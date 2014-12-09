@@ -42,10 +42,6 @@ python __anonymous() {
 # do_debian_patch
 ###############################################################################
 
-# do_debian_patch depends on quilt
-# FIXME: also depends on "dpatch"
-DEPENDS += "${@base_conditional('PN', 'quilt-native', '', 'quilt-native', d)}"
-
 DEBIAN_QUILT_DIR ?= "${DEBIAN_UNPACK_DIR}/.pc"
 DEBIAN_QUILT_DIR_ESC ?= "${DEBIAN_UNPACK_DIR}/.pc.debian"
 
@@ -92,8 +88,11 @@ debian_patch_dpatch() {
 	dpatch apply-all
 }
 
+# TODO: also depends on "dpatch-native"
 addtask debian_patch after do_unpack before do_patch
 do_debian_patch[dirs] = "${DEBIAN_UNPACK_DIR}"
+do_debian_patch[depends] += "${@base_conditional(\
+    'PN', 'quilt-native', '', 'quilt-native:do_populate_sysroot', d)}"
 do_debian_patch() {
 	if debian_check_source_format; then
 		return 0
