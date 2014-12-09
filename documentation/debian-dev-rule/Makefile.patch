@@ -1,0 +1,29 @@
+diff --git a/documentation/Makefile b/documentation/Makefile
+index 3bc9a21..aa2c9bd 100644
+--- a/documentation/Makefile
++++ b/documentation/Makefile
+@@ -71,6 +71,24 @@
+ # the PDF and HTML 'denzil' versions of the YP Development Manual.
+ #
+ 
++ifeq ($(DOC),debian-dev-rule)
++ALLPREQ = $(DOC)/$(DOC).xml html tarball
++TARFILES = debian-dev-rule.html debian-dev-rule.css
++MANUALS = $(DOC)/$(DOC).xml $(DOC)/$(DOC).html
++FIGURES = figures
++STYLESHEET = $(DOC)/*.css
++
++# to add a rule for .xml without changing default action
++default: all
++
++# convert "var" and "dvar" tags
++$(DOC)/$(DOC).xml: $(DOC)/$(DOC).xml.in
++	sed \
++		-e "s@<var [ ]*name=['\"]\([^']*\)['\"][ ]*/[ ]*>@<ulink url='\&YOCTO_DOCS_REF_URL;#var-\1'><filename>\1</filename></ulink>@g" \
++		-e "s@<dvar [ ]*name=['\"]\([^']*\)['\"][ ]*/[ ]*>@<ulink url='\&YOCTO_DOCS_REF_URL;#var-\1'><filename>\1</filename></ulink>@g" \
++		$(DOC)/$(DOC).xml.in > $(DOC)/$(DOC).xml
++endif
++
+ ifeq ($(DOC),bsp-guide)
+ XSLTOPTS = --xinclude
+ ALLPREQ = html pdf eclipse tarball
