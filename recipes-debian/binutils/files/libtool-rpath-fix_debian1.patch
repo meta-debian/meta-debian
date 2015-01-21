@@ -1,0 +1,64 @@
+diff --git a/ltmain.sh b/ltmain.sh
+index 9503ec8..676a235 100644
+--- a/ltmain.sh
++++ b/ltmain.sh
+@@ -1155,6 +1155,37 @@ func_execute_cmds ()
+     IFS=$save_ifs
+ }
+ 
++# func_replace_sysroot PATH
++# If PATH begins with the sysroot, replace it with = and
++# store the result into func_replace_sysroot_result.
++func_replace_sysroot ()
++{
++    case "$lt_sysroot:$1" in
++    ?*:"$lt_sysroot"*)
++        func_stripname "$lt_sysroot" '' "$1"
++        func_replace_sysroot_result="=$func_stripname_result"
++        ;;
++    *)
++        # Including no sysroot.
++        func_replace_sysroot_result=$1
++        ;;
++    esac
++}
++
++# func_stripname prefix suffix name
++# strip PREFIX and SUFFIX off of NAME.
++# PREFIX and SUFFIX must not contain globbing or regex special
++# characters, hashes, percent signs, but SUFFIX may contain a leading
++# dot (in which case that matches only a dot).
++# func_strip_suffix prefix name
++func_stripname ()
++{
++    case ${2} in
++      .*) func_stripname_result=`$ECHO "${3}" | $SED "s%^${1}%%; s%\\\\${2}\$%%"`;;
++      *)  func_stripname_result=`$ECHO "${3}" | $SED "s%^${1}%%; s%${2}\$%%"`;;
++    esac
++} # func_stripname may be replaced by extended shell implementation
++
+ 
+ # func_source file
+ # Source FILE, adding directory component if necessary.
+@@ -7104,6 +7135,10 @@ EOF
+ 	  test "$mode" != relink && rpath="$compile_rpath$rpath"
+ 	  for libdir in $rpath; do
+ 	    if test -n "$hardcode_libdir_flag_spec"; then
++                 func_replace_sysroot "$libdir"
++                 libdir=$func_replace_sysroot_result
++                 func_stripname '=' '' "$libdir"
++                 libdir=$func_stripname_result
+ 	      if test -n "$hardcode_libdir_separator"; then
+ 		if test -z "$hardcode_libdirs"; then
+ 		  hardcode_libdirs="$libdir"
+@@ -7799,6 +7834,10 @@ EOF
+       hardcode_libdirs=
+       for libdir in $compile_rpath $finalize_rpath; do
+ 	if test -n "$hardcode_libdir_flag_spec"; then
++          func_replace_sysroot "$libdir"
++          libdir=$func_replace_sysroot_result
++          func_stripname '=' '' "$libdir"
++          libdir=$func_stripname_result
+ 	  if test -n "$hardcode_libdir_separator"; then
+ 	    if test -z "$hardcode_libdirs"; then
+ 	      hardcode_libdirs="$libdir"

@@ -1,0 +1,26 @@
+diff --git a/ltmain.sh b/ltmain.sh
+index 9503ec8..e779c27 100644
+--- a/ltmain.sh
++++ b/ltmain.sh
+@@ -7104,6 +7104,10 @@ EOF
+ 	  test "$mode" != relink && rpath="$compile_rpath$rpath"
+ 	  for libdir in $rpath; do
+ 	    if test -n "$hardcode_libdir_flag_spec"; then
++                 func_replace_sysroot "$libdir"
++                 libdir=$func_replace_sysroot_result
++                 func_stripname '=' '' "$libdir"
++                 libdir=$func_stripname_result
+ 	      if test -n "$hardcode_libdir_separator"; then
+ 		if test -z "$hardcode_libdirs"; then
+ 		  hardcode_libdirs="$libdir"
+@@ -7799,6 +7803,10 @@ EOF
+       hardcode_libdirs=
+       for libdir in $compile_rpath $finalize_rpath; do
+ 	if test -n "$hardcode_libdir_flag_spec"; then
++          func_replace_sysroot "$libdir"
++          libdir=$func_replace_sysroot_result
++          func_stripname '=' '' "$libdir"
++          libdir=$func_stripname_result
+ 	  if test -n "$hardcode_libdir_separator"; then
+ 	    if test -z "$hardcode_libdirs"; then
+ 	      hardcode_libdirs="$libdir"
