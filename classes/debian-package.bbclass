@@ -14,7 +14,8 @@ DPR ?= ""
 # * consider fetching by a common tag
 DEBIAN_BRANCH ?= "${DISTRO_CODENAME}-master"
 DEBIAN_SECTION ?= "SECTION"
-SRC_URI = "${DEBIAN_GIT_URI}/${DEBIAN_SECTION}/${BPN}.git;protocol=git;branch=${DEBIAN_BRANCH}"
+DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_SECTION}/${BPN}.git;protocol=git;branch=${DEBIAN_BRANCH}"
+SRC_URI = "${DEBIAN_SRC_URI}"
 # By default, always use latest version of the default branch
 # TODO: consider fetching by a common tag
 SRCREV = "${AUTOREV}"
