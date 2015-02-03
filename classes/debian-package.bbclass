@@ -43,9 +43,6 @@ python __anonymous() {
 # do_debian_patch
 ###############################################################################
 
-DEBIAN_QUILT_DIR ?= "${DEBIAN_UNPACK_DIR}/.pc"
-DEBIAN_QUILT_DIR_ESC ?= "${DEBIAN_UNPACK_DIR}/.pc.debian"
-
 # Check Debian source format and then decide the action.
 # The meanings of return values are the follows.
 #   0: native package, there is no patch
@@ -75,19 +72,60 @@ debian_check_source_format() {
 	return 1
 }
 
+DEBIAN_QUILT_PATCHES ?= "${DEBIAN_UNPACK_DIR}/debian/patches"
+DEBIAN_QUILT_DIR ?= "${DEBIAN_UNPACK_DIR}/.pc"
+DEBIAN_QUILT_DIR_ESC ?= "${DEBIAN_UNPACK_DIR}/.pc.debian"
+
 # apply patches by quilt
 debian_patch_quilt() {
-	if [ ! -s ${DEBIAN_UNPACK_DIR}/debian/patches/series ]; then
-		bbfatal "no patch in series"
+	# confirm that other patches didn't applied
+	if [ -d ${DEBIAN_QUILT_DIR} -o -d ${DEBIAN_QUILT_DIR_ESC} ]; then
+		bbfatal "unknown quilt patches already applied"
 	fi
-	QUILT_PATCHES=${DEBIAN_UNPACK_DIR}/debian/patches \
-		quilt --quiltrc /dev/null push -a
+	# Some packages which don't modify upstream sources have
+	# empty series or don't have debian/packages. This seems
+	# to be acceptable as an implementation of source package
+	if [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
+		bbwarn "${DEBIAN_QUILT_PATCHES}/series not found, nothing to do"
+	elif [ ! -s ${DEBIAN_QUILT_PATCHES}/series ]; then
+		bbwarn "no patch in series, nothing to do"
+	else
+		# apply patches
+		QUILT_PATCHES=${DEBIAN_QUILT_PATCHES} \
+			quilt --quiltrc /dev/null push -a
+	fi
+
+	# avoid conflict with "do_patch"
+	if [ -d ${DEBIAN_QUILT_DIR} ]; then
+		mv ${DEBIAN_QUILT_DIR} ${DEBIAN_QUILT_DIR_ESC}
+	fi
 }
 
 # apply patches by dpatch
 debian_patch_dpatch() {
 	dpatch apply-all
 }
+
+DEBIAN_FIND_PATCHES_DIR ?= "${DEBIAN_UNPACK_DIR}/debian"
+
+debian_find_patches() {
+	find ${DEBIAN_FIND_PATCHES_DIR} \
+		-name "*.patch" -o \
+		-name "*.diff" \
+		-type f
+}
+
+# used only when DEBIAN_PATCH_TYPE is "abnormal"
+# this is very rare case; should not be used except
+# the cases that all other types cannot be used
+# this function must be overwritten by each recipe
+debian_patch_abnormal() {
+	bbfatal "debian_patch_abnormal not defined"
+}
+
+# decide an action to apply patches for the source package
+# candidates: quilt, dpatch, nopatch, abnormal
+DEBIAN_PATCH_TYPE ?= ""
 
 # TODO: also depends on "dpatch-native"
 addtask debian_patch after do_unpack before do_patch
@@ -100,39 +138,41 @@ do_debian_patch() {
 	else
 		FORMAT=$?
 	fi
-
-	if [ -d ${DEBIAN_QUILT_DIR} -o -d ${DEBIAN_QUILT_DIR_ESC} ]; then
-		bbfatal "unknown quilt patches already applied"
-	fi
-
-	# debian/patches must exist in non-native source package.
-	# Some old packages have ignore this rule. For such packages,
-	# user needs to overwrite this function by their hands.
-	if [ ! -d ${DEBIAN_UNPACK_DIR}/debian/patches ]; then
-		bbfatal "debian/patches not found in non-native package"
-	fi
-
 	# apply patches according to the source format
 	case ${FORMAT} in
 	1)
-		if [ -f ${DEBIAN_UNPACK_DIR}/debian/patches/series ]; then
-			bbnote "patch type: quilt"
+		# DEBIAN_PATCH_TYPE must be set manually to decide
+		# an action when Debian source format is not 3.0
+		if [ -z "${DEBIAN_PATCH_TYPE}" ]; then
+			bbfatal "DEBIAN_PATCH_TYPE not set"
+		fi
+
+		bbnote "DEBIAN_PATCH_TYPE: ${DEBIAN_PATCH_TYPE}"
+		if [ "${DEBIAN_PATCH_TYPE}" = "quilt" ]; then
 			debian_patch_quilt
-		elif [ -f ${DEBIAN_UNPACK_DIR}/debian/patches/00list ]; then
-			bbnote "patch type: dpatch"
+		elif [ "${DEBIAN_PATCH_TYPE}" = "dpatch" ]; then
 			debian_patch_dpatch
+		elif [ "${DEBIAN_PATCH_TYPE}" = "nopatch" ]; then
+			# No patch and no function to apply patches in
+			# some source packages. In such cases, confirm
+			# that really no patch-related file is included
+			FOUND_PATCHES=$(debian_find_patches)
+			if [ -n "${FOUND_PATCHES}" ]; then
+				bberror "the following patches found:"
+				for p in ${FOUND_PATCHES}; do
+					bberror ${p}
+				done
+				bbfatal "please re-consider DEBIAN_PATCH_TYPE"
+			fi
+		elif [ "${DEBIAN_PATCH_TYPE}" = "abnormal" ]; then
+			debian_patch_abnormal
 		else
-			bbfatal "unsupported patch type"
+			bbfatal "invalid DEBIAN_PATCH_TYPE: ${DEBIAN_PATCH_TYPE}"
 		fi
 		;;
 	3)
 		debian_patch_quilt
 		;;
 	esac
-
-	# avoid conflict with "do_patch"
-	if [ -d ${DEBIAN_QUILT_DIR} ]; then
-		mv ${DEBIAN_QUILT_DIR} ${DEBIAN_QUILT_DIR_ESC}
-	fi
 }
 EXPORT_FUNCTIONS do_debian_patch
