@@ -16,8 +16,3 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=cf5b3a2f7083750d504333114e738656"
 SRC_URI += " \
 file://no-examples.patch \
 "
-
-# there is no patch in debian/patches
-do_debian_patch() {
-	:
-}

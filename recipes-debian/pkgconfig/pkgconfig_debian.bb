@@ -19,9 +19,5 @@ file://fix-glib-configure-libtool-usage.patch \
 file://obsolete_automake_macros.patch \
 "
 
-# There is no debian/patches in source code
-# therefore, nothing to do with do_debian_patch
-do_debian_patch(){
-        # do nothing
-        :
-}
+# no patch related-rule
+DEBIAN_PATCH_TYPE = "nopatch"

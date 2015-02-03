@@ -17,7 +17,3 @@ SRC_URI += "\
  file://uclibc.patch \
  ${NATIVEPATCHES} \
 "
-# Pass through since there is no patch file in debian/patch/series
-debian_patch_quilt() {
-	:
-}

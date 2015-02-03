@@ -11,7 +11,6 @@ file://COPYING;md5=262a7a87da56e66dd639bf7334a110c6 \
 file://xfixesproto.h;md5=fcfb0d4532a76861bee8ff4d61e8d397 \
 "
 
-# There are no debian/patches
-do_debian_patch() {
-	:
-}
+# always try to apply patches in debian/patches by quilt
+# see debian/xsfbs/xsfbs.mk
+DEBIAN_PATCH_TYPE = "quilt"
