@@ -1,4 +1,4 @@
-require bison-2.7.1.inc
+require recipes-devtools/bison/${PN}_2.7.1.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/bison/bison:"
 
 inherit debian-package
@@ -17,7 +17,15 @@ file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 # FIXME: file doc/bison.texi is missing, temporarily build without document
 # and examples for minimal implementation with
 # remove-document-examples-target.patch
+
+BASE_SRC_URI = "file://m4.patch"
+
+SRC_URI_class-native = " \
+${DEBIAN_SRC_URI} \
+${BASE_SRC_URI} \
+"
+
 SRC_URI += " \
-file://m4.patch \
+${BASE_SRC_URI} \
 file://remove-document-examples-target.patch \
 "
