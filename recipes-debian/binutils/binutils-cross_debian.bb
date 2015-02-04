@@ -19,6 +19,9 @@ file://COPYING.LIB;md5=9f604d8a4f8e74f4f5140845a21b6674 \
 file://COPYING3.LIB;md5=6a6a8e020838b23406c81b19c1d46df6 \
 "
 
+# alway try to apply debian patches by quilt
+DEBIAN_PATCH_TYPE = "quilt"
+
 # Exclude following patches because they are already applied
 # binutils-uclibc-300-001_ld_makefile_patch.patch
 # binutils-uclibc-300-012_check_ldrunpath_length.patch

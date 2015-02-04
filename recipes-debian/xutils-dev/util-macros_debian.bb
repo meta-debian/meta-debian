@@ -10,5 +10,9 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1970511fddd439b07a6ba789d28ff662"
 
 S = "${DEBIAN_UNPACK_DIR}/util-macros"
+
+# alway try to apply debian patches by quilt
+DEBIAN_PATCH_TYPE = "quilt"
+
 # Fix QA issue file not shipped to any package
 FILES_${PN} += "${datadir}"
