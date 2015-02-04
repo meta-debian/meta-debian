@@ -18,7 +18,10 @@ file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 # and examples for minimal implementation with
 # remove-document-examples-target.patch
 
-BASE_SRC_URI = "file://m4.patch"
+BASE_SRC_URI = " \
+file://m4.patch \
+file://remove-document-examples-target.patch \
+"
 
 SRC_URI_class-native = " \
 ${DEBIAN_SRC_URI} \
@@ -27,5 +30,4 @@ ${BASE_SRC_URI} \
 
 SRC_URI += " \
 ${BASE_SRC_URI} \
-file://remove-document-examples-target.patch \
 "
