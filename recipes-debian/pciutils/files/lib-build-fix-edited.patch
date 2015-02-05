@@ -1,0 +1,87 @@
+diff --git a/Makefile b/Makefile
+index 85d5fec..55ee973 100644
+--- a/Makefile
++++ b/Makefile
+@@ -57,9 +57,9 @@ export
+ 
+ pcimod-$(PCI_OS_LINUX) := pcimodules
+ pcimod8-$(PCI_OS_LINUX) := pcimodules.8
+-all: lib/$(PCILIB) lspci lspci-udeb setpci example lspci.8 setpci.8 pcilib.7 update-pciids update-pciids.8 $(PCI_IDS) $(pcimod-1) $(pcimod8-1)
++all: lib/$(PCILIB_DEV) lspci lspci-udeb setpci example lspci.8 setpci.8 pcilib.7 update-pciids update-pciids.8 $(PCI_IDS) $(pcimod-1) $(pcimod8-1)
+ 
+-lib/$(PCILIB): $(PCIINC) force
++lib/$(PCILIB) lib/$(PCILIB_DEV): $(PCIINC) force
+ 	$(MAKE) -C lib all
+ 
+ force:
+@@ -67,10 +67,10 @@ force:
+ lib/config.h lib/config.mk:
+ 	cd lib && ./configure
+ 
+-lspci: lspci.o ls-vpd.o ls-caps.o ls-ecaps.o ls-kernel.o ls-tree.o ls-map.o common.o lib/$(PCILIB)
++lspci: lspci.o ls-vpd.o ls-caps.o ls-ecaps.o ls-kernel.o ls-tree.o ls-map.o common.o lib/$(PCILIB_DEV)
+ lspci-udeb: lspci.o ls-vpd.o ls-caps.o ls-ecaps.o ls-kernel.o ls-tree.o ls-map.o common.o lib/libpci.a
+-setpci: setpci.o common.o lib/$(PCILIB)
+-pcimodules: pcimodules.o common.o lib/$(PCILIB)
++setpci: setpci.o common.o lib/$(PCILIB_DEV)
++pcimodules: pcimodules.o common.o lib/$(PCILIB_DEV)
+ 
+ LSPCIINC=lspci.h pciutils.h $(PCIINC)
+ lspci.o: lspci.c $(LSPCIINC)
+@@ -94,7 +94,7 @@ update-pciids: update-pciids.sh
+ 	chmod +x $@
+ 
+ # The example of use of libpci
+-example: example.o lib/$(PCILIB)
++example: example.o lib/$(PCILIB_DEV)
+ example.o: example.c $(PCIINC)
+ 
+ %: %.o
+diff --git a/lib/Makefile b/lib/Makefile
+index d9f28ba..de65dbe 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -44,7 +44,7 @@ endif
+ 
+ PCILIBA=libpci.a
+ 
+-all: $(PCILIB) $(PCILIBA) $(PCILIBPC)
++all: $(PCILIB_DEV) $(PCILIBA) $(PCILIBPC)
+ 
+ #ifeq ($(SHARED),no)
+ $(PCILIBA): $(addsuffix .o,$(OBJS))
+@@ -55,6 +55,10 @@ $(PCILIBA): $(addsuffix .o,$(OBJS))
+ CFLAGS += -fPIC -fvisibility=hidden
+ $(PCILIB): $(addsuffix .o,$(OBJS))
+ 	$(CC) -shared $(LDFLAGS) $(SONAME) -Wl,--version-script=libpci.ver -o $@ $^ $(LIB_LDLIBS)
++
++$(PCILIB_DEV): $(PCILIB)
++	ln -s $< $@
++
+ #endif
+ 
+ $(PCILIBPC): libpci.pc.in
+diff --git a/lib/configure b/lib/configure
+index 2dd42ff..419cdac 100755
+--- a/lib/configure
++++ b/lib/configure
+@@ -236,16 +236,18 @@ fi
+ echo "Checking whether to build a shared library... $SHARED (set manually)"
+ if [ "$SHARED" = no ] ; then
+ 	echo >>$m 'PCILIB=$(LIBNAME).a'
++	echo >>$m 'PCILIB_DEV=$(LIBNAME).a'
+ 	echo >>$m 'LDLIBS=$(WITH_LIBS)'
+ 	echo >>$m 'LIB_LDLIBS='
+ else
+ 	echo >>$m 'PCILIB=$(LIBNAME).so.$(VERSION)'
++	echo >>$m 'PCILIB_DEV=$(LIBNAME).so'
+ 	# We link the dependencies _to_ the library, so we do not need explicit deps in .pc
+ 	echo >>$m 'LDLIBS='
+ 	echo >>$m 'LIB_LDLIBS=$(WITH_LIBS)'
+ 	echo >>$c '#define PCI_SHARED_LIB'
+ 	if [ "$SHARED" = yes ] ; then
+-		echo >>$m 'SONAME=-Wl,-soname,$(LIBNAME).so$(ABI_VERSION)'
++		echo >>$m 'SONAME=-Wl,-soname -Wl,$(LIBNAME).so$(ABI_VERSION)'
+ 	fi
+ fi
+ echo >>$m 'PCILIBPC=$(LIBNAME).pc'
