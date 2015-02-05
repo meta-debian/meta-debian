@@ -1,0 +1,83 @@
+diff --git a/libltdl/config/ltmain.m4sh b/libltdl/config/ltmain.m4sh
+index 6d799c0..18f8b61 100644
+--- a/libltdl/config/ltmain.m4sh
++++ b/libltdl/config/ltmain.m4sh
+@@ -2166,7 +2166,7 @@ func_mode_install ()
+ 	dir="$func_dirname_result"
+ 	func_append dir "$objdir"
+ 
+-	if test -n "$relink_command"; then
++	if test "$fast_install" = no && test -n "$relink_command"; then
+ 	  # Determine the prefix the user has applied to our future dir.
+ 	  inst_prefix_dir=`$ECHO "$destdir" | $SED -e "s%$libdir\$%%"`
+ 
+@@ -2198,7 +2198,7 @@ func_mode_install ()
+ 	  shift
+ 
+ 	  srcname="$realname"
+-	  test -n "$relink_command" && srcname="$realname"T
++	  test "$fast_install" = no && test -n "$relink_command" && srcname="$realname"T
+ 
+ 	  # Install the shared library and build the symlinks.
+ 	  func_show_eval "$install_shared_prog $dir/$srcname $destdir/$realname" \
+@@ -5868,15 +5868,15 @@ func_mode_link ()
+ 	    # Hardcode the library path.
+ 	    # Skip directories that are in the system default run-time
+ 	    # search path.
+-	    case " $sys_lib_dlsearch_path " in
+-	    *" $absdir "*) ;;
+-	    *)
+-	      case "$compile_rpath " in
+-	      *" $absdir "*) ;;
+-	      *) func_append compile_rpath " $absdir" ;;
+-	      esac
+-	      ;;
+-	    esac
++	    #case " $sys_lib_dlsearch_path " in
++	    #*" $absdir "*) ;;
++	    #*)
++	    #  case "$compile_rpath " in
++	    #  *" $absdir "*) ;;
++	    #  *) func_append compile_rpath " $absdir" ;;
++	    #  esac
++	    #  ;;
++	    #esac
+ 	    case " $sys_lib_dlsearch_path " in
+ 	    *" $libdir "*) ;;
+ 	    *)
+@@ -5942,15 +5942,15 @@ func_mode_link ()
+ 	    # Hardcode the library path.
+ 	    # Skip directories that are in the system default run-time
+ 	    # search path.
+-	    case " $sys_lib_dlsearch_path " in
+-	    *" $absdir "*) ;;
+-	    *)
+-	      case "$compile_rpath " in
+-	      *" $absdir "*) ;;
+-	      *) func_append compile_rpath " $absdir" ;;
+-	      esac
+-	      ;;
+-	    esac
++	    #case " $sys_lib_dlsearch_path " in
++	    #*" $absdir "*) ;;
++	    #*)
++	    #  case "$compile_rpath " in
++	    #  *" $absdir "*) ;;
++	    #  *) func_append compile_rpath " $absdir" ;;
++	    #  esac
++	    #  ;;
++	    #esac
+ 	    case " $sys_lib_dlsearch_path " in
+ 	    *" $libdir "*) ;;
+ 	    *)
+@@ -6296,8 +6296,8 @@ func_mode_link ()
+ 		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
+ 		  test -z "$libdir" && \
+ 		    func_fatal_error "\`$deplib' is not a valid libtool archive"
+-		  test "$absdir" != "$libdir" && \
+-		    func_warning "\`$deplib' seems to be moved"
++		  #test "$absdir" != "$libdir" && \
++		  #  func_warning "\`$deplib' seems to be moved"
+ 
+ 		  path="-L$absdir"
+ 		fi
