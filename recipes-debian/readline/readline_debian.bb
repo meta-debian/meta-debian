@@ -8,7 +8,7 @@ inherit debian-package
 DEBIAN_SECTION = "libs"
 DPR = "0"
 
-BPN = "readline6"
+DPN = "readline6"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

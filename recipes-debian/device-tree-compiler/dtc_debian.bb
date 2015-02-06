@@ -1,7 +1,7 @@
 require recipes-kernel/dtc/dtc_git.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-kernel/dtc/dtc:"
 
-BPN = "device-tree-compiler"
+DPN = "device-tree-compiler"
 inherit debian-package
 DEBIAN_SECTION = "devel"
 DPR = "0"

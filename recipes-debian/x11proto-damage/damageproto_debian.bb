@@ -1,6 +1,6 @@
 require recipes-graphics/xorg-proto/damageproto_1.2.1.bb
 
-BPN = "x11proto-damage"
+DPN = "x11proto-damage"
 inherit debian-package
 DEBIAN_SECTION = "x11"
 DPR = "0"

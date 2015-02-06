@@ -1,7 +1,7 @@
 require recipes-graphics/pango/pango_1.36.2.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-graphics/pango/pango:"
 
-BPN = "pango1.0"
+DPN = "pango1.0"
 inherit debian-package
 
 DEBIAN_SECTION = "libs"

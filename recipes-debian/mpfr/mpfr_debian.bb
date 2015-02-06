@@ -1,7 +1,7 @@
 require recipes-support/mpfr/mpfr_3.1.2.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-support/mpfr/mpfr-3.1.2:"
 
-BPN = "mpfr4"
+DPN = "mpfr4"
 inherit debian-package
 
 DEBIAN_SECTION = "math"

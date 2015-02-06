@@ -4,7 +4,7 @@ ${COREBASE}/meta/recipes-devtools/pkgconfig/pkgconfig-0.28:\
 ${COREBASE}/meta/recipes-devtools/pkgconfig/pkgconfig:\
 "
 
-BPN = "pkg-config"
+DPN = "pkg-config"
 inherit debian-package
 
 DEBIAN_SECTION = "devel"

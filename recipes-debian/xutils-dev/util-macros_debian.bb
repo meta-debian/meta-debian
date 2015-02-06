@@ -1,6 +1,6 @@
 require recipes-graphics/xorg-util/util-macros_1.18.0.bb
 
-BPN = "xutils-dev"
+DPN = "xutils-dev"
 
 inherit debian-package
 DEBIAN_SECTION = "x11"

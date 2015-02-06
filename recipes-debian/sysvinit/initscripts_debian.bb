@@ -7,7 +7,7 @@ inherit debian-package
 DEBIAN_SECTION = "admin"
 DPR = "0"
 
-BPN = "sysvinit"
+DPN = "sysvinit"
 RDEPENDS_${PN} = "sysvinit-inittab"
 
 LICENSE = "GPLv2"

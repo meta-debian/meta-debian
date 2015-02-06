@@ -1,6 +1,6 @@
 require recipes-graphics/xorg-proto/compositeproto_0.4.2.bb
 
-BPN = "x11proto-composite"
+DPN = "x11proto-composite"
 inherit debian-package
 DEBIAN_SECTION = "x11"
 DPR = "0"

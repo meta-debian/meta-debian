@@ -1,6 +1,6 @@
 require recipes-graphics/xorg-proto/xextproto_7.3.0.bb
 
-BPN = "x11proto-xext"
+DPN = "x11proto-xext"
 inherit debian-package
 DEBIAN_SECTION = "x11"
 DPR = "0"

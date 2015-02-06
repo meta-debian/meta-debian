@@ -5,7 +5,7 @@
 require recipes-devtools/binutils/${PN}_2.24.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/binutils/binutils:"
 
-BPN = "binutils"
+DPN = "binutils"
 
 inherit debian-package
 DEBIAN_SECTION = "devel"

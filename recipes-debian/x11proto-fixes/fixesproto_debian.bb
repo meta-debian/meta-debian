@@ -1,6 +1,6 @@
 require recipes-graphics/xorg-proto/fixesproto_5.0.bb
 
-BPN = "x11proto-fixes"
+DPN = "x11proto-fixes"
 inherit debian-package
 DEBIAN_SECTION = "x11"
 DPR = "0"

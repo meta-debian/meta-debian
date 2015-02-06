@@ -1,6 +1,6 @@
 require recipes-devtools/make/make_4.0.bb
 
-BPN = "make-dfsg"
+DPN = "make-dfsg"
 inherit debian-package
 
 DEBIAN_SECTION = "devel"

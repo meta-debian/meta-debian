@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend = "\
 ${COREBASE}/meta/recipes-devtools/automake/automake:\
 "
 
-BPN = "automake-1.14"
+DPN = "automake-1.14"
 inherit debian-package
 DEBIAN_SECTION = "devel"
 

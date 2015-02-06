@@ -1,6 +1,6 @@
 require recipes-support/atk/atk_2.10.0.bb
 
-BPN = "atk1.0"
+DPN = "atk1.0"
 
 inherit debian-package
 DEBIAN_SECTION = "libs"

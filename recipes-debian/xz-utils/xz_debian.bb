@@ -1,6 +1,6 @@
 require recipes-extended/xz/xz_5.1.3alpha.bb
 
-BPN = "xz-utils"
+DPN = "xz-utils"
 inherit debian-package
 DEBIAN_SECTION = "utils"
 DPR = "0"
