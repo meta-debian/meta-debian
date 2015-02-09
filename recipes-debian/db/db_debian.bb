@@ -3,6 +3,7 @@ FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-support/db/db:"
 
 inherit debian-package
 DEBIAN_SECTION = "libs"
+DPN = "db5.3"
 DPR = "0"
 
 LICENSE = "BSD"
