@@ -18,17 +18,26 @@ LIC_FILES_CHKSUM = "\
 # fixinstall_edited.patch and 
 # dont-depend-on-help2man-edited.patch was created for apply
 # with the same purpose.
-SRC_URI += "\
-	file://trailingslash.patch\
-	file://rename-with-sysroot.patch\
-	file://use-sysroot-in-libpath.patch\
-	file://fix-final-rpath.patch\
-	file://avoid_absolute_paths_for_general_utils.patch\
-	file://fix-rpath.patch\
-	file://respect-fstack-protector.patch\
-	file://norm-rpath.patch\
-	file://dont-depend-on-help2man-edited.patch\
-	file://fix-resolve-lt-sysroot.patch\
-	file://prefix.patch\
-	file://fixinstall.patch\
+SRC_URI += " \
+file://trailingslash.patch \
+file://rename-with-sysroot.patch \
+file://use-sysroot-in-libpath.patch \
+file://fix-final-rpath.patch \
+file://avoid_absolute_paths_for_general_utils.patch \
+file://fix-rpath.patch \
+file://respect-fstack-protector.patch \
+file://norm-rpath.patch \
+file://dont-depend-on-help2man-edited.patch \
+file://fix-resolve-lt-sysroot.patch \
+file://prefix.patch \
+file://fixinstall.patch \
 "
+
+# Don't apply debian/patches/link_all_deplibs.patch
+# This patch make libtool do not link all dependency libs when create shared 
+# object archive and causes an error while link gettext's libraries although 
+# the dependency flag was already added.
+
+do_debian_patch_prepend() {
+	sed -i -e "/link_all_deplibs/ d" ${S}/debian/patches/series
+}
