@@ -18,6 +18,8 @@ LICENSE_liblzma-staticdev = "PD"
 LICENSE_liblzma-dbg = "PD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c475b6c7dca236740ace4bba553e8e1c"
 
+DEPENDS += "gettext-native"
+
 # generate build-aux/config.rpath so autoreconf can see it
 do_configure_prepend() {
 	cd ${S}
