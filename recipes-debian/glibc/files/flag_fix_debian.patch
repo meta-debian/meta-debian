@@ -1,0 +1,15 @@
+diff --git a/elf/readlib.c b/elf/readlib.c
+index 226ab31..0d9b86f 100644
+--- a/elf/readlib.c
++++ b/elf/readlib.c
+@@ -50,6 +50,10 @@ struct known_names
+   int flag;
+ };
+ 
++/* don't use host's definition of LD_SO */                                     
++#undef LD_SO                                                                   
++#define LD_SO "ld.so.1"
++
+ static struct known_names interpreters[] =
+ {
+   { "/lib/" LD_SO, FLAG_ELF_LIBC6 },

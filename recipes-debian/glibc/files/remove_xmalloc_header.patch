@@ -1,0 +1,15 @@
+diff --git a/sysdeps/generic/ldconfig.h b/sysdeps/generic/ldconfig.h
+index ba1d953..2b33524 100644
+--- a/sysdeps/generic/ldconfig.h
++++ b/sysdeps/generic/ldconfig.h
+@@ -89,6 +89,9 @@ extern int opt_verbose;
+ extern int opt_format;
+ 
+ /* Prototypes for a few program-wide used functions.  */
+-#include <programs/xmalloc.h>
++extern void *xmalloc (size_t __n);                                              
++extern void *xcalloc (size_t __n, size_t __size);                               
++extern void *xrealloc (void *__p, size_t __n);                                  
++extern char *xstrdup (const char *__str);
+ 
+ #endif /* ! _LDCONFIG_H  */

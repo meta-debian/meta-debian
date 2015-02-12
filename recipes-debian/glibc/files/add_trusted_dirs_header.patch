@@ -1,0 +1,14 @@
+diff --git a/trusted-dirs.h b/elf/trusted-dirs.h                                
+new file mode 100644                                                            
+index 0000000..0758d1c                                                          
+--- /dev/null                                                                   
++++ b/elf/trusted-dirs.h                                                        
+@@ -0,0 +1,8 @@                                                                 
++#define SYSTEM_DIRS \                                                          
++  "/lib/" "\0" "/usr/lib/"                                                     
++                                                                               
++#define SYSTEM_DIRS_LEN \                                                      
++  5, 9                                                                         
++                                                                               
++#define SYSTEM_DIRS_MAX_LEN    9                                               
++#define DL_DST_LIB "lib"

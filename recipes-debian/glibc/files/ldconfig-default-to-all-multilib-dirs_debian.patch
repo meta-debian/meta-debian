@@ -1,0 +1,17 @@
+diff --git a/elf/ldconfig.c b/elf/ldconfig.c
+index 5e78c48..59e617a 100644
+--- a/elf/ldconfig.c
++++ b/elf/ldconfig.c
+@@ -52,7 +52,11 @@
+                                                                                
+ #define SYSCONFDIR "/etc"                                                      
+ #define LIBDIR "/usr/lib"                                                      
+-#define SLIBDIR "/lib"                                                         
++#define LIBDIR32 "/usr/lib32"
++#define LIBDIR64 "/usr/lib64"
++#define SLIBDIR "/lib"
++#define SLIBDIR32 "/lib32"
++#define SLIBDIR64 "/lib64"
+ #define N_(msgid)  msgid                                                      
+ #define _(msg) msg
+ 
