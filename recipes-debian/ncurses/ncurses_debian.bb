@@ -5,7 +5,7 @@ ${COREBASE}/meta/recipes-core/ncurses/ncurses-5.9:\
 
 inherit debian-package
 DEBIAN_SECTION = "libs"
-DPR = "0"
+DPR = "1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\
@@ -20,5 +20,5 @@ file://config.cache \
 # headers to /usr/include instead of /usr/include/ncurses
 # and /usr/include/ncursesw
 do_configure_append_class-native () {
-	ncurses_configure "widec" "--enable-overwrite"
+	ncurses_configure "narrowc" "--enable-overwrite"
 }
