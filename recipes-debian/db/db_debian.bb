@@ -4,11 +4,11 @@ FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-support/db/db:"
 inherit debian-package
 DEBIAN_SECTION = "libs"
 DPN = "db5.3"
-DPR = "0"
+DPR = "1"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = " \
-file://${DEBIAN_UNPACK_DIR}/LICENSE;md5=86f9294f39f38ef9e89690bcd2320e7a \
+file://${DEBIAN_UNPACK_DIR}/LICENSE;md5=ed1158e31437f4f87cdd4ab2b8613955 \
 "
 
 S = "${DEBIAN_UNPACK_DIR}/dist"
