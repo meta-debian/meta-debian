@@ -1,0 +1,23 @@
+diff --git a/login-utils/login.c b/login-utils/login.c
+index de56f2d..f24f8d7 100644
+--- a/login-utils/login.c
++++ b/login-utils/login.c
+@@ -394,6 +394,7 @@ main(int argc, char **argv)
+     char *childArgv[10];
+     char *buff;
+     int childArgc = 0;
++    struct sigaction act;
+ #ifdef HAVE_SECURITY_PAM_MISC_H
+     int retcode;
+     pam_handle_t *pamh = NULL;
+@@ -410,7 +411,9 @@ main(int argc, char **argv)
+     pid = getpid();
+ 
+     signal(SIGALRM, timedout);
+-    siginterrupt(SIGALRM,1);           /* we have to interrupt syscalls like ioclt() */
++    (void) sigaction(SIGALRM, NULL, &act);
++    act.sa_flags &= ~SA_RESTART;
++    sigaction(SIGALRM, &act, NULL);
+     alarm((unsigned int)timeout);
+     signal(SIGQUIT, SIG_IGN);
+     signal(SIGINT, SIG_IGN);
