@@ -4,11 +4,14 @@ FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-connectivity/openssl/openssl
 inherit debian-package
 
 DEBIAN_SECTION = "utils"
-DPR = "0"
+DPR = "1"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f9a8f968107345e0b75aa8c2ecaa7ec8"
+
+#Remove depend on cryptodev-linux-native
+DEPENDS_remove = "cryptodev-linux-native"
 
 # remove patches which already exist in debian/patches directory:
 # engines-install-in-libdir-ssl.patch (equal debian/patches/engines-path.patch)
