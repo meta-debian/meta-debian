@@ -11,6 +11,9 @@ DPR = "0"
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=de10de48642ab74318e893a61105afbb"
 
+#Remove depend on kern-tools-native
+DEPENDS_remove = "kern-tools-native"
+
 SRC_URI += " \
 file://get_header_tar.patch \                                        
 file://busybox-appletlib-dependency.patch \                          
