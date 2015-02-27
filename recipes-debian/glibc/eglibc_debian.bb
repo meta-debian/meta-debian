@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-core/eglibc/eglibc-2.19:"
 
 inherit debian-package
 DEBIAN_SECTION = "libs"
-DPR = "0"
+DPR = "1"
 
 DPN = "glibc"
 
@@ -13,6 +13,9 @@ file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
 file://LICENSES;md5=e9a558e243b36d3209f380deb394b213 \
 "
+
+#Remove depend on kconfig-frontends-native
+DEPENDS_remove = "kconfig-frontends-native"
 
 # Exclude patch that apply for old version:
 # mips-rld-map-check.patch
