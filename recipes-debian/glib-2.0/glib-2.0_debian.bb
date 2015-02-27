@@ -7,7 +7,7 @@ ${COREBASE}/meta/recipes-core/glib-2.0/files:\
 inherit debian-package
 DEBIAN_SECTION = "libs"
 
-DPR = "0"
+DPR = "1"
 DPN = "glib2.0"
 
 LICENSE = "LGPLv2 & PD"
@@ -16,6 +16,8 @@ LIC_FILES_CHKSUM = "\
 	file://docs/reference/COPYING;md5=f51a5100c17af6bae00735cd791e1fcc\
 "
 
+#Remove depend on gtk-doc-stub-native
+DEPENDS_remove = "gtk-doc-stub-native"
 
 #
 # Patch files:
