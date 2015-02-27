@@ -8,6 +8,7 @@ inherit debian-package
 DEBIAN_SECTION = "libs"
 
 DPR = "0"
+DPN = "glib2.0"
 
 LICENSE = "LGPLv2 & PD"
 LIC_FILES_CHKSUM = "\
