@@ -10,6 +10,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 DEPENDS += "tcl-native"
+do_compile[depends] += "tcl-native:do_populate_sysroot"
 
 # Required to avoid a compile error
 SRC_URI += "file://fix-hardcode-libtool.patch"
