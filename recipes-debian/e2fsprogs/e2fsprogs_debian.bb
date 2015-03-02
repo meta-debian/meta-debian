@@ -5,7 +5,7 @@ ${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs:\
 
 inherit debian-package
 DEBIAN_SECTION = "admin"
-DPR = "0"
+DPR = "1"
 
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b48f21d765b875bd10400975d12c1ca2"
@@ -37,3 +37,7 @@ do_configure_prepend() {
 	sed -i -e "s:MKINSTALLDIRS = .*:MKINSTALLDIRS = @MKDIR_P@:" \
 							${S}/MCONFIG.in
 }
+
+# Remove option to disable libuuid to avoid error external uuid library
+# not found. 
+EXTRA_OECONF_remove = "--disable-libuuid --disable-uuidd"
