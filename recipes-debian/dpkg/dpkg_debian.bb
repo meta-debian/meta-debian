@@ -1,5 +1,5 @@
 require recipes-devtools/dpkg/${PN}_1.17.4.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/dpkg/${BPN}:"
+FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/dpkg/dpkg:"
 
 inherit debian-package
 DEBIAN_SECTION = "admin"
@@ -23,3 +23,17 @@ file://arch_pm.patch \
 file://dpkg-configure.service \
 file://glibc2.5-sync_file_range.patch \
 "
+
+# We want to use dpkg source code to build virtual/update-alternatives 
+# instead of opkg-utils - which is not supported by Debian. But dpkg depends
+# on 'ncurses' and 'bzip2', which inherit update-alternatives.bbclass, then
+# causes loop dependencies. So we assign another provider for 
+# virtual/update-alternatives, please refer to update-alternatives-dpkg_debian.bb
+
+DEPENDS_remove_class-native = "virtual/update-alternatives-native"
+
+do_install_append_class-target () {
+	rm ${D}${sbindir}/update-alternatives
+}
+
+PACKAGES_remove = "update-alternatives-dpkg"
