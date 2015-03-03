@@ -6,4 +6,4 @@ require gcc-shared-source.inc
 # | gcc-4.8.1-r0/gcc-4.8.1/gcc/cp/decl.c:7442:(.text.unlikely+0x318): additional relocation overflows omitted from the output
 ARM_INSTRUCTION_SET_armv4 = "arm"
 
-DEPENDS += "mpfr libmpc"
+DEPENDS += "mpfr libmpc gmp zlib"
