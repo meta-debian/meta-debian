@@ -4,7 +4,7 @@ FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-connectivity/openssl/openssl
 inherit debian-package
 
 DEBIAN_SECTION = "utils"
-DPR = "1"
+DPR = "2"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
@@ -46,3 +46,7 @@ file://run-ptest \
 # but by debian/patches/engines-path.patch, the path is "${libdir}/openssl-1.0.0/engines/*.so"
 FILES_${PN}-engines = "${libdir}/openssl-1.0.0/engines/*.so ${libdir}/engines"
 FILES_${PN}-engines-dbg = "${libdir}/openssl-1.0.0/engines/.debug"
+
+# Override CFLAG since we don't want to depend on cryptodev-linux-native
+# anymore.
+CFLAG_remove = "-DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS"
