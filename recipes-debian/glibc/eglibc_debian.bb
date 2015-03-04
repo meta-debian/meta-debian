@@ -27,6 +27,11 @@ DEPENDS_remove = "kconfig-frontends-native"
 #
 # Exclude GLRO_dl_debug_mask.patch because debian source code (2.19-10) 
 # does not support RTLD debug
+#
+# Exclude 0001-eglibc-menuconfig-support.patch
+#         0002-eglibc-menuconfig-hex-string-options_debian.patch
+#         0003-eglibc-menuconfig-build-instructions.patch
+# because Debian distro does not support kconfig-frontend
 
 SRC_URI += " \
 	file://eglibc-svn-arm-lowlevellock-include-tls.patch \
@@ -38,9 +43,6 @@ SRC_URI += " \
 	file://ppc-sqrt_finite.patch \
 	file://ppc_slow_ieee754_sqrt.patch \
 	file://add_resource_h_to_wait_h.patch \
-	file://0001-eglibc-menuconfig-support.patch \
-	file://0002-eglibc-menuconfig-hex-string-options_debian.patch \
-	file://0003-eglibc-menuconfig-build-instructions.patch \
 	file://fsl-ppc-no-fsqrt.patch \
 	file://0001-R_ARM_TLS_DTPOFF32.patch \
 	file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
@@ -48,30 +50,15 @@ SRC_URI += " \
 	file://grok_gold.patch \
 "
 
-# FIXME:
-# EGLIBC.*, option-groups.*: serves for "make config"
-# Debian source code does not include these files and work good enough at
-# configuring step, but recipe in meta/ has do_configure_append that requires
-# them. We want to get updates from Yocto in the future and don't want to
-# modify "required" recipe.
-#
 # manual: texinfo meterial to build libc's info page
 SRC_URI += " \
 	file://manual \
-	file://EGLIBC.cross-building \
-	file://EGLIBC.option-groups \
-	file://option-groups.def \
-	file://option-groups.defaults \
-	file://option-groups.awk \
 "
-# Install missing texinfo materials and option groups related files
+# Install missing texinfo materials
 do_debian_patch_append() {
-	cp -r ${WORKDIR}/EGLIBC.cross-building \
-		${WORKDIR}/EGLIBC.option-groups \
-		${WORKDIR}/option-groups.def \
-		${WORKDIR}/option-groups.defaults \
-		${WORKDIR}/manual ${S}
-	cp ${WORKDIR}/option-groups.awk ${S}/scripts
+	cp -r ${WORKDIR}/manual ${S}
+	# Set empty because kconfig-frontend is not supported
+	echo "config:" >> ${S}/Makeconfig
 }
 
 EXTRA_OECONF += " \
