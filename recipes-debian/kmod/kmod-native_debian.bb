@@ -4,10 +4,12 @@ DESCRIPTION = "kmod is a set of tools to handle common tasks with Linux kernel m
 
 HOMEPAGE = "http://packages.profusion.mobi/kmod/"
 
-inherit debian-package autotools ptest
+inherit debian-package autotools ptest native
 DEBIAN_SECTION = "admin"
 PR = "r0"
 DPR = "0"
+
+DEPENDS += "pkgconfig-native"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LICENSE_libkmod = "LGPLv2.1"
@@ -25,6 +27,10 @@ SRC_URI += "\
  file://Change-to-calling-bswap_-instead-of-htobe-and-be-toh_debian.patch \
 "
 
-EXTRA_AUTORECONF += "--install --symlink"                                       
+EXTRA_AUTORECONF += "--install --symlink"
 EXTRA_OECONF +="--enable-debug --enable-logging --enable-tools --disable-manpages\
-		 --with-zlib --disable-gtk-doc"
+		 --with-zlib"
+
+do_configure_prepend () {
+	touch ${S}/libkmod/docs/gtk-doc.make
+}
