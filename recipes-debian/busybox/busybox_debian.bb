@@ -43,3 +43,21 @@ file://inetd \
 file://login-utilities.cfg \                                         
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
 "
+
+# To help find ncurses header and library for do_menuconfig functions
+do_configure_prepend() {
+	
+	if test -f ${STAGING_INCDIR_NATIVE}/ncursesw/ncurses.h \
+		-o test -f ${STAGING_INCDIR_NATIVE}/ncurses/ncurses.h; then
+		sub_pair="/usr/include/:${STAGING_INCDIR_NATIVE}"
+	elif test -f ${STAGING_INCDIR_NATIVE}/ncurses.h; then
+		sub_pair="/usr/include/ncursesw:${STAGING_INCDIR_NATIVE}"
+	fi
+
+	sed -i -e "s:$sub_pair:g" \
+			${S}/scripts/kconfig/lxdialog/check-lxdialog.sh
+	# -B option to help gcc find library
+	sed -i -e "s:\$cc:\$cc -B${STAGING_LIBDIR_NATIVE}:g" \
+			${S}/scripts/kconfig/lxdialog/check-lxdialog.sh
+	
+}
