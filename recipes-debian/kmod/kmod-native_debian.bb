@@ -4,6 +4,8 @@ DESCRIPTION = "kmod is a set of tools to handle common tasks with Linux kernel m
 
 HOMEPAGE = "http://packages.profusion.mobi/kmod/"
 
+FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-kernel/kmod/kmod:"
+
 inherit debian-package autotools ptest native
 DEBIAN_SECTION = "admin"
 PR = "r0"
