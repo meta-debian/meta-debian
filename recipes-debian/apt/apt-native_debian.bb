@@ -23,3 +23,5 @@ file://apt.conf \
 SRC_URI += " \
 file://gtest-skip-fix.patch \
 "
+
+PARALLEL_MAKE = ""
