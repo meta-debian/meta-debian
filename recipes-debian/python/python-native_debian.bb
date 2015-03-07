@@ -32,3 +32,6 @@ file://add-md5module-support.patch \
 file://builddir_2.7.8.patch \
 file://parallel-makeinst-create-bindir.patch \
 "
+
+# Parallel make causes strange compile error so temporarily disable it
+PARALLEL_MAKE = ""
