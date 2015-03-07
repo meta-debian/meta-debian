@@ -55,3 +55,9 @@ EXTRA_OECONF_remove = " \
 	--disable-socket-activation \
 	--disable-su \
 "
+
+# To fix WARNING at build time: e2fsprogs-native and util-linux-native both
+# provide libuuid header and uuidgen utility.
+EXTRA_OECONF_class-native += " \
+	--disable-libuuid \
+"
