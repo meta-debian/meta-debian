@@ -32,5 +32,10 @@ file://Qemu-Arm-versatilepb-Add-memory-size-checking_debian.patch \
 #BIOS images cannot be built on cross compiling.
 # binary of BIOS should be downloaded from repository.
 #
-EXTRA_OECONF += "--disable-blobs"
-EXTRA_OECONF_virtclass-nativesdk += "--disable-blobs"
+#Since environment doesn't have libsdl, so qemu should not depend
+#on it.
+#
+EXTRA_OECONF += "--disable-blobs --disable-sdl"
+EXTRA_OECONF_virtclass-nativesdk += "--disable-blobs --disable-sdl"
+EXTRA_OECONF_remove = "--enable-sdl"
+EXTRA_OECONF_virtclass-nativesdk_remove = "--enable-sdl"
