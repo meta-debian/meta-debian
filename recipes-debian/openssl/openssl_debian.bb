@@ -50,3 +50,20 @@ FILES_${PN}-engines-dbg = "${libdir}/openssl-1.0.0/engines/.debug"
 # Override CFLAG since we don't want to depend on cryptodev-linux-native
 # anymore.
 CFLAG_remove = "-DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS"
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+        file://openssl-native-test/run_native_test_openssl \
+        file://openssl-native-test/run_version_command \
+        file://openssl-native-test/run_help_command \
+        file://openssl-native-test/run_cipher_command \
+        file://openssl-native-test/run_speed_command \
+        file://openssl-native-test/run_certificate_command \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_openssl"
+TEST_DIR = "${B}/native-test"
