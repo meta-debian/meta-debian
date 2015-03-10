@@ -9,7 +9,7 @@ SRC_URI += "${@bb.utils.contains('INHERIT_NATIVE', 'True', '${SRC_URI_DEBIAN_TES
 
 TEST_DIR ?= "${B}/test"
 
-addtask native_test after do_compile
+addtask native_test after do_populate_sysroot
 do_native_test[dirs] = "${TEST_DIR}"
 
 def define_debian_test_files(d):
@@ -42,7 +42,7 @@ do_summary_native_test() {
 	:
 }
 
-addtask prepare_native_test after do_compile before do_native_test
+addtask prepare_native_test after do_populate_sysroot before do_native_test
 
 # For native package only
 python () {
