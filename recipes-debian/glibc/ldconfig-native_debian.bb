@@ -44,3 +44,18 @@ do_compile () {
 	    locale/programs/xstrdup.c elf/cache.c elf/readlib.c  elf/dl-cache.c\ 
 		-o ldconfig
 }
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+	file://ldconfig-native-test/run_native_test_ldconfig \
+	file://ldconfig-native-test/run_option-v \
+	file://ldconfig-native-test/run_option-p \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_ldconfig"
+TEST_DIR = "${B}/native-test"
+

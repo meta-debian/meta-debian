@@ -1,0 +1,14 @@
+#!/bin/sh
+
+TESTS="\
+run_option-v \
+run_option-p \
+"
+which ldconfig
+for tst in $TESTS; do
+    if ./$tst; then
+        echo "PASS: $tst"
+    else
+        echo "FAIL: $tst"
+    fi
+done
