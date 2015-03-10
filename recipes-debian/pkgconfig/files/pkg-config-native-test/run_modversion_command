@@ -1,0 +1,5 @@
+#!/bin/sh
+
+pkg-config --modversion foo
+
+pkg-config --modversion bar
