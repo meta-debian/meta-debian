@@ -29,3 +29,16 @@ file://fix_STT_GNU_IFUNC.patch \
 do_configure_prepend() {
         sed "s/MKLIBS_VERSION/${PV}/" ${S}/configure.ac
 }
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+        file://mklibs-native-test/run_native_test_mklibs \
+        file://mklibs-native-test/run_version_command \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_mklibs"
+TEST_DIR = "${B}/native-test"
