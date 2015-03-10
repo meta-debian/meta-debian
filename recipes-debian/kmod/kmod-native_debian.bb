@@ -6,10 +6,10 @@ HOMEPAGE = "http://packages.profusion.mobi/kmod/"
 
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-kernel/kmod/kmod:"
 
-inherit debian-package autotools ptest native
+inherit debian-package autotools ptest native debian-test
 DEBIAN_SECTION = "admin"
 PR = "r0"
-DPR = "0"
+DPR = "1"
 
 DEPENDS += "pkgconfig-native"
 
@@ -36,3 +36,18 @@ EXTRA_OECONF +="--enable-debug --enable-logging --enable-tools --disable-manpage
 do_configure_prepend () {
 	touch ${S}/libkmod/docs/gtk-doc.make
 }
+
+#
+# Debian Native Test
+#
+
+SRC_URI_DEBIAN_TEST =" \
+ file://native_testcases/run_native_test_kmod \
+ file://native_testcases/run_version_command \
+ file://native_testcases/run_help_command \
+ file://native_testcases/run_list_command \
+ file://native_testcases/run_static_nodes_command \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_kmod"
+TEST_DIR = "${B}/test"
