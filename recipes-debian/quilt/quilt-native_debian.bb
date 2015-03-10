@@ -30,3 +30,21 @@ debian_patch_quilt() {
 		patch -p1 < ${PATCH_DIR}/${patch}
 	done
 }
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+        file://quilt-native-test/run_native_test_quilt \
+	file://quilt-native-test/run_without_options \
+	file://quilt-native-test/run_version_command \
+	file://quilt-native-test/run_trace_command \
+	file://quilt-native-test/run_series_command \
+	file://quilt-native-test/run_top_command \
+	file://quilt-native-test/run_add_command \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_quilt"
+TEST_DIR = "${B}/native-test"

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+TESTS=" \
+run_help_command \
+run_version_command \
+run_trace_command \
+run_top_command \
+run_add_command \
+run_series_command \
+"
+
+for tst in $TESTS; do
+	if ./$tst; then
+		echo "PASS: $tst"
+	else
+		echo "FAIL: $tst"
+	fi
+done
