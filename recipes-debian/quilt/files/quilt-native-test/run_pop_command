@@ -1,0 +1,3 @@
+#!/bin/sh
+
+quilt pop -a

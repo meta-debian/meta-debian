@@ -38,13 +38,17 @@ inherit debian-test
 
 SRC_URI_DEBIAN_TEST = "\
         file://quilt-native-test/run_native_test_quilt \
-	file://quilt-native-test/run_without_options \
+	file://quilt-native-test/run_help_command \
 	file://quilt-native-test/run_version_command \
 	file://quilt-native-test/run_trace_command \
 	file://quilt-native-test/run_series_command \
 	file://quilt-native-test/run_top_command \
-	file://quilt-native-test/run_add_command \
+	file://quilt-native-test/run_pop_command \
+	file://quilt-native-test/run_import_command \
+	file://quilt-native-test/run_push_command \
+	file://quilt-native-test/03_test \
+	file://quilt-native-test/add.c \
 "
 
 DEBIAN_NATIVE_TESTS = "run_native_test_quilt"
-TEST_DIR = "${B}/native-test"
+TEST_DIR = "${B}/quilt-native-test"
