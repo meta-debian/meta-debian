@@ -1,0 +1,3 @@
+#!/bin/sh
+
+gperf  -L C++ -H new_hash command_line_options.gperf > perfecthash.hpp
