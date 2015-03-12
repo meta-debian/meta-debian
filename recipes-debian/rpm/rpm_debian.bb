@@ -170,3 +170,20 @@ do_configure () {
 	export STAGING_LIBDIR=${STAGING_LIBDIR}
 	oe_runconf
 }
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+        file://rpm-native-test/run_native_test_rpm \
+        file://rpm-native-test/run_checkdepend_command \
+        file://rpm-native-test/run_get_info_command \
+        file://rpm-native-test/run_help_command \
+        file://rpm-native-test/run_usage_command \
+        file://rpm-native-test/quilt-0.64-1.1.noarch.rpm.test \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_rpm"
+TEST_DIR = "${B}/native-test"
