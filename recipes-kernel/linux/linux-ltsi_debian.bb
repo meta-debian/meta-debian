@@ -15,4 +15,11 @@ SRC_URI += "file://test.defconfig"
 
 DEPENDS += "bc-native"
 
-do_compile[depends] += "bc-native:do_populate_sysroot" 
+do_compile[depends] += "bc-native:do_populate_sysroot"
+
+# Required to make 'KERNEL_IMAGETYPE = "vmlinux"' available
+do_compile_append() {
+        mkdir -p ${B}/arch/${ARCH}/boot
+	cd ${B}/arch/${ARCH}/boot
+        ln -sf ../../../vmlinux vmlinux
+}
