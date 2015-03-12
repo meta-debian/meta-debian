@@ -35,14 +35,22 @@ LIC_FILES_CHKSUM="\
 # mips64-default-ld-emulation.patch, binutils-xlp-support.patch
 # no need to apply since source code has changed.
 SRC_URI += "\
-	file://binutils-uclibc-100-uclibc-conf.patch\
-	file://binutils-uclibc-300-006_better_file_error.patch\
-	file://binutils-uclibc-gas-needs-libm.patch\
-	file://libtool-2.4-update_debian.patch\
-	file://libiberty_path_fix.patch\
-	file://binutils-poison_debian.patch\
-	file://libtool-rpath-fix_debian.patch\
-	file://binutils-armv5e.patch\
+	file://binutils-uclibc-100-uclibc-conf.patch \
+	file://binutils-uclibc-300-006_better_file_error.patch \
+	file://binutils-uclibc-gas-needs-libm.patch \
+	file://libtool-2.4-update_debian.patch \
+	file://libiberty_path_fix.patch \
+	file://binutils-poison_debian.patch \
+	file://libtool-rpath-fix_debian.patch \
+	file://binutils-armv5e.patch \
+	file://binutils_CVE-2014-8484_debian.patch \
+	file://binutils_CVE-2014-8485.patch \
+	file://binutils_CVE-2014-8501.patch \
+	file://binutils_CVE-2014-8502_1.patch \
+	file://binutils_CVE-2014-8502.patch \
+	file://binutils_CVE-2014-8503.patch \
+	file://binutils_CVE-2014-8504.patch \
+	file://binutils_CVE-2014-8737_debian.patch \
 "
 
 DEPENDS += "flex bison zlib"                                                    
