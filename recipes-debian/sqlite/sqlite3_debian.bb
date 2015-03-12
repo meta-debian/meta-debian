@@ -22,3 +22,22 @@ do_compile_prepend_class-target () {
 do_install_prepend_class-target () {
 	export CROSS_BUILDING="yes"
 }
+
+#
+# Debian Native Test
+#
+inherit debian-test
+
+SRC_URI_DEBIAN_TEST = "\
+        file://sqlite3-native-test/run_native_test_sqlite3 \
+        file://sqlite3-native-test/run_create_table \
+        file://sqlite3-native-test/run_insert_record \
+        file://sqlite3-native-test/run_view_record \
+        file://sqlite3-native-test/run_alter_tablename \
+        file://sqlite3-native-test/run_version_command \
+        file://sqlite3-native-test/run_drop_table \
+        file://sqlite3-native-test/insert-data.sql \
+"
+
+DEBIAN_NATIVE_TESTS = "run_native_test_sqlite3"
+TEST_DIR = "${B}/native-test"

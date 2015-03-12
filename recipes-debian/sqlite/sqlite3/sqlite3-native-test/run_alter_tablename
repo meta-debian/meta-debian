@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sqlite3 company.db "alter table department rename to dept;"
