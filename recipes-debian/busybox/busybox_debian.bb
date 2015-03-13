@@ -1,7 +1,8 @@
 require recipes-core/busybox/${PN}_1.22.1.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-core/busybox/busybox:\
+${THISDIR}/files:\
 ${COREBASE}/meta/recipes-core/busybox/files:\
+${COREBASE}/meta/recipes-core/busybox/busybox:\
 "
 
 inherit debian-package
