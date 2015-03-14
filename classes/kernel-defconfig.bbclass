@@ -25,6 +25,8 @@ do_defconfig() {
 	rm -rf ${B}
 	mkdir -p ${B}
 	cd ${B}
+	# To make source tree clean
+	oe_runmake ARCH=${ARCH} -C ${S} mrproper
 	oe_runmake \
 		ARCH=${ARCH} CROSS_COMPILE=${TARGET_PREFIX} O=${B} -C ${S} \
 		KBUILD_DEFCONFIG=../../../defconfig defconfig || \
