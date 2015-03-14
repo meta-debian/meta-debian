@@ -26,6 +26,12 @@ do_configure_prepend() {
 
 	# To avoid rebuilding manpages.
 	touch ${S}/doc/m4.1
+
+	# To avoid running autoconf
+	touch ${S}/configure
+
+	# To avoid running autoheader   
+	touch ${S}/lib/config.hin
 }
 
 do_compile_prepend() {
