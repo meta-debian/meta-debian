@@ -10,7 +10,7 @@ inherit kernel kernel-defconfig
 require linux-shared-source.inc
 require linux-ltsi-common.inc
 
-LINUX_CONF = "${SW}/test.defconfig"
+LINUX_CONF = "${SW}/test.${TARGET_ARCH}.defconfig"
 defconfig[dirs] = "${SW}"
 do_defconfig[depends] += " \
 	linux-ltsi-source:do_patch \

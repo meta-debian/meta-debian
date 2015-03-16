@@ -1,4 +1,3 @@
-inherit allarch
 require linux-ltsi-common.inc
 
 deltask do_configure
@@ -13,6 +12,6 @@ deltask do_package_qa
 deltask do_packagedata                                                          
 deltask do_rm_work
 
-SRC_URI += "file://test.defconfig"
+SRC_URI += "file://test.${TARGET_ARCH}.defconfig"
 
 PROVIDES += "nativesdk-linux-ltsi-source"
