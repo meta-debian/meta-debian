@@ -6,8 +6,8 @@ inherit kernel-checkout
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-LINUX_SRCREV = "linux-3.10.y-zynq-backport"
-LINUX_VERSION = "3.10.24"
+LINUX_SRCREV ?= "linux-3.10.y-zynq-backport"
+LINUX_VERSION ?= "3.10.24"
 
 S = "${TMPDIR}/work-shared/linux-${PV}-${PR}/git"
 
