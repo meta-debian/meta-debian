@@ -1,5 +1,6 @@
 # Default repository uri
-LINUX_REPO ??= "git://github.com/ystk"
+LINUX_REPO ??= "${DEBIAN_GIT_URI}"
+LINUX_PROTOCOL ??= "${DEBIAN_GIT_PROTOCOL}"
 
 # Default source directory, use Long Term Support Initiative Linux
 LINUX_SRC ??= "linux-poky-debian"
@@ -8,7 +9,7 @@ LINUX_SRC ??= "linux-poky-debian"
 LINUX_SRCREV ??= "linux-3.10.y-ltsi"
 SRCREV = "${LINUX_SRCREV}"
 
-SRC_URI = "${LINUX_REPO}/${LINUX_SRC}.git;branch=${SRCREV};protocol=git"
+SRC_URI = "${LINUX_REPO}/${LINUX_SRC}.git;branch=${SRCREV};protocol=${LINUX_PROTOCOL}"
 
 S ?= "${WORKDIR}/git"
 B ?= "${WORKDIR}/build"

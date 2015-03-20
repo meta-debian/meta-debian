@@ -12,9 +12,10 @@ DPR ?= ""
 # * remove SECTION (need to change git repo paths)
 # * consider other branches like backport
 # * consider fetching by a common tag
-DEBIAN_BRANCH ?= "${DISTRO_CODENAME}-master"
-DEBIAN_SECTION ?= "SECTION"
-DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_SECTION}/${DPN}.git;protocol=git;branch=${DEBIAN_BRANCH}"
+DEBIAN_GIT_DIR ?= "debian-${DPN}.git"
+DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
+DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_GIT_DIR};\
+protocol=${DEBIAN_GIT_PROTOCOL};branch=${DEBIAN_GIT_BRANCH}"
 SRC_URI = "${DEBIAN_SRC_URI}"
 # By default, always use latest version of the default branch
 # TODO: consider fetching by a common tag
