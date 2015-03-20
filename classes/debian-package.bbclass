@@ -5,32 +5,30 @@
 # Debian source package name
 DPN ?= "${BPN}"
 
-# should be defined in each recipe
+# revision of Debian recipes
+# should be statically defined in each recipe
 DPR ?= ""
 
-# TODO:
-# * remove SECTION (need to change git repo paths)
-# * consider other branches like backport
-# * consider fetching by a common tag
+# default SRC_URI
 DEBIAN_GIT_DIR ?= "debian-${DPN}.git"
 DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
 DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_GIT_DIR};\
 protocol=${DEBIAN_GIT_PROTOCOL};branch=${DEBIAN_GIT_BRANCH}"
+
 SRC_URI = "${DEBIAN_SRC_URI}"
+
 # By default, always use latest version of the default branch
-# TODO: consider fetching by a common tag
 SRCREV = "${AUTOREV}"
 
-# TODO: we want to include "Package version number" in PV
 PV = "git${SRCPV}"
 
 DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
 
-# sometimes need to be overwritten by a sub directory
+# sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
 S = "${DEBIAN_UNPACK_DIR}"
 
 ###############################################################################
-# parse
+# during parsing recipe
 ###############################################################################
 
 python __anonymous() {
@@ -128,7 +126,6 @@ debian_patch_abnormal() {
 # candidates: quilt, dpatch, nopatch, abnormal
 DEBIAN_PATCH_TYPE ?= ""
 
-# TODO: also depends on "dpatch-native"
 addtask debian_patch after do_unpack before do_patch
 do_debian_patch[dirs] = "${DEBIAN_UNPACK_DIR}"
 do_debian_patch[depends] += "${@base_conditional(\

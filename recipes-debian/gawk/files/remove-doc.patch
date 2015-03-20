@@ -6,8 +6,6 @@
 # debian/rules solves this problem on make by touching empty files,
 # but this solution cannot solve the problem on automake.
 #
-# Skerlet Project Team <skerlet@swc.toshiba.co.jp>
-#
 
 diff --git a/Makefile.am b/Makefile.am
 index f49c273..70d11a4 100644
