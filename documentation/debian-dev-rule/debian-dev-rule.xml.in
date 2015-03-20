@@ -1,6 +1,6 @@
 <!--
-Poky Debian Development Rules
-Copyright (C) 2014 TOSHIBA CORPORATION
+meta-debian Development Rules
+Copyright (C) 2015 TOSHIBA CORPORATION
 -->
 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
@@ -9,7 +9,7 @@ Copyright (C) 2014 TOSHIBA CORPORATION
 
 <article id='intro'>
     <articleinfo>
-        <title>Poky Debian Development Rules</title>
+        <title>meta-debian Development Rules</title>
         <copyright>
             <year>&COPYRIGHT_YEAR;</year>
             <holder>TOSHIBA CORPORATION</holder>
@@ -235,17 +235,5 @@ quilt-native_debian.bb: becomes independent of native quilt command
         </itemizedlist>
     </para>
 </section>
-
-<!--
-TODO
-
-rules about developing Debian recipes (debian-package.bbclass)
-* How to require base recipes
-* About "require"
- * "5.1.3.2. Avoid Duplicating Include Files"
- * http://www.yoctoproject.org/docs/1.6/dev-manual/dev-manual.html#best-practices-to-follow-when-creating-layers
-
-DEPENDS, RDEPENDS
--->
 
 </article>
