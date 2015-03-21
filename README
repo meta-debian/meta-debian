@@ -1,10 +1,12 @@
+Copyright (C) 2015 TOSHIBA CORPORATION
+
 meta-debian
 ===========
 
 This layer provides recipes to build source packages provided by Debian.
 
 Debian version: 8.0 jessie (testing)
-Supported Yoct Project version: 1.6 'Daisy'
+Yoct Project version: 1.6 'Daisy'
 You can build small Linux with Debian sources by enabling this layer.
 
 How to bitbake
@@ -18,8 +20,25 @@ $ git clone https://github.com/ystk/meta-debian.git
 $ cd meta-debian
 $ git checkout daisy
 
-Bitbake tiny rootfs
+Please don't forget to install essential packages
+into your host system before you bitbake something.
+http://www.yoctoproject.org/docs/1.6/poky-ref-manual/poky-ref-manual.html#intro-requirements
+
+Setup build directory
 $ source ./poky/oe-init-build-env
-$ cp ../poky/meta-debian/conf/bblayers.conf.sample conf/bblayers.conf
 $ cp ../poky/meta-debian/conf/local.conf.sample conf/local.conf
+
+Copy the following definitions to your conf/bblayers.conf
+in order to enable meta-debian layer.
+-------------->8--------------
+BBLAYERS = " \
+  /path/to/poky/meta \
+  /path/to/poky/meta-debian \
+  "
+BBLAYERS_NON_REMOVABLE = " \
+  /path/to/poky/meta \
+  "
+-------------->8--------------
+
+Bitbake tiny rootfs
 $ bitbake core-image-minimal
