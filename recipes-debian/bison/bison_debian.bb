@@ -31,5 +31,3 @@ ${BASE_SRC_URI} \
 SRC_URI += " \
 ${BASE_SRC_URI} \
 "
-
-inherit debian-fix-timestamp
