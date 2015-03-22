@@ -31,3 +31,6 @@ ${BASE_SRC_URI} \
 SRC_URI += " \
 ${BASE_SRC_URI} \
 "
+
+# avoid a parallel build problem in src/yacc
+PARALLEL_MAKE = ""
