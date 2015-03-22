@@ -174,3 +174,9 @@ do_debian_patch() {
 	esac
 }
 EXPORT_FUNCTIONS do_debian_patch
+
+###############################################################################
+# do_debian_fix_timestamp
+###############################################################################
+
+inherit debian-fix-timestamp
