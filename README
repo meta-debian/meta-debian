@@ -9,6 +9,17 @@ Debian version: 8.0 jessie (testing)
 Yoct Project version: 1.6 'Daisy'
 You can build small Linux with Debian sources by enabling this layer.
 
+License
+=======
+
+License of meta-debian is same as meta in poky i.e.
+All metadata is MIT licensed unless otherwise stated.
+Source code included in tree for individual recipes
+is under the LICENSE stated in the associated recipe
+(.bb file) unless otherwise stated.
+
+See COPYING.MIT for more details about MIT license.
+
 How to bitbake
 ==============
 
