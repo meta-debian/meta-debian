@@ -13,7 +13,9 @@ DEPENDS_class-native = "zlib-native"
 
 SRC_URI = "ftp://ftp.astron.com/pub/file/file-${PV}.tar.gz \
            file://dump \
-           file://filesystems"
+           file://filesystems \
+	   file://file-CVE-2014-9620-and-CVE-2014-9621_debian.patch \
+"
 
 SRC_URI[md5sum] = "359c0cf41c3d438d17b4d293f3b950dc"
 SRC_URI[sha256sum] = "48bcac7726c37a8a0bc7ffa16b58993575657dd7b382039380fb3b74ab389261"
