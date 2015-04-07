@@ -3,11 +3,13 @@ Copyright (C) 2015 TOSHIBA CORPORATION
 meta-debian
 ===========
 
-This layer provides recipes to build source packages provided by Debian.
+This layer provides recipes to build a minimal image using Debian
+source packages from upstream Debian repositories.
 
 Debian version: 8.0 jessie (testing)
-Yoct Project version: 1.6 'Daisy'
-You can build small Linux with Debian sources by enabling this layer.
+Yocto Project version: 1.6 'Daisy'
+You can build a small GNU/Linux image with Debian sources by enabling
+this layer.
 
 License
 =======
