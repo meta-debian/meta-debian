@@ -50,15 +50,12 @@ SRC_URI += " \
 	file://grok_gold.patch \
 "
 
-# manual: texinfo meterial to build libc's info page
-SRC_URI += " \
-	file://manual \
-"
-# Install missing texinfo materials
 do_debian_patch_append() {
-	cp -r ${WORKDIR}/manual ${S}
 	# Set empty because kconfig-frontend is not supported
 	echo "config:" >> ${S}/Makeconfig
+
+	# No documentation
+	sed -i -e "s:manual::" ${S}/Makeconfig
 }
 
 EXTRA_OECONF += " \
@@ -67,3 +64,5 @@ EXTRA_OECONF += " \
 	--without-cvs \
 	--enable-add-ons=nptl,libidn,ports \
 "
+
+FILES_${PN}-doc += "${datadir}"
