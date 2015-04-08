@@ -55,3 +55,9 @@ BBLAYERS_NON_REMOVABLE = " \
 
 Bitbake tiny rootfs
 $ bitbake core-image-minimal
+
+Latest testing commit ID
+========================
+
+Yocto Project version: 1.6 'Daisy'
+Commit ID: 6b8f7999c3e86d6e834af95ffe4c33d0d53db34a
