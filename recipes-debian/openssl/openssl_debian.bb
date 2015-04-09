@@ -1,4 +1,4 @@
-require recipes-connectivity/openssl/openssl_1.0.1j.bb
+require recipes-connectivity/openssl/openssl_1.0.1m.bb
 FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-connectivity/openssl/openssl:"
 
 inherit debian-package
