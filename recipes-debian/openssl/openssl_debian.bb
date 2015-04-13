@@ -4,7 +4,7 @@ FILESEXTRAPATHS_prepend = "${THISDIR}/files:${THISDIR}/files:${COREBASE}/meta/re
 inherit debian-package
 
 DEBIAN_SECTION = "utils"
-DPR = "2"
+DPR = "3"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
