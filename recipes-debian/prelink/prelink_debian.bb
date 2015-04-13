@@ -1,5 +1,5 @@
 require recipes-devtools/prelink/prelink_git.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/prelink/prelink:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/prelink/prelink:"
 
 inherit debian-package
 

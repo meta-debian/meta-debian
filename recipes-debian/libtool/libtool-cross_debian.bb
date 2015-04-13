@@ -1,6 +1,6 @@
 require recipes-devtools/libtool/libtool-cross_2.4.2.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/libtool/libtool:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/libtool/libtool:\
 "
 
 inherit debian-package

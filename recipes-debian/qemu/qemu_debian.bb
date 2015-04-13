@@ -1,7 +1,7 @@
 require recipes-devtools/qemu/qemu.inc
 
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/qemu/qemu:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/qemu/qemu:\
 ${COREBASE}/meta/recipes-devtools/qemu/files:\
 " 
 

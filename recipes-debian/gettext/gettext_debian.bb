@@ -1,6 +1,6 @@
 require recipes-core/gettext/gettext_0.18.3.2.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-core/gettext/gettext-0.18.3.2:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/gettext/gettext-0.18.3.2:\
 "
 
 inherit debian-package

@@ -1,6 +1,6 @@
 #FILESEXTRAPATHS_prepend = "${THISDIR}/files:"
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta-debian/recipes-debian/run-postinsts/files:\
+${THISDIR}/files:${COREBASE}/meta-debian/recipes-debian/run-postinsts/files:\
 "
 
 # run-postinsts.init from base recipe missing LSB

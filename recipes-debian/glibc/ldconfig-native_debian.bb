@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "\
 "
 
 FILESPATH_prepend = "\
-${COREBASE}/meta/recipes-core/eglibc/ldconfig-native-2.12.1:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/eglibc/ldconfig-native-2.12.1:\
 ${THISDIR}/files:\
 "
 

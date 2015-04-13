@@ -1,6 +1,6 @@
 require recipes-support/nspr/nspr_4.10.3.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-support/nspr/nspr:\
+${THISDIR}/files:${COREBASE}/meta/recipes-support/nspr/nspr:\
 ${COREBASE}/meta/recipes-support/nspr/files:\
 "
 

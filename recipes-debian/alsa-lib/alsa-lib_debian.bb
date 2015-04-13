@@ -1,5 +1,5 @@
 require recipes-multimedia/alsa/${PN}_1.0.27.2.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-multimedia/alsa/alsa-lib:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-multimedia/alsa/alsa-lib:"
 
 inherit debian-package
 DEBIAN_SECTION = "libs"

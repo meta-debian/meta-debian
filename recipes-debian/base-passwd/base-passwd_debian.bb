@@ -1,6 +1,6 @@
 require recipes-core/base-passwd/base-passwd_3.5.29.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-core/base-passwd/base-passwd:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/base-passwd/base-passwd:\
 "
 
 inherit debian-package

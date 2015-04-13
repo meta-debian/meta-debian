@@ -1,6 +1,6 @@
 require recipes-support/gmp/gmp.inc
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-support/gmp/gmp:\
+${THISDIR}/files:${COREBASE}/meta/recipes-support/gmp/gmp:\
 ${COREBASE}/meta/recipes-support/gmp/files:\
 "
 

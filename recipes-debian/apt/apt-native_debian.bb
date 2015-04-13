@@ -1,6 +1,6 @@
 require recipes-devtools/apt/apt-native_0.9.9.4.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/apt/files:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/apt/files:\
 ${COREBASE}/meta/recipes-devtools/apt/apt-0.9.9.4:\
 "
 

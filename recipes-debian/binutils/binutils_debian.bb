@@ -2,7 +2,7 @@ require recipes-devtools/binutils/binutils.inc
 require recipes-devtools/binutils/binutils-2.24.inc
 
 FILESEXTRAPATHS_prepend ="\
-${COREBASE}/meta/recipes-devtools/binutils/binutils:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/binutils/binutils:\
 "
 
 inherit debian-package

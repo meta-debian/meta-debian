@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/perl/perl-5.14.3:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/perl/perl-5.14.3:"
 
 inherit debian-package
 

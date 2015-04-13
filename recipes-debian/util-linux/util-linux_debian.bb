@@ -1,7 +1,7 @@
 require recipes-core/util-linux/util-linux_2.24.1.bb
 
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-core/util-linux/util-linux:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/util-linux/util-linux:\
 "
 
 inherit debian-package

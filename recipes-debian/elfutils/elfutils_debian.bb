@@ -1,6 +1,6 @@
 require recipes-devtools/elfutils/${BPN}_0.155.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/elfutils/elfutils-0.155:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/elfutils/elfutils-0.155:\
 ${COREBASE}/meta/recipes-devtools/elfutils/elfutils:\
 "
 

@@ -1,5 +1,5 @@
 require recipes-devtools/bison/${PN}_2.7.1.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/bison/bison:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/bison/bison:"
 
 inherit debian-package
 DEBIAN_SECTION = "devel"
