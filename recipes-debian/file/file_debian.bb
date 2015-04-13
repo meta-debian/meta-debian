@@ -1,5 +1,5 @@
 require file-5.16.inc 
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/file/${BPN}:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/file/${BPN}:"
 
 inherit debian-package
 DEBIAN_SECTION = "utils"

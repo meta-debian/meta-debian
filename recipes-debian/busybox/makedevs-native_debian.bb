@@ -1,6 +1,6 @@
 SUMMARY = "Tool for creating device nodes"
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-core/busybox/busybox:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/busybox/busybox:\
 ${COREBASE}/meta/recipes-core/busybox/files:\
 "
 

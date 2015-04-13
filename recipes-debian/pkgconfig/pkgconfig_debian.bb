@@ -1,6 +1,6 @@
 require recipes-devtools/pkgconfig/pkgconfig_0.28.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/pkgconfig/pkgconfig-0.28:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/pkgconfig/pkgconfig-0.28:\
 ${COREBASE}/meta/recipes-devtools/pkgconfig/pkgconfig:\
 "
 

@@ -1,5 +1,5 @@
 require recipes-core/eglibc/eglibc_2.19.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-core/eglibc/eglibc-2.19:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-core/eglibc/eglibc-2.19:"
 
 inherit debian-package
 DEBIAN_SECTION = "libs"

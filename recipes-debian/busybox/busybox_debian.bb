@@ -1,7 +1,7 @@
 require recipes-core/busybox/${PN}_1.22.1.bb
 FILESEXTRAPATHS_prepend = "\
 ${THISDIR}/files:\
-${COREBASE}/meta/recipes-core/busybox/files:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/busybox/files:\
 ${COREBASE}/meta/recipes-core/busybox/busybox:\
 "
 

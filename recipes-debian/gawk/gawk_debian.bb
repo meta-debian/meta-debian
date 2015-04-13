@@ -1,6 +1,6 @@
 require recipes-extended/gawk/gawk_4.0.2.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-extended/gawk/gawk-4.0.2:\
+${THISDIR}/files:${COREBASE}/meta/recipes-extended/gawk/gawk-4.0.2:\
 ${COREBASE}/meta/recipes-extended/gawk/files:\
 "
 

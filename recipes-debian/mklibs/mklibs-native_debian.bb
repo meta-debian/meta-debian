@@ -6,7 +6,7 @@
 # is failed.
 #require recipes-devtools/mklibs/mklibs-native_0.1.38.bb
 
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/mklibs/files:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/mklibs/files:"
 
 DEPENDS = "python-native dpkg-native"
 

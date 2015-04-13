@@ -1,5 +1,5 @@
 require recipes-devtools/libtool/${PN}_2.4.2.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/libtool/libtool:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/libtool/libtool:"
 
 inherit debian-package
 DEBIAN_SECTION = "devel"

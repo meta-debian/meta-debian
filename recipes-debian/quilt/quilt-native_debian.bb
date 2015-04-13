@@ -1,5 +1,5 @@
 require recipes-devtools/quilt/${PN}_0.61.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/quilt/quilt:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/quilt/quilt:"
 
 inherit debian-package
 DEBIAN_SECTION = "vcs"

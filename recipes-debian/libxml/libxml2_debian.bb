@@ -1,6 +1,6 @@
 require recipes-core/libxml/libxml2_2.9.1.bb
 FILESEXTRAPATHS_prepend ="\
-${COREBASE}/meta/recipes-core/libxml/libxml2:\
+${THISDIR}/files:${COREBASE}/meta/recipes-core/libxml/libxml2:\
 "
 
 inherit debian-package

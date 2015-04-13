@@ -1,5 +1,5 @@
 require recipes-devtools/m4/${PN}_1.4.17.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/m4/m4:"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/m4/m4:"
 
 inherit debian-package
 DEBIAN_SECTION = "interpreters"

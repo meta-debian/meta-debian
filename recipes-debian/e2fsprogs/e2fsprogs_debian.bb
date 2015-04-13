@@ -1,6 +1,6 @@
 require recipes-devtools/e2fsprogs/${PN}_1.42.9.bb
 FILESEXTRAPATHS_prepend = "\
-${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs:\
+${THISDIR}/files:${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs:\
 "
 
 inherit debian-package
