@@ -6,10 +6,10 @@ require recipes-support/libmpc/libmpc_1.0.2.bb
 inherit debian-package pkgconfig
 DEBIAN_SECTION = "libs"
 DPR = "0"
-DPN = "mpclib"
+DPN = "mpclib3"
 
 LICENSE = "LGPLv3"
-LIC_FILES_CHKSUM = "file://COPYING.LIB;md5=7fbc338309ac38fefcd64b04bb903e34"
+LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=e6a600fd5e1d9cbde2d983680233ad02"
 
 DEBIAN_PATCH_TYPE = "quilt"
 
