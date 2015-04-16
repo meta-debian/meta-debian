@@ -22,6 +22,18 @@ is under the LICENSE stated in the associated recipe
 
 See COPYING.MIT for more details about MIT license.
 
+Community Resources
+===================
+
+Project home:
+  * https://github.com/ystk/meta-debian
+
+Mailing list:
+  * meta-debian@googlegroups.com 
+  * Subscription
+    - meta-debian+subscribe@googlegroups.com 
+    - https://groups.google.com/forum/#!forum/meta-debian/join
+
 How to bitbake
 ==============
 
