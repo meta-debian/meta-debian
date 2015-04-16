@@ -136,6 +136,8 @@ require gcc-debian.inc
 
 # Exclude patch which for older version
 # 0001-gcc-4.3.1-ARCH_FLAGS_FOR_TARGET.patch
+# Exclude a patch already applied in version 4.9.2-10
+# file://0055-PR-rtl-optimization-61801.patch
 SRC_URI += "\
     file://0002-uclibc-conf.patch \
     file://0003-gcc-uclibc-locale-ctype_touplow_t.patch \
@@ -180,7 +182,6 @@ SRC_URI += "\
     file://0051-eabispe.patch \
     file://0053-gcc-fix-segfault-from-calling-free-on-non-malloc-d-a.patch \
     file://0054-gcc-Makefile.in-fix-parallel-building-failure.patch \
-    file://0055-PR-rtl-optimization-61801.patch \
     file://0056-top-level-reorder_gcc-bug-61144.patch \
     file://0057-aarch64-config.patch \
     file://0058-gcc-r212171.patch \
