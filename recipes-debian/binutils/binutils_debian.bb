@@ -34,6 +34,15 @@ LIC_FILES_CHKSUM="\
 #
 # mips64-default-ld-emulation.patch, binutils-xlp-support.patch
 # no need to apply since source code has changed.
+#
+# the following CVEs are already applied in 2.25-5
+# binutils_CVE-2014-8484.patch
+# binutils_CVE-2014-8485.patch
+# binutils_CVE-2014-8504.patch
+# binutils_CVE-2014-8501.patch
+# binutils_CVE-2014-8502.patch
+# binutils_CVE-2014-8503.patch
+# binutils_CVE-2014-8737.patch
 SRC_URI += "\
 	file://binutils-uclibc-100-uclibc-conf.patch \
 	file://binutils-uclibc-300-006_better_file_error.patch \
@@ -43,14 +52,6 @@ SRC_URI += "\
 	file://binutils-poison_debian.patch \
 	file://libtool-rpath-fix_debian.patch \
 	file://binutils-armv5e.patch \
-	file://binutils_CVE-2014-8484_debian.patch \
-	file://binutils_CVE-2014-8485.patch \
-	file://binutils_CVE-2014-8501.patch \
-	file://binutils_CVE-2014-8502_1.patch \
-	file://binutils_CVE-2014-8502.patch \
-	file://binutils_CVE-2014-8503.patch \
-	file://binutils_CVE-2014-8504.patch \
-	file://binutils_CVE-2014-8737_debian.patch \
 "
 
 DEPENDS += "flex bison zlib"                                                    
