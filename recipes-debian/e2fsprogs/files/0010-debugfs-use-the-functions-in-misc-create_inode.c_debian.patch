@@ -1,5 +1,5 @@
 diff --git a/debugfs/Makefile.in b/debugfs/Makefile.in
-index 3dd06f0..b4b07f8 100644
+index 3dd06f0..04a39ca 100644
 --- a/debugfs/Makefile.in
 +++ b/debugfs/Makefile.in
 @@ -18,7 +18,7 @@ MK_CMDS=	_SS_DIR_OVERRIDE=../lib/ss ../lib/ss/mk_cmds
@@ -47,7 +47,7 @@ index 3dd06f0..b4b07f8 100644
   $(top_builddir)/lib/dirpaths.h $(top_srcdir)/lib/ss/ss.h \
   $(top_builddir)/lib/ss/ss_err.h $(top_srcdir)/lib/et/com_err.h \
 diff --git a/debugfs/debugfs.c b/debugfs/debugfs.c
-index 9226b92..2779bbf 100644
+index f73e258..9f7a5c7 100644
 --- a/debugfs/debugfs.c
 +++ b/debugfs/debugfs.c
 @@ -25,8 +25,6 @@ extern char *optarg;
@@ -80,11 +80,11 @@ index 9226b92..2779bbf 100644
 -ext2_filsys	current_fs = NULL;
  quota_ctx_t	current_qctx;
 -ext2_ino_t	root, cwd;
-+ext2_ino_t	cwd;
++ext2_ino_t     cwd;
  
  static void open_filesystem(char *device, int open_flags, blk64_t superblock,
  			    blk64_t blocksize, int catastrophic,
-@@ -1576,190 +1563,25 @@ void do_find_free_inode(int argc, char *argv[])
+@@ -1576,195 +1563,25 @@ void do_find_free_inode(int argc, char *argv[])
  }
  
  #ifndef READ_ONLY
@@ -231,7 +231,12 @@ index 9226b92..2779bbf 100644
 -	inode.i_atime = inode.i_ctime = inode.i_mtime =
 -		current_fs->now ? current_fs->now : time(0);
 -	inode.i_links_count = 1;
--	inode.i_size = statbuf.st_size;
+-	retval = ext2fs_inode_size_set(current_fs, &inode, statbuf.st_size);
+-	if (retval) {
+-		com_err(argv[2], retval, 0);
+-		close(fd);
+-		return;
+-	}
 -	if (current_fs->super->s_feature_incompat &
 -	    EXT3_FEATURE_INCOMPAT_EXTENTS) {
 -		int i;
@@ -273,11 +278,11 @@ index 9226b92..2779bbf 100644
  	errcode_t 	retval;
 -	struct ext2_inode inode;
  	int		filetype, nr;
-+	struct stat	st;
++	struct stat     st;
  
  	if (check_fs_open(argv[0]))
  		return;
-@@ -1771,113 +1593,46 @@ void do_mknod(int argc, char *argv[])
+@@ -1776,112 +1593,45 @@ void do_mknod(int argc, char *argv[])
  	mode = minor = major = 0;
  	switch (argv[2][0]) {
  		case 'p':
@@ -316,7 +321,7 @@ index 9226b92..2779bbf 100644
 -		return;
 -	retval = ext2fs_new_inode(current_fs, cwd, 010755, 0, &newfile);
 -	if (retval) {
-+
++	
 +	st.st_rdev = makedev(major, minor);
 +	if ((retval = do_mknod_internal(cwd, argv[1], &st)))
  		com_err(argv[0], retval, 0);
@@ -366,7 +371,7 @@ index 9226b92..2779bbf 100644
  	if (common_args_process(argc, argv, 2, 2, "mkdir",
  				"<filename>", CHECK_FS_RW))
  		return;
- 
+-
 -	cp = strrchr(argv[1], '/');
 -	if (cp) {
 -		*cp = 0;
@@ -395,13 +400,12 @@ index 9226b92..2779bbf 100644
 -		com_err("ext2fs_mkdir", retval, 0);
 -		return;
 -	}
--
 +	if ((retval = do_mkdir_internal(cwd, argv[1], NULL)))
 +		com_err(argv[0], retval, 0);
+ 
  }
  
- static int release_blocks_proc(ext2_filsys fs, blk64_t *blocknr,
-@@ -2271,45 +2026,14 @@ void do_punch(int argc, char *argv[])
+@@ -2309,45 +2059,14 @@ void do_punch(int argc, char *argv[])
  
  void do_symlink(int argc, char *argv[])
  {
@@ -450,7 +454,7 @@ index 9226b92..2779bbf 100644
  
  void do_dump_mmp(int argc EXT2FS_ATTR((unused)), char *argv[])
 diff --git a/debugfs/debugfs.h b/debugfs/debugfs.h
-index 9b67f69..9e9af5c 100644
+index 0e75cee..3406b80 100644
 --- a/debugfs/debugfs.h
 +++ b/debugfs/debugfs.h
 @@ -6,6 +6,7 @@

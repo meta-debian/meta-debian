@@ -1,5 +1,5 @@
 diff --git a/misc/Makefile.in b/misc/Makefile.in
-index 8d3318b..f1e3160 100644
+index a68edff..ee310e6 100644
 --- a/misc/Makefile.in
 +++ b/misc/Makefile.in
 @@ -43,7 +43,7 @@ LPROGS=		@E2INITRD_PROG@
@@ -11,17 +11,16 @@ index 8d3318b..f1e3160 100644
  CHATTR_OBJS=	chattr.o
  LSATTR_OBJS=	lsattr.o
  UUIDGEN_OBJS=	uuidgen.o
-@@ -61,7 +61,8 @@ E2FREEFRAG_OBJS= e2freefrag.o
- PROFILED_TUNE2FS_OBJS=	profiled/tune2fs.o profiled/util.o
+@@ -62,7 +62,7 @@ PROFILED_TUNE2FS_OBJS=	profiled/tune2fs.o profiled/util.o
  PROFILED_MKLPF_OBJS=	profiled/mklost+found.o
  PROFILED_MKE2FS_OBJS=	profiled/mke2fs.o profiled/util.o profiled/profile.o \
--			profiled/prof_err.o profiled/default_profile.o
-+			profiled/prof_err.o profiled/default_profile.o \
-+			profiled/create_inode.o
+ 			profiled/prof_err.o profiled/default_profile.o \
+-			profiled/mk_hugefiles.o
++			profiled/mk_hugefiles.o profiled/create_inode.o
  PROFILED_CHATTR_OBJS=	profiled/chattr.o
  PROFILED_LSATTR_OBJS=	profiled/lsattr.o
  PROFILED_UUIDGEN_OBJS=	profiled/uuidgen.o
-@@ -83,7 +84,7 @@ SRCS=	$(srcdir)/tune2fs.c $(srcdir)/mklost+found.c $(srcdir)/mke2fs.c $(srcdir)/
+@@ -84,7 +84,7 @@ SRCS=	$(srcdir)/tune2fs.c $(srcdir)/mklost+found.c $(srcdir)/mke2fs.c $(srcdir)/
  		$(srcdir)/uuidgen.c $(srcdir)/blkid.c $(srcdir)/logsave.c \
  		$(srcdir)/filefrag.c $(srcdir)/base_device.c \
  		$(srcdir)/ismounted.c $(srcdir)/../e2fsck/profile.c \
@@ -30,7 +29,7 @@ index 8d3318b..f1e3160 100644
  
  LIBS= $(LIBEXT2FS) $(LIBCOM_ERR)
  DEPLIBS= $(LIBEXT2FS) $(DEPLIBCOM_ERR)
-@@ -647,7 +648,7 @@ mke2fs.o: $(srcdir)/mke2fs.c $(top_builddir)/lib/config.h \
+@@ -648,7 +648,7 @@ mke2fs.o: $(srcdir)/mke2fs.c $(top_builddir)/lib/config.h \
   $(srcdir)/util.h profile.h prof_err.h $(top_srcdir)/version.h \
   $(srcdir)/nls-enable.h $(top_srcdir)/lib/quota/quotaio.h \
   $(top_srcdir)/lib/quota/dqblk_v2.h $(top_srcdir)/lib/quota/quotaio_tree.h \
@@ -39,7 +38,7 @@ index 8d3318b..f1e3160 100644
  mk_hugefiles.o: $(srcdir)/mk_hugefiles.c $(top_builddir)/lib/config.h \
   $(top_builddir)/lib/dirpaths.h $(top_srcdir)/lib/ext2fs/ext2_fs.h \
   $(top_builddir)/lib/ext2fs/ext2_types.h $(top_srcdir)/lib/ext2fs/ext2fsP.h \
-@@ -735,3 +736,7 @@ e2freefrag.o: $(srcdir)/e2freefrag.c $(top_builddir)/lib/config.h \
+@@ -736,3 +736,7 @@ e2freefrag.o: $(srcdir)/e2freefrag.c $(top_builddir)/lib/config.h \
   $(top_srcdir)/lib/ext2fs/ext2_io.h $(top_builddir)/lib/ext2fs/ext2_err.h \
   $(top_srcdir)/lib/ext2fs/ext2_ext_attr.h $(top_srcdir)/lib/ext2fs/bitops.h \
   $(srcdir)/e2freefrag.h
@@ -48,7 +47,7 @@ index 8d3318b..f1e3160 100644
 + $(top_srcdir)/lib/et/com_err.h $(top_srcdir)/lib/e2p/e2p.h \
 + $(srcdir)/nls-enable.h
 diff --git a/misc/mke2fs.c b/misc/mke2fs.c
-index da77e3a..3a8dc38 100644
+index 550e886..280a00e 100644
 --- a/misc/mke2fs.c
 +++ b/misc/mke2fs.c
 @@ -22,7 +22,6 @@
@@ -121,7 +120,7 @@ index da77e3a..3a8dc38 100644
  		case 'v':
  			verbose = 1;
  			break;
-@@ -2917,6 +2916,21 @@ no_journal:
+@@ -2919,6 +2918,21 @@ no_journal:
  	if (retval)
  		com_err(program_name, retval, "while creating huge files");
  
@@ -137,7 +136,7 @@ index da77e3a..3a8dc38 100644
 +			fprintf(stderr, "%s",
 +				_("\nError while populating file system"));
 +		else if (!quiet)
-+			printf("%s", _("done\n"));
++		        printf("%s", _("done\n"));
 +	}
 +
  	if (!quiet)
