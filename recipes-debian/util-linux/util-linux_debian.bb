@@ -32,7 +32,7 @@ CACHED_CONFIGUREVARS += "scanf_cv_type_modifier=as"
 
 # Creating folder for holding swapargs.h file
 do_compile_prepend() {
-	mkdir ${S}/mount-deprecated
+	mkdir -p ${S}/mount-deprecated
 }
 
 # Fixing QA Issue: package contains symlink .so
