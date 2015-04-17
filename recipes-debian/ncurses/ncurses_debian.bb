@@ -14,6 +14,7 @@ file://ncurses/base/version.c;beginline=1;endline=27;md5=cbc180a8c44ca642e97c354
 SRC_URI += " \
 file://tic-hang.patch \
 file://config.cache \
+file://exclude-host-includedir-from-CXX-test.patch \
 "
 
 # Set configure option --enable-overwrite to install

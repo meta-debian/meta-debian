@@ -1,0 +1,23 @@
+#
+# No need to add -I${includedir} (outside of sysroots)
+# to CPPFLAGS for CXX compile test in configure.
+# Adding -I${includedir} causes of the following warning:
+#   warning: include location "/usr/include"
+#   is unsafe for cross-compilation
+# and do_qa_configure treats this message as an error
+#
+diff --git a/configure b/configure
+index f26efd7..265a865 100755
+--- a/configure
++++ b/configure
+@@ -2796,10 +2796,6 @@ ac_main_return=return
+ 		echo "$as_me:2796: checking if $CXX works" >&5
+ echo $ECHO_N "checking if $CXX works... $ECHO_C" >&6
+ 
+-		save_CPPFLAGS="$CPPFLAGS"
+-		eval cf_includedir=${includedir}
+-		CPPFLAGS="$CPPFLAGS -I${cf_includedir}"
+-
+ cat >conftest.$ac_ext <<_ACEOF
+ #line 2804 "configure"
+ #include "confdefs.h"
