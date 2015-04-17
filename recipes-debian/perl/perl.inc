@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/pe
 inherit debian-package
 
 DEBIAN_SECTION = "perl"
-PV = "5.20.0"
+PV = "5.20.2"
 
 LICENSE = "Artistic-1.0 | GPL-1.0"
 LIC_FILES_CHKSUM = " \
