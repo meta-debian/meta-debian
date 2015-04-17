@@ -9,7 +9,7 @@ DEBIAN_SECTION = "base"
 DPR = "0"
 
 LICENSE = "GPL-2.0"
-LIC_FILES_CHKSUM = "file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552"
+LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 # Exclude inappropriate patch which for newer version
 # uclibc-__progname-conflict.patch
@@ -17,12 +17,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552"
 # fix-parallel-build.patch
 # util-linux-native.patch
 # util-linux-native-qsort.patch
+# util-linux-ng-replace-siginterrupt.patch
 SRC_URI += " \
 	file://MCONFIG \
 	file://make_include \
 	file://swapargs.h \
 	file://defines.h \
-	file://util-linux-ng-replace-siginterrupt_debian.patch \
 	file://util-linux-ng-2.16-mount_lock_path.patch \
 	file://configure-sbindir.patch \
 "
