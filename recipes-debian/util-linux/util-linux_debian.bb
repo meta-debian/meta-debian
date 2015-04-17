@@ -6,7 +6,7 @@ ${THISDIR}/files:${COREBASE}/meta/recipes-core/util-linux/util-linux:\
 
 inherit debian-package
 DEBIAN_SECTION = "base"
-DPR = "1"
+DPR = "2"
 
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
@@ -60,4 +60,10 @@ EXTRA_OECONF_remove = " \
 # provide libuuid header and uuidgen utility.
 EXTRA_OECONF_class-native += " \
 	--disable-libuuid \
+"
+
+# To avoids trying to build unneeded bindings to python. 
+# Without this option, bitbake can result in error.
+EXTRA_OECONF_append = "\
+	--without-python \
 "
