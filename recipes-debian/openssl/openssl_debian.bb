@@ -1,10 +1,10 @@
 require recipes-connectivity/openssl/openssl_1.0.1m.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${THISDIR}/files:${COREBASE}/meta/recipes-connectivity/openssl/openssl"
+FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-connectivity/openssl/openssl"
 
 inherit debian-package
 
 DEBIAN_SECTION = "utils"
-DPR = "3"
+DPR = "4"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
@@ -41,6 +41,7 @@ file://debian/make-targets.patch \
 file://fix-cipher-des-ede3-cfb1.patch \
 file://openssl-avoid-NULL-pointer-dereference-in-EVP_DigestInit_ex.patch \
 file://openssl-avoid-NULL-pointer-dereference-in-dh_pub_encode.patch \
+file://Fix_typo_error_in_debian_patch.patch \
 file://initial-aarch64-bits.patch \
 file://find.pl \
 file://openssl-fix-des.pod-error.patch \
