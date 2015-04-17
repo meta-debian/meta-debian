@@ -2,11 +2,11 @@ require recipes-devtools/gcc/gcc-common.inc
 
 # Third digit in PV should be incremented after a minor release
 
-PV = "4.9.1"
+PV = "4.9.2"
 
 # BINV should be incremented to a revision after a minor gcc release
 
-BINV = "4.9.1"
+BINV = "4.9.2"
 
 FILESEXTRAPATHS =. "${FILE_DIRNAME}/gcc-4.9:"
 
