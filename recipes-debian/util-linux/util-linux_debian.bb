@@ -6,7 +6,7 @@ ${THISDIR}/files:${COREBASE}/meta/recipes-core/util-linux/util-linux:\
 
 inherit debian-package
 DEBIAN_SECTION = "base"
-DPR = "0"
+DPR = "1"
 
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
