@@ -27,6 +27,7 @@ file://disable-configure-in-makefile.patch \
 file://noconfigure_debian.patch \
 file://no-curl_debian.patch \
 file://apt.conf \
+file://reverse-patch-to-avoid-running-dpkg-configure-a.patch \
 "
 # Skip build test for native package
 SRC_URI += " \
