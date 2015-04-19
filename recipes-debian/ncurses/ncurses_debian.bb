@@ -5,7 +5,7 @@ ${COREBASE}/meta/recipes-core/ncurses/ncurses-5.9:\
 
 inherit debian-package
 DEBIAN_SECTION = "libs"
-DPR = "1"
+DPR = "2"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\
