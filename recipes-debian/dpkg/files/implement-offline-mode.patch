@@ -1,0 +1,351 @@
+Lets update-alternatives manage symlinks inside a cross-arch root
+filesystem in a directory specified by DPKG_INSTDIR.
+
+Signed-off-by: Andreas Oberritter <obi@opendreambox.org>
+---
+ utils/update-alternatives.c | 162 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 102 insertions(+), 60 deletions(-)
+
+diff --git a/utils/update-alternatives.c b/utils/update-alternatives.c
+index 62675e8..83d5d9e 100644
+--- a/utils/update-alternatives.c
++++ b/utils/update-alternatives.c
+@@ -51,6 +51,7 @@
+ #define PROGNAME "update-alternatives"
+ 
+ static const char *altdir = SYSCONFDIR "/alternatives";
++static const char *instdir;
+ static const char *admdir;
+ 
+ static const char *prog_path = "update-alternatives";
+@@ -71,6 +72,27 @@ static int nb_opts = 0;
+ #define ALT_TMP_EXT ".dpkg-tmp"
+ 
+ /*
++ * Types.
++ */
++
++enum alternative_path_status {
++	ALT_PATH_SYMLINK,
++	ALT_PATH_MISSING,
++	ALT_PATH_OTHER,
++};
++
++
++/*
++ * Predeclarations.
++ */
++
++static int DPKG_ATTR_PRINTF(2)
++xasprintf(char **strp, const char *fmt, ...);
++
++static enum alternative_path_status
++alternative_path_classify(const char *linkname);
++
++/*
+  * Functions.
+  */
+ 
+@@ -277,7 +299,7 @@ xstrdup(const char *str)
+ }
+ 
+ static char *
+-areadlink(const char *linkname)
++_areadlink(const char *linkname)
+ {
+ 	struct stat st;
+ 	char *buf;
+@@ -310,6 +332,22 @@ areadlink(const char *linkname)
+ }
+ 
+ static char *
++areadlink(const char *linkname)
++{
++	char *instdir_linkname;
++	int saved_errno;
++	char *ret;
++
++	xasprintf(&instdir_linkname, "%s%s", instdir, linkname);
++	ret = _areadlink(instdir_linkname);
++	saved_errno = errno;
++	free(instdir_linkname);
++	errno = saved_errno;
++
++	return ret;
++}
++
++static char *
+ xreadlink(const char *linkname)
+ {
+ 	char *buf;
+@@ -356,6 +394,18 @@ set_action(const char *new_action)
+ }
+ 
+ static const char *
++instdir_init(void)
++{
++	const char *dpkg_instdir;
++
++	dpkg_instdir = getenv("DPKG_INSTDIR");
++	if (dpkg_instdir)
++		return dpkg_instdir;
++
++	return "";
++}
++
++static const char *
+ admindir_init(void)
+ {
+ 	const char *basedir, *dpkg_basedir;
+@@ -477,25 +527,43 @@ rename_mv(const char *src, const char *dst)
+ static void
+ checked_symlink(const char *filename, const char *linkname)
+ {
+-	if (symlink(filename, linkname))
++	char *instdir_linkname;
++
++	xasprintf(&instdir_linkname, "%s%s", instdir, linkname);
++
++	if (symlink(filename, instdir_linkname))
+ 		syserr(_("error creating symbolic link `%.255s'"), linkname);
++
++	free(instdir_linkname);
+ }
+ 
+ static void
+ checked_mv(const char *src, const char *dst)
+ {
+-	if (!rename_mv(src, dst))
++	char *instdir_src;
++	char *instdir_dst;
++
++	xasprintf(&instdir_src, "%s%s", instdir, src);
++	xasprintf(&instdir_dst, "%s%s", instdir, dst);
++
++	if (!rename_mv(instdir_src, instdir_dst))
+ 		syserr(_("unable to install `%.250s' as `%.250s'"), src, dst);
++
++	free(instdir_src);
++	free(instdir_dst);
+ }
+ 
+ static void
+ checked_rm(const char *f)
+ {
+-	if (!unlink(f))
+-		return;
++	char *instdir_f;
+ 
+-	if (errno != ENOENT)
++	xasprintf(&instdir_f, "%s%s", instdir, f);
++
++	if (unlink(instdir_f) && errno != ENOENT)
+ 		syserr(_("unable to remove '%s'"), f);
++
++	free(instdir_f);
+ }
+ 
+ static void DPKG_ATTR_PRINTF(1)
+@@ -612,16 +680,11 @@ fileset_has_slave(struct fileset *fs, const char *name)
+ static bool
+ fileset_can_install_slave(struct fileset *fs, const char *slave_name)
+ {
+-	struct stat st;
+-
+ 	/* Decide whether the slave alternative must be setup */
+ 	if (fileset_has_slave(fs, slave_name)) {
+ 		const char *slave = fileset_get_slave(fs, slave_name);
+ 
+-		errno = 0;
+-		if (stat(slave, &st) == -1 && errno != ENOENT)
+-			syserr(_("cannot stat file '%s'"), slave);
+-		if (errno == 0)
++		if (alternative_path_classify(slave) != ALT_PATH_MISSING)
+ 			return true;
+ 	}
+ 
+@@ -1212,7 +1275,6 @@ alternative_parse_fileset(struct alternative *a, struct altdb_context *ctx)
+ {
+ 	struct fileset *fs;
+ 	struct slave_link *sl;
+-	struct stat st;
+ 	char *master_file;
+ 
+ 	master_file = altdb_get_line(ctx, _("master file"));
+@@ -1225,12 +1287,9 @@ alternative_parse_fileset(struct alternative *a, struct altdb_context *ctx)
+ 	if (fs)
+ 		ctx->bad_format(ctx, _("duplicate path %s"), master_file);
+ 
+-	if (stat(master_file, &st)) {
++	if (alternative_path_classify(master_file) == ALT_PATH_MISSING) {
+ 		char *junk;
+ 
+-		if (errno != ENOENT)
+-			syserr(_("cannot stat file '%s'"), master_file);
+-
+ 		/* File not found - remove. */
+ 		if (ctx->flags & ALTDB_WARN_PARSER)
+ 			warning(_("alternative %s (part of link group %s) "
+@@ -1293,7 +1352,7 @@ alternative_load(struct alternative *a, enum altdb_flags flags)
+ 		ctx.bad_format = altdb_parse_stop;
+ 	else
+ 		ctx.bad_format = altdb_parse_error;
+-	xasprintf(&fn, "%s/%s", admdir, a->master_name);
++	xasprintf(&fn, "%s%s/%s", instdir, admdir, a->master_name);
+ 	ctx.filename = fn;
+ 
+ 	/* Open the alternative file. */
+@@ -1386,7 +1445,7 @@ alternative_save(struct alternative *a)
+ 	xasprintf(&file, "%s/%s", admdir, a->master_name);
+ 	xasprintf(&filenew, "%s" ALT_TMP_EXT, file);
+ 
+-	ctx.filename = filenew;
++	xasprintf(&ctx.filename, "%s%s", instdir, filenew);
+ 	ctx.fh = fopen(ctx.filename, "w");
+ 	if (ctx.fh == NULL)
+ 		syserr(_("unable to create file '%s'"), ctx.filename);
+@@ -1425,6 +1484,7 @@ alternative_save(struct alternative *a)
+ 		syserr(_("unable to sync file '%s'"), ctx.filename);
+ 	if (fclose(ctx.fh))
+ 		syserr(_("unable to close file '%s'"), ctx.filename);
++	free(ctx.filename);
+ 
+ 	/* Put in place atomically. */
+ 	checked_mv(filenew, file);
+@@ -1445,7 +1505,6 @@ alternative_set_current(struct alternative *a, char *new_choice)
+ static const char *
+ alternative_get_current(struct alternative *a)
+ {
+-	struct stat st;
+ 	char *curlink;
+ 	char *file;
+ 
+@@ -1453,12 +1512,9 @@ alternative_get_current(struct alternative *a)
+ 		return a->current;
+ 
+ 	xasprintf(&curlink, "%s/%s", altdir, a->master_name);
+-	if (lstat(curlink, &st)) {
+-		if (errno == ENOENT) {
+-			free(curlink);
+-			return alternative_set_current(a, NULL);
+-		}
+-		syserr(_("cannot stat file '%s'"), curlink);
++	if (alternative_path_classify(curlink) == ALT_PATH_MISSING) {
++		free(curlink);
++		return alternative_set_current(a, NULL);
+ 	}
+ 
+ 	file = xreadlink(curlink);
+@@ -1708,14 +1764,8 @@ alternative_commit(struct alternative *a)
+ 	alternative_commit_operations_free(a);
+ }
+ 
+-enum alternative_path_status {
+-	ALT_PATH_SYMLINK,
+-	ALT_PATH_MISSING,
+-	ALT_PATH_OTHER,
+-};
+-
+ static enum alternative_path_status
+-alternative_path_classify(const char *linkname)
++_alternative_path_classify(const char *linkname)
+ {
+ 	struct stat st;
+ 
+@@ -1731,6 +1781,19 @@ alternative_path_classify(const char *linkname)
+ 	}
+ }
+ 
++static enum alternative_path_status
++alternative_path_classify(const char *linkname)
++{
++	enum alternative_path_status ret;
++	char *instdir_linkname;
++
++	xasprintf(&instdir_linkname, "%s%s", instdir, linkname);
++	ret = _alternative_path_classify(instdir_linkname);
++	free(instdir_linkname);
++
++	return ret;
++}
++
+ static bool
+ alternative_path_can_remove(const char *linkname)
+ {
+@@ -2216,13 +2279,7 @@ alternative_select_mode(struct alternative *a, const char *current_choice)
+ 	if (current_choice) {
+ 		/* Detect manually modified alternative, switch to manual. */
+ 		if (!alternative_has_choice(a, current_choice)) {
+-			struct stat st;
+-
+-			errno = 0;
+-			if (stat(current_choice, &st) == -1 && errno != ENOENT)
+-				syserr(_("cannot stat file '%s'"), current_choice);
+-
+-			if (errno == ENOENT) {
++			if (alternative_path_classify(current_choice) == ALT_PATH_MISSING) {
+ 				warning(_("%s/%s is dangling; it will be updated "
+ 				          "with best choice"), altdir, a->master_name);
+ 				alternative_set_status(a, ALT_ST_AUTO);
+@@ -2245,7 +2302,6 @@ static void
+ alternative_evolve_slave(struct alternative *a, const char *cur_choice,
+                          struct slave_link *sl, struct fileset *fs)
+ {
+-	struct stat st;
+ 	char *new_file = NULL;
+ 	const char *old, *new;
+ 
+@@ -2263,17 +2319,7 @@ alternative_evolve_slave(struct alternative *a, const char *cur_choice,
+ 	}
+ 	if (strcmp(old, new) != 0 &&
+ 	    alternative_path_classify(old) == ALT_PATH_SYMLINK) {
+-		bool rename_link = false;
+-
+-		if (new_file) {
+-			errno = 0;
+-			if (stat(new_file, &st) == -1 && errno != ENOENT)
+-				syserr(_("cannot stat file '%s'"),
+-				       new_file);
+-			rename_link = (errno == 0);
+-		}
+-
+-		if (rename_link) {
++		if (new_file && alternative_path_classify(new_file) != ALT_PATH_MISSING) {
+ 			info(_("renaming %s slave link from %s to %s"),
+ 			     sl->name, old, new);
+ 			checked_mv(old, new);
+@@ -2413,7 +2459,6 @@ alternative_check_install_args(struct alternative *inst_alt,
+ 	struct alternative_map *alt_map_links, *alt_map_parent;
+ 	struct alternative *found;
+ 	struct slave_link *sl;
+-	struct stat st;
+ 
+ 	alternative_check_name(inst_alt->master_name);
+ 	alternative_check_link(inst_alt->master_link);
+@@ -2438,13 +2483,9 @@ alternative_check_install_args(struct alternative *inst_alt,
+ 		      inst_alt->master_link, found->master_name);
+ 	}
+ 
+-	if (stat(fileset->master_file, &st) == -1) {
+-		if (errno == ENOENT)
+-			error(_("alternative path %s doesn't exist"),
+-			      fileset->master_file);
+-		else
+-			syserr(_("cannot stat file '%s'"), fileset->master_file);
+-	}
++	if (alternative_path_classify(fileset->master_file) == ALT_PATH_MISSING)
++		error(_("alternative path %s doesn't exist"),
++		      fileset->master_file);
+ 
+ 	for (sl = inst_alt->slaves; sl; sl = sl->next) {
+ 		const char *file = fileset_get_slave(fileset, sl->name);
+@@ -2517,6 +2558,7 @@ main(int argc, char **argv)
+ 	bindtextdomain(PACKAGE, LOCALEDIR);
+ 	textdomain(PACKAGE);
+ 
++	instdir = instdir_init();
+ 	admdir = admindir_init();
+ 
+ 	if (setvbuf(stdout, NULL, _IONBF, 0))
+-- 
+1.9.1

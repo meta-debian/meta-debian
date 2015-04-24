@@ -1,0 +1,18 @@
+Meta-debian hack version for using update-alternatives from dpkg.
+
+Using existing OFFLINE_ROOT variable instead of DPKG_INSTDIR to avoid
+modify poky source code(i.e: poky/lib/oe/package_manager.py).
+---------------------------------------------------------------------
+diff --git a/utils/update-alternatives.c b/utils/update-alternatives.c
+index 723725d..78defa8 100644
+--- a/utils/update-alternatives.c
++++ b/utils/update-alternatives.c
+@@ -398,7 +398,7 @@ instdir_init(void)
+ {
+ 	const char *dpkg_instdir;
+ 
+-	dpkg_instdir = getenv("DPKG_INSTDIR");
++	dpkg_instdir = getenv("OFFLINE_ROOT");
+ 	if (dpkg_instdir)
+ 		return dpkg_instdir;
+ 

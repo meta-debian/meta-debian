@@ -2,12 +2,18 @@ require dpkg_debian.bb
 
 DESCRIPTION = "Dpkg version of update-alternatives"
 DEBIAN_SECTION = "admin"
-DPR = "0"
+DPR = "1"
 DPN = "dpkg"
 
 # Overwrite DEPENDS of dpkg.inc
 DEPENDS = ""
 PROVIDES_class-native += "virtual/update-alternatives-native"
+
+SRC_URI += "\
+	file://implement-offline-mode.patch \
+	file://fix_update_alternatives_dir.patch \
+	file://fix_offline_dir.patch \
+"
 
 # Unnecessary for update-alternatives
 EXTRA_OECONF += " \
@@ -22,8 +28,9 @@ do_compile() {
 }
   
 do_install() {
-	install -d ${D}${sbindir} ${sysconfdir}/alternatives \
-			${localstatedir}/lib/dpkg/alternatives
+	install -d ${D}${sbindir} 
+	install -d ${D}${sysconfdir}/alternatives 
+	install -d ${D}${localstatedir}/lib/dpkg/alternatives
 	install -m 0755 ${S}/utils/update-alternatives ${D}${sbindir}
 	exit 0
 }
