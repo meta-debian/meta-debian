@@ -19,6 +19,8 @@ DPR = "0"
 #	05-enable-ctypes-cross-build.patch
 #	multilib.patch (file not found to patch, so update the patch for right file
 #			and rename to multilib_2.7.8.patch)
+# makerace.patch: copied from python3 directory
+#   Always builds 'Parser/pgen' required by do_install
 SRC_URI += "\
 file://06-ctypes-libffi-fix-configure.patch \
 file://10-distutils-fix-swig-parameter.patch \
@@ -31,6 +33,7 @@ file://multilib_2.7.8.patch \
 file://add-md5module-support.patch \
 file://builddir_2.7.8.patch \
 file://parallel-makeinst-create-bindir.patch \
+file://makerace.patch \
 "
 
 # Parallel make causes strange compile error so temporarily disable it
