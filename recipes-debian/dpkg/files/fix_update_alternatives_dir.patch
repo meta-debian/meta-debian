@@ -1,0 +1,26 @@
+Meta-debian hack version for using update-alternative
+from dpkg.
+
+update-alternatives-native use sysroot directories
+as path to symlink, this could lead to wrong installation 
+directories in target environment. e.g ${sysconfdir} 
+will become {...}/sysroot/x86-64/.../etc instead of /etc/.
+--------------------------------------------------
+diff --git a/utils/Makefile.am b/utils/Makefile.am
+index 8a5c902..c1d5a73 100644
+--- a/utils/Makefile.am
++++ b/utils/Makefile.am
+@@ -2,10 +2,10 @@
+ 
+ localedir = $(datadir)/locale
+ AM_CPPFLAGS = \
+-	-DADMINDIR=\"$(admindir)\" \
+-	-DLOCALEDIR=\"$(localedir)\" \
++	-DADMINDIR=\"/var/lib/dpkg\" \
++	-DLOCALEDIR=\"/var/lib/dpkg\" \
+ 	-DLOGDIR=\"$(logdir)\" \
+-	-DSYSCONFDIR=\"$(sysconfdir)\" \
++	-DSYSCONFDIR=\"/etc\" \
+ 	-idirafter $(top_srcdir)/lib/compat \
+ 	-I$(top_builddir) \
+ 	-I$(top_srcdir)/lib
