@@ -17,7 +17,7 @@ index 8a5c902..c1d5a73 100644
 -	-DADMINDIR=\"$(admindir)\" \
 -	-DLOCALEDIR=\"$(localedir)\" \
 +	-DADMINDIR=\"/var/lib/dpkg\" \
-+	-DLOCALEDIR=\"/var/lib/dpkg\" \
++	-DLOCALEDIR=\"/usr/share/locale\" \
  	-DLOGDIR=\"$(logdir)\" \
 -	-DSYSCONFDIR=\"$(sysconfdir)\" \
 +	-DSYSCONFDIR=\"/etc\" \
