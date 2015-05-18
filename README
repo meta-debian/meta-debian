@@ -50,20 +50,8 @@ into your host system before you bitbake something.
 http://www.yoctoproject.org/docs/1.6/poky-ref-manual/poky-ref-manual.html#intro-requirements
 
 Setup build directory
+$ export TEMPLATECONF=meta-debian/conf
 $ source ./poky/oe-init-build-env
-$ cp ../poky/meta-debian/conf/local.conf.sample conf/local.conf
-
-Copy the following definitions to your conf/bblayers.conf
-in order to enable meta-debian layer.
--------------->8--------------
-BBLAYERS = " \
-  /path/to/poky/meta \
-  /path/to/poky/meta-debian \
-  "
-BBLAYERS_NON_REMOVABLE = " \
-  /path/to/poky/meta \
-  "
--------------->8--------------
 
 Bitbake tiny rootfs
 $ bitbake core-image-minimal
