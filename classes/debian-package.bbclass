@@ -10,7 +10,7 @@ DPN ?= "${BPN}"
 DPR ?= ""
 
 # default SRC_URI
-DEBIAN_GIT_DIR ?= "debian-${DPN}.git"
+DEBIAN_GIT_DIR ??= "debian-${DPN}.git"
 DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
 DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_GIT_DIR};\
 protocol=${DEBIAN_GIT_PROTOCOL};branch=${DEBIAN_GIT_BRANCH}"
