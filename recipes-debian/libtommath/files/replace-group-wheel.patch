@@ -1,0 +1,13 @@
+diff --git a/makefile b/makefile
+index 70de306..f4dd4d0 100755
+--- a/makefile
++++ b/makefile
+@@ -29,7 +29,7 @@ endif
+
+ #install as this user
+ ifndef INSTALL_GROUP
+-   GROUP=wheel
++   GROUP=root
+ else
+    GROUP=$(INSTALL_GROUP)
+ endif
