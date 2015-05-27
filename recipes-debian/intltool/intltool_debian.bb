@@ -2,10 +2,10 @@ require intltool.inc
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
-SRC_URI += "file://intltool-nowarn.patch \
-           file://uclibc.patch \
-           ${NATIVEPATCHES} \
-           "
+#SRC_URI += "file://intltool-nowarn.patch \
+#           file://uclibc.patch \
+#           ${NATIVEPATCHES} \
+#           "
 
 #
 # All of the intltool scripts have the correct paths to perl already
@@ -24,3 +24,8 @@ SRC_URI[sha256sum] = "67f25c5c6fb71d095793a7f895b245e65e829e8bde68c6c8b4c912144f
 inherit debian-package
 DPR = "0"
 DEBIAN_SECTION = "devel"
+
+SRC_URI += "file://intltool-nowarn.patch \
+           file://uclibc.patch \
+           ${NATIVEPATCHES} \
+           "
