@@ -74,4 +74,5 @@ EGLIBCPATCHES = "\
            file://fix-not-found-mempcpy.patch \
            file://use-options-group-for-argp-help.patch \
            file://use-options-group-for-argp-fmtstream.patch \
+           file://add-support-uint-32.patch \
           "
