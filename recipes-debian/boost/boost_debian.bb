@@ -1,4 +1,4 @@
-include boost-1.55.0.inc
+include boost-debian.inc
 include boost.inc
 
 #SRC_URI += "file://arm-intrinsics.patch"
