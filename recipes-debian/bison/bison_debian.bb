@@ -34,3 +34,8 @@ ${BASE_SRC_URI} \
 
 # avoid a parallel build problem in src/yacc
 PARALLEL_MAKE = ""
+
+do_configure_prepend(){
+	# Fix error gettext infrastructure mismatch
+	cp ${STAGING_DATADIR_NATIVE}/gettext/po/Makefile.in.in ${S}/runtime-po/
+}
