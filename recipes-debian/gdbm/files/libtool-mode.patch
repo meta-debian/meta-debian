@@ -1,0 +1,22 @@
+diff --git a/Makefile.in b/Makefile.in
+index 9f00396..d694a1c 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -131,7 +131,7 @@ install: libgdbm.la gdbm.h gdbm.info
+ 	$(srcdir)/mkinstalldirs $(DESTDIR)$(libdir) \
+ 		$(DESTDIR)$(includedir) $(DESTDIR)$(man3dir) \
+ 		$(DESTDIR)$(infodir)
+-	$(LIBTOOL) $(INSTALL) -c libgdbm.la $(DESTDIR)$(libdir)/libgdbm.la
++	$(LIBTOOL) --mode=install $(INSTALL) -c libgdbm.la $(DESTDIR)$(libdir)/libgdbm.la
+ 	$(INSTALL_DATA) gdbm.h \
+ 		$(DESTDIR)$(includedir)/gdbm.h
+ 	$(INSTALL_DATA) $(srcdir)/gdbm.3 \
+@@ -142,7 +142,7 @@ install: libgdbm.la gdbm.h gdbm.info
+ install-compat:
+ 	$(srcdir)/mkinstalldirs $(DESTDIR)$(libdir) \
+ 		$(DESTDIR)$(includedir)
+-	$(LIBTOOL) --mode=install $(INSTALL) -T libgdbm_compat.la \
++	$(LIBTOOL) --mode=install $(INSTALL) -c libgdbm_compat.la \
+ 		$(DESTDIR)$(libdir)/libgdbm_compat.la
+ 	$(INSTALL_DATA) $(srcdir)/dbm.h \
+ 		$(DESTDIR)$(includedir)/dbm.h
