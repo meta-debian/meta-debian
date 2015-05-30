@@ -1,6 +1,0 @@
-#!/bin/sh
-
-openssl req \
-  -x509 -nodes -days 365 \
-  -subj '/C=VN/ST=HN/L=TX/CN=Toshiba' \
-  -newkey rsa:1024 -keyout mycert.pem -out mycert.pem
