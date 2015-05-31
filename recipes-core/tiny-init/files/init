@@ -1,4 +1,12 @@
 #!/bin/sh
+#
+# tiny-init
+#
+# This script is almost same as poky's tiny-init except network settings
+# required features:
+#   kernel: PROC_FS, UNIX98_PTYS, SYSFS, DEVTMPFS, DEVTMPFS_MOUNT=n
+#   busybox: sh, mount, mkdir, true, setsid, cttyhack, echo, sleep
+#
 
 # Mount the Linux kernel virtual filesystems
 mount none -t proc /proc
@@ -10,8 +18,6 @@ mount none -t devtmpfs /dev
 # Setup PTY infrastructure
 mkdir /dev/pts
 mount none -t devpts /dev/pts
-
-ifup lo
 
 # Allow for distro or local customizations
 if [ -f /etc/rc.local ] ; then
