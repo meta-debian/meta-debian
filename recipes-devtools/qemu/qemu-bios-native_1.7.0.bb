@@ -4,7 +4,7 @@
 # This recipe provide BIOS images for qemu-native.
 #
 # Currently, qemu source package in Debian doesn't include BIOS images
-# and tricky implementation is needed to cross-compiling BIOS images from
+# and tricky implementation is needed for cross-compiling BIOS images from
 # several source packages like "openbios" and "seabios" by native recipes :-(
 #
 # Therefore, we TEMPORALLY use this recipe only for getting
@@ -28,7 +28,7 @@ file://COPYING.LIB;endline=24;md5=c04def7ae38850e7d3ef548588159913 \
 
 S = "${WORKDIR}/qemu-${PV}"
 
-# comes from ${S}/Makefile, the list of firmware blobs and keymaps
+# comes from ${S}/Makefile, the list of firmware blobs
 BLOBS = " \
 bios.bin sgabios.bin vgabios.bin vgabios-cirrus.bin \
 vgabios-stdvga.bin vgabios-vmware.bin vgabios-qxl.bin \
@@ -46,12 +46,6 @@ s390-ccw.img \
 spapr-rtas.bin slof.bin \
 palcode-clipper \
 "
-KEYMAPS= " \
-da     en-gb  et  fr     fr-ch  is  lt  modifiers  no  pt-br  sv \
-ar      de     en-us  fi  fr-be  hr     it  lv  nl         pl  ru     th \
-common  de-ch  es     fo  fr-ca  hu     ja  mk  nl-be      pt  sl     tr \
-bepo    cz \
-"
 
 do_configure() {
 	:
@@ -65,11 +59,5 @@ do_install() {
 	install -d ${D}${datadir}/qemu
 	for blob in ${BLOBS}; do
 		install -m 0644 ${S}/pc-bios/${blob} ${D}${datadir}/qemu
-	done
-
-	install -d ${D}${datadir}/qemu/keymaps
-	for keymap in ${KEYMAPS}; do
-		install -m 0644 ${S}/pc-bios/keymaps/${keymap} \
-			${D}${datadir}/qemu/keymaps
 	done
 }
