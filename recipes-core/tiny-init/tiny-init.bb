@@ -26,7 +26,6 @@ do_compile() {
 }
 
 do_install() {
-	install -d ${D}${sysconfdir}
 	install -m 0755 ${WORKDIR}/init ${D}
 }
 
