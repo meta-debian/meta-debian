@@ -4,12 +4,11 @@ meta-debian
 ===========
 
 This layer provides recipes to build a minimal image using Debian
-source packages from upstream Debian repositories.
+source packages from upstream Debian repositories. You can build
+a small GNU/Linux image with Debian sources by enabling this layer.
 
-Debian version: 8.0 jessie (testing)
+Debian version: 8.0 jessie (stable)
 Yocto Project version: 1.6 'Daisy'
-You can build a small GNU/Linux image with Debian sources by enabling
-this layer.
 
 License
 =======
@@ -26,7 +25,7 @@ Community Resources
 ===================
 
 Project home:
-  * https://github.com/ystk/meta-debian
+  * https://github.com/meta-debian/meta-debian.git
 
 Mailing list:
   * meta-debian@googlegroups.com 
@@ -41,7 +40,7 @@ Setup repositories
 $ git clone git://git.yoctoproject.org/poky.git
 $ cd poky
 $ git checkout daisy
-$ git clone https://github.com/ystk/meta-debian.git
+$ git clone https://github.com/meta-debian/meta-debian.git
 $ cd meta-debian
 $ git checkout daisy
 
@@ -53,11 +52,36 @@ Setup build directory
 $ export TEMPLATECONF=meta-debian/conf
 $ source ./poky/oe-init-build-env
 
-Bitbake tiny rootfs
+You can change the target machine by setting MACHINE variable
+in local.conf to one of the following machines.
+  qemux86, qemux86-64, qemuarm, qemuppc
+
+Bitbake kernel and tiny rootfs
 $ bitbake core-image-minimal
+
+How to run on QEMU
+==================
+
+Please run the following commands after bitbake core-image-minimal finishes.
+
+(qemux86)
+$ runqemu qemux86 nographic bootparams="init=/init root=/dev/sda"
+
+(qemux86-64)
+$ runqemu qemux86-64 nographic bootparams="init=/init root=/dev/sda"
+
+(qemuarm)
+$ runqemu qemuarm nographic bootparams="init=/init console=ttyAMA0"
+
+(qemuppc)
+$ runqemu qemuppc nographic bootparams="init=/init"
+
+The shell prompt appears automatically after system boots without login.
+"init=/init" means that kernel uses tiny-init script as the init process
+instead of busybox /sbin/init.
 
 Latest testing commit ID
 ========================
 
 Yocto Project version: 1.6 'Daisy'
-Commit ID: efde5a130397c597e6464a4e547774b6e600abfa
+Commit ID: b2ba41b57550aa912da93b4aef789ff562a67fce
