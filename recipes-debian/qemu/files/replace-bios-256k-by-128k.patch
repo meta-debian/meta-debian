@@ -1,0 +1,26 @@
+diff --git a/hw/i386/pc_piix.c b/hw/i386/pc_piix.c
+index 9694f88..c1d6dd4 100644
+--- a/hw/i386/pc_piix.c
++++ b/hw/i386/pc_piix.c
+@@ -452,7 +452,7 @@ static void pc_xen_hvm_init(MachineState *machine)
+ 
+ #define PC_I440FX_2_1_MACHINE_OPTIONS                           \
+     PC_I440FX_MACHINE_OPTIONS,                                  \
+-    .default_machine_opts = "firmware=bios-256k.bin"
++    .default_machine_opts = "firmware=bios.bin"
+ 
+ static QEMUMachine pc_i440fx_machine_v2_1 = {
+     PC_I440FX_2_1_MACHINE_OPTIONS,
+diff --git a/hw/i386/pc_q35.c b/hw/i386/pc_q35.c
+index c39ee98..e474b5b 100644
+--- a/hw/i386/pc_q35.c
++++ b/hw/i386/pc_q35.c
+@@ -350,7 +350,7 @@ static void pc_q35_init_1_4(MachineState *machine)
+ 
+ #define PC_Q35_2_1_MACHINE_OPTIONS                      \
+     PC_Q35_MACHINE_OPTIONS,                             \
+-    .default_machine_opts = "firmware=bios-256k.bin"
++    .default_machine_opts = "firmware=bios.bin"
+ 
+ static QEMUMachine pc_q35_machine_v2_1 = {
+     PC_Q35_2_1_MACHINE_OPTIONS,
