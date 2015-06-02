@@ -159,4 +159,4 @@ python populate_packages_prepend() {
 PACKAGES =+ " \
              ${PN}-linux-fbdevhw \
              "
-FILES_${PN}-linux-fbdevhw = "${libdir}/xorg/modules/linux/libfbdevhw.so"
+FILES_${PN}-linux-fbdevhw = "${libdir}/xorg/modules/libfbdevhw.so"
