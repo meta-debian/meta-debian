@@ -13,5 +13,9 @@ SRC_URI[archive.sha256sum] = "3671b034356bbc4d32d052808cf646c940ec8b2d1913adac51
 #
 PR = "r0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=dbd075aaffa4a60a8d00696f2e4b9a8f"
-FILES_${PN} = "${includedir}/X11"
+FILES_${PN} = "\
+	${includedir}/X11 \
+	/usr/share/"
 DEBIAN_PATCH_TYPE = "nopatch"
+
+PACKAGES = "${PN}"
