@@ -1,0 +1,40 @@
+diff --git a/argp/argp-help.c b/argp/argp-help.c
+index c5217d8..9e6db50 100644
+--- a/argp/argp-help.c
++++ b/argp/argp-help.c
+@@ -51,6 +51,7 @@ char *alloca ();
+ #ifdef _LIBC
+ # include <../libio/libioP.h>
+ # include <wchar.h>
++# include <gnu/option-groups.h>
+ #endif
+ 
+ #ifndef _
+@@ -1702,7 +1703,7 @@ char *__argp_basename (char *name)
+ }
+ 
+ char *
+-__argp_short_program_name (void)
++(__argp_short_program_name) (void)
+ {
+ # if HAVE_DECL_PROGRAM_INVOCATION_SHORT_NAME
+   return program_invocation_short_name;
+@@ -1873,9 +1874,17 @@ __argp_failure (const struct argp_state *state, int status, int errnum,
+ #endif
+ 	    }
+ 
++#ifdef _LIBC
+ 	  if (_IO_fwide (stream, 0) > 0)
+-	    putwc_unlocked (L'\n', stream);
++	    {
++#if ! _LIBC || __OPTION_POSIX_WIDE_CHAR_DEVICE_IO
++              putwc_unlocked (L'\n', stream);
++#else
++              abort ();
++#endif
++            }
+ 	  else
++#endif
+ 	    putc_unlocked ('\n', stream);
+ 
+ #if _LIBC || (HAVE_FLOCKFILE && HAVE_FUNLOCKFILE)

@@ -245,9 +245,9 @@ diff --git a/Makefile.SH b/Makefile.SH
 +pod/perlmodlib.pod: pod/perlmodlib.PL MANIFEST
  	$(MINIPERL) pod/perlmodlib.PL -q
  
- pod/perl5200delta.pod: pod/perldelta.pod
- 	$(RMS) pod/perl5200delta.pod
- 	$(LNS) perldelta.pod pod/perl5200delta.pod
+ pod/perl5202delta.pod: pod/perldelta.pod
+ 	$(RMS) pod/perl5202delta.pod
+ 	$(LNS) perldelta.pod pod/perl5202delta.pod
  
 -extra.pods: $(MINIPERL_EXE)
 +extra.pods:

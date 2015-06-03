@@ -86,12 +86,16 @@ debian_patch_quilt() {
 	# to be acceptable as an implementation of source package
 	if [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
 		bbwarn "${DEBIAN_QUILT_PATCHES}/series not found, nothing to do"
-	elif [ ! -s ${DEBIAN_QUILT_PATCHES}/series ]; then
-		bbwarn "no patch in series, nothing to do"
 	else
-		# apply patches
-		QUILT_PATCHES=${DEBIAN_QUILT_PATCHES} \
-			quilt --quiltrc /dev/null push -a
+		# Remove comment line in file series
+		export series_with_no_cmt=$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)
+		if [ -z "$series_with_no_cmt" ]; then
+			bbwarn "no patch in series, nothing to do"
+		else
+			# apply patches
+			QUILT_PATCHES=${DEBIAN_QUILT_PATCHES} \
+				quilt --quiltrc /dev/null push -a
+		fi
 	fi
 
 	# avoid conflict with "do_patch"

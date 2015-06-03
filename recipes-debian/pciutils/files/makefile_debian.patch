@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index d1ea99b..771ab22 100644
+--- a/Makefile
++++ b/Makefile
+@@ -35,7 +35,7 @@ SHAREDIR=$(PREFIX)/share
+ IDSDIR=$(SHAREDIR)
+ MANDIR:=$(shell if [ -d $(PREFIX)/share/man ] ; then echo $(PREFIX)/share/man ; else echo $(PREFIX)/man ; fi)
+ INCDIR=$(PREFIX)/include
+-LIBDIR=$(PREFIX)/lib
++LIBDIR=$(libdir)
+ PKGCFDIR=$(LIBDIR)/pkgconfig
+ 
+ # Commands
+@@ -98,10 +98,10 @@ example: example.o lib/$(PCILIB)
+ example.o: example.c $(PCIINC)
+ 
+ %: %.o
+-	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LIB_LDLIBS) -o $@
++	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LIB_LDLIBS) -lkmod -o $@
+ 
+ lspci-udeb: lspci.o
+-	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -lz -lresolv -o $@
++	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -lz -lresolv -lkmod -o $@
+ 
+ %.8 %.7: %.man
+ 	M=`echo $(DATE) | sed 's/-01-/-January-/;s/-02-/-February-/;s/-03-/-March-/;s/-04-/-April-/;s/-05-/-May-/;s/-06-/-June-/;s/-07-/-July-/;s/-08-/-August-/;s/-09-/-September-/;s/-10-/-October-/;s/-11-/-November-/;s/-12-/-December-/;s/\(.*\)-\(.*\)-\(.*\)/\3 \2 \1/'` ; sed <$< >$@ "s/@TODAY@/$$M/;s/@VERSION@/pciutils-$(VERSION)/;s#@IDSDIR@#$(IDSDIR)#"

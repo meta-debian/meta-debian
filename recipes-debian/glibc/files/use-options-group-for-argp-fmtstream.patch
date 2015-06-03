@@ -1,0 +1,61 @@
+diff --git a/argp/argp-fmtstream.c b/argp/argp-fmtstream.c
+index 5eed9a8..2abf0f4 100644
+--- a/argp/argp-fmtstream.c
++++ b/argp/argp-fmtstream.c
+@@ -42,6 +42,7 @@
+ #ifdef _LIBC
+ # include <wchar.h>
+ # include <libio/libioP.h>
++# include <gnu/option-groups.h>
+ # define __vsnprintf(s, l, f, a) _IO_vsnprintf (s, l, f, a)
+ #endif
+ 
+@@ -100,7 +101,11 @@ __argp_fmtstream_free (argp_fmtstream_t fs)
+   __argp_fmtstream_update (fs);
+   if (fs->p > fs->buf)
+     {
++#ifdef _LIBC
+       __fxprintf (fs->stream, "%.*s", (int) (fs->p - fs->buf), fs->buf);
++#else
++      fwrite_unlocked (fs->buf, 1, fs->p - fs->buf, fs->stream);
++#endif
+     }
+   free (fs->buf);
+   free (fs);
+@@ -145,8 +150,16 @@ __argp_fmtstream_update (argp_fmtstream_t fs)
+ 	      size_t i;
+ 	      for (i = 0; i < pad; i++)
+ 		{
++#ifdef _LIBC
+ 		  if (_IO_fwide (fs->stream, 0) > 0)
+-		    putwc_unlocked (L' ', fs->stream);
++		    {
++#if ! _LIBC || __OPTION_POSIX_WIDE_CHAR_DEVICE_IO
++                      putwc_unlocked (L' ', fs->stream);
++#else
++                      abort ();
++#endif
++                    }
+ 		  else
++#endif
+ 		    putc_unlocked (' ', fs->stream);
+ 		}
+@@ -308,9 +321,17 @@ __argp_fmtstream_update (argp_fmtstream_t fs)
+ 	      *nl++ = ' ';
+ 	  else
+ 	    for (i = 0; i < fs->wmargin; ++i)
++#ifdef _LIBC
+ 	      if (_IO_fwide (fs->stream, 0) > 0)
+-		putwc_unlocked (L' ', fs->stream);
++		{
++#ifdef OPTION_POSIX_WIDE_CHAR_DEVICE_IO
++                  putwc_unlocked (L' ', fs->stream);
++#else
++                  abort ();
++#endif
++                }
+ 	      else
++#endif
+ 		putc_unlocked (' ', fs->stream);
+ 
+ 	  /* Copy the tail of the original buffer into the current buffer

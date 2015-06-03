@@ -1,0 +1,26 @@
+diff --git a/lib/configure b/lib/configure
+index 62be551..a12293e 100755
+--- a/lib/configure
++++ b/lib/configure
+@@ -54,20 +54,7 @@ cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+ sys=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+ echo " $host $rel $cpu $sys"
+ 
+-if [ "$host" = "linux--gnueabi" ]
+-then
+-	sys=linux
+-fi
+-
+-if [ "$host" = "linux--uclibc" ]
+-then
+-	sys=linux
+-fi
+-
+-if [ "$host" = "linux--uclibcgnueabi" ]
+-then
+-	sys=linux
+-fi
++{ echo "$host" | grep linux; } && sys=linux
+ 
+ c=config.h
+ m=config.mk

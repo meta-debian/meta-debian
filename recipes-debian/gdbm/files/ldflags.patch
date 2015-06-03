@@ -1,0 +1,21 @@
+diff --git a/Makefile.in b/Makefile.in
+index 0382098..76e17c7 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -156,13 +156,13 @@ install-compat:
+ 
+ libgdbm.la: $(LOBJS) gdbm.h
+ 	rm -f libgdbm.la
+-	$(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o libgdbm.la -rpath $(libdir) \
++	$(LIBTOOL) --mode=link $(CC) $(LDFLAGS) -o libgdbm.la -rpath $(libdir) \
+ 		-version-info $(SHLIB_VER) $(LOBJS)
+ 
+ libgdbm_compat.la: $(C_LOBJS) gdbm.h
+ 	rm -f libgdbm_compat.la
+-	$(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o libgdbm_compat.la -rpath $(libdir) \
+-		-version-info $(SHLIB_VER) $(C_LOBJS) -lgdbm
++	$(LIBTOOL) --mode=link $(CC) $(LDFLAGS) -o libgdbm_compat.la -rpath $(libdir) \
++		-version-info $(SHLIB_VER) $(C_LOBJS)
+ 
+ gdbm.h:	gdbm.proto gdbmerrno.h gdbm.proto2
+ 	rm -f gdbm.h

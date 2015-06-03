@@ -1,0 +1,47 @@
+From 33e67c4ea663ab3be586fdce6740ebaec59fb05a Mon Sep 17 00:00:00 2001
+From: Vu Tuan Anh <anh.vutuan@toshiba-tsdv.com>
+Date: Fri, 16 Jan 2015 18:14:50 +0700
+Subject: [PATCH] alsactl: don't let systemd unit restore the volume when
+ asound.state is missing
+
+This avoids an error on bootup
+
+Signed-off-by: Koen Kooi <koen@dominion.thruhere.net>
+
+Filed as https://bugtrack.alsa-project.org/alsa-bug/view.php?id=5459
+
+Upstream-Status: Pending
+
+Signed-off-by: Vu Tuan Anh <anh.vutuan@toshiba-tsdv.com>
+---
+ alsactl/Makefile.am             | 1 +
+ alsactl/alsa-restore.service.in | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/alsactl/Makefile.am b/alsactl/Makefile.am
+index 47f06e9..7b783f5 100644
+--- a/alsactl/Makefile.am
++++ b/alsactl/Makefile.am
+@@ -46,6 +46,7 @@ edit = \
+ 	$(SED) -r -e 's,@sbindir\@,$(sbindir),g' \
+ 		  -e 's,@mydatadir\@,$(mydatadir),g' \
+ 		  -e 's,@daemonswitch\@,$(ALSACTL_DAEMONSWITCH),g' \
++		  -e 's,@localstatedir\@,$(localstatedir),g' \
+ 							< $< > $@ || rm $@
+ 
+ alsa-state.service: alsa-state.service.in
+diff --git a/alsactl/alsa-restore.service.in b/alsactl/alsa-restore.service.in
+index 245a439..b017854 100644
+--- a/alsactl/alsa-restore.service.in
++++ b/alsactl/alsa-restore.service.in
+@@ -10,6 +10,7 @@ DefaultDependencies=no
+ After=alsa-state.service
+ Before=shutdown.target
+ Conflicts=shutdown.target
++ConditionPathExists=@localstatedir@/lib/alsa/asound.state
+ 
+ [Service]
+ Type=oneshot
+-- 
+2.1.3
+

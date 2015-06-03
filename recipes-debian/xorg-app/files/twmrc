@@ -1,0 +1,95 @@
+#
+# $XConsortium: system.twmrc,v 1.8 91/04/23 21:10:58 gildea Exp $
+#
+# A little $HOME/.twmrc by Thomas Eriksson brummelufs@hotmail.com
+#
+#   twm... the original and the best...
+#
+
+NoGrabServer
+#NoDefaults
+RestartPreviousState
+DecorateTransients
+TitleFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+ResizeFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+MenuFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+IconFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*-*-*-*"
+IconManagerFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*"
+#ClientBorderWidth 2
+BorderWidth 3
+ButtonIndent 2
+NoHighlight
+AutoRelativeResize
+#DefaultBackground
+FramePadding 0
+#ForceIcons
+NoRaiseOnMove
+OpaqueMove
+Zoom 500
+RandomPlacement
+
+# This is for hiding the ugly menubar in windows who dont need em.
+
+Color
+{
+    BorderColor "Black"
+    DefaultBackground "black"
+    DefaultForeground "black"
+    TitleBackground "#3072EC"
+    TitleForeground "White"
+    MenuBackground "White"
+    MenuForeground "#322E2D"
+    MenuTitleBackground "#3072EC"
+    MenuTitleForeground "White"
+    IconBackground "darkblue"
+    IconForeground "gray60"
+    IconBorderColor "darkblue"
+    IconManagerBackground "navy"
+    IconManagerForeground "gray85"
+    PointerForeground "navy"
+    PointerBackground "white"
+
+}
+
+#
+# Set some useful bindings.  Sort of uwm-ish, sort of
+# simple-button-ish
+#
+Button1 = : root : f.menu "prg"
+
+LeftTitleButton  "menu-tsdv"  = f.fullzoom
+RightTitleButton "xlogo11-tsdv"  = f.delete
+
+
+#
+# And a menus with the usual things
+#
+menu "prg"
+{
+"MENU"           f.title
+"xterm"         f.exec "xterm -sl 255 -bg midnightblue -fg white &"
+"exit"      f.quit
+}
+
+Icons
+{
+     "XTerm"   "/usr/include/X11/bitmaps/terminal.xbm"
+     "x11amp"  "/usr/include/X11/bitmaps/xfm_au.xbm"
+}
+
+Cursors
+{
+                         Frame     "left_ptr"
+                         Title     "left_ptr"
+                         Icon      "left_ptr"
+                         IconMgr   "left_ptr"
+                         Move      "fleur"
+                         Resize    "fleur"
+                         Menu      "hand1"
+                         Button    "hand2"
+                         Wait      "clock"
+                         Select    "dot"
+                         Destroy   "pirate"
+}
+
+
