@@ -87,9 +87,8 @@ debian_patch_quilt() {
 	if [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
 		bbwarn "${DEBIAN_QUILT_PATCHES}/series not found, nothing to do"
 	else
-		# Remove comment line in file series
-		export series_with_no_cmt=$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)
-		if [ -z "$series_with_no_cmt" ]; then
+		# sometimes series is empty, it's scary
+		if [ -z "$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)" ]; then
 			bbwarn "no patch in series, nothing to do"
 		else
 			# apply patches
