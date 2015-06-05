@@ -45,7 +45,8 @@ SRC_URI += "\
 "
 
 do_install_prepend() {
-	install -d ${D}${sysconfdir}/network/if-{,pre-}up.d
+	install -d ${D}${sysconfdir}/network/if-up.d
+	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install ${S}/debian/ethtool.if-up ${D}${sysconfdir}/network/if-up.d/ethtool
 	install ${S}/debian/ethtool.if-pre-up ${D}${sysconfdir}/network/if-pre-up.d/ethtool
 }
