@@ -60,7 +60,9 @@ do_install () {
 	
 	# install /etc/systemd/system/
 	install -d ${D}${systemd_unitdir}/system
-	install ${S}/debian/acpid.{path,service,socket} ${D}${systemd_unitdir}/system/	
+	install ${S}/debian/acpid.path ${D}${systemd_unitdir}/system/
+	install ${S}/debian/acpid.service ${D}${systemd_unitdir}/system/
+	install ${S}/debian/acpid.socket ${D}${systemd_unitdir}/system/
 	
 	# install /etc/acpi/events/
 	install -d ${D}${sysconfdir}/acpi
