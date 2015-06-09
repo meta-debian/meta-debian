@@ -1,18 +1,11 @@
-require recipes-devtools/m4/${PN}_1.4.17.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/m4/m4:"
+require m4.inc
 
-inherit debian-package
-DEBIAN_SECTION = "interpreters"
+PR = "r0"
 
-DPR = "1"
+inherit native
 
-LICENSE = "GPLv3"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
-
-SRC_URI += "\
-	file://ac_config_links.patch\
-	file://remove-gets.patch\
-"
+INHIBIT_AUTOTOOLS_DEPS = "1"
+DEPENDS += "gnu-config-native"
 
 # Change timestamp of some files to avoid remaking them (which require
 # automake to be installed)
@@ -32,6 +25,12 @@ do_configure_prepend() {
 
 	# To avoid running autoheader   
 	touch ${S}/lib/config.hin
+}
+
+do_configure()  {
+        install -m 0644 ${STAGING_DATADIR}/gnu-config/config.sub .
+        install -m 0644 ${STAGING_DATADIR}/gnu-config/config.guess .
+        oe_runconf
 }
 
 do_compile_prepend() {
