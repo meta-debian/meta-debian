@@ -23,6 +23,16 @@ do_install_prepend_class-target () {
 	export CROSS_BUILDING="yes"
 }
 
+# Fix error: ./lemon: Command not found
+# lemon need be built with $(BCC) instead of $(LTLINK)
+do_compile_prepend_class-nativesdk(){
+	export CROSS_BUILDING="yes"
+}
+
+do_install_prepend_class-nativesdk(){
+	export CROSS_BUILDING="yes"
+}
+
 #
 # Debian Native Test
 #
