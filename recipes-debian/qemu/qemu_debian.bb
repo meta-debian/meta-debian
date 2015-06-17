@@ -45,3 +45,10 @@ EXTRA_OECONF += "--disable-blobs --disable-sdl"
 EXTRA_OECONF_virtclass-nativesdk += "--disable-blobs --disable-sdl"
 EXTRA_OECONF_remove = "--enable-sdl"
 EXTRA_OECONF_virtclass-nativesdk_remove = "--enable-sdl"
+
+do_install_append() {
+	# Prevent QA warnings about installed ${localstatedir}/run
+	if [ -d ${D}${localstatedir}/run ]; then
+		rmdir ${D}${localstatedir}/run
+	fi
+}
