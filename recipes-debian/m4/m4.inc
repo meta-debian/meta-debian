@@ -18,5 +18,8 @@ SRC_URI += " \
 	file://ac_config_links.patch \
 "
 
+# Follow debian/rules
+EXTRA_OECONF += "--disable-rpath"
+
 EXTRA_OEMAKE += "'infodir=${infodir}'"
 LDFLAGS_prepend_libc-uclibc = " -lrt "
