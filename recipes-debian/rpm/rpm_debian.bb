@@ -34,6 +34,11 @@ HOMEPAGE = "http://www.rpm.org"
 DEPENDS = "db libxml2 xz file popt nss bzip2 elfutils patch attr \
                zlib acl gzip make binutils python"
 
+DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz nativesdk-file \
+		nativesdk-popt nativesdk-nss nativesdk-bzip2 nativesdk-elfutils nativesdk-attr \
+		nativesdk-zlib nativesdk-acl nativesdk-make nativesdk-python"
+RDEPENDS_${PN}_class-nativesdk = ""
+
 #SRC_URI += "http://rpm.org/releases/rpm-4.11.x/${BP}.tar.bz2 \
 #	file://use-pkgconfig-for-python.patch \
 #	file://remove-db3-from-configure.patch \
@@ -113,8 +118,10 @@ pkg_postinst_${PN}() {
 pkg_postrm_${PN}() {
 	[ "x\$D" == "x" ] && ldconfig
 }
-
-PACKAGES += "python-${PN}"
+# Don't use "python-${PN}",
+# if we bitbake nativesdk-rpm, we will get nativesdk-python-nativesdk-rpm,
+# so use "python-rpm" instead
+PACKAGES += "python-rpm"
 PROVIDES += "python-rpm"
 FILES_${PN} += "${libdir}/rpm \
 ${libdir}/rpm-plugins/exec.so \
@@ -126,9 +133,9 @@ ${libdir}/rpm-plugins/.debug/* \
 ${libdir}/python2.7/site-packages/rpm/.debug/* \
 "
 FILES_${PN}-dev += "${libdir}/python2.7/site-packages/rpm/*.la"
-FILES_python-${PN} = "${libdir}/python2.7/site-packages/rpm/*"
-RDEPENDS_python-${PN} = "${PN} python"
-BBCLASSEXTEND = "native"
+FILES_python-rpm = "${libdir}/python2.7/site-packages/rpm/*"
+RDEPENDS_python-rpm = "${PN} python"
+BBCLASSEXTEND = "native nativesdk"
 
 #
 # To build from debian (jessie) source code
@@ -156,6 +163,8 @@ file://disable_shortcircuited.patch \
 file://fix_libdir.patch \                                               
 file://rpm-scriptetexechelp.patch \ 
 "
+
+EXTRA_OEMAKE += " LIBTOOL=${HOST_SYS}-libtool"
 
 # Autoreconf breaks with
 # gnu-configize: `configure.ac' or `configure.in' is required
