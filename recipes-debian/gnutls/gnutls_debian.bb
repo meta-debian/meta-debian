@@ -17,7 +17,7 @@ SRC_URI += " \
 file://use-pkg-config-to-locate-zlib.patch \
 "
 
-DEPEND = "nettle"
+DEPENDS = "nettle"
 
 DPN = "gnutls28"
 
