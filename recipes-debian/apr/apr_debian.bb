@@ -1,7 +1,9 @@
 #
-# base recipe: meta/recipes-support/apr/apr-util_1.5.2.bb
+# base recipe: meta/recipes-support/apr/apr_1.4.8.bb
 # base branch: daisy
 #
+
+PR = "r0"
 
 inherit debian-package
 
@@ -15,10 +17,9 @@ BBCLASSEXTEND = "native"
 SRC_URI += " \
 file://configure_fixes.patch \
 file://configfix.patch \
+file://run-ptest \
+file://upgrade-and-fix-1.5.1.patch \
 "
-
-SRC_URI[md5sum] = "ce2ab01a0c3cdb71cf0a6326b8654f41"
-SRC_URI[sha256sum] = "61b8d2f8d321c6365ee3d71d0bb41f3a89c44da6124cc5b407a3b8319d660421"
 
 inherit autotools-brokensep lib_package binconfig multilib_header ptest
 
@@ -62,4 +63,22 @@ apr_sysroot_preprocess () {
 	cp ${S}/build/mkdir.sh $d/
 	cp ${S}/build/make_exports.awk $d/
 	cp ${S}/build/make_var_export.awk $d/
+}
+
+do_compile_ptest() {
+        cd ${S}/test
+        oe_runmake
+}
+
+do_install_ptest() {
+        t=${D}${PTEST_PATH}/test
+        mkdir -p $t/.libs
+        cp -r ${S}/test/data $t/
+        cp -r ${S}/test/.libs/*.so $t/.libs/
+        cp ${S}/test/proc_child $t/
+        cp ${S}/test/readchild $t/
+        cp ${S}/test/sockchild $t/
+        cp ${S}/test/sockperf $t/
+        cp ${S}/test/testall $t/
+        cp ${S}/test/tryread $t/
 }
