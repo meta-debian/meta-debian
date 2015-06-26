@@ -2,10 +2,12 @@
 # base recipe: meta/recipes-devtools/libtool/libtool_2.4.2.bb
 # base branch: daisy
 #
-require libtool.inc
 
-# patch file to exclude depending on help2man
-SRC_URI += "file://dont-depend-on-help2man-edited.patch"
+PR = "${INC_PR}.0"
+
+inherit debian-package
+
+require libtool.inc
 
 #                                                                               
 # We want the results of libtool-cross preserved - don't stage anything ourselves.
