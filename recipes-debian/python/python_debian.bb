@@ -29,6 +29,10 @@ SRC_URI += "\
 
 FILESEXTRAPATH_prepend =. "${THISDIR}/${PN}:"
 
+# Avoid error:
+# Parser/parser.o: file not recognized: File truncated
+PARALLEL_MAKE_class-nativesdk = ""
+
 inherit autotools multilib_header python-dir pythonnative
 
 CONFIGUREOPTS += " --with-system-ffi "
