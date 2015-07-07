@@ -1,6 +1,12 @@
 #
-# rpm_4.11.2.bb from openembedded
+# base recipe: meta/recipes-devtools/rpm/rpm_4.11.2.bb
+# base branch: master
 #
+
+PR = "r0"
+
+inherit debian-package
+
 SUMMARY = "The RPM package management system"
 DESCRIPTION = "The RPM Package Manager (RPM) is a powerful command line driven \
 package management system capable of installing, uninstalling, \
@@ -26,27 +32,32 @@ supplied by the RPM Package Manager libraries."
 
 HOMEPAGE = "http://www.rpm.org"
 
-#LICENSE = "GPL-2.0+"
+LICENSE = "GPL-2.0"
+LIC_FILES_CHKSUM = "file://COPYING;md5=f5259151d26ff18e78023450a5ac8d96"
 
-#LIC_FILES_CHKSUM ??= " \
-#file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
+# FIXME: fail when regenerate config.status and Makefile.in
+# Makefile.in is already available, temporarily remove this step
+# with no_recreate_Makefile_in.patch
+SRC_URI += " \
+file://no_recreate_Makefile_in.patch \
+file://pythondeps.sh \
+file://change-aclocal-version.patch \
+file://remove-db3-from-configure.patch \
+file://add_RPMSENSE_MISSINGOK_to_rpmmodule.patch \
+file://support-suggests-tag.patch \
+file://remove-dir-check.patch \
+file://disable_shortcircuited.patch \
+file://fix_libdir.patch \
+file://rpm-scriptetexechelp.patch \
+"
 
 DEPENDS = "db libxml2 xz file popt nss bzip2 elfutils patch attr \
                zlib acl gzip make binutils python"
 
-#SRC_URI += "http://rpm.org/releases/rpm-4.11.x/${BP}.tar.bz2 \
-#	file://use-pkgconfig-for-python.patch \
-#	file://remove-db3-from-configure.patch \
-#	file://add_RPMSENSE_MISSINGOK_to_rpmmodule.patch \
-#	file://support-suggests-tag.patch \
-#	file://remove-dir-check.patch \
-#	file://disable_shortcircuited.patch \
-#	file://fix_libdir.patch \
-#	file://rpm-scriptetexechelp.patch \
-#	file://pythondeps.sh \
-#	"
-#SRC_URI[md5sum] = "876ac9948a88367054f8ddb5c0e87173"
-#SRC_URI[sha256sum] = "403f8de632b33846ce5746f429c21a60f40dff9dcb56f1b4118f37a0652a48d4"
+DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz nativesdk-file \
+		nativesdk-popt nativesdk-nss nativesdk-bzip2 nativesdk-elfutils nativesdk-attr \
+		nativesdk-zlib nativesdk-acl nativesdk-make nativesdk-python"
+RDEPENDS_${PN}_class-nativesdk = ""
 
 inherit autotools
 inherit pythonnative
@@ -75,17 +86,32 @@ EXTRA_OECONF += "--host=${HOST_SYS} \
 		--enable-python \
 		--with-external-db \
 		"
-#CPPFLAGS_append = " `pkg-config --cflags nss`"
 LDFLAGS_append = " -Wl,-Bsymbolic-functions -ffunction-sections"
 CCFLAGS_append = " -fPIC "
 CXXFLAGS_append = " -fPIC "
 CFLAGS_append = " -fPIC -DRPM_VENDOR_WINDRIVER -DRPM_VENDOR_POKY -DRPM_VENDOR_OE "
+
+EXTRA_OEMAKE += " LIBTOOL=${HOST_SYS}-libtool"
 
 do_configure_prepend() {
 	rm -rf sqlite
 	rm -f m4/libtool.m4
 	rm -f m4/lt*.m4
 	rm -rf db3/configure*
+}
+
+# Autoreconf breaks with
+# gnu-configize: `configure.ac' or `configure.in' is required
+# Works good enough without autoreconf
+do_configure () {
+        # configure cannot find sechash.h by default
+        export CPPFLAGS="-I${STAGING_INCDIR_NATIVE} -I${STAGING_INCDIR_NATIVE}/nss3"
+        # set some variables so python can see Python.h header 
+        export BUILD_SYS=${BUILD_SYS}
+        export HOST_SYS=${HOST_SYS}
+        export STAGING_INCDIR=${STAGING_INCDIR}
+        export STAGING_LIBDIR=${STAGING_LIBDIR}
+        oe_runconf
 }
 
 do_install_append() {
@@ -113,8 +139,10 @@ pkg_postinst_${PN}() {
 pkg_postrm_${PN}() {
 	[ "x\$D" == "x" ] && ldconfig
 }
-
-PACKAGES += "python-${PN}"
+# Don't use "python-${PN}",
+# if we bitbake nativesdk-rpm, we will get nativesdk-python-nativesdk-rpm,
+# so use "python-rpm" instead
+PACKAGES += "python-rpm"
 PROVIDES += "python-rpm"
 FILES_${PN} += "${libdir}/rpm \
 ${libdir}/rpm-plugins/exec.so \
@@ -126,50 +154,9 @@ ${libdir}/rpm-plugins/.debug/* \
 ${libdir}/python2.7/site-packages/rpm/.debug/* \
 "
 FILES_${PN}-dev += "${libdir}/python2.7/site-packages/rpm/*.la"
-FILES_python-${PN} = "${libdir}/python2.7/site-packages/rpm/*"
-RDEPENDS_python-${PN} = "${PN} python"
-BBCLASSEXTEND = "native"
-
-#
-# To build from debian (jessie) source code
-#
-
-inherit debian-package
-DEBIAN_SECTION = "admin"
-DPR = "0"
-
-LICENSE = "GPL-2.0"
-LIC_FILES_CHKSUM = "file://COPYING;md5=f5259151d26ff18e78023450a5ac8d96"
-
-# FIXME: fail when regenerate config.status and Makefile.in
-# Makefile.in is already available, temporarily remove this step
-# with no_recreate_Makefile_in.patch
-SRC_URI += " \
-file://no_recreate_Makefile_in.patch \
-file://pythondeps.sh \
-file://change-aclocal-version.patch \
-file://remove-db3-from-configure.patch \                                
-file://add_RPMSENSE_MISSINGOK_to_rpmmodule.patch \                      
-file://support-suggests-tag.patch \                                     
-file://remove-dir-check.patch \                                         
-file://disable_shortcircuited.patch \                                   
-file://fix_libdir.patch \                                               
-file://rpm-scriptetexechelp.patch \ 
-"
-
-# Autoreconf breaks with
-# gnu-configize: `configure.ac' or `configure.in' is required
-# Works good enough without autoreconf
-do_configure () {
-	# configure cannot find sechash.h by default
-	export CPPFLAGS="-I${STAGING_INCDIR_NATIVE} -I${STAGING_INCDIR_NATIVE}/nss3"
-	# set some variables so python can see Python.h header 
-	export BUILD_SYS=${BUILD_SYS}
-	export HOST_SYS=${HOST_SYS}
-	export STAGING_INCDIR=${STAGING_INCDIR}
-	export STAGING_LIBDIR=${STAGING_LIBDIR}
-	oe_runconf
-}
+FILES_python-rpm = "${libdir}/python2.7/site-packages/rpm/*"
+RDEPENDS_python-rpm = "${PN} python"
+BBCLASSEXTEND = "native nativesdk"
 
 #
 # Debian Native Test

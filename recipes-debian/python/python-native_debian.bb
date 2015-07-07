@@ -1,40 +1,66 @@
-require recipes-devtools/python/python-native_2.7.3.bb
-FILESPATH_prepend = "${COREBASE}/meta/recipes-devtools/python/python-native:"
+#
+# base recipe: meta/recipes-devtools/python/python-native_2.7.9.bb
+# base branch: master
+#
 
 require python.inc
 
-inherit debian-package
+EXTRANATIVEPATH += "bzip2-native"
+DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native"
+PR = "${INC_PR}.1"
 
-DPR = "0"
-
-# Source code has been updated, no need to patch:
-#	nohostlibs.patch (some hunk is not updated, 
-#		so use nohostlibs_2.7.8.patch for non-update content)
-#	builddir.patch (some hunk is not updated, 
-#		so use builddir_2.7.8.patch for non-update content)
-#	python-fix-build-error-with-Readline-6.3.patch
-#	gcc-4.8-fix-configure-Wformat.patch
-# \
-# Source code has been changed, not found content to patch:
-#	05-enable-ctypes-cross-build.patch
-#	multilib.patch (file not found to patch, so update the patch for right file
-#			and rename to multilib_2.7.8.patch)
 # makerace.patch: copied from python3 directory
 #   Always builds 'Parser/pgen' required by do_install
 SRC_URI += "\
-file://06-ctypes-libffi-fix-configure.patch \
-file://10-distutils-fix-swig-parameter.patch \
-file://11-distutils-never-modify-shebang-line.patch \
-file://12-distutils-prefix-is-inside-staging-area.patch \
-file://debug.patch \
-file://unixccompiler.patch \
-file://nohostlibs_2.7.8.patch \
-file://multilib_2.7.8.patch \
-file://add-md5module-support.patch \
-file://builddir_2.7.8.patch \
-file://parallel-makeinst-create-bindir.patch \
-file://makerace.patch \
+	file://05-enable-ctypes-cross-build.patch \
+	file://11-distutils-never-modify-shebang-line.patch \
+	file://12-distutils-prefix-is-inside-staging-area.patch \
+	file://unixccompiler.patch \
+	file://nohostlibs.patch \
+	file://multilib.patch \
+	file://add-md5module-support.patch \
+	file://builddir.patch \
+	file://parallel-makeinst-create-bindir.patch \
+	file://makerace.patch \
 "
 
-# Parallel make causes strange compile error so temporarily disable it
-PARALLEL_MAKE = ""
+FILESEXTRAPATHS =. "${THISDIR}/${PN}:"
+
+inherit native
+
+RPROVIDES += "python-distutils-native python-compression-native python-textutils-native python-codecs-native python-core-native"
+
+EXTRA_OECONF_append = " --bindir=${bindir}/${PN}"
+
+EXTRA_OEMAKE = '\
+	BUILD_SYS="" \
+	HOST_SYS="" \
+	LIBC="" \
+	STAGING_LIBDIR=${STAGING_LIBDIR_NATIVE} \
+	STAGING_INCDIR=${STAGING_INCDIR_NATIVE} \
+'
+
+do_configure_append() {
+	autoreconf --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi
+}
+
+do_install() {
+	oe_runmake 'DESTDIR=${D}' install
+	install -d ${D}${bindir}/${PN}
+	install -m 0755 Parser/pgen ${D}${bindir}/${PN}
+
+	# Make sure we use /usr/bin/env python
+	for PYTHSCRIPT in `grep -rIl ${bindir}/${PN}/python ${D}${bindir}/${PN}`; do
+		sed -i -e '1s|^#!.*|#!/usr/bin/env python|' $PYTHSCRIPT
+	done
+
+	# Add a symlink to the native Python so that scripts can just invoke
+	# "nativepython" and get the right one without needing absolute paths
+	# (these often end up too long for the #! parser in the kernel as the
+	# buffer is 128 bytes long).
+	ln -s python-native/python ${D}${bindir}/nativepython
+
+	# We don't want modules in ~/.local being used in preference to those
+	# installed in the native sysroot, so disable user site support.
+	sed -i -e 's,^\(ENABLE_USER_SITE = \).*,\1False,' ${D}${libdir}/python${PYTHON_MAJMIN}/site.py
+}

@@ -1,0 +1,9 @@
+--- a/Makefile.am	2015-05-29 02:54:05.671676080 +0700
++++ b/Makefile.am	2015-05-29 02:54:13.775676015 +0700
+@@ -4,5 +4,5 @@
+ 
+ AUTOMAKE_OPTIONS = 1.5 dist-bzip2 foreign
+ 
+-SUBDIRS = po man libmisc lib src \
++SUBDIRS = po libmisc lib src \
+ 	contrib doc etc

@@ -58,12 +58,12 @@ ALLOW_EMPTY_${BPN}-localedatas = "1"
 PACKAGES += "${BPN}-localedatas"
 RRECOMMENDS_${BPN}-localedatas =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-localedata") != -1])}"
 
-DESCRIPTION_localedef = "glibc: compile locale definition files"
+DESCRIPTION_localedef = "eglibc: compile locale definition files"
 
 # glibc-gconv is dynamically added into PACKAGES, thus
 # FILES_glibc-gconv will not be automatically extended in multilib.
 # Explicitly add ${MLPREFIX} for FILES_glibc-gconv.
-FILES_${MLPREFIX}glibc-gconv = "${libdir}/gconv/*"
+FILES_${MLPREFIX}glibc-gconv = "/usr/lib/gconv/*"
 FILES_${PN}-dbg += "${libdir}/gconv/.debug/*"
 FILES_localedef = "${bindir}/localedef"
 
@@ -103,5 +103,6 @@ DPN = "glibc"
 
 do_debian_patch[noexec] = "1"
 
-# Avoid listed in PACKAGE multiple times
-PACKAGES_remove = "locale-base-ca-es"
+PACKAGES += "locales ${MLPREFIX}glibc-gconv"
+FILES_locales += "/usr/share/i18n/locales/* \
+		/usr/share/i18n/charmaps/*"

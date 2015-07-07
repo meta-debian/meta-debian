@@ -1,0 +1,13 @@
+diff --git a/configure.in b/configure.in
+index 1a3f841..1bc97d0 100644
+--- a/configure.in
++++ b/configure.in
+@@ -342,7 +342,7 @@ int main(void) {
+ 	gid_t g;
+ 	return (sizeof u < 4) || (sizeof g < 4);
+ }
+-	])], [id32bit="yes"], [id32bit="no"])
++	])], [id32bit="yes"], [id32bit="no"], [id32bit="yes"])
+ 
+ 	if test "x$id32bit" = "xyes"; then
+ 		AC_DEFINE(ENABLE_SUBIDS, 1, [Define to support the subordinate IDs.])
