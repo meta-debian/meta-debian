@@ -21,9 +21,6 @@ file://configure_fixes.patch \
 file://run-ptest \
 "
 
-SRC_URI[md5sum] = "eb682cfb8642babba427a4fb391b15e8"
-SRC_URI[sha256sum] = "a1ec5025373815795d2fa5bfac40c0984675feffc88e049be9a162c408c2f613"
-
 EXTRA_OECONF = "--with-apr=${STAGING_BINDIR_CROSS}/apr-1-config \ 
 		--without-odbc \
 		--without-pgsql \
@@ -32,7 +29,6 @@ EXTRA_OECONF = "--with-apr=${STAGING_BINDIR_CROSS}/apr-1-config \
 		--without-sqlite2 \
 		--without-sqlite3 \
 		--with-expat=${STAGING_DIR_HOST}${prefix}"
-
 
 inherit autotools-brokensep lib_package binconfig
 
@@ -43,9 +39,11 @@ do_configure_append() {
 		cp ${STAGING_DATADIR}/apr/apr_rules.mk ${S}/build/rules.mk
 	fi
 }
+
 do_configure_prepend_class-native() {
 	cp ${STAGING_DATADIR_NATIVE}/apr/apr_rules.mk ${S}/build/rules.mk
 }
+
 do_configure_append_class-native() {
 	sed -i "s#LIBTOOL=\$(SHELL) \$(apr_builddir)#LIBTOOL=\$(SHELL) ${STAGING_BINDIR_NATIVE}#" ${S}/build/rules.mk
 	# sometimes there isn't SHELL
@@ -68,6 +66,6 @@ do_install_ptest() {
 	t=${D}${PTEST_PATH}/test
 	mkdir $t
 	for i in testall data; do \
-	  cp -r ${S}/test/$i $t; \
+		cp -r ${S}/test/$i $t; \
 	done
 }
