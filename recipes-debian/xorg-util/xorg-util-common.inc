@@ -1,27 +1,16 @@
 #
-# xorg-util-common.inc
+# base recipe: meta-debian/recipes-debian/xorg-util/xorg-util-common.inc
+# base branch: daisy
 #
+
 HOMEPAGE = "http://www.x.org"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=xorg"
 
-SECTION = "x11/utils"
-LICENSE = "MIT-X"
+INC_PR = "r0"
 
-XORG_PN = "${BPN}"
-
-SRC_URI = "${XORG_MIRROR}/individual/util/${XORG_PN}-${PV}.tar.gz"
-
-#S = "${WORKDIR}/${XORG_PN}-${PV}"
-
-inherit autotools pkgconfig
-
-#
-#debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
+inherit debian-package autotools pkgconfig
 DPN = "xutils-dev"
 
+# Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
-S = "${DEBIAN_UNPACK_DIR}/makedepend"
