@@ -91,7 +91,6 @@ B = "${S}/build.${HOST_SYS}.${TARGET_SYS}"
 
 EXTRA_OECONF = "--program-prefix=${TARGET_PREFIX} \
                 --disable-werror \
-		--enable-shared \
 		--enable-plugins \
 		--enable-threads \
                 --enable-plugins \
