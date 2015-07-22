@@ -90,3 +90,24 @@ perl_package_preprocess_append(){
 		rm ${PKGD}${libdir}/perl/${PV}/cacheout.pl
 	fi
 }
+
+# FIXME: temporally fix run-time dependencies of perl modules
+# Currently, this recipe is based on perl-rdepends_5.14.3.inc,
+# which includes packages that are not provided in Debian:
+#   ${PN}-module-list-util-pp, ${PN}-module-scalar-util-pp
+# So remove these packages from the dependency chain.
+# perl_debian.bb should be re-created from scratch without the base recipe.
+RDEPENDS_${PN}-module-list-util = " \
+${PN}-module-dynaloader \
+${PN}-module-exporter \
+${PN}-module-strict \
+${PN}-module-vars \
+${PN}-module-xsloader \
+"
+RDEPENDS_${PN}-module-scalar-util = " \
+${PN}-module-carp \
+${PN}-module-exporter \
+${PN}-module-list-util \
+${PN}-module-strict \
+${PN}-module-vars \
+"
