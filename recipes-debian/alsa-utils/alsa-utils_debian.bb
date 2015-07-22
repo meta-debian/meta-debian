@@ -1,24 +1,39 @@
+#
+# base recipe: meta/recipes-multimedia/alsa/alsa-utils_1.0.27.2.bb
+# base branch: daisy
+#
+
+PR = "r0"
+
+inherit debian-package
+
 SUMMARY = "ALSA sound utilities"
 HOMEPAGE = "http://www.alsa-project.org"
 BUGTRACKER = "https://bugtrack.alsa-project.org/alsa-bug/login_page.php"
-SECTION = "console/utils"
 LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552 \
-                    file://alsactl/utils.c;beginline=1;endline=20;md5=fe9526b055e246b5558809a5ae25c0b9"
-DEPENDS = "alsa-lib ncurses"
+LIC_FILES_CHKSUM = " \
+	file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552 \
+	file://alsactl/utils.c;beginline=1;endline=20;md5=fe9526b055e246b5558809a5ae25c0b9 \
+"
+
+DEPENDS = "alsa-lib ncurses libsamplerate0 udev"
+
+SRC_URI +=" \
+	file://0001-alsactl-don-t-let-systemd-unit-restore-the-volume-wh.patch \
+	file://alsa-utils-aplay-interrupt-signal-handling.patch \
+"
 
 PACKAGECONFIG ??= "udev"
 PACKAGECONFIG[udev] = "--with-udev-rules-dir=`pkg-config --variable=udevdir udev`/rules.d,,udev"
 PACKAGECONFIG[xmlto] = "--enable-xmlto, --disable-xmlto, xmlto-native docbook-xml-dtd4-native docbook-xsl-stylesheets-native"
 
-SRC_URI = "ftp://ftp.alsa-project.org/pub/utils/alsa-utils-${PV}.tar.bz2 \
-           file://0001-alsactl-don-t-let-systemd-unit-restore-the-volume-wh.patch \
-           file://alsa-utils-aplay-interrupt-signal-handling.patch \
-          "
-
-SRC_URI[md5sum] = "6b289bf874c4c9a63f4b3973093dd404"
-SRC_URI[sha256sum] = "5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b"
-
+# Follow Debian
+EXTRA_OECONF += " \
+	--with-asound-state-dir=${localstatedir}/lib/alsa \
+	--with-alsactl-home-dir=${var}/run/alsa \
+	--with-systemdsystemunitdir=${systemd_unitdir}/system \
+	--disable-alsaconf \
+"
 # lazy hack. needs proper fixing in gettext.m4, see
 # http://bugs.openembedded.org/show_bug.cgi?id=2348
 # please close bug and remove this comment when properly fixed
@@ -57,7 +72,9 @@ FILES_alsa-utils-midi        = "${bindir}/aplaymidi ${bindir}/arecordmidi ${bind
 FILES_alsa-utils-aconnect    = "${bindir}/aconnect"
 FILES_alsa-utils-aseqnet     = "${bindir}/aseqnet"
 FILES_alsa-utils-iecset      = "${bindir}/iecset"
-FILES_alsa-utils-alsactl     = "${sbindir}/alsactl */udev/rules.d ${systemd_unitdir} ${localstatedir}/lib/alsa ${datadir}/alsa/init/"
+FILES_alsa-utils-alsactl     = "${sbindir}/alsactl */udev/rules.d ${systemd_unitdir} \
+				${localstatedir}/lib/alsa ${datadir}/alsa/init/ \
+				${sysconfdir}/init.d/"
 FILES_alsa-utils-aseqdump    = "${bindir}/aseqdump"
 FILES_alsa-utils-alsaloop    = "${bindir}/alsaloop"
 FILES_alsa-utils-alsaucm     = "${bindir}/alsaucm"
@@ -76,48 +93,12 @@ SUMMARY_alsa-utils-aseqdump     = "Shows the events received at an ALSA sequence
 SUMMARY_alsa-utils-alsaloop     = "ALSA PCM loopback utility"
 SUMMARY_alsa-utils-alsaucm      = "ALSA Use Case Manager"
 
-#No need to save sound state
-#RRECOMMENDS_alsa-utils-alsactl = "alsa-states"
-
 ALLOW_EMPTY_alsa-utils = "1"
 
-#do_install() {
-#	autotools_do_install
-#
-#	# We don't ship this here because it requires a dependency on bash.
-#	# See alsa-utils-scripts_${PV}.bb
-#	rm ${D}${sbindir}/alsaconf
-#	rm ${D}${sbindir}/alsa-info.sh
-#
-#	if ${@bb.utils.contains('PACKAGECONFIG', 'udev', 'false', 'true', d)}; then
-#	   # This is where alsa-utils will install its rules if we don't tell it anything else.
-#	   rm -rf ${D}/lib/udev
-#	   rmdir --ignore-fail-on-non-empty ${D}/lib
-#	fi
-#}
+# Follow Debian
+do_install_append() {
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/debian/init ${D}${sysconfdir}/init.d/alsa-utils
 
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
-
-SRC_URI +=" \
-           file://0001-alsactl-don-t-let-systemd-unit-restore-the-volume-wh.patch \
-           file://alsa-utils-aplay-interrupt-signal-handling.patch \
-          "
-
-do_install() {
-	autotools_do_install
-
-	# We don't ship this here because it requires a dependency on bash.
-	# See alsa-utils-scripts_${PV}.bb
-	rm ${D}${sbindir}/alsaconf
-	#rm ${D}${sbindir}/alsa-info.sh
-
-	if ${@bb.utils.contains('PACKAGECONFIG', 'udev', 'false', 'true', d)}; then
-	   # This is where alsa-utils will install its rules if we don't tell it anything else.
-	   rm -rf ${D}/lib/udev
-	   rmdir --ignore-fail-on-non-empty ${D}/lib
-	fi
+	ln -s /dev/null ${D}${systemd_unitdir}/system/alsa-utils.service
 }
