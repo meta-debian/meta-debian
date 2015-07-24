@@ -40,3 +40,10 @@ DPR = "0"
 DPN = "xorg-server"
 
 DEBIAN_PATCH_TYPE = "quilt"
+
+# macro_tweak.patch:
+#   correct a include directory path for sysroot
+#   Without this patch, do_qa_configure of other X packages
+#   that use xorg-server.m4 may fail because of the following warning:
+#   "/usr/include/xorg" is unsafe for cross-compilation
+SRC_URI += "file://macro_tweak.patch"
