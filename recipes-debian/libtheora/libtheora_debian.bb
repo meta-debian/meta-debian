@@ -1,30 +1,25 @@
 #
-# libtheora_1.1.1.bb
+# Base recipe: meta/recipes-multimedia/libtheora/libtheora_1.1.1.bb
+# Base branch: daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
 #
 SUMMARY = "Theora Video Codec"
 DESCRIPTION = "The libtheora reference implementation provides the standard encoder and decoder under a BSD license."
 HOMEPAGE = "http://xiph.org/"
 BUGTRACKER = "https://trac.xiph.org/newticket"
-SECTION = "libs"
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://COPYING;md5=cf91718f59eb6a83d06dc7bcaf411132"
+
+inherit autotools pkgconfig debian-package
+
+PR = "r0"
 DEPENDS = "libogg"
 
-PR = "r1"
+LICENSE = "BSD"
+LIC_FILES_CHKSUM = "file://COPYING;md5=cf91718f59eb6a83d06dc7bcaf411132"
 
-SRC_URI = "http://downloads.xiph.org/releases/theora/libtheora-${PV}.tar.bz2 \
-           file://no-docs.patch"
-
-SRC_URI[md5sum] = "292ab65cedd5021d6b7ddd117e07cd8e"
-SRC_URI[sha256sum] = "b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc"
-
-inherit autotools pkgconfig
-
+# libtheora-bin contains examples only so no need for it
 EXTRA_OECONF = "--disable-examples"
 
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "libs"
-DPR = "0"
+# Specify scope of apply Debian name
+LEAD_SONAME = "libtheora.so.0"
+
+DEBIANNAME_${PN} = "libtheora0"
