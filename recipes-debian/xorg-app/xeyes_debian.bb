@@ -7,18 +7,12 @@ follow the location of the mouse cursor around the screen."
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3ea51b365051ac32d1813a7dbaa4bfc6"
 
-SRC_URI[md5sum] = "a3035dcecdbdb89e864177c080924981"
-SRC_URI[sha256sum] = "975e98680cd59e1f9439016386609546ed08c284d0f05a95276f96aca6e8a521"
-
-#
-# debian
-#
 inherit debian-package
+
 DEBIAN_SECTION = "x11"
 DPR = "0"
 DPN = "x11-apps"
 
-# There is a patch in debian/patches/ but no patch in series
 DEBIAN_PATCH_TYPE = "quilt"
 
-S = "${WORKDIR}/git/xeyes"
+S = "${DEBIAN_UNPACK_DIR}/xeyes"
