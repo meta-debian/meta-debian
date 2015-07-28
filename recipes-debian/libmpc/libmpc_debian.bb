@@ -1,11 +1,19 @@
-require recipes-support/libmpc/libmpc_1.0.2.bb
+#
+# Base recipe: meta/recipes-support/libmpc/libmpc_1.0.2.bb
+# Base branch: daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+#
 
-# Using pkgconfig to check the existence of the library and set all 
-# necessary flags.
+SUMMARY = "C library for complex number arithmetic with arbitrary precision and correct rounding"
+DESCRIPTION = "Mpc is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result. It is built upon and follows the same principles as Mpfr"
+HOMEPAGE = "http://www.multiprecision.org/"
+LICENSE = "LGPLv3"
+SECTION = "libs"
 
-inherit debian-package pkgconfig
-DEBIAN_SECTION = "libs"
-DPR = "0"
+inherit autotools debian-package pkgconfig
+
+PR = "r0"
+DEPENDS = "gmp mpfr"
 DPN = "mpclib3"
 
 LICENSE = "LGPLv3"
@@ -17,3 +25,5 @@ DEBIAN_PATCH_TYPE = "quilt"
 SRC_URI += "\
 	file://fix-configure.patch \
 "
+
+BBCLASSEXTEND = "native nativesdk"
