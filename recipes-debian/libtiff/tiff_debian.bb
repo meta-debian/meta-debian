@@ -1,5 +1,7 @@
 #
-# Base on meta/recipes-multimedia/libtiff/tiff_4.0.3.bb
+# Base recipe: meta/recipes-multimedia/libtiff/tiff_4.0.3.bb
+# Base branch: daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
 #
 
 SUMMARY = "Provides support for the Tag Image File Format (TIFF)"
@@ -7,20 +9,9 @@ LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=34da3db46fab7501992f9615d7e158cf"
 HOMEPAGE = "http://www.remotesensing.org/libtiff/"
 
-#SRC_URI = "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${PV}.tar.gz \
-#           file://libtool2.patch \
-#           file://libtiff-CVE-2013-1960.patch \
-#           file://libtiff-CVE-2013-1961.patch \
-#           file://libtiff-CVE-2013-4232.patch \
-#           file://libtiff-CVE-2013-4243.patch \
-#           file://libtiff-CVE-2013-4244.patch \
-#           file://libtiff-CVE-2013-4231.patch \
-#           file://tiff-CVE-2012-4564.patch "
+inherit autotools debian-package
 
-#SRC_URI[md5sum] = "051c1068e6a0627f461948c365290410"
-#SRC_URI[sha256sum] = "ea1aebe282319537fb2d4d7805f478dd4e0e05c33d0928baba76a7c963684872"
-
-inherit autotools
+PR = "r0"
 
 CACHED_CONFIGUREVARS = "ax_cv_check_gl_libgl=no"
 
@@ -47,21 +38,16 @@ PACKAGECONFIG[check-ycbcr-subsampling] = "--enable-check-ycbcr-subsampling,--dis
 # in chunks when using TIFFReadScanline. Experimental 4.0+ feature
 PACKAGECONFIG[chunky-strip-read] = "--enable-chunky-strip-read,--disable-chunky-strip-read,,"
 
-PACKAGES =+ "tiffxx tiffxx-dbg tiffxx-dev tiffxx-staticdev tiff-utils tiff-utils-dbg"
-FILES_tiffxx = "${libdir}/libtiffxx.so.*"
-FILES_tiffxx-dev = "${libdir}/libtiffxx.so ${libdir}/libtiffxx.la"
-FILES_tiffxx-staticdev = "${libdir}/libtiffxx.a"
+# Set list of package build from Debian source according to list of packages in Debian
+PACKAGES =+ "tiffxx5 tiffxx-dbg tiff-tools tiff-utils-dbg"
+
+FILES_tiffxx5 = "${libdir}/libtiffxx.so.*"
+FILES_${PN}-dev += "${libdir}/libtiffxx.so ${libdir}/libtiffxx.la ${libdir}/libtiffxx.a"
 FILES_tiffxx-dbg += "${libdir}/.debug/libtiffxx.so*"
-FILES_tiff-utils = "${bindir}/*"
+FILES_tiff-tools = "${bindir}/*"
 FILES_tiff-utils-dbg += "${bindir}/.debug/"
 
+# Correct Debian package name
+DEBIANNAME_${PN}-dev = "libtiff5-dev"
+
 BBCLASSEXTEND = "native"
-
-#
-# debian 
-#
-
-inherit debian-package
-
-DEBIAN_SECTION = "libs"
-DPR = "0"
