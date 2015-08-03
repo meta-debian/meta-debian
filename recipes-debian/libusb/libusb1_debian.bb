@@ -1,22 +1,20 @@
+#
+# Base recipe: meta/recipes-support/libusb/libusb1_1.0.9.bb
+# Base branch: daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+#
+
 SUMMARY = "Userspace library to access USB (version 1.0)"
 HOMEPAGE = "http://libusb.sf.net"
 BUGTRACKER = "http://www.libusb.org/report"
-SECTION = "libs"
+
+inherit debian-package autotools pkgconfig
+
+PR = "r0"
+DPN = "libusb-1.0"
 
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=fbc093901857fcd118f065f900982c24"
-
-BBCLASSEXTEND = "native nativesdk"
-
-SRC_URI = "${SOURCEFORGE_MIRROR}/libusb/libusb-${PV}.tar.bz2 \
-          "
-
-SRC_URI[md5sum] = "f9e2bb5879968467e5ca756cb4e1fa7e"
-SRC_URI[sha256sum] = "6c502c816002f90d4f76050a6429c3a7e0d84204222cbff2dce95dd773ba6840"
-
-S = "${WORKDIR}/libusb-${PV}"
-
-inherit autotools pkgconfig
 
 # Don't configure udev by default since it will cause a circular
 # dependecy with udev package, which depends on libusb
@@ -31,10 +29,13 @@ do_install_append() {
 
 FILES_${PN} += "${base_libdir}/*.so.*"
 
-FILES_${PN}-dev += "${base_libdir}/*.so ${base_libdir}/*.la"
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
-DPN = "libusb-1.0"
+# Move .a library to dev package
+FILES_${PN}-dev += "${base_libdir}/*.so ${base_libdir}/*.la ${base_libdir}/*.a"
+
+# Override file in staticdev package
+FILES_${PN}-staticdev = ""
+
+# Skip checking QA issue that .a file not in staticdev lib
+INSANE_SKIP_${PN}-dev = "staticdev"
+
+BBCLASSEXTEND = "native nativesdk"
