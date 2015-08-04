@@ -1,12 +1,31 @@
-require expat.inc
+#
+# base recipe: meta/recipes-core/expat/expat_2.1.0.bb
+# base branch: daisy
+#
+
+PR = "r0"
+
+SUMMARY = "A stream-oriented XML parser library"
+DESCRIPTION = "Expat is an XML parser library written in C. It is a stream-oriented parser in which an application registers handlers for things the parser might find in the XML document (like start tags)"
+
+inherit debian-package
+
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://COPYING;md5=1b71f681713d1256e1c23b0890920874"
+
+inherit autotools lib_package gzipnative
+
+# This package uses an archive format known to have issue with some
+# versions of gzip
+do_unpack[depends] += "gzip-native:do_populate_sysroot"
+
+do_configure_prepend () {
+        rm -f ${S}/conftools/libtool.m4
+}
+
+BBCLASSEXTEND = "native nativesdk"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=1b71f681713d1256e1c23b0890920874"
 
 SRC_URI[md5sum] = "dd7dab7a5fea97d2a6a43f511449b7cd"
 SRC_URI[sha256sum] = "823705472f816df21c8f6aa026dd162b280806838bb55b3432b0fb1fcca7eb86"
-
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
-DEBIAN_SECTION = "libs"
