@@ -1,5 +1,6 @@
 #
-# xf86dgaproto_2.1.bb
+# Base recipe: meta/recipes-graphics/xorg-proto/xf86dgaproto_2.1.bb
+# Base branch: daisy
 #
 require xorg-proto-common.inc
 
@@ -10,22 +11,13 @@ Direct Graphics Access extension. This extension allows direct graphics \
 access to a framebuffer-like region, as well as relative mouse \
 reporting."
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e01e66e4b317088cf869bc98e6af4fb6"
 
 RCONFLICTS_${PN} = "xxf86dgaext"
-PR = "r2"
-PE = "1"
 
-SRC_URI[md5sum] = "a036dc2fcbf052ec10621fd48b68dbb1"
-SRC_URI[sha256sum] = "ac5ef65108e1f2146286e53080975683dae49fc94680042e04bd1e2010e99050"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "x11proto-xf86dga"
 
 # There is no debian patch
