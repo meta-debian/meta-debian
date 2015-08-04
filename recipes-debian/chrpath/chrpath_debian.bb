@@ -16,6 +16,7 @@ file://standarddoc.patch \
 
 inherit autotools
 
+# There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
 
 # We don't have a staged chrpath-native for ensuring our binary is
