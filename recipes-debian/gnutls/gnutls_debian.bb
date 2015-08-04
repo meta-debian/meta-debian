@@ -7,14 +7,12 @@ PR = "r0"
 
 inherit debian-package
 
-LICENSE = "GPLv3+ & LGPLv2.1+"
+LICENSE = "GPLv3+ & LGPLv2.1+ & ISC"
 LIC_FILES_CHKSUM = " \
 file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 file://COPYING.LESSER;md5=a6f89e2100d9b6cdffcea4f398e37343 \
-"
-
-SRC_URI += " \
-file://use-pkg-config-to-locate-zlib.patch \
+file://lib/inet_pton.c;beginline=8;enline=15;\
+md5=42f6ae91128cbd74b08e629d25ad4346 \
 "
 
 DEPENDS = "nettle"
@@ -23,13 +21,18 @@ DPN = "gnutls28"
 
 inherit autotools binconfig pkgconfig gettext lib_package
 
-EXTRA_OECONF="--disable-rpath \
-              --with-included-libtasn1 \
-              --enable-local-libopts \
-              --with-libpthread-prefix=${STAGING_DIR_HOST}${prefix} \
+EXTRA_OECONF="--enable-ld-version-script \
+              --enable-cxx \
+              --enable-static \
+              --without-lzo \
+              --disable-libdane \
+              --without-tpm \
+              --disable-heartbeat-support \
+              -disable-silent-rules \
+              --with-packager=Debian \
+              --disable-gtk-doc \
+              --disable-gtk-doc \
               --disable-guile \
-              --disable-crywrap \
-              --without-p11-kit \
               "
 
 do_configure_prepend() {
