@@ -24,12 +24,10 @@ inherit autotools binconfig pkgconfig gettext lib_package
 EXTRA_OECONF="--enable-ld-version-script \
               --enable-cxx \
               --enable-static \
-              --without-lzo \
               --disable-libdane \
               --without-tpm \
               --disable-heartbeat-support \
               -disable-silent-rules \
-              --with-packager=Debian \
               --disable-gtk-doc \
               --disable-gtk-doc \
               --disable-guile \
