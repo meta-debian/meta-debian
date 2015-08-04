@@ -21,9 +21,9 @@ SRC_URI[sha256sum] = "bc71ebd43435537d767799e414fce88e521b7278d48c860651216e1fc6
 EXTRA_OECONF = "--disable-openssl"
 
 do_configure_prepend() {
-       if [ ! -e ${S}/acinclude.m4 -a -e ${S}/aclocal.m4 ]; then
-               cp ${S}/aclocal.m4 ${S}/acinclude.m4
-       fi
+	if [ ! -e ${S}/acinclude.m4 -a -e ${S}/aclocal.m4 ]; then
+		cp ${S}/aclocal.m4 ${S}/acinclude.m4
+	fi
 }
 
 inherit autotools
