@@ -1,10 +1,28 @@
-require recipes-extended/gperf/gperf_3.0.4.bb
+#
+# base recipe: meta/recipes-extended/gperf/gperf_3.0.4.bb
+# branch: daisy
+#
+
+PR = "r0"
 
 inherit debian-package
-DEBIAN_SECTION = "devel"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+inherit autotools
+
+# autoreconf couldn't find acinclude.m4 when stepping into subdirectory. Instead of
+# duplicating acinclude.m4 in every subdirectory, use absolute include path to aclocal
+EXTRA_AUTORECONF += " -I ${S}"
+
+do_configure_prepend() {
+        if [ ! -e ${S}/acinclude.m4 ]; then
+                cat ${S}/aclocal.m4 > ${S}/acinclude.m4
+        fi
+}
+
+BBCLASSEXTEND = "native"
 
 #
 # Debian Native Test
