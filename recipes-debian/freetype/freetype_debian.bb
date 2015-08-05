@@ -1,28 +1,25 @@
 #
-# freetype_2.5.2.bb
+# base recipe: meta/recipes-graphics/freetype/freetype_2.5.2.bb
+# base branch: daisy
 #
+
+PR = "r0"
+
+inherit debian-package
+
 SUMMARY = "Freetype font rendering library"
-DESCRIPTION = "FreeType is a software font engine that is designed to be small, efficient, \
-highly customizable, and portable while capable of producing high-quality output (glyph \
-images). It can be used in graphics libraries, display servers, font conversion tools, text \
-image generation tools, and many other products as well."
-HOMEPAGE = "http://www.freetype.org/"
-BUGTRACKER = "https://savannah.nongnu.org/bugs/?group=freetype"
+DESCRIPTION = "FreeType is a software font engine that is designed to be \
+small, efficient, highly customizable, and portable while capable of \
+producing high-quality output (glyph images). It can be used in graphics \
+libraries, display servers, font conversion tools, text image generation \
+tools, and many other products as well."
 
 LICENSE = "FreeType | GPLv2+"
-LIC_FILES_CHKSUM = "file://docs/LICENSE.TXT;md5=c017ff17fc6f0794adf93db5559ccd56 \
-                    file://docs/FTL.TXT;md5=d479e83797f699fe873b38dadd0fcd4c \
-                    file://docs/GPLv2.TXT;md5=8ef380476f642c20ebf40fecb0add2ec"
-
-SECTION = "libs"
-
-SRC_URI = "${SOURCEFORGE_MIRROR}/freetype/freetype-${PV}.tar.bz2 \
+LIC_FILES_CHKSUM = " \
+file://docs/LICENSE.TXT;md5=c017ff17fc6f0794adf93db5559ccd56 \
+file://docs/FTL.TXT;md5=d479e83797f699fe873b38dadd0fcd4c \
+file://docs/GPLv2.TXT;md5=8ef380476f642c20ebf40fecb0add2ec \
 "
-
-SRC_URI[md5sum] = "10e8f4d6a019b124088d18bc26123a25"
-SRC_URI[sha256sum] = "4ff4bd393aa01071ec7b849d035508a505a78f88b2bcf25ff11e58e43c0b9def"
-
-S = "${WORKDIR}/freetype-${PV}"
 
 inherit autotools-brokensep pkgconfig binconfig multilib_header
 
@@ -62,13 +59,6 @@ do_install_append() {
 }
 
 BBCLASSEXTEND = "native"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "libs"
-DPR = "0"
 
 # .orig.tar.gz is doubly-compressed
 do_unpack_append() {
