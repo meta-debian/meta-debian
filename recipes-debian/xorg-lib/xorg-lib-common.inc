@@ -1,15 +1,17 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-lib/xorg-lib-common.inc 
+# Base branch: daisy
+#
+
 HOMEPAGE = "http://www.x.org"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=xorg"
 
-SECTION = "x11/libs"
+INC_PR =  "r0"
+
+inherit debian-package
+
 LICENSE = "MIT-X"
 DEPENDS = "util-macros"
-
-XORG_PN = "${BPN}"
-
-SRC_URI = "${XORG_MIRROR}/individual/lib/${XORG_PN}-${PV}.tar.bz2"
-
-S = "${WORKDIR}/${XORG_PN}-${PV}"
 
 inherit autotools distro_features_check pkgconfig
 
