@@ -1,6 +1,8 @@
 #
-# libxt_1.1.4.bb
+# Base recipe: meta/recipes-graphics/xorg-lib/libxt_1.1.4.bb
+# Base branch: daisy
 #
+
 SUMMARY = "Xt: X Toolkit Intrinsics library"
 
 DESCRIPTION = "The Intrinsics are a programming library tailored to the \
@@ -15,22 +17,23 @@ independent of any particular user interface policy or style."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT & MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6565b1e0094ea1caae0971cc4035f343"
-
 
 DEPENDS += "util-linux libxcb libsm virtual/libx11 kbproto libxdmcp"
 PROVIDES = "xt"
 
-PE = "1"
-
-XORG_PN = "libXt"
-
-SRC_URI +=  "file://libxt_fix_for_x32.patch"
-
 BBCLASSEXTEND = "native"
 
-EXTRA_OECONF += "--disable-xkb"
+# Follow configure in debian/rules
+EXTRA_OECONF += "--with-appdefaultdir=/etc/X11/app-defaults \
+		--with-xfile-search-path="/usr/lib/X11/%L/%T/%N%S:/usr/lib/X11/%l/%T/%N%S:/usr/lib/X11/%T/%N%S:/etc/X11/%L/%T/%N%C%S:/etc/X11/%l/%T/%N%C%S:/etc/X11/%T/%N%C%S:/etc/X11/%L/%T/%N%S:/etc/X11/%l/%T/%N%S:/etc/X11/%T/%N%S" \
+		--enable-unit-tests \
+		--disable-silent-rules \
+		--disable-specs \
+		"
 
 do_compile() {
 	(
@@ -42,16 +45,6 @@ do_compile() {
 	fi
 	oe_runmake
 }
-
-SRC_URI[md5sum] = "03149823ae57bb02d0cec90d5b97d56c"
-SRC_URI[sha256sum] = "843a97a988f5654872682a4120486d987d853a71651515472f55519ffae2dd57"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
