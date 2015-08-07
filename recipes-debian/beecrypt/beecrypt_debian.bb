@@ -17,9 +17,6 @@ file://run-ptest \
 file://beecrypt-enable-ptest-support.patch \
 "
 
-SRC_URI[md5sum] = "8441c014170823f2dff97e33df55af1e"
-SRC_URI[sha256sum] = "286f1f56080d1a6b1d024003a5fa2158f4ff82cae0c6829d3c476a4b5898c55d"
-
 inherit autotools multilib_header ptest
 acpaths=""
 

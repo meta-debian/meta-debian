@@ -1,17 +1,16 @@
-require recipes-extended/gawk/gawk_4.0.2.bb
-FILESEXTRAPATHS_prepend = "\
-${THISDIR}/files:${COREBASE}/meta/recipes-extended/gawk/gawk-4.0.2:\
-${COREBASE}/meta/recipes-extended/gawk/files:\
-"
+#
+# base recipe: meta/recipes-extended/gawk/gawk_4.0.2.bb
+# base branch: daisy
+#
+
+PR = "r0"
 
 inherit debian-package
-DEBIAN_SECTION = "interpreters"
 
-DPR = "0"
-
-LICENSE = "GPLv3"
-
+LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+DEPENDS += "readline"
 
 # 
 # remove-doc.patch:
@@ -26,17 +25,41 @@ file://remove-doc.patch \
 file://run-ptest \
 "
 
-# Shipped installed files to corresponding folder
-FILES_${PN} += "/usr/lib"
+inherit autotools gettext update-alternatives
+
+EXTRA_OECONF += "--disable-rpath --libexecdir=${libdir}"
 
 # Touch empty gawk.texi file according to debian/rules.
 do_configure_prepend() {
-	# solve libtool version mismatch
-	find ${S} -name aclocal.m4 | xargs rm
-	find ${S} -name ltversion.m4 | xargs rm
-
 	# see debian/rules and comments in remove-doc.patch
 	touch --date="Jan 01 2000" \
-	${S}/doc/gawk.info ${S}/doc/gawk.texi ${S}/doc/gawkinet.info\ 
-					      ${S}/doc/gawkinet.texi
+		${S}/doc/gawktexi.in ${S}/doc/gawk.texi ${S}/doc/gawkinet.texi \
+		${S}/doc/gawk.info ${S}/doc/gawkinet.info ${S}/doc/sidebar.awk
+}
+
+do_install_append() {
+	# Remove unwanted files.
+	rm -f ${D}${bindir}/*awk-*
+	rm -f ${D}${bindir}/awk
+	# Remove fake info files
+	rm -rf ${D}${datadir}/info
+}
+
+FILES_${PN} += " \
+	${datadir}/awk \
+	${libdir}/awk \
+"
+FILES_${PN}-dbg += "${libdir}/awk/.debug"
+
+ALTERNATIVE_${PN} = "awk"
+ALTERNATIVE_TARGET[awk] = "${bindir}/gawk"
+ALTERNATIVE_PRIORITY = "100"
+
+inherit ptest
+
+do_install_ptest() {
+	mkdir ${D}${PTEST_PATH}/test
+	for i in `grep -vE "@|^$|#|Gt-dummy" ${S}/test/Maketests |awk -F: '{print $1}'` Maketests; \
+		do cp ${S}/test/$i* ${D}${PTEST_PATH}/test; \
+	done
 }

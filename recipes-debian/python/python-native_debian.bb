@@ -9,8 +9,6 @@ EXTRANATIVEPATH += "bzip2-native"
 DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native"
 PR = "${INC_PR}.1"
 
-# makerace.patch: copied from python3 directory
-#   Always builds 'Parser/pgen' required by do_install
 SRC_URI += "\
 	file://05-enable-ctypes-cross-build.patch \
 	file://11-distutils-never-modify-shebang-line.patch \
@@ -21,7 +19,7 @@ SRC_URI += "\
 	file://add-md5module-support.patch \
 	file://builddir.patch \
 	file://parallel-makeinst-create-bindir.patch \
-	file://makerace.patch \
+	file://avoid_parallel_make_races_on_pgen.patch \
 "
 
 FILESEXTRAPATHS =. "${THISDIR}/${PN}:"

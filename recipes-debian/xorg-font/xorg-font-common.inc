@@ -1,17 +1,14 @@
 HOMEPAGE = "http://www.x.org"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=xorg"
 
-SECTION = "x11/fonts"
+INC_PR = "r0"
+
+inherit debian-package
+
 LICENSE = "MIT-X"
 
 DEPENDS = " encodings font-alias font-util-native mkfontdir-native mkfontscale-native"
 RDEPENDS_${PN} = "encodings font-util font-alias"
-
-XORG_PN = "${BPN}"
-INC_PR = "r2"
-
-SRC_URI = "${XORG_MIRROR}/individual/font/${XORG_PN}-${PV}.tar.bz2"
-S = "${WORKDIR}/${XORG_PN}-${PV}"
 
 inherit autotools pkgconfig
 

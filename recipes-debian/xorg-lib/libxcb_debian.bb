@@ -1,21 +1,36 @@
-include libxcb.inc
+#
+# Base recipe: meta/recipes-graphics/xorg-lib/libxcb_1.10.bb
+# Base branch: daisy
+#
+
+SUMMARY = "XCB: The X protocol C binding library"
+DESCRIPTION = "The X protocol C-language Binding (XCB) is a replacement \
+for Xlib featuring a small footprint, latency hiding, direct access to \
+the protocol, improved threading support, and extensibility."
+HOMEPAGE = "http://xcb.freedesktop.org"
+BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=XCB"
+
+PR = "r0"
+
+inherit debian-package
+
+BBCLASSEXTEND = "native nativesdk"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d763b081cb10c223435b01e00dc0aba7"
 
+DEPENDS = "xcb-proto xproto libxau libxslt-native xcb-proto-native \
+	   libpthread-stubs libxdmcp"
 
-DEPENDS += "libxdmcp"
+#PACKAGES_DYNAMIC = "^libxcb-.*"
 
-SRC_URI[md5sum] = "074c335cc4453467eeb234e3dadda700"
-SRC_URI[sha256sum] = "98d9ab05b636dd088603b64229dd1ab2d2cc02ab807892e107d674f9c3f2d5b5"
+FILES_${PN} = "${libdir}/libxcb.so.*"
 
-#
-# debian
-#
-inherit debian-package
+inherit autotools pkgconfig pythonnative
 
-DEBIAN_SECTION = "x11"
-DPR = "0"
+python populate_packages_prepend () {
+    do_split_packages(d, '${libdir}', '^libxcb-(.*)\.so\..*$', 'libxcb-%s', 'XCB library module for %s', allow_links=True)
+}
 
 SRC_URI += " \
 	file://xcbincludedir.patch \

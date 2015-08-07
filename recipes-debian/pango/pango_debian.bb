@@ -1,28 +1,122 @@
-require pango.inc
+#
+# Base recipe: 
+#	meta/recipes-graphics/pango/pango.inc
+#	meta/recipes-graphics/pango/pango_1.36.2.bb
+# Base branch: daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+#
 
+SUMMARY = "Framework for layout and rendering of internationalized text"
+DESCRIPTION = "Pango is a library for laying out and rendering of text, \
+with an emphasis on internationalization. Pango can be used anywhere \
+that text layout is needed, though most of the work on Pango so far has \
+been done in the context of the GTK+ widget toolkit. Pango forms the \
+core of text and font handling for GTK+-2.x."
+HOMEPAGE = "http://www.pango.org/"
+BUGTRACKER = "http://bugzilla.gnome.org"
+
+PR = "r0"
+DPN = "pango1.0"
+
+X11DEPENDS = "virtual/libx11 libxft"
+DEPENDS = "glib-2.0 fontconfig freetype zlib virtual/libiconv cairo harfbuzz qemu-native"
+
+PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG[x11] = "--with-xft,--without-xft,${X11DEPENDS}"
+
+BBCLASSEXTEND = "native"
+DEPENDS_class-native = "glib-2.0-native cairo-native harfbuzz-native"
+
+PACKAGES_DYNAMIC += "^pango-module-.*"
+
+RRECOMMENDS_${PN} = "pango-module-basic-fc"
+
+inherit gnomebase gtk-doc qemu debian-package
+
+# Create a pango-modules package
+ALLOW_EMPTY_${BPN}-modules = "1"
+PACKAGES += "${BPN}-modules"
+RRECOMMENDS_${BPN}-modules =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("pango-module") != -1])}"
+
+# Remove dependency on gnome
+DEPENDS_remove = "gnome-common-native"
+
+LICENSE = "LGPLv2.0+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3bf50002aefd002f49e7bb854063f7e7"
+
+EXTRA_AUTORECONF = ""
+
+#Remove unrecognised options: --with-mlprefix
+EXTRA_OECONF = "--disable-introspection \
+		--enable-explicit-deps=no \
+	        --disable-debug \
+"
 
 GNOME_COMPRESS_TYPE="xz"
 
-#SRC_URI += "file://no-tests.patch \
-#            file://multilib-fix-clean.patch \
-#"
+# seems to go wrong with default cflags
+FULL_OPTIMIZATION_arm = "-O2"
 
-SRC_URI[archive.md5sum] = "253026c7132c22e52cefd998ba89a742"
-SRC_URI[archive.sha256sum] = "f07f9392c9cf20daf5c17a210b2c3f3823d517e1917b72f20bb19353b2bc2c63"
+LEAD_SONAME = "libpango-1.0*"
+LIBV = "1.8.0"
 
-#
-# Meta-debian
-#
-inherit debian-package
-DPR = "0"
-DEBIAN_SECTION = "libs"
-DPN = "pango1.0"
+postinst_prologue() {
+if ! [ -e $D${sysconfdir}/pango ] ; then
+	mkdir -p $D${sysconfdir}/pango
+fi
+
+if [ "x$D" != "x" ]; then
+	${@qemu_run_binary(d, '$D','${bindir}/${MLPREFIX}pango-querymodules')} \
+		$D${libdir}/pango/${LIBV}/modules/*.so \
+		> $D${sysconfdir}/pango/${MLPREFIX}pango.modules 2>/dev/null
+
+	[ $? -ne 0 ] && exit 1
+
+	sed -i -e "s:$D::" $D${sysconfdir}/pango/${MLPREFIX}pango.modules
+
+	exit 0
+fi
+}
 
 #Remove doc when build
 do_configure_prepend() {
-	sed -i -e "s/docs//" ${S}/Makefile.am
-	sed -i -e "/docs\/Makefile/d" ${S}/configure.ac
-	sed -i -e "/docs\/version.xml/d" ${S}/configure.ac
-	sed -i -e "/GTK_DOC_CHECK/d" ${S}/configure.ac
+        sed -i -e "s/docs//" ${S}/Makefile.am
+        sed -i -e "/docs\/Makefile/d" ${S}/configure.ac
+        sed -i -e "/docs\/version.xml/d" ${S}/configure.ac
+        sed -i -e "/GTK_DOC_CHECK/d" ${S}/configure.ac
 }
+
+do_install_append () {
+	if [ "${MLPREFIX}" != "" ]; then
+		mv ${D}/${bindir}/pango-querymodules ${D}/${bindir}/${MLPREFIX}pango-querymodules 
+	fi
+}
+
+
+python populate_packages_prepend () {
+    prologue = d.getVar("postinst_prologue", True)
+
+    modules_root = d.expand('${libdir}/pango/${LIBV}/modules')
+
+    do_split_packages(d, modules_root, '^pango-(.*)\.so$', 'pango-module-%s', 'Pango module %s', prologue + '${bindir}/${MLPREFIX}pango-querymodules > /etc/pango/${MLPREFIX}pango.modules')
+}
+
+# Add more packages according to list of package build
+# from Debian source
+PACKAGES += "libpangocairo-1.0-0 libpangoft2-1.0-0 libpangoxft-1.0-0"
+
+# libpangoxft only avavailable when enable libx11 distro feature
+ALLOW_EMPTY_libpangoxft-1.0-0 = "1"
+
+# Rearrange files into packages
+FILES_${PN} = "${sysconfdir}/pango/* ${libdir}/libpango-*${SOLIBS}"
+FILES_${PN}-dbg += "${libdir}/pango/${LIBV}/modules/.debug"
+FILES_${PN}-dev += "${bindir}* ${libdir}/pango/${LIBV}/modules/*.la"
+FILES_libpangocairo-1.0-0 = "${libdir}/libpangocairo*${SOLIBS}"
+FILES_libpangoft2-1.0-0 = "${libdir}/libpangoft*${SOLIBS}"
+FILES_libpangoxft-1.0-0 = "${libdir}/libpangoxft*${SOLIBS}"
+
+# Correct name of deb file
+DEBIANNAME_${PN} = "libpango-1.0-0"
+DEBIANNAME_${PN}-dbg = "libpango-1.0-0-dbg"
+DEBIANNAME_${PN}-dev = "libpango-1.0-dev"

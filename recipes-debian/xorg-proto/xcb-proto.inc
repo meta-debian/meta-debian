@@ -1,3 +1,7 @@
+#
+# base recipe: meta/recipes-graphics/xorg-proto/xcb-proto.inc 
+# base branch: daisy
+#
 SUMMARY = "XCB: The X protocol C binding headers"
 DESCRIPTION = "Function prototypes for the X protocol C-language Binding \
 (XCB).  XCB is a replacement for Xlib featuring a small footprint, \
@@ -6,10 +10,11 @@ support, and extensibility."
 HOMEPAGE = "http://xcb.freedesktop.org"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=XCB"
 
-SECTION = "x11/libs"
-LICENSE = "MIT-X"
+INC_PR = "r0"
 
-SRC_URI = "http://xcb.freedesktop.org/dist/xcb-proto-${PV}.tar.bz2"
+inherit debian-package
+
+LICENSE = "MIT-X"
 
 inherit autotools pkgconfig pythonnative
 

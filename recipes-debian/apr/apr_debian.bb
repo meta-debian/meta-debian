@@ -66,19 +66,19 @@ apr_sysroot_preprocess () {
 }
 
 do_compile_ptest() {
-        cd ${S}/test
-        oe_runmake
+	cd ${S}/test
+	oe_runmake
 }
 
 do_install_ptest() {
-        t=${D}${PTEST_PATH}/test
-        mkdir -p $t/.libs
-        cp -r ${S}/test/data $t/
-        cp -r ${S}/test/.libs/*.so $t/.libs/
-        cp ${S}/test/proc_child $t/
-        cp ${S}/test/readchild $t/
-        cp ${S}/test/sockchild $t/
-        cp ${S}/test/sockperf $t/
-        cp ${S}/test/testall $t/
-        cp ${S}/test/tryread $t/
+	t=${D}${PTEST_PATH}/test
+	mkdir -p $t/.libs
+	cp -r ${S}/test/data $t/
+	cp -r ${S}/test/.libs/*.so $t/.libs/
+	cp ${S}/test/proc_child $t/
+	cp ${S}/test/readchild $t/
+	cp ${S}/test/sockchild $t/
+	cp ${S}/test/sockperf $t/
+	cp ${S}/test/testall $t/
+	cp ${S}/test/tryread $t/
 }

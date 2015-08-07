@@ -1,15 +1,18 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-proto/xorg-proto-common.inc 
+# Base branch: daisy
+#
+
 SUMMARY = "X protocol headers: ${XORG_PN}"
 HOMEPAGE = "http://www.x.org"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=xorg"
 
+INC_PR = "r0"
+
+inherit debian-package
+
 SECTION = "x11/libs"
 LICENSE = "MIT-X"
-
-XORG_PN = "${BPN}"
-
-SRC_URI = "${XORG_MIRROR}/individual/proto/${XORG_PN}-${PV}.tar.bz2"
-
-S = "${WORKDIR}/${XORG_PN}-${PV}"
 
 DEPENDS = "util-macros"
 

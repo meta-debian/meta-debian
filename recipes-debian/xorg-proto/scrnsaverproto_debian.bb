@@ -1,5 +1,6 @@
 #
-# scrnsaverproto_1.2.2.bb
+# Base recipe: meta/recipes-graphics/xorg-proto/scrnsaverproto_1.2.2.bb
+# Base branch: daisy
 #
 
 require xorg-proto-common.inc
@@ -11,23 +12,16 @@ Saver extension.  This extension allows an external \"screen saver\" \
 client to detect when the alternative image is to be displayed and to \
 provide the graphics."
 
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://COPYING;md5=eed49b78b15b436c933b6b8b054e3901 \
-                    file://saverproto.h;endline=26;md5=a84c0637305159f3c0ab173aaeede48d"
+PR = "${INC_PR}.0"
 
-PE = "1"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "\
+file://COPYING;md5=eed49b78b15b436c933b6b8b054e3901 \
+file://saverproto.h;endline=26;md5=a84c0637305159f3c0ab173aaeede48d"
 
 EXTRA_OECONF_append = " --enable-specs=no"
 
-SRC_URI[md5sum] = "edd8a73775e8ece1d69515dd17767bfb"
-SRC_URI[sha256sum] = "8bb70a8da164930cceaeb4c74180291660533ad3cc45377b30a795d1b85bcd65"
-
-#
-# Meta-debian
-#
-inherit debian-package
-
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "x11proto-scrnsaver"
+
+#There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"

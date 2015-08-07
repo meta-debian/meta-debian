@@ -1,3 +1,9 @@
+#
+# Base recipe: meta/recipes-support/libxslt/libxslt_1.1.28.bb
+# Base branch: Daisy
+# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+#
+
 SUMMARY = "GNOME XSLT library"
 HOMEPAGE = "http://xmlsoft.org/XSLT/"
 BUGTRACKER = "https://bugzilla.gnome.org/"
@@ -5,15 +11,12 @@ BUGTRACKER = "https://bugzilla.gnome.org/"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://Copyright;md5=0cd9a07afbeb24026c9b03aecfeba458"
 
-SECTION = "libs"
+PR = "r0"
 DEPENDS = "libxml2"
 
-SRC_URI = "ftp://xmlsoft.org/libxslt//libxslt-${PV}.tar.gz \
-           file://pkgconfig_fix.patch"
+inherit debian-package
 
-SRC_URI[md5sum] = "9667bf6f9310b957254fdcf6596600b7"
-SRC_URI[sha256sum] = "5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c"
-S = "${WORKDIR}/libxslt-${PV}"
+EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto"
 
 inherit autotools pkgconfig binconfig lib_package
 
@@ -26,7 +29,6 @@ do_configure_prepend () {
 	touch ${S}/doc/xsltproc.1
 }
 
-EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto"
 # older versions of this recipe had ${PN}-utils
 RPROVIDES_${PN}-bin += "${PN}-utils"
 RCONFLICTS_${PN}-bin += "${PN}-utils"
@@ -35,12 +37,13 @@ RREPLACES_${PN}-bin += "${PN}-utils"
 FILES_${PN} += "${libdir}/libxslt-plugins"
 FILES_${PN}-dev += "${libdir}/xsltConf.sh"
 
+# Set this variable to specify the library to which to apply the naming
+# scheme. Without this variable, DEBIANNAME could not set.
+LEAD_SONAME = "libxslt.so"
+
+DEBIANNAME_${PN}-dbg = "libxslt1-dbg"
+DEBIANNAME_${PN}-dev = "libxslt1-dev"
+DEBIANNAME_${PN}-bin = "xsltproc"
+DEBIANNAME_${PN} = "libxslt1.1"
+
 BBCLASSEXTEND = "native"
-
-#
-# debian
-#
-
-inherit debian-package
-DEBIAN_SECTION = "libs"
-DPR = "0"
