@@ -6,16 +6,15 @@
 require python.inc
 
 EXTRANATIVEPATH += "bzip2-native"
-DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native"
+DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native expat-native"
 PR = "${INC_PR}.1"
 
 SRC_URI += "\
 	file://05-enable-ctypes-cross-build.patch \
 	file://11-distutils-never-modify-shebang-line.patch \
-	file://12-distutils-prefix-is-inside-staging-area.patch \
+	file://12-distutils-prefix-is-inside-staging-area_debian.patch \
 	file://unixccompiler.patch \
-	file://nohostlibs.patch \
-	file://multilib.patch \
+	file://multilib_debian.patch \
 	file://add-md5module-support.patch \
 	file://builddir.patch \
 	file://parallel-makeinst-create-bindir.patch \

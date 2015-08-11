@@ -1,47 +1,30 @@
-Upstream-Status: Inappropriate [Embedded specific]
-
-This patch fixes issuing with different libdir like lib64.
-This patch makes the native python binary modules findable
-in the install process of the host python.
-
-Signed-Off-By: Nitin A Kamble <nitin.a.kamble@intel.com>
-Date: 2012/03/14
-
-Updated for python 2.7.3
-Signed-Off-By: Nitin A Kamble <nitin.a.kamble@intel.com>
-Date: 2012/05/01
-
-Rebased for python-2.7.9
-Signed-Off-By: Alejandro Hernandez <alejandro.hernandez@linux.intel.com>
-
-
-Index: Python-2.7.9/Lib/sysconfig.py
-===================================================================
---- Python-2.7.9.orig/Lib/sysconfig.py
-+++ Python-2.7.9/Lib/sysconfig.py
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index e822bdf..85b9699 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
 @@ -9,7 +9,7 @@ _INSTALL_SCHEMES = {
      'posix_prefix': {
-         'stdlib': '{base}/'+sys.lib+'/python{py_version_short}',
-         'platstdlib': '{platbase}/'+sys.lib+'/python{py_version_short}',
+         'stdlib': '{base}/lib/python{py_version_short}',
+         'platstdlib': '{platbase}/lib/python{py_version_short}',
 -        'purelib': '{base}/lib/python{py_version_short}/site-packages',
 +        'purelib': '{base}/'+sys.lib+'/python{py_version_short}/site-packages',
-         'platlib': '{platbase}/'+sys.lib+'/python{py_version_short}/site-packages',
+         'platlib': '{platbase}/lib/python{py_version_short}/site-packages',
          'include': '{base}/include/python{py_version_short}',
          'platinclude': '{platbase}/include/python{py_version_short}',
-@@ -67,7 +67,7 @@ _INSTALL_SCHEMES = {
+@@ -87,7 +87,7 @@ _INSTALL_SCHEMES = {
      'posix_user': {
-         'stdlib': '{userbase}/'+sys.lib+'/python{py_version_short}',
-         'platstdlib': '{userbase}/'+sys.lib+'/python{py_version_short}',
+         'stdlib': '{userbase}/lib/python{py_version_short}',
+         'platstdlib': '{userbase}/lib/python{py_version_short}',
 -        'purelib': '{userbase}/lib/python{py_version_short}/site-packages',
 +        'purelib': '{userbase}/'+sys.lib+'/python{py_version_short}/site-packages',
-         'platlib': '{userbase}/'+sys.lib+'/python{py_version_short}/site-packages',
+         'platlib': '{userbase}/lib/python{py_version_short}/site-packages',
          'include': '{userbase}/include/python{py_version_short}',
          'scripts': '{userbase}/bin',
-Index: Python-2.7.9/Makefile.pre.in
-===================================================================
---- Python-2.7.9.orig/Makefile.pre.in
-+++ Python-2.7.9/Makefile.pre.in
-@@ -1046,27 +1046,27 @@ libinstall:	build_all $(srcdir)/Lib/$(PL
+diff --git a/Makefile.pre.in b/Makefile.pre.in
+index dd66e8e..df98acf 100644
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -1060,27 +1060,27 @@ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
  		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
  			$(DESTDIR)$(LIBDEST)/distutils/tests ; \
  	fi

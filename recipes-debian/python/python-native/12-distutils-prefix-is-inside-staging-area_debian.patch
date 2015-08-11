@@ -1,12 +1,8 @@
-Upstream-Status: Inappropriate [embedded specific]
-
-# The proper prefix is inside our staging area.
-# Signed-Off: Michael 'Mickey' Lauer <mickey@vanille-media.de>
-# Signed-off-by: Phil Blundell <philb@gnu.org>
-
---- Python-2.6.6/Lib/distutils/sysconfig.py.orig	2012-01-03 14:02:03.027005296 +0000
-+++ Python-2.6.6/Lib/distutils/sysconfig.py	2012-01-03 14:02:31.517601081 +0000
-@@ -19,8 +19,8 @@
+diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
+index ddb4658..119e34b 100644
+--- a/Lib/distutils/sysconfig.py
++++ b/Lib/distutils/sysconfig.py
+@@ -19,8 +19,8 @@ import sys
  from distutils.errors import DistutilsPlatformError
  
  # These are needed in a couple of spots, so just compute them once.
@@ -17,19 +13,10 @@ Upstream-Status: Inappropriate [embedded specific]
  
  # Path to the base directory of the project. On Windows the binary may
  # live in project/PCBuild9.  If we're dealing with an x64 Windows build,
-@@ -70,7 +70,7 @@
+@@ -121,12 +121,16 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
      sys.exec_prefix -- i.e., ignore 'plat_specific'.
      """
-     if prefix is None:
--        prefix = plat_specific and EXEC_PREFIX or PREFIX
-+        prefix = os.environ['STAGING_INCDIR'].rstrip('include')
- 
-     if os.name == "posix":
-         if python_build:
-@@ -115,12 +115,16 @@
-     If 'prefix' is supplied, use it instead of sys.prefix or
-     sys.exec_prefix -- i.e., ignore 'plat_specific'.
-     """
+     is_default_prefix = not prefix or os.path.normpath(prefix) in ('/usr', '/usr/local')
 +    lib_basename = os.environ['STAGING_LIBDIR'].split('/')[-1]
      if prefix is None:
 -        prefix = plat_specific and EXEC_PREFIX or PREFIX
@@ -44,8 +31,8 @@ Upstream-Status: Inappropriate [embedded specific]
 +                                 lib_basename, "python" + get_python_version())
          if standard_lib:
              return libpython
-         else:
-@@ -216,7 +220,7 @@
+         elif is_default_prefix and 'PYTHONUSERBASE' not in os.environ and 'real_prefix' not in sys.__dict__:
+@@ -260,7 +264,7 @@ def get_config_h_filename():
      else:
          # The name of the config.h file changed in 2.2
          config_h = 'pyconfig.h'
@@ -54,11 +41,11 @@ Upstream-Status: Inappropriate [embedded specific]
  
  
  def get_makefile_filename():
-@@ -225,7 +229,7 @@
-         return os.path.join(os.path.dirname(os.path.realpath(sys.executable)),
-                             "Makefile")
+@@ -268,7 +272,7 @@ def get_makefile_filename():
+     if python_build:
+         return os.path.join(project_base, "Makefile")
      lib_dir = get_python_lib(plat_specific=1, standard_lib=1)
--    return os.path.join(lib_dir, "config", "Makefile")
+-    return os.path.join(get_config_var('LIBPL'), "Makefile")
 +    return os.path.join(lib_dir, "config", "Makefile").replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
  
  
