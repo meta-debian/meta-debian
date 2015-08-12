@@ -1,6 +1,9 @@
 #
-# libxcomposite_0.4.4.bb
+# Base recipe: metta/recipes-graphics/xorg-lib/libxcomposite_0.4.4.bb
+# Base branch: daisy
+# Base commit: 9f8f4fd1f923e940f325c0562af1a94970bad924
 #
+
 SUMMARY = "Xcomposite: X Composite extension library"
 
 DESCRIPTION = "The composite extension provides three related \
@@ -14,6 +17,8 @@ compositing transformations through a client."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3f2907aad541f6f226fbc58cc1b3cdf1"
 
@@ -21,21 +26,9 @@ DEPENDS += " compositeproto virtual/libx11 libxfixes libxext"
 PROVIDES = "xcomposite"
 BBCLASSEXTEND = "native"
 
-PE = "1"
-
-XORG_PN = "libXcomposite"
-
-SRC_URI += " file://change-include-order.patch"
-
-SRC_URI[md5sum] = "f7a218dcbf6f0848599c6c36fc65c51a"
-SRC_URI[sha256sum] = "ede250cd207d8bee4a338265c3007d7a68d5aca791b6ac41af18e9a2aeb34178"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
-
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+#Correct package name folow Debian
+DEBIANNAME_${PN} = "${PN}1"
+DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
