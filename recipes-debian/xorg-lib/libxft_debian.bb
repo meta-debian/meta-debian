@@ -1,6 +1,8 @@
 #
-# libxft_2.3.1.bb
+# Base recipe: meta/recipes-graphics/xorg-lib/libxft_2.3.1.bb
+# Bare branch: daisy
 #
+
 SUMMARY = "XFt: X FreeType libary"
 
 DESCRIPTION = "Xft was designed to provide good support for scalable \
@@ -15,20 +17,13 @@ fairly extensive changes to toolkits (user-interface libraries)."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=90b90b60eb30f65fc9c2673d7cf59e24"
 
 DEPENDS += "virtual/libx11 libxrender freetype fontconfig"
 PROVIDES = "xft"
-
-PE = "1"
-
-SRC_URI += "file://freetype.patch"
-
-SRC_URI[md5sum] = "78d64dece560c9e8699199f3faa521c0"
-SRC_URI[sha256sum] = "7fce32b92dcb7b2869bed567af2abc7bbad0d5d6fcf471b8a3e137964a31bbbd"
-
-XORG_PN = "libXft"
 
 BBCLASSEXTEND = "native"
 
@@ -37,13 +32,10 @@ python () {
             d.setVar('PKG_${PN}', '${MLPREFIX}libxft2')
 }
 
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "xft"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+# Correct the package name follow Debian
+DEBIANNAME_${PN}-dbg = "${PN}2-dbg"
