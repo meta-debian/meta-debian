@@ -1,3 +1,8 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-lib/libxdamage_1.1.4.bb
+# Base branch: daisy
+#
+
 SUMMARY = "Xdamage: X Damage extension library"
 
 DESCRIPTION = "'Damage' is a term that describes changes make to pixel \
@@ -13,6 +18,8 @@ the repaint operation has started."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=9fe101f30dd24134cf43146863241868"
 
@@ -20,19 +27,8 @@ DEPENDS += "virtual/libx11 damageproto libxfixes"
 PROVIDES = "xdamage"
 BBCLASSEXTEND = "native"
 
-PE = "1"
-
-XORG_PN = "libXdamage"
-
-SRC_URI[md5sum] = "0cf292de2a9fa2e9a939aefde68fd34f"
-SRC_URI[sha256sum] = "7c3fe7c657e83547f4822bfde30a90d84524efb56365448768409b77f05355ad"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
-
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+# Correct the package name follow Debian
+DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
