@@ -22,7 +22,8 @@ PR = "${INC_PR}.0"
 LICENSE = "MIT & MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6565b1e0094ea1caae0971cc4035f343"
 
-DEPENDS += "util-linux libxcb libsm virtual/libx11 kbproto libxdmcp"
+# Option --enable-unit-tests require glib-2.0
+DEPENDS += "util-linux libxcb libsm virtual/libx11 kbproto libxdmcp glib-2.0"
 PROVIDES = "xt"
 
 BBCLASSEXTEND = "native"
