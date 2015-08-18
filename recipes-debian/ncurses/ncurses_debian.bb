@@ -40,6 +40,7 @@ BUILD_CPPFLAGS += "-D_GNU_SOURCE"
 
 # natives don't generally look in base_libdir
 base_libdir_class-native = "${libdir}"
+base_libdir_class-nativesdk = "${libdir}"
 
 # Display corruption occurs on 64 bit hosts without these settings
 # This was derrived from the upstream debian ncurses which uses
@@ -121,6 +122,10 @@ do_configure() {
 	! ${ENABLE_WIDEC} || \
 		ncurses_configure "widec" "--enable-widec" "--without-progs" \
 					"--disable-overwrite" 
+}
+
+do_configure_append_class-nativesdk () {
+	ncurses_configure "narrowc" "--enable-overwrite"
 }
 
 do_compile() {
@@ -300,9 +305,12 @@ ALTERNATIVE_ncurses-tools_class-target = "clear reset"
 PACKAGES = " \
   libncurses5 \
   libncurses5-dev \
+  libncurses5-staticdev \
   libncursesw5 \
   libncursesw5-dev \
+  libncursesw5-staticdev \
   libtinfo-dev \
+  libtinfo-staticdev \
   libtinfo5 \
   ncurses-base \
   ncurses-bin \
@@ -329,18 +337,22 @@ FILES_libncurses5-dev = " \
   ${datadir}/pkgconfig \
   ${datadir}/aclocal \
   ${libdir}/libcurses.so \
+  ${libdir}/libform.so \
+  ${libdir}/libmenu.so \
+  ${libdir}/libncurses.so \
+  ${libdir}/libpanel.so \
+  ${libdir}/${BPN}/*.la \
+  ${base_libdir}/*.la \
+"
+
+FILES_libncurses5-staticdev = " \
   ${libdir}/libcurses.a \
   ${libdir}/libform.so \
   ${libdir}/libform.a \
   ${libdir}/libmenu.a \
-  ${libdir}/libmenu.so \
   ${libdir}/libncurses++.a \
-  ${libdir}/libncurses.so \
   ${libdir}/libncurses.a \
   ${libdir}/libpanel.a \
-  ${libdir}/libpanel.so \
-  ${libdir}/${BPN}/*.la \
-  ${base_libdir}/*.la \
 "
 
 FILES_libncursesw5 = " \
@@ -359,19 +371,25 @@ FILES_libncursesw5-dev = "\
   ${libdir}/pkgconfig/panelw.pc \
   ${libdir}/*w.la \
   ${libdir}/*w.so \
+"
+
+FILES_libncursesw5-staticdev = " \
   ${libdir}/*w.a \
 "
 
 FILES_libtinfo-dev = " \
   ${libdir}/valgrind/ \
-  ${libdir}/libtermcap.a \
   ${libdir}/libtermcap.so \
-  ${libdir}/libtic.a \
   ${libdir}/libtic.so \
-  ${libdir}/libtinfo.a \
   ${libdir}/libtinfo.so \
   ${libdir}/pkgconfig/tic.pc \
   ${libdir}/pkgconfig/tinfo.pc \
+"
+
+FILES_libtinfo-staticdev = " \
+  ${libdir}/libtermcap.a \
+  ${libdir}/libtic.a \
+  ${libdir}/libtinfo.a \
 "
 
 FILES_libtinfo5 = " \
@@ -405,10 +423,5 @@ DOTDEBUG-dbg = "${bindir}/.debug ${sbindir}/.debug ${libexecdir}/.debug ${libdir
 DEBUGFILEDIRECTORY-dbg = "/usr/lib/debug /usr/src/debug"
 
 FILES_${PN}-dbg = "${@d.getVar(['DOTDEBUG-dbg', 'DEBUGFILEDIRECTORY-dbg'][d.getVar('PACKAGE_DEBUG_SPLIT_STYLE', True) == 'debug-file-directory'], True)}"
-
-# Avoid QA issue related to .a file inside non-staticdev package
-INSANE_SKIP_libtinfo-dev = "staticdev"
-INSANE_SKIP_libncurses5-dev = "staticdev"
-INSANE_SKIP_libncursesw5-dev = "staticdev"
 
 BBCLASSEXTEND = "native nativesdk"
