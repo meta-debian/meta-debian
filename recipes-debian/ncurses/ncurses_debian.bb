@@ -279,16 +279,16 @@ do_install_append() {
 	install -m 0644 ${S}/misc/ncurses.supp ${D}${libdir}/valgrind/
 
 	# Create link according to Debian package files
-	ln -sf ${D}${libdir}/libtinfo.a ${D}${libdir}/libtermcap.a
-	ln -sf ${D}${libdir}/libtinfo.so.5 ${D}${libdir}/libtinfo.so
-	ln -sf ${D}${libdir}/libncurses.so ${D}${libdir}/libcurses.so
+	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a
+	ln -sf libtinfo.so.5 ${D}${libdir}/libtinfo.so
+	ln -sf libncurses.so ${D}${libdir}/libcurses.so
 
-	ln -sf ${D}${base_libdir}/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
-	ln -sf ${D}${base_libdir}/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
-	ln -sf ${D}${base_libdir}/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
-	ln -sf ${D}${base_libdir}/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
-	ln -sf ${D}${base_libdir}/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
-	ln -sf ${D}${base_libdir}/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
+	ln -sf ../../../../lib/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
+	ln -sf ../../../../lib/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
+	ln -sf ../../../../lib/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
+	ln -sf ../../../../lib/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
+	ln -sf ../../../../lib/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
+	ln -sf ../../../../lib/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
 }
 
 ALTERNATIVE_PRIORITY = "100"

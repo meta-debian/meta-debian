@@ -1,17 +1,30 @@
-require recipes-core/gettext/gettext-minimal-native_0.18.3.2.bb
-FILESEXTRAPATHS_prepend = "\
-${THISDIR}/files:${COREBASE}/meta/recipes-core/gettext/gettext-minimal-0.18.3.2:\
-"
+#
+# base recipe: meta/recipes-core/gettext/gettext-minimal-native_0.18.3.2.bb
+# base branch: daisy
+#
 
-BPN = "gettext"
+PR = "r0"
 
 inherit debian-package
-DEBIAN_SECTION = "devel"
-
-DPR = "0"
 
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+DPN = "gettext"
+
+INHIBIT_DEFAULT_DEPS = "1"
+INHIBIT_AUTOTOOLS_DEPS = "1"
+
+inherit native
+
+do_install () {
+        install -d ${D}${datadir}/aclocal/
+        cp ${WORKDIR}/*.m4 ${D}${datadir}/aclocal/
+        install -d ${D}${datadir}/gettext/po/
+        cp ${WORKDIR}/config.rpath ${D}${datadir}/gettext/
+        cp ${WORKDIR}/Makefile.in.in ${D}${datadir}/gettext/po/
+        cp ${WORKDIR}/remove-potcdate.sin ${D}${datadir}/gettext/po/
+}
 
 # Exclude iconv-m4-remove-the-test-to-convert-euc-jp.patch
 # because of no file to patch

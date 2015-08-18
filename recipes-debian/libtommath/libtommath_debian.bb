@@ -29,8 +29,8 @@ do_install() {
 	# Ship libtommath dynamic library to correct directory
 	install -m 0755 ${S}/.libs/libtommath.so.0.0.42 ${D}${libdir}
 
-	ln -sf ${D}${libdir}/libtommath.so.0.0.42 ${D}${libdir}/libtommath.so.0
-	ln -sf ${D}${libdir}/libtommath.so.0.0.42 ${D}${libdir}/libtommath.so
+	ln -sf libtommath.so.0.0.42 ${D}${libdir}/libtommath.so.0
+	ln -sf libtommath.so.0 ${D}${libdir}/libtommath.so
 }
 
 # Correct name of libtommath-dev package

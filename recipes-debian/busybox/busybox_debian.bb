@@ -168,7 +168,7 @@ def find_cfgs(d):
 # To help find ncurses header and library for do_menuconfig functions
 do_configure_prepend() {
 	if test -f ${STAGING_INCDIR_NATIVE}/ncursesw/ncurses.h \
-		-o test -f ${STAGING_INCDIR_NATIVE}/ncurses/ncurses.h; then
+		-o -f ${STAGING_INCDIR_NATIVE}/ncurses/ncurses.h; then
 		sub_pair="/usr/include/:${STAGING_INCDIR_NATIVE}"
 	elif test -f ${STAGING_INCDIR_NATIVE}/ncurses.h; then
 		sub_pair="/usr/include/ncursesw:${STAGING_INCDIR_NATIVE}"

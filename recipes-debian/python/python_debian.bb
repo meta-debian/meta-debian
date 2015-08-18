@@ -12,12 +12,12 @@ SRC_URI += "\
 	file://01-use-proper-tools-for-cross-build.patch \
 	file://03-fix-tkinter-detection.patch \
 	file://06-avoid_usr_lib_termcap_path_in_linking.patch \
-	file://multilib.patch \
+	file://multilib_debian.patch \
 	file://cgi_py.patch \
 	file://setup_py_skip_cross_import_check.patch \
 	file://add-md5module-support.patch \
 	file://host_include_contamination.patch \
-	file://fix_for_using_different_libdir.patch \
+	file://fix_for_using_different_libdir_debian.patch \
 	file://setuptweaks.patch \
 	file://check-if-target-is-64b-not-host.patch \
 	file://search_db_h_in_inc_dirs_and_avoid_warning.patch \
@@ -27,8 +27,6 @@ SRC_URI += "\
 	file://use_sysroot_ncurses_instead_of_host.patch \
 	file://avoid_parallel_make_races_on_pgen.patch \
 "
-
-FILESEXTRAPATH_prepend =. "${THISDIR}/${PN}:"
 
 inherit autotools multilib_header python-dir pythonnative
 
@@ -48,6 +46,9 @@ do_configure_append() {
 }
 
 do_compile() {
+	# Set config folder for debug package to config only, not config-${MULTIARCH}
+	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${S}/Makefile
+
         # regenerate platform specific files, because they depend on system headers
         cd ${S}/Lib/plat-linux2
         include=${STAGING_INCDIR} ${STAGING_BINDIR_NATIVE}/python-native/python \

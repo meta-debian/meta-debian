@@ -1,6 +1,8 @@
 #
-# libsm_1.2.2.bb
+# Base recipe: meta/recipes-graphics/xorg-lib/libsm_1.2.2.bb
+# Base branch: daisy
 #
+
 SUMMARY = "SM: Session Management library"
 
 DESCRIPTION = "The Session Management Library (SMlib) is a low-level \"C\" \
@@ -11,26 +13,19 @@ has a particular state."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c0fb37f44e02bdbde80546024400728d"
 
 DEPENDS += "libice xproto xtrans e2fsprogs"
 
-PE = "1"
-
-XORG_PN = "libSM"
-
 BBCLASSEXTEND = "native"
 
-SRC_URI[md5sum] = "499a7773c65aba513609fe651853c5f3"
-SRC_URI[sha256sum] = "0baca8c9f5d934450a70896c4ad38d06475521255ca63b717a6510fdb6e287bd"
-
-#
-# debian
-#
 inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+# Correct the package name follow Debian
+DEBIANNAME_${PN}-dbg = "${PN}6-dbg"

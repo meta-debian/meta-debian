@@ -21,7 +21,7 @@ inherit autotools multilib_header ptest
 acpaths=""
 
 do_install_append() {
-        oe_multilib_header beecrypt/gnu.h
+	oe_multilib_header beecrypt/gnu.h
 }
 
 EXTRA_OECONF = "--without-python --enable-static --without-java"
@@ -36,6 +36,6 @@ FILES_${PN}-staticdev += "${libdir}/${BPN}/*.a"
 BBCLASSEXTEND = "native nativesdk"
 
 do_install_ptest () {
-        mkdir ${D}${PTEST_PATH}/tests
-        cp -r ${B}/tests/.libs/test* ${D}${PTEST_PATH}/tests
+	mkdir ${D}${PTEST_PATH}/tests
+	cp -r ${B}/tests/.libs/test* ${D}${PTEST_PATH}/tests
 }

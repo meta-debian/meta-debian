@@ -1,3 +1,8 @@
+#
+# Base recipe: meta-debian/recipes-debian/xorg-lib/libxext_1.3.2.bb
+# Base bracnh: daisy
+#
+
 SUMMARY = "XExt: X Extension library"
 
 DESCRIPTION = "libXext provides an X Window System client interface to \
@@ -10,27 +15,18 @@ extensions."
 
 require xorg-lib-common.inc
 
+PR = "${INC_PR}.0"
+
 LICENSE = "MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=879ce266785414bd1cbc3bc2f4d9d7c8"
 
 DEPENDS += "xproto virtual/libx11 xextproto libxau libxdmcp"
 PROVIDES = "xext"
 
-PE = "1"
-
-XORG_PN = "libXext"
-
 BBCLASSEXTEND = "native nativesdk"
-
-SRC_URI[md5sum] = "4376101e51bb2c6c44d9ab14344e85ad"
-SRC_URI[sha256sum] = "f829075bc646cdc085fa25d98d5885d83b1759ceb355933127c257e8e50432e0"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+# Correct the package name follow Debian
+DEBIANNAME_${PN}-dbg = "${PN}6-dbg"

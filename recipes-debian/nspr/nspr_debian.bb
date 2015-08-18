@@ -172,12 +172,12 @@ do_install_append() {
         rm ${D}${bindir}/compile-et.pl ${D}${bindir}/prerr.properties
 
         # Install softlink for libnspr4-0d package
-        ln -sf ${D}${libdir}/libnspr4.so ${D}${libdir}/libnspr4.so.0d
-        ln -sf ${D}${libdir}/libplc4.so ${D}${libdir}/libplc4.so.0d
-        ln -sf ${D}${libdir}/libplds4.so ${D}${libdir}/libplds4.so.0d
+        ln -sf libnspr4.so ${D}${libdir}/libnspr4.so.0d
+        ln -sf libplc4.so ${D}${libdir}/libplc4.so.0d
+        ln -sf libplds4.so ${D}${libdir}/libplds4.so.0d
 
         # Install softlink for libnspr4-dev package
-        ln -sf ${D}${libdir}/pkgconfig/nspr.pc ${D}${libdir}/pkgconfig/xulrunner-nspr.pc
+        ln -sf nspr.pc ${D}${libdir}/pkgconfig/xulrunner-nspr.pc
 }
 
 # Correct list of packages according to list of packages build from

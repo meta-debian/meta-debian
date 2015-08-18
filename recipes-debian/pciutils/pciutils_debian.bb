@@ -9,7 +9,7 @@ to PCI bus configuration space and several utilities based on this library.'
 HOMEPAGE = "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
 
 PR = "r0"
-DEPENDS = "zlib"
+DEPENDS = "zlib kmod"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"

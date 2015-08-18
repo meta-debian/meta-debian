@@ -13,6 +13,8 @@ DEBIAN_SECTION = "x11"
 DPR = "0"
 DPN = "x11-apps"
 
+DEPENDS += "libxt libxext libxmu"
+
 DEBIAN_PATCH_TYPE = "quilt"
 
 S = "${DEBIAN_UNPACK_DIR}/xeyes"

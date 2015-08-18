@@ -34,3 +34,9 @@ EXTRA_OECONF = " \
 	ac_cv_header_bluetooth_bluetooth_h=no ac_cv_header_bluetooth_h=no \
 	${PYTHONLSBOPTS} \
 "
+
+# series file need to be processed before using for applying patches according
+# to Debian rules
+do_debian_patch_prepend() {
+	cpp -E -o - ${S}/debian/patches/series.in | egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
+}

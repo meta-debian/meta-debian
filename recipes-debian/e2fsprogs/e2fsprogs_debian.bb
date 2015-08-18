@@ -1,14 +1,32 @@
-require recipes-devtools/e2fsprogs/${PN}_1.42.9.bb
-FILESEXTRAPATHS_prepend = "\
-${THISDIR}/files:${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs:\
-"
+#
+# Base recipe: meta/recipes-devtools/e2fsprogs/e2fsprogs_1.42.9.bb
+# Base branch: daisy
+#
+
+SUMMARY = "Ext2 Filesystem Utilities"
+DESCRIPTION = "The Ext2 Filesystem Utilities (e2fsprogs) contain all of the \
+standard utilities for creating, fixing, configuring , and debugging ext2 filesystems."
+HOMEPAGE = "http://e2fsprogs.sourceforge.net/"
+
+PR = "r0"
 
 inherit debian-package
-DEBIAN_SECTION = "admin"
-DPR = "1"
 
-LICENSE = "GPL-2.0"
-LIC_FILES_CHKSUM = "file://COPYING;md5=b48f21d765b875bd10400975d12c1ca2"
+LICENSE = "GPLv2 & LGPLv2 & BSD & MIT"
+
+LIC_FILES_CHKSUM = "\
+file://COPYING;md5=b48f21d765b875bd10400975d12c1ca2 \
+file://lib/ext2fs/ext2fs.h;beginline=1;endline=9;md5=596a8dedcb4e731c6b21c7a46fba6bef \
+file://lib/e2p/e2p.h;beginline=1;endline=7;md5=8a74ade8f9d65095d70ef2d4bf48e36a \
+file://lib/uuid/uuid.h.in;beginline=1;endline=32;md5=dbb8079e114a5f841934b99e59c8820a \
+file://lib/uuid/COPYING;md5=58dcd8452651fc8b07d1f65ce07ca8af \
+file://lib/et/et_name.c;beginline=1;endline=11;md5=ead236447dac7b980dbc5b4804d8c836 \
+file://lib/ss/ss.h;beginline=1;endline=20;md5=6e89ad47da6e75fecd2b5e0e81e1d4a6 \
+"
+
+DEPENDS = "util-linux"
+
+inherit autotools gettext pkgconfig multilib_header
 
 # Exclude already applied patch:
 # 0001-e2fsprogs-fix-cross-compilation-problem.patch
@@ -31,13 +49,132 @@ file://0011-mke2fs.8.in-update-the-manual-for-the-d-option.patch \
 file://misc-mke2fs.c-return-error-when-failed-to-populate-fs.patch \
 "
 
+COMMON_CONF_FLAGS = " \
+		--disable-e2initrd-helper \
+		--enable-quota \
+		--infodir=${infodir} \
+		--enable-symlink-install \
+"
+STD_CONF_FLAGS = " \
+		--enable-elf-shlibs \
+"
+UTIL_CONF_FLAGS = " \
+		--disable-fsck \
+		--disable-libblkid \
+		--disable-libuuid \
+		--disable-uuidd \
+"
+EXTRA_OECONF += "\
+		${COMMON_CONF_FLAGS} \
+		${STD_CONF_FLAGS} \
+		${UTIL_CONF_FLAGS} \
+		--build=${BUILD_SYS} \
+		--host=${HOST_SYS} \
+		--libdir=${base_libdir} \
+		--sbindir=${base_sbindir} \
+"
+
 # Automake has dropped such macro, use "mkdir -p" instead
-do_configure_prepend() {
+do_configure_prepend () {
+	cp ${WORKDIR}/acinclude.m4 ${S}/
 	sed -i -e "s:AM_MKINSTALLDIRS:AM_PROG_MKDIR_P:" ${S}/configure.in
 	sed -i -e "s:MKINSTALLDIRS = .*:MKINSTALLDIRS = @MKDIR_P@:" \
 							${S}/MCONFIG.in
 }
 
-# Remove option to disable libuuid to avoid error external uuid library
-# not found. 
-EXTRA_OECONF_remove = "--disable-libuuid --disable-uuidd"
+do_install () {
+	oe_runmake 'DESTDIR=${D}' install
+	oe_runmake 'DESTDIR=${D}' install-libs
+	#Some files belong to libdir
+	if [ ! ${D}${libdir} -ef ${D}${base_libdir} ]; then
+		install -d ${D}${libdir}
+		mv ${D}${base_libdir}/pkgconfig ${D}${libdir}
+		rm ${D}${base_libdir}/libe2p.so
+		ln -sf ${base_libdir}/libe2p.so.2 ${D}${libdir}/libe2p.so
+		rm ${D}${base_libdir}/libcom_err.so
+		ln -sf ${base_libdir}/libcom_err.so.2 ${D}${libdir}/libcom_err.so
+		rm ${D}${base_libdir}/libext2fs.so
+		ln -sf ${base_libdir}/libext2fs.so.2 ${D}${libdir}/libext2fs.so
+		rm ${D}${base_libdir}/libss.so
+		ln -sf ${base_libdir}/libss.so.2 ${D}${libdir}/libss.so
+		mv ${D}${base_libdir}/*.a ${D}${libdir}
+	fi
+	#Some files belong to sbindir
+	install -d ${D}${sbindir}
+	mv ${D}${base_sbindir}/e2freefrag ${D}${sbindir}	
+	mv ${D}${base_sbindir}/e4defrag ${D}${sbindir}
+	mv ${D}${base_sbindir}/filefrag ${D}${sbindir}
+	mv ${D}${base_sbindir}/mklost+found ${D}${sbindir}
+	
+	oe_multilib_header ext2fs/ext2_types.h			
+}
+
+PACKAGES = "comerr-dev e2fsck-static e2fslibs e2fslibs-dbg e2fslibs-dev ${PN} \
+	    ${PN}-dbg libcomerr2 libcomerr2-dbg libss2 libss2-dbg ss-dev \
+	    comerr-staticdev e2fslibs-staticdev ss-staticdev"
+
+FILES_comerr-dev = "\
+		${bindir}/compile_et \
+		${includedir}/com_err.h \
+		${includedir}/et/* \
+		${libdir}/libcom_err.so \
+		${libdir}/pkgconfig/com_err.pc \
+		${datadir}/et"
+FILES_e2fsck-static = "${sbin}/e2fsck.static"
+FILES_comerr-staticdev = "${libdir}/libcom_err.a"
+FILES_e2fslibs = "\
+		${base_libdir}/libe2p.so.* \
+		${base_libdir}/libext2fs.so.*"
+FILES_e2fslibs-dbg = " \
+		${base_libdir}/.debug/libe2p.so.* \
+		${base_libdir}/.debug/libext2fs.so.*"
+FILES_e2fslibs-dev = " \
+		${includedir}/e2p/* \
+		${includedir}/ext2fs/* \
+		${libdir}/libe2p.so \
+		${libdir}/libext2fs.so \
+		${libdir}/pkgconfig/e2p.pc \
+		${libdir}/pkgconfig/ext2fs.pc \
+		${infodir}"
+FILES_e2fslibs-staticdev = " \
+		${libdir}/libext2fs.a \
+		${libdir}/libe2p.a"
+FILES_${PN} = " \
+		${sysconfdir} \
+		${base_sbindir}/b* \
+		${base_sbindir}/d* \
+		${base_sbindir}/e2fsck \
+		${base_sbindir}/e2image \
+		${base_sbindir}/e2label \
+		${base_sbindir}/e2undo \
+		${base_sbindir}/fsck* \
+		${base_sbindir}/logsave \
+		${base_sbindir}/mke2fs \
+		${base_sbindir}/mkfs* \
+		${base_sbindir}/resize2fs \
+		${base_sbindir}/tune2fs \
+		${bindir}/lsattr \
+		${bindir}/chattr \
+		${sbindir}/e2freefrag \
+		${sbindir}/mklost+found \
+		${sbindir}/filefrag \
+		${sbindir}/e4defrag \ 
+		${datadir}/man"
+FILES_${PN}-dbg = " \
+		${prefix}/src \
+		${base_sbindir}/.debug \
+		${bindir}/.debug \
+		${sbindir}/.debug"
+FILES_libcomerr2 = "${base_libdir}/libcom_err.so.*"
+FILES_libcomerr2-dbg = "${base_libdir}/.debug/libcom_err.so.2.1"
+FILES_libss2 = "${base_libdir}/libss.so.*"
+FILES_libss2-dbg = "${base_libdir}/.debug/libss.so.2.0"
+FILES_ss-dev = " \
+		${bindir}/mk_cmds \
+		${includedir}/ss \
+		${libdir}/libss.so \
+		${libdir}/pkgconfig/ss.pc \
+		${datadir}/ss"
+FILES_ss-staticdev = "${libdir}/libss.a"
+
+BBCLASSEXTEND = "native"

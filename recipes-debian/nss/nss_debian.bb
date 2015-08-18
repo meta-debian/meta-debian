@@ -149,10 +149,10 @@ do_install() {
 	done
 
 	# Create soft links for libnss3-1d packages
-	ln -sf ${D}${libdir}/libnss3.so ${D}${libdir}/libnss3.so.1d
-	ln -sf ${D}${libdir}/libnssutil3.so ${D}${libdir}/libnssutil3.so.1d
-	ln -sf ${D}${libdir}/libsmime3.so ${D}${libdir}/libsmime3.so.1d
-	ln -sf ${D}${libdir}/libssl3.so ${D}${libdir}/libssl3.so.1d
+	ln -sf libnss3.so ${D}${libdir}/libnss3.so.1d
+	ln -sf libnssutil3.so ${D}${libdir}/libnssutil3.so.1d
+	ln -sf libsmime3.so ${D}${libdir}/libsmime3.so.1d
+	ln -sf libssl3.so ${D}${libdir}/libssl3.so.1d
 
 	# Remove redundant binaries compare to list of file in Debian
 	# packages
