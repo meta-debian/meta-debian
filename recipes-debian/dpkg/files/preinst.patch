@@ -1,0 +1,51 @@
+Our pre/postinsts expect $D to be set when running in a sysroot and
+don't expect a chroot. This matches up our system expectations with
+what dpkg does.
+
+Upstream-Status: Inappropriate [OE Specific]
+
+RP 2011/12/07
+
+Index: dpkg-1.17.1/src/script.c
+===================================================================
+--- dpkg-1.17.1.orig/src/script.c
++++ dpkg-1.17.1/src/script.c
+@@ -111,36 +111,9 @@ preexecscript(struct command *cmd)
+ 	size_t instdirl = strlen(instdir);
+ 
+ 	if (*instdir) {
+-		if (strncmp(admindir, instdir, instdirl) != 0)
+-			ohshit(_("admindir must be inside instdir for dpkg to work properly"));
+-		if (setenv("DPKG_ADMINDIR", admindir + instdirl, 1) < 0)
+-			ohshite(_("unable to setenv for subprocesses"));
+-
+-		if (chroot(instdir))
+-			ohshite(_("failed to chroot to `%.250s'"), instdir);
+-	}
+-	/* Switch to a known good directory to give the maintainer script
+-	 * a saner environment, also needed after the chroot(). */
+-	if (chdir("/"))
+-		ohshite(_("failed to chdir to `%.255s'"), "/");
+-	if (debug_has_flag(dbg_scripts)) {
+-		struct varbuf args = VARBUF_INIT;
+-		const char **argv = cmd->argv;
+-
+-		while (*++argv) {
+-			varbuf_add_char(&args, ' ');
+-			varbuf_add_str(&args, *argv);
+-		}
+-		varbuf_end_str(&args);
+-		debug(dbg_scripts, "fork/exec %s (%s )", cmd->filename,
+-		      args.buf);
+-		varbuf_destroy(&args);
++		setenv("D", instdir, 1);
+ 	}
+-	if (!instdirl)
+-		return cmd->filename;
+-
+-	assert(strlen(cmd->filename) >= instdirl);
+-	return cmd->filename + instdirl;
++	return cmd->filename;
+ }
+ 
+ /**

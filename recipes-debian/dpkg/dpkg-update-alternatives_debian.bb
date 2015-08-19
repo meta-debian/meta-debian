@@ -1,13 +1,12 @@
-require dpkg_debian.bb
+require dpkg.inc
+
+PR = "${INC_PR}.0"
 
 DESCRIPTION = "Dpkg version of update-alternatives"
-DEBIAN_SECTION = "admin"
-DPR = "1"
-DPN = "dpkg"
 
 # Overwrite DEPENDS of dpkg.inc
 DEPENDS = ""
-PROVIDES_class-native += "virtual/update-alternatives-native"
+PROVIDES += "virtual/update-alternatives"
 
 SRC_URI += "\
 	file://implement-offline-mode.patch \
