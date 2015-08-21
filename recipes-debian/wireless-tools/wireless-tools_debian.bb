@@ -1,71 +1,61 @@
+#
+# Base recipe: meta/recipes-connectivity/wireless-tools/wireless-tools_30.pre9.bb
+# Base branch: daisy
+#
+
 SUMMARY = "Tools for the Linux Standard Wireless Extension Subsystem"
 HOMEPAGE = "http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html"
+
+PR = "r0"
+
+inherit debian-package
+
 LICENSE = "GPLv2 & (LGPLv2.1 | MPL-1.1 | BSD)"
-LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f \
-			file://iwconfig.c;beginline=1;endline=12;md5=cf710eb1795c376eb10ea4ff04649caf \
-			file://iwevent.c;beginline=59;endline=72;md5=d66a10026d4394f0a5b1c5587bce4537 \
-			file://sample_enc.c;beginline=1;endline=4;md5=838372be07874260b566bae2f6ed33b6"
-SECTION = "base"
-PE = "1"
+LIC_FILES_CHKSUM = "\
+file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f \
+file://iwconfig.c;beginline=1;endline=12;md5=cf710eb1795c376eb10ea4ff04649caf \
+file://iwevent.c;beginline=59;endline=72;md5=d66a10026d4394f0a5b1c5587bce4537 \
+file://sample_enc.c;beginline=1;endline=4;md5=838372be07874260b566bae2f6ed33b6"
 
-#SRC_URI = "http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/wireless_tools.${PV}.tar.gz \
-#           file://wireless-tools.if-pre-up \
-#           file://zzz-wireless.if-pre-up \
-#           file://remove.ldconfig.call.patch \
-#           file://man.patch \
-#           file://avoid_strip.patch \
-#           file://ldflags.patch \
-#          "
-SRC_URI[md5sum] = "ca91ba7c7eff9bfff6926b1a34a4697d"
-SRC_URI[sha256sum] = "abd9c5c98abf1fdd11892ac2f8a56737544fe101e1be27c6241a564948f34c63"
-
-S = "${WORKDIR}/wireless_tools.30"
-
-CFLAGS =+ "-I${S}"
-EXTRA_OEMAKE = "-e 'BUILD_SHARED=y' \
-		'INSTALL_DIR=${D}${base_sbindir}' \
-		'INSTALL_LIB=${D}${libdir}' \
-		'INSTALL_INC=${D}${includedir}' \
-		'INSTALL_MAN=${D}${mandir}'"
+# remove.ldconfig.call.patch: prevent make install-libs from creating invalid cache
+SRC_URI += " \
+file://remove.ldconfig.call.patch \
+"
 
 do_compile() {
 	oe_runmake all libiw.a
 }
 
+# Follow debian/rules
 do_install() {
-	oe_runmake PREFIX=${D} install-iwmulticall install-dynamic install-man install-hdr
-	install -d ${D}${sbindir}
-	install -m 0755 ifrename ${D}${sbindir}/ifrename
-	# Disabled by RP - 20/8/08 - We don't seem to need/use these
-	#install -d ${D}${sysconfdir}/network/if-pre-up.d
-	#install ${WORKDIR}/wireless-tools.if-pre-up ${D}${sysconfdir}/network/if-pre-up.d/wireless-tools
-	#install ${WORKDIR}/zzz-wireless.if-pre-up ${D}${sysconfdir}/network/if-pre-up.d/zzz-wireless
+	oe_runmake install install-static PREFIX=${D}
+	install -d ${D}${libdir}
+	install -d ${D}${base_libdir}/udev
+	install -d ${D}${sysconfdir}/init.d
+	install -d ${D}${sysconfdir}/network/if-pre-up.d
+	install -d ${D}${sysconfdir}/network/if-post-down.d
+	install -m 0755 19-udev-ifrename.rules ${D}${base_libdir}/udev/19-ifrename.rules
+	mv ${D}${base_libdir}/libiw.a ${D}${libdir}
+	unlink ${D}${base_libdir}/libiw.so
+	#ln -sf ${base_libdir}/libiw.so.30 ${D}${libdir}/libiw.so
+	install -m 0755 ${S}/debian/ifrename.init ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/debian/wireless-tools.if-pre-up  ${D}${sysconfdir}/network/if-pre-up.d/wireless-tools
+	install -m 0755 ${S}/debian/wireless-tools.if-post-down ${D}${sysconfdir}/network/if-post-down.d/wireless-tools
 }
 
-PACKAGES = "libiw-dbg ifrename-dbg ${PN}-dbg \
-libiw libiw-dev libiw-doc ifrename-doc ifrename ${PN} ${PN}-doc"
+#Ship paackges follow Debian
+PACKAGES = "ifrename ifrename-doc libiw-dev libiw-dbg libiw30 libiw30-staticdev \
+		${PN} ${PN}-doc ${PN}-dbg"
 
-FILES_libiw-dbg = "${libdir}/.debug/*.so.*"
-FILES_ifrename-dbg = "${sbindir}/.debug/ifrename"
-FILES_libiw = "${libdir}/*.so.*"
-FILES_libiw-dev = "${libdir}/*.a ${libdir}/*.so ${includedir}"
-FILES_libiw-doc = "${mandir}/man7"
-FILES_ifrename = "${sbindir}/ifrename"
-FILES_ifrename-doc = "${mandir}/man8/ifrename.8 ${mandir}/man5/iftab.5"
-FILES_${PN} = "${bindir} ${sbindir}/iw* ${base_sbindir} ${base_bindir} ${sysconfdir}/network"
+FILES_ifrename = "${sysconfdir}/init.d ${base_libdir}/udev ${base_sbin}/ifrename"
+FILES_ifrename-doc = "${mandir}/man5 ${mandir}/man8/ifrename.8 \
+		      ${mandir}/fr.UTF-8/man5 ${mandir}/fr.UTF-8/man8/ifrename.8 \
+		      ${mandir}/fr.ISO8859-1/man5 ${mandir}/fr.ISO8859-1/man8/ifrename.8 \
+		      ${mandir}/cs/man5 ${mandir}/cs/man8/ifrename.8"
+FILES_libiw-dev = "${includedir} ${libdir}/*.so"
+FILES_libiw-dbg = "${base_libdir}/.debug"
+FILES_libiw30-staticdev = "${includedir} ${libdir}/*.a"
+FILES_libiw30 = "${base_libdir}/libiw.so.30"
+FILES_${PN} = "${sysconfdir}/network ${base_sbindir}/i*"
 FILES_${PN}-doc = "${mandir}"
-
-#
-# Meta-debian
-#
-inherit debian-package
-DPR = "0"
-DEBIAN_SECTIONS = "net"
-
-SRC_URI += " \
-           file://wireless-tools.if-pre-up \
-           file://zzz-wireless.if-pre-up \
-           file://remove.ldconfig.call.patch \
-           file://avoid_strip.patch \
-           file://ldflags.patch \
-          "
+FILES_${PN}-dbg = "${prefix}/src/debug ${base_sbindir}/.debug"
