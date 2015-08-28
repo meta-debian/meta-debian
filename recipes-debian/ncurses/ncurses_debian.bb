@@ -124,7 +124,13 @@ do_configure() {
 					"--disable-overwrite" 
 }
 
+# Install headers to /usr/include instead of /usr/include/ncurses
+# non-native recipe didn't have this problem because of oe_multilib_header
 do_configure_append_class-nativesdk () {
+	ncurses_configure "narrowc" "--enable-overwrite"
+}
+
+do_configure_append_class-native () {
 	ncurses_configure "narrowc" "--enable-overwrite"
 }
 
@@ -284,10 +290,17 @@ do_install_append() {
 	install -m 0644 ${S}/misc/ncurses.supp ${D}${libdir}/valgrind/
 
 	# Create link according to Debian package files
-	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a
 	ln -sf libtinfo.so.5 ${D}${libdir}/libtinfo.so
 	ln -sf libncurses.so ${D}${libdir}/libcurses.so
 
+	# In case libdir is not the same as base_libdir
+	# needed to create symlink to /lib instead of /usr/lib
+	if [ "${base_libdir}" != "${libdir}" ]; then
+		ln -sf ../../lib/libtinfo.so.5 ${D}${libdir}/libtinfo.so
+		ln -sf ../../lib/libncurses.so ${D}${libdir}/libcurses.so
+	fi
+
+	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a
 	ln -sf ../../../../lib/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
 	ln -sf ../../../../lib/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
 	ln -sf ../../../../lib/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
