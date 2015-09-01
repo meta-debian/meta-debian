@@ -36,11 +36,4 @@ do_install() {
 # Correct name of libtommath-dev package
 DEBIANNAME_${PN}-dev = "libtommath-dev"
 
-# Move static lib into same package as Debian
-FILES_${PN}-dev = "${includedir} ${libdir}/libtommath.a ${libdir}/libtommath.so"
-
-# Override files in package staticdev
-FILES_${PN}-staticdev = ""
-
-# Skip QA issue related to .a file not in static dev package
-INSANE_SKIP_libtommath-dev = "staticdev"
+FILES_${PN}-dev = "${includedir} ${libdir}/libtommath.so"

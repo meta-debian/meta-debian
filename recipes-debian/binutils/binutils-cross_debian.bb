@@ -1,48 +1,37 @@
-# Make sure that the following line is already in
-# conf/local.conf or meta-debian/conf/layer.conf:
-# PREFERRED_VERSION_binutils-cross = "debian"
+#
+# base recipe: meta/recipes-devtools/binutils/binutils-cross_2.25.bb
+# base branch: master
+# base commit: 3b7c38458856805588d552508de10944ed38d9f2
+#
 
-require recipes-devtools/binutils/${PN}_2.24.bb
-FILESEXTRAPATHS_prepend = "${COREBASE}/meta/recipes-devtools/binutils/binutils:"
+require binutils.inc
 
-DPN = "binutils"
+PR = "${INC_PR}.0"
 
-inherit debian-package
-DEBIAN_SECTION = "devel"
-DPR = "0"
+inherit cross
+PROVIDES = "virtual/${TARGET_PREFIX}binutils"
 
-LICENSE = "GPLv2 & LGPLv2 & GPLv3 & LGPLv3"
-LIC_FILES_CHKSUM = " \
-file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552 \
-file://COPYING3;md5=d32239bcb673463ab874e80d47fae504 \
-file://COPYING.LIB;md5=9f604d8a4f8e74f4f5140845a21b6674 \
-file://COPYING3.LIB;md5=6a6a8e020838b23406c81b19c1d46df6 \
-"
+INHIBIT_DEFAULT_DEPS = "1"
+INHIBIT_AUTOTOOLS_DEPS = "1"
 
-# alway try to apply debian patches by quilt
-DEBIAN_PATCH_TYPE = "quilt"
+EXTRA_OECONF += "--with-sysroot=${STAGING_DIR_TARGET} \
+                --disable-install-libbfd \
+                --enable-poison-system-directories \
+                "
+do_install () {
+	oe_runmake 'DESTDIR=${D}' install
 
-# Exclude following patches because they are already applied
-# binutils-uclibc-300-001_ld_makefile_patch.patch
-# binutils-uclibc-300-012_check_ldrunpath_length.patch
-# fix-pr15815.patch
-# fix-pr2404.patch
-# fix-pr16476.patch
-# fix-pr16428.patch
-# replace_macros_with_static_inline.patch
-# 0001-Fix-MMIX-build-breakage-from-bfd_set_section_vma-cha.patch
-# binutils-uninitialised-warning.patch
-# 
-# Exclude mips64-default-ld-emulation.patch because it implements
-# for old version
-SRC_URI += " \
-file://binutils-uclibc-100-uclibc-conf.patch \
-file://binutils-uclibc-300-006_better_file_error.patch \
-file://binutils-uclibc-gas-needs-libm.patch \
-file://libtool-2.4-update_debian.patch \
-file://libiberty_path_fix.patch \
-file://binutils-poison_debian.patch \
-file://libtool-rpath-fix_debian.patch \
-file://binutils-armv5e.patch \
-file://binutils-xlp-support_debian.patch \
-"
+	# We don't really need these, so we'll remove them...
+	rm -rf ${D}${STAGING_DIR_NATIVE}${libdir_native}/libiberty.a
+	rm -rf ${D}${STAGING_DIR_NATIVE}${prefix_native}/${TARGET_SYS}
+	rm -rf ${D}${STAGING_DIR_NATIVE}${prefix_native}/lib/ldscripts
+	rm -rf ${D}${STAGING_DIR_NATIVE}${prefix_native}/share/info
+	rm -rf ${D}${STAGING_DIR_NATIVE}${prefix_native}/share/locale
+	rm -rf ${D}${STAGING_DIR_NATIVE}${prefix_native}/share/man
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/share || :
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/${libdir}/gcc-lib || :
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/${libdir}64/gcc-lib || :
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/${libdir} || :
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/${libdir}64 || :
+	rmdir ${D}${STAGING_DIR_NATIVE}${prefix_native}/${prefix} || :
+}

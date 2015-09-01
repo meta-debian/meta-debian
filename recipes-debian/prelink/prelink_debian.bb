@@ -1,27 +1,44 @@
-require recipes-devtools/prelink/prelink_git.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/prelink/prelink:"
+#
+# Base recipe: meta/recipes-devtools/prelink/prelink_git.b
+# Base branch: daisy
+#
+
+SUMMARY = "An ELF prelinking utility"
+DESCRIPTION = "The prelink package contains a utility which modifies ELF shared \
+libraries and executables, so that far fewer relocations need to be resolved at \
+runtime and thus programs come up faster."
+
+PR = "r0"
 
 inherit debian-package
-
-DEBIAN_SECTION = "admin"
-DPR = "1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"
 
 # Patch prelink_cross.diff was created to enable option --root
 SRC_URI += " \
-file://prelink.conf \
-file://prelink.cron.daily \
-file://prelink.default \
-file://macros.prelink \
 file://prelink_cross.diff \
 "
+inherit autotools
+DEPENDS = "elfutils binutils"
 
-# QA Issue: Unrecognised options in version 0.0.20130503:
-# --with-pkgversion --disable-selinux --with-bugurl
-# FIXME: hardcodedly remove these options.
-EXTRA_OECONF = ""
+# Follow debian/rules
+EXTRA_OECONF = "--disable-libtool-lock --disable-dependency-tracking"
+
+# Install package follow debian/rules
+do_install_append () {
+	install -d ${D}${sysconfdir}/cron.daily ${D}${sysconfdir}/default
+	install -m 0644 ${S}/debian/prelink.conf ${D}${sysconfdir}/prelink.conf
+	install -m 0644 ${S}/debian/prelink.cron.daily ${D}${sysconfdir}/default/prelink
+	install -m 0644 ${S}/debian/prelink.default ${D}${sysconfdir}/default/prelink
+	mv ${D}${sbindir}/prelink ${D}${sbindir}/prelink.bin
+	install -m 0755 ${S}/debian/prelink.sh ${D}${sbindir}/prelink
+}
+
+#Add package follow Debian
+PACKAGES =+ "execstack"
+FILES_execstack = "${bindir}/execstack"
+FILES_execstack-doc = "${docdir}/execstack/* ${mandir}/man8/execstack.8"
 
 #
 # Debian Native Test

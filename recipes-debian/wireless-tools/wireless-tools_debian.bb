@@ -37,7 +37,7 @@ do_install() {
 	install -m 0755 19-udev-ifrename.rules ${D}${base_libdir}/udev/19-ifrename.rules
 	mv ${D}${base_libdir}/libiw.a ${D}${libdir}
 	unlink ${D}${base_libdir}/libiw.so
-	#ln -sf ${base_libdir}/libiw.so.30 ${D}${libdir}/libiw.so
+	ln -sf ${base_libdir}/libiw.so.30 ${D}${libdir}/libiw.so
 	install -m 0755 ${S}/debian/ifrename.init ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/wireless-tools.if-pre-up  ${D}${sysconfdir}/network/if-pre-up.d/wireless-tools
 	install -m 0755 ${S}/debian/wireless-tools.if-post-down ${D}${sysconfdir}/network/if-post-down.d/wireless-tools

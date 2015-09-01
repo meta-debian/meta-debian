@@ -1,19 +1,39 @@
-require recipes-devtools/quilt/${PN}_0.61.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/quilt/quilt:"
+#
+# Base recipe: meta/recipes-devtools/quilt/quilt-native_0.61.bb
+# Base branch: daisy
+#
 
-inherit debian-package
-DEBIAN_SECTION = "vcs"
+require quilt.inc
 
-DPR = "0"
+PR = "${INC_PR}.0"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
-SRC_URI += " \
-file://install.patch \
-file://run-ptest \
-file://Makefile \
-"
+RDEPENDS_${PN} += "diffstat-native patch-native bzip2-native util-linux-native"
+
+INHIBIT_AUTOTOOLS_DEPS = "1"
+
+inherit native
+
+PATCHTOOL = "patch"
+
+EXTRA_OECONF = "--disable-nls"
+
+do_configure () {
+	oe_runconf
+}
+
+# Install package follow Debian
+do_install_append () {
+	# Dummy quiltrc file for patch.bbclass
+	install -d ${D}${sysconfdir}/
+	touch ${D}${sysconfdir}/quiltrc
+
+	install -m 0755 ${S}/debian/deb3 ${D}${bindir}
+	install -m 0755 ${S}/debian/dh_quilt_patch ${D}${bindir}
+	install -m 0755 ${S}/debian/dh_quilt_unpatch ${D}${bindir}
+}
 
 # quilt-native also depends on native quilt command.
 # This is a special overwritten to apply all patches in

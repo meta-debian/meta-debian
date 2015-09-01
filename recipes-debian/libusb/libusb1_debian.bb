@@ -30,12 +30,6 @@ do_install_append() {
 FILES_${PN} += "${base_libdir}/*.so.*"
 
 # Move .a library to dev package
-FILES_${PN}-dev += "${base_libdir}/*.so ${base_libdir}/*.la ${base_libdir}/*.a"
-
-# Override file in staticdev package
-FILES_${PN}-staticdev = ""
-
-# Skip checking QA issue that .a file not in staticdev lib
-INSANE_SKIP_${PN}-dev = "staticdev"
+FILES_${PN}-dev += "${base_libdir}/*.so ${base_libdir}/*.la"
 
 BBCLASSEXTEND = "native nativesdk"

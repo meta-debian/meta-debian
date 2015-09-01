@@ -1,13 +1,18 @@
-require recipes-support/popt/popt_1.16.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-support/popt/popt:"
+#
+# Base recipe: meta/recipes-support/popt/popt_1.16.bb
+# Base branch: daisy
+#
+SUMMARY = "Library for parsing command line options"
+HOMEPAGE = "http://rpm5.org/"
+
+PR = "r0"
 
 inherit debian-package
 
-DEBIAN_SECTION = "devel"
-DPR = "0"
-
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=cb0613c30af2a8249b8dcc67d3edb06d"
+
+inherit autotools gettext
 
 # popt_fix_for_automake-1.12.patch: already applied in 1.16-10
 SRC_URI += " \
@@ -20,3 +25,4 @@ file://disable_tests.patch \
 do_compile_prepend(){
 	sed -i s@"#elseif"@"#elif"@g ${S}/system.h
 }
+

@@ -1,13 +1,16 @@
 #
 # base recipe: meta/recipes-devtools/binutils/binutils.inc
-# base branch: daisy
+# base branch: master
+# base commit: 3b7c38458856805588d552508de10944ed38d9f2
 #
+
+INC_PR = "r0"
 
 inherit debian-package
 
 DPN = "binutils"
 
-LICENSE = "GPLv2+ & GPLv3+"
+LICENSE = "GPLv2+ & GPLv3+ & LGPLv2 & LGPLv3"
 LIC_FILES_CHKSUM=" \
 	file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552\
 	file://COPYING.LIB;md5=9f604d8a4f8e74f4f5140845a21b6674\
@@ -22,6 +25,10 @@ LIC_FILES_CHKSUM=" \
 
 DEPENDS = "flex-native bison-native zlib-native gnu-config-native autoconf-native"
 
+# Some patch files have already applied in Debian source code, so ignore them:
+# 	0003-Point-scripts-location-to-libdir.patch
+#	0004-Only-generate-an-RPATH-entry-if-LD_RUN_PATH-is-not-e.patch
+#	0011-Change-default-emulation-for-mips64-linux.patch
 SRC_URI += " \
 	file://0002-configure-widen-the-regexp-for-SH-architectures.patch \
 	file://0005-Explicitly-link-with-libm-on-uclibc.patch \
@@ -85,15 +92,12 @@ python do_package_prepend() {
         d.setVarFlag('ALTERNATIVE_LINK_NAME', alt, bindir + "/" + alt)
 }
 
-# FILES_${PN}-dbg = "${prefix}/${TARGET_SYS}/bin/.debug ${prefix}${libdir}/.debug"
-
 B = "${S}/build.${HOST_SYS}.${TARGET_SYS}"
 
 EXTRA_OECONF = "--program-prefix=${TARGET_PREFIX} \
-                --disable-werror \
+		--disable-werror \
 		--enable-plugins \
 		--enable-threads \
-                --enable-plugins \
                 ${LDGOLD} \
                 ${@base_contains('DISTRO_FEATURES', 'multiarch', '--enable-64-bit-bfd', '', d)}"
 

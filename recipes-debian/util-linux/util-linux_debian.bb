@@ -86,8 +86,8 @@ do_install_append () {
 
 	# install pam
 	install -d ${D}${sysconfdir}/pam.d
-	install ${S}/debian/util-linux.runuser.pam ${D}${sysconfdir}/runuser
-	install ${S}/debian/util-linux.runuser-l.pam ${D}${sysconfdir}/runuser-l
+	install ${S}/debian/util-linux.runuser.pam ${D}${sysconfdir}/pam.d/runuser
+	install ${S}/debian/util-linux.runuser-l.pam ${D}${sysconfdir}/pam.d/runuser-l
 
 	# install /etc/default/hwclock
 	install -d ${D}${sysconfdir}/default
@@ -95,9 +95,9 @@ do_install_append () {
 }
 
 PACKAGES = "bsdutils libblkid-dev libblkid1 libmount-dev libmount1 \
-	    libsmartcols-dev libsmartcols1 libuuid1 mount ${PN} ${PN}-locales \
-	    uuid-dev uuid-runtime ${PN}-dbg libblkid-staticdev libmount-staticdev \
-	    libsmartcols-staticdev uuid-staticdev"
+	    libsmartcols-dev libsmartcols1 libuuid1 mount uuid-runtime uuid-dev \
+	    libmount-staticdev libsmartcols-staticdev uuid-staticdev \
+	    libblkid-staticdev ${PN}-dbg ${PN} ${PN}-locales ${PN}-doc"
 
 FILES_bsdutils = " \
 		${bindir}/logger ${bindir}/renice ${bindir}/script \
@@ -141,20 +141,6 @@ FILES_libsmartcols-staticdev = " \
 		${libdir}/libsmartcols.a"
 FILES_libuuid1 = " \
 		${base_libdir}/libuuid.so.*"
-FILES_uuid-dev = " \
-		${includedir}/uuid \
-		${libdir}/libuuid.so \
-		${libdir}/pkgconfig/uuid.pc \
-		${datadir}/man/man3/uuid*.3"
-FILES_uuid-staticdev = " \
-		${libdir}/libuuid.a"
-FILES_uuid-runtime = " \
-		${bindir}/uuid* \
-		${sbindir}/uuidd \
-		${datadir}/bash-completion/completions/uuid* \
-		${datadir}/man/man8/uuidd.8 \
-		${datadir}/man/man1/uuidgen.1 \
-		"
 FILES_mount = " \
 		${base_bindir}/mount \
 		${base_bindir}/findmnt \
@@ -174,226 +160,26 @@ FILES_mount = " \
 		${datadir}/man/man8/umount.8"	
 		
 FILES_${PN} = " \
-		${sysconfdir} \
-		${base_bindir}/dmesg \
-		${base_bindir}/lsblk \
-		${base_bindir}/more \
-		${base_bindir}/tailf \
-		${base_bindir}/wdctl \
-		${base_sbindir}/agetty \
-		${base_sbindir}/blkdiscard \
-		${base_sbindir}/blkid \
-		${base_sbindir}/blockdev \
-		${base_sbindir}/cfdisk \
-		${base_sbindir}/chcpu \
-		${base_sbindir}/ctrlaltdel \
-		${base_sbindir}/fdisk \
-		${base_sbindir}/findfs \
-		${base_sbindir}/fsck \
-		${base_sbindir}/fsck.cramfs \
-		${base_sbindir}/fsck.minix \
-		${base_sbindir}/fsfreeze \
-		${base_sbindir}/fstrim \
-		${base_sbindir}/getty \
-		${base_sbindir}/hwclock \
-		${base_sbindir}/isosize \
-		${base_sbindir}/mkfs \
-		${base_sbindir}/mkfs.bfs \
-		${base_sbindir}/mkfs.cramfs \
-		${base_sbindir}/mkfs.minix \
-		${base_sbindir}/mkswap \
-		${base_sbindir}/pivot_root \
-		${base_sbindir}/raw \
-		${base_sbindir}/runuser \
-		${base_sbindir}/sfdisk \
-		${base_sbindir}/swaplabel \
-		${base_sbindir}/switch_root \
-		${base_sbindir}/wipefs \
-		${sbindir}/fdformat \
-		${sbindir}/ldattach \
-		${sbindir}/readprofile \
-		${sbindir}/rtcwake \
-		${sbindir}/tunelp \
-		${bindir}/addpart \
-		${bindir}/chrt \
-		${bindir}/delpart \
-		${bindir}/fallocate \
-		${bindir}/flock \
-		${bindir}/getopt \
-		${bindir}/i386 \
-		${bindir}/ionice \
-		${bindir}/ipcmk \
-		${bindir}/ipcrm \
-		${bindir}/ipcs \
-		${bindir}/line \
-		${bindir}/linux32 \
-		${bindir}/linux64 \
-		${bindir}/lscpu \
-		${bindir}/lslocks \
-		${bindir}/mcookie \
-		${bindir}/namei \
-		${bindir}/nsenter \
-		${bindir}/partx \
-		${bindir}/pg \
-		${bindir}/prlimit \
-		${bindir}/rename \
-		${bindir}/resizepart \
-		${bindir}/rev \
-		${bindir}/setarch \
-		${bindir}/setsid \
-		${bindir}/setterm \
-		${bindir}/taskset \
-		${bindir}/unshare \
-		${bindir}/utmpdump \
-		${bindir}/whereis \
-		${bindir}/lslogins \
-		${bindir}/isosize \
-		${bindir}/uname26 \
-		${datadir}/doc \
-		${datadir}/man/man1/chrt.1 \
-		${datadir}/man/man1/dmesg.1 \
-		${datadir}/man/man1/fallocate.1 \
-		${datadir}/man/man1/flock.1 \
-		${datadir}/man/man1/getopt.1 \
-		${datadir}/man/man1/ionice.1 \
-		${datadir}/man/man1/ipcmk.1 \
-		${datadir}/man/man1/ipcrm.1 \
-		${datadir}/man/man1/ipcs.1 \
-		${datadir}/man/man1/line.1 \
-		${datadir}/man/man1/linux32.1 \
-		${datadir}/man/man1/linux64.1 \
-		${datadir}/man/man1/ls*.1 \
-		${datadir}/man/man1/m*.1 \
-		${datadir}/man/man1/n*.1 \
-		${datadir}/man/man1/p*.1 \
-		${datadir}/man/man1/rename*.1 \
-		${datadir}/man/man1/rev.1 \
-		${datadir}/man/man1/runuser.1 \
-		${datadir}/man/man1/setsid.1 \
-		${datadir}/man/man1/setterm.1 \
-		${datadir}/man/man1/tailf.1 \
-		${datadir}/man/man1/taskset.1 \
-		${datadir}/man/man1/u*.1 \
-		${datadir}/man/man1/w*.1 \
-		${datadir}/man/man5/hwclock.5 \
-		${datadir}/man/man5/terminal-colors.d.5 \
-		${datadir}/man/man8/fsfreeze.8 \
-		${datadir}/man/man8/readprofile.8 \
-		${datadir}/man/man8/ctrlaltdel.8 \
-		${datadir}/man/man8/delpart.8 \
-		${datadir}/man/man8/blkid.8 \
-		${datadir}/man/man8/uuidd.8 \
-		${datadir}/man/man8/wipefs.8 \
-		${datadir}/man/man8/mkfs.cramfs.8 \
-		${datadir}/man/man8/chcpu.8 \
-		${datadir}/man/man8/linux64.8 \
-		${datadir}/man/man8/findfs.8 \
-		${datadir}/man/man8/cfdisk.8 \
-		${datadir}/man/man8/agetty.8 \
-		${datadir}/man/man8/mkfs.minix.8 \
-		${datadir}/man/man8/addpart.8 \
-		${datadir}/man/man8/fdisk.8 \
-		${datadir}/man/man8/fsck.minix.8 \
-		${datadir}/man/man8/fdformat.8 \
-		${datadir}/man/man8/mkfs.bfs.8 \
-		${datadir}/man/man8/lslocks.8 \
-		${datadir}/man/man8/fstrim.8 \
-		${datadir}/man/man8/fsck.cramfs.8 \
-		${datadir}/man/man8/rtcwake.8 \
-		${datadir}/man/man8/blockdev.8 \
-		${datadir}/man/man8/lsblk.8 \
-		${datadir}/man/man8/resizepart.8 \
-		${datadir}/man/man8/i386.8 \
-		${datadir}/man/man8/mkswap.8 \
-		${datadir}/man/man8/hwclock.8 \
-		${datadir}/man/man8/fsck.8 \
-		${datadir}/man/man8/uname26.8 \
-		${datadir}/man/man8/mkfs.8 \
-		${datadir}/man/man8/pivot_root.8 \
-		${datadir}/man/man8/setarch.8 \
-		${datadir}/man/man8/sfdisk.8 \
-		${datadir}/man/man8/partx.8 \
-		${datadir}/man/man8/ldattach.8 \
-		${datadir}/man/man8/switch_root.8 \
-		${datadir}/man/man8/wdctl.8 \
-		${datadir}/man/man8/blkdiscard.8 \
-		${datadir}/man/man8/isosize.8 \
-		${datadir}/man/man8/linux32.8 \
-		${datadir}/man/man8/tunelp.8 \
-		${datadir}/man/man8/swaplabel.8 \
-		${datadir}/man/man8/raw.8 \
-		${datadir}/bash-completion/completions/sfdisk \                                 
-		${datadir}/bash-completion/completions/pivot_root \                             
-		${datadir}/bash-completion/completions/more \                                   
-		${datadir}/bash-completion/completions/mkswap \                                 
-		${datadir}/bash-completion/completions/delpart \                                
-		${datadir}/bash-completion/completions/blkid \                                  
-		${datadir}/bash-completion/completions/fsfreeze \                               
-		${datadir}/bash-completion/completions/colrm \                                  
-		${datadir}/bash-completion/completions/hexdump \                                
-		${datadir}/bash-completion/completions/ionice \                                 
-		${datadir}/bash-completion/completions/fallocate \                              
-		${datadir}/bash-completion/completions/unshare \                                
-		${datadir}/bash-completion/completions/mcookie \                                
-		${datadir}/bash-completion/completions/utmpdump \                               
-		${datadir}/bash-completion/completions/nsenter \                                
-		${datadir}/bash-completion/completions/setarch \                                
-		${datadir}/bash-completion/completions/getopt \                                 
-		${datadir}/bash-completion/completions/lscpu \                                  
-		${datadir}/bash-completion/completions/lsblk \                                  
-		${datadir}/bash-completion/completions/mkfs.cramfs \                            
-		${datadir}/bash-completion/completions/setterm \                                
-		${datadir}/bash-completion/completions/col \                                    
-		${datadir}/bash-completion/completions/readprofile \                            
-		${datadir}/bash-completion/completions/namei \                                  
-		${datadir}/bash-completion/completions/rev \                                    
-		${datadir}/bash-completion/completions/pg \                                     
-		${datadir}/bash-completion/completions/ldattach \                               
-		${datadir}/bash-completion/completions/wdctl \                                  
-		${datadir}/bash-completion/completions/mkfs \                                   
-		${datadir}/bash-completion/completions/partx \                                  
-		${datadir}/bash-completion/completions/cfdisk \                                 
-		${datadir}/bash-completion/completions/fstrim \                                 
-		${datadir}/bash-completion/completions/swaplabel \                              
-		${datadir}/bash-completion/completions/mkfs.bfs \                               
-		${datadir}/bash-completion/completions/blkdiscard \                             
-		${datadir}/bash-completion/completions/hwclock \                                
-		${datadir}/bash-completion/completions/tailf \                                  
-		${datadir}/bash-completion/completions/setsid \                                 
-		${datadir}/bash-completion/completions/blockdev \                               
-		${datadir}/bash-completion/completions/tunelp \                                 
-		${datadir}/bash-completion/completions/colcrt \                                 
-		${datadir}/bash-completion/completions/uuidd \                                  
-		${datadir}/bash-completion/completions/fdformat \                               
-		${datadir}/bash-completion/completions/rtcwake \                                
-		${datadir}/bash-completion/completions/look \                                   
-		${datadir}/bash-completion/completions/ipcrm \                                  
-		${datadir}/bash-completion/completions/lslocks \                                
-		${datadir}/bash-completion/completions/fdisk \
-		${datadir}/bash-completion/completions/ctrlaltdel \                             
-		${datadir}/bash-completion/completions/resizepart \                             
-		${datadir}/bash-completion/completions/chcpu \ 
-		${datadir}/bash-completion/completions/fsck.minix \                             
-		${datadir}/bash-completion/completions/fsck \                                   
-		${datadir}/bash-completion/completions/chrt \                                   
-		${datadir}/bash-completion/completions/raw \                                    
-		${datadir}/bash-completion/completions/prlimit \                                
-		${datadir}/bash-completion/completions/ipcs \                                   
-		${datadir}/bash-completion/completions/isosize \                                
-		${datadir}/bash-completion/completions/taskset \                                
-		${datadir}/bash-completion/completions/whereis \                                
-		${datadir}/bash-completion/completions/cal \                                    
-		${datadir}/bash-completion/completions/column \                                 
-		${datadir}/bash-completion/completions/wipefs \                                 
-		${datadir}/bash-completion/completions/mkfs.minix \                             
-		${datadir}/bash-completion/completions/ul \                                     
-		${datadir}/bash-completion/completions/fsck.cramfs \                            
-		${datadir}/bash-completion/completions/rename \                                 
-		${datadir}/bash-completion/completions/flock \                                  
-		${datadir}/bash-completion/completions/addpart \
-		"
+		${sysconfdir} ${base_bindir}/* ${base_sbindir}/* \
+		${sbindir}/* ${bindir}/* ${datadir}/bash-completion/completions"
+FILES_${PN}-doc = " \
+                ${datadir}/doc ${datadir}/man"
+
 FILES_${PN}-dbg += "${prefix}/src/* \
 		${bindir}/.debug/* \
 		${base_sbindir}/.debug/*"
-
+FILES_uuid-dev = " \
+		${includedir}/uuid \
+		${libdir}/libuuid.so \
+		${libdir}/pkgconfig/uuid.pc \
+		${datadir}/man/man3/uuid*.3"
+FILES_uuid-staticdev = " \
+		${libdir}/libuuid.a"
+FILES_uuid-runtime = " \
+		${bindir}/uuid* \
+		${sbindir}/uuidd \
+		${datadir}/bash-completion/completions/uuid* \
+		${datadir}/man/man8/uuidd.8 \
+		${datadir}/man/man1/uuidgen.1 \
+		"
 BBCLASSEXTEND = "native nativesdk"

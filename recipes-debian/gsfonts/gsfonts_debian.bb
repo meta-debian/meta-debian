@@ -1,12 +1,12 @@
-DESCRIPTION = "Fonts for the Ghostscript interpreter"
-HOMEPAGE = "http://www.ghostscript.com/"
-SECTION = "text"
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 PR = "r0"
-DPR = "0"
 
 inherit debian-package
+
+DESCRIPTION = "Fonts for the Ghostscript interpreter"
+HOMEPAGE = "http://www.ghostscript.com/"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
+
 DEBIAN_SECTION = "fonts"
 DEBIAN_PATCH_TYPE = "nopatch"
 

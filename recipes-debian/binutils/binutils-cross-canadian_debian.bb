@@ -1,6 +1,7 @@
 #
-# base recipe: meta/recipes-devtools/binutils/binutils-cross-canadian_2.24.bb 
-# base branch: daisy
+# base recipe: meta/recipes-devtools/binutils/binutils-cross-canadian_2.25.bb 
+# base branch: master
+# base commit: 3b7c38458856805588d552508de10944ed38d9f2
 #
 
 require binutils.inc
