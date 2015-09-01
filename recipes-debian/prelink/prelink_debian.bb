@@ -19,6 +19,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"
 SRC_URI += " \
 file://prelink_cross.diff \
 "
+
 inherit autotools
 DEPENDS = "elfutils binutils"
 
@@ -33,6 +34,30 @@ do_install_append () {
 	install -m 0644 ${S}/debian/prelink.default ${D}${sysconfdir}/default/prelink
 	mv ${D}${sbindir}/prelink ${D}${sbindir}/prelink.bin
 	install -m 0755 ${S}/debian/prelink.sh ${D}${sbindir}/prelink
+}
+
+BBCLASSEXTEND = "native"
+
+# If we're using image-prelink, we want to skip this on the host side
+# but still do it if the package is installed on the target...
+pkg_postinst_prelink() {
+#!/bin/sh
+
+if [ "x$D" != "x" ]; then
+  ${@base_contains('USER_CLASSES', 'image-prelink', 'exit 0', 'exit 1', d)}
+fi
+
+prelink -a
+}
+
+pkg_prerm_prelink() {
+#!/bin/sh
+
+if [ "x$D" != "x" ]; then
+  exit 1
+fi
+
+prelink -au
 }
 
 #Add package follow Debian
