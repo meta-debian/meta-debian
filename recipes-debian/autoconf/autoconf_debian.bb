@@ -25,6 +25,7 @@ SRC_URI += " \
 	file://remove-usr-local-lib-from-m4.patch \
 	file://preferbash.patch \
 	file://autotest-automake-result-format.patch \
+	file://program_prefix.patch \
 "
 SRC_URI_append_class-native = " file://fix_path_xtra.patch"
 
