@@ -58,6 +58,7 @@ PACKAGES =+ " lib${PN}"
 FILES_lib${PN} = "${base_libdir}/*"
 DEBIANNAME_lib${PN} = "lib${PN}3"
 
+ALTERNATIVE_${PN} = "w"
 ALTERNATIVE_PRIORITY = "50"
 ALTERNATIVE_LINK_NAME[w] = "${bindir}/w"
 ALTERNATIVE_TARGET[w] = "${bindir}/w.${DPN}"
