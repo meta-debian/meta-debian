@@ -10,7 +10,7 @@ PR = "${INC_PR}.0"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
-RDEPENDS_${PN} += "diffstat-native patch-native bzip2-native util-linux-native"
+RDEPENDS_${PN} = "diffstat-native patch-native bzip2-native util-linux-native"
 
 INHIBIT_AUTOTOOLS_DEPS = "1"
 
