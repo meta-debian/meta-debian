@@ -10,7 +10,7 @@ HOMEPAGE = "http://www.gnu.org/software/ncurses/ncurses.html"
 
 inherit debian-package autotools binconfig multilib_header update-alternatives
 
-PR = "r0"
+PR = "r1"
 DEPENDS = "ncurses-native"
 DEPENDS_class-native = ""
 
@@ -290,14 +290,14 @@ do_install_append() {
 	install -m 0644 ${S}/misc/ncurses.supp ${D}${libdir}/valgrind/
 
 	# Create link according to Debian package files
-	ln -sf libtinfo.so.5 ${D}${libdir}/libtinfo.so
 	ln -sf libncurses.so ${D}${libdir}/libcurses.so
 
 	# In case libdir is not the same as base_libdir
 	# needed to create symlink to /lib instead of /usr/lib
 	if [ "${base_libdir}" != "${libdir}" ]; then
 		ln -sf ../../lib/libtinfo.so.5 ${D}${libdir}/libtinfo.so
-		ln -sf ../../lib/libncurses.so ${D}${libdir}/libcurses.so
+	else
+		ln -sf libtinfo.so.5 ${D}${libdir}/libtinfo.so
 	fi
 
 	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a

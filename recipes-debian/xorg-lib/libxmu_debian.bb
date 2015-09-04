@@ -18,8 +18,6 @@ PR = "${INC_PR}.0"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=def3d8e4e9c42004f1941fa22f01dc18"
 
-EXTRA_OECONF += "--with-xmlto --without-fop"
-
 DEPENDS += "libxt libxext"
 PROVIDES = "xmu"
 

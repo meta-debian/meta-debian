@@ -32,6 +32,9 @@ do_install_append () {
 	install -m 0644 ${S}/debian/prelink.conf ${D}${sysconfdir}/prelink.conf
 	install -m 0644 ${S}/debian/prelink.cron.daily ${D}${sysconfdir}/default/prelink
 	install -m 0644 ${S}/debian/prelink.default ${D}${sysconfdir}/default/prelink
+}
+
+do_install_append_class-target () {
 	mv ${D}${sbindir}/prelink ${D}${sbindir}/prelink.bin
 	install -m 0755 ${S}/debian/prelink.sh ${D}${sbindir}/prelink
 }
