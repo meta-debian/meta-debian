@@ -1,7 +1,7 @@
 #
-# xinit_1.3.3.bb
+# Base recipe: meta/recipes-graphics/xorg-app/xinit_1.3.3.bb
+# Base branch: daisy
 #
-require xorg-app-common.inc
 
 SUMMARY = "X Window System initializer"
 
@@ -11,23 +11,22 @@ directly from /etc/init or in environments that use multiple window \
 systems. When this first client exits, xinit will kill the X server and \
 then terminate."
 
+require xorg-app-common.inc
+
+PR = "${INC_PR}.0"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=18f01e7b39807bebe2b8df101a039b68"
-
-PE = "1"
-
-SRC_URI[md5sum] = "3b8da0e6237aee9828cc809c647510a7"
-SRC_URI[sha256sum] = "74b2878de6e3d5b5948f1562a77e7f53b4e10621e505ddb278050c7f3cae00af"
 
 EXTRA_OECONF = "ac_cv_path_MCOOKIE=${bindir}/mcookie"
 
-RDEPENDS_${PN} += "util-linux-mcookie"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
+RDEPENDS_${PN} += "util-linux"
 
 # Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
+
+# Install package and set permission follow debian/rules
+do_install_append () {
+	install -d ${D}${sysconfdir}/X11/xinit
+	install -m 755 ${S}/debian/local/xserverrc ${D}${sysconfdir}/X11/xinit
+	chmod 755 ${D}${sysconfdir}/X11/xinit/xinitrc
+}
