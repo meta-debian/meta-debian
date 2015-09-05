@@ -1,31 +1,33 @@
+#
+# Base recipe: meta-oe/recipes-graphics/xorg-app/twm_1.0.9.bb
+# Base commit: 41c804bb34bb36b3a863e4c60550f171a72c8dc1
+#
+
 require xorg-app-common.inc
-#PE = "1"
 
 DESCRIPTION = "tiny window manager"
 
-DEPENDS += " virtual/libx11 libxext libxt libxmu"
-
-ALTERNATIVE_PATH = "${bindir}/twm"
-ALTERNATIVE_NAME = "x-window-manager"
-ALTERNATIVE_LINK = "${bindir}/x-window-manager"
-ALTERNATIVE_PRIORITY = "1"
-
-#
-# meta-debian
-#
-inherit debian-package
+PR = "${INC_PR}.0"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4c6d42ef60e8166aa26606524c0b9586"
-DEBIAN_SECTION = "x11"
-DPR = "r0"
+
+DEPENDS += " virtual/libx11 libxext libxt libxmu"
+
+# There is no patch files
 DEBIAN_PATCH_TYPE = "quilt"
 
-SRC_URI += "file://twmrc"
-
+# Install package follow Debian
 do_install_append() {
-	install -d ${D}/root/
-	install -m 0644 ${WORKDIR}/twmrc ${D}/root/.twmrc
+	install -d ${D}${sysconfdir}/X11/twm
+	install -m 0644 ${S}/src/system.twmrc ${D}${sysconfdir}/X11/twm/system.twmrc-menu
+	install -d ${D}${datadir}/xsessions
+	install -m 644 ${S}/debian/twm.desktop ${D}${datadir}/xsessions/twm.desktop
+	install -d ${D}${sysconfdir}/menu-methods
+	install -m 0644 ${S}/debian/twm.menu-method ${D}${sysconfdir}/menu-methods
+	install -d ${D}${libdir}/X11
+	ln -s ${sysconfdir}/X11/twm ${D}${libdir}/X11/twm
 }
-FILES_${PN} += " /root/ "
 
+FILES_${PN} = "${sysconfdir} ${bindir} ${libdir}"
+FILES_${PN}-doc = "${datadir}"
