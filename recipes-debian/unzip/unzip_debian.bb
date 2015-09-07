@@ -1,22 +1,20 @@
 #
-# Base on meta/recipes-extended/unzip/unzip_6.0.bb
+# base reicpe: meta/recipes-extended/unzip/unzip_6.0.bb
+# base branch: daisy
 #
 
 SUMMARY = "Utilities for extracting and viewing files in .zip archives"
 HOMEPAGE = "http://www.info-zip.org"
-SECTION = "console/utils"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=94caec5a51ef55ef711ee4e8b1c69e29"
-PE = "1"
-PR = "r5"
 
-#SRC_URI = "ftp://ftp.info-zip.org/pub/infozip/src/unzip60.tgz \
-#	file://avoid-strip.patch \
-#	file://define-ldflags.patch"
+PR = "r0"
+inherit debian-package
 
-#SRC_URI[md5sum] = "62b490407489521db863b523a7f86375"
-#SRC_URI[sha256sum] = "036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37"
-#S = "${WORKDIR}/unzip60"
+SRC_URI += "\
+	file://avoid-strip.patch \
+	file://define-ldflags.patch \
+"
 
 # Makefile uses CF_NOOPT instead of CFLAGS.  We lifted the values from
 # Makefile and add CFLAGS.  Optimization will be overriden by unzip
@@ -28,29 +26,24 @@ EXTRA_OEMAKE += "STRIP=true LF2='' \
 export LD = "${CC}"
 LD_class-native = "${CC}"
 
+# Follow debian/rules
+DEFINES = "-DACORN_FTYPE_NFS -DWILD_STOP_AT_DIR -DLARGE_FILE_SUPPORT \
+	-DUNICODE_SUPPORT -DUNICODE_WCHAR -DUTF8_MAYBE_NATIVE -DNO_LCHMOD \
+	-DDATE_FORMAT=DF_YMD -DUSE_BZIP2 -DIZ_HAVE_UXUIDGID -DNOMEMCPY \
+	-DNO_WORKING_ISPRINT"
+
+EXTRA_OEMAKE += "D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 \
+		LF2='${LDFLAGS}' \
+		'CF=${CFLAGS} ${CPPFLAGS} -I. ${DEFINES}'"
+
 do_compile() {
-	oe_runmake -f unix/Makefile generic
+	oe_runmake -f unix/Makefile unzips
 }
 
 do_install() {
 	oe_runmake -f unix/Makefile install prefix=${D}${prefix}
 	install -d ${D}${mandir}
-	mv ${D}${prefix}/man/* ${D}${mandir}
-	rmdir ${D}${prefix}/man/
+	mv ${D}${prefix}/man ${D}${datadir}/
 }
 
 BBCLASSEXTEND = "native"
-
-#
-# debian
-#
-
-inherit debian-package
-
-DEBIAN_SECTION = "utils"
-DPR = "0"
-
-SRC_URI += "\
-	file://avoid-strip.patch \
-	file://define-ldflags.patch \
-"
