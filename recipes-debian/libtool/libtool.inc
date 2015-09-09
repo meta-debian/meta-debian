@@ -9,9 +9,9 @@ Libtool hides the complexity of generating special library types \
 (such as shared libraries) behind a consistent interface."
 HOMEPAGE = "http://www.gnu.org/software/libtool/libtool.html"
 
-INC_PR = "r0"
+INC_PR = "r1"
 
-inherit autotools
+inherit  debian-package autotools
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\
@@ -52,4 +52,8 @@ FILES_${PN}-dev = "${includedir} ${FILES_SOLIBSDEV} ${libdir}/*.la \
 FILES_libltdl = "${libdir}/libltdl${SOLIBS}"                                    
 FILES_libltdl-dev = "${libdir}/libltdl${SOLIBSDEV} ${includedir}"               
 FILES_libltdl-staticdev = "${libdir}/libltdl.a"                                 
-FILES_libltdl-dbg = "${libdir}/.debug/" 
+
+
+
+
+
