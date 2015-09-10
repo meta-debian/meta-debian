@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 DPN = "tcl8.6"
 
@@ -42,7 +42,7 @@ VER = "8.6"
 
 # Follow debian/rules
 EXTRA_OECONF = " \
-	--includedir=/usr/include/${DPN} \
+	--includedir=${includedir}/${DPN} \
 	--enable-shared \
 	--enable-threads \
 	--enable-dll-unloading \
@@ -75,6 +75,7 @@ do_install() {
 	sed -i "s:-I${includedir}:-I=${includedir}:g" tclConfig.sh
 	install -d ${D}${bindir_crossscripts}
 	install -m 0755 tclConfig.sh ${D}${bindir_crossscripts}
+	ln -sf tclsh8.6 ${D}${bindir}/tclsh
 
 	# Follow debian/rules
 	#
