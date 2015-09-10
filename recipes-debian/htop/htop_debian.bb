@@ -18,8 +18,8 @@ RDEPENDS_${PN} = "ncurses-term"
 
 LDFLAGS_append_libc-uclibc = " -lubacktrace"
 
-do_configure_prepend () {
-	rm -rf ${S}/config.h
-}
-
 inherit autotools
+
+# Enable configuration base on debian/rules
+EXTRA_OECONF += " --enable-taskstats --enable-openvz --enable-vserver \
+		--enable-cgroup --enable-native-affinity"
