@@ -1,25 +1,22 @@
-require recipes-devtools/libtool/${PN}_2.4.2.bb
-FILESEXTRAPATHS_prepend = "${THISDIR}/files:${COREBASE}/meta/recipes-devtools/libtool/libtool:"
+#
+# Base recipe: meta/recipes-devtools/libtool/libtool-native_2.4.2.bb
+# Base-branch: daisy
+#
 
-inherit debian-package
-DEBIAN_SECTION = "devel"
+require libtool.inc
 
-DPR = "0"
+PR = "${INC_PR}.1"
 
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
+inherit native
+
+DEPENDS = ""
+
+EXTRA_OECONF = " --with-libtool-sysroot=${STAGING_DIR_NATIVE}"
+
 SRC_URI += " \
-file://trailingslash.patch \
-file://rename-with-sysroot.patch \
-file://use-sysroot-in-libpath.patch \
-file://fix-final-rpath.patch \
-file://avoid_absolute_paths_for_general_utils.patch \
-file://fix-rpath.patch \
-file://respect-fstack-protector.patch \
-file://norm-rpath.patch \
-file://dont-depend-on-help2man-edited.patch \
-file://fix-resolve-lt-sysroot.patch \
 file://prefix.patch \
 "
 

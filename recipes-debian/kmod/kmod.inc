@@ -1,3 +1,7 @@
+#
+# base recipe: meta/recipes-kernel/kmod/kmod.inc
+# base branch: daisy
+#
 # Copyright (C) 2012 Khem Raj <raj.khem@gmail.com>
 # Released under the MIT license (see COPYING.MIT for the terms)
 
@@ -7,32 +11,30 @@ DESCRIPTION = "kmod is a set of tools to handle common tasks with Linux kernel m
 HOMEPAGE = "http://packages.profusion.mobi/kmod/"
 LICENSE = "GPL-2.0+"
 LICENSE_libkmod = "LGPL-2.1+"
-SECTION = "base"
-
-DEPENDS += "pkgconfig-native"
-
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
                     file://libkmod/COPYING;md5=a6f89e2100d9b6cdffcea4f398e37343 \
                    "
-inherit autotools gtk-doc
 
-SRCREV = "d9c71758595cad72c8278179eabf17017615f704"
-# Lookout for PV bump too when SRCREV is changed
-PV = "20+git${SRCPV}"
+INC_PR = "r0"
+inherit debian-package
 
-SRC_URI = "git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git \
-           file://depmod-search.conf \
+DEPENDS += "pkgconfig-native"
+
+inherit autotools gtk-doc ptest
+
+SRC_URI += " \
+           file://run-ptest \
+           file://ptest.patch \
            file://avoid_parallel_tests.patch \
            file://fix-O_CLOEXEC.patch \
           "
 
-S = "${WORKDIR}/git"
-
-EXTRA_AUTORECONF += "--install --symlink"
-EXTRA_OECONF +=" --enable-tools --disable-manpages --with-zlib"
-
-PACKAGECONFIG[debug] = "--enable-debug,--disable-debug"
-PACKAGECONFIG[logging] = " --enable-logging,--disable-logging"
+# Follow debian/rules
+EXTRA_AUTORECONF += "--force --install --symlink"
+EXTRA_OECONF +=" \
+	--bindir=${base_bindir} --with-rootlibdir=${base_libdir} \
+	--enable-debug --disable-manpages \
+"
 
 do_configure_prepend () {
         gtkdocize --docdir ${S}/libkmod/docs || touch ${S}/libkmod/docs/gtk-doc.make

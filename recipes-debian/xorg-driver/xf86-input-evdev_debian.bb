@@ -1,3 +1,8 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-driver/xf86-input-evdev_2.8.2.bb
+# Base branch: daisy
+#
+
 require xorg-driver-input.inc
 
 SUMMARY = "X.Org X server -- event devices (evdev) input driver"
@@ -12,17 +17,13 @@ Multiple input devices are supported by multiple instances of this \
 driver, with one Load directive for evdev in the Module section of your \
 xorg.conf for each input device that will use this driver. "
 
+PR = "${INC_PR}.0"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=fefe33b1cf0cacba0e72e3b0fa0f0e16"
 
 DEPENDS += "mtdev libevdev"
 
-SRC_URI[md5sum] = "8f73a98e32dccc9d054b54727cc4093f"
-SRC_URI[sha256sum] = "0ce30328adfeac90a6f4b508d992fb834d8e50b484b29d3d58cf6683fa8502f9"
-
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
 DPN = "xserver-xorg-input-evdev"
+
+# There is no debian patch
 DEBIAN_PATCH_TYPE = "quilt"

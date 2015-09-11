@@ -13,6 +13,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=124500c21e856f0912df29295ba104c7"
 PR = "r0"
 inherit debian-package
 
+# strace-add-configure-options.patch:
+#	Add options "aio" and "acl" to enable/disable libaio and acl support.
+# git-version-gen:
+#	Required by configure.ac.
+# Makefile-ptest.patch & run-ptest:
+#	Required to install and run ptest.
 SRC_URI += " \
 	file://strace-add-configure-options.patch \
 	file://git-version-gen \

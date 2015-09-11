@@ -1,6 +1,8 @@
 #
-# xprop_1.2.2.bb
+# Base recipe: meta/recipes-graphics/xorg-app/xprop_1.2.2.bb
+# Base branch: daisy
 #
+
 require xorg-app-common.inc
 
 SUMMARY = "Utility to display window and font properties of an X server"
@@ -11,21 +13,12 @@ command line arguments or possibly in the case of a window, by clicking \
 on the desired window. A list of properties is then given, possibly with \
 formatting information."
 
+PR = "${INC_PR}.0"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=e226ab8db88ac0bc0391673be40c9f91"
 
 DEPENDS += " libxmu virtual/libx11"
 
-PE = "1"
-
-SRC_URI[md5sum] = "fae3d2fda07684027a643ca783d595cc"
-SRC_URI[sha256sum] = "9bee88b1025865ad121f72d32576dd3027af1446774aa8300cce3c261d869bc6"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "x11-utils"
 
 # Apply debian patch by quilt

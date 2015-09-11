@@ -1,0 +1,3 @@
+#!/bin/sh
+touch testsuite/stamp-rootfs
+make -k runtest-TESTS 2>/dev/null| grep -e ^PASS -e ^FAIL

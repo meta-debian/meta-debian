@@ -1,3 +1,8 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-driver/xf86-video-intel_2.99.910.bb
+# Base branch: daisy
+#
+
 require xorg-driver-video.inc
 
 SUMMARY = "X.Org X server -- Intel integrated graphics chipsets driver"
@@ -7,13 +12,11 @@ chipsets. The driver supports depths 8, 15, 16 and 24. On some chipsets, \
 the driver supports hardware accelerated 3D via the Direct Rendering \
 Infrastructure (DRI)."
 
+PR = "${INC_PR}.0"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=8730ad58d11c7bbad9a7066d69f7808e"
 
 DEPENDS += "virtual/libx11 drm libpciaccess pixman"
-
-#SRC_URI += "file://disable-dri2-tests.patch \
-#            file://compat-api-Map-changes-of-DamageUnregister-API-in-1..patch \
-#           "
 
 PACKAGECONFIG ??= "sna udev ${@base_contains('DISTRO_FEATURES', 'opengl', 'dri', '', d)}"
 
@@ -28,14 +31,7 @@ EXTRA_OECONF += '${@base_conditional( "ROOTLESS_X", "1", " --enable-kms-only", "
 
 COMPATIBLE_HOST = '(i.86|x86_64).*-linux'
 
-SRC_URI[md5sum] = "8b646d257ace8197d6ab4e5ddeb8efb2"
-SRC_URI[sha256sum] = "7d5a140f82a72fd1cbc8a664d66c3d4eca47ee240ca4927b8a98d7af6f65d6fc"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "xserver-xorg-video-intel"
+
+#There is no debian patch file
 DEBIAN_PATCH_TYPE = "quilt"

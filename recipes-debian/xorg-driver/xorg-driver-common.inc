@@ -1,17 +1,19 @@
+#
+# Base recipe: meta/recipes-graphics/xorg-driver/xorg-driver-common.inc
+# Base branch: daisy
+#
+
 SUMMARY = "X driver"
 HOMEPAGE = "http://www.x.org"
 BUGTRACKER = "https://bugs.freedesktop.org"
-SECTION = "x11/drivers"
+
+INC_PR = "r0"
+
+inherit debian-package
+
 LICENSE = "MIT-X"
 
-PE = "2"
-INC_PR = "r21"
-
 DEPENDS = "virtual/xserver xproto randrproto util-macros"
-
-SRC_URI = "${XORG_MIRROR}/individual/driver/${BPN}-${PV}.tar.bz2"
-
-S = "${WORKDIR}/${BPN}-${PV}"
 
 FILES_${PN} += " ${libdir}/xorg/modules/drivers/*.so"
 FILES_${PN}-dbg += " ${libdir}/xorg/modules/drivers/.debug"

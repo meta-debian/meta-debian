@@ -1,6 +1,8 @@
 #
-# xkbcomp_1.2.4.bb
+# Base recipe: meta/recipes-graphics/xorg-app/xkbcomp_1.2.4.bb
+# Base branch: daisy
 #
+
 require xorg-app-common.inc
 
 SUMMARY = "A program to compile XKB keyboard description"
@@ -18,15 +20,6 @@ DEPENDS += "libxkbfile"
 
 BBCLASSEXTEND = "native"
 
-SRC_URI[md5sum] = "a0fc1ac3fc4fe479ade09674347c5aa0"
-SRC_URI[sha256sum] = "91d0c9ab445d21dfe1892dbae5ae5264f39bae68223dd092ffc547c9450b5a2d"
-
-#
-# debian
-#
-inherit debian-package
-DEBIAN_SECTION = "x11"
-DPR = "0"
 DPN = "x11-xkb-utils"
 
 # There is a patch in debian/patches/ but no patch in series

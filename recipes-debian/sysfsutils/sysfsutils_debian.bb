@@ -8,39 +8,32 @@ LICENSE_libsysfs = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3d06403ea54c7574a9e581c6478cc393 \
                     file://cmd/GPL;md5=d41d4e2e1e108554e0388ea4aecd8d27 \
                     file://lib/LGPL;md5=b75d069791103ffe1c0d6435deeff72e"
-PR = "r5"
-
-#SRC_URI = "${SOURCEFORGE_MIRROR}/linux-diag/sysfsutils-${PV}.tar.gz \
-#           file://obsolete_automake_macros.patch \
-#           file://separatebuild.patch"
-
-SRC_URI[md5sum] = "14e7dcd0436d2f49aa403f67e1ef7ddc"
-SRC_URI[sha256sum] = "e865de2c1f559fff0d3fc936e660c0efaf7afe662064f2fb97ccad1ec28d208a"
-S = "${WORKDIR}/sysfsutils-${PV}"
-
-inherit autotools
-
-PACKAGES =+ "libsysfs libsysfs-dev libsysfs-staticdev"
-FILES_libsysfs = "${libdir}/lib*${SOLIBS}"
-FILES_libsysfs-dev = "${libdir}/lib*${SOLIBSDEV} ${includedir}"
-FILES_libsysfs-staticdev = "${libdir}/lib*.a"
-
-export libdir = "${base_libdir}"
-
-#
-# Meta-debian
-#
-
+PR = "r0"
 inherit debian-package
-DEBIAN_SECTION = "utils"
-DPR = "0"
 
 SRC_URI += " \
 	file://obsolete_automake_macros.patch \
 	file://separatebuild.patch \
 "
 
-do_compile() {
-	echo ${S}
-	oe_runmake -I${S}/include
+inherit autotools
+
+# Follow Debian
+EXTRA_OECONF += "--libdir=${base_libdir}"
+do_install_append() {
+	mkdir -p ${D}${libdir}
+	rm ${D}${base_libdir}/libsysfs.so
+	ln -s ../..${base_libdir}/libsysfs.so.2 ${D}${libdir}/libsysfs.so
+	mv ${D}${base_libdir}/libsysfs.a ${D}${libdir}
+
+	chrpath -d ${D}${bindir}/*
+
+	mkdir -p ${D}${sysconfdir}/init.d
+	install -m 0644 ${S}/debian/sysfs.conf ${D}${sysconfdir}/
+	install -m 0755 ${S}/debian/sysfsutils.init ${D}${sysconfdir}/init.d/sysfsutils
 }
+
+PACKAGES =+ "libsysfs libsysfs-dev libsysfs-staticdev"
+FILES_libsysfs = "${base_libdir}/lib*${SOLIBS}"
+FILES_libsysfs-dev = "${libdir}/lib*${SOLIBSDEV} ${includedir}"
+FILES_libsysfs-staticdev = "${libdir}/lib*.a"

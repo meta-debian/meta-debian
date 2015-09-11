@@ -3,11 +3,9 @@
 # base branch: daisy
 #
 
-PR = "${INC_PR}.0"
-
-inherit debian-package
-
 require libtool.inc
+
+PR = "${INC_PR}.1"
 
 #                                                                               
 # We want the results of libtool-cross preserved - don't stage anything ourselves.

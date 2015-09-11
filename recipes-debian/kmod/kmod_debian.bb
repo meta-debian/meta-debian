@@ -1,71 +1,55 @@
+#
+# base recipe: meta/recipes-kernel/kmod/kmod_git.bb
+# base branch: daisy
+#
 # Copyright (C) 2012 Khem Raj <raj.khem@gmail.com>
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 require kmod.inc
 
-DEPENDS += "zlib"
-PROVIDES += "module-init-tools-insmod-static module-init-tools-depmod module-init-tools"
-RPROVIDES_${PN} += "module-init-tools-insmod-static module-init-tools-depmod module-init-tools"
-RCONFLICTS_${PN} += "module-init-tools-insmod-static module-init-tools-depmod module-init-tools"
-RREPLACES_${PN} += "module-init-tools-insmod-static module-init-tools-depmod module-init-tools"
+PR = "${INC_PR}.0"
 
-# to force user to remove old module-init-tools and replace them with kmod variants
-RCONFLICTS_libkmod2 += "module-init-tools-insmod-static module-init-tools-depmod module-init-tools"
-
-# autotools set prefix to /usr, however we want them in /bin and /sbin
-bindir = "${base_bindir}"
-sbindir = "${base_sbindir}"
-# libdir = "${base_libdir}"
-
+# Follow debian/rules
 do_install_append () {
-        install -dm755 ${D}${base_bindir}
-        install -dm755 ${D}${base_sbindir}
-        # add symlinks to kmod
-        ln -s ..${base_bindir}/kmod ${D}${base_bindir}/lsmod
-        for tool in insmod rmmod depmod modinfo modprobe; do
-                ln -s ..${base_bindir}/kmod ${D}${base_sbindir}/${tool}
-        done
-        # configuration directories
-        install -dm755 ${D}${base_libdir}/depmod.d
-        install -dm755 ${D}${base_libdir}/modprobe.d
-        install -dm755 ${D}${sysconfdir}/depmod.d
-        install -dm755 ${D}${sysconfdir}/modprobe.d
+	mkdir ${D}${base_libdir}/modprobe.d/
+	cp ${S}/extra/aliases.conf ${D}${base_libdir}/modprobe.d/
 
-        # install depmod.d file for search/ dir
-        install -Dm644 "${WORKDIR}/depmod-search.conf" "${D}${base_libdir}/depmod.d/search.conf"
+	mkdir -p ${D}${datadir}/initramfs-tools/hooks
+        install -m 0755 ${S}/debian/kmod.initramfs-hook \
+                ${D}${datadir}/initramfs-tools/hooks/kmod
+
+	# Install initscript
+	mkdir -p ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/debian/kmod.init ${D}${sysconfdir}/init.d/kmod
+
+	ln -sf kmod ${D}${base_bindir}/lsmod
+	install -d ${D}${base_sbindir}
+	for tool in depmod insmod lsmod modinfo modprobe rmmod; do
+		ln -sf ..${base_bindir}/kmod ${D}${base_sbindir}/${tool}
+	done
 }
 
-do_compile_prepend() {
-            sed -i 's/ac_pwd=/#ac_pwd=/' config.status ; sed -i "/#ac_pwd=/a\ac_pwd='.'" config.status
+do_compile_ptest () {
+	oe_runmake buildtest-TESTS rootfs
 }
 
-inherit update-alternatives
+INHIBIT_PACKAGE_STRIP = "${@base_contains("DISTRO_FEATURES", "ptest", "1", "0", d)}"
+INSANE_SKIP_${PN}-ptest = "arch"
 
-ALTERNATIVE_PRIORITY = "60"
+PROVIDES += "module-init-tools"
+PACKAGES =+ "libkmod module-init-tools"
 
-ALTERNATIVE_kmod = "insmod modprobe rmmod modinfo bin-lsmod lsmod depmod"
+# Base on debian/control
+RDEPENDS_${PN} += "lsb"
+RDEPENDS_module-init-tools += "kmod libkmod"
 
-ALTERNATIVE_LINK_NAME[insmod] = "${base_sbindir}/insmod"
-ALTERNATIVE_LINK_NAME[modprobe] = "${base_sbindir}/modprobe"
-ALTERNATIVE_LINK_NAME[rmmod] = "${base_sbindir}/rmmod"
-ALTERNATIVE_LINK_NAME[modinfo] = "${base_sbindir}/modinfo"
-ALTERNATIVE_LINK_NAME[bin-lsmod] = "${base_bindir}/lsmod"
-
-ALTERNATIVE_LINK_NAME[lsmod] = "${base_sbindir}/lsmod"
-ALTERNATIVE_TARGET[lsmod] = "${base_bindir}/lsmod.${BPN}"
-
-ALTERNATIVE_LINK_NAME[depmod] = "${base_sbindir}/depmod"
-
-PACKAGES =+ "libkmod ${PN}-bash-completion"
+RREPLACES_${PN} += "module-init-tools"
 
 FILES_libkmod = "${base_libdir}/libkmod*${SOLIBS} ${libdir}/libkmod*${SOLIBS}"
-FILES_${PN} += "${base_libdir}/depmod.d ${base_libdir}/modprobe.d"
-FILES_${PN}-bash-completion = "${datadir}/bash-completion"
+FILES_${PN} += " \
+	${base_libdir}/modprobe.d \
+	${datadir}/bash-completion \
+	${datadir}/initramfs-tools \
+"
 
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
-
-SRC_URI += "file://depmod-search.conf"
+DEBIANNAME_${PN}-dev = "libkmod-dev"
