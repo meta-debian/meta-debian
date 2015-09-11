@@ -77,9 +77,3 @@ $ runqemu qemuppc nographic bootparams="init=/init"
 The shell prompt appears automatically after system boots without login.
 "init=/init" means that kernel uses tiny-init script as the init process
 instead of busybox /sbin/init.
-
-Latest testing commit ID
-========================
-
-Yocto Project version: 1.6 'Daisy'
-Commit ID: b2ba41b57550aa912da93b4aef789ff562a67fce
