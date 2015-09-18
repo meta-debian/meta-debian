@@ -27,6 +27,10 @@ PAM_DEPS = "libpam libpam-runtime pam-plugin-env pam-plugin-limits"
 RCONFLICTS_${PN} = "atd"
 RREPLACES_${PN} = "atd"
 
+# fix_parallel_build_error.patch:
+#	Avoid "fatal error: y.tab.h: No such file or directory"
+SRC_URI += "file://fix_parallel_build_error.patch"
+
 # Configure follow debian/rules
 EXTRA_OECONF += " \
 	--with-loadavg_mx=1.5 \
