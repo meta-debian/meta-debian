@@ -63,6 +63,9 @@ ALSA_UTILS_PKGS = "\
 PACKAGES += "${ALSA_UTILS_PKGS}"
 RDEPENDS_${PN} += "${ALSA_UTILS_PKGS}"
 
+# init.d/alsa-utils require lsb-base
+RDEPENDS_alsa-utils-alsactl += "lsb-base"
+
 FILES_${PN} = ""
 FILES_alsa-utils-aplay       = "${bindir}/aplay ${bindir}/arecord"
 FILES_alsa-utils-amixer      = "${bindir}/amixer"
@@ -78,7 +81,6 @@ FILES_alsa-utils-alsactl     = "${sbindir}/alsactl */udev/rules.d ${systemd_unit
 FILES_alsa-utils-aseqdump    = "${bindir}/aseqdump"
 FILES_alsa-utils-alsaloop    = "${bindir}/alsaloop"
 FILES_alsa-utils-alsaucm     = "${bindir}/alsaucm"
-
 
 SUMMARY_alsa-utils-aplay        = "Play (and record) sound files using ALSA"
 SUMMARY_alsa-utils-amixer       = "Command-line control for ALSA mixer and settings"

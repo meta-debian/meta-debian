@@ -30,6 +30,9 @@ DEPENDS = "zlib ncurses"
 DEPENDS_append_class-native = " lzo-native"
 DEPENDS_append_class-nativesdk = " lzo-native"
 
+# init.d/hwclock.sh require lsb-base
+RDEPENDS_${PN}_class-target += "lsb-base"
+
 # Follow Debian/rules
 # FIXME: Temporary remove configs: --with-slang --with-systemd --with-selinux
 # and add configs: --disable-use-tty-group for building successfully.

@@ -10,6 +10,9 @@ LIC_FILES_CHKSUM=" \
 
 DEPENDS = "ncurses"
 
+# init.d/procps require lsb-base
+RDEPENDS_${PN} += "lsb-base"
+
 inherit autotools gettext pkgconfig update-alternatives
 
 # Configure options follow debian/rules.

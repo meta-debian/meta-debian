@@ -21,6 +21,9 @@ inherit autotools
 
 DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
+# init.d/cron require lsb-base
+RDEPENDS_${PN} += "lsb-base"
+
 # There are no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
 
