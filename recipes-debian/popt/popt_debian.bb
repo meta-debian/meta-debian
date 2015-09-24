@@ -26,3 +26,4 @@ do_compile_prepend(){
 	sed -i s@"#elseif"@"#elif"@g ${S}/system.h
 }
 
+BBCLASSEXTEND = "native nativesdk"

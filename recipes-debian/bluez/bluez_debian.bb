@@ -19,6 +19,9 @@ LIC_FILES_CHKSUM = " \
 "
 DEPENDS = "udev libusb dbus-glib glib-2.0 libcheck readline"
 
+# init.d/bluetooth require lsb-base
+RDEPENDS_${PN} += "lsb-base"
+
 RCONFLICTS_${PN} = "bluez4"
 
 PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'alsa', 'alsa', '', d)} obex-profiles"

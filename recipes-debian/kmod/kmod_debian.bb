@@ -40,7 +40,8 @@ PROVIDES += "module-init-tools"
 PACKAGES =+ "libkmod module-init-tools"
 
 # Base on debian/control
-RDEPENDS_${PN} += "lsb"
+# init.d/kmod require lsb-base
+RDEPENDS_${PN} += "lsb-base"
 RDEPENDS_module-init-tools += "kmod libkmod"
 
 RREPLACES_${PN} += "module-init-tools"

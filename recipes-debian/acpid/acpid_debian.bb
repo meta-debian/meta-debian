@@ -13,6 +13,9 @@ LIC_FILES_CHKSUM = " \
 	file://acpid.h;endline=24;md5=324a9cf225ae69ddaad1bf9d942115b5 \
 "
 
+# init.d/acpid require lsb-base
+RDEPENDS_${PN} += "lsb-base"
+
 DEBIAN_PATCH_TYPE = "nopatch"
 
 inherit autotools systemd
