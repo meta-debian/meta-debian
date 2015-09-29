@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=4c6d42ef60e8166aa26606524c0b9586"
 
 DEPENDS += " virtual/libx11 libxext libxt libxmu"
 
-# There is no patch files
+# Apply patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
 # Install package follow Debian

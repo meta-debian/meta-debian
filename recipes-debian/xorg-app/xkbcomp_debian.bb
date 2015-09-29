@@ -22,10 +22,7 @@ BBCLASSEXTEND = "native"
 
 DPN = "x11-xkb-utils"
 
-# There is a patch in debian/patches/ but no patch in series
-DEBIAN_PATCH_TYPE = "abnormal"
-debian_patch_abnormal() {
-	:
-}
+# Apply patch by quilt
+DEBIAN_PATCH_TYPE = "quilt"
 
 S = "${DEBIAN_UNPACK_DIR}/${PN}"
