@@ -72,6 +72,8 @@ do_install_base () {
 	install -m 0755 bin/apt-extracttemplates ${D}${bindir}/
 	install -m 0755 bin/apt-ftparchive ${D}${bindir}/
 
+	oe_libinstall -so -C bin libapt-private ${D}${libdir}/
+
 	eval `cat environment.mak | grep ^GLIBC_VER | sed -e's, = ,=,'`
 	eval `cat environment.mak | grep ^LIBSTDCPP_VER | sed -e's, = ,=,'`
 	oe_libinstall -so -C bin libapt-pkg$GLIBC_VER$LIBSTDCPP_VER ${D}${libdir}/
