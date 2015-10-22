@@ -2,7 +2,12 @@ include eglibc-collateral.inc
 
 SUMMARY = "Locale data from glibc"
 
-BPN = "glibc"
+inherit debian-package
+PR = "0"
+DPN = "glibc"
+
+do_debian_patch[noexec] = "1"
+
 LOCALEBASEPN = "${MLPREFIX}glibc"
 
 # glibc-collateral.inc inhibits all default deps, but do_package needs objcopy
@@ -94,14 +99,6 @@ do_install () {
 inherit libc-package
 
 BBCLASSEXTEND = "nativesdk"
-#
-#Meta-debian
-#
-inherit debian-package
-DPR = "0"
-DPN = "glibc"
-
-do_debian_patch[noexec] = "1"
 
 PACKAGES += "locales ${MLPREFIX}glibc-gconv"
 FILES_locales += "/usr/share/i18n/locales/* \

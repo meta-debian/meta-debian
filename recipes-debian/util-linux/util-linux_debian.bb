@@ -94,7 +94,7 @@ do_install_append () {
 
 	# install /etc/default/hwclock
 	install -d ${D}${sysconfdir}/default
-	install ${S}/debian/util-linux.hwclock.default ${D}${sysconfdir}/hwclock
+	install ${S}/debian/util-linux.hwclock.default ${D}${sysconfdir}/default/hwclock
 }
 
 PACKAGES = "bsdutils libblkid-dev libblkid1 libmount-dev libmount1 \
