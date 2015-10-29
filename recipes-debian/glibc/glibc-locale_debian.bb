@@ -1,4 +1,4 @@
-include eglibc-collateral.inc
+include glibc-collateral.inc
 
 SUMMARY = "Locale data from glibc"
 
@@ -63,7 +63,7 @@ ALLOW_EMPTY_${BPN}-localedatas = "1"
 PACKAGES += "${BPN}-localedatas"
 RRECOMMENDS_${BPN}-localedatas =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-localedata") != -1])}"
 
-DESCRIPTION_localedef = "eglibc: compile locale definition files"
+DESCRIPTION_localedef = "glibc: compile locale definition files"
 
 # glibc-gconv is dynamically added into PACKAGES, thus
 # FILES_glibc-gconv will not be automatically extended in multilib.
@@ -72,7 +72,7 @@ FILES_${MLPREFIX}glibc-gconv = "/usr/lib/gconv/*"
 FILES_${PN}-dbg += "${libdir}/gconv/.debug/*"
 FILES_localedef = "${bindir}/localedef"
 
-LOCALETREESRC = "${STAGING_INCDIR}/eglibc-locale-internal-${MULTIMACH_TARGET_SYS}"
+LOCALETREESRC = "${STAGING_INCDIR}/glibc-locale-internal-${MULTIMACH_TARGET_SYS}"
 
 do_install () {
 	mkdir -p ${D}${bindir} ${D}${datadir} ${D}${libdir}

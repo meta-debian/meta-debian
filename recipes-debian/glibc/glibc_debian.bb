@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-require eglibc.inc
+require glibc.inc
 
 PR = "0"
 
@@ -67,7 +67,7 @@ TARGET_CPPFLAGS = "-I${STAGING_DIR_TARGET}${includedir}"
 
 GLIBC_BROKEN_LOCALES = " _ER _ET so_ET yn_ER sid_ET tr_TR mn_MN gez_ET gez_ER bn_BD te_IN es_CR.ISO-8859-1"
 
-FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/eglibc-${PV}', '${FILE_DIRNAME}/eglibc', '${FILE_DIRNAME}/files', '${FILE_DIRNAME}' ], d)}"
+FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/glibc-${PV}', '${FILE_DIRNAME}/glibc', '${FILE_DIRNAME}/files', '${FILE_DIRNAME}' ], d)}"
 
 #
 # For now, we will skip building of a gcc package if it is a uclibc one
@@ -108,7 +108,7 @@ do_patch_append() {
     bb.build.exec_func('do_fix_readlib_c', d)
 }
 
-# for mips eglibc now builds syscall tables for all abi's
+# for mips glibc now builds syscall tables for all abi's
 # so we make sure that we choose right march option which is
 # compatible with o32,n32 and n64 abi's
 # e.g. -march=mips32 is not compatible with n32 and n64 therefore
@@ -162,7 +162,7 @@ do_compile () {
 	fi
 }
 
-require eglibc-package.inc
+require glibc-package.inc
 
 BBCLASSEXTEND = "nativesdk"
 FILES_${PN}-doc += "${datadir}"

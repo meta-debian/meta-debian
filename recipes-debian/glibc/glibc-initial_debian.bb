@@ -3,13 +3,13 @@
 # base branch: daisy
 #
 
-require eglibc_${PV}.bb
+require glibc_${PV}.bb
 
 PR = "0"
 
-# main eglibc recipes muck with TARGET_CPPFLAGS to point into
+# main glibc recipes muck with TARGET_CPPFLAGS to point into
 # final target sysroot but we
-# are not there when building eglibc-initial
+# are not there when building glibc-initial
 # so reset it here
 
 TARGET_CPPFLAGS = ""
@@ -61,7 +61,7 @@ do_install () {
 	if [ -e ${B}/bits/stdio_lim.h ]; then
 		cp ${B}/bits/stdio_lim.h  ${D}${includedir}/bits/
 	fi
-	# add links to linux-libc-headers: final eglibc build need this.
+	# add links to linux-libc-headers: final glibc build need this.
 	for t in linux asm asm-generic; do
 		ln -s ${STAGING_DIR_TARGET}${includedir}/$t ${D}${includedir}/
 	done
@@ -75,8 +75,8 @@ do_siteconfig () {
 	:
 }
 
-SSTATEPOSTINSTFUNCS += "eglibcinitial_sstate_postinst"
-eglibcinitial_sstate_postinst() {
+SSTATEPOSTINSTFUNCS += "glibcinitial_sstate_postinst"
+glibcinitial_sstate_postinst() {
 	if [ "${BB_CURRENTTASK}" = "populate_sysroot" -o "${BB_CURRENTTASK}" = "populate_sysroot_setscene" ]
 	then
 		# Recreate the symlinks to ensure they point to the correct location

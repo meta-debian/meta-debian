@@ -3,15 +3,11 @@
 # base branch: daisy
 #
 
-SUMMARY = "Embedded GLIBC (GNU C Library)"
-DESCRIPTION = "Embedded GLIBC (EGLIBC) is a variant of the GNU C Library (GLIBC) that is designed to work well on embedded systems. EGLIBC strives to be source and binary compatible with GLIBC. EGLIBC's goals include reduced footprint, configurable components, better support for cross-compilation and cross-testing."
-HOMEPAGE = "http://www.eglibc.org/home"
-
 inherit debian-package
 DPN = "glibc"
 
-require eglibc-ld.inc
-require eglibc-testing.inc
+require glibc-ld.inc
+require glibc-testing.inc
 
 STAGINGCC = "gcc-cross-initial"
 STAGINGCC_class-nativesdk = "gcc-crosssdk-initial"
@@ -19,12 +15,12 @@ PATH_prepend = "${STAGING_BINDIR_TOOLCHAIN}.${STAGINGCC}:"
 
 TOOLCHAIN_OPTIONS = " --sysroot=${STAGING_DIR_TCBOOTSTRAP}"
 
-# eglibc can't be built without optimization, if someone tries to compile an
+# glibc can't be built without optimization, if someone tries to compile an
 # entire image as -O0, we override it with -O2 here and give a note about it.
 def get_optimization(d):
     selected_optimization = d.getVar("SELECTED_OPTIMIZATION", True)
     if base_contains("SELECTED_OPTIMIZATION", "-O0", "x", "", d) == "x":
-        bb.note("eglibc can't be built with -O0, -O2 will be used instead.")
+        bb.note("glibc can't be built with -O0, -O2 will be used instead.")
         return selected_optimization.replace("-O0", "-O2")
     return selected_optimization
 
@@ -50,7 +46,7 @@ DEPENDS = "virtual/${TARGET_PREFIX}gcc-initial linux-libc-headers virtual/${TARG
 PROVIDES = "virtual/libc virtual/${TARGET_PREFIX}libc-for-gcc"
 PROVIDES += "virtual/libintl virtual/libiconv"
 inherit autotools
-require eglibc-options.inc
+require glibc-options.inc
 
 LEAD_SONAME = "libc.so"
 
@@ -66,19 +62,19 @@ INHIBIT_DEFAULT_DEPS = "1"
 
 ARM_INSTRUCTION_SET = "arm"
 
-# eglibc uses PARALLELMFLAGS variable to pass parallel build info so transfer
+# glibc uses PARALLELMFLAGS variable to pass parallel build info so transfer
 # PARALLEL_MAKE into PARALLELMFLAGS and empty out PARALLEL_MAKE
 EGLIBCPARALLELISM := "PARALLELMFLAGS="${PARALLEL_MAKE}""
 EXTRA_OEMAKE[vardepsexclude] += "EGLIBCPARALLELISM"
 EXTRA_OEMAKE += "${EGLIBCPARALLELISM}"
 PARALLEL_MAKE = ""
 
-# eglibc make-syscalls.sh has a number of issues with /bin/dash and
+# glibc make-syscalls.sh has a number of issues with /bin/dash and
 # it's output which make calls via the SHELL also has issues, so 
 # ensure make uses /bin/bash
 EXTRA_OEMAKE += "SHELL=/bin/bash"
 
-OE_FEATURES = "${@features_to_eglibc_settings(d)}"
+OE_FEATURES = "${@features_to_glibc_settings(d)}"
 do_configure_prepend() {
 	sed -e "s#@BASH@#/bin/sh#" -i ${S}/elf/ldd.bash.in
 	echo '${OE_FEATURES}' > ${B}/option-groups.config

@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-def eglibc_cfg(feature, tokens, cnf):
+def glibc_cfg(feature, tokens, cnf):
     if type(tokens) == type(""):
         tokens = [tokens]
     if feature:
@@ -15,8 +15,8 @@ def eglibc_cfg(feature, tokens, cnf):
                 cnf.extend(["OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG=\"${S}/nss/nsswitch.conf\""])
                 cnf.extend(["OPTION_EGLIBC_NSSWITCH_FIXED_FUNCTIONS=\"${S}/nss/fixed-nsswitch.functions\""])
 
-# Map distro features to eglibc options settings
-def features_to_eglibc_settings(d):
+# Map distro features to glibc options settings
+def features_to_glibc_settings(d):
     cnf = ([])
 
     ipv4 = base_contains('DISTRO_FEATURES', 'ipv4', True, False, d)
@@ -57,7 +57,7 @@ def features_to_eglibc_settings(d):
     libc_posix_regexp_glibc = base_contains('DISTRO_FEATURES', 'libc-posix-regexp-glibc', True, False, d)
     libc_posix_wchar_io = base_contains('DISTRO_FEATURES', 'libc-posix-wchar-io', True, False, d)
 
-    # arrange the dependencies among eglibc configuable options according to file option-groups.def from eglibc source code
+    # arrange the dependencies among glibc configuable options according to file option-groups.def from glibc source code
     new_dep = True
     while new_dep:
         new_dep = False
@@ -126,42 +126,42 @@ def features_to_eglibc_settings(d):
             new_dep = True
             libc_posix_clang_wchar = True
 
-    eglibc_cfg(ipv6, 'OPTION_EGLIBC_ADVANCED_INET6', cnf)
-    eglibc_cfg(libc_backtrace, 'OPTION_EGLIBC_BACKTRACE', cnf)
-    eglibc_cfg(libc_big_macros, 'OPTION_EGLIBC_BIG_MACROS', cnf)
-    eglibc_cfg(libc_bsd, 'OPTION_EGLIBC_BSD', cnf)
-    eglibc_cfg(libc_cxx_tests, 'OPTION_EGLIBC_CXX_TESTS', cnf)
-    eglibc_cfg(libc_catgets, 'OPTION_EGLIBC_CATGETS', cnf)
-    eglibc_cfg(libc_charsets, 'OPTION_EGLIBC_CHARSETS', cnf)
-    eglibc_cfg(libc_crypt, 'OPTION_EGLIBC_CRYPT', cnf)
-    eglibc_cfg(libc_crypt_ufc, 'OPTION_EGLIBC_CRYPT_UFC', cnf)
-    eglibc_cfg(libc_db_aliases, 'OPTION_EGLIBC_DB_ALIASES', cnf)
-    eglibc_cfg(libc_envz, 'OPTION_EGLIBC_ENVZ', cnf)
-    eglibc_cfg(libc_fcvt, 'OPTION_EGLIBC_FCVT', cnf)
-    eglibc_cfg(libc_fmtmsg, 'OPTION_EGLIBC_FMTMSG', cnf)
-    eglibc_cfg(libc_fstab, 'OPTION_EGLIBC_FSTAB', cnf)
-    eglibc_cfg(libc_ftraverse, 'OPTION_EGLIBC_FTRAVERSE', cnf)
-    eglibc_cfg(libc_getlogin, 'OPTION_EGLIBC_GETLOGIN', cnf)
-    eglibc_cfg(libc_idn, 'OPTION_EGLIBC_IDN', cnf)
-    eglibc_cfg(ipv4, 'OPTION_EGLIBC_INET', cnf)
-    eglibc_cfg(libc_inet_anl, 'OPTION_EGLIBC_INET_ANL', cnf)
-    eglibc_cfg(libc_libm, 'OPTION_EGLIBC_LIBM', cnf)
-    eglibc_cfg(libc_locales, 'OPTION_EGLIBC_LOCALES', cnf)
-    eglibc_cfg(libc_locale_code, 'OPTION_EGLIBC_LOCALE_CODE', cnf)
-    eglibc_cfg(libc_memusage, 'OPTION_EGLIBC_MEMUSAGE', cnf)
-    eglibc_cfg(libc_nis, 'OPTION_EGLIBC_NIS', cnf)
-    eglibc_cfg(libc_nsswitch, 'OPTION_EGLIBC_NSSWITCH', cnf)
-    eglibc_cfg(libc_rcmd, 'OPTION_EGLIBC_RCMD', cnf)
-    eglibc_cfg(libc_rtld_debug, 'OPTION_EGLIBC_RTLD_DEBUG', cnf)
-    eglibc_cfg(libc_spawn, 'OPTION_EGLIBC_SPAWN', cnf)
-    eglibc_cfg(libc_streams, 'OPTION_EGLIBC_STREAMS', cnf)
-    eglibc_cfg(libc_sunrpc, 'OPTION_EGLIBC_SUNRPC', cnf)
-    eglibc_cfg(libc_utmp, 'OPTION_EGLIBC_UTMP', cnf)
-    eglibc_cfg(libc_utmpx, 'OPTION_EGLIBC_UTMPX', cnf)
-    eglibc_cfg(libc_wordexp, 'OPTION_EGLIBC_WORDEXP', cnf)
-    eglibc_cfg(libc_posix_clang_wchar, 'OPTION_POSIX_C_LANG_WIDE_CHAR', cnf)
-    eglibc_cfg(libc_posix_regexp, 'OPTION_POSIX_REGEXP', cnf)
-    eglibc_cfg(libc_posix_regexp_glibc, 'OPTION_POSIX_REGEXP_GLIBC', cnf)
-    eglibc_cfg(libc_posix_wchar_io, 'OPTION_POSIX_WIDE_CHAR_DEVICE_IO', cnf)
+    glibc_cfg(ipv6, 'OPTION_EGLIBC_ADVANCED_INET6', cnf)
+    glibc_cfg(libc_backtrace, 'OPTION_EGLIBC_BACKTRACE', cnf)
+    glibc_cfg(libc_big_macros, 'OPTION_EGLIBC_BIG_MACROS', cnf)
+    glibc_cfg(libc_bsd, 'OPTION_EGLIBC_BSD', cnf)
+    glibc_cfg(libc_cxx_tests, 'OPTION_EGLIBC_CXX_TESTS', cnf)
+    glibc_cfg(libc_catgets, 'OPTION_EGLIBC_CATGETS', cnf)
+    glibc_cfg(libc_charsets, 'OPTION_EGLIBC_CHARSETS', cnf)
+    glibc_cfg(libc_crypt, 'OPTION_EGLIBC_CRYPT', cnf)
+    glibc_cfg(libc_crypt_ufc, 'OPTION_EGLIBC_CRYPT_UFC', cnf)
+    glibc_cfg(libc_db_aliases, 'OPTION_EGLIBC_DB_ALIASES', cnf)
+    glibc_cfg(libc_envz, 'OPTION_EGLIBC_ENVZ', cnf)
+    glibc_cfg(libc_fcvt, 'OPTION_EGLIBC_FCVT', cnf)
+    glibc_cfg(libc_fmtmsg, 'OPTION_EGLIBC_FMTMSG', cnf)
+    glibc_cfg(libc_fstab, 'OPTION_EGLIBC_FSTAB', cnf)
+    glibc_cfg(libc_ftraverse, 'OPTION_EGLIBC_FTRAVERSE', cnf)
+    glibc_cfg(libc_getlogin, 'OPTION_EGLIBC_GETLOGIN', cnf)
+    glibc_cfg(libc_idn, 'OPTION_EGLIBC_IDN', cnf)
+    glibc_cfg(ipv4, 'OPTION_EGLIBC_INET', cnf)
+    glibc_cfg(libc_inet_anl, 'OPTION_EGLIBC_INET_ANL', cnf)
+    glibc_cfg(libc_libm, 'OPTION_EGLIBC_LIBM', cnf)
+    glibc_cfg(libc_locales, 'OPTION_EGLIBC_LOCALES', cnf)
+    glibc_cfg(libc_locale_code, 'OPTION_EGLIBC_LOCALE_CODE', cnf)
+    glibc_cfg(libc_memusage, 'OPTION_EGLIBC_MEMUSAGE', cnf)
+    glibc_cfg(libc_nis, 'OPTION_EGLIBC_NIS', cnf)
+    glibc_cfg(libc_nsswitch, 'OPTION_EGLIBC_NSSWITCH', cnf)
+    glibc_cfg(libc_rcmd, 'OPTION_EGLIBC_RCMD', cnf)
+    glibc_cfg(libc_rtld_debug, 'OPTION_EGLIBC_RTLD_DEBUG', cnf)
+    glibc_cfg(libc_spawn, 'OPTION_EGLIBC_SPAWN', cnf)
+    glibc_cfg(libc_streams, 'OPTION_EGLIBC_STREAMS', cnf)
+    glibc_cfg(libc_sunrpc, 'OPTION_EGLIBC_SUNRPC', cnf)
+    glibc_cfg(libc_utmp, 'OPTION_EGLIBC_UTMP', cnf)
+    glibc_cfg(libc_utmpx, 'OPTION_EGLIBC_UTMPX', cnf)
+    glibc_cfg(libc_wordexp, 'OPTION_EGLIBC_WORDEXP', cnf)
+    glibc_cfg(libc_posix_clang_wchar, 'OPTION_POSIX_C_LANG_WIDE_CHAR', cnf)
+    glibc_cfg(libc_posix_regexp, 'OPTION_POSIX_REGEXP', cnf)
+    glibc_cfg(libc_posix_regexp_glibc, 'OPTION_POSIX_REGEXP_GLIBC', cnf)
+    glibc_cfg(libc_posix_wchar_io, 'OPTION_POSIX_WIDE_CHAR_DEVICE_IO', cnf)
 
     return "\n".join(cnf)

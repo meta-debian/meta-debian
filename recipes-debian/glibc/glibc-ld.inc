@@ -10,7 +10,7 @@ def ld_append_if_tune_exists(d, infos, dict):
         infos['ldconfig'].add('{"' + libdir + '/' + dict[tune][0] + '",' + dict[tune][1] + ' }')
         infos['lddrewrite'].add(libdir+'/'+dict[tune][0])
 
-def eglibc_dl_info(d):
+def glibc_dl_info(d):
     ld_info_all = {
         "mips": ["ld.so.1", "FLAG_ELF_LIBC6"],
         "mips64-n32": ["ld.so.1", "FLAG_ELF_LIBC6"],
@@ -57,5 +57,5 @@ def eglibc_dl_info(d):
     infos['lddrewrite'] = ' '.join(infos['lddrewrite'])
     return infos
 
-EGLIBC_KNOWN_INTERPRETER_NAMES = "${@eglibc_dl_info(d)['ldconfig']}"
-RTLDLIST = "${@eglibc_dl_info(d)['lddrewrite']}"
+EGLIBC_KNOWN_INTERPRETER_NAMES = "${@glibc_dl_info(d)['ldconfig']}"
+RTLDLIST = "${@glibc_dl_info(d)['lddrewrite']}"
