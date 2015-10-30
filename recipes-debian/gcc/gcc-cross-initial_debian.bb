@@ -14,6 +14,8 @@ PACKAGES = ""
 INHIBIT_AUTOTOOLS_DEPS = "1"
 INHIBIT_DEFAULT_DEPS = "1"
 
+PN = "gcc-cross-initial-${TARGET_ARCH}"
+
 CROSS_TARGET_SYS_DIR_append = ".${PN}"
 
 # This is intended to be a -very- basic config

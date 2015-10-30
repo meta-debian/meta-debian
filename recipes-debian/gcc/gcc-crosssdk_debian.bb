@@ -8,6 +8,8 @@ require gcc-cross_${PV}.bb
 
 inherit crosssdk
 
+PN = "gcc-crosssdk-${TARGET_ARCH}"
+
 SYSTEMHEADERS = "${SDKPATHNATIVE}${prefix_nativesdk}/include"
 SYSTEMLIBS = "${SDKPATHNATIVE}${base_libdir_nativesdk}/"
 SYSTEMLIBS1 = "${SDKPATHNATIVE}${libdir_nativesdk}/"

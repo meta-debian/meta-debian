@@ -20,9 +20,9 @@ PROVIDES = "virtual/${TARGET_PREFIX}libc-initial"
 PACKAGES = ""
 PACKAGES_DYNAMIC = ""
 
-STAGINGCC = "gcc-cross-initial"
-STAGINGCC_class-nativesdk = "gcc-crosssdk-initial"
-TOOLCHAIN_OPTIONS = " --sysroot=${STAGING_DIR_TARGET}"
+STAGINGCC = "gcc-cross-initial-${TARGET_ARCH}"
+STAGINGCC_class-nativesdk = "gcc-crosssdk-initial-${TARGET_ARCH}"
+TOOLCHAIN_OPTIONS = " --sysroot=${STAGING_DIR_TCBOOTSTRAP}"
 
 # Specify add-ons for glibc: nptl, libidn, ports
 do_configure () {
