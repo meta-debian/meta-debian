@@ -127,10 +127,6 @@ do_configure () {
 # calls for now
 # don't pass CPPFLAGS into configure, since it upsets the kernel-headers
 # version check and doesn't really help with anything
-	if [ -z "`which rpcgen`" ]; then
-		echo "rpcgen not found.  Install glibc-devel."
-		exit 1
-	fi
 	(cd ${S} && gnu-configize) || die "failure in running gnu-configize"
 	find ${S} -name "configure" | xargs touch
 	CPPFLAGS="" oe_runconf
@@ -148,7 +144,8 @@ do_compile () {
 		cd ${S}/sunrpc/rpcsvc
 		for r in ${rpcsvc}; do
 			h=`echo $r|sed -e's,\.x$,.h,'`
-			rpcgen -h $r -o $h || bbwarn "unable to generate header for $r"
+			rm -f $h
+			${B}/sunrpc/cross-rpcgen -h $r -o $h || bbwarn "${PN}: unable to generate header for $r"
 		done
         )
 	echo "Adjust ldd script"
