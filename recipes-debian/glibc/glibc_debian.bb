@@ -47,6 +47,7 @@ SRC_URI += " \
 	file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
 	file://ppce6500-32b_slow_ieee754_sqrt.patch \
 	file://grok_gold.patch \
+	file://0013-sysdeps-gnu-configure.ac-handle-correctly-libc_cv_ro.patch \
 "
 
 B = "${WORKDIR}/build-${TARGET_SYS}"
@@ -84,8 +85,6 @@ python __anonymous () {
         raise bb.parse.SkipPackage("incompatible with target %s" %
                                    d.getVar('TARGET_OS', True))
 }
-
-export libc_cv_slibdir = "${base_libdir}"
 
 EXTRA_OECONF = "--enable-kernel=${OLDEST_KERNEL} \
                 --without-cvs --disable-profile \
