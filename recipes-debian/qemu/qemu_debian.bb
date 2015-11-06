@@ -27,10 +27,11 @@ LIC_FILES_CHKSUM = " \
 file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
 file://COPYING.LIB;md5=79ffa0ec772fa86740948cb7327a0cc7"
 
-DEPENDS = "glib-2.0 zlib pixman"
+DEPENDS = "glib-2.0 zlib pixman dtc \
+           ${@base_contains('DISTRO_FEATURES', 'x11', 'virtual/libx11', '', d)}"
+DEPENDS_class-native = "zlib-native glib-2.0-native pixman-native dtc-native"
+DEPENDS_class-nativesdk = "nativesdk-zlib nativesdk-glib-2.0 nativesdk-pixman nativesdk-dtc"
 RDEPENDS_${PN}_class-target += "bash python"
-RDEPENDS_${PN}_class-target += "bash python"
-
 # qemu-bios-native provides BIOS images for qemu-system
 DEPENDS_class-native += "qemu-bios-native"
 
