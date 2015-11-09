@@ -78,7 +78,7 @@ EXTRA_OECONF += "--target-list=${@get_qemu_target_list(d)} --disable-werror \
 		 --disable-bluez --disable-libiscsi --with-system-pixman \
 		 --extra-cflags='${CFLAGS}'"
 
-EXTRA_OECONF_class-nativesdk = "--target-list=${@get_qemu_target_list(d)} --disable-werror \
+EXTRA_OECONF_class-nativesdk += "--target-list=${@get_qemu_target_list(d)} --disable-werror \
 				"
 export LIBTOOL="${HOST_SYS}-libtool"
 
