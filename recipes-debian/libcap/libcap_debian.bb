@@ -56,6 +56,17 @@ do_install() {
 		LIBDIR="${D}${base_libdir}"
 }
 
+# Install files follow Debian
+do_install_append() {
+	# libcap-dev:
+	#   Move the development files from lib/ to usr/lib.
+	mv ${D}${base_libdir}/*.a ${D}${libdir}
+	ln -sf ${base_libdir}/libcap.so.2 ${D}${libdir}/libcap.so
+
+	# Remove unwanted/unused files
+	rm -rf ${D}${base_libdir}/*.so
+}
+
 PACKAGES += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-cap', '', d)}"
 
 FILES_${PN}-bin += "${base_sbindir}"
