@@ -51,12 +51,6 @@ S = "${DEBIAN_UNPACK_DIR}/dist"
 B = "${DEBIAN_UNPACK_DIR}/build_unix"
 SPDX_S = "${DEBIAN_UNPACK_DIR}"
 
-# In meta/conf/distro/include/seperatebuilddir.inc,
-# build folder of db and db-native is set to ${WORKDIR}/build.
-# We need overwrite these variable.
-B_pn-db = "${DEBIAN_UNPACK_DIR}/build_unix"
-B_pn-db-native = "${DEBIAN_UNPACK_DIR}/build_unix"
-
 # The executables go in a separate package - typically there
 # is no need to install these unless doing real database
 # management on the system.
