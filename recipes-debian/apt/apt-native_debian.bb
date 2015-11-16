@@ -72,12 +72,10 @@ do_install_base () {
 	install -m 0755 bin/apt-extracttemplates ${D}${bindir}/
 	install -m 0755 bin/apt-ftparchive ${D}${bindir}/
 
-	eval `cat environment.mak | grep ^GLIBC_VER | sed -e's, = ,=,'`
-	eval `cat environment.mak | grep ^LIBSTDCPP_VER | sed -e's, = ,=,'`
+	oe_libinstall -so -C bin libapt-private ${D}${libdir}/
+
 	oe_libinstall -so -C bin libapt-pkg$GLIBC_VER$LIBSTDCPP_VER ${D}${libdir}/
-	ln -sf libapt-pkg$GLIBC_VER$LIBSTDCPP_VER.so ${D}${libdir}/libapt-pkg.so
 	oe_libinstall -so -C bin libapt-inst$GLIBC_VER$LIBSTDCPP_VER ${D}${libdir}/
-	ln -sf libapt-inst$GLIBC_VER$LIBSTDCPP_VER.so ${D}${libdir}/libapt-inst.so
 
 	install -d ${D}${libdir}/apt/methods
 	install -m 0755 bin/methods/* ${D}${libdir}/apt/methods/

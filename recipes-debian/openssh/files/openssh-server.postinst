@@ -1,0 +1,189 @@
+umask 022
+
+get_config_option() {
+	option="$1"
+
+	[ -f $D/etc/ssh/sshd_config ] || return
+
+	# TODO: actually only one '=' allowed after option
+	perl -lne '
+		s/[[:space:]]+/ /g; s/[[:space:]]+$//;
+		print if s/^[[:space:]]*'"$option"'[[:space:]=]+//i' \
+	   $D/etc/ssh/sshd_config
+}
+
+set_config_option() {
+	option="$1"
+	value="$2"
+
+	perl -le '
+		$option = $ARGV[0]; $value = $ARGV[1]; $done = 0;
+		while (<STDIN>) {
+			chomp;
+			(my $match = $_) =~ s/\s+/ /g;
+			if ($match =~ s/^\s*\Q$option\E\s+.*/$option $value/) {
+				$_ = $match;
+				$done = 1;
+			}
+			print;
+		}
+		print "$option $value" unless $done;' \
+		"$option" "$value" \
+		< $D/etc/ssh/sshd_config > $D/etc/ssh/sshd_config.dpkg-new
+	chown --reference $D/etc/ssh/sshd_config $D/etc/ssh/sshd_config.dpkg-new
+	chmod --reference $D/etc/ssh/sshd_config $D/etc/ssh/sshd_config.dpkg-new
+	mv $D/etc/ssh/sshd_config.dpkg-new $D/etc/ssh/sshd_config
+}
+
+host_keys_required() {
+	hostkeys="$(get_config_option HostKey)"
+	if [ "$hostkeys" ]; then
+		echo "$hostkeys"
+	else
+		# No HostKey directives at all, so the server picks some
+		# defaults depending on the setting of Protocol.
+		protocol="$(get_config_option Protocol)"
+		[ "$protocol" ] || protocol=1,2
+		if echo "$protocol" | grep 1 >/dev/null; then
+			echo /etc/ssh/ssh_host_key
+		fi
+		if echo "$protocol" | grep 2 >/dev/null; then
+			echo /etc/ssh/ssh_host_rsa_key
+			echo /etc/ssh/ssh_host_dsa_key
+			echo /etc/ssh/ssh_host_ecdsa_key
+			echo /etc/ssh/ssh_host_ed25519_key
+		fi
+	fi
+}
+
+
+create_key() {
+	msg="$1"
+	shift
+	hostkeys="$1"
+	shift
+	file="$1"
+	shift
+	if echo "$hostkeys" | grep -x "$file" >/dev/null && \
+	   [ ! -f "$D$file" ] ; then
+		echo -n $msg
+		ssh-keygen -q -f "$D$file" -N '' "$@"
+		echo
+		if which restorecon >/dev/null 2>&1; then
+			restorecon "$D$file" "$D$file.pub"
+		fi
+		ssh-keygen -l -f "$D$file.pub"
+	fi
+}
+
+
+create_keys() {
+	hostkeys="$(host_keys_required)"
+	create_key "Creating SSH1 key; this may take some time ..." \
+		"$hostkeys" /etc/ssh/ssh_host_key -t rsa1
+
+	create_key "Creating SSH2 RSA key; this may take some time ..." \
+		"$hostkeys" /etc/ssh/ssh_host_rsa_key -t rsa
+	create_key "Creating SSH2 DSA key; this may take some time ..." \
+		"$hostkeys" /etc/ssh/ssh_host_dsa_key -t dsa
+	create_key "Creating SSH2 ECDSA key; this may take some time ..." \
+		"$hostkeys" /etc/ssh/ssh_host_ecdsa_key -t ecdsa
+	create_key "Creating SSH2 ED25519 key; this may take some time ..." \
+		"$hostkeys" /etc/ssh/ssh_host_ed25519_key -t ed25519
+}
+
+create_sshdconfig() {
+	cat <<EOF > $D/etc/ssh/sshd_config
+# Package generated configuration file
+# See the sshd_config(5) manpage for details
+
+# What ports, IPs and protocols we listen for
+Port 22
+# Use these options to restrict which interfaces/protocols sshd will bind to
+#ListenAddress ::
+#ListenAddress 0.0.0.0
+Protocol 2
+# HostKeys for protocol version 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+#Privilege Separation is turned on for security
+UsePrivilegeSeparation yes
+
+# Lifetime and size of ephemeral version 1 server key
+KeyRegenerationInterval 3600
+ServerKeyBits 1024
+
+# Logging
+SyslogFacility AUTH
+LogLevel INFO
+
+# Authentication:
+LoginGraceTime 120
+PermitRootLogin without-password
+StrictModes yes
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+#AuthorizedKeysFile	%h/.ssh/authorized_keys
+
+# Don't read the user's ~/.rhosts and ~/.shosts files
+IgnoreRhosts yes
+# For this to work you will also need host keys in /etc/ssh_known_hosts
+RhostsRSAAuthentication no
+# similar for protocol version 2
+HostbasedAuthentication no
+# Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication
+#IgnoreUserKnownHosts yes
+
+# To enable empty passwords, change to yes (NOT RECOMMENDED)
+PermitEmptyPasswords no
+
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
+ChallengeResponseAuthentication no
+
+# Change to no to disable tunnelled clear text passwords
+#PasswordAuthentication yes
+
+# Kerberos options
+#KerberosAuthentication no
+#KerberosGetAFSToken no
+#KerberosOrLocalPasswd yes
+#KerberosTicketCleanup yes
+
+# GSSAPI options
+#GSSAPIAuthentication no
+#GSSAPICleanupCredentials yes
+
+X11Forwarding yes
+X11DisplayOffset 10
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+#UseLogin no
+
+#MaxStartups 10:30:60
+#Banner /etc/issue.net
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+# UsePAM yes
+EOF
+}
+
+create_sshdconfig
+create_keys

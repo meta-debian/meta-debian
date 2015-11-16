@@ -53,11 +53,10 @@ file://rpm-scriptetexechelp.patch \
 
 DEPENDS = "db libxml2 xz file popt nss bzip2 elfutils patch attr \
                zlib acl gzip make binutils python"
-
+DEPENDS_append_class-native = " file-replacement-native"
 DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz nativesdk-file \
 		nativesdk-popt nativesdk-nss nativesdk-bzip2 nativesdk-elfutils nativesdk-attr \
 		nativesdk-zlib nativesdk-acl nativesdk-make nativesdk-python"
-RDEPENDS_${PN}_class-nativesdk = ""
 
 inherit autotools
 inherit pythonnative
@@ -148,7 +147,8 @@ FILES_${PN} += "${libdir}/rpm \
 ${libdir}/rpm-plugins/exec.so \
 "
 RDEPENDS_${PN} = "base-files run-postinsts"
-RDEPENDS_${PN}_class-native = "base-files run-postinsts"
+RDEPENDS_${PN}_class-native = ""
+RDEPENDS_${PN}_class-nativesdk = ""
 FILES_${PN}-dbg += "${libdir}/rpm/.debug/* \
 ${libdir}/rpm-plugins/.debug/* \
 ${libdir}/python2.7/site-packages/rpm/.debug/* \

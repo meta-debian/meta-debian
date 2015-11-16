@@ -81,9 +81,9 @@ FILES_${PN}-binutils = "\
     ${bindir}/eu-size \
     ${bindir}/eu-strip"
 
-FILES_libelf = "${libdir}/libelf-${PV}.so ${libdir}/libelf.so.*"
-FILES_libasm = "${libdir}/libasm-${PV}.so ${libdir}/libasm.so.*"
-FILES_libdw  = "${libdir}/libdw-${PV}.so ${libdir}/libdw.so.* ${libdir}/elfutils/lib*"
+FILES_libelf = "${libdir}/libelf-*.so ${libdir}/libelf.so.*"
+FILES_libasm = "${libdir}/libasm-*.so ${libdir}/libasm.so.*"
+FILES_libdw  = "${libdir}/libdw-*.so ${libdir}/libdw.so.* ${libdir}/elfutils/lib*"
 FILES_libelf-dev = "${libdir}/libelf.so ${includedir}"
 FILES_libasm-dev = "${libdir}/libasm.so ${includedir}/elfutils/libasm.h"
 FILES_libdw-dev  = "${libdir}/libdw.so  ${includedir}/dwarf.h ${includedir}/elfutils/libdw*.h"

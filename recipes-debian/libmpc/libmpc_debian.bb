@@ -19,7 +19,7 @@ DPN = "mpclib3"
 LICENSE = "LGPLv3"
 LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=e6a600fd5e1d9cbde2d983680233ad02"
 
-DEBIAN_PATCH_TYPE = "quilt"
+DEBIAN_PATCH_TYPE = "nopatch"
 
 # Remove -Werror when initialize automake 
 SRC_URI += "\

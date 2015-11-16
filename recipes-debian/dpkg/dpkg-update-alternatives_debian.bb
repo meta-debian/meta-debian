@@ -22,15 +22,15 @@ EXTRA_OECONF += " \
 
 # Only compile materials for update-alternatives
 do_compile() {
-	cd ${S}/lib && oe_runmake
-	cd ${S}/utils && oe_runmake
+	cd ${B}/lib && oe_runmake
+	cd ${B}/utils && oe_runmake
 }
   
 do_install() {
 	install -d ${D}${sbindir} 
 	install -d ${D}${sysconfdir}/alternatives 
 	install -d ${D}${localstatedir}/lib/dpkg/alternatives
-	install -m 0755 ${S}/utils/update-alternatives ${D}${sbindir}
+	install -m 0755 ${B}/utils/update-alternatives ${D}${sbindir}
 	exit 0
 }
 

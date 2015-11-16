@@ -14,6 +14,8 @@ PACKAGES = ""
 INHIBIT_AUTOTOOLS_DEPS = "1"
 INHIBIT_DEFAULT_DEPS = "1"
 
+PN = "gcc-cross-initial-${TARGET_ARCH}"
+
 CROSS_TARGET_SYS_DIR_append = ".${PN}"
 
 # This is intended to be a -very- basic config
@@ -47,10 +49,11 @@ do_configure_prepend () {
 }
 
 do_compile () {
-	oe_runmake all-gcc all-target-libgcc
+	oe_runmake all-gcc configure-target-libgcc
 }
 do_install () {
-	oe_runmake 'DESTDIR=${D}' install-gcc install-target-libgcc
+	( cd ${B}/${TARGET_SYS}/libgcc; oe_runmake 'DESTDIR=${D}' install-unwind_h )
+	oe_runmake 'DESTDIR=${D}' install-gcc
 
 	# We don't really need this (here shares/ contains man/, info/, locale/).
 	rm -rf ${D}${datadir}/
@@ -73,6 +76,14 @@ do_install () {
 	# so we overwirte the generated include-fixed/limits.h for gcc-cross-initial
 	# to get rid references to real limits.h
 	cp gcc/include-fixed/limits.h ${D}${gcclibdir}/${TARGET_SYS}/${BINV}/include-fixed/limits.h
+
+	# gcc-runtime installs libgcc into a special location in staging since it breaks doing a standalone build
+        case ${PN} in
+		*gcc-cross-initial-${TARGET_ARCH}|*gcc-crosssdk-initial-${TARGET_ARCH})
+			dest=${D}/${includedir}/gcc-build-internal-initial-${TARGET_SYS}
+			hardlinkdir . $dest
+		;;
+	esac
 }
 #
 # Override the default sysroot staging copy since this won't look like a target system

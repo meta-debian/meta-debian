@@ -47,7 +47,7 @@ do_configure_append() {
 
 do_compile() {
 	# Set config folder for debug package to config only, not config-${MULTIARCH}
-	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${S}/Makefile
+	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${B}/Makefile
 
         # regenerate platform specific files, because they depend on system headers
         cd ${S}/Lib/plat-linux2

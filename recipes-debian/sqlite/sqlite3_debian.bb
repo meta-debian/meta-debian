@@ -13,8 +13,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 DEPENDS = "readline ncurses tcl-native"
-DEPENDS_class-native = ""
-do_compile[depends] += "tcl-native:do_populate_sysroot"
+DEPENDS_class-native = "tcl-native"
 
 # Required to avoid a compile error
 SRC_URI += "file://fix-hardcode-libtool.patch"

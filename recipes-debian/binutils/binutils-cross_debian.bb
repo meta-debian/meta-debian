@@ -11,6 +11,8 @@ PR = "${INC_PR}.0"
 inherit cross
 PROVIDES = "virtual/${TARGET_PREFIX}binutils"
 
+PN = "binutils-cross-${TARGET_ARCH}"
+
 INHIBIT_DEFAULT_DEPS = "1"
 INHIBIT_AUTOTOOLS_DEPS = "1"
 
