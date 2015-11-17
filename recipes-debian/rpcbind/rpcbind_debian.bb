@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = " \
 DEPENDS = "libtirpc"
 RDEPENDS_${PN} = "lsb-base"
 
-inherit autotools
+inherit autotools pkgconfig
 
 # Configure folllow debian/rules
 EXTRA_OECONF = "--enable-warmstarts --with-statedir=/run/rpcbind --with-rpcuser=root"

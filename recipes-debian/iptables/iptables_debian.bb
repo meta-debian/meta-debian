@@ -25,7 +25,7 @@ RRECOMMENDS_${PN} = " \
 	kernel-module-ipt-masquerade \
 "
 
-inherit autotools
+inherit autotools pkgconfig
 
 EXTRA_OECONF = "--with-kernel=${STAGING_INCDIR}"
 
