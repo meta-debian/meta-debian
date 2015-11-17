@@ -208,4 +208,4 @@ do_install_ptest () {
 	install util/shlib_wrap.sh     ${D}${PTEST_PATH}/util
 }
 
-RDEPENDS_${PN}-ptest += "${PN}-misc make perl perl-module-filehandle bc"
+RDEPENDS_${PN}-ptest += "make perl perl-module-filehandle bc"
