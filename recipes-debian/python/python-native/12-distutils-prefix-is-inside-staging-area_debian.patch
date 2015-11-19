@@ -13,6 +13,15 @@ index ddb4658..119e34b 100644
  
  # Path to the base directory of the project. On Windows the binary may
  # live in project/PCBuild9.  If we're dealing with an x64 Windows build,
+@@ -77,6 +77,8 @@ def get_python_inc(plat_specific=0, prefix=None):
+     If 'prefix' is supplied, use it instead of sys.prefix or
+     sys.exec_prefix -- i.e., ignore 'plat_specific'.
+     """
++    if prefix is None:
++        prefix = os.environ['STAGING_INCDIR'].rstrip('include')
+ 
+     if os.name == "posix":
+         if python_build:
 @@ -121,12 +121,16 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
      sys.exec_prefix -- i.e., ignore 'plat_specific'.
      """
