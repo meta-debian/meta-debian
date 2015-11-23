@@ -17,7 +17,7 @@ inherit autotools
 BBCLASSEXTEND = "native"
 
 do_configure_prepend() {
-	sed -i "s:swig/\${PACKAGE_VERSION}:swig2.0:" configure.ac
+	sed -i "s:swig/\${PACKAGE_VERSION}:swig2.0:" ${S}/configure.ac
 }
 
 do_configure() {
