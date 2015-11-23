@@ -3,7 +3,7 @@ include glibc-collateral.inc
 SUMMARY = "Locale data from glibc"
 
 inherit debian-package
-PR = "0"
+PR = "r1"
 DPN = "glibc"
 
 do_debian_patch[noexec] = "1"
@@ -68,7 +68,7 @@ DESCRIPTION_localedef = "glibc: compile locale definition files"
 # glibc-gconv is dynamically added into PACKAGES, thus
 # FILES_glibc-gconv will not be automatically extended in multilib.
 # Explicitly add ${MLPREFIX} for FILES_glibc-gconv.
-FILES_${MLPREFIX}glibc-gconv = "/usr/lib/gconv/*"
+FILES_${MLPREFIX}glibc-gconv = "${libdir}/gconv/*"
 FILES_${PN}-dbg += "${libdir}/gconv/.debug/*"
 FILES_localedef = "${bindir}/localedef"
 
