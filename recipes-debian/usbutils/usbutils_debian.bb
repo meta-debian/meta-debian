@@ -15,7 +15,7 @@ inherit debian-package
 
 DEPENDS = "libusb zlib virtual/libiconv"
 
-inherit autotools gettext
+inherit autotools gettext pkgconfig
 
 # Follow debian/rules
 EXTRA_OECONF += " \

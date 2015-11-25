@@ -52,7 +52,7 @@ do_install_append() {
 	## Install terminfo and termcap precompiled definitions.
 	install -d ${D}${docdir}/xterm
 	install -m 644 ${S}/termcap  ${D}${docdir}/xterm/xterm.termcap
-	install -m 644 terminfo ${D}${docdir}/xterm/xterm.terminfo
+	install -m 644 ${S}/terminfo ${D}${docdir}/xterm/xterm.terminfo
 }
 
 FILES_${PN} = "${sysconfdir} ${bindir} ${datadir}/applications ${datadir}/icons \
