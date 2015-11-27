@@ -18,7 +18,6 @@ EXTRA_OECONF_PATHS = " \
 
 ARCH_FLAGS_FOR_TARGET += "-isystem${STAGING_INCDIR}"
 
-EXTRA_OECONF += "--disable-libunwind-exceptions"
 EXTRA_OECONF_append_linuxstdbase = " --enable-clocale=gnu"
 
 RUNTIMETARGET = "libssp libstdc++-v3 libgomp libatomic"

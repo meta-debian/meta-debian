@@ -166,7 +166,7 @@ SYSTEMHEADERS = "/usr/include"
 SYSTEMLIBS = "${target_base_libdir}/"
 SYSTEMLIBS1 = "${target_libdir}/"
 
-EXTRA_OECONF += "--disable-libunwind-exceptions --disable-libssp \
+EXTRA_OECONF += "--disable-libssp \
 		--disable-libgomp --disable-libmudflap \
 		--with-mpfr=${STAGING_DIR_HOST}${layout_exec_prefix} \
 		--with-mpc=${STAGING_DIR_HOST}${layout_exec_prefix}"
