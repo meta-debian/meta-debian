@@ -12,7 +12,7 @@ PR = "${INC_PR}.0"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4c6d42ef60e8166aa26606524c0b9586"
 
-DEPENDS += " virtual/libx11 libxext libxt libxmu"
+DEPENDS += " libxext libxt libxmu"
 
 # Apply patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
