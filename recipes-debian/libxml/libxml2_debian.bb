@@ -11,10 +11,10 @@ DESCRIPTION = "The XML Parser Library allows for manipulation of XML files.  Lib
 HOMEPAGE = "http://www.xmlsoft.org/"
 BUGTRACKER = "http://bugzilla.gnome.org/buglist.cgi?product=libxml2"
 
-PR = "r0"
+PR = "r1"
 DEPENDS =+ "zlib"
 
-inherit autotools pkgconfig binconfig pythonnative ptest debian-package
+inherit autotools pkgconfig binconfig pythonnative debian-package
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \
@@ -29,17 +29,11 @@ SRC_URI += " \
 	file://ansidecl.patch \
 	file://libxml-64bit.patch \
 	file://python-sitepackages-dir.patch \
-	file://run-ptest \
-	file://runtest.patch \
 "
 
 BINCONFIG = "${bindir}/xml2-config"
 
-RDEPENDS_${PN}-ptest += "python-core"
-
 RDEPENDS_${PN}-python += "python-core"
-
-RDEPENDS_${PN}-ptest_append_libc-glibc += "glibc-gconv-ebcdic-us glibc-gconv-ibm1141"
 
 # We don't DEPEND on binutils for ansidecl.h so ensure we don't use the header
 do_configure_prepend () {
@@ -83,9 +77,5 @@ FILES_${PN} = "${libdir}/lib*${SOLIBS}"
 
 # Correct .deb file name
 DEBIANNAME_${PN}-python = "python-libxml2"
-
-do_install_ptest () {
-  cp -r ${WORKDIR}/xmlconf ${D}${PTEST_PATH}
-}
 
 BBCLASSEXTEND = "native nativesdk"
