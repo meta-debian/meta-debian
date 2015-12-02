@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -45,7 +45,7 @@ EXTRA_OECONF += "M4=m4"
 
 LDFLAGS_prepend_libc-uclibc = " -lrt "
 
-inherit autotools gettext
+inherit autotools gettext update-alternatives
 acpaths = "-I ${S}/m4"
 
 do_configure_prepend(){
@@ -54,7 +54,7 @@ do_configure_prepend(){
 }
 
 # Follow debian, rename yacc to bison.yacc
-do_install_append(){
+do_install_append_class-target(){
 	mv ${D}${bindir}/yacc ${D}${bindir}/bison.yacc
 }
 
@@ -62,4 +62,11 @@ do_install_append_class-native() {
 	create_wrapper ${D}/${bindir}/bison \
 		BISON_PKGDATADIR=${STAGING_DATADIR_NATIVE}/bison
 }
+
+# Follow debian/bison.postinst
+ALTERNATIVE_${PN} = "yacc"
+ALTERNATIVE_PRIORITY = "100"
+ALTERNATIVE_LINK_NAME[yacc] = "${bindir}/yacc"
+ALTERNATIVE_TARGET[yacc] = "${bindir}/bison.yacc"
+
 BBCLASSEXTEND = "native nativesdk"
