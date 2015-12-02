@@ -32,7 +32,7 @@ BINARY_LOCALE_ARCHES ?= "arm.* aarch64 i[3-6]86 x86_64 powerpc mips mips64"
 
 # set "1" to use cross-localedef for locale generation
 # set "0" for qemu emulation of native localedef for locale generation
-LOCALE_GENERATION_WITH_CROSS-LOCALEDEF = "1"
+LOCALE_GENERATION_WITH_CROSS-LOCALEDEF = "0"
 
 PROVIDES = "virtual/libc-locale"
 
