@@ -17,9 +17,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=ed80ff1c2b40843cf5768e5229cf16e5 \
 
 DPR = "0"
 
-DEPENDS = "shadow-native"
-DEPENDS_class-native = ""
-DEPENDS_class-nativesdk = ""
+DEPENDS = "shadow-native bison-native"
+DEPENDS_class-native = "bison-native"
+DEPENDS_class-nativesdk = "bison-native"
 
 SRC_URI += "\
 	file://disable-build-man-dir.patch \

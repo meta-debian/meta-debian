@@ -15,6 +15,6 @@ DPN = "x11-xserver-utils"
 # Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEPENDS += "libxmu virtual/libx11 xbitmaps libxcursor"
+DEPENDS += "libxmu xbitmaps libxcursor"
 
 S = "${DEBIAN_UNPACK_DIR}/${PN}"

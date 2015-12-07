@@ -5,7 +5,7 @@
 
 require glibc.inc
 
-PR = "0"
+PR = "r1"
 
 LICENSE = "GPLv2 & LGPLv2.1 & ISC"
 LIC_FILES_CHKSUM = " \

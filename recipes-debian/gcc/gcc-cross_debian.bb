@@ -26,8 +26,7 @@ require gcc-configure-common.inc
 EXTRA_OECONF += " --enable-poison-system-directories"
 EXTRA_OECONF_append_sh4 = " --with-multilib-list= --enable-incomplete-targets "
 
-EXTRA_OECONF += "--disable-libunwind-exceptions \
-                 --with-mpfr=${STAGING_DIR_NATIVE}${prefix_native} \
+EXTRA_OECONF += "--with-mpfr=${STAGING_DIR_NATIVE}${prefix_native} \
                  --with-system-zlib "
 
 EXTRA_OECONF_PATHS = " \
@@ -53,7 +52,7 @@ do_compile () {
 	export CXXFLAGS_FOR_TARGET="${TARGET_CXXFLAGS}"
 	export LDFLAGS_FOR_TARGET="${TARGET_LDFLAGS}"
 
-	oe_runmake all-host all-target-libgcc
+	oe_runmake all-host configure-target-libgcc
 	# now generate script to drive testing
 	echo "#!/usr/bin/env sh" >${B}/${TARGET_PREFIX}testgcc
 	set >> ${B}/${TARGET_PREFIX}testgcc
@@ -153,6 +152,7 @@ INHIBIT_PACKAGE_STRIP = "1"
 BINRELPATH = "${@os.path.relpath(d.expand("${STAGING_DIR_NATIVE}${prefix_native}/bin/${TARGET_SYS}"), d.expand("${libexecdir}/gcc/${TARGET_SYS}/${BINV}"))}"
 
 do_install () {
+	( cd ${B}/${TARGET_SYS}/libgcc; oe_runmake 'DESTDIR=${D}' install-unwind_h )
 	oe_runmake 'DESTDIR=${D}' install-host
 
 	install -d ${D}${target_base_libdir}
