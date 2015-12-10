@@ -5,8 +5,8 @@ This layer provides recipes to build a minimal image using Debian
 source packages from upstream Debian repositories. You can build
 a small GNU/Linux image with Debian sources by enabling this layer.
 
-Debian version: 8.0 jessie (stable)
-Yocto Project version: 1.6 'Daisy'
+Debian version: 8 jessie (stable)
+Yocto Project version: 2.0 'Jethro'
 
 License
 =======
@@ -37,14 +37,14 @@ How to bitbake
 Setup repositories
 $ git clone git://git.yoctoproject.org/poky.git
 $ cd poky
-$ git checkout daisy
+$ git checkout jethro
 $ git clone https://github.com/meta-debian/meta-debian.git
 $ cd meta-debian
-$ git checkout daisy
+$ git checkout jethro
 
 Please don't forget to install essential packages
 into your host system before you bitbake something.
-http://www.yoctoproject.org/docs/1.6/poky-ref-manual/poky-ref-manual.html#intro-requirements
+http://www.yoctoproject.org/docs/2.0/ref-manual/ref-manual.html#intro-requirements
 
 Setup build directory
 $ export TEMPLATECONF=meta-debian/conf
@@ -63,10 +63,10 @@ How to run on QEMU
 Please run the following commands after bitbake core-image-minimal finishes.
 
 (qemux86)
-$ runqemu qemux86 nographic bootparams="init=/init root=/dev/sda"
+$ runqemu qemux86 nographic bootparams="init=/init"
 
 (qemux86-64)
-$ runqemu qemux86-64 nographic bootparams="init=/init root=/dev/sda"
+$ runqemu qemux86-64 nographic bootparams="init=/init"
 
 (qemuarm)
 $ runqemu qemuarm nographic bootparams="init=/init console=ttyAMA0"
