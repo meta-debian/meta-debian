@@ -1,4 +1,4 @@
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = " \
 	file://COPYING.LIB;md5=fbc093901857fcd118f065f900982c24 \
 "
 
-inherit autotools
+inherit autotools pkgconfig
 
 # Configure follow Debian
 EXTRA_OECONF += " \
