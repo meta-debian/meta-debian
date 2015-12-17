@@ -95,27 +95,27 @@ do_configure_prepend_class-nativesdk() {
 }
 
 do_configure() {
-    # Handle distros such as CentOS 5 32-bit that do not have kvm support
-    KVMOPTS="--disable-kvm"
-    if [ "${PN}" != "qemu-native" -a "${PN}" != "nativesdk-qemu" ] \
-       || [ -f /usr/include/linux/kvm.h ] ; then
-       KVMOPTS="--enable-kvm"
-    fi
+	# Handle distros such as CentOS 5 32-bit that do not have kvm support
+	KVMOPTS="--disable-kvm"
+	if [ "${PN}" != "qemu-native" -a "${PN}" != "nativesdk-qemu" ] \
+	|| [ -f /usr/include/linux/kvm.h ] ; then
+		KVMOPTS="--enable-kvm"
+	fi
 
-    ${S}/configure --prefix=${prefix} --sysconfdir=${sysconfdir} --libexecdir=${libexecdir} \
-		   --localstatedir=${localstatedir} --disable-strip ${EXTRA_OECONF} $KVMOPTS
-    test ! -e ${S}/target-i386/beginend_funcs.sh || chmod a+x ${S}/target-i386/beginend_funcs.sh
+	${S}/configure --prefix=${prefix} --sysconfdir=${sysconfdir} --libexecdir=${libexecdir} \
+		--localstatedir=${localstatedir} --disable-strip ${EXTRA_OECONF} $KVMOPTS
+	test ! -e ${S}/target-i386/beginend_funcs.sh || chmod a+x ${S}/target-i386/beginend_funcs.sh
 }
 
 do_compile_ptest() {
-        make buildtest-TESTS
+	make buildtest-TESTS
 }
 
 do_install_ptest() {
-        cp -rL ${B}/tests ${D}${PTEST_PATH}
-        find ${D}${PTEST_PATH}/tests -type f -name "*.[Sshcod]" | xargs -i rm -rf {}
+	cp -rL ${B}/tests ${D}${PTEST_PATH}
+	find ${D}${PTEST_PATH}/tests -type f -name "*.[Sshcod]" | xargs -i rm -rf {}
 
-        cp ${S}/tests/Makefile ${D}${PTEST_PATH}/tests
+	cp ${S}/tests/Makefile ${D}${PTEST_PATH}/tests
 }
 
 do_install () {
@@ -132,64 +132,64 @@ do_install () {
 # IMPORTANT: This piece needs to be removed once the root cause is fixed!
 do_install_append() {
 	if [ -e "${D}/${bindir}/qemu-mips" ]; then
-                create_wrapper ${D}/${bindir}/qemu-mips \
-                        QEMU_RESERVED_VA=0x0
-        fi
+		create_wrapper ${D}/${bindir}/qemu-mips \
+		QEMU_RESERVED_VA=0x0
+	fi
 
-        # Prevent QA warnings about installed ${localstatedir}/run
-        if [ -d ${D}${localstatedir}/run ]; then
-                rmdir ${D}${localstatedir}/run
-        fi
+	# Prevent QA warnings about installed ${localstatedir}/run
+	if [ -d ${D}${localstatedir}/run ]; then
+		rmdir ${D}${localstatedir}/run
+	fi
 
-        # some files belong into ${base_sbindir}
-        install -d ${D}${base_bindir}
-        mv ${D}${bindir}/qemu-ga ${D}${base_bindir}/qemu-ga
+	# some files belong into ${base_sbindir}
+	install -d ${D}${base_bindir}
+	mv ${D}${bindir}/qemu-ga ${D}${base_bindir}/qemu-ga
 
-        # Install files/scripts from debian
-        install -d ${D}${sysconfdir}/init.d
-        install -d ${D}${base_libdir}/udev/rules.d
-        install -m 0644 ${S}/debian/qemu-guest-agent.init ${D}${sysconfdir}/init.d/qemu-guest-agent
-        install -m 0755 ${S}/debian/qemu-ifdown ${D}${sysconfdir}/qemu-ifdown
-        install -m 0755 ${S}/debian/qemu-ifup.linux ${D}${sysconfdir}/qemu-ifup
-        install -m 0644 ${S}/debian/qemu-system-common.udev \
-                        ${D}/${base_libdir}/udev/rules.d/60-qemu-system-common.rules
-        install -m 0644 ${S}/debian/qemu-system-x86.init \
-                        ${D}${sysconfdir}/init.d/qemu-system-x86
+	# Install files/scripts from debian
+	install -d ${D}${sysconfdir}/init.d
+	install -d ${D}${base_libdir}/udev/rules.d
+	install -m 0644 ${S}/debian/qemu-guest-agent.init ${D}${sysconfdir}/init.d/qemu-guest-agent
+	install -m 0755 ${S}/debian/qemu-ifdown ${D}${sysconfdir}/qemu-ifdown
+	install -m 0755 ${S}/debian/qemu-ifup.linux ${D}${sysconfdir}/qemu-ifup
+	install -m 0644 ${S}/debian/qemu-system-common.udev \
+		${D}/${base_libdir}/udev/rules.d/60-qemu-system-common.rules
+	install -m 0644 ${S}/debian/qemu-system-x86.init \
+		${D}${sysconfdir}/init.d/qemu-system-x86
 	install -m 0755 ${S}/debian/kvm ${D}${bindir}/kvm
 	install -m 0644 ${S}/debian/kvm.1 ${D}${mandir}/man1/kvm.1
 }
 
 PACKAGES =+ "${PN}-guest-agent ${PN}-kvm ${PN}-system-arm ${PN}-system-common \
-             ${PN}-system-mips ${PN}-systemd-ppc ${PN}-system-x86 ${PN}-utils ${PN}-user"
+	     ${PN}-system-mips ${PN}-systemd-ppc ${PN}-system-x86 ${PN}-utils ${PN}-user"
 
 FILES_${PN}-guest-agent += " \
-                        ${base_sbindir}/qemu-ga \
-                        ${sysconfdir}/init.d/qemu-guest-agent"
+			${base_sbindir}/qemu-ga \
+			${sysconfdir}/init.d/qemu-guest-agent"
 FILES_${PN}-kvm += "${bindir}/kvm"
 FILES_${PN}-system-common += " \
-                        ${sysconfdir}/qemu-* \
-                        ${bindir}/virtfs-proxy-helper \
-                        ${base_libdir} \
-                        ${libdir}/${PN}/*"
+			${sysconfdir}/qemu-* \
+			${bindir}/virtfs-proxy-helper \
+			${base_libdir} \
+			${libdir}/${PN}/*"
 FILES_${PN}-dbg += "${libdir}/${PN}/.debug"
 FILES_${PN}-system-arm += "${bindir}/qemu-system-arm"
 FILES_${PN}-system-mips += "${bindir}/qemu-system-mips*"
 FILES_${PN}-system-ppc += "${bindir}/qemu-system-ppc*"
 FILES_${PN}-system-x86 += "${bindir}/qemu-system-x86_64 \
-                        ${bindir}/qemu-system-i386 \
-                        ${sysconfdir}/${PN}/target-x86_64.conf \
-                        ${sysconfdir}/init.d/qemu-system-x86"
+			${bindir}/qemu-system-i386 \
+			${sysconfdir}/${PN}/target-x86_64.conf \
+			${sysconfdir}/init.d/qemu-system-x86"
 FILES_${PN}-utils += " \
-                        ${bindir}/${PN}-io \
-                        ${bindir}/${PN}-img \
-                        ${bindir}/${PN}-ndb"
+			${bindir}/${PN}-io \
+			${bindir}/${PN}-img \
+			${bindir}/${PN}-ndb"
 FILES_${PN}-user += "${bindir}/${PN}-*"
 
 # END of qemu-mips workaround
 
 PACKAGECONFIG ??= " \
-        fdt sdl alsa virtfs \
-        ${@bb.utils.contains('DISTRO_FEATURES', 'xen', 'xen', '', d)} \
+	fdt sdl alsa virtfs \
+	${@bb.utils.contains('DISTRO_FEATURES', 'xen', 'xen', '', d)} \
         "
 PACKAGECONFIG_class-native ??= "fdt alsa uuid"
 PACKAGECONFIG_class-nativesdk ??= "fdt sdl"
