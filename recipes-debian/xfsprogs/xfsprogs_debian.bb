@@ -11,14 +11,21 @@ LIC_FILES_CHKSUM = "file://doc/COPYING;md5=dbdb5f4329b7e7145de650e9ecd4ac2a"
 
 DEPENDS = "util-linux"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"
 
-# fix bug invalid user
-SRC_URI += "file://remove-install-as-user.patch" 
+# remove-install-as-user.patch:
+#     fix bug invalid user
+# xfsprogs-generate-crctable-which-is-moved-into-runti.patch:
+#     Fix error when cross compile:
+#       | /bin/bash: ./gen_crc32table: cannot execute binary file: Exec format error
+SRC_URI += " \
+    file://remove-install-as-user.patch \
+    file://xfsprogs-generate-crctable-which-is-moved-into-runti.patch \
+"
 
 inherit autotools
 
