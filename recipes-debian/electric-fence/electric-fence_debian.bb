@@ -8,13 +8,13 @@ DESCRIPTION = "	Electric Fence is a debugger that uses virtual memory hardware	\
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=18810669f13b87348459e611d31ab760"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
-#fix-unknown-file.patch
+#makefile-fix-install-unknown-file_debian.patch:
 #	fixed the install some unknown file: ef.sh, efence.3
 #	correct the softlink: libefence.so --> libefence.so.0
-SRC_URI += "file://makefile-fix-install-unknown-file.patch"
+SRC_URI += "file://makefile-fix-install-unknown-file_debian.patch"
 
 DEBIAN_PATCH_TYPE = "nopatch"
 
@@ -28,6 +28,11 @@ do_install() {
 	install -d ${D}${mandir}/man3
 	oe_runmake 'DESTDIR=${D}' 'LIB_INSTALL_DIR=${D}${libdir}' \
 		   'MAN_INSTALL_DIR= ${D}${mandir}/man3' install
+
+	#correct the permission of /usr/lib/libefence.so.0.0
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libefence.so))
+	LINKLIB_2=$(basename $(readlink ${D}${libdir}/$LINKLIB))
+	chmod 0644 ${D}${libdir}/${LINKLIB_2}	
 }
 #Correct the sub-package name
 DEBIANNAME_${PN} = "electric-fence"
