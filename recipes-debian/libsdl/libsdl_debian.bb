@@ -30,6 +30,8 @@ DEPENDS_class-nativesdk = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 			   'virtual/nativesdk-libx11 nativesdk-libxrandr \
 			   nativesdk-libxrender nativesdk-libxext', '', d)}"
 
+PROVIDES = "virtual/libsdl"
+
 inherit autotools lib_package binconfig-disabled
 
 #Correct follow debian/rules
