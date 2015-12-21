@@ -7,7 +7,7 @@ DESCRIPTION = " GeoIP is a C library that enables the user to find the country 	
 		using reverse DNS lookups."
 HOMEPAGE = "http://dev.maxmind.com/geoip/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "LGPLv2.1+"
@@ -34,9 +34,15 @@ do_install_append() {
 	install -m 0755 ${S}/debian/src/geoip-generator \
 			${D}${libdir}/geoip/
 	install -m 0755 ${S}/debian/src/geoip-generator-asn \
-                        ${D}${libdir}/geoip/		
+                        ${D}${libdir}/geoip/
+	install -m 0755 ${S}/debian/src/v4-to-v6-layout.pl \
+			${D}${libdir}/geoip/
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libGeoIP.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+	rm ${D}${libdir}/libGeoIP.la		
 }
 #Correct the package name
 DEBIANNAME_${PN} = "${PN}-bin"
+DEBIANNAME_${PN}-dev = "lib${PN}-dev"
 
 FILES_libgeoip1 = "${libdir}/libGeoIP.so.*"
