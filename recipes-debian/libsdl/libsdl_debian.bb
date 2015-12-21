@@ -11,7 +11,7 @@ joystick, 3D hardware via OpenGL, and 2D video framebuffer."
 HOMEPAGE = "http://www.libsdl.org"
 BUGTRACKER = "http://bugzilla.libsdl.org/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 #Correct the debian package name
@@ -56,6 +56,12 @@ do_configure_prepend() {
 	export SYSROOT=$PKG_CONFIG_SYSROOT_DIR
 }
 
+#install follow Debian jessie
+do_install_append () {
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libSDL.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+	rm ${D}${libdir}/*.la
+}
 #Corect the packages name
 DEBIANNAME_${PN} = "libsdl1.2debian"
 DEBIANNAME_${PN}-dev = "libsdl1.2-dev"
