@@ -25,3 +25,5 @@ do_configure () {
 	ln -sf  ../acinclude.m4 ${S}/acinclude.m4
 	autotools_do_configure
 }
+
+BBCLASSEXTEND += "native nativesdk"

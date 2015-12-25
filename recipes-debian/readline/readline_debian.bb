@@ -11,14 +11,17 @@ additional functions to maintain a list of previously-entered command lines, \
 to recall and perhaps reedit those lines, and perform csh-like history expansion \
 on previous commands."
 
-PR = "r1"
+PR = "r2"
 DPN = "readline6"
 
 inherit debian-package
 
 DEPENDS += "ncurses"
 
-SRC_URI += "file://acinclude.m4"
+SRC_URI += " \
+    file://acinclude.m4 \
+    file://configure-fix.patch \
+"
 
 # GPLv2+ (< 6.0), GPLv3+ (>= 6.0)
 LICENSE = "GPLv3+"        

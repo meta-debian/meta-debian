@@ -3,7 +3,7 @@
 #	http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-support/ntp/ntp_4.2.8p3.bb
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -51,7 +51,7 @@ do_install_append(){
 	# don't install tickadj
 	rm ${D}${bindir}/tickadj
 
-	install -D -m 0755 ${S}/scripts/ntpsweep ${D}${bindir}/ntpsweep
+	install -D -m 0755 ${B}/scripts/ntpsweep ${D}${bindir}/ntpsweep
 
 	test -d ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d || \
 		install -d ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d

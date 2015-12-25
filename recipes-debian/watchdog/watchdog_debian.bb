@@ -19,9 +19,11 @@ DEBIAN_PATCH_TYPE = "nopatch"
 LICENSE = "GPL-2.0+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ecc0551bf54ad97f6b541720f84d6569"
 
+#fixsepbuild.patch:
+#	this patch is correct the path to watchdog-conf file
+#watchdog-conf.patch:
+#	declare path for watchdog-device	
 SRC_URI += "file://fixsepbuild.patch \
-	   file://fix-ping-failure.patch \
-	   file://watchdog-init.patch \
 	   file://watchdog-conf.patch"
 
 inherit autotools
@@ -35,6 +37,7 @@ RRECOMMENDS_${PN} = "kernel-module-softdog"
 #ship packages
 FILES_${PN} += "${base_libdir}/systemd/system/* ${sysconfdir}/init.d/*"
 
+#install follow Debian jessies
 do_install_append() {
 	#Create lib/sytemd/system folder
 	install -d ${D}${base_libdir}

@@ -9,7 +9,7 @@ inherit debian-package
 
 DEPENDS = "virtual/libx11 openssl libgssglue alsa-lib"
 
-inherit autotools
+inherit autotools-brokensep pkgconfig
 
 # Currently, we have no recipe for pcsclite, so temporary disable smartcard.
 EXTRA_OECONF = "--with-openssl=${STAGING_LIBDIR}/.. \

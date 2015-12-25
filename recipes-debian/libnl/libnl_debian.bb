@@ -6,7 +6,7 @@ HOMEPAGE = "http://www.infradead.org/~tgr/libnl/"
 SECTION = "libs/network"
 
 PR = "r0"
-
+DPN = "libnl3"
 inherit debian-package
 
 LICENSE = "LGPLv2.1"
@@ -30,14 +30,17 @@ do_install_append() {
 
 	# install for libnl-genl-3-dev package
 	mv ${D}${libdir}/libnl-genl-3.a ${D}${base_libdir}/
-	mv ${D}${libdir}/libnl-genl-3.so ${D}${base_libdir}/
+	# Relink library
+	libname=`readlink ${D}${libdir}/libnl-genl-3.so | xargs basename`
+	ln -sf ..${libdir}/${libname} ${D}${base_libdir}/libnl-genl-3.so
+	rm -rf ${D}${libdir}/libnl-genl-3.so
 }
 
 FILES_libnl-3-200 = " \
 	${base_libdir}/libnl-3.so.200 \
 	${base_libdir}/libnl-3.so.200.19.0 \
 	${sysconfdir}/libnl-3/classid \
-	${sysconfdir}/libnl-3/pktloc \	
+	${sysconfdir}/libnl-3/pktloc \
     "
 
 FILES_libnl-3-dev = " \

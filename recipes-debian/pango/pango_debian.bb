@@ -15,7 +15,7 @@ core of text and font handling for GTK+-2.x."
 HOMEPAGE = "http://www.pango.org/"
 BUGTRACKER = "http://bugzilla.gnome.org"
 
-PR = "r0"
+PR = "r1"
 DPN = "pango1.0"
 
 X11DEPENDS = "virtual/libx11 libxft"
@@ -27,16 +27,7 @@ PACKAGECONFIG[x11] = "--with-xft,--without-xft,${X11DEPENDS}"
 BBCLASSEXTEND = "native"
 DEPENDS_class-native = "glib-2.0-native cairo-native harfbuzz-native"
 
-PACKAGES_DYNAMIC += "^pango-module-.*"
-
-RRECOMMENDS_${PN} = "pango-module-basic-fc"
-
 inherit gnomebase gtk-doc qemu debian-package
-
-# Create a pango-modules package
-ALLOW_EMPTY_${BPN}-modules = "1"
-PACKAGES += "${BPN}-modules"
-RRECOMMENDS_${BPN}-modules =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("pango-module") != -1])}"
 
 # Remove dependency on gnome
 DEPENDS_remove = "gnome-common-native"
@@ -115,6 +106,10 @@ FILES_${PN}-dev += "${bindir}* ${libdir}/pango/${LIBV}/modules/*.la"
 FILES_libpangocairo-1.0-0 = "${libdir}/libpangocairo*${SOLIBS}"
 FILES_libpangoft2-1.0-0 = "${libdir}/libpangoft*${SOLIBS}"
 FILES_libpangoxft-1.0-0 = "${libdir}/libpangoxft*${SOLIBS}"
+
+# Keep compatible with meta
+RPROVIDES_${PN} += "pango-modules pango-module-indic-lang \
+                    pango-module-basic-fc pango-module-arabic-lang"
 
 # Correct name of deb file
 DEBIANNAME_${PN} = "libpango-1.0-0"

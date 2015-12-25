@@ -3,8 +3,10 @@
 # base branch: daisy
 #
 
+SUMMARY = "A standalone native ldconfig build"
+
 inherit debian-package
-PR = "0"
+PR = "r0"
 DPN = "glibc"
 
 LICENSE = "GPLv2"
@@ -47,8 +49,8 @@ do_compile () {
 }
 
 do_install () {
-	install -d ${D}/${bindir}/
-	install ldconfig ${D}/${bindir}/
+	install -d ${D}${bindir}
+	install ${B}/ldconfig ${D}${bindir}/
 }
 
 #
