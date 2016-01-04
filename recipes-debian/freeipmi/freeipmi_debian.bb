@@ -6,7 +6,7 @@ DESCRIPTION = "	GNU implementation of the IPMI protocol - common files 		\
 		Platform Management Interface (IPMI v1.5 and v2.0) standards."
 HOMEPAGE = "http://www.gnu.org/software/freeipmi/"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv3+"
@@ -15,6 +15,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 EXTRA_OECONF += "--without-random-device"
 
 inherit autotools
+#libgcrypt required to build libfreeipmi
+DEPENDS += "libgcrypt"
 
 #Split the freeipmi to sub-packages list
 PACKAGES =+ 	" ${PN}-bmc-watchdog 	\
@@ -132,3 +134,16 @@ FILES_libipmimonitoring-dev =  "${includedir}/ipmi_monitoring* 		\
 				${libdir}/libipmimonitoring.so"
 
 FILES_libipmimonitoring5a = "${libdir}/libipmimonitoring.so.*"
+
+#follow debian/control
+RDEPENDS_${PN}-tools 		+= "${PN}-common"
+RDEPENDS_${PN}-bmc-watchdog 	+= "${PN}-common ${PN}-tools"
+RDEPENDS_${PN}-ipmidetect 	+= "${PN}-common"
+RDEPENDS_libfreeipmi16 		+= "${PN}-common"
+RDEPENDS_libfreeipmi-dev 	+= "libfreeipmi16 ${PN}-common"
+RDEPENDS_libipmidetect0 	+= "${PN}-common"
+RDEPENDS_libipmidetect-dev 	+= "libipmidetect0 ${PN}-common"
+RDEPENDS_libipmimonitoring5a 	+= "${PN}-common"
+RDEPENDS_libipmimonitoring-dev 	+= "libipmimonitoring5a ${PN}-common"
+RDEPENDS_libipmiconsole2 	+= "${PN}-common"
+RDEPENDS_libipmiconsole-dev 	+= "${PN}-common libipmiconsole2"               
