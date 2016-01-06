@@ -27,4 +27,7 @@ do_install_append () {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/kexec.init.d ${D}${sysconfdir}/init.d/kexec
 	install -m 0755 ${S}/debian/kexec-load.init.d ${D}${sysconfdir}/init.d/kexec-load
-}	
+}
+
+# kexec_test uses 32-bit code for testing - add an INSANE_SKIP exception for it.
+INSANE_SKIP_${PN} = "arch"
