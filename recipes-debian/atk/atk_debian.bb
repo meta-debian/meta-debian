@@ -25,4 +25,9 @@ GNOME_COMPRESS_TYPE = "xz"
 EXTRA_OECONF = "--disable-glibtest \
                 --disable-introspection"
 
+DEBIANNAME_${PN} = "libatk1.0-0"
+DEBIANNAME_${PN}-dev = "libatk1.0-dev"
+DEBIANNAME_${PN}-doc = "libatk1.0-doc"
+DEBIANNAME_${PN}-dbg = "libatk1.0-dbg"
+
 BBCLASSEXTEND = "native"
