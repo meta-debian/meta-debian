@@ -10,7 +10,7 @@ DEPENDS = "libxml2 libtool glib-2.0 bzip2 util-linux libxslt"
 inherit autotools pkgconfig
 
 EXTRA_OECONF += "--disable-fatal-warnings --enable-doc=no \
-	--with-initdir=/etc/init.d"
+	--with-initdir=${sysconfdir}/init.d"
 
 do_configure_prepend() {
         cd ${S}
