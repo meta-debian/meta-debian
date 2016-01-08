@@ -17,8 +17,8 @@ DEPENDS += "libsepol libpcre swig-native python"
 SRC_URI += "file://Makefile_debian.patch"
 
 do_compile() {
-        export INCLUDEDIR=${STAGING_INCDIR}
-        export LIBDIR=${STAGING_LIBDIR}
+	export INCLUDEDIR=${STAGING_INCDIR}
+	export LIBDIR=${STAGING_LIBDIR}
 	sed -i -e "s:##STAGING_LIBDIR##:${STAGING_LIBDIR}:g" ${S}/src/Makefile
 	oe_runmake PREFIX="${prefix}" LIBBASE="${base_lib}" all
 }
@@ -28,7 +28,6 @@ do_install() {
 	if [ ! `ls -A ${D}${base_sbindir}` ]; then
 		rm -r ${D}${base_sbindir}
 	fi
-	echo ${PYTHON_SITEPACKAGES_DIR} > ~/hehe
 }
 
 # Add package follow debian
