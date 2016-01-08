@@ -16,11 +16,11 @@ DEBIAN_PATCH_TYPE = "nopatch"
 
 ENABLE_IPV6 = "--enable-ipv6=${@bb.utils.contains('DISTRO_FEATURES', 'ipv6', 'yes', 'no', d)}"
 EXTRA_OECONF = " ${ENABLE_IPV6} --with-randomdev=/dev/random --disable-threads \
-                 --disable-devpoll --disable-epoll --with-gost=no \
-                 --with-gssapi=no --with-ecdsa=yes \
-                 --sysconfdir=${sysconfdir}/bind \
-                 --without-openssl --disable-kqueue --with-gssapi=no \
-               "
+		 --disable-devpoll --disable-epoll --with-gost=no \
+		 --with-gssapi=no --with-ecdsa=yes \
+		 --sysconfdir=${sysconfdir}/bind \
+		 --without-openssl --disable-kqueue --with-gssapi=no \
+	       "
 inherit autotools update-rc.d systemd useradd pkgconfig
 
 PACKAGECONFIG ?= ""
@@ -28,7 +28,7 @@ PACKAGECONFIG[httpstats] = "--with-libxml2,--without-libxml2,libxml2"
 
 USERADD_PACKAGES = "${PN}"
 USERADD_PARAM_${PN} = "--system --home /var/cache/bind --no-create-home \
-                       --user-group bind"
+		       --user-group bind"
 
 INITSCRIPT_NAME = "bind"
 INITSCRIPT_PARAMS = "defaults"
@@ -119,7 +119,6 @@ CONFFILES_${PN} = " \
 	${sysconfdir}/bind/db.local \
 	${sysconfdir}/bind/db.root \
 	"
-DISTRO_FEATURES += "systemd"
 SYSTEMD_SERVICE_${PN} = "bind9.service bind9-resolvconf.service"
 SYSTEMD_SERVICE_lwresd = "lwresd.service"
 
@@ -182,8 +181,8 @@ FILES_libdns100 = " \
 
 FILES_libirs-export91 = " \
 	${libdir}/libirs-export.so.91 \
-        ${libdir}/libirs-export.so.91.0.0 \
-        "
+	${libdir}/libirs-export.so.91.0.0 \
+	"
 
 FILES_libisc-export95 = " \
 	${libdir}/libisc-export.so.95 \
@@ -196,30 +195,30 @@ FILES_libisc95 = " \
 	"
 
 FILES_libisccc90 = " \
-        ${libdir}/libisccc.so.90 \
-        ${libdir}/libisccc.so.90.0.6 \
-        "
+	${libdir}/libisccc.so.90 \
+	${libdir}/libisccc.so.90.0.6 \
+	"
 
 FILES_libisccfg-export90 = " \
-        ${libdir}/libisccfg-export.so.90 \
-        ${libdir}/libisccfg-export.so.90.1.0 \
-        "
+	${libdir}/libisccfg-export.so.90 \
+	${libdir}/libisccfg-export.so.90.1.0 \
+	"
 
 FILES_libisccfg90 = " \
-        ${libdir}/libisccfg.so.90 \
-        ${libdir}/libisccfg.so.90.1.0 \
-        "
+	${libdir}/libisccfg.so.90 \
+	${libdir}/libisccfg.so.90.1.0 \
+	"
 
 FILES_liblwres90 = " \
-        ${libdir}/liblwres.so.90 \
-        ${libdir}/liblwres.so.90.0.7 \
-        "
+	${libdir}/liblwres.so.90 \
+	${libdir}/liblwres.so.90.0.7 \
+	"
 
 FILES_lwresd = " \
 	${sysconfdir}/init.d/lwresd \
 	${systemd_system_unitdir}/lwresd.service \
 	${libdir}/tmpfiles.d/lwresd.conf \
-        ${sbindir}/lwresd \
-        "
+	${sbindir}/lwresd \
+	"
 
 FILES_${PN} += "${localstatedir} /run"	 
