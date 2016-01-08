@@ -101,5 +101,7 @@ inherit libc-package
 BBCLASSEXTEND = "nativesdk"
 
 PACKAGES += "locales ${MLPREFIX}glibc-gconv"
-FILES_locales += "/usr/share/i18n/locales/* \
-		/usr/share/i18n/charmaps/*"
+FILES_locales += " \
+    ${datadir}/i18n/locales/* \
+    ${datadir}/i18n/charmaps/* \
+"
