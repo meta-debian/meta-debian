@@ -10,7 +10,7 @@ a flexible mechanism for authenticating users"
 HOMEPAGE = "https://fedorahosted.org/linux-pam/"
 BUGTRACKER = "https://fedorahosted.org/linux-pam/newticket"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -59,6 +59,11 @@ do_install_append() {
 	install -m 0644 ${S}/debian/pam-configs/unix \
 			${D}${datadir}/pam-configs
 	rm -rf ${D}${base_libdir}/security/pam_filter
+
+	# Prevent QA warnings about installing ${localstatedir}/run
+	if [ -d ${D}${localstatedir}/run ]; then
+		rm -rf ${D}${localstatedir}/run
+	fi
 }
 
 PACKAGES =+ "${PN}-cracklib ${PN}-modules ${PN}-modules-bin \
