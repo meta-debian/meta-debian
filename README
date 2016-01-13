@@ -57,6 +57,9 @@ in local.conf to one of the following machines.
 Bitbake kernel and tiny rootfs
 $ bitbake core-image-minimal
 
+If you'd like to reduce the time of bitbake, 
+please refer to https://github.com/meta-debian/meta-debian-docker.
+
 How to run on QEMU
 ==================
 
