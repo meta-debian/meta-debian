@@ -36,7 +36,7 @@ RDEPENDS_${PN} += "\
 	perl-module-threads \
 	perl-module-vars \
 "
-RDEPENDS_${PN}_class-native = "autoconf-native perl-native-runtime"
+RDEPENDS_${PN}_class-native = "autoconf-native hostperl-runtime-native"
 
 # regenerate dependent files created by aclocal and automake
 do_configure_prepend() {

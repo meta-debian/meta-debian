@@ -25,7 +25,7 @@ file://find.pl \
 "
 
 # "${S}/Configure" is written by perl script
-DEPENDS = "perl-native-runtime"
+DEPENDS = "hostperl-runtime-native"
 
 # CFLAG replaces the second parameters (next to gcc:) of the target config
 # in Configure (see do_configure). We simply use the same options as OE-Core

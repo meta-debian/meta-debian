@@ -10,10 +10,10 @@ LICENSE = "BSD | GPLv2"
 LIC_FILES_CHKSUM = "file://License;md5=3f84fd6f29d453a56514cb7e4ead25f1"
 
 DPN = "libcap2"
-DEPENDS = "attr perl-native-runtime"
+DEPENDS = "attr hostperl-runtime-native"
 DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 # attr and pam are disabled by EXTRA_OEMAKE_class-native
-DEPENDS_class-native = "perl-native-runtime"
+DEPENDS_class-native = "hostperl-runtime-native"
 
 inherit debian-package
 inherit lib_package
