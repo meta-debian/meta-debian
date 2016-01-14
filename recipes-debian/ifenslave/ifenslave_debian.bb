@@ -14,7 +14,7 @@ DESCRIPTION = " This is a tool to attach and detach slave network interfaces to 
 		to "channel bonding" or "trunking" techniques used in switches"
 HOMEPAGE = "http://www.linuxfoundation.org/collaborate/workgroups/networking/bonding"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv3+"
@@ -23,15 +23,15 @@ LIC_FILES_CHKSUM = "file://ifenslave;md5=5b971c6ad58cb00d10e12e5bf460037c"
 #Install follow Debian jessies
 do_install() {
 	#Create new folders
-	install -d ${D}${sbindir}
-	install -m 755 ${S}/ifenslave ${D}${sbindir}/
+	install -d ${D}${base_sbindir}
+	install -m 755 ${S}/ifenslave ${D}${base_sbindir}/
 	install -d ${D}${sysconfdir}
 	install -d ${D}${sysconfdir}/network
 	install -d ${D}${sysconfdir}/network/if-post-down.d
 	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install -d ${D}${sysconfdir}/network/if-up.d
 	
-	ln -s ifenslave ${D}${sbindir}/ifenslave-2.6
+	ln -s ifenslave ${D}${base_sbindir}/ifenslave-2.6
 	install -m 0755 ${S}/debian/ifenslave.if-post-down 		\
 			${D}${sysconfdir}/network/if-post-down.d/ifenslave
 

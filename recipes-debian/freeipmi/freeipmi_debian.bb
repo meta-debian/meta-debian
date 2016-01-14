@@ -6,7 +6,7 @@ DESCRIPTION = "	GNU implementation of the IPMI protocol - common files 		\
 		Platform Management Interface (IPMI v1.5 and v2.0) standards."
 HOMEPAGE = "http://www.gnu.org/software/freeipmi/"
 
-PR = "r0"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv3+"
@@ -15,6 +15,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 EXTRA_OECONF += "--without-random-device"
 
 inherit autotools
+#libgcrypt required to build libfreeipmi
+DEPENDS += "libgcrypt"
 
 #Split the freeipmi to sub-packages list
 PACKAGES =+ 	" ${PN}-bmc-watchdog 	\
@@ -29,7 +31,7 @@ PACKAGES =+ 	" ${PN}-bmc-watchdog 	\
 		libipmidetect-dev 	\
 		libipmidetect0 		\
 		libipmimonitoring-dev 	\
-		libipmimonitoring5a 	\
+		libipmimonitoring5a	\
 "
 #Install follow Debian jessies
 do_install_append() {
@@ -46,10 +48,18 @@ do_install_append() {
 	install -m 0755 ${S}/debian/freeipmi-ipmiseld.ipmiseld.init \
 			${D}${sysconfdir}/init.d/ipmiseld
 
-	#change permissions
-	chmod 0644 ${D}${libdir}/libfreeipmi.so.16.0.2
-	chmod 0644 ${D}${libdir}/libipmiconsole.so.2.3.3
-	chmod 0644 ${D}${libdir}/libipmimonitoring.so.5.0.6
+	#change permission
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libfreeipmi.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+	
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libipmiconsole.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+	
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libipmimonitoring.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libipmidetect.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
 
 	#Correct the softlinks
 	[ -L ${D}${sbindir}/ipmi-console ] && rm ${D}${sbindir}/ipmi-console
@@ -69,7 +79,11 @@ do_install_append() {
 	
 	[ -L ${D}${sbindir}/rmcp-ping ] && rm ${D}${sbindir}/rmcp-ping
 	ln -s rmcpping ${D}${sbindir}/rmcp-ping
+	
+	rm ${D}${libdir}/*.la
 }
+#correct the sub-package names
+DEBIANNAME_libipmimonitoring5a = "libipmimonitoring5a"
 
 #shipment file to packages
 FILES_${PN}-bmc-watchdog = "${sysconfdir}/default/bmc-watchdog 		\
@@ -94,25 +108,42 @@ FILES_${PN}-ipmiseld = "${sysconfdir}/freeipmi/ipmiseld.conf 		\
 			${sbindir}/ipmiseld"
 
 FILES_${PN}-tools = "${sbindir}/* 					\
-		     ${vardir}/*"
+		     ${localstatedir}/*"
 
 FILES_libfreeipmi-dev = "${includedir}/freeipmi/* 			\
-			${libdir}/pkgconfig/libfreeipmi.pc"
+			 ${libdir}/pkgconfig/libfreeipmi.pc 		\
+			 ${libdir}/libfreeipmi.so"
 
 FILES_libfreeipmi16 = "${libdir}/libfreeipmi.so.*"
 
 FILES_libipmiconsole-dev = "${includedir}/ipmiconsole.h 		\
-			    ${libdir}/pkgconfig/libipmiconsole.pc"
+			    ${libdir}/pkgconfig/libipmiconsole.pc 	\
+			    ${libdir}/libipmiconsole.so"
 
 FILES_libipmiconsole2 = "${sysconfdir}/freeipmi/libipmiconsole.conf 	\
 			 ${libdir}/libipmiconsole.so.2*"
 
 FILES_libipmidetect-dev = "${includedir}/ipmidetect.h 			\
-			   ${libdir}/pkgconfig/libipmidetect.pc"
+			   ${libdir}/pkgconfig/libipmidetect.pc 	\
+			   ${libdir}/libipmidetect.so"
 
 FILES_libipmidetect0 = "${libdir}/libipmidetect.so.*"
 
 FILES_libipmimonitoring-dev =  "${includedir}/ipmi_monitoring* 		\
-				${libdir}/pkgconfig/libipmimonitoring.pc"
+				${libdir}/pkgconfig/libipmimonitoring.pc \
+				${libdir}/libipmimonitoring.so"
 
 FILES_libipmimonitoring5a = "${libdir}/libipmimonitoring.so.*"
+
+#follow debian/control
+RDEPENDS_${PN}-tools 		+= "${PN}-common"
+RDEPENDS_${PN}-bmc-watchdog 	+= "${PN}-common ${PN}-tools"
+RDEPENDS_${PN}-ipmidetect 	+= "${PN}-common"
+RDEPENDS_libfreeipmi16 		+= "${PN}-common"
+RDEPENDS_libfreeipmi-dev 	+= "libfreeipmi16 ${PN}-common"
+RDEPENDS_libipmidetect0 	+= "${PN}-common"
+RDEPENDS_libipmidetect-dev 	+= "libipmidetect0 ${PN}-common"
+RDEPENDS_libipmimonitoring5a 	+= "${PN}-common"
+RDEPENDS_libipmimonitoring-dev 	+= "libipmimonitoring5a ${PN}-common"
+RDEPENDS_libipmiconsole2 	+= "${PN}-common"
+RDEPENDS_libipmiconsole-dev 	+= "${PN}-common libipmiconsole2"               

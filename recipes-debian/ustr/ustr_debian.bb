@@ -6,7 +6,7 @@ DESCRIPTION = "Micro string library, very low overhead from plain strdup() (Ave.
 0-20B strings). Very easy to use in existing C code. At it's simplest you can \
 just include a single header file into your .c and start using it."
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "MIT | LGPLv2+ | BSD"
@@ -20,6 +20,13 @@ LIC_FILES_CHKSUM = " \
 # for apply patches
 DEBIAN_PATCH_TYPE = "quilt"
 
+# ustr-makefile-fix.patch:
+# 	Don't run autoconf_64b or autoconf_vsnprintf
+# 	to avoid error when cross-compile.
+SRC_URI += " \
+    file://ustr-makefile-fix.patch \
+"
+
 inherit lib_package siteinfo
 
 # The debian class renames output packages so that they follow the Debian naming policy
@@ -28,12 +35,13 @@ LEAD_SONAME = "libustr-1.0.so.1"
 # ${datadir}/libustr-dev/ contains .h files and .c files
 FILES_${PN}-dev += " \
 	${bindir}/ustr-import \
-	${libexecdir}/ustr-${PV}/ustr-import-* \
+	${libexecdir}/ustr-*/ustr-import-* \
 	${datadir}/libustr-dev/ \
     "
 
 do_compile() {
-	oe_runmake all-shared HIDE= 
+	oe_runmake all-shared \
+		mlib=${SITEINFO_BITS}
 }
 
 do_install() {

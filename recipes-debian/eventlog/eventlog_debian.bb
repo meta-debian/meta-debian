@@ -16,10 +16,18 @@ DESCRIPTION = "The EventLog library aims to be a replacement of the 	\
               file. his package is the runtime part of the library. 	\
 "
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b8ba8e77bcda9a53fac0fe39fe957767"
 
 inherit autotools pkgconfig
+
+#install follow Debian jessie
+do_install_append () {
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libevtlog.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+}
+#correct the sub-package name
+DEBIANNAME_${PN}-dbg = "libevtlog0-dbg"

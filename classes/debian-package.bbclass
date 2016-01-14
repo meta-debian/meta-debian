@@ -103,8 +103,13 @@ debian_patch_quilt() {
 	fi
 }
 
+DEBIAN_DPATCH_PATCHES ?= "${DEBIAN_UNPACK_DIR}/debian/patches"
 # apply patches by dpatch
 debian_patch_dpatch() {
+	# Replace hardcode path in patch files
+	find ${DEBIAN_DPATCH_PATCHES} -name "*.dpatch" -type f -exec sed -i \
+	    -e "s@^#! /bin/sh /usr/share/dpatch/dpatch-run@#! /bin/sh ${STAGING_DATADIR_NATIVE}/dpatch/dpatch-run@g" {} \;
+
 	dpatch apply-all
 }
 
@@ -133,6 +138,8 @@ addtask debian_patch after do_unpack before do_patch
 do_debian_patch[dirs] = "${DEBIAN_UNPACK_DIR}"
 do_debian_patch[depends] += "${@base_conditional(\
     'PN', 'quilt-native', '', 'quilt-native:do_populate_sysroot', d)}"
+do_debian_patch[depends] += "${@base_conditional(\
+    'DEBIAN_PATCH_TYPE', 'dpatch', 'dpatch-native:do_populate_sysroot', '', d)}"
 do_debian_patch() {
 	if debian_check_source_format; then
 		return 0
