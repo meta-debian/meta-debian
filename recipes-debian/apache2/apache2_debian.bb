@@ -13,7 +13,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=dbff5a2b542fa58854455bf1a0b94b83"
 
 DEPENDS = " \
-    libtool-native dpkg-native apache2-native \
+    libtool-native dpkg-native apache2-native libtimedate-perl-native \
     openssl expat pcre apr apr-util \
 "
 
@@ -212,7 +212,7 @@ PACKAGE_BEFORE_PN = " \
     ${PN}-utils \
 "
 
-FILES_${PN}-bin = "${libdir}/${DPN} ${sbindir}/apache2"
+FILES_${PN}-bin = "${libdir}/${DPN}/modules/* ${sbindir}/apache2"
 FILES_${PN}-data = " \
     ${datadir}/${DPN}/build/envvars-std \
     ${datadir}/${DPN}/default-site \
@@ -235,6 +235,7 @@ FILES_${PN}-utils = " \
 "
 
 FILES_${PN} += "/run/${DPN}"
+FILES_${PN}-dbg += "${libdir}/${DPN}/modules/.debug"
 
 # Follow debian/control, declare relationships between packages
 RDEPENDS_${PN} += "${PN}-bin ${PN}-utils ${PN}-data"
