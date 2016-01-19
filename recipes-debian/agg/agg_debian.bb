@@ -26,7 +26,7 @@ D_pic = "${WORKDIR}/image-pic"
 # Configure follow debian/rules
 EXTRA_OECONF = " \
     --disable-examples \
-    --x-includes=${STAGING_INCDIR} --x-libraries=${STAGING_INCDIR} \
+    --x-includes=${STAGING_INCDIR} --x-libraries=${STAGING_LIBDIR} \
 "
 NONPIC_CONF = "--disable-gpc"
 PIC_CONF = "--with-pic"
