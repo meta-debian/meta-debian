@@ -3,7 +3,7 @@
 # base branch: master
 #
 
-INC_PR = "r0"
+INC_PR = "r1"
 
 inherit debian-package
 
@@ -39,4 +39,11 @@ EXTRA_OECONF = " \
 # to Debian rules
 do_debian_patch_prepend() {
 	cpp -E -o - ${S}/debian/patches/series.in | egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
+}
+
+# debian/patches/multiarch.diff set LIBPC to $(LIBDIR)/$(MULTIARCH)/pkgconfig,
+# this make pkgconfig cannot get information about python,
+# so change it back to original.
+do_configure_prepend() {
+	sed -i -e 's#^LIBPC=.*#LIBPC= $(LIBDIR)/pkgconfig#g' ${S}/Makefile.pre.in
 }
