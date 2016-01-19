@@ -64,14 +64,22 @@ ${@base_conditional('LINUX_CONFIG_APPEND', '', '', 'file://${LINUX_CONFIG_APPEND
 do_configure_prepend() {
 	rm -f ${WORKDIR}/defconfig
 
+	# When ARCH is set to i386 or x86_64, we need to map ARCH to the real name of src
+	# dir (x86) under arch/ of kenrel tree, so that we can find correct source to copy.
+	if [ "${ARCH}" = "i386" ] || [ "${ARCH}" = "x86_64" ]; then
+		KERNEL_SRCARCH=x86
+	else
+		KERNEL_SRCARCH=${ARCH}
+	fi
+
 	if [ -n "${LINUX_CONFIG}" ]; then
 		DEFCONFIG=${WORKDIR}/${LINUX_CONFIG}
 	elif [ -n "${LINUX_DEFCONFIG}" ]; then
-		DEFCONFIG=${S}/arch/${ARCH}/configs/${LINUX_DEFCONFIG}
+		DEFCONFIG=${S}/arch/${KERNEL_SRCARCH}/configs/${LINUX_DEFCONFIG}
 	else
 		bbfatal "Both LINUX_DEFCONFIG and LINUX_CONFIG are not defined.
        Please set one of them at lease.
-       LINUX_DEFCONFIG: a defconfig file in ${S}/arch/${ARCH}/configs
+       LINUX_DEFCONFIG: a defconfig file in ${S}/arch/${KERNEL_SRCARCH}/configs
        LINUX_CONFIG: a config file in FILESPATH"
 	fi
 	if [ ! -f ${DEFCONFIG} ]; then
