@@ -7,9 +7,6 @@ require libtool.inc
 
 PR = "${INC_PR}.1"
 
-LICENSE = "GPL-2.0"
-LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
-
 inherit native
 
 DEPENDS = ""

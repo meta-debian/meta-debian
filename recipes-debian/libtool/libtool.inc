@@ -52,8 +52,3 @@ FILES_${PN}-dev = "${includedir} ${FILES_SOLIBSDEV} ${libdir}/*.la \
 FILES_libltdl = "${libdir}/libltdl${SOLIBS}"                                    
 FILES_libltdl-dev = "${libdir}/libltdl${SOLIBSDEV} ${includedir}"               
 FILES_libltdl-staticdev = "${libdir}/libltdl.a"                                 
-
-
-
-
-
