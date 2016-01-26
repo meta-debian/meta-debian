@@ -43,6 +43,7 @@ EXTRA_OECONF = " \
 	--with-default-path=${DEFAULT_PATH} \
 	--with-superuser-path=${SUPERUSER_PATH} \
 	--with-cflags='${cflags}' \
+	--libexecdir=${libdir}/${BPN} \
 "
 cflags = "${CPPFLAGS} ${CFLAGS} -DLOGIN_PROGRAM=\"${base_bindir}/login\" -DLOGIN_NO_ENDOPT"
 DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
