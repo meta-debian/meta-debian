@@ -1,23 +1,11 @@
-SUMMARY = "Apache HTTP Server"
-DESCRIPTION = "The Apache HTTP Server Project's goal is to build a secure, efficient and \
-extensible HTTP server as standards-compliant open source software. The \
-result has long been the number one web server on the Internet. \
-Installing this package results in a full installation, including the \
-configuration files, init scripts and support scripts."
+require apache2.inc
 
-PR = "r0"
-
-inherit debian-package
-
-LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=dbff5a2b542fa58854455bf1a0b94b83"
+PR = "${INC_PR}.1"
 
 DEPENDS = " \
     libtool-native dpkg-native apache2-native libtimedate-perl-native \
     openssl expat pcre apr apr-util \
 "
-
-inherit autotools pkgconfig perlnative
 
 # Base on
 # meta-openembedded/meta-webserver/recipes-httpd/apache2
@@ -29,7 +17,7 @@ SRC_URI += " \
 "
 
 # Configure follow debian/rules
-EXTRA_OECONF = " \
+EXTRA_OECONF += " \
     --enable-layout=Debian --enable-so --with-program-name=${DPN} \
     --enable-suexec --with-suexec-caller=www-data \
     --with-suexec-bin=${libexecdir}/suexec --with-suexec-docroot=${localstatedir}/www \
@@ -46,20 +34,10 @@ EXTRA_OECONF = " \
     LDFLAGS="-Wl,--as-needed ${LDFLAGS}" LTFLAGS="--no-silent" \
 "
 
-# Correct installation and library path.
-# Option ap_cv_void_ptr_lt_long=no:
-# 	Avoid error: Size of "void *" is less than size of "long"
 EXTRA_OECONF += " \
-    --prefix=${base_prefix} \
-    --localstatedir=${localstatedir}/${DPN} \
-    --includedir=${includedir}/${DPN} \
-    --datadir=${datadir}/${DPN} \
-    --sysconfdir=${sysconfdir}/${DPN} \
-    --libexecdir=${libexecdir}/modules \
     --enable-ssl \
     --with-ssl=${STAGING_LIBDIR}/.. \
     --with-expat=${STAGING_LIBDIR}/.. \
-    ap_cv_void_ptr_lt_long=no \
 "
 CFLAGS_prepend = " -I${STAGING_INCDIR}/openssl "
 
@@ -158,12 +136,8 @@ do_install_append() {
 
 	# standard suexec
 	chmod 4754 ${D}${libexecdir}/suexec-pristine
-	chgrp www-data ${D}${libexecdir}/suexec-pristine
 	# configurable suexec
 	chmod 4754 ${D}${libexecdir}/suexec-custom
-	chgrp www-data ${D}${libexecdir}/suexec-custom
-	chown -R www-data:www-data ${D}${localstatedir}/cache/apache2/mod_cache_disk
-	chown root:adm ${D}${localstatedir}/log/apache2
 	chmod o-rx ${D}${localstatedir}/log/apache2
 
 	# Remove sysroot path
@@ -172,6 +146,19 @@ do_install_append() {
 	       -e 's,APU_CONFIG = .*,APU_CONFIG = ,g' ${D}${datadir}/apache2/build/config_vars.mk
 	sed -i -e 's,${STAGING_DIR_HOST},,g' \
 	       -e 's,".*/configure","configure",g' ${D}${datadir}/apache2/build/config.nice
+}
+
+pkg_postints_${PN}() {
+	chown -R www-data:www-data ${D}${localstatedir}/cache/apache2/mod_cache_disk
+	chown root:adm ${D}${localstatedir}/log/apache2
+}
+
+pkg_postinst_${PN}-suexec-custom() {
+	chgrp www-data $D${libexecdir}/suexec-custom
+}
+
+pkg_postinst_${PN}-suexec-pristine() {
+	chgrp www-data $D${libexecdir}/suexec-pristine
 }
 
 # Add files into SSTATE_SCAN_FILES to replace the hardcoded paths
@@ -212,7 +199,7 @@ PACKAGE_BEFORE_PN = " \
     ${PN}-utils \
 "
 
-FILES_${PN}-bin = "${libdir}/${DPN}/modules/* ${sbindir}/apache2"
+FILES_${PN}-bin = "${libexecdir}/modules/* ${sbindir}/apache2"
 FILES_${PN}-data = " \
     ${datadir}/${DPN}/build/envvars-std \
     ${datadir}/${DPN}/default-site \
@@ -224,9 +211,9 @@ FILES_${PN}-doc += "${sysconfdir}/${DPN}/conf-available/apache2-doc.conf"
 
 FILES_${PN}-suexec-custom = " \
     ${sysconfdir}/${DPN}/suexec \
-    ${libdir}/${DPN}/suexec-custom \
+    ${libexecdir}/suexec-custom \
 "
-FILES_${PN}-suexec-pristine = "${libdir}/${DPN}/suexec-pristine"
+FILES_${PN}-suexec-pristine = "${libexecdir}/suexec-pristine"
 FILES_${PN}-utils = " \
     ${bindir} \
     ${sbindir}/check_forensic \
@@ -235,7 +222,7 @@ FILES_${PN}-utils = " \
 "
 
 FILES_${PN} += "/run/${DPN}"
-FILES_${PN}-dbg += "${libdir}/${DPN}/modules/.debug"
+FILES_${PN}-dbg += "${libexecdir}/modules/.debug"
 
 # Follow debian/control, declare relationships between packages
 RDEPENDS_${PN} += "${PN}-bin ${PN}-utils ${PN}-data"
