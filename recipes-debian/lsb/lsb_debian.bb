@@ -17,11 +17,11 @@ do_install(){
 	install -m 0644 ${S}/init-functions.d/20-left-info-blocks ${D}${base_libdir}/${DPN}/init-functions.d
 
 	# Install files for lsb-core
-	install -d ${D}${libexecdir}
-	install -m 0755 ${S}/initdutils.py ${D}${libexecdir}
-	install -m 0755 ${S}/install_initd ${D}${libexecdir}
-	install -m 0755 ${S}/remove_initd ${D}${libexecdir}
-	install -m 0755 ${S}/lsbinstall ${D}${libexecdir}
+	install -d ${D}${libdir}/${BPN}
+	install -m 0755 ${S}/initdutils.py ${D}${libdir}/${BPN}
+	install -m 0755 ${S}/install_initd ${D}${libdir}/${BPN}
+	install -m 0755 ${S}/remove_initd ${D}${libdir}/${BPN}
+	install -m 0755 ${S}/lsbinstall ${D}${libdir}/${BPN}
 
 	# Install files for lsb-invalid-mta
 	install -d ${D}${sbindir}
