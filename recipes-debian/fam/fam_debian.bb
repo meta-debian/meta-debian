@@ -19,14 +19,16 @@ LIC_FILES_CHKSUM = " \
     file://lib/COPYING;md5=dcf3c825659e82539645da41a7908589 \
 "
 
-# We need specific version for extracting source code
-PV = "2.7.0"
-do_unpack_src() {
-	tar -xzf ${DEBIAN_UNPACK_DIR}/${DPN}-${PV}.tar.gz -C ${S}
-	mv ${S}/${DPN}-${PV}/* ${S}/
-	rmdir ${S}/${DPN}-${PV}
+# Extrace source code from compress file
+do_unpack_extra() {
+	PV_SRCPKG=$(head -n 1 ${S}/debian/changelog | \
+	            sed "s|.*(\([^()]*\)).*|\1|")
+	PV_ORIG=$(echo $PV_SRCPKG | sed "s|-.*||")
+	tar -xzf ${DEBIAN_UNPACK_DIR}/${DPN}-$PV_ORIG.tar.gz -C ${S}
+	mv ${S}/${DPN}-$PV_ORIG/* ${S}/
+	rmdir ${S}/${DPN}-$PV_ORIG
 }
-addtask unpack_src after do_unpack before do_debian_fix_timestamp
+addtask unpack_extra after do_unpack before do_debian_fix_timestamp
 
 # Apply patches in debian/patches.
 # Debian patch files are not same level,
