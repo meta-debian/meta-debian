@@ -3,7 +3,7 @@
 # base branch: master
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -113,9 +113,13 @@ do_configure () {
         oe_runconf
 }
 
-do_install_append() {
+do_install_append_class-native() {
 	mv ${D}/${base_bindir}/rpm ${D}/${bindir}/
-	rmdir ${D}/${base_bindir}
+	rmdir --ignore-fail-on-non-empty ${D}${base_bindir}
+	# Correct links after moving rpm
+	ln -sf rpm ${D}${bindir}/rpmquery
+	ln -sf rpm ${D}${bindir}/rpmverify
+
 	rm -f ${D}${prefix}/lib/*.la
 	rm -f ${D}${prefix}/lib/rpm-plugins/*.la
 	rm -f ${D}/${libdir}/python%{with_python_version}/site-packages/*.{a,la}
@@ -125,6 +129,15 @@ do_install_append() {
 	ln -s ../debugedit ${D}${prefix}/lib/rpm/bin/debugedit
 	ln -s ../rpmdeps ${D}${prefix}/lib/rpm/bin/rpmdeps-oecore
 	install -m 0755 ${WORKDIR}/pythondeps.sh ${D}/${libdir}/rpm/pythondeps.sh
+}
+
+do_install_append_class-target() {
+	mv ${D}${base_bindir}/rpm ${D}${bindir}/
+	rmdir --ignore-fail-on-non-empty ${D}${base_bindir}
+	ln -s ../lib/rpm/debugedit ${D}${bindir}/debugedit
+	# Correct links after moving rpm
+	ln -sf rpm ${D}${bindir}/rpmquery
+	ln -sf rpm ${D}${bindir}/rpmverify
 }
 
 pkg_postinst_${PN}() {
@@ -141,21 +154,39 @@ pkg_postrm_${PN}() {
 # Don't use "python-${PN}",
 # if we bitbake nativesdk-rpm, we will get nativesdk-python-nativesdk-rpm,
 # so use "python-rpm" instead
-PACKAGES += "python-rpm"
+PACKAGES =+ "debugedit librpm librpmbuild librpmio librpmsign rpm-common rpm2cpio python-rpm"
 PROVIDES += "python-rpm"
-FILES_${PN} += "${libdir}/rpm \
-${libdir}/rpm-plugins/exec.so \
-"
-RDEPENDS_${PN} = "base-files run-postinsts"
+
+FILES_debugedit = "${bindir}/debugedit ${libdir}/rpm/debugedit"
+FILES_librpm = "${libdir}/librpm${SOLIBS}"
+FILES_librpmbuild = "${libdir}/librpmbuild${SOLIBS}"
+FILES_librpmio = "${libdir}/librpmio${SOLIBS}"
+FILES_librpmsign = "${libdir}/librpmsign${SOLIBS}"
+FILES_rpm-common = "${libdir}/rpm-plugins/* \
+                    ${libdir}/rpm/platform/* \
+                    ${libdir}/rpm/macro* \
+                    ${libdir}/rpm/rpmrc"
+FILES_rpm2cpio = "${bindir}/rpm2cpio"
+FILES_python-rpm = "${libdir}/python${PYTHON_BASEVERSION}/*/rpm/*"
+FILES_${PN}-dbg += "${libdir}/rpm-plugins/.debug \
+                    ${libdir}/python${PYTHON_BASEVERSION}/*/rpm/.debug"
+
+DEBIANNAME_${PN}-dev = "librpm-dev"
+DEBIANNAME_${PN}-dbg = "librpm-dbg"
+
+RDEPENDS_${PN} = "base-files run-postinsts perl \
+                  rpm2cpio debugedit rpm-common"
 RDEPENDS_${PN}_class-native = ""
 RDEPENDS_${PN}_class-nativesdk = ""
-FILES_${PN}-dbg += "${libdir}/rpm/.debug/* \
-${libdir}/rpm-plugins/.debug/* \
-${libdir}/python2.7/site-packages/rpm/.debug/* \
-"
-FILES_${PN}-dev += "${libdir}/python2.7/site-packages/rpm/*.la"
-FILES_python-rpm = "${libdir}/python2.7/site-packages/rpm/*"
-RDEPENDS_python-rpm = "${PN} python"
+
+# Follow debian/control
+RDEPENDS_python-rpm = "python librpm librpmio librpmbuild librpmsign"
+RDEPENDS_rpm2cpio = "rpm-common"
+RDEPENDS_librpm = "librpmio"
+RDEPENDS_librpmbuild = "librpm librpmio"
+RDEPENDS_librpmsign = "librpm librpmio"
+RDEPENDS_debugedit = "librpmio"
+
 BBCLASSEXTEND = "native nativesdk"
 
 #

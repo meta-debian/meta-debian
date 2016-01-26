@@ -27,20 +27,18 @@ DEBIAN_PATCH_TYPE = "nopatch"
 #Add tftpd-hpa package
 PACKAGES =+ "tftpd-hpa"
 
-do_install_append() {
+inherit autotools-brokensep pkgconfig
+
+do_configure() {
+	${S}/autogen.sh
+	oe_runconf
+}
+do_install() {
+	oe_runmake install INSTALLROOT=${D}
 	#Create new folders
-	install -d ${D}${sysconfdir}
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/init
-	install -d ${D}${bindir}
-	install -d ${D}${sbindir}
 
-	install -m 0755 ${S}/tftp/tftp 				\
-			${D}${bindir}
-	
-	install -m 0755 ${S}/tftpd/tftpd 			\
-                        ${D}${sbindir}/in.tftpd 
-	
 	install -m 0644 ${S}/debian/tftpd-hpa.upstart 		\
 			${D}${sysconfdir}/init/tftpd-hpa.conf
 

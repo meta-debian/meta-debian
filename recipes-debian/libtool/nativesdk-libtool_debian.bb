@@ -3,11 +3,11 @@
 # base-branch: daisy
 #
                                                                                 
-inherit debian-package nativesdk
-
 PR = "${INC_PR}.0"                                                              
 
 require libtool.inc                                               
+
+inherit nativesdk
 
 SRC_URI += "\
 file://prefix.patch \

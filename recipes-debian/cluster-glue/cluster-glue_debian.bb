@@ -39,6 +39,15 @@ FILES_${PN} += " \
 	${libdir}/heartbeat/plugins/compress/*.so \
 	${libdir}/heartbeat/plugins/InterfaceMgr/*.so \
 	"
+
+FILES_${PN}-dbg += " \
+	${libdir}/stonith/plugins/stonith2/.debug/* \
+	${libdir}/heartbeat/.debug/* \
+	${libdir}/heartbeat/plugins/RAExec/.debug/* \
+	${libdir}/heartbeat/plugins/test/.debug/* \
+	${libdir}/heartbeat/plugins/compress/.debug/* \
+	${libdir}/heartbeat/plugins/InterfaceMgr/.debug/* \
+	"
 	
 FILES_${PN}-dev += " \
 	${libdir}/stonith/plugins/stonith2/*.la \

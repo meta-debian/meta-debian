@@ -17,6 +17,14 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
                     file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
                     file://README;endline=8;md5=c3803a3e8ca5ab5eb1e5912faa405351"
 
-SRC_URI += "file://dont-depend-on-help2man.patch \
-           "
+#install follow Debian jessie
+do_install_append() {
+	#remove unwanted files
+	rm ${D}${libdir}/libtasn1.la
+	
+	LINKLIB=$(basename $(readlink ${D}${libdir}/libtasn1.so))
+	chmod 0644 ${D}${libdir}/${LINKLIB}
+}
 inherit autotools texinfo binconfig lib_package
+DEBIANNAME_${PN}-dev = "${PN}-dev"
+DEBIANNAME_${PN}-dbg = "${PN}-dbg"

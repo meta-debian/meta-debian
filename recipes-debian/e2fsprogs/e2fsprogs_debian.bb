@@ -82,7 +82,36 @@ do_configure_prepend () {
 							${S}/MCONFIG.in
 }
 
-do_install () {
+do_install_class-target () {
+	oe_runmake 'DESTDIR=${D}' install
+	oe_runmake 'DESTDIR=${D}' install-libs
+	#Some files belong to libdir
+	if [ ! ${D}${libdir} -ef ${D}${base_libdir} ]; then
+		install -d ${D}${libdir}
+		mv ${D}${base_libdir}/pkgconfig ${D}${libdir}
+		# Refine softlink in class-target to avoid finding libraries in host system
+		# while building other packages which use e2fsprogs's libraries.
+		rm ${D}${base_libdir}/libe2p.so
+		ln -sf ../../${base_libdir}/libe2p.so.2 ${D}${libdir}/libe2p.so
+		rm ${D}${base_libdir}/libcom_err.so
+		ln -sf ../../${base_libdir}/libcom_err.so.2 ${D}${libdir}/libcom_err.so
+		rm ${D}${base_libdir}/libext2fs.so
+		ln -sf ../../${base_libdir}/libext2fs.so.2 ${D}${libdir}/libext2fs.so
+		rm ${D}${base_libdir}/libss.so
+		ln -sf ../../${base_libdir}/libss.so.2 ${D}${libdir}/libss.so
+		mv ${D}${base_libdir}/*.a ${D}${libdir}
+	fi
+	#Some files belong to sbindir
+	install -d ${D}${sbindir}
+	mv ${D}${base_sbindir}/e2freefrag ${D}${sbindir}
+	mv ${D}${base_sbindir}/e4defrag ${D}${sbindir}
+	mv ${D}${base_sbindir}/filefrag ${D}${sbindir}
+	mv ${D}${base_sbindir}/mklost+found ${D}${sbindir}
+
+	oe_multilib_header ext2fs/ext2_types.h
+}
+
+do_install_class-native () {
 	oe_runmake 'DESTDIR=${D}' install
 	oe_runmake 'DESTDIR=${D}' install-libs
 	#Some files belong to libdir
