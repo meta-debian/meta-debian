@@ -1,0 +1,31 @@
+#
+# uri-check.bbclass
+#
+# Set INHERIT += "uri-check" to enable this class
+#
+# This class confirms that all sources in SRC_URI except local files
+# are fetched from one of allowed URIs (SRC_URI_ALLOWED).
+#
+# URIs that don't match with SRC_URI_ALLOWED by 'prefix search'
+# are printed as WARNING.
+# Do nothing if SRC_URI_ALLOWED is not set.
+#
+
+base_do_fetch_append() {
+    import re
+
+    allowed = d.getVar("SRC_URI_ALLOWED", True) or ""
+    if allowed is "":
+        return
+
+    # fetcher is built in base_do_fetch
+    for u in fetcher.urls:
+        # ignore local files
+        if isinstance(fetcher.ud[u].method, bb.fetch2.local.Local):
+            continue
+        for a in allowed.split():
+            if re.compile("^" + a).match(u):
+                bb.note("SRC_URI %s matches %s in SRC_URI_ALLOWED" % (u, a))
+                return
+        bb.warn("SRC_URI %s doesn't match SRC_URI_ALLOWED" % u)
+}
