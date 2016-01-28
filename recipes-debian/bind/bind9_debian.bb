@@ -10,6 +10,13 @@ inherit debian-package
 LICENSE = "ISC & BSD"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=a3df5f651469919a0e6cb42f84fb6ff1"
 
+#
+# dont-test-on-host.patch:
+#   -patch file to remove test on host system.
+#
+SRC_URI +=" \
+file://dont-test-on-host_debian.patch"
+
 DEPENDS = "openssl openssl-native libcap"
 
 DEBIAN_PATCH_TYPE = "nopatch"
@@ -65,8 +72,8 @@ do_install_append() {
 	install -D ${S}/debian/ip-up.d ${D}${sysconfdir}/network/if-up.d/bind9
 	install -D ${S}/debian/ip-down.d ${D}${sysconfdir}/network/if-down.d/bind9
 
-	install -D ${S}/debian/ip-up.d ${D}${sysconfdir}/ppp/if-up.d/bind9
-	install -D ${S}/debian/ip-down.d ${D}${sysconfdir}/ppp/if-down.d/bind9
+	install -D ${S}/debian/ip-up.d ${D}${sysconfdir}/ppp/ip-up.d/bind9
+	install -D ${S}/debian/ip-down.d ${D}${sysconfdir}/ppp/ip-down.d/bind9
 
 	install -D -m 644 ${S}/debian/bind9.ufw.profile ${D}${sysconfdir}/ufw/applications.d/bind9
 
@@ -107,6 +114,10 @@ do_install_append() {
 
 	ln -sf liblwres.so.90 ${D}${libdir}/liblwres.so.90.0.7
 
+	# Install script follow Debian
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/debian/bind9.init ${D}${sysconfdir}/init.d/bind9
+	install -m 0755 ${S}/debian/lwresd.init ${D}${sysconfdir}/init.d/lwresd
 }
 
 CONFFILES_${PN} = " \
