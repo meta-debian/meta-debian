@@ -23,9 +23,10 @@ base_do_fetch_append() {
         # ignore local files
         if isinstance(fetcher.ud[u].method, bb.fetch2.local.Local):
             continue
+        uri = "%s: SRC_URI %s" % (d.getVar("PN", True) or "", u)
         for a in allowed.split():
             if re.compile("^" + a).match(u):
-                bb.note("SRC_URI %s matches %s in SRC_URI_ALLOWED" % (u, a))
+                bb.note("%s matches %s in SRC_URI_ALLOWED" % (uri, a))
                 return
-        bb.warn("SRC_URI %s doesn't match SRC_URI_ALLOWED" % u)
+        bb.warn("%s doesn't match SRC_URI_ALLOWED" % uri)
 }
