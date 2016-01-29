@@ -1,6 +1,6 @@
 require apache2.inc
 
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 
 DEPENDS = " \
     libtool-native dpkg-native apache2-native libtimedate-perl-native \
@@ -146,6 +146,8 @@ do_install_append() {
 	       -e 's,APU_CONFIG = .*,APU_CONFIG = ,g' ${D}${datadir}/apache2/build/config_vars.mk
 	sed -i -e 's,${STAGING_DIR_HOST},,g' \
 	       -e 's,".*/configure","configure",g' ${D}${datadir}/apache2/build/config.nice
+	sed -i -e 's,${OECMAKE_PERLNATIVE_DIR},${bindir},g' ${D}${bindir}/apxs
+	sed -i -e 's,${OECMAKE_PERLNATIVE_DIR},${bindir},g' ${D}${sbindir}/split-logfile
 }
 
 pkg_postints_${PN}() {
