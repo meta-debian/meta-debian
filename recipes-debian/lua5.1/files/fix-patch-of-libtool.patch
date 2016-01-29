@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index 98f9e31..22c8348 100644
+--- a/Makefile
++++ b/Makefile
+@@ -130,8 +130,8 @@ lecho:
+ # Use libtool for binary installs, etc.
+ 
+ export V
+-export LIBTOOL = libtool --quiet --tag=CC
+-export LIBTOOLPP = libtool --quiet --tag=CXX
++export LIBTOOL = /home/tuyenhv/recipes_2016/build/tmp/sysroots/qemux86/usr/bin/crossscripts/i586-debian-linux-libtool --quiet --tag=CC
++export LIBTOOLPP = /home/tuyenhv/recipes_2016/build/tmp/sysroots/qemux86/usr/bin/crossscripts/i586-debian-linux-libtool --quiet --tag=CXX
+ # See libtool manual about how to set this
+ export LIB_VERSION = 0:0:0
+ 
