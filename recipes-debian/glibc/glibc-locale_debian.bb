@@ -6,7 +6,13 @@ inherit debian-package
 PR = "r1"
 DPN = "glibc"
 
+do_debian_fix_timestamp[noexec] = "1"
 do_debian_patch[noexec] = "1"
+
+# very rare case; glibc-locale doen't have source tree but
+# generates binary packages. DEBIAN_UNPACK_DIR should point
+# the glibc source tree instead so that summary.bbclass can find changelog.
+DEBIAN_UNPACK_DIR = "${@d.getVar("WORKDIR", True).replace("/glibc-locale/", "/glibc/")}/git"
 
 LOCALEBASEPN = "${MLPREFIX}glibc"
 
