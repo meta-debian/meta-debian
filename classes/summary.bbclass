@@ -145,7 +145,7 @@ python gen_rootfs_summary() {
 }
 
 python gen_sdk_target_summary() {
-    sdk_output = d.getVar("SDK_OUTPUT", True).strip("/")
+    sdk_output = d.getVar("SDK_OUTPUT", True)
     sdk_path_target = d.getVar('SDKTARGETSYSROOT', True).strip("/")
     tree = os.path.join(sdk_output, sdk_path_target)
     csv = os.path.join(d.getVar("WORKDIR", True), "sdk-target-summary.csv")
@@ -153,9 +153,7 @@ python gen_sdk_target_summary() {
 }
 
 python gen_sdk_host_summary() {
-    sdk_output = d.getVar("SDK_OUTPUT", True).strip("/")
-    sdk_path_host = d.getVar('SDKPATHNATIVE', True).strip("/")
-    tree = os.path.join(sdk_output, sdk_path_host)
+    tree = d.getVar("SDK_OUTPUT", True)
     csv = os.path.join(d.getVar("WORKDIR", True), "sdk-host-summary.csv")
     gen_summary(tree, csv)
 }
