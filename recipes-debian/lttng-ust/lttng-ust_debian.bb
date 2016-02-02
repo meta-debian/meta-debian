@@ -18,6 +18,9 @@ inherit debian-package autotools lib_package
 
 DPN = "ust"
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 DEPENDS = "liburcu util-linux"
 
 do_install_append() {

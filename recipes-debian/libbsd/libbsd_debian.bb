@@ -16,6 +16,9 @@ PR = "r0"
 
 inherit debian-package
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 LICENSE = "BSD-4-Clause & MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f1530ea92aeaa1c5e2547cfd43905d8c"
 SECTION = "libs"

@@ -5,6 +5,9 @@ HOMEPAGE = "https://www.openfabrics.org/"
 
 inherit debian-package autotools
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 PR = "r0"
 
 LICENSE = "GPLv2"

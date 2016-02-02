@@ -7,6 +7,9 @@ PR = "r0"
 
 inherit debian-package
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 SUMMARY = "Display or change ethernet card settings"
 DESCRIPTION = "A small utility for examining and tuning the settings of your ethernet-based network interfaces."
 HOMEPAGE = "http://www.kernel.org/pub/software/network/ethtool/"

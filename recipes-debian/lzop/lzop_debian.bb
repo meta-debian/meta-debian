@@ -10,6 +10,9 @@ HOMEPAGE = "http://www.lzop.org/"
 PR = "r0"
 inherit debian-package
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 DEPENDS += "lzo"
 
 LICENSE = "GPLv2+"
