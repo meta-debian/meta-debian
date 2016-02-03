@@ -7,9 +7,13 @@
 # are fetched from one of allowed URIs (SRC_URI_ALLOWED).
 #
 # URIs that don't match with SRC_URI_ALLOWED by 'prefix search'
-# are printed as WARNING.
+# are printed as WARNING by default. If SRC_URI_CHECK_ERROR is 1,
+# build stops with ERROR when such URIs are found.
 # Do nothing if SRC_URI_ALLOWED is not set.
 #
+
+# if "1" raise ERROR, otherwise just print WARNING
+SRC_URI_CHECK_ERROR ?= ""
 
 base_do_fetch_append() {
     import re
@@ -28,5 +32,8 @@ base_do_fetch_append() {
             if re.compile("^" + a).match(u):
                 bb.note("%s matches %s in SRC_URI_ALLOWED" % (uri, a))
                 return
-        bb.warn("%s doesn't match SRC_URI_ALLOWED" % uri)
+        if d.getVar("SRC_URI_CHECK_ERROR", True) or "" is "1":
+            bb.fatal("%s doesn't match SRC_URI_ALLOWED" % uri)
+        else:
+            bb.warn("%s doesn't match SRC_URI_ALLOWED" % uri)
 }
