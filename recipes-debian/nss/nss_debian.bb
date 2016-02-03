@@ -78,12 +78,12 @@ do_compile() {
 		OS_TEST="${TARGET_ARCH}"
 	fi
 
-if [ "${SITEINFO_BITS}" = "64" ]; then
-	export USE_64=1
-fi
+	if [ "${SITEINFO_BITS}" = "64" ]; then
+		export USE_64=1
+	fi
 
-make -C ./nss CCC="${CXX}" \
-	OS_TEST=${OS_TEST} \
+	make -C ./nss CCC="${CXX}" \
+		OS_TEST=${OS_TEST}
 }
 
 do_install() {
