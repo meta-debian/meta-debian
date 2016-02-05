@@ -2,4 +2,5 @@
 RDEPENDS_${PN}_remove = "\
 nativesdk-unfs3 \
 nativesdk-smartpm \
+nativesdk-opkg \
 "
