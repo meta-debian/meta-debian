@@ -5,9 +5,7 @@ DPN = "gcc-4.9"
 
 DEBIAN_PATCH_TYPE = "quilt"
 
-# BINV should be incremented to a revision after a minor gcc release
-
-BINV = "4.9.2"
+BINV = "4.9"
 
 FILESEXTRAPATHS =. "${FILE_DIRNAME}/gcc-4.9:"
 
@@ -23,7 +21,6 @@ LIC_FILES_CHKSUM = "\
     file://COPYING.RUNTIME;md5=fe60d87048567d4fe8c8a0ed2448bcc8 \
 "
 
-DEBIAN_UNPACK_DIR = "${TMPDIR}/work-shared/gcc-${PV}-${PR}/git"
 B = "${WORKDIR}/gcc-${PV}/build.${HOST_SYS}.${TARGET_SYS}"
 
 # Language Overrides
@@ -112,7 +109,6 @@ SRC_URI += "\
     file://0032-libtool.patch \
     file://0033-gcc-armv4-pass-fix-v4bx-to-linker-to-support-EABI.patch \
     file://0034-Use-the-multilib-config-files-from-B-instead-of-usin.patch \
-    file://0040-fix-g++-sysroot.patch \
     file://0041-libtool-avoid-libdir.patch \
     file://0043-cpp.patch \
     file://0044-gengtypes.patch \
@@ -121,16 +117,10 @@ SRC_URI += "\
     file://0049-Enable-SPE-AltiVec-generation-on-powepc-linux-target.patch \
     file://0050-Revert-Use-dbx_reg_number-for-spanning-registers.patch \
     file://0051-eabispe.patch \
-    file://0053-gcc-fix-segfault-from-calling-free-on-non-malloc-d-a.patch \
     file://0054-gcc-Makefile.in-fix-parallel-building-failure.patch \
     file://0056-top-level-reorder_gcc-bug-61144.patch \
     file://0057-aarch64-config.patch \
     file://0058-gcc-r212171.patch \
     file://0059-gcc-PR-rtl-optimization-63348.patch \
     file://target-gcc-includedir.patch \
-"
-
-# Debian distribution was make empty gcc/doc/tm.texi file due to license reason
-SRC_URI += " \
-    file://gcc-remove-target-tm-texi.patch \
 "
