@@ -16,9 +16,9 @@ PR = "r0"
 
 inherit native
 
-SRC_URI = "http://wiki.qemu.org/download/qemu-${PV}.tar.bz2"
-SRC_URI[md5sum] = "32893941d40d052a5e649efcf06aca06"
-SRC_URI[sha256sum] = "31f333a85f2d14c605a77679904a9668eaeb1b6dc7da53a1665230f46bc21314"
+SRC_URI = "${NONDEBIAN_GIT_URI}/qemu.git;protocol=${NONDEBIAN_GIT_PROTOCOL};branch=stable-2.1"
+SRCREV = "c2b0926634cda378f634be62c616afbf03ca5890"
+PV = "2.1.3+git${SRCPV}"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = " \
@@ -26,7 +26,7 @@ file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
 file://COPYING.LIB;endline=24;md5=c04def7ae38850e7d3ef548588159913 \
 "
 
-S = "${WORKDIR}/qemu-${PV}"
+S = "${WORKDIR}/git"
 
 # comes from ${S}/Makefile, the list of firmware blobs
 BLOBS = " \

@@ -51,7 +51,7 @@ diff --git a/gcc/configure.ac b/gcc/configure.ac
 index 3601ab6..06e501f 100644
 --- a/gcc/configure.ac
 +++ b/gcc/configure.ac
-@@ -4779,15 +4779,15 @@ if test x$gcc_cv_libc_provides_ssp = xyes; then
+@@ -5095,19 +5095,19 @@ if test x$gcc_cv_libc_provides_ssp = xyes; then
  fi
  
  # Test for <sys/sdt.h> on the target.
@@ -59,18 +59,26 @@ index 3601ab6..06e501f 100644
 -AC_MSG_CHECKING(sys/sdt.h in the target C library)
 -have_sys_sdt_h=no
 -if test -f $target_header_dir/sys/sdt.h; then
--  have_sys_sdt_h=yes
--  AC_DEFINE(HAVE_SYS_SDT_H, 1,
--            [Define if your target C library provides sys/sdt.h])
+-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/sdt.h>]],
+-                                     [[DTRACE_PROBE(foo,bar); return 0;]])
+-                    ],[
+-                     have_sys_sdt_h=yes
+-                     AC_DEFINE(HAVE_SYS_SDT_H, 1,
+-                       [Define if your target C library provides sys/sdt.h])
+-                    ])
 -fi
 -AC_MSG_RESULT($have_sys_sdt_h)
 +#GCC_TARGET_TEMPLATE([HAVE_SYS_SDT_H])
 +#AC_MSG_CHECKING(sys/sdt.h in the target C library)
 +#have_sys_sdt_h=no
 +#if test -f $target_header_dir/sys/sdt.h; then
-+#  have_sys_sdt_h=yes
-+#  AC_DEFINE(HAVE_SYS_SDT_H, 1,
-+#            [Define if your target C library provides sys/sdt.h])
++#  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/sdt.h>]],
++#                                     [[DTRACE_PROBE(foo,bar); return 0;]])
++#                    ],[
++#                     have_sys_sdt_h=yes
++#                     AC_DEFINE(HAVE_SYS_SDT_H, 1,
++#                       [Define if your target C library provides sys/sdt.h])
++#                    ])
 +#fi
 +#AC_MSG_RESULT($have_sys_sdt_h)
  

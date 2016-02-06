@@ -1,11 +1,10 @@
 require dpkg.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 DESCRIPTION = "Dpkg version of update-alternatives"
 
-# Overwrite DEPENDS of dpkg.inc
-DEPENDS = ""
+DPN = "dpkg"
 PROVIDES += "virtual/update-alternatives"
 
 SRC_URI += "\
@@ -14,10 +13,17 @@ SRC_URI += "\
 	file://fix_offline_dir.patch \
 "
 
-# Unnecessary for update-alternatives
-EXTRA_OECONF += " \
+inherit autotools gettext pkgconfig
+
+# disable features except update-alternatives
+EXTRA_OECONF = " \
+	--enable-update-alternatives \
+	--disable-dselect \
+	--disable-start-stop-daemon \
 	--without-zlib \
 	--without-bz2 \
+	--without-liblzma \
+	--without-selinux \
 "
 
 # Only compile materials for update-alternatives
@@ -31,7 +37,6 @@ do_install() {
 	install -d ${D}${sysconfdir}/alternatives 
 	install -d ${D}${localstatedir}/lib/dpkg/alternatives
 	install -m 0755 ${B}/utils/update-alternatives ${D}${sbindir}
-	exit 0
 }
 
 PACKAGES = "${PN} ${PN}-dbg"
@@ -44,3 +49,5 @@ FILES_${PN}-dbg = " \
 	${prefix}/src \
 	${sbindir}/.debug \
 "
+
+BBCLASSEXTEND = "native nativesdk"

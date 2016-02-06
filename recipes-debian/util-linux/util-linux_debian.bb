@@ -9,7 +9,7 @@ DESCRIPTION = "Util-linux includes a suite of basic system administration utilit
 commonly found on most Linux systems.  Some of the more important utilities include \
 disk partitioning, kernel message management, filesystem creation, and system login."
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -107,6 +107,11 @@ do_install_append () {
 
 	# create soft link getty to agetty command
 	ln -sf agetty ${D}/${base_sbindir}/getty
+
+	# Install files belong to util-linux package follow Debian
+	install -m 0755 ${D}${bindir}/isosize ${D}${base_sbindir}
+	# perl gets to do rename, not us.
+	mv ${D}${bindir}/rename ${D}${bindir}/rename.ul
 }
 
 PACKAGES =+ " \
@@ -250,7 +255,7 @@ RDEPENDS_${PN}_class-target +=" \
 		${PN}-findfs ${PN}-fsck.cramfs ${PN}-fsck ${PN}-fsfreeze \
 		${PN}-fstrim ${PN}-hwclock ${PN}-isosize ${PN}-mkfs ${PN}-wipefs \
 		${PN}-mkfs.cramfs ${PN}-mkswap ${PN}-pivot-root ${PN}-raw \
-		${PN}-runuser ${PN}-sfdisk ${PN}-swaplabel ${PN}-switch-root \
+		${PN}-sfdisk ${PN}-swaplabel ${PN}-switch-root \
 		${PN}-dmesg ${PN}-lsblk ${PN}-more ${PN}-tailf ${PN}-wdctl \
 		${PN}-fdformat ${PN}-ldattach ${PN}-readprofile \
 		${PN}-rtcwake ${PN}-tunelp \
@@ -261,6 +266,7 @@ RDEPENDS_${PN}_class-target +=" \
 		${PN}-rename.ul ${PN}-resizepart ${PN}-rev ${PN}-setarch ${PN}-setsid \
 		${PN}-setterm ${PN}-taskset ${PN}-unshare ${PN}-utmpdump ${PN}-whereis \
 		"
+RDEPENDS_${PN}_class-target += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${PN}-runuser', '', d)}"
 FILES_${PN}-doc = "${datadir}/doc ${datadir}/man"
 FILES_${PN}-dbg += "${prefix}/src/* \
 		${bindir}/.debug/* \

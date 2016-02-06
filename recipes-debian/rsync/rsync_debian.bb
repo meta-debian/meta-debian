@@ -24,7 +24,18 @@ DEPENDS = "popt"
 #	Need to run autoconf
 SRC_URI +=  "file://acinclude.m4"
 
-inherit autotools
+do_debian_patch_prepend () {
+	# debian/patches/series does not exist,
+	# so we need generate it before apply patch.
+	olddir=$(pwd)
+	cd ${DEBIAN_QUILT_PATCHES}
+	for i in $(ls *.diff *.patch); do
+		echo $i >> ${DEBIAN_QUILT_PATCHES}/series
+	done
+	cd $olddir
+}
+
+inherit autotools-brokensep
 
 PACKAGECONFIG ??= "acl attr"
 PACKAGECONFIG[acl] = "--enable-acl-support,--disable-acl-support,acl,"

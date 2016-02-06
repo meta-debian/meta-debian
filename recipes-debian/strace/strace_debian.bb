@@ -13,6 +13,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=124500c21e856f0912df29295ba104c7"
 PR = "r0"
 inherit debian-package
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 # strace-add-configure-options.patch:
 #	Add options "aio" and "acl" to enable/disable libaio and acl support.
 # git-version-gen:

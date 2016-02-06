@@ -71,7 +71,10 @@ debian_check_source_format() {
 	return 1
 }
 
+# Some 3.0 formatted source packages have no patch.
+# Please set DEBIAN_QUILT_PATCHES = "" for such packages.
 DEBIAN_QUILT_PATCHES ?= "${DEBIAN_UNPACK_DIR}/debian/patches"
+
 DEBIAN_QUILT_DIR ?= "${DEBIAN_UNPACK_DIR}/.pc"
 DEBIAN_QUILT_DIR_ESC ?= "${DEBIAN_UNPACK_DIR}/.pc.debian"
 
@@ -81,21 +84,33 @@ debian_patch_quilt() {
 	if [ -d ${DEBIAN_QUILT_DIR} -o -d ${DEBIAN_QUILT_DIR_ESC} ]; then
 		bbfatal "unknown quilt patches already applied"
 	fi
-	# Some packages which don't modify upstream sources have
-	# empty series or don't have debian/packages. This seems
-	# to be acceptable as an implementation of source package
-	if [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
-		bbwarn "${DEBIAN_QUILT_PATCHES}/series not found, nothing to do"
-	else
-		# sometimes series is empty, it's scary
-		if [ -z "$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)" ]; then
-			bbwarn "no patch in series, nothing to do"
+
+	# some source packages don't have patch
+	if [ -z "${DEBIAN_QUILT_PATCHES}" ]; then
+		if [ -d ${DEBIAN_UNPACK_DIR}/debian/patches ]; then
+			bbfatal "DEBIAN_QUILT_PATCHES is null, but ${DEBIAN_UNPACK_DIR}/debian/patches exists"
+		fi
+		bbnote "no debian patch exists in the source tree, nothing to do"
+		return
+	fi
+
+	if [ ! -d ${DEBIAN_QUILT_PATCHES} ]; then
+		bbfatal "${DEBIAN_QUILT_PATCHES} not found"
+	elif [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
+		bbfatal "${DEBIAN_QUILT_PATCHES}/series not found"
+	# sometimes series is empty, it's too scary
+	elif [ -z "$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)" ]; then
+		FOUND_PATCHES="$(debian_find_patches)"
+		if [ -z "${FOUND_PATCHES}" ]; then
+			bbnote "series is empty, nothing to do"
+			return
 		else
-			# apply patches
-			QUILT_PATCHES=${DEBIAN_QUILT_PATCHES} \
-				quilt --quiltrc /dev/null push -a
+			bbfatal "series is empty, but some patches found"
 		fi
 	fi
+
+	# apply patches
+	QUILT_PATCHES=${DEBIAN_QUILT_PATCHES} quilt --quiltrc /dev/null push -a
 
 	# avoid conflict with "do_patch"
 	if [ -d ${DEBIAN_QUILT_DIR} ]; then
