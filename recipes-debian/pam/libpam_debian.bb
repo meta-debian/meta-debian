@@ -101,7 +101,7 @@ FILES_${PN}0g-dev += "\
 
 RDEPENDS_${PN}-modules += "${PN}0g ${PN}-modules-bin"
 RDEPENDS_${PN}-runtime += "${PN}-modules"
-RDEPENDS_${PN}-0g-dev += "${PN}-0g"
+RDEPENDS_${PN}0g-dev += "${PN}0g"
 RDEPENDS_${PN}-cracklib += "${PN}-runtime"
 
 python do_pam_sanity () {
