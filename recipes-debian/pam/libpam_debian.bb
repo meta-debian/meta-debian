@@ -74,7 +74,8 @@ FILES_${PN}-cracklib += "\
 	${datadir}/pam-configs/cracklib"
 FILES_${PN}-modules += "\
 	${sysconfdir}/security/*.conf \
-	${sysconfdir}/security/*.init"
+	${sysconfdir}/security/*.init \
+	${base_libdir}/security/*.so"
 FILES_${PN}-modules-bin += "\
 	${base_sbindir}/* \
 	${sbindir}/* "
@@ -97,23 +98,6 @@ FILES_${PN}0g-dev += "\
 
 # Split libpam module into subpackages
 # Using python function to add RDEPENDS
-
-PACKAGES_DYNAMIC += "pam-plugin-.*"
-
-python populate_packages_prepend () {
-    def pam_plugin_hook(file, pkg, pattern, format, basename):
-        rdeps = d.getVar('RDEPENDS_${PN}-modules', True)
-        if rdeps:
-            rdeps = rdeps + " " + pkg 
-        else:
-            rdeps = pkg
-        d.setVar('RDEPENDS_${PN}-modules', rdeps)
-
-    pam_libdir = d.expand('${base_libdir}/security')
-    pam_pkgname = 'pam-plugin%s'
-    do_split_packages(d, pam_libdir, '^pam(.*)\.so$', pam_pkgname,
-                      'PAM plugin for %s', hook=pam_plugin_hook, extra_depends='')
-}
 
 RDEPENDS_${PN}-modules += "${PN}0g ${PN}-modules-bin"
 RDEPENDS_${PN}-runtime += "${PN}-modules"

@@ -60,23 +60,10 @@ NSCDOPT_class-nativesdk = "--without-nscd"
 NSCDOPT_libc-uclibc = " --without-nscd"
 NSCDOPT_libc-glibc = "${@bb.utils.contains('DISTRO_FEATURES', 'libc-spawn', '--with-nscd', '--without-nscd', d)}"
 
-PAM_PLUGINS = "libpam-runtime \
-               pam-plugin-faildelay \
-               pam-plugin-securetty \
-               pam-plugin-nologin \
-               pam-plugin-env \
-               pam-plugin-group \
-               pam-plugin-limits \
-               pam-plugin-lastlog \
-               pam-plugin-motd \
-               pam-plugin-mail \
-               pam-plugin-shells \
-               pam-plugin-rootok"
- 
 PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
 PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
-PACKAGECONFIG[pam] = "--with-libpam,--without-libpam,libpam,${PAM_PLUGINS}"
+PACKAGECONFIG[pam] = "--with-libpam,--without-libpam,libpam,libpam-modules"
 PACKAGECONFIG[attr] = "--with-attr,--without-attr,attr"
 PACKAGECONFIG[acl] = "--with-acl,--without-acl,acl"
 

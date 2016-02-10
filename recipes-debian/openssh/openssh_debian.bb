@@ -152,7 +152,7 @@ RDEPENDS_${PN} += " \
 	${PN}-client \
 	${PN}-sftp-server \
 	lsb-base \
-	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam-plugin-keyinit pam-plugin-loginuid', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-modules', '', d)} \
 "
 
 RCONFLICTS_${PN} = "dropbear"
