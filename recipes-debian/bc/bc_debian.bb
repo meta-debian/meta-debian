@@ -25,4 +25,4 @@ PACKAGES += "dc"
 FILES_dc = "${bindir}/dc"
 FILES_${PN} = "${bindir}/bc"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
