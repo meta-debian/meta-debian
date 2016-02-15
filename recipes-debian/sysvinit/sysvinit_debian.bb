@@ -9,8 +9,8 @@ PR = "${INC_PR}.0"
 
 PROVIDES += "initscripts"
 
-PACKAGES =+ "sysv-rc bootlogd bootlogd-doc initscripts initscripts-doc \
-             ${PN}-core FILES_${PN}-core-doc ${PN}-utils"
+PACKAGES =+ "sysv-rc bootlogd bootlogd-doc ${PN}-initscripts ${PN}-initscripts-doc \
+             ${PN}-core ${PN}-core-doc ${PN}-utils"
 FILES_${PN} += " \
 		${base_libdir}/${PN}/*"
 FILES_${PN}-dbg += " \
@@ -26,7 +26,7 @@ FILES_bootlogd += " \
 		${sysconfdir}/init.d/stop*"
 FILES_bootlogd-doc += " \
 		${mandir}/man8/bootlogd.8"
-FILES_initscripts += " \
+FILES_${PN}-initscripts += " \
 		${base_bindir}/mountpoint \
 		${sysconfdir}/default/* \
 		${sysconfdir}/init.d/* \
@@ -37,7 +37,7 @@ FILES_initscripts += " \
 		${localstatedir}${base_libdir}/initscripts \
 		${localstatedir}${base_libdir}/urandom \
 		${localstatedir}/log/fsck"
-FILES_initscripts-doc += " \
+FILES_${PN}-initscripts-doc += " \
 		${mandir}/man1/mountpoint.1 \
 		${mandir}/man5/halt.5 \
 		${mandir}/man5/rcS.5 \
@@ -128,7 +128,7 @@ case "$1" in
 esac
 }
 
-pkg_postinst_initscripts() {
+pkg_postinst_${PN}-initscripts() {
 #
 # Links in runlevel S
 #
