@@ -202,6 +202,7 @@ FILES_${PN} = "${base_bindir} \
 FILES_${PN}-dbg += "${base_libdir}/systemd/.debug \
                     ${base_libdir}/systemd/system-generators/.debug \
                     ${base_libdir}/udev/.debug \
+                    ${@base_contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
                    "
 FILES_${PN}-dev = ""
 ALLOW_EMPTY_${PN}-dev = "1"
