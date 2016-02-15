@@ -28,14 +28,6 @@ do_compile() {
 	cpan_do_compile
 }
 
-# install file follow content of package name of jessie
-do_install_append() {
-	install -d ${D}${datadir}/perl5/
-	mv ${D}${libdir}/perl/vendor_perl/5.20.2/URI ${D}${datadir}/perl5/
-	mv ${D}${libdir}/perl/vendor_perl/5.20.2/URI.pm ${D}${datadir}/perl5/
-	rm -r ${D}${libdir}
-}
-
 # ship file for package liburi-perl
 FILES_${PN} =+ " ${datadir}"
 
