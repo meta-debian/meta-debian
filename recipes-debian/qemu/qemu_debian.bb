@@ -20,6 +20,8 @@ SRC_URI += "\
 file://qemu-enlarge-env-entry-size.patch \
 file://Qemu-Arm-versatilepb-Add-memory-size-checking_debian.patch \
 file://replace-bios-256k-by-128k.patch \
+file://add-ptest-in-makefile.patch \
+file://run-ptest \
 "
 
 LICENSE = "GPL-2.0 & LGPL-2.1"
@@ -34,6 +36,7 @@ DEPENDS_class-nativesdk = "nativesdk-zlib nativesdk-glib-2.0 nativesdk-pixman na
 RDEPENDS_${PN}_class-target += "bash python"
 # qemu-bios-native provides BIOS images for qemu-system
 DEPENDS_class-native += "qemu-bios-native"
+RDEPENDS_${PN}-ptest = "bash make"
 
 inherit autotools-brokensep ptest
 
@@ -170,8 +173,8 @@ FILES_${PN}-system-common += " \
 			${sysconfdir}/qemu-* \
 			${bindir}/virtfs-proxy-helper \
 			${base_libdir} \
-			${libdir}/${PN}/*"
-FILES_${PN}-dbg += "${libdir}/${PN}/.debug"
+			${libdir}/${DPN}/qemu-bridge-helper"
+FILES_${PN}-dbg += "${libdir}/${DPN}/.debug"
 FILES_${PN}-system-arm += "${bindir}/qemu-system-arm"
 FILES_${PN}-system-mips += "${bindir}/qemu-system-mips*"
 FILES_${PN}-system-ppc += "${bindir}/qemu-system-ppc*"
