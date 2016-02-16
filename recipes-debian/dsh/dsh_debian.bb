@@ -15,7 +15,7 @@ inherit autotools-brokensep gettext pkgconfig
 DEBIAN_PATCH_TYPE = "nopatch"
 
 DEPENDS += "libdshconfig"
-EXTRA_OECONF += "--sysconfdir=/etc/dsh --mandir=/usr/share/man"
+EXTRA_OECONF += "--sysconfdir=${sysconfdir}/${PN} --mandir=${mandir}"
 
 #install follow Debian jessie
 do_install_append() {
