@@ -156,6 +156,20 @@ do_install_append() {
     fi
 }
 
+PACKAGES =+ "login"
+FILES_login = "  ${base_bindir}/* \
+                 ${sysconfdir}/login.defs \
+                 ${sysconfdir}/securetty \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/login', '', d)} \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/su', '', d)} \
+                 ${bindir}/faillog \
+                 ${bindir}/lastlog \
+                 ${bindir}/newgrp \
+                 ${bindir}/sg \
+                 ${sbindir}/nologin \
+"
+RDEPENDS_${PN} += "login"
+
 pkg_postinst_${PN} () {
     if [ "x$D" != "x" ]; then
       rootarg="--root $D"
