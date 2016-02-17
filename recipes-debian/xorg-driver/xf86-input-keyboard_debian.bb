@@ -18,5 +18,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=ea2099d24ac9e316a6d4b9f20b3d4e10"
 
 DPN = "xserver-xorg-input-keyboard"
 
-# There is no patch files
+# There is no debian patch, but debian/rules keep using quilt.
+# debian/rules - line26:
+#     dh $@ --with quilt,autoreconf,xsf --builddirectory=build/
+# so we do the same thing with DEBIAN_PATCH_TYPE is "quilt".
 DEBIAN_PATCH_TYPE = "quilt"
+# Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
+DEBIAN_QUILT_PATCHES = ""
