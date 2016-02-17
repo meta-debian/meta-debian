@@ -18,6 +18,9 @@ inherit debian-package
 # compile error when build on almost all architectures
 SRC_URI += "file://0001-Fix-macro-error.patch"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 CFLAGS += "-DLIBEXECDIR=${libexecdir}"
 
 do_compile() {

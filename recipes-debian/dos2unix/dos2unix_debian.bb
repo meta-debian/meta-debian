@@ -7,6 +7,9 @@ inherit debian-package
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://COPYING.txt;md5=37ef5b0498ecd2c4c7f2e2be47a75d5e"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 # Follow debian/rules
 EXTRA_OEMAKE = ' \
     LDFLAGS_USER="${LDFLAGS}" \
