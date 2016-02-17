@@ -91,27 +91,27 @@ install_login(){
 	install -c -m 444 ${S}/debian/login.defs ${D}${sysconfdir}/login.defs
 
 	# Enable CREATE_HOME by default.
-        sed -i 's/#CREATE_HOME/CREATE_HOME/g' ${D}${sysconfdir}/login.defs
+    sed -i 's/#CREATE_HOME/CREATE_HOME/g' ${D}${sysconfdir}/login.defs
 
-        # As we are on an embedded system, ensure the users mailbox is in
-        # ~/ not /var/spool/mail by default, as who knows where or how big
-        # /var is. The system MDA will set this later anyway.
-        sed -i 's/MAIL_DIR/#MAIL_DIR/g' ${D}${sysconfdir}/login.defs
-        sed -i 's/#MAIL_FILE/MAIL_FILE/g' ${D}${sysconfdir}/login.defs
+    # As we are on an embedded system, ensure the users mailbox is in
+    # ~/ not /var/spool/mail by default, as who knows where or how big
+    # /var is. The system MDA will set this later anyway.
+    sed -i 's/MAIL_DIR/#MAIL_DIR/g' ${D}${sysconfdir}/login.defs
+    sed -i 's/#MAIL_FILE/MAIL_FILE/g' ${D}${sysconfdir}/login.defs
 
-        # Disable checking emails.
-        sed -i 's/MAIL_CHECK_ENAB/#MAIL_CHECK_ENAB/g' ${D}${sysconfdir}/login.defs
+    # Disable checking emails.
+    sed -i 's/MAIL_CHECK_ENAB/#MAIL_CHECK_ENAB/g' ${D}${sysconfdir}/login.defs
 
-        # Comment out SU_NAME to work correctly with busybox
-        # See Bug#5359 and Bug#7173
-        sed -i 's:^SU_NAME:#SU_NAME:g' ${D}${sysconfdir}/login.defs
+    # Comment out SU_NAME to work correctly with busybox
+    # See Bug#5359 and Bug#7173
+    sed -i 's:^SU_NAME:#SU_NAME:g' ${D}${sysconfdir}/login.defs
 
-        # Use proper encryption for passwords
-        sed -i 's/^#ENCRYPT_METHOD.*$/ENCRYPT_METHOD SHA512/' ${D}${sysconfdir}/login.defs
+    # Use proper encryption for passwords
+    sed -i 's/^#ENCRYPT_METHOD.*$/ENCRYPT_METHOD SHA512/' ${D}${sysconfdir}/login.defs
 
 	# Handle link properly after rename, otherwise missing files would
-        # lead rpm failed dependencies.
-        ln -sf newgrp ${D}${bindir}/sg
+    # lead rpm failed dependencies.
+    ln -sf newgrp ${D}${bindir}/sg
 }
 
 install_passwd(){
@@ -120,14 +120,14 @@ install_passwd(){
 	install -c -m 644 ${S}/debian/useradd.default ${D}${sysconfdir}/default/useradd
 
 	# Now we don't have a mail system. Disable mail creation for now.
-        sed -i 's:/bin/bash:/bin/sh:g' ${D}${sysconfdir}/default/useradd
-        sed -i '/^CREATE_MAIL_SPOOL/ s:^:#:' ${D}${sysconfdir}/default/useradd
+    sed -i 's:/bin/bash:/bin/sh:g' ${D}${sysconfdir}/default/useradd
+    sed -i '/^CREATE_MAIL_SPOOL/ s:^:#:' ${D}${sysconfdir}/default/useradd
 
-        # Use users group by default
-        sed -i 's,^GROUP=1000,GROUP=100,g' ${D}${sysconfdir}/default/useradd
+    # Use users group by default
+    sed -i 's,^GROUP=1000,GROUP=100,g' ${D}${sysconfdir}/default/useradd
 
 	rm ${D}${sbindir}/vigr
-        ln -sf vipw ${D}${sbindir}/vigr
+    ln -sf vipw ${D}${sbindir}/vigr
 	ln -sf cppw ${D}${sbindir}/cpgr
 }
 
@@ -149,22 +149,22 @@ do_install_append() {
 
 	install -d ${D}${sbindir} ${D}${base_bindir} 
 
-        # Move binaries to the locations we want
-        if [ "${bindir}" != "${base_bindir}" ]; then
-                mv ${D}${bindir}/login ${D}${base_bindir}/login
-                mv ${D}${bindir}/su ${D}${base_bindir}/su
-        fi
+    # Move binaries to the locations we want
+    if [ "${bindir}" != "${base_bindir}" ]; then
+            mv ${D}${bindir}/login ${D}${base_bindir}/login
+            mv ${D}${bindir}/su ${D}${base_bindir}/su
+    fi
 }
 
 pkg_postinst_${PN} () {
-	if [ "x$D" != "x" ]; then
-	  rootarg="--root $D"
-	else
-	  rootarg=""
-	fi
+    if [ "x$D" != "x" ]; then
+      rootarg="--root $D"
+    else
+      rootarg=""
+    fi
 
-	pwconv $rootarg || exit 1
-	grpconv $rootarg || exit 1
+    pwconv $rootarg || exit 1
+    grpconv $rootarg || exit 1
 }
 
 BBCLASSEXTEND = "native nativesdk"
