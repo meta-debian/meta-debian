@@ -156,7 +156,7 @@ do_install_append() {
     fi
 }
 
-PACKAGES =+ "login"
+PACKAGES =+ "login uidmap passwd"
 FILES_login = "  ${base_bindir}/* \
                  ${sysconfdir}/login.defs \
                  ${sysconfdir}/securetty \
@@ -168,7 +168,16 @@ FILES_login = "  ${base_bindir}/* \
                  ${bindir}/sg \
                  ${sbindir}/nologin \
 "
-RDEPENDS_${PN} += "login"
+FILES_uidmap = " ${bindir}/newgidmap \
+                 ${bindir}/newuidmap \
+"
+FILES_passwd = " ${sysconfdir}/default/useradd \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/*', '', d)} \
+                 ${base_sbindir}/shadowconfig \
+                 ${bindir}/* \
+                 ${sbindir}/* \
+"
+RDEPENDS_${PN} += "login uidmap passwd"
 
 pkg_postinst_${PN} () {
     if [ "x$D" != "x" ]; then
