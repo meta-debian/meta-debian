@@ -10,6 +10,6 @@ PREFERRED_PROVIDER_udev = "systemd"
 PREFERRED_PROVIDER_make-native = "make-native"
 
 # use dpkg as update-alternatives instead of opkg-utils
-PREFERRED_PROVIDER_virtual/update-alternatives = "dpkg-update-alternatives"
-PREFERRED_PROVIDER_virtual/update-alternatives-native = "dpkg-update-alternatives-native"
-PREFERRED_PROVIDER_virtual/nativesdk-update-alternatives = "nativesdk-dpkg-update-alternatives"
+PREFERRED_PROVIDER_virtual/update-alternatives = "dpkg-utils"
+PREFERRED_PROVIDER_virtual/update-alternatives-native = "dpkg-utils-native"
+PREFERRED_PROVIDER_virtual/nativesdk-update-alternatives = "nativesdk-dpkg-utils"
