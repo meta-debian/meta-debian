@@ -14,7 +14,7 @@ be read directly by XKB-capable X servers or utilities."
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=08436e4f4476964e2e2dd7e7e41e076a"
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 DEPENDS += "libxkbfile"
 
@@ -24,5 +24,13 @@ DPN = "x11-xkb-utils"
 
 # Apply patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
+
+# 11_xkb_documentation_updates.diff is commented in debian/patches/series.
+# Remove it to avoid error: "series is empty, but some patches found"
+do_debian_patch_prepend() {
+	if [ -f ${DEBIAN_QUILT_PATCHES}/11_xkb_documentation_updates.diff ]; then
+		rm  ${DEBIAN_QUILT_PATCHES}/11_xkb_documentation_updates.diff
+	fi
+}
 
 S = "${DEBIAN_UNPACK_DIR}/${PN}"
