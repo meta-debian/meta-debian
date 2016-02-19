@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = " \
 do_install(){
 	# Install files for lsb-base
 	install -d ${D}${base_libdir}/${DPN}/init-functions.d
-	install -m 0755 ${S}/init-functions ${D}${base_libdir}/${DPN}
+	install -m 0644 ${S}/init-functions ${D}${base_libdir}/${DPN}
 	install -m 0644 ${S}/init-functions.d/20-left-info-blocks ${D}${base_libdir}/${DPN}/init-functions.d
 
 	# Install files for lsb-core
