@@ -10,205 +10,111 @@ inherit debian-package
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=de10de48642ab74318e893a61105afbb"
 
-DEPENDS += "kern-tools-native"
+#
+# controllable variables
+#
 
-SRC_URI += " \
-file://get_header_tar.patch \                                        
-file://busybox-appletlib-dependency.patch \                          
-file://busybox-udhcpc-no_deconfig.patch \                            
-file://find-touchscreen.sh \                                         
-file://busybox-cron \                                                
-file://busybox-httpd \                                               
-file://busybox-udhcpd \                                              
-file://default.script \                                              
-file://simple.script \                                               
-file://hwclock.sh \                                                  
-file://mount.busybox \                                               
-file://syslog \                                                      
-file://syslog-startup.conf \                                         
-file://syslog.conf \                                                 
-file://busybox-syslog.default \                                      
-file://mdev \                                                        
-file://mdev.conf \                                                   
-file://umount.busybox \                                              
-file://defconfig \                                                   
-file://busybox-syslog.service.in \                                   
-file://busybox-klogd.service.in \                                    
-file://fail_on_no_media.patch \                                      
-file://run-ptest \                                                   
-file://inetd.conf \                                                  
-file://inetd \                                                       
-file://login-utilities.cfg \                                         
-file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
-"
+# base configuration
+BUSYBOX_DEFCONFIG ?= "defconfig"
 
 # Whether to split the suid apps into a seperate binary
 BUSYBOX_SPLIT_SUID ?= "1"
 
+#
+# basic definitions
+#
+
+# busybox-appletlib-dependency.patch: avoid build process races
+# 0001-build-system...patch: required for cross compiling
+SRC_URI += " \
+file://busybox-appletlib-dependency.patch \
+file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
+file://${BUSYBOX_DEFCONFIG} \
+file://run-ptest \
+"
+
+# settings for cross-compile
 export EXTRA_CFLAGS = "${CFLAGS}"
 export EXTRA_LDFLAGS = "${LDFLAGS}"
 export EXTRA_OEMAKE += "'LD=${CCLD}' V=1 ARCH=${TARGET_ARCH} CROSS_COMPILE=${TARGET_PREFIX} SKIP_STRIP=y"
 
-PACKAGES =+ "${PN}-httpd ${PN}-udhcpd ${PN}-udhcpc ${PN}-syslog ${PN}-mdev ${PN}-hwclock"
-
-FILES_${PN}-httpd = "${sysconfdir}/init.d/busybox-httpd /srv/www"
-FILES_${PN}-syslog = "${sysconfdir}/init.d/syslog* \
-		${sysconfdir}/syslog-startup.conf* \
-		${sysconfdir}/syslog.conf* \
-		${systemd_unitdir}/system/syslog.service \
-		${sysconfdir}/default/busybox-syslog"
-FILES_${PN}-mdev = "${sysconfdir}/init.d/mdev ${sysconfdir}/mdev.conf"
-FILES_${PN}-udhcpd = "${sysconfdir}/init.d/busybox-udhcpd"
-FILES_${PN}-udhcpc = "${sysconfdir}/udhcpc.d ${datadir}/udhcpc"
-FILES_${PN}-hwclock = "${sysconfdir}/init.d/hwclock.sh"
-
-INITSCRIPT_PACKAGES = "${PN}-httpd ${PN}-syslog ${PN}-udhcpd ${PN}-mdev ${PN}-hwclock"
-
-INITSCRIPT_NAME_${PN}-httpd = "busybox-httpd"
-INITSCRIPT_NAME_${PN}-hwclock = "hwclock.sh"
-INITSCRIPT_NAME_${PN}-mdev = "mdev"
-INITSCRIPT_PARAMS_${PN}-mdev = "start 03 S ."
-INITSCRIPT_NAME_${PN}-syslog = "syslog"
-INITSCRIPT_NAME_${PN}-udhcpd = "busybox-udhcpd"
-
-SYSTEMD_PACKAGES = "${PN}-syslog"
-SYSTEMD_SERVICE_${PN}-syslog = "busybox-syslog.service"
-
-CONFFILES_${PN}-syslog = "${sysconfdir}/syslog-startup.conf.${BPN}"
-CONFFILES_${PN}-mdev = "${sysconfdir}/mdev.conf"
-
-RRECOMMENDS_${PN} = "${PN}-syslog ${PN}-udhcpc"
-
-inherit cml1 systemd update-rc.d ptest
-
-# internal helper
-def busybox_cfg(feature, tokens, cnf, rem):
-    if type(tokens) == type(""):
-        tokens = [tokens]
-    rem.extend(['/^[# ]*' + token + '[ =]/d' for token in tokens])
-    if feature:
-        cnf.extend([token + '=y' for token in tokens])
-    else:
-        cnf.extend(['# ' + token + ' is not set' for token in tokens])
-
-# Map distro features to config settings
-def features_to_busybox_settings(d):
-    cnf, rem = ([], [])
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'ipv6', True, False, d), 'CONFIG_FEATURE_IPV6', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'largefile', True, False, d), 'CONFIG_LFS', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'largefile', True, False, d), 'CONFIG_FDISK_SUPPORT_LARGE_DISKS', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'nls', True, False, d), 'CONFIG_LOCALE_SUPPORT', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'ipv4', True, False, d), 'CONFIG_FEATURE_IFUPDOWN_IPV4', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'ipv6', True, False, d), 'CONFIG_FEATURE_IFUPDOWN_IPV6', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'wifi', True, False, d), 'CONFIG_RFKILL', cnf, rem)
-    busybox_cfg(base_contains('DISTRO_FEATURES', 'bluetooth', True, False, d), 'CONFIG_RFKILL', cnf, rem)
-    return "\n".join(cnf), "\n".join(rem)
-
-# X, Y = ${@features_to_uclibc_settings(d)}
-# unfortunately doesn't seem to work with bitbake, workaround:
-def features_to_busybox_conf(d):
-    cnf, rem = features_to_busybox_settings(d)
-    return cnf
-def features_to_busybox_del(d):
-    cnf, rem = features_to_busybox_settings(d)
-    return rem
-
-configmangle = '/CROSS_COMPILER_PREFIX/d; \
-		/CONFIG_EXTRA_CFLAGS/d; \
-		'
-OE_FEATURES := "${@features_to_busybox_conf(d)}"
-OE_DEL      := "${@features_to_busybox_del(d)}"
-DO_IPv4 := "${@base_contains('DISTRO_FEATURES', 'ipv4', 1, 0, d)}"
-DO_IPv6 := "${@base_contains('DISTRO_FEATURES', 'ipv6', 1, 0, d)}"
-
-python () {
-    if "${OE_DEL}":
-        d.setVar('configmangle_append', "${OE_DEL}" + "\n")
-    if "${OE_FEATURES}":
-        d.setVar('configmangle_append',
-                 "/^### DISTRO FEATURES$/a\\\n%s\n\n" %
-                 ("\\n".join((d.expand("${OE_FEATURES}").split("\n")))))
-    d.setVar('configmangle_append',
-             "/^### CROSS$/a\\\n%s\n" %
-             ("\\n".join(["CONFIG_CROSS_COMPILER_PREFIX=\"${TARGET_PREFIX}\"",
-			       "CONFIG_EXTRA_CFLAGS=\"${CFLAGS}\" \"${HOST_CC_ARCH}\""
-                        ])
-              ))
-}
-
-do_prepare_config () {
-	sed -e 's#@DATADIR@#${datadir}#g' \
-		< ${WORKDIR}/defconfig > ${S}/.config
-	sed -i -e '/CONFIG_STATIC/d' .config
-	echo "# CONFIG_STATIC is not set" >> .config
-	for i in 'CROSS' 'DISTRO FEATURES'; do echo "### $i"; done >> \
-		${S}/.config
-	sed -i -e '${configmangle}' ${S}/.config
-	if test ${DO_IPv4} -eq 0 && test ${DO_IPv6} -eq 0; then
-		# disable networking applets
-		mv ${S}/.config ${S}/.config.oe-tmp
-		awk 'BEGIN{net=0}
-			/^# Networking Utilities/{net=1}
-			/^#$/{if(net){net=net+1}}
-			{if(net==2&&$0 !~ /^#/&&$1){print("# "$1" is not set")}else{print}}' \
-			${S}/.config.oe-tmp > ${S}/.config
-	fi
-}
-
-# returns all the elements from the src uri that are .cfg files
-def find_cfgs(d):
-    sources=src_patches(d, True)
-    sources_list=[]
-    for s in sources:
-        if s.endswith('.cfg'):
-            sources_list.append(s)
-
-    return sources_list
-
-# To help find ncurses header and library for do_menuconfig functions
-do_configure_prepend() {
-	if test -f ${STAGING_INCDIR_NATIVE}/ncursesw/ncurses.h \
-		-o -f ${STAGING_INCDIR_NATIVE}/ncurses/ncurses.h; then
-		sub_pair="/usr/include/:${STAGING_INCDIR_NATIVE}"
-	elif test -f ${STAGING_INCDIR_NATIVE}/ncurses.h; then
-		sub_pair="/usr/include/ncursesw:${STAGING_INCDIR_NATIVE}"
-	fi
-
-	sed -i -e "s:$sub_pair:g" \
-			${S}/scripts/kconfig/lxdialog/check-lxdialog.sh
-	# -B option to help gcc find library
-	sed -i -e "s:\$cc:\$cc -B${STAGING_LIBDIR_NATIVE}:g" \
-			${S}/scripts/kconfig/lxdialog/check-lxdialog.sh
-	
-}
+inherit cml1
 
 do_configure () {
-	do_prepare_config
-	merge_config.sh -m .config ${@" ".join(find_cfgs(d))}
+	cp ${WORKDIR}/${BUSYBOX_DEFCONFIG} ${S}/.config
 	cml1_do_configure
+}
+
+# This function creates the same .config as "merge_config.sh -m",
+# but is more simple. merge_config.sh is included in yocto-kernel-tools.
+#
+# usage: merge_config <config1> <config2>
+# If the same CONFIG is defined in the both of config1 and config2,
+# the CONFIG value in config2 is selected (the value in config1 is dropped).
+merge_config() {
+	SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+
+	cp ${1} .config
+	for cfg in $(sed -n "${SED_CONFIG_EXP}" ${2}); do
+		if grep -q -w ${cfg} .config; then
+			sed -i "/${cfg}[ =]/d" .config
+		fi
+	done
+	cat ${2} >> .config
 }
 
 do_compile() {
 	unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
+
+	# FEATURE_INDIVIDUAL produces not a symlink but a binary for each applet,
+	# so no need to build two busybox binaries
 	if [ "${BUSYBOX_SPLIT_SUID}" = "1" -a x`grep "CONFIG_FEATURE_INDIVIDUAL=y" .config` = x ]; then
-	# split the .config into two parts, and make two busybox binaries
+		# split the .config into two parts, and make two busybox binaries
+
 		cp .config .config.orig
+		rm -f .config.suid .config.nosuid
+
+		# busybox.cfg.suid/nosuid are the default rules in Makefile.custom.
+		# They have only CONFIGs for applets that does/doesn't require SUID.
 		oe_runmake busybox.cfg.suid
 		oe_runmake busybox.cfg.nosuid
+
+		# .config.disable.apps:
+		#   all applet CONFIGs are disabled
+		#   non-applet CONFIGs are not included
 		for i in `cat busybox.cfg.suid busybox.cfg.nosuid`; do
 			echo "# $i is not set" >> .config.disable.apps
 		done
-		merge_config.sh -m .config.orig .config.disable.apps
+
+		# .config.noapps:
+		#   all applet CONFIGs are disable
+		#   non-applet CONFIGs are the same as .config.orig
+		merge_config .config.orig .config.disable.apps
 		cp .config .config.nonapps
+
 		for s in suid nosuid; do
+			# .config.app.suid/nosuid:
+			#   all suid/nosuid applet CONFIGs are the same as .config.orig
+			#   all nosuid/suid applet CONFIGs are not included
+			#   non-applet CONFIGs are not included
 			cat busybox.cfg.$s | while read item; do
 				grep -w "$item" .config.orig
 			done > .config.app.$s
-			merge_config.sh -m .config.nonapps .config.app.$s
+
+			# .config (the final configuration):
+			#   all suid/nosuid applet CONFIGs are the same as .config.orig
+			#   all nosuid/suid applet CONFIGs are disabled
+			#   non-applet CONFIGs are the same as .config.orig
+			merge_config .config.nonapps .config.app.$s
+
+			# make busybox binaries and busybox.links
 			oe_runmake busybox_unstripped
 			mv busybox_unstripped busybox.$s
 			oe_runmake busybox.links
 			mv busybox.links busybox.links.$s
+
+			# keep configs for busybox.suid and busybox.nosuid
+			cp .config .config.${s}
 		done
 		# copy .config.orig back to .config, because the install process may check this file
 		cp .config.orig .config
@@ -221,7 +127,7 @@ do_compile() {
 	fi
 }
 
-do_install () {
+do_install() {
 	if [ "${prefix}" != "/usr" ]; then
 		sed -i "s:^/usr/:${prefix}/:" busybox.links*
 	fi
@@ -231,6 +137,8 @@ do_install () {
 
 	install -d ${D}${sysconfdir}/init.d
 
+	# install busybox binaries, busybox.links files,
+	# and several symlinks for postinst script
 	if ! grep -q "CONFIG_FEATURE_INDIVIDUAL=y" ${B}/.config; then
 		# Install /bin/busybox, and the /bin/sh link so the postinst script
 		# can run. Let update-alternatives handle the rest.
@@ -286,81 +194,98 @@ do_install () {
 		install -m 0644 ${S}/busybox.links ${D}${sysconfdir}
 	fi
 
+	# install scripts and configs for sub packages;
+	# udhcpc, udhcpd, and syslogd
+	install -d ${D}${sysconfdir}/default
+	if grep -q "CONFIG_UDHCPC=y" ${B}/.config; then
+		install -d ${D}${sysconfdir}/udhcpc
+		install -m 0755 \
+			${S}/debian/tree/udhcpc/etc/udhcpc/default.script \
+			${D}${sysconfdir}/udhcpc
+	fi
+	if grep -q "CONFIG_UDHCPD=y" ${B}/.config; then
+		install -m 0755 ${S}/debian/tree/udhcpd/etc/init.d/udhcpd \
+			${D}${sysconfdir}/init.d
+		install -m 0644 ${S}/debian/tree/udhcpd/etc/default/udhcpd \
+			${D}${sysconfdir}/default
+		install -m 0644 ${S}/debian/tree/udhcpd/etc/udhcpd.conf \
+			${D}${sysconfdir}
+	fi
 	if grep -q "CONFIG_SYSLOGD=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/syslog ${D}${sysconfdir}/init.d/syslog.${BPN}
-		install -m 644 ${WORKDIR}/syslog-startup.conf ${D}${sysconfdir}/syslog-startup.conf.${BPN}
-		install -m 644 ${WORKDIR}/syslog.conf ${D}${sysconfdir}/syslog.conf.${BPN}
-	fi
-	if grep "CONFIG_CROND=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/busybox-cron ${D}${sysconfdir}/init.d/
-	fi
-	if grep "CONFIG_HTTPD=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/busybox-httpd ${D}${sysconfdir}/init.d/
-		install -d ${D}/srv/www
-	fi
-	if grep "CONFIG_UDHCPD=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/busybox-udhcpd ${D}${sysconfdir}/init.d/
-	fi
-	if grep "CONFIG_HWCLOCK=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/hwclock.sh ${D}${sysconfdir}/init.d/
-	fi
-	if grep "CONFIG_UDHCPC=y" ${B}/.config; then
-		install -d ${D}${sysconfdir}/udhcpc.d
-		install -d ${D}${datadir}/udhcpc
-		install -m 0755 ${WORKDIR}/simple.script ${D}${sysconfdir}/udhcpc.d/50default
-		install -m 0755 ${WORKDIR}/default.script ${D}${datadir}/udhcpc/default.script
-	fi
-	if grep "CONFIG_INETD=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/inetd ${D}${sysconfdir}/init.d/inetd.${BPN}
-		sed -i "s:/usr/sbin/:${sbindir}/:" ${D}${sysconfdir}/init.d/inetd.${BPN}
-		install -m 0644 ${WORKDIR}/inetd.conf ${D}${sysconfdir}/
-	fi
-	if grep "CONFIG_MDEV=y" ${B}/.config; then
-		install -m 0755 ${WORKDIR}/mdev ${D}${sysconfdir}/init.d/mdev
-		if grep "CONFIG_FEATURE_MDEV_CONF=y" ${B}/.config; then
-			install -m 644 ${WORKDIR}/mdev.conf ${D}${sysconfdir}/mdev.conf
-		fi
-	fi
-
-	if ${@base_contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-		install -d ${D}${systemd_unitdir}/system
-		sed 's,@base_sbindir@,${base_sbindir},g' < ${WORKDIR}/busybox-syslog.service.in \
-			> ${D}${systemd_unitdir}/system/busybox-syslog.service
-		sed 's,@base_sbindir@,${base_sbindir},g' < ${WORKDIR}/busybox-klogd.service.in \
-			> ${D}${systemd_unitdir}/system/busybox-klogd.service
-
-		if [ -f ${WORKDIR}/busybox-syslog.default ] ; then
-			install -d ${D}${sysconfdir}/default
-			install -m 0644 ${WORKDIR}/busybox-syslog.default ${D}${sysconfdir}/default/busybox-syslog
-		fi
-
-		ln -sf /dev/null ${D}${systemd_unitdir}/system/syslog.service
-	fi
-
-	# Remove the sysvinit specific configuration file for systemd systems to avoid confusion
-	if ${@base_contains('DISTRO_FEATURES', 'sysvinit', 'false', 'true', d)}; then
-		rm -f ${D}${sysconfdir}/syslog-startup.conf.${BPN}
+		install -m 0755 \
+			${S}/debian/busybox-syslogd.busybox-klogd.init \
+			${D}${sysconfdir}/init.d/busybox-klogd
+		install -m 0755 ${S}/debian/busybox-syslogd.init \
+			${D}${sysconfdir}/init.d/busybox-syslogd
+		install -m 0644 ${S}/debian/busybox-syslogd.default \
+			${D}${sysconfdir}/default/busybox-syslogd
+		# drop insserv config file for sysvinit
 	fi
 }
+
+#
+# packaging
+#
+
+PACKAGES =+ "${PN}-syslogd udhcpc udhcpd"
+
+# sub packages don't include their core binaries (e.g. syslogd) and
+# assume that the binaries are provided by the busybox main package
+RDEPENDS_${PN}-syslogd += "${PN} lsb-base start-stop-daemon"
+RDEPENDS_udhcpc += "${PN}"
+RDEPENDS_udhcpd += "${PN} lsb-base start-stop-daemon"
+
+# applets:
+#   ${base_sbindir}/klogd
+#   ${base_sbindir}/syslogd
+#   ${base_bindir}/logread
+FILES_${PN}-syslogd = "${sysconfdir}/default/busybox-syslogd \
+                       ${sysconfdir}/init.d/busybox-klogd \
+                       ${sysconfdir}/init.d/busybox-syslogd \
+                      "
+# applet: ${base_sbindir}/udhcpc
+FILES_udhcpc = "${sysconfdir}/udhcpc/default.script"
+# applets:
+#   ${sbindir}/udhcpd
+#   ${bindir}/dumpleases
+FILES_udhcpd = "${sysconfdir}/default/udhcpd \
+                ${sysconfdir}/init.d/udhcpd \
+                ${sysconfdir}/udhcpd.conf \
+               "
+
+CONFFILES_udhcpd = "${sysconfdir}/udhcpd.conf"
+
+#
+# update-alternatives
+#
+# busybox package usually includes a lot of commands that are also
+# provided by other packages. In order to avoid conflicts between them,
+# update-alternatives parameters must be defined for all commands.
+#
+# busybox sub packages don't include commands
+# (include only helper scripts and configs),
+# so no need to define update-alternatives parameters for them.
+#
 
 inherit update-alternatives
 
 ALTERNATIVE_PRIORITY = "50"
 
-ALTERNATIVE_${PN}-syslog += "syslog-conf"
-ALTERNATIVE_LINK_NAME[syslog-conf] = "${sysconfdir}/syslog.conf"
-
-python () {
-    if base_contains('DISTRO_FEATURES', 'sysvinit', True, False, d):
-        pn = d.getVar('PN', True)
-        d.appendVar('ALTERNATIVE_%s-syslog' % (pn), ' syslog-init')
-        d.setVarFlag('ALTERNATIVE_LINK_NAME', 'syslog-init', '%s/init.d/syslog' % (d.getVar('sysconfdir', True)))
-        d.setVarFlag('ALTERNATIVE_TARGET', 'syslog-init', '%s/init.d/syslog.%s' % (d.getVar('sysconfdir', True), d.getVar('BPN', True)))
-        d.appendVar('ALTERNATIVE_%s-syslog' % (pn), ' syslog-startup-conf')
-        d.setVarFlag('ALTERNATIVE_LINK_NAME', 'syslog-startup-conf', '%s/syslog-startup.conf' % (d.getVar('sysconfdir', True)))
-        d.setVarFlag('ALTERNATIVE_TARGET', 'syslog-startup-conf', '%s/syslog-startup.conf.%s' % (d.getVar('sysconfdir', True), d.getVar('BPN', True)))
-}
-
+# Dynamically define update-alternatives parameters (ALTERNATIVE_*)
+# for all commands in busybox.links* files. A simple example is below:
+#
+# /etc/busybox.links:
+#   /bin/cmd1
+#   /sbin/cmd2
+#   ...
+# results:
+#   ALTERNATIVE_busybox = "cmd1 cmd2 ..."
+#   ALTERNATIVE_LINK_NAME[cmd1] = "/bin/cmd1"
+#   ALTERNATIVE_LINK_NAME[cmd2] = "/sbin/cmd2"
+#   ...
+#   ALTERNATIVE_TARGET[cmd1] = "/bin/busybox"
+#   ALTERNATIVE_TARGET[cmd2] = "/bin/busybox"
+#   ...
 python do_package_prepend () {
     # We need to load the full set of busybox provides from the /etc/busybox.links
     # Use this to see the update-alternatives with the right information
@@ -389,73 +314,9 @@ python do_package_prepend () {
         set_alternative_vars("/etc/busybox.links.suid", "/bin/busybox.suid")
 }
 
-pkg_postinst_${PN} () {
-	# This part of code is dedicated to the on target upgrade problem.
-	# It's known that if we don't make appropriate symlinks before update-alternatives calls,
-	# there will be errors indicating missing commands such as 'sed'.
-	# These symlinks will later be updated by update-alternatives calls.
-	test -n 2 > /dev/null || alias test='busybox test'
-	if test "x$D" = "x"; then
-		# Remove busybox.nosuid if it's a symlink, because this situation indicates
-		# that we're installing or upgrading to a one-binary busybox.
-		if test -h /bin/busybox.nosuid; then
-			rm -f /bin/busybox.nosuid
-		fi
-		for suffix in "" ".nosuid" ".suid"; do
-			if test -e /etc/busybox.links$suffix; then
-				while read link; do
-					if test ! -e "$link"; then
-						case "$link" in
-							/*/*/*)
-								to="../../bin/busybox$suffix"
-								;;
-							/bin/*)
-								to="busybox$suffix"
-								;;
-							/*/*)
-								to="../bin/busybox$suffix"
-								;;
-						esac
-						# we can use busybox here because even if we are using splitted busybox
-						# we've made a symlink from /bin/busybox to /bin/busybox.nosuid.
-						busybox rm -f $link
-						busybox ln -s $to $link
-					fi
-				done < /etc/busybox.links$suffix
-			fi
-		done
-	fi
-}
-
-pkg_prerm_${PN} () {
-	# This is so you can make busybox commit suicide - removing busybox with no other packages
-	# providing its files, this will make update-alternatives work, but the update-rc.d part
-	# for syslog, httpd and/or udhcpd will fail if there is no other package providing sh
-	tmpdir=`mktemp -d /tmp/busyboxrm-XXXXXX`
-	ln -s /bin/busybox $tmpdir/[
-	ln -s /bin/busybox $tmpdir/test
-	ln -s /bin/busybox $tmpdir/head
-	ln -s /bin/busybox $tmpdir/sh
-	ln -s /bin/busybox $tmpdir/basename
-	ln -s /bin/busybox $tmpdir/echo
-	ln -s /bin/busybox $tmpdir/mv
-	ln -s /bin/busybox $tmpdir/ln
-	ln -s /bin/busybox $tmpdir/dirname
-	ln -s /bin/busybox $tmpdir/rm
-	ln -s /bin/busybox $tmpdir/sed
-	ln -s /bin/busybox $tmpdir/sort
-	ln -s /bin/busybox $tmpdir/grep
-	export PATH=$PATH:$tmpdir
-}
-
-pkg_prerm_${PN}-syslog () {
-	# remove syslog
-	if test "x$D" = "x"; then
-		if test "$1" = "upgrade" -o "$1" = "remove"; then
-			/etc/init.d/syslog stop
-		fi
-	fi
-}
+#
+# ptest
+#
 
 do_install_ptest () {
 	cp -r ${B}/testsuite ${D}${PTEST_PATH}/
