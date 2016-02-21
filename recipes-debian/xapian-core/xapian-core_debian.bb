@@ -9,7 +9,7 @@ DESCRIPTION = "\
 	collections containing hundreds of millions of documents. \
 "
 HOMEPAGE = "http://xapian.org/"
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+"
@@ -22,19 +22,19 @@ do_install_append() {
 	install -d ${D}${libdir}/xapian-examples/examples
 	mv ${D}${bindir}/simple* ${D}${libdir}/xapian-examples/examples/
 }
-PACKAGES =+ "libxapian22 xapian-examples"
+PACKAGES =+ "libxapian xapian-examples"
 
 DEBIANNAME_${PN} = "xapian-tools"
 DEBIANNAME_${PN}-dev = "libxapian-dev"
 DEBIANNAME_${PN}-doc = "xapian-doc"
 DEBIANNAME_${PN}-dbg = "libxapian22-dbg"
 
-FILES_libxapian22 = "${libdir}/libxapian.so.*"
+FILES_libxapian = "${libdir}/libxapian.so.*"
 FILES_xapian-examples = "${libdir}/xapian-examples/examples/simple*"
 FILES_${PN}-dev += "${libdir}/cmake/xapian/* ${bindir}/xapian-config"
 FILES_${PN}-dbg += "${libdir}/xapian-examples/examples/.debug/*"
 
 #follow debian/control
-RDEPENDS_libxapian-dev += "libxapian22 libc6-dev"
-RDEPENDS_xapian-tools += "libxapian22"
+RDEPENDS_libxapian-dev += "libxapian libc6-dev"
+RDEPENDS_xapian-tools += "libxapian"
 
