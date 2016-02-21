@@ -11,8 +11,8 @@ DPN = "openldap"
 #       installing .so and executables, this fails in cross compilation
 #       environments
 SRC_URI += "\
-	file://Makefile_debian.patch"
-#	file://install-strip.patch"
+	file://Makefile_debian.patch \
+	file://install-strip.patch"
 
 PACKAGECONFIG ??= "gnutls modules sasl \
 "
