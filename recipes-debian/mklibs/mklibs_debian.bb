@@ -10,7 +10,7 @@ inherit debian-package
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
-	file://src/mklibs-readelf/elf.cpp;md5=eac8712efb9999f3ad0606c57d13424e \
+	file://src/mklibs-readelf/elf.cpp;beginline=1;endline=19;md5=f29887abbf3222cc072c0de27d7a5017 \
 	"
 inherit autotools-brokensep gettext pkgconfig
 DEPENDS += "libtimedate-perl-native"
