@@ -11,11 +11,11 @@ HOMEPAGE = "http://beyondgrep.com/"
 PR = "r0"
 inherit debian-package cpan
 
-LICENSE = "Artistic-2.0 & GPL-2+ | GPL-1+"
+LICENSE = "Artistic-2.0 & GPL-2+ & (Artistic-1.0 | GPL-1+)"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE.md;md5=f19ee102af436a61316db71e613ded2c \
-	file://t/swamp/c-source.c;md5=4434b7963eee9c9432761f5124202e1c \
-	file://t/swamp/c-header.h;md5=e419183d1776291d257bb6c47e35bfe4"
+	file://t/swamp/c-source.c;beginline=27;endline=49;md5=e62ea93e397468c8fc0f902203acf8c9 \
+	file://t/swamp/c-header.h;beginline=1;endline=9;md5=e855db0451099d570f57f22349c3a809"
 
 do_install() {
 	oe_runmake install INSTALLVENDORLIB=${datadir}/perl5 DESTDIR=${D}
