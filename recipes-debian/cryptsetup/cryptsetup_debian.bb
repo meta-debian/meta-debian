@@ -11,20 +11,20 @@ DESCRIPTION = "\
 	initramfs-tools and several supported ways to read a passphrase or key.   \
 "
 HOMEPAGE = "http://code.google.com/p/cryptsetup/"
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=32107dd283b1dfeb66c9b3e6be312326\
 	file://COPYING.LGPL;md5=1960515788100ce5f9c98ea78a65dc52"
-inherit autotools-brokensep pkgconfig gettext binconfig
+inherit autotools-brokensep pkgconfig gettext binconfig lib_package
 
 #inherit autotools-brokensep
 DEPENDS = "util-linux lvm2 popt libgcrypt chrpath-native"
 EXTRA_OECONF += "--enable-shared \
-		--libdir=/lib \
-		--sbindir=/sbin \
+		--libdir=${base_libdir} \
+		--sbindir=${base_sbindir} \
 		--enable-cryptsetup-reencrypt"
 
 #install follow Debian jessie
@@ -63,24 +63,16 @@ do_install_append() {
 		${D}${sbindir}/cryptdisks_stop
 	install -m 0755 ${S}/debian/scripts/decrypt_* 				\
 		${D}${base_libdir}/cryptsetup/scripts/
-	install -m 0755 ${S}/debian/initramfs/cryptgnupg-hook 			\
-		${D}${datadir}/initramfs-tools/hooks/cryptgnupg
-	install -m 0755 ${S}/debian/initramfs/cryptkeyctl-hook 			\
-		${D}${datadir}/initramfs-tools/hooks/cryptkeyctl
-	install -m 0755 ${S}/debian/initramfs/cryptopenct-hook 			\
-		${D}${datadir}/initramfs-tools/hooks/cryptopenct
-	install -m 0755 ${S}/debian/initramfs/cryptopensc-hook 			\
-		${D}${datadir}/initramfs-tools/hooks/cryptopensc
+	for i in  ${S}/debian/initramfs/*-hook; do
+		install -m 0755 ${i} \
+		${D}${datadir}/initramfs-tools/hooks/`basename $i|cut -d- -f1`
+	done
 	install -m 0755 ${S}/debian/initramfs/cryptopensc-script-local-bottom 	\
 		${D}${datadir}/initramfs-tools/scripts/local-bottom/cryptopensc
 	install -m 0755 ${S}/debian/initramfs/cryptopensc-script-local-top 	\
 		${D}${datadir}/initramfs-tools/scripts/local-top/cryptopensc
-	install -m 0755 ${S}/debian/initramfs/cryptpassdev-hook 		\
-		${D}${datadir}/initramfs-tools/hooks/cryptpassdev
 	install -m 0644 ${S}/debian/initramfs/cryptroot-conf 			\
 		${D}${datadir}/initramfs-tools/conf-hooks.d/cryptsetup
-	install -m 0755 ${S}/debian/initramfs/cryptroot-hook 			\
-		${D}${datadir}/initramfs-tools/hooks/cryptroot
 	install -m 0755 ${S}/debian/initramfs/cryptroot-script 			\
 		${D}${datadir}/initramfs-tools/scripts/local-top/cryptroot
 	install -m 0755 ${S}/debian/initramfs/cryptroot-script-block 		\
@@ -119,14 +111,14 @@ do_install_append() {
 	chrpath -d ${D}${base_sbindir}/cryptsetup
 	chrpath -d ${D}${base_sbindir}/cryptsetup-reencrypt
 }
-PACKAGES =+ "lib${PN}4 ${PN}-bin"
+PACKAGES =+ "lib${PN}"
 PKG_${PN}-dev = "lib${PN}-dev"
 
 FILES_${PN}-bin = "\
 	${base_sbindir}/cryptsetup ${base_sbindir}/cryptsetup-reencrypt 	\
 	${base_sbindir}/veritysetup ${sbindir}/luksformat ${datadir}/locale/*	\
 	"
-FILES_lib${PN}4 = "${base_libdir}/libcryptsetup.so.*"
+FILES_lib${PN} = "${base_libdir}/libcryptsetup.so.*"
 
 FILES_${PN}-dbg += "\
 	${base_libdir}/cryptsetup/scripts/.debug/* 				\
@@ -139,5 +131,5 @@ FILES_${PN} += "${datadir}/bug ${datadir}/initramfs-tools 			\
 RDEPENDS_${PN} += "dmsetup cryptsetup-bin"
 RREPLACES_${PN} += "hashalot"
 RREPLACES_${PN}-bin += "${PN}"
-RDEPENDS_lib${PN}4 += "libgpg-error libgcrypt"
+RDEPENDS_lib${PN} += "libgpg-error libgcrypt"
 RDEPENDS_lib${PN}-dev += "lib${PN}4"
