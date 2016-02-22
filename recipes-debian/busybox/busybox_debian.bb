@@ -20,6 +20,9 @@ BUSYBOX_DEFCONFIG ?= "defconfig"
 # Whether to split the suid apps into a seperate binary
 BUSYBOX_SPLIT_SUID ?= "1"
 
+# config that are enabled/disabled according to VIRTUAL-RUNTIME_init_manager
+BUSYBOX_INIT_CONFIGS ?= "INIT FEATURE_USE_INITTAB"
+
 #
 # basic definitions
 #
@@ -40,11 +43,6 @@ export EXTRA_OEMAKE += "'LD=${CCLD}' V=1 ARCH=${TARGET_ARCH} CROSS_COMPILE=${TAR
 
 inherit cml1
 
-do_configure () {
-	cp ${WORKDIR}/${BUSYBOX_DEFCONFIG} ${S}/.config
-	cml1_do_configure
-}
-
 # This function creates the same .config as "merge_config.sh -m",
 # but is more simple. merge_config.sh is included in yocto-kernel-tools.
 #
@@ -61,6 +59,23 @@ merge_config() {
 		fi
 	done
 	cat ${2} >> .config
+}
+
+do_configure () {
+	# enable/disable CONFIG_INIT according to VIRTUAL-RUNTIME_init_manager
+	rm -f ${S}/.config.init
+	for cfg in ${BUSYBOX_INIT_CONFIGS}; do
+		if [ "${VIRTUAL-RUNTIME_init_manager}" = "busybox" ]; then
+			cfg_def="CONFIG_${cfg}=y"
+		else
+			cfg_def="# CONFIG_${cfg} is not set"
+		fi
+		echo "${cfg_def}" >> ${S}/.config.init
+	done
+	merge_config ${WORKDIR}/${BUSYBOX_DEFCONFIG} ${S}/.config.init
+	rm ${S}/.config.init
+
+	cml1_do_configure
 }
 
 do_compile() {
