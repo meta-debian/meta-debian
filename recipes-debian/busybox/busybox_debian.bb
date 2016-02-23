@@ -23,6 +23,12 @@ BUSYBOX_SPLIT_SUID ?= "1"
 # config that are enabled/disabled according to VIRTUAL-RUNTIME_init_manager
 BUSYBOX_INIT_CONFIGS ?= "INIT FEATURE_USE_INITTAB"
 
+# space-separated list of the terminals that allow login
+# (same format as SERIAL_CONSOLES)
+# respawning gettys for ttys in this list are automatically appended to inittab
+BUSYBOX_INITTAB_GETTYS ?= \
+"${@base_conditional('SERIAL_CONSOLES', None or '', '38400;tty1', '${SERIAL_CONSOLES}', d)}"
+
 #
 # basic definitions
 #
@@ -33,6 +39,8 @@ SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
 file://${BUSYBOX_DEFCONFIG} \
+file://inittab \
+file://rcS \
 file://run-ptest \
 "
 
@@ -235,6 +243,21 @@ do_install() {
 		install -m 0644 ${S}/debian/busybox-syslogd.default \
 			${D}${sysconfdir}/default/busybox-syslogd
 		# drop insserv config file for sysvinit
+	fi
+
+	# install inittab and rcS only if busybox is the init manager
+	if [ "${VIRTUAL-RUNTIME_init_manager}" = "busybox" ]; then
+		install -m 0644 ${WORKDIR}/inittab ${D}${sysconfdir}
+
+		# automatically append respawns for ${BUSYBOX_INITTAB_GETTYS}
+		for gettyargs in $(echo "${BUSYBOX_INITTAB_GETTYS}" | tr ";" ":"); do
+			baudrate=$(echo "${gettyargs}" | cut -d ":" -f 1)
+			tty=$(echo "${gettyargs}" | cut -d ":" -f 2)
+			echo "${tty}::respawn:${base_sbindir}/getty ${baudrate} ${tty}" \
+				>> ${D}${sysconfdir}/inittab
+		done
+
+		install -m 0755 ${WORKDIR}/rcS ${D}${sysconfdir}/init.d
 	fi
 }
 
