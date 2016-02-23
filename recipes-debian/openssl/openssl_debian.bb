@@ -44,7 +44,7 @@ EXTRA_OECONF_append_x86-64 = "enable-ec_nistp_64_gcc_128"
 
 # without this, ar commands fail in do_compile
 AR_append = " r"
-
+EXTRA_OEMAKE = "-e MAKEFLAGS="
 # Only "test" is removed from the default targets because it includes
 # running tests. Instead, "buildteset" and "runtest" are added by
 # Makefiles-ptest.patchas as new targets

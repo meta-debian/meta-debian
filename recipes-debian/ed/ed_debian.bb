@@ -16,6 +16,8 @@ DEBIAN_PATCH_TYPE = "dpatch"
 
 inherit texinfo update-alternatives
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_configure() {
 	${S}/configure
 }
