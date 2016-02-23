@@ -14,9 +14,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=de10de48642ab74318e893a61105afbb"
 # controllable variables
 #
 
-# base configuration
-BUSYBOX_DEFCONFIG ?= "defconfig"
-
 # Whether to split the suid apps into a seperate binary
 BUSYBOX_SPLIT_SUID ?= "1"
 
@@ -38,7 +35,7 @@ BUSYBOX_INITTAB_GETTYS ?= \
 SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
-file://${BUSYBOX_DEFCONFIG} \
+file://defconfig \
 file://inittab \
 file://rcS \
 file://run-ptest \
@@ -80,7 +77,7 @@ do_configure () {
 		fi
 		echo "${cfg_def}" >> ${S}/.config.init
 	done
-	merge_config ${WORKDIR}/${BUSYBOX_DEFCONFIG} ${S}/.config.init
+	merge_config ${WORKDIR}/defconfig ${S}/.config.init
 	rm ${S}/.config.init
 
 	cml1_do_configure
