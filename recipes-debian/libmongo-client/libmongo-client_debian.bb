@@ -11,6 +11,9 @@ inherit debian-package
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 inherit autotools pkgconfig
 DEPENDS += "glib-2.0"
 

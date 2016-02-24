@@ -8,12 +8,14 @@ DESCRIPTION = "	Electric Fence is a debugger that uses virtual memory hardware	\
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=18810669f13b87348459e611d31ab760"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 #makefile-fix-install-unknown-file_debian.patch:
-#	fixed the install some unknown file: ef.sh, efence.3
+#	- fixed the install some unknown file: ef.sh, efence.3
 #	correct the softlink: libefence.so --> libefence.so.0
+#	- remove the Testing for Electric Fence
+#	script to test:"./eftest" and "./tstheap" depend on diffrent architecture
 SRC_URI += "file://makefile-fix-install-unknown-file_debian.patch"
 
 DEBIAN_PATCH_TYPE = "nopatch"

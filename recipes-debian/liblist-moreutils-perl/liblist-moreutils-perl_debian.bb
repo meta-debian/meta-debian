@@ -16,6 +16,9 @@ inherit debian-package
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=385c55653886acac3821999a3ccd17b3"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 inherit cpan
 
 do_compile() {

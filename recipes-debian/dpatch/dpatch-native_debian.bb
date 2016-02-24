@@ -18,7 +18,7 @@ inherit debian-package
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=876a2203d96d26da30e0bff0355d7f5b"
 
-DEPENDS = "patchutils-native"
+DEPENDS = "patchutils-native dpkg-native"
 
 inherit native
 

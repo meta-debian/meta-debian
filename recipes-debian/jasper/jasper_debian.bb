@@ -6,12 +6,18 @@ LICENSE = "Jasper-2.0"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=6fa5cfb08782fcab103fad4ebb2a01d7 \
 		    file://LICENSE;md5=baa697d7510288a9cdcce9bd7edaf9bc"
 SECTION = "graphics"
-PR = "r0"
+PR = "r1"
 
-DEPENDS = "libjpeg6b"
+DEPENDS = "libjpeg-turbo"
 
 EXTRA_OECONF += " --enable-shared=yes"
 
 inherit autotools
 inherit debian-package
 DPR = "0"
+
+PACKAGES =+ "libjasper "
+FILES_libjasper = "${libdir}/libjasper.so.*"
+
+DEBIANNAME_${PN}-dev = "libjasper-dev"
+DEBIANNAME_${PN} = "libjasper-runtime"
