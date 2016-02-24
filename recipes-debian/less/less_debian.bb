@@ -49,8 +49,13 @@ do_install_append() {
 
 FILES_${PN} += "${libdir}/*"
 
+# Add update-alternatives definitions to avoid conflict with busybox
+ALTERNATIVE_${PN} = "less"
+ALTERNATIVE_PRIORITY[less] = "100"
+ALTERNATIVE_LINK_NAME[less] = "${base_bindir}/less"
+
 # Follow debian/postinst
-ALTERNATIVE_${PN} = "pager"
-ALTERNATIVE_TARGET[pager] = "${base_bindir}/less"
+ALTERNATIVE_${PN} += "pager"
+ALTERNATIVE_TARGET[pager] = "${base_bindir}/less.${DPN}"
 ALTERNATIVE_LINK_NAME[pager] = "${bindir}/pager"
-ALTERNATIVE_PRIORITY = "77"
+ALTERNATIVE_PRIORITY[pager] = "77"

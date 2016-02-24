@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = " \
 
 PACKAGECONFIG[acl] = "--with-posix-acls, --without-posix-acls, acl,"
 
-inherit autotools gettext
+inherit autotools gettext update-alternatives
 
 # Configure follow debian/rules
 # --dissable-gcc-warnings to avoid all warnings being treated as errors.
@@ -44,5 +44,10 @@ FILES_${PN}-scripts = " \
 	${sbindir}/tar-restore \
 "
 FILES_${PN} += "${libdir}/mime/packages"
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "tar"
+ALTERNATIVE_LINK_NAME[tar] = "${base_bindir}/tar"
 
 BBCLASSEXTEND = "nativesdk"
