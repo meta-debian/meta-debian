@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=84b4d2c6ef954a2d4081e775a270d0d0"
 DEPENDS += "libsepol libpcre swig-native python"
 
 do_compile() {
-	oe_runmake CC=${TARGET_SYS}-gcc PREFIX="${prefix}" LIBBASE="${base_libdir}" LIBSEPOLDIR="${STAGING_LIBDIR}" all
+	oe_runmake CC=${TARGET_SYS}-gcc PREFIX="${D}${prefix}" LIBBASE="${D}${base_libdir}" LIBSEPOLDIR="${STAGING_LIBDIR}" all
 }
 
 do_install() {
@@ -20,7 +20,7 @@ do_install() {
 			DESTDIR=${D} LIBDIR=${D}/${libdir} install
 	# Fix up the broken library symlink
 	rm -f ${D}${libdir}/libselinux.so
-	ln -s ${base_libdir}/libselinux.so.1 ${D}${libdir}/libselinux.so
+	ln -s ../..${base_libdir}/libselinux.so.1 ${D}${libdir}/libselinux.so
 	oe_runmake CC=${TARGET_SYS}-gcc PREFIX="${D}${prefix}" LIBSEPOLDIR="${STAGING_LIBDIR}" \
 			DESTDIR=${D} LIBDIR=${D}/${libdir} \
 			PYINC=-I${STAGING_INCDIR}/${PYTHON_DIR} install-pywrap

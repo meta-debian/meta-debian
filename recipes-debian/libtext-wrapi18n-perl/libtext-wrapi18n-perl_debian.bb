@@ -5,7 +5,7 @@ PR = "r0"
 inherit debian-package cpan
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
-LIC_FILES_CHKSUM = "file://README;beginline=44;md5=080862e1e40cdcddef4393e137285858"
+LIC_FILES_CHKSUM = "file://README;beginline=44;md5=e66988112aaf864a328fad61627fe75b"
 
 DEBIAN_PATCH_TYPE = "quilt"
 

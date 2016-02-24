@@ -16,6 +16,9 @@ LIC_FILES_CHKSUM = "file://README;beginline=26;endline=30;md5=6c33ae5c87fd1c4897
 
 DEPENDS += "perl"
 
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
+
 EXTRA_CPANFLAGS = "EXPATLIBPATH=${STAGING_LIBDIR} EXPATINCPATH=${STAGING_INCDIR}"
 
 inherit cpan
@@ -23,14 +26,6 @@ inherit cpan
 do_compile() {
 	export LIBC="$(find ${STAGING_DIR_TARGET}/${base_libdir}/ -name 'libc-*.so')"
 	cpan_do_compile
-}
-
-# install file follow content of package name of jessie
-do_install_append() {
-	install -d ${D}${datadir}/perl5/
-	mv ${D}${libdir}/perl/vendor_perl/5.20.2/URI ${D}${datadir}/perl5/
-	mv ${D}${libdir}/perl/vendor_perl/5.20.2/URI.pm ${D}${datadir}/perl5/
-	rm -r ${D}${libdir}
 }
 
 # ship file for package liburi-perl

@@ -2,7 +2,7 @@ SUMMARY = "multiple-precision integer library"
 DESCRIPTION = "LibTomMath is a C language library that provides a vast array \
 of highly optimized functions for number theory."
 
-inherit debian-package autotools
+inherit debian-package autotools-brokensep
 PR = "r0"
 
 LICENSE = "PD"

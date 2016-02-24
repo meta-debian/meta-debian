@@ -10,7 +10,7 @@ BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
 inherit debian-package autotools-brokensep binconfig pkgconfig
 
-PR = "r0"
+PR = "r1"
 DPN = "libgcrypt20"
 DEPENDS = "libgpg-error libcap"
 
@@ -26,12 +26,26 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f \
 
 ARM_INSTRUCTION_SET = "arm"
 
-EXTRA_OECONF = "--disable-asm --with-capabilities"
+# Follow debian/rules
+EXTRA_OECONF = " \
+	--enable-noexecstack \
+	--enable-ld-version-script --enable-static \
+	--libdir=${base_libdir} \
+"
 
 # libgcrypt.pc is added locally and thus installed here
 do_install_append() {
 	install -d ${D}/${libdir}/pkgconfig
 	install -m 0644 ${B}/src/libgcrypt.pc ${D}/${libdir}/pkgconfig/
+
+	# Move libgcrypt.so and static library to ${libdir}
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	libname=`readlink ${D}${base_libdir}/libgcrypt.so | xargs basename`
+	ln -s $rel_lib_prefix${base_libdir}/$libname ${D}${libdir}/libgcrypt.so
+	rm ${D}${base_libdir}/*.so
+
+	mv ${D}${base_libdir}/*.a ${D}${libdir}/
+	mv ${D}${base_libdir}/*.la ${D}${libdir}/
 }
 
 # Specifies the lead (or primary) compiled library file (.so) 

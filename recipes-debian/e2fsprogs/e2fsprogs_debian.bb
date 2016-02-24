@@ -138,9 +138,8 @@ do_install_class-native () {
 	oe_multilib_header ext2fs/ext2_types.h			
 }
 
-PACKAGES = "comerr-dev e2fsck-static e2fslibs e2fslibs-dbg e2fslibs-dev ${PN} \
-	    ${PN}-dbg libcomerr2 libcomerr2-dbg libss2 libss2-dbg ss-dev \
-	    comerr-staticdev e2fslibs-staticdev ss-staticdev"
+PACKAGES =+ "comerr-dev e2fsck-static e2fslibs e2fslibs-dev libcomerr \
+	     libss ss-dev comerr-staticdev e2fslibs-staticdev ss-staticdev"
 
 FILES_comerr-dev = "\
 		${bindir}/compile_et \
@@ -154,9 +153,6 @@ FILES_comerr-staticdev = "${libdir}/libcom_err.a"
 FILES_e2fslibs = "\
 		${base_libdir}/libe2p.so.* \
 		${base_libdir}/libext2fs.so.*"
-FILES_e2fslibs-dbg = " \
-		${base_libdir}/.debug/libe2p.so.* \
-		${base_libdir}/.debug/libext2fs.so.*"
 FILES_e2fslibs-dev = " \
 		${includedir}/e2p/* \
 		${includedir}/ext2fs/* \
@@ -165,6 +161,7 @@ FILES_e2fslibs-dev = " \
 		${libdir}/pkgconfig/e2p.pc \
 		${libdir}/pkgconfig/ext2fs.pc \
 		${infodir}"
+FILES_libcomerr = "${base_libdir}/libcom_err.so.*"
 FILES_e2fslibs-staticdev = " \
 		${libdir}/libext2fs.a \
 		${libdir}/libe2p.a"
@@ -187,17 +184,9 @@ FILES_${PN} = " \
 		${sbindir}/e2freefrag \
 		${sbindir}/mklost+found \
 		${sbindir}/filefrag \
-		${sbindir}/e4defrag \ 
-		${datadir}/man"
-FILES_${PN}-dbg = " \
-		${prefix}/src \
-		${base_sbindir}/.debug \
-		${bindir}/.debug \
-		${sbindir}/.debug"
-FILES_libcomerr2 = "${base_libdir}/libcom_err.so.*"
-FILES_libcomerr2-dbg = "${base_libdir}/.debug/libcom_err.so.2.1"
-FILES_libss2 = "${base_libdir}/libss.so.*"
-FILES_libss2-dbg = "${base_libdir}/.debug/libss.so.2.0"
+		${sbindir}/e4defrag \
+		" 
+FILES_libss = "${base_libdir}/libss.so.*"
 FILES_ss-dev = " \
 		${bindir}/mk_cmds \
 		${includedir}/ss \
@@ -205,5 +194,9 @@ FILES_ss-dev = " \
 		${libdir}/pkgconfig/ss.pc \
 		${datadir}/ss"
 FILES_ss-staticdev = "${libdir}/libss.a"
+
+# Correct the package name
+DEBIANNAME_libcomerr = "libcomerr2"
+DEBIANNAME_libss = "libss2"
 
 BBCLASSEXTEND = "native"

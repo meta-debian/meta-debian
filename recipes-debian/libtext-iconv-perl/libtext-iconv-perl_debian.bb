@@ -18,6 +18,9 @@ inherit debian-package
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=3;endline=6;md5=fadf2919c7128e887d26b4d905f90649"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 inherit cpan
 
 FILES_${PN}-dbg += "${libdir}/perl/vendor_perl/*/auto/Text/Iconv/.debug/"

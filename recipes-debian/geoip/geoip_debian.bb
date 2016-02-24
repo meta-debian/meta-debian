@@ -13,6 +13,9 @@ inherit debian-package
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d5d53d6b948c064f4070183180a4fa89"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 inherit autotools
 
 #split geoip package to sub-packages

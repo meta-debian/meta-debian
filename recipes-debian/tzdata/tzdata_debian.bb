@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = " \
 file://asia;beginline=2;endline=3;md5=996a9811747aa48db91ed239e5b355a1 \
 file://README;md5=d0ff93a73dd5bc3c6e724bb4343760f6"
 
-DEPENDS = "tzcode-native"
+DEPENDS = "zic-native"
 
 DEFAULT_TIMEZONE ?= "Universal"
 
@@ -26,11 +26,11 @@ TIMEZONES := "africa antarctica asia australasia europe northamerica southameric
 do_compile () {
 	# build the "default"; "posix" and "right" versions
 	for zone in ${TIMEZONES}; do \
-		${STAGING_BINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo -L /dev/null \
+		${STAGING_SBINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo -L /dev/null \
 			-y ${S}/yearistype.sh ${S}/${zone} ; \
-		${STAGING_BINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo/posix -L /dev/null \
+		${STAGING_SBINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo/posix -L /dev/null \
 			-y ${S}/yearistype.sh ${S}/${zone} ; \
-		${STAGING_BINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo/right -L ${S}/leapseconds \
+		${STAGING_SBINDIR_NATIVE}/zic -d ${WORKDIR}/build/${datadir}/zoneinfo/right -L ${S}/leapseconds \
 			-y ${S}/yearistype.sh ${S}/${zone} ; \
 	done
 }                                                      

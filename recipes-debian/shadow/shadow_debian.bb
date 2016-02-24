@@ -60,23 +60,10 @@ NSCDOPT_class-nativesdk = "--without-nscd"
 NSCDOPT_libc-uclibc = " --without-nscd"
 NSCDOPT_libc-glibc = "${@bb.utils.contains('DISTRO_FEATURES', 'libc-spawn', '--with-nscd', '--without-nscd', d)}"
 
-PAM_PLUGINS = "libpam-runtime \
-               pam-plugin-faildelay \
-               pam-plugin-securetty \
-               pam-plugin-nologin \
-               pam-plugin-env \
-               pam-plugin-group \
-               pam-plugin-limits \
-               pam-plugin-lastlog \
-               pam-plugin-motd \
-               pam-plugin-mail \
-               pam-plugin-shells \
-               pam-plugin-rootok"
- 
 PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
 PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
-PACKAGECONFIG[pam] = "--with-libpam,--without-libpam,libpam,${PAM_PLUGINS}"
+PACKAGECONFIG[pam] = "--with-libpam,--without-libpam,libpam,libpam-modules"
 PACKAGECONFIG[attr] = "--with-attr,--without-attr,attr"
 PACKAGECONFIG[acl] = "--with-acl,--without-acl,acl"
 
@@ -104,27 +91,27 @@ install_login(){
 	install -c -m 444 ${S}/debian/login.defs ${D}${sysconfdir}/login.defs
 
 	# Enable CREATE_HOME by default.
-        sed -i 's/#CREATE_HOME/CREATE_HOME/g' ${D}${sysconfdir}/login.defs
+    sed -i 's/#CREATE_HOME/CREATE_HOME/g' ${D}${sysconfdir}/login.defs
 
-        # As we are on an embedded system, ensure the users mailbox is in
-        # ~/ not /var/spool/mail by default, as who knows where or how big
-        # /var is. The system MDA will set this later anyway.
-        sed -i 's/MAIL_DIR/#MAIL_DIR/g' ${D}${sysconfdir}/login.defs
-        sed -i 's/#MAIL_FILE/MAIL_FILE/g' ${D}${sysconfdir}/login.defs
+    # As we are on an embedded system, ensure the users mailbox is in
+    # ~/ not /var/spool/mail by default, as who knows where or how big
+    # /var is. The system MDA will set this later anyway.
+    sed -i 's/MAIL_DIR/#MAIL_DIR/g' ${D}${sysconfdir}/login.defs
+    sed -i 's/#MAIL_FILE/MAIL_FILE/g' ${D}${sysconfdir}/login.defs
 
-        # Disable checking emails.
-        sed -i 's/MAIL_CHECK_ENAB/#MAIL_CHECK_ENAB/g' ${D}${sysconfdir}/login.defs
+    # Disable checking emails.
+    sed -i 's/MAIL_CHECK_ENAB/#MAIL_CHECK_ENAB/g' ${D}${sysconfdir}/login.defs
 
-        # Comment out SU_NAME to work correctly with busybox
-        # See Bug#5359 and Bug#7173
-        sed -i 's:^SU_NAME:#SU_NAME:g' ${D}${sysconfdir}/login.defs
+    # Comment out SU_NAME to work correctly with busybox
+    # See Bug#5359 and Bug#7173
+    sed -i 's:^SU_NAME:#SU_NAME:g' ${D}${sysconfdir}/login.defs
 
-        # Use proper encryption for passwords
-        sed -i 's/^#ENCRYPT_METHOD.*$/ENCRYPT_METHOD SHA512/' ${D}${sysconfdir}/login.defs
+    # Use proper encryption for passwords
+    sed -i 's/^#ENCRYPT_METHOD.*$/ENCRYPT_METHOD SHA512/' ${D}${sysconfdir}/login.defs
 
 	# Handle link properly after rename, otherwise missing files would
-        # lead rpm failed dependencies.
-        ln -sf newgrp ${D}${bindir}/sg
+    # lead rpm failed dependencies.
+    ln -sf newgrp ${D}${bindir}/sg
 }
 
 install_passwd(){
@@ -133,14 +120,14 @@ install_passwd(){
 	install -c -m 644 ${S}/debian/useradd.default ${D}${sysconfdir}/default/useradd
 
 	# Now we don't have a mail system. Disable mail creation for now.
-        sed -i 's:/bin/bash:/bin/sh:g' ${D}${sysconfdir}/default/useradd
-        sed -i '/^CREATE_MAIL_SPOOL/ s:^:#:' ${D}${sysconfdir}/default/useradd
+    sed -i 's:/bin/bash:/bin/sh:g' ${D}${sysconfdir}/default/useradd
+    sed -i '/^CREATE_MAIL_SPOOL/ s:^:#:' ${D}${sysconfdir}/default/useradd
 
-        # Use users group by default
-        sed -i 's,^GROUP=1000,GROUP=100,g' ${D}${sysconfdir}/default/useradd
+    # Use users group by default
+    sed -i 's,^GROUP=1000,GROUP=100,g' ${D}${sysconfdir}/default/useradd
 
 	rm ${D}${sbindir}/vigr
-        ln -sf vipw ${D}${sbindir}/vigr
+    ln -sf vipw ${D}${sbindir}/vigr
 	ln -sf cppw ${D}${sbindir}/cpgr
 }
 
@@ -162,22 +149,45 @@ do_install_append() {
 
 	install -d ${D}${sbindir} ${D}${base_bindir} 
 
-        # Move binaries to the locations we want
-        if [ "${bindir}" != "${base_bindir}" ]; then
-                mv ${D}${bindir}/login ${D}${base_bindir}/login
-                mv ${D}${bindir}/su ${D}${base_bindir}/su
-        fi
+    # Move binaries to the locations we want
+    if [ "${bindir}" != "${base_bindir}" ]; then
+            mv ${D}${bindir}/login ${D}${base_bindir}/login
+            mv ${D}${bindir}/su ${D}${base_bindir}/su
+    fi
 }
 
-pkg_postinst_${PN} () {
-	if [ "x$D" != "x" ]; then
-	  rootarg="--root $D"
-	else
-	  rootarg=""
-	fi
+PACKAGES =+ "login uidmap passwd"
+FILES_login = "  ${base_bindir}/* \
+                 ${sysconfdir}/login.defs \
+                 ${sysconfdir}/securetty \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/login', '', d)} \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/su', '', d)} \
+                 ${bindir}/faillog \
+                 ${bindir}/lastlog \
+                 ${bindir}/newgrp \
+                 ${bindir}/sg \
+                 ${sbindir}/nologin \
+"
+FILES_uidmap = " ${bindir}/newgidmap \
+                 ${bindir}/newuidmap \
+"
+FILES_passwd = " ${sysconfdir}/default/useradd \
+                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/*', '', d)} \
+                 ${base_sbindir}/shadowconfig \
+                 ${bindir}/* \
+                 ${sbindir}/* \
+"
+RDEPENDS_${PN} += "login uidmap passwd"
 
-	pwconv $rootarg || exit 1
-	grpconv $rootarg || exit 1
+pkg_postinst_${PN} () {
+    if [ "x$D" != "x" ]; then
+      rootarg="--root $D"
+    else
+      rootarg=""
+    fi
+
+    pwconv $rootarg || exit 1
+    grpconv $rootarg || exit 1
 }
 
 BBCLASSEXTEND = "native nativesdk"

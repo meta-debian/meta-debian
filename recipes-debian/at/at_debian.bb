@@ -22,7 +22,7 @@ DEPENDS = "flex flex-native \
 RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${PAM_DEPS}', '', d)} \
 "
 
-PAM_DEPS = "libpam libpam-runtime pam-plugin-env pam-plugin-limits"
+PAM_DEPS = "libpam libpam-runtime libpam-modules"
 
 RCONFLICTS_${PN} = "atd"
 RREPLACES_${PN} = "atd"

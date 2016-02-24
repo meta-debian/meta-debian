@@ -34,9 +34,11 @@ PERL_class-native = "${STAGING_BINDIR_NATIVE}/perl-native/perl"
 export PERL_LIBDIR = "${libdir}/perl"
 PERL_LIBDIR_class-native = "${libdir}/perl-native/perl"
 
+# update-alternatives and start-stop-daemon are provided by dpkg-utils recipe
 EXTRA_OECONF = " \
+	--disable-update-alternatives \
+	--disable-start-stop-daemon \
 	--disable-dselect \
-	--enable-start-stop-daemon \
 	--with-zlib \
 	--with-bz2 \
 	--without-liblzma \
@@ -50,7 +52,6 @@ do_configure () {
 }
 
 do_install_append () {
-	rm ${D}${bindir}/update-alternatives
 	if [ "${PN}" = "dpkg-native" ]; then
 		sed -i -e 's|^#!.*${bindir}/perl-native.*/perl|#!/usr/bin/env nativeperl|' ${D}${bindir}/dpkg-*
 	else
@@ -74,11 +75,15 @@ do_install_append () {
 	install -m 0755 ${S}/debian/dpkg.cron.daily ${D}${sysconfdir}/cron.daily/
 	install -m 0644 ${S}/debian/dpkg.logrotate ${D}${sysconfdir}/logrotate.d/
 
+	install -d ${D}${sbindir}
 	ln -s ../bin/dpkg-divert ${D}${sbindir}/dpkg-divert
 	ln -s ../bin/dpkg-statoverride ${D}${sbindir}/dpkg-statoverride
 }
 
 PACKAGES += "${PN}-perl"
+
+RDEPENDS_${PN} += "update-alternatives start-stop-daemon"
+
 FILES_${PN}-perl = "${libdir}/perl"
 
 DEBIANNAME_${PN}-perl = "lib${PN}-perl"

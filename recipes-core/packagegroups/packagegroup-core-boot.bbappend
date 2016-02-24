@@ -1,3 +1,1 @@
-RDEPENDS_${PN} += " \
-dpkg-update-alternatives \
-"
+RDEPENDS_${PN} += "update-alternatives"
