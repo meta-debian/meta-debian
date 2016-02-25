@@ -47,35 +47,7 @@ export EXTRA_LDFLAGS = "${LDFLAGS}"
 export EXTRA_OEMAKE += "'LD=${CCLD}' V=1 ARCH=${TARGET_ARCH} CROSS_COMPILE=${TARGET_PREFIX} SKIP_STRIP=y"
 
 inherit cml1
-
-# This function creates the same .config as "merge_config.sh -m",
-# but is more simple. merge_config.sh is included in yocto-kernel-tools.
-#
-# usage: merge_config <config1> <config2>
-# If the same CONFIG is defined in the both of config1 and config2,
-# the CONFIG value in config2 is selected (the value in config1 is dropped).
-merge_config() {
-	SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-
-	cp ${1} .config.merged
-	for cfg in $(sed -n "${SED_CONFIG_EXP}" ${2}); do
-		if grep -q -w ${cfg} .config.merged; then
-			sed -i "/${cfg}[ =]/d" .config.merged
-		fi
-	done
-	cat ${2} >> .config.merged
-	mv .config.merged .config
-}
-
-# returns all the elements from the src uri that are .cfg files
-def find_cfgs(d):
-    sources=src_patches(d, True)
-    sources_list=[]
-    for s in sources:
-        if s.endswith('.cfg'):
-            sources_list.append(s)
-
-    return sources_list
+inherit merge-config
 
 do_configure () {
 	# defconfig is the base configuration.
