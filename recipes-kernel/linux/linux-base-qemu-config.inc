@@ -8,13 +8,14 @@
 #
 
 LINUX_DEFCONFIG_qemux86 ?= "i386_defconfig"
-LINUX_CONFIG_APPEND_qemux86 ?= "${MACHINE}.config"
+SRC_URI_append_qemux86 = " file://qemu.config"
 
 LINUX_DEFCONFIG_qemux86-64 ?= "x86_64_defconfig"
-LINUX_CONFIG_APPEND_qemux86-64 ?= "${MACHINE}.config"
+SRC_URI_append_qemux86-64 = " file://qemu.config"
 
 LINUX_DEFCONFIG_qemuarm ?= "versatile_defconfig"
-LINUX_CONFIG_APPEND_qemuarm ?= "${MACHINE}.config"
+SRC_URI_append_qemuarm = " file://qemu.config file://${MACHINE}.config"
 
 # TODO: should be based on a defconfig
-LINUX_CONFIG_qemuppc ?= "${MACHINE}.config"
+LINUX_DEFCONFIG_qemuppc ?= ""
+SRC_URI_append_qemuppc = " file://${MACHINE}.config"
