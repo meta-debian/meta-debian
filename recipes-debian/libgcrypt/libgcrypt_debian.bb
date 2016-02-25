@@ -10,7 +10,7 @@ BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
 inherit debian-package autotools-brokensep binconfig pkgconfig
 
-PR = "r1"
+PR = "r2"
 DPN = "libgcrypt20"
 DEPENDS = "libgpg-error libcap"
 
@@ -32,6 +32,15 @@ EXTRA_OECONF = " \
 	--enable-ld-version-script --enable-static \
 	--libdir=${base_libdir} \
 "
+# Avoid error:
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_lshift'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_add_n'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_addmul_1'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_submul_1'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_mul_1'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_sub_n'
+# 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_rshift'
+EXTRA_OECONF += "--disable-asm"
 
 # libgcrypt.pc is added locally and thus installed here
 do_install_append() {
