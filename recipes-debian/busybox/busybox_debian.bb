@@ -57,17 +57,34 @@ inherit cml1
 merge_config() {
 	SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
 
-	cp ${1} .config
+	cp ${1} .config.merged
 	for cfg in $(sed -n "${SED_CONFIG_EXP}" ${2}); do
-		if grep -q -w ${cfg} .config; then
-			sed -i "/${cfg}[ =]/d" .config
+		if grep -q -w ${cfg} .config.merged; then
+			sed -i "/${cfg}[ =]/d" .config.merged
 		fi
 	done
-	cat ${2} >> .config
+	cat ${2} >> .config.merged
+	mv .config.merged .config
 }
 
+# returns all the elements from the src uri that are .cfg files
+def find_cfgs(d):
+    sources=src_patches(d, True)
+    sources_list=[]
+    for s in sources:
+        if s.endswith('.cfg'):
+            sources_list.append(s)
+
+    return sources_list
+
 do_configure () {
-	# enable/disable CONFIG_INIT according to VIRTUAL-RUNTIME_init_manager
+	# defconfig is the base configuration.
+	# If they are .cfg files in SRC_URI, they are automatically
+	# appended to defconfig in order of appearance.
+	merge_config ${WORKDIR}/defconfig ${@" ".join(find_cfgs(d))}
+
+	# enable/disable BUSYBOX_INIT_CONFIGS based on
+	# VIRTUAL-RUNTIME_init_manager
 	rm -f ${S}/.config.init
 	for cfg in ${BUSYBOX_INIT_CONFIGS}; do
 		if [ "${VIRTUAL-RUNTIME_init_manager}" = "busybox" ]; then
@@ -77,7 +94,7 @@ do_configure () {
 		fi
 		echo "${cfg_def}" >> ${S}/.config.init
 	done
-	merge_config ${WORKDIR}/defconfig ${S}/.config.init
+	merge_config .config ${S}/.config.init
 	rm ${S}/.config.init
 
 	cml1_do_configure
