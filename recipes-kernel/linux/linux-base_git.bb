@@ -69,9 +69,15 @@ do_configure_prepend() {
 		bbnote "use ${DEFCONFIG} as the base configuration"
 	else
 		DEFCONFIG=
+		bbnote "LINUX_DEFCONFIG not set, use only .configs in SRC_URI"
 	fi
 
-	merge_config ${DEFCONFIG} ${@" ".join(find_cfgs(d))}
+	bbnote "creating the final config with the following .config files:"
+	LOCAL_CONFIGS="${@' '.join(find_cfgs(d))}"
+	for cfg in ${DEFCONFIG} ${LOCAL_CONFIGS}; do
+		bbnote "    ${cfg}"
+	done
+	merge_config ${DEFCONFIG} ${LOCAL_CONFIGS}
 
 	if [ ! -f ${B}/.config ]; then
 		bbfatal "no config file given
