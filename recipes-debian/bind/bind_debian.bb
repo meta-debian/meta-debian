@@ -35,7 +35,7 @@ EXTRA_OECONF = " \
 	--with-libtool \
 	--enable-shared \
 	--enable-static \
-	--with-openssl=/usr \
+	--with-openssl=${STAGING_LIBDIR}/.. \
 	--with-gssapi=${STAGING_LIBDIR}/../ \
 	--with-gnu-ld \
 	--with-dlz-postgres=no \
