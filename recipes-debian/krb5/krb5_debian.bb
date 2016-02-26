@@ -29,8 +29,6 @@ DEPENDS = "ncurses util-linux e2fsprogs e2fsprogs-native"
 
 inherit autotools-brokensep binconfig perlnative
 
-SHRT_VER = "${@oe.utils.trim_version("${PV}", 2)}"
-
 S = "${DEBIAN_UNPACK_DIR}/src/"
 
 PACKAGECONFIG ??= "openssl ldap"
