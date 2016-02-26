@@ -1,7 +1,18 @@
 #
+# The default configuration for busybox
+#
+# This file is based on debian/config/pkg/deb in Debian busybox package.
+# The following configurations are modified so that
+# the default system works correctly.
+#
+# CONFIG_MESG=y
+#   .profile in base-files depends on mesg command
+#
+
+#
 # Automatically generated make config: don't edit
-# Busybox version: 1.22.0
-# Thu Jan 23 18:30:49 2014
+# Busybox version: 1.22.1
+# Thu Feb 25 19:21:07 2016
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -445,7 +456,7 @@ CONFIG_FEATURE_EXTRA_QUIET=y
 CONFIG_FEATURE_INIT_COREDUMPS=y
 # CONFIG_FEATURE_INITRD is not set
 CONFIG_INIT_TERMINAL_TYPE="linux"
-# CONFIG_MESG is not set
+CONFIG_MESG=y
 # CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP is not set
 
 #

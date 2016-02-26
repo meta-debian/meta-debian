@@ -32,13 +32,12 @@ BUSYBOX_INITTAB_GETTYS ?= \
 
 # busybox-appletlib-dependency.patch: avoid build process races
 # 0001-build-system...patch: required for cross compiling
-# defconfig: completely same as ${S}/debian/config/pkg/deb
-# tune.config: appended configs required for system to work correctly
+# defconfig: based on ${S}/debian/config/pkg/deb, and some configs are modified
+#            so that the default system works correctly (see header comments)
 SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
 file://defconfig \
-file://tune.config \
 file://inittab \
 file://rcS \
 file://run-ptest \
