@@ -49,11 +49,9 @@ PACKAGES =+ "\
 PACKAGECONFIG ??= "\
 	openssl json dbi smtp geoip tcp-wrapers libnet 			  \
 	eventlog hiredis libmongo-client ivykis 			  \
-	${@base_contains('DISTRO_FEATURES', 'ipv8', 'ipv6', '', d)} 	  \
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
 	"
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
-PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,,"
 PACKAGECONFIG[systemd] = "\
 	--enable-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/,\
 	--disable-systemd --without-systemdsystemunitdir,systemd,"
