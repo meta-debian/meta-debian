@@ -30,7 +30,7 @@ inherit debian-package
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=2f31b266d3440dd7ee50f92cf67d8e6c"
 
-DEPENDS = "ncurses readline util-linux"
+DEPENDS = "ncurses readline util-linux lvm2"
 
 # syscalls.patch: Fix error:
 #     | libparted/arch/linux.c:1700:22: error: unknown type name '_llseek'
