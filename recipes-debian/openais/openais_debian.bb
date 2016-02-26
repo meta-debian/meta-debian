@@ -33,7 +33,7 @@ PACKAGES =+ "\
 FILES_libsaamf = "${libdir}/libSaAmf.so.*"
 FILES_libsaamf-dev = "\
 	${includedir}/${DPN}/saAmf.h ${libdir}/libSaAmf.so \
-	libSaAmf.pc"
+	${libdir}/pkgconfig/libSaAmf.pc"
 FILES_libsackpt = "${libdir}/libSaCkpt.so.*"
 FILES_libsackpt-dev = "\
 	${includedir}/${DPN}/saCkpt.h ${libdir}/libSaCkpt.so \
@@ -81,4 +81,4 @@ RDEPENDS_libsaclm-dev += "libsaclm"
 DEPENDS_libsaevt-dev += "libsaevt"
 RDEPENDS_libsalck-dev += "libsalck"
 RDEPENDS_libsamsg-dev += "libsamsg"
-RDEPENDS_libsatmr3-dev += "libsatmr"
+RDEPENDS_libsatmr-dev += "libsatmr"
