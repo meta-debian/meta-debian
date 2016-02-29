@@ -67,7 +67,7 @@ USERADD_PARAM_${PN} = "--system --home /var/cache/bind --no-create-home \
 INITSCRIPT_NAME = "bind"
 INITSCRIPT_PARAMS = "defaults"
 
-SYSTEMD_SERVICE_${PN} = "named.service"
+SYSTEMD_SERVICE_${PN} = "bind9-resolvconf.service bind9.service lwresd.service"
 
 PARALLEL_MAKE = ""
 
@@ -108,7 +108,7 @@ do_install_append () {
 	install -D -m 644 ${S}/bind9.service ${D}${systemd_system_unitdir}/bind9.service
 	install -D -m 644 ${S}/bind9-resolvconf.service ${D}${systemd_system_unitdir}/bind9-resolvconf.service
 	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${libdir}/tmpfiles.d/lwresd.conf
-	install -D ${S}/debian/lwresd.service ${D}${systemd_system_unitdir}/lwresd.service
+	install -D -m 644 ${S}/debian/lwresd.service ${D}${systemd_system_unitdir}/lwresd.service
 	
 	mv ${D}${libdir}/bind9/* ${D}${libdir}/
 	rm -r ${D}${libdir}/bind9/
