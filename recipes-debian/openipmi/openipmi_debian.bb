@@ -1,4 +1,8 @@
-PR = "r0"
+SUMMARY = "Intelligent Platform Management Interface"
+DESCRIPTION = "IPMI allows remote monitoring and remote management of devices."
+HOMEPAGE = "http://openipmi.sourceforge.net/"
+
+PR = "r1"
 
 inherit debian-package
 
@@ -17,8 +21,10 @@ inherit autotools
 
 # Configure follow debian/rules
 # remove unrecognised options: --disable-rpath
-EXTRA_OECONF = "--without-openssl"
-
+# Set --with-swig=no to avoid using swig from swig-native.
+EXTRA_OECONF = "--without-openssl \
+                --with-swig=no \
+"
 PARALLEL_MAKEINST = ""
 
 PACKAGES =+ "lib${PN}"
