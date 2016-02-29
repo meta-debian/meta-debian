@@ -28,7 +28,10 @@ inherit debian-package
 
 DEPENDS = "flex glib-2.0 util-linux"
 
-inherit autotools-brokensep systemd pkgconfig update-rc.d update-alternatives
+inherit autotools-brokensep systemd pkgconfig update-alternatives
+
+# Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
+DEBIAN_QUILT_PATCHES = ""
 
 EXTRA_OECONF += " \
 	--enable-dynamic-linking 	\
