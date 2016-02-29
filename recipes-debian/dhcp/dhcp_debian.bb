@@ -45,13 +45,6 @@ inherit autotools systemd
 # link correct to path of library
 CFLAGS =+ " -I${STAGING_INCDIR}/bind-export/ "
 
-SYSTEMD_PACKAGES = "isc-${PN}-server isc-${PN}-relay"
-SYSTEMD_SERVICE_isc-${PN}-server = "dhcpd.service dhcpd6.service"
-SYSTEMD_AUTO_ENABLE_isc-${PN}-server = "disable"
-
-SYSTEMD_SERVICE_isc-${PN}-relay = "dhcrelay.service"
-SYSTEMD_AUTO_ENABLE_isc-${PN}-relay = "disable"
-
 TARGET_CFLAGS += "-D_GNU_SOURCE"
 EXTRA_OECONF = "--with-srv-lease-file=${localstatedir}/lib/dhcp/dhcpd.leases \
                 --with-srv6-lease-file=${localstatedir}/lib/dhcp/dhcpd6.leases \
@@ -63,7 +56,8 @@ EXTRA_OECONF = "--with-srv-lease-file=${localstatedir}/lib/dhcp/dhcpd.leases \
 do_install_append () {
 	install -d ${D}${sysconfdir}/dhcp/dhclient-enter-hooks.d/
 	install -d ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/
-	install -m 0644 ${S}/debian/rfc3442-classless-routes.linux ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/rfc3442-classless-routes
+	install -m 0644 ${S}/debian/rfc3442-classless-routes.linux \
+			${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/rfc3442-classless-routes
 	install -m 0644 ${S}/debian/debug ${D}${sysconfdir}/dhcp/dhclient-enter-hooks.d/
 	install -m 0644 ${S}/debian/debug ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/
 	install -d ${D}${sysconfdir}/init.d
