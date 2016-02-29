@@ -12,14 +12,17 @@ HOMEPAGE = "http://linux.thai.net/projects/libthai/"
 
 PR = "r0"
 
-inherit debian-package autotools
+inherit debian-package autotools pkgconfig
 
 LICENSE = "LGPL-2.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=2d5025d4aa3495befef8f17206a5b0a1"
 
+# source package has no patch.
+DEBIAN_QUILT_PATCHES = ""
+
 EXTRA_OECONF += "--enable-dict --enable-shared"
 
-DEPENDS += "libdatrie-native"
+DEPENDS += "libdatrie"
 
 # Create more packages follow Debian
 PACKAGES =+ "${PN}-data"
