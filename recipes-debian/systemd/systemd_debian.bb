@@ -172,6 +172,15 @@ do_install_append() {
 	install -d ${D}${base_sbindir}
 	ln -s ${base_bindir}/udevadm ${D}${base_sbindir}
 	ln -s ${base_libdir}/systemd/systemd-udevd ${D}${base_sbindir}/udevd
+
+    # systemd-sysv
+	ln -s /bin/systemd   ${D}${base_sbindir}/init
+	ln -s /bin/systemctl ${D}${base_sbindir}/halt
+	ln -s /bin/systemctl ${D}${base_sbindir}/poweroff
+	ln -s /bin/systemctl ${D}${base_sbindir}/reboot
+	ln -s /bin/systemctl ${D}${base_sbindir}/runlevel
+	ln -s /bin/systemctl ${D}${base_sbindir}/shutdown
+	ln -s /bin/systemctl ${D}${base_sbindir}/telinit
 }
 
 # the following nonessential packages are excluded
@@ -185,6 +194,7 @@ PACKAGES =+ "libsystemd-dev \
              libudev1 \
              libgudev-1.0-dev \
              libgudev-1.0-0 \
+             systemd-sysv \
             "
 
 FILES_${PN} = "${base_bindir} \
@@ -284,5 +294,42 @@ FILES_libgudev-1.0-dev = "${includedir}/gudev* \
                       ${libdir}/libgudev*.a \
                       ${libdir}/pkgconfig/gudev*.pc \
                      "
+FILES_systemd-sysv = " ${base_sbindir}/init \
+                       ${base_sbindir}/halt \
+                       ${base_sbindir}/poweroff \
+                       ${base_sbindir}/reboot \
+                       ${base_sbindir}/runlevel \
+                       ${base_sbindir}/shutdown \
+                       ${base_sbindir}/telinit \
+                     "
+RDEPENDS_${PN} += "systemd-sysv"
+
+inherit update-alternatives
+
+ALTERNATIVE_${PN} = "init halt reboot shutdown poweroff runlevel"
+
+ALTERNATIVE_TARGET[init] = "${base_bindir}/systemd"
+ALTERNATIVE_LINK_NAME[init] = "${base_sbindir}/init"
+ALTERNATIVE_PRIORITY[init] ?= "300"
+
+ALTERNATIVE_TARGET[halt] = "${base_bindir}/systemctl"
+ALTERNATIVE_LINK_NAME[halt] = "${base_sbindir}/halt"
+ALTERNATIVE_PRIORITY[halt] ?= "300"
+
+ALTERNATIVE_TARGET[reboot] = "${base_bindir}/systemctl"
+ALTERNATIVE_LINK_NAME[reboot] = "${base_sbindir}/reboot"
+ALTERNATIVE_PRIORITY[reboot] ?= "300"
+
+ALTERNATIVE_TARGET[shutdown] = "${base_bindir}/systemctl"
+ALTERNATIVE_LINK_NAME[shutdown] = "${base_sbindir}/shutdown"
+ALTERNATIVE_PRIORITY[shutdown] ?= "300"
+
+ALTERNATIVE_TARGET[poweroff] = "${base_bindir}/systemctl"
+ALTERNATIVE_LINK_NAME[poweroff] = "${base_sbindir}/poweroff"
+ALTERNATIVE_PRIORITY[poweroff] ?= "300"
+
+ALTERNATIVE_TARGET[runlevel] = "${base_bindir}/systemctl"
+ALTERNATIVE_LINK_NAME[runlevel] = "${base_sbindir}/runlevel"
+ALTERNATIVE_PRIORITY[runlevel] ?= "300"
 
 DEBIAN_NOAUTONAME = "1"
