@@ -26,7 +26,7 @@ export STAGING_INCDIR
 do_compile_append() {
 	#follow debian/rules
 	cd py-smbus && \
-		CFLAGS="$CFLAGS ${HOST_CC_ARCH} -I../include" \
+		CFLAGS="${CFLAGS} ${HOST_CC_ARCH} -I../include" \
 		${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py build
 }
 
@@ -41,7 +41,7 @@ do_install() {
 
 	#follow debian/rules
 	cd py-smbus && \
-		CFLAGS="$(CFLAGS) -I../include" \
+		CFLAGS="${CFLAGS} -I../include" \
 		${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py install \
 		--install-layout=deb --root=build
 
