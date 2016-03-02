@@ -16,6 +16,9 @@ PR = "${INC_PR}.0"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=8730ad58d11c7bbad9a7066d69f7808e"
 
+# Source package has no patch.
+DEBIAN_QUILT_PATCHES = ""
+
 DEPENDS += "virtual/libx11 drm libpciaccess pixman"
 
 PACKAGECONFIG ??= "sna udev ${@base_contains('DISTRO_FEATURES', 'opengl', 'dri', '', d)}"

@@ -12,7 +12,7 @@ HOMEPAGE = "http://www.linuxfoundation.org/collaborate/workgroups/networking/ipr
 SECTION = "base"
 
 PR = "r0"
-inherit debian-package
+inherit debian-package update-alternatives
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a \
@@ -40,3 +40,8 @@ INSANE_SKIP_${PN} = "dev-so"
 FILES_${PN} += " ${libdir}/tc/*"
 
 FILES_${PN}-dbg += "${libdir}/tc/.debug"
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "ip"
+ALTERNATIVE_LINK_NAME[ip] = "${base_sbindir}/ip"

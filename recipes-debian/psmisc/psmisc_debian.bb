@@ -19,7 +19,7 @@ inherit debian-package
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=0636e73ff0215e8d672dc4c32c317bb3"
 
-inherit autotools gettext
+inherit autotools gettext update-alternatives
 
 #Move /usr/bin/fuser file to /bin/ folder
 do_install_append () {
@@ -27,3 +27,8 @@ do_install_append () {
 	mv ${D}${bindir}/fuser ${D}${base_bindir}/fuser
 }
 FILES_${PN} += "${base_bindir}/fuser"
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "fuser"
+ALTERNATIVE_LINK_NAME[fuser] = "${base_bindir}/fuser"

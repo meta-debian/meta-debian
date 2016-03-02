@@ -34,8 +34,13 @@ do_install() {
 	fi
 }
 
+# Add update-alternatives definitions to avoid confict with busybox
+ALTERNATIVE_${PN} = "ed"
+ALTERNATIVE_PRIORITY[ed] = "100"
+ALTERNATIVE_LINK_NAME[ed] = "${base_bindir}/ed"
+
 # Follow debian/postinst
-ALTERNATIVE_${PN} = "editor"
-ALTERNATIVE_PRIORITY = "-100"
+ALTERNATIVE_${PN} += "editor"
+ALTERNATIVE_PRIORITY[editor] = "-100"
 ALTERNATIVE_LINK_NAME[editor] = "${bindir}/editor"
-ALTERNATIVE_TARGET[editor] = "${base_bindir}/ed"
+ALTERNATIVE_TARGET[editor] = "${base_bindir}/ed.${DPN}"

@@ -15,6 +15,9 @@ inherit debian-package
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=63fe03535d83726f5655072502bef1bc"
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
+
 inherit autotools pkgconfig
 
 EXTRA_OECONF = " --disable-journal --disable-rfc3195 "

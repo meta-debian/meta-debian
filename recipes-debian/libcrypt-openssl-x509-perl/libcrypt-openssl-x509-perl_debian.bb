@@ -20,7 +20,9 @@ SRC_URI += "file://Makefile-correct-INC_debian.patch"
 #cpan is perl modules that use Makefile.PL to build system
 inherit cpan
 
-DEPENDS += "openssl"
+
+# Source package has no patch.
+DEBIAN_QUILT_PATCHES = ""
 
 #include perl headers
 CFLAGS =+ " -I${STAGING_LIBDIR}/perl/5.20.2/CORE/ "

@@ -12,12 +12,12 @@ inherit debian-package
 LICENSE = "GPLv3+ & GPLv2+ & LGPLv2+ & LGPLv3+ & GFDL-1.3"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=e4cf3810f33a067ea7ccd2cd889fed21 \
-	file://lib/xstrtol.c;md5=0b9c0c4dad1905904e549845fac9240d \
+	file://lib/xstrtol.c;beginline=1;endline=19;md5=59e62eec95598de1dabf311b492d13ff \
 	file://doc/COPYINGv2;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 	file://doc/COPYINGv3;md5=d32239bcb673463ab874e80d47fae504 \
 	file://doc/COPYING.LESSERv2;md5=4fbd65380cdd255951079008b364516c \
 	file://doc/COPYING.LESSERv3;md5=e6a600fd5e1d9cbde2d983680233ad02 \
-	file://doc/gnulib.texi;md5=a49d3d465a526b40785c493c6ba757ea"
+	file://doc/gnulib.texi;beginline=21;endline=34;md5=76bfc6d3b1f0371d2414b0f5a52044ea"
 inherit autotools-brokensep
 
 #install follow Debian jessie

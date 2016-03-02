@@ -87,4 +87,17 @@ do_install_append_class-native(){
 	rm -f ${D}${STAGING_BINDIR_NATIVE}/groups
 }
 
+# Add update-alternatives definitions
+inherit update-alternatives
+
+base_bindir_progs = "cat chgrp chmod chown cp date dd df echo false ln ls mkdir mknod \
+		mktemp mv pwd readlink rm rmdir sleep stty sync touch true uname"
+
+ALTERNATIVE_PRIORITY = "100"
+ALTERNATIVE_${PN} = "${base_bindir_progs}"
+python __anonymous() {
+        for prog in d.getVar('base_bindir_progs', True).split():
+                d.setVarFlag('ALTERNATIVE_LINK_NAME', prog, '%s/%s' % (d.getVar('base_bindir', True), prog))
+}
+
 BBCLASSEXTEND = "native"

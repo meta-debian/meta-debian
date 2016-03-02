@@ -31,7 +31,7 @@ FILES_${PN}-unimaps = "${datadir}/unimaps"
 
 inherit update-alternatives
 
-ALTERNATIVE_${PN} = "chvt deallocvt fgconsole openvt"
+ALTERNATIVE_${PN} = "chvt deallocvt fgconsole openvt kbd_mode"
 ALTERNATIVE_PRIORITY = "100"
 
 BBCLASSEXTEND = "native"

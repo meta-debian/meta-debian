@@ -54,3 +54,14 @@ FILES_${PN} += " \
 "
 
 DEBIANNAME_${PN}-dev = "libkmod-dev"
+
+# Add update-alternatives definitions
+inherit update-alternatives
+
+base_sbindir_progs = "depmod insmod lsmod modinfo modprobe rmmod"
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "${base_sbindir_progs}"
+python __anonymous() {
+        for prog in d.getVar('base_sbindir_progs', True).split():
+                d.setVarFlag('ALTERNATIVE_LINK_NAME', prog, '%s/%s' % (d.getVar('base_sbindir', True), prog))
+}

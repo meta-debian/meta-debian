@@ -15,9 +15,10 @@ PR = "r0"
 inherit debian-package
 
 LICENSE = "BSD-2-Clause & BSD-3-Clause & BSD-4-Clause"
-LIC_FILES_CHKSUM = "file://doc/COPYING;md5=fb43d5727b2d3d1238545f75ce456ec3 \
-		    file://include/ifaddrlist.h;md5=58a41682f610ab26d8b2e457f1d8d593 \
-		    file://include/bpf.h;md5=4bf8fab88f054e7f83c66e9fa9180933 \
+LIC_FILES_CHKSUM = "\
+	file://doc/COPYING;md5=fb43d5727b2d3d1238545f75ce456ec3 \
+	file://include/ifaddrlist.h;beginline=1;endline=21;md5=ccc5a11df2bba85cf4b010112171df59 \
+	file://include/bpf.h;beginline=6;endline=41;md5=d7d64c78ed4248f365f5788c2c469b45 \
 "
 DEPENDS = "libpcap"
 

@@ -37,7 +37,7 @@ PAM_SRC_URI = "file://pam.d/chfn \
                file://pam.d/passwd \
                file://pam.d/su"
 
-inherit autotools gettext
+inherit autotools gettext update-alternatives
 
 EXTRA_OECONF += " \
 		--disable-account-tools-setuid \
@@ -178,6 +178,12 @@ FILES_passwd = " ${sysconfdir}/default/useradd \
                  ${sbindir}/* \
 "
 RDEPENDS_${PN} += "login uidmap passwd"
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY = "100"
+ALTERNATIVE_login = "login su"
+ALTERNATIVE_LINK_NAME[login] = "${base_bindir}/login" 
+ALTERNATIVE_LINK_NAME[su] = "${base_bindir}/su" 
 
 pkg_postinst_${PN} () {
     if [ "x$D" != "x" ]; then
