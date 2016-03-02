@@ -16,6 +16,9 @@ LIC_FILES_CHKSUM = "\
 inherit autotools-brokensep
 DEPENDS += "libaio lvm2 readline"
 
+#follow debian/rules
+export DISABLE_SYSTEMD = "1"
+
 #install follow Debian jessie
 do_install() {
 	oe_runmake install LIB=${base_libdir} DESTDIR=${D}
