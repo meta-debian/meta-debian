@@ -16,7 +16,7 @@ PR = "r0"
 
 inherit native
 
-SRC_URI = "${NONDEBIAN_GIT_URI}/qemu.git;protocol=${NONDEBIAN_GIT_PROTOCOL};branch=stable-2.1"
+SRC_URI = "${MISC_GIT_URI}/${MISC_GIT_PREFIX}qemu.git;protocol=${MISC_GIT_PROTOCOL};branch=stable-2.1"
 SRCREV = "c2b0926634cda378f634be62c616afbf03ca5890"
 PV = "2.1.3+git${SRCPV}"
 

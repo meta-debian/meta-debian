@@ -4,7 +4,8 @@
 # This recipe provides virtual/kernel.
 # The purpose is to build various kernel sources by changing a few variables.
 #
-# LINUX_GIT_URI, LINUX_GIT_REPO, LINUX_GIT_PROTOCOL, LINUX_GIT_SRCREV:
+# LINUX_GIT_URI, LINUX_GIT_PROTOCOL,
+# LINUX_GIT_PREFIX, LINUX_GIT_REPO, LINUX_GIT_SRCREV:
 #   Define the target git repository and source tree.
 #   See linux-src.bbclass for more details.
 # LINUX_DEFCONFIG

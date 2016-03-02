@@ -1,2 +1,3 @@
-SRC_URI = "${NONDEBIAN_GIT_URI}/${BPN}.git;protocol=${NONDEBIAN_GIT_PROTOCOL} \
-           file://gnu-configize.in"
+SRC_URI = "${MISC_GIT_URI}/${MISC_GIT_PREFIX}${BPN}.git;protocol=${MISC_GIT_PROTOCOL} \
+           file://gnu-configize.in \
+          "
