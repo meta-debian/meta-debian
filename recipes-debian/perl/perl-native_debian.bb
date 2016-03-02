@@ -37,12 +37,12 @@ do_configure () {
 		-Dsiteprefix=${prefix} \
 		\
 		-Dbin=${STAGING_BINDIR}/${PN} \
-		-Dprivlib=${STAGING_LIBDIR}/perl/${PV} \
-		-Darchlib=${STAGING_LIBDIR}/perl/${PV} \
-		-Dvendorlib=${STAGING_LIBDIR}/perl/${PV} \
-		-Dvendorarch=${STAGING_LIBDIR}/perl/${PV} \
-		-Dsitelib=${STAGING_LIBDIR}/perl/${PV} \
-		-Dsitearch=${STAGING_LIBDIR}/perl/${PV} \
+		-Dprivlib=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Darchlib=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Dvendorlib=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Dvendorarch=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Dsitelib=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Dsitearch=${STAGING_LIBDIR}/perl/${PERL_PV} \
 		\
 		-Duseshrplib \
 		-Dusethreads \
@@ -68,17 +68,17 @@ do_install () {
 	oe_runmake 'DESTDIR=${D}' install
 
 	# We need a hostperl link for building perl
-	ln -sf perl${PV} ${D}${bindir}/hostperl
+	ln -sf perl${PERL_PV} ${D}${bindir}/hostperl
 
         ln -sf perl ${D}${libdir}/perl5
 
-	install -d ${D}${libdir}/perl/${PV}/CORE \
-	           ${D}${datadir}/perl/${PV}/ExtUtils
+	install -d ${D}${libdir}/perl/${PERL_PV}/CORE \
+	           ${D}${datadir}/perl/${PERL_PV}/ExtUtils
 
 	# Save native config 
 	install config.sh ${D}${libdir}/perl
-	install lib/Config.pm ${D}${libdir}/perl/${PV}/
-	install lib/ExtUtils/typemap ${D}${libdir}/perl/${PV}/ExtUtils/
+	install lib/Config.pm ${D}${libdir}/perl/${PERL_PV}/
+	install lib/ExtUtils/typemap ${D}${libdir}/perl/${PERL_PV}/ExtUtils/
 
 	# perl shared library headers
 	# reference perl 5.20.0-1 in debian:
@@ -95,11 +95,11 @@ do_install () {
 		unicode_constants.h unixish.h utf8.h utfebcdic.h util.h uudmap.h \
 		vutil.h warnings.h XSUB.h
 	do
-		install $i ${D}${libdir}/perl/${PV}/CORE
+		install $i ${D}${libdir}/perl/${PERL_PV}/CORE
 	done
 
-	create_wrapper ${D}${bindir}/perl PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl/${PV}:${STAGING_LIBDIR}/perl:${STAGING_LIBDIR}/perl/site_perl/${PV}:${STAGING_LIBDIR}/perl/vendor_perl/${PV}'
-	create_wrapper ${D}${bindir}/perl${PV} PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl/${PV}:${STAGING_LIBDIR}/perl${STAGING_LIBDIR}/perl:${STAGING_LIBDIR}/perl/site_perl/${PV}:${STAGING_LIBDIR}/perl/vendor_perl/${PV}'
+	create_wrapper ${D}${bindir}/perl PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl/${PERL_PV}:${STAGING_LIBDIR}/perl:${STAGING_LIBDIR}/perl/site_perl/${PERL_PV}:${STAGING_LIBDIR}/perl/vendor_perl/${PERL_PV}'
+	create_wrapper ${D}${bindir}/perl${PERL_PV} PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl/${PERL_PV}:${STAGING_LIBDIR}/perl${STAGING_LIBDIR}/perl:${STAGING_LIBDIR}/perl/site_perl/${PERL_PV}:${STAGING_LIBDIR}/perl/vendor_perl/${PERL_PV}'
 
 	# Use /usr/bin/env nativeperl for the perl script.
 	for f in `grep -Il '#! *${bindir}/perl' ${D}/${bindir}/*`; do

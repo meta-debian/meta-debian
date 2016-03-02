@@ -3,7 +3,7 @@ INC_PR = "r0"
 inherit debian-package
 
 DEBIAN_SECTION = "perl"
-PV = "5.20.2"
+PERL_PV = "5.20.2"
 
 LICENSE = "Artistic-1.0 | GPL-1.0"
 LIC_FILES_CHKSUM = " \
