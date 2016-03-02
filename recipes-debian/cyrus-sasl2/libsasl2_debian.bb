@@ -28,8 +28,7 @@ EXTRA_OECONF += "--with-dblib=berkeley 			\
 		 --disable-gssapi 			\
                  andrew_cv_runpath_switch=none"
 
-PACKAGECONFIG ??= "ntlm \
-        ${@base_contains('DISTRO_FEATURES', 'ldap', 'ldap', '', d)} \
+PACKAGECONFIG ??= "ntlm ldap \
         ${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
         "
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam,"
