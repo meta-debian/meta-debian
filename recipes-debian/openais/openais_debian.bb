@@ -17,6 +17,8 @@ inherit autotools-brokensep pkgconfig
 DEPENDS += "corosync"
 
 EXTRA_OECONF += "--with-lcrso-dir=${libdir}/lcrso"
+#Empty DEBIAN_QUILT_PATCHES to avoid error :debian/patches not found
+DEBIAN_QUILT_PATCHES = ""
 
 #install follow debian jessie
 do_install_append() {
