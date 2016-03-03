@@ -14,7 +14,6 @@ EXTRA_OECONF += " --enable-shared=yes"
 
 inherit autotools
 inherit debian-package
-DPR = "0"
 
 PACKAGES =+ "libjasper "
 FILES_libjasper = "${libdir}/libjasper.so.*"

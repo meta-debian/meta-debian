@@ -18,5 +18,4 @@ do_install() {
 # Meta Debian
 #
 inherit debian-package
-DPR = "0"
 DPN = "boost1.55"

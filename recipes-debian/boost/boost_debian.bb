@@ -7,5 +7,4 @@ include boost.inc
 #
 inherit debian-package
 DEBIAN_SECTION = "libs"
-DPR = "0"
 DPN = "boost1.55"
