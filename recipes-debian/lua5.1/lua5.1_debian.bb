@@ -4,12 +4,10 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=59bdd99bb82238f238cf5c65c21604fd"
 HOMEPAGE = "http://www.lua.org/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 DEPENDS = "readline libtool"
-
-SRC_URI += "file://fix-patch-of-libtool.patch"
 
 inherit pkgconfig binconfig
 
@@ -41,6 +39,8 @@ do_configure_prepend() {
 }
 
 do_compile () {
+	# fix patch of libtool in Makefile
+	sed -i -e "s:= libtool:= ${STAGING_DIR_HOST}${bindir_crossscripts}/${HOST_PREFIX}libtool:g" ${S}/Makefile
 	oe_runmake \
 		debian_linux \
 		RPATH=${libdir}/$(DEB_HOST_MULTIARCH) \
