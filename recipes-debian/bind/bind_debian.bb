@@ -55,7 +55,7 @@ EXTRA_OECONF = " \
 	--enable-exportlib \
 "
 
-inherit autotools-brokensep update-rc.d systemd useradd pkgconfig
+inherit autotools-brokensep systemd useradd pkgconfig
 
 PACKAGECONFIG ?= ""
 PACKAGECONFIG[httpstats] = "--with-libxml2,--without-libxml2,libxml2"
