@@ -1,5 +1,5 @@
 #
-# uri-check.bbclass
+# src-uri-check.bbclass
 #
 # Set INHERIT += "uri-check" to enable this class
 #
@@ -32,7 +32,7 @@ base_do_fetch_append() {
             if re.compile("^" + a).match(u):
                 bb.note("%s matches %s in SRC_URI_ALLOWED" % (uri, a))
                 return
-        if d.getVar("SRC_URI_CHECK_ERROR", True) or "" is "1":
+        if (d.getVar("SRC_URI_CHECK_ERROR", True) or "") is "1":
             bb.fatal("%s doesn't match SRC_URI_ALLOWED" % uri)
         else:
             bb.warn("%s doesn't match SRC_URI_ALLOWED" % uri)
