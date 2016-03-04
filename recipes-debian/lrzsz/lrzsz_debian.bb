@@ -38,3 +38,7 @@ inherit autotools-brokensep gettext
 
 # Follow debian/rules
 EXTRA_OECONF = "--program-transform-name=s/l//"
+
+# in parallel build, "install-exec-local" that creates links to binaries
+# in bindir, would be executed before the binaries are installed
+PARALLEL_MAKE = ""
