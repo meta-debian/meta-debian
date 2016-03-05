@@ -26,6 +26,11 @@ LIC_FILES_CHKSUM = "\
 PR = "r0"
 inherit debian-package
 
+#disable-build-doc_debian.patch:
+#	this patch to disable build doc, \
+#	to build doc folder need to docbook-xsl packages.
+SRC_URI += "file://disable-build-doc_debian.patch"
+
 DEPENDS = "flex glib-2.0 util-linux"
 
 inherit autotools-brokensep systemd pkgconfig update-alternatives
@@ -41,6 +46,7 @@ EXTRA_OECONF += " \
 	--with-ivykis=system 		\
 	--enable-amqp 			\
 	--with-librabbitmq-client=internal \
+	--disable-build-docs \
 "
 
 PACKAGES =+ "\
@@ -97,7 +103,6 @@ do_install_append() {
 	
 	mv ${D}${datadir}/include ${D}${datadir}/syslog-ng/
 	mv ${D}${datadir}/tools ${D}${datadir}/syslog-ng/
-	mv ${D}${datadir}/xsd ${D}${datadir}/syslog-ng/
 
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.default \
 			${D}${sysconfdir}/default/syslog-ng
