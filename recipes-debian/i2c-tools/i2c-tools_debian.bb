@@ -19,9 +19,11 @@ LIC_FILES_CHKSUM = "\
 inherit autotools-brokensep
 DEPENDS += "python"
 
+#export some variable from poky, to use for python command
 export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
+export LDSHARED="${CCLD} -shared"
 
 do_compile_append() {
 	#follow debian/rules
