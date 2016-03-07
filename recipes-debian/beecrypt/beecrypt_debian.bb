@@ -24,7 +24,7 @@ do_install_append() {
 	oe_multilib_header beecrypt/gnu.h
 }
 
-EXTRA_OECONF = "--without-python --enable-static --without-java"
+EXTRA_OECONF = "--without-python --enable-static --without-java --disable-openmp"
 
 PACKAGECONFIG ??= ""
 PACKAGECONFIG[cplusplus] = "--with-cplusplus,--without-cplusplus,icu"
