@@ -28,7 +28,7 @@ USERADD_PARAM_nfs-common = "--system  --home-dir /var/lib/nfs \
 
 PARALLEL_MAKE = ""
 
-inherit autotools-brokensep update-rc.d pkgconfig
+inherit autotools-brokensep pkgconfig
 
 INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME = "nfs-kernel-server"

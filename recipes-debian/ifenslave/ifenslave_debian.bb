@@ -41,3 +41,11 @@ do_install() {
 	install -m 0755 ${S}/debian/ifenslave.if-up 			\
 			${D}${sysconfdir}/network/if-up.d/ifenslave
 }
+
+# Add update-alternatives definitions
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "ifenslave ifenslave-2.6"
+ALTERNATIVE_LINK_NAME[ifenslave] = "${base_sbindir}/ifenslave"
+ALTERNATIVE_LINK_NAME[ifenslave-2.6] = "${base_sbindir}/ifenslave-2.6"

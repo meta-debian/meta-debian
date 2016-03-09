@@ -5,15 +5,13 @@
 # Debian source package name
 DPN ?= "${BPN}"
 
-# revision of Debian recipes
-# should be statically defined in each recipe
-DPR ?= ""
-
 # default SRC_URI
-DEBIAN_GIT_DIR ??= "debian-${DPN}.git"
 DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
-DEBIAN_SRC_URI ?= "${DEBIAN_GIT_URI}/${DEBIAN_GIT_DIR};\
-protocol=${DEBIAN_GIT_PROTOCOL};branch=${DEBIAN_GIT_BRANCH}"
+DEBIAN_SRC_URI ?= "\
+${DEBIAN_GIT_URI}/${DEBIAN_GIT_PREFIX}${DPN}.git;\
+protocol=${DEBIAN_GIT_PROTOCOL};\
+branch=${DEBIAN_GIT_BRANCH}\
+"
 
 SRC_URI = "${DEBIAN_SRC_URI}"
 
@@ -26,17 +24,6 @@ DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
 
 # sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
 S = "${DEBIAN_UNPACK_DIR}"
-
-###############################################################################
-# during parsing recipe
-###############################################################################
-
-python __anonymous() {
-    # append DPR to original PR
-    pr = d.getVar("PR", True) or ""
-    dpr = d.getVar("DPR", True) or ""
-    d.setVar("PR", pr + "deb" + dpr)
-}
 
 ###############################################################################
 # do_debian_patch

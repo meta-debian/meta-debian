@@ -15,8 +15,6 @@ LICENSE = "BSD | Artistic-1.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ed80ff1c2b40843cf5768e5229cf16e5 \
                     file://src/passwd.c;beginline=8;endline=30;md5=d83888ea14ae61951982d77125947661"
 
-DPR = "0"
-
 DEPENDS = "shadow-native bison-native"
 DEPENDS_class-native = "bison-native"
 DEPENDS_class-nativesdk = "bison-native"
@@ -37,7 +35,7 @@ PAM_SRC_URI = "file://pam.d/chfn \
                file://pam.d/passwd \
                file://pam.d/su"
 
-inherit autotools gettext
+inherit autotools gettext update-alternatives
 
 EXTRA_OECONF += " \
 		--disable-account-tools-setuid \
@@ -178,6 +176,12 @@ FILES_passwd = " ${sysconfdir}/default/useradd \
                  ${sbindir}/* \
 "
 RDEPENDS_${PN} += "login uidmap passwd"
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY = "100"
+ALTERNATIVE_login = "login su"
+ALTERNATIVE_LINK_NAME[login] = "${base_bindir}/login" 
+ALTERNATIVE_LINK_NAME[su] = "${base_bindir}/su" 
 
 pkg_postinst_${PN} () {
     if [ "x$D" != "x" ]; then

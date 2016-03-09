@@ -69,3 +69,11 @@ do_install() {
 FILES_${PN} += "${base_libdir}"
 FILES_${PN}-doc += "${datadir}"
 
+# Add update-alternatives definitions
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "ifup ifdown"
+ALTERNATIVE_LINK_NAME[ifup] = "${base_sbindir}/ifup"
+ALTERNATIVE_LINK_NAME[ifdown] = "${base_sbindir}/ifdown"
+

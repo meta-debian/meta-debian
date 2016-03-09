@@ -68,12 +68,18 @@ FILES_update-alternatives = " \
 	${sysconfdir}/alternatives \
 "
 
-FILES_start-stop-daemon = "${base_sbindir}/start-stop-daemon"
+FILES_start-stop-daemon = "${base_sbindir}/start-stop-daemon*"
 
 FILES_${PN}-dbg = " \
 	${prefix}/src \
 	${sbindir}/.debug \
 	${base_sbindir}/.debug \
 "
+
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_start-stop-daemon = "start-stop-daemon"
+ALTERNATIVE_LINK_NAME[start-stop-daemon] = "${base_sbindir}/start-stop-daemon"
 
 BBCLASSEXTEND = "native nativesdk"

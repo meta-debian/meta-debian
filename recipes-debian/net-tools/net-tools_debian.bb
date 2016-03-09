@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = " \
 
 DEBIAN_PATCH_TYPE = "quilt"
 
-inherit gettext
+inherit gettext update-alternatives
 
 # The Makefile is lame, no parallel build
 PARALLEL_MAKE = ""
@@ -54,4 +54,15 @@ do_install() {
 	for i in $base_bin_files; do
 		install -m 0755 $i ${D}${base_bindir}
 	done
+}
+
+# Add update-alternatives definitions
+ALTERNATIVE_PRIORITY="100"
+
+base_sbindir_progs = "ifconfig iptunnel nameif route slattach"
+ALTERNATIVE_${PN} = "${base_sbindir_progs} netstat"
+ALTERNATIVE_LINK_NAME[netstat] = "${base_bindir}/netstat"
+python __anonymous() {
+        for prog in d.getVar('base_sbindir_progs', True).split():
+                d.setVarFlag('ALTERNATIVE_LINK_NAME', prog, '%s/%s' % (d.getVar('base_sbindir', True), prog))
 }

@@ -42,7 +42,6 @@ FILES_${PN} += "${datadir}/${BPN}"
 #
 inherit debian-package
 DEBIAN_SECTION = "libs"
-DPR = "0"
 DPN = "gst-plugins-base0.10"
 
 SRC_URI += " \

@@ -21,7 +21,7 @@ DEPENDS += " util-linux groff-native"
 #Declare Debian patch type
 DEBIAN_PATCH_TYPE = "quilt"
 
-inherit autotools-brokensep update-rc.d systemd toolchain-scripts
+inherit autotools-brokensep systemd toolchain-scripts
 
 # CV SETTINGS
 # Required to work round AC_FUNC_MEMCMP which gets the wrong answer

@@ -11,7 +11,6 @@ SUMMARY = "Keytable files and keyboard utilities"
 # everything minus console-fonts is GPLv2+
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=a5fcc36121d93e1f69d96a313078c8b5"
-DEPENDS = "libcheck"
 
 inherit autotools gettext ptest pkgconfig
 
@@ -31,7 +30,7 @@ FILES_${PN}-unimaps = "${datadir}/unimaps"
 
 inherit update-alternatives
 
-ALTERNATIVE_${PN} = "chvt deallocvt fgconsole openvt"
+ALTERNATIVE_${PN} = "chvt deallocvt fgconsole openvt kbd_mode"
 ALTERNATIVE_PRIORITY = "100"
 
 BBCLASSEXTEND = "native"

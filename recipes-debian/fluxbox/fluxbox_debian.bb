@@ -14,4 +14,3 @@ B = "${S}"
 #
 inherit debian-package
 DEBIAN_SECTION = "x11"
-DPR = "0"

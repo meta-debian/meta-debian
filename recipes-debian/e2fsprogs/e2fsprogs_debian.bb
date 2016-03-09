@@ -26,7 +26,7 @@ file://lib/ss/ss.h;beginline=1;endline=20;md5=6e89ad47da6e75fecd2b5e0e81e1d4a6 \
 
 DEPENDS = "util-linux"
 
-inherit autotools gettext pkgconfig multilib_header
+inherit autotools gettext pkgconfig multilib_header update-alternatives
 
 # Exclude already applied patch:
 # 0001-e2fsprogs-fix-cross-compilation-problem.patch
@@ -108,6 +108,8 @@ do_install_class-target () {
 	mv ${D}${base_sbindir}/filefrag ${D}${sbindir}
 	mv ${D}${base_sbindir}/mklost+found ${D}${sbindir}
 
+	mv ${D}${base_sbindir}/mkfs.ext2 ${D}${base_sbindir}/mkfs.ext2.${DPN}
+
 	oe_multilib_header ext2fs/ext2_types.h
 }
 
@@ -175,10 +177,10 @@ FILES_${PN} = " \
 		${base_sbindir}/e2undo \
 		${base_sbindir}/fsck* \
 		${base_sbindir}/logsave \
-		${base_sbindir}/mke2fs \
+		${base_sbindir}/mke2fs* \
 		${base_sbindir}/mkfs* \
 		${base_sbindir}/resize2fs \
-		${base_sbindir}/tune2fs \
+		${base_sbindir}/tune2fs* \
 		${bindir}/lsattr \
 		${bindir}/chattr \
 		${sbindir}/e2freefrag \
@@ -198,5 +200,12 @@ FILES_ss-staticdev = "${libdir}/libss.a"
 # Correct the package name
 DEBIANNAME_libcomerr = "libcomerr2"
 DEBIANNAME_libss = "libss2"
+
+ALTERNATIVE_PRIORITY="100"
+ALTERNATIVE_${PN} = "mke2fs mkfs.ext2 tune2fs"
+ALTERNATIVE_LINK_NAME[mke2fs] = "${base_sbindir}/mke2fs"
+ALTERNATIVE_LINK_NAME[mkfs.ext2] = "${base_sbindir}/mkfs.ext2"
+ALTERNATIVE_TARGET[mkfs.ext2] = "${base_sbindir}/mkfs.ext2.${DPN}"
+ALTERNATIVE_LINK_NAME[tune2fs] = "${base_sbindir}/tune2fs"
 
 BBCLASSEXTEND = "native"

@@ -8,7 +8,9 @@ require sysvinit.inc
 PR = "${INC_PR}.0"
 
 PROVIDES += "initscripts"
-
+do_install_append() {
+	mv ${D}${base_bindir}/pidof ${D}${base_bindir}/pidof.${DPN}
+}
 PACKAGES =+ "sysv-rc bootlogd bootlogd-doc ${PN}-initscripts ${PN}-initscripts-doc \
              ${PN}-core ${PN}-core-doc ${PN}-utils"
 FILES_${PN} += " \
@@ -62,7 +64,7 @@ FILES_${PN}-core-doc += " \
 		${datadir}/man/man8/shutdown.8 \
 		${datadir}/man/man8/halt.8"
 FILES_${PN}-utils += " \
-		${base_bindir}/pidof \
+		${base_bindir}/pidof* \
 		${base_libdir}/init/init-d-script \
 		${base_sbindir}/fstab-decode \
 		${base_sbindir}/killall5 \
@@ -81,6 +83,22 @@ FILES_${PN}-utils-doc += " \
 		${datardir}/man/man8/pidof.8 \
 		${datardir}/man/man8/service.8 \
 		${datardir}/man/man8/sulogin.8"
+
+# Add update-alternatives definitions
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY="200"
+ALTERNATIVE_${PN}-core = "halt init poweroff reboot runlevel"
+ALTERNATIVE_${PN}-utils = "pidof killall5 sulogin"
+
+ALTERNATIVE_LINK_NAME[halt] = "${base_sbindir}/halt"
+ALTERNATIVE_LINK_NAME[init] = "${base_sbindir}/init"
+ALTERNATIVE_LINK_NAME[poweroff] = "${base_sbindir}/poweroff"
+ALTERNATIVE_LINK_NAME[reboot] = "${base_sbindir}/reboot"
+ALTERNATIVE_LINK_NAME[runlevel] = "${base_sbindir}/runlevel"
+ALTERNATIVE_LINK_NAME[pidof] = "${base_bindir}/pidof"
+ALTERNATIVE_LINK_NAME[killall5] = "${base_sbindir}/killall5"
+ALTERNATIVE_LINK_NAME[sulogin] = "${base_sbindir}/sulogin"
 
 pkg_postinst_bootlogd() {
 set -e

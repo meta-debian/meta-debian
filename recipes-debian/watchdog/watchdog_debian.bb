@@ -27,7 +27,6 @@ SRC_URI += "file://fixsepbuild.patch \
 	   file://watchdog-conf.patch"
 
 inherit autotools
-inherit update-rc.d
 
 INITSCRIPT_NAME = "watchdog.sh"
 INITSCRIPT_PARAMS = "start 15 1 2 3 4 5 . stop 85 0 6 ."

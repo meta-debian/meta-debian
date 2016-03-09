@@ -32,6 +32,8 @@ BUSYBOX_INITTAB_GETTYS ?= \
 
 # busybox-appletlib-dependency.patch: avoid build process races
 # 0001-build-system...patch: required for cross compiling
+# defconfig: based on ${S}/debian/config/pkg/deb, and some configs are modified
+#            so that the default system works correctly (see header comments)
 SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
@@ -47,27 +49,16 @@ export EXTRA_LDFLAGS = "${LDFLAGS}"
 export EXTRA_OEMAKE += "'LD=${CCLD}' V=1 ARCH=${TARGET_ARCH} CROSS_COMPILE=${TARGET_PREFIX} SKIP_STRIP=y"
 
 inherit cml1
-
-# This function creates the same .config as "merge_config.sh -m",
-# but is more simple. merge_config.sh is included in yocto-kernel-tools.
-#
-# usage: merge_config <config1> <config2>
-# If the same CONFIG is defined in the both of config1 and config2,
-# the CONFIG value in config2 is selected (the value in config1 is dropped).
-merge_config() {
-	SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-
-	cp ${1} .config
-	for cfg in $(sed -n "${SED_CONFIG_EXP}" ${2}); do
-		if grep -q -w ${cfg} .config; then
-			sed -i "/${cfg}[ =]/d" .config
-		fi
-	done
-	cat ${2} >> .config
-}
+inherit merge-config
 
 do_configure () {
-	# enable/disable CONFIG_INIT according to VIRTUAL-RUNTIME_init_manager
+	# defconfig is the base configuration.
+	# If they are .cfg files in SRC_URI, they are automatically
+	# appended to defconfig in order of appearance.
+	merge_config ${WORKDIR}/defconfig ${@" ".join(find_cfgs(d))}
+
+	# enable/disable BUSYBOX_INIT_CONFIGS based on
+	# VIRTUAL-RUNTIME_init_manager
 	rm -f ${S}/.config.init
 	for cfg in ${BUSYBOX_INIT_CONFIGS}; do
 		if [ "${VIRTUAL-RUNTIME_init_manager}" = "busybox" ]; then
@@ -77,7 +68,7 @@ do_configure () {
 		fi
 		echo "${cfg_def}" >> ${S}/.config.init
 	done
-	merge_config ${WORKDIR}/defconfig ${S}/.config.init
+	merge_config .config ${S}/.config.init
 	rm ${S}/.config.init
 
 	cml1_do_configure

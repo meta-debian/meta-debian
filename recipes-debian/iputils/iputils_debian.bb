@@ -45,3 +45,12 @@ FILES_${PN}-ping = "${base_bindir}/* ${mandir}/man8/ping*"
 FILES_${PN}-tracepath = "${bindir}/trace* ${mandir}/man8/trace*"
 FILES_${PN}-clockdiff = "${bindir}/clockdiff ${mandir}/man8/clockdiff.8"
 FILES_${PN}-arping = "${bindir}/arping ${mandir}/man8/arping.8"
+
+# Add update-alternatives definitions
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY = "100"
+
+ALTERNATIVE_${PN}-ping = "ping ping6"
+ALTERNATIVE_LINK_NAME[ping] = "${base_bindir}/ping"
+ALTERNATIVE_LINK_NAME[ping6] = "${base_bindir}/ping6"

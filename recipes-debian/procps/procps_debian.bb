@@ -62,6 +62,15 @@ FILES_lib${PN} = "${base_libdir}/*"
 DEBIANNAME_lib${PN} = "lib${PN}3"
 
 ALTERNATIVE_${PN} = "w"
-ALTERNATIVE_PRIORITY = "50"
+ALTERNATIVE_PRIORITY[w] = "50"
 ALTERNATIVE_LINK_NAME[w] = "${bindir}/w"
 ALTERNATIVE_TARGET[w] = "${bindir}/w.${DPN}"
+
+# Add update-alternatives definitions to avoid conflict with Debian
+ALTERNATIVE_${PN} += "kill ps sysctl"
+ALTERNATIVE_PRIORITY[kill] = "100"
+ALTERNATIVE_LINK_NAME[kill] = "${base_bindir}/kill"
+ALTERNATIVE_PRIORITY[ps] = "100"
+ALTERNATIVE_LINK_NAME[ps] = "${base_bindir}/ps"
+ALTERNATIVE_PRIORITY[sysctl] = "100"
+ALTERNATIVE_LINK_NAME[sysctl] = "${base_sbindir}/sysctl"
