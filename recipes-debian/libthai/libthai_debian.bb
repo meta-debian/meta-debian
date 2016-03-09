@@ -22,7 +22,7 @@ DEBIAN_QUILT_PATCHES = ""
 
 EXTRA_OECONF += "--enable-dict --enable-shared"
 
-DEPENDS += "libdatrie-native"
+DEPENDS += "libdatrie-native libdatrie"
 
 # Create more packages follow Debian
 PACKAGES =+ "${PN}-data"
