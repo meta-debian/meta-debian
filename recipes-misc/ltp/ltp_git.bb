@@ -33,6 +33,7 @@ SRC_URI = "\
     file://add-knob-for-numa.patch \
     file://add-knob-for-tirpc.patch \
     file://0001-ltp-vma03-fix-the-alginment-of-page-size.patch \
+    file://fix_cleanup_function_for_df01.sh.patch \
 "
 
 S = "${WORKDIR}/git"
