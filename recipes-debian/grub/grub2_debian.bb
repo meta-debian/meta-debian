@@ -1,11 +1,15 @@
 #
 # base recipe: meta/recipes-bsp/grub/grub_git.bb
+#              meta/recipes-bsp/grub/grub2.inc
 # base branch: daisy
 #
 
-require grub2.inc
+PR = "r0"
 
-PR = "${INC_PR}.0"
+LICENSE = "GPLv3"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+inherit debian-package autotools gettext
 
 # autogen.sh-exclude-pc:
 #	Exclude the .pc from po/POTFILES.in
@@ -25,6 +29,12 @@ SRC_URI += " \
 
 DEFAULT_PREFERENCE = "-1"
 DEFAULT_PREFERENCE_arm = "1"
+
+DEPENDS = "flex-native bison-native xz"
+
+PACKAGECONFIG ??= ""
+PACKAGECONFIG[grub-mount] = "--enable-grub-mount,--disable-grub-mount,fuse"
+PACKAGECONFIG[device-mapper] = "--enable-device-mapper,--disable-device-mapper,lvm2"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'
 
@@ -54,11 +64,20 @@ do_install_append () {
 	install -m 0755 ${S}/debian/update-grub ${D}${sbindir}
 }
 
+# grub and grub-efi's sysroot/${datadir}/grub/grub-mkconfig_lib are
+# conflicted, remove it since no one uses it.
+SYSROOT_PREPROCESS_FUNCS_class-target += "remove_sysroot_mkconfig_lib"
+remove_sysroot_mkconfig_lib() {
+    rm -r "${SYSROOT_DESTDIR}${datadir}/grub/grub-mkconfig_lib"
+}
+
 # debugedit chokes on bare metal binaries
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 
+FILES_${PN} += "${libdir}/grub ${datadir}/grub"
 RDEPENDS_${PN} = "diffutils freetype"
-FILES_${PN}-dbg += "${libdir}/${BPN}/*/.debug"
+
+FILES_${PN}-dbg += "${libdir}/grub/*/.debug"
 
 # Sometimes, ELF type of bootloader binary does not match the target architecture,
 # bypass check "arch" to avoid the QA error.
