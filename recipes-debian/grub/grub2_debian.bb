@@ -27,14 +27,7 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
-DEFAULT_PREFERENCE = "-1"
-DEFAULT_PREFERENCE_arm = "1"
-
 DEPENDS = "flex-native bison-native xz"
-
-PACKAGECONFIG ??= ""
-PACKAGECONFIG[grub-mount] = "--enable-grub-mount,--disable-grub-mount,fuse"
-PACKAGECONFIG[device-mapper] = "--enable-device-mapper,--disable-device-mapper,lvm2"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'
 
@@ -45,20 +38,29 @@ GRUBPLATFORM_arm = "uboot"
 GRUBPLATFORM_aarch64 = "efi"
 GRUBPLATFORM ??= "pc"
 
-EXTRA_OECONF = "--with-platform=${GRUBPLATFORM} --disable-grub-mkfont --program-prefix='' \
-                --enable-liblzma=no --enable-device-mapper=no --enable-libzfs=no"
+# mostly same as options in debian/rules, but mkfont is disabled
+# to exclude non essential font-related functions
+EXTRA_OECONF = "--with-platform=${GRUBPLATFORM} \
+                --disable-grub-mkfont \
+                --program-prefix="" \
+               "
 
 do_configure_prepend() {
 	( cd ${S}
 	${S}/autogen.sh )
 }
 
-# value for GRUB_CMDLINE_LINUX_DEFAULT in /etc/default/grub
-DEFAULT_CMDLINE ?= "quiet"
+# parameters for /etc/default/grub, use same values as debian/rules
+GRUB_DEFAULT_CMDLINE = "quiet"
+GRUB_DEFAULT_TIMEOUT = "5"
+
 do_install_append () {
 	install -d ${D}${sysconfdir}/default
-	sed -i "s/@DEFAULT_CMDLINE@/${DEFAULT_CMDLINE}/g" ${S}/debian/default/grub
-	install -m 0644 ${S}/debian/default/grub ${D}${sysconfdir}/default/
+	install -m 0644 ${S}/debian/default/grub ${D}${sysconfdir}/default
+	sed -i \
+		-e "s/@DEFAULT_CMDLINE@/${GRUB_DEFAULT_CMDLINE}/g" \
+		-e "s/@DEFAULT_TIMEOUT@/${GRUB_DEFAULT_TIMEOUT}/g" \
+		${D}${sysconfdir}/default/grub
 
 	install -d ${D}${sbindir}
 	install -m 0755 ${S}/debian/update-grub ${D}${sbindir}
