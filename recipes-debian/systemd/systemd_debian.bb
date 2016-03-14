@@ -304,8 +304,8 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                      "
 RDEPENDS_${PN} += "systemd-sysv"
 
-# init script requires init-functions and procps's ps
-RDEPENDS_udev += "lsb-base procps"
+# init script requires init-functions, procps's ps, and mountpoint
+RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"
 
 inherit update-alternatives
 
