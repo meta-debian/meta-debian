@@ -8,11 +8,17 @@ require sysvinit.inc
 PR = "${INC_PR}.0"
 
 PROVIDES += "initscripts"
+
 do_install_append() {
 	mv ${D}${base_bindir}/pidof ${D}${base_bindir}/pidof.${DPN}
+
+	# mountpoint is moved to sysvinit-mountpoint package
+	rm -f ${D}${base_bindir}/mountpoint ${D}${mandir}/man1/mountpoint.1
 }
+
 PACKAGES =+ "sysv-rc bootlogd bootlogd-doc ${PN}-initscripts ${PN}-initscripts-doc \
              ${PN}-core ${PN}-core-doc ${PN}-utils"
+
 FILES_${PN} += " \
 		${base_libdir}/${PN}/*"
 FILES_${PN}-dbg += " \
@@ -28,8 +34,9 @@ FILES_bootlogd += " \
 		${sysconfdir}/init.d/stop*"
 FILES_bootlogd-doc += " \
 		${mandir}/man8/bootlogd.8"
+# mountpoint is moved to sysvinit-mountpoint package
+RDEPENDS_${PN}-initscripts += "${PN}-mountpoint"
 FILES_${PN}-initscripts += " \
-		${base_bindir}/mountpoint \
 		${sysconfdir}/default/* \
 		${sysconfdir}/init.d/* \
 		${sysconfdir}/network \
@@ -40,7 +47,6 @@ FILES_${PN}-initscripts += " \
 		${localstatedir}${base_libdir}/urandom \
 		${localstatedir}/log/fsck"
 FILES_${PN}-initscripts-doc += " \
-		${mandir}/man1/mountpoint.1 \
 		${mandir}/man5/halt.5 \
 		${mandir}/man5/rcS.5 \
 		${mandir}/man5/tmpfs.5 \
