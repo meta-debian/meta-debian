@@ -304,6 +304,9 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                      "
 RDEPENDS_${PN} += "systemd-sysv"
 
+# init script requires init-functions and procps's ps
+RDEPENDS_udev += "lsb-base procps"
+
 inherit update-alternatives
 
 ALTERNATIVE_${PN} = "init halt reboot shutdown poweroff runlevel"
