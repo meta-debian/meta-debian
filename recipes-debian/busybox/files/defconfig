@@ -7,12 +7,15 @@
 #
 # CONFIG_MESG=y
 #   .profile in base-files depends on mesg command
+# CONFIG_FEATURE_SH_STANDALONE is not set
+#   The standalone shell searches available applets without PATH.
+#   update-alternatives doesn't work with this feature.
 #
 
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.22.1
-# Thu Feb 25 19:21:07 2016
+# Mon Mar 14 15:19:01 2016
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -1022,7 +1025,7 @@ CONFIG_FEATURE_BASH_IS_NONE=y
 CONFIG_SH_MATH_SUPPORT=y
 CONFIG_SH_MATH_SUPPORT_64=y
 # CONFIG_FEATURE_SH_EXTRA_QUIET is not set
-CONFIG_FEATURE_SH_STANDALONE=y
+# CONFIG_FEATURE_SH_STANDALONE is not set
 # CONFIG_FEATURE_SH_NOFORK is not set
 CONFIG_FEATURE_SH_HISTFILESIZE=y
 
