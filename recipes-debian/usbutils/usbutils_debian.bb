@@ -13,7 +13,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 PR = "r0"
 inherit debian-package
 
-DEPENDS = "libusb zlib virtual/libiconv"
+DEPENDS = "libusb1 zlib virtual/libiconv"
 
 inherit autotools gettext pkgconfig
 

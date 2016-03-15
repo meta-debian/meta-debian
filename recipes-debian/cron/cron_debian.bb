@@ -74,3 +74,5 @@ do_install_append() {
 		install -m 755 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
 	fi	
 }
+
+FILES_${PN} += "${base_libdir}/*"

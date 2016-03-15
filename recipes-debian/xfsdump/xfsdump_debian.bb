@@ -24,7 +24,14 @@ SRC_URI += "file://remove-install-as-use_debian.patch"
 inherit autotools-brokensep
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEPENDS += "xfsprogs attr"
+DEPENDS += "xfsprogs attr gettext"
+
+do_configure_prepend () {
+	#correct the path to binaries files, to use the binaries files 
+	#in sysroot instead of host system
+	sed -i -e "s: \/usr\/bin: ${STAGING_BINDIR_NATIVE}:g" \
+		${S}/m4/package_utilies.m4
+}
 
 #install follow Debian jessie
 do_install_append() {

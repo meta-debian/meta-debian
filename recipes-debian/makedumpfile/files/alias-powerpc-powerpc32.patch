@@ -1,0 +1,18 @@
+Create Alias for target for powerpc as powerpc32
+
+Signed-off-by: Siva Borra <siva.borra@enea.com>
+Upstream-status: Pending
+
+diff -rupN makedumpfile-1.5.8/Makefile makedumpfile-1.5.8/Makefile
+--- makedumpfile-1.5.8/Makefile	2015-03-24 02:58:33.000000000 +0100
++++ makedumpfile-1.5.8/Makefile	2015-06-23 11:08:30.595655336 +0200
+@@ -25,7 +25,8 @@ endif
+ ARCH := $(shell echo ${TARGET}  | sed -e s/i.86/x86/ -e s/sun4u/sparc64/ \
+ 			       -e s/arm.*/arm/ -e s/sa110/arm/ \
+ 			       -e s/s390x/s390/ -e s/parisc64/parisc/ \
+-			       -e s/ppc64/powerpc64/ -e s/ppc/powerpc32/)
++			       -e s/ppc64/powerpc64/ -e s/ppc/powerpc32/ \
++			       -e s/powerpc/powerpc32/)
+ 
+ CROSS :=
+ ifneq ($(TARGET), $(HOST_ARCH))

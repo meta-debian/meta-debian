@@ -27,12 +27,12 @@ BUILD_CFLAGS += "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE"
 do_configure_prepend() {
 	mkdir -p m4
 	autoreconf -Wcross --verbose --install --force || oefatal "autoreconf execution failed."
-	sed -i 's:\./configure\(.[^-]\):./configure --build=${BUILD_SYS} --host=${HOST_SYS} \
-	        --target=${TARGET_SYS} --prefix=${prefix} --exec_prefix=${exec_prefix} \
-	        --bindir=${bindir} --sbindir=${sbindir} --libexecdir=${libexecdir} \
-	        --datadir=${datadir} --sysconfdir=${sysconfdir} \
-	        --sharedstatedir=${sharedstatedir} --localstatedir=${localstatedir} \
-	        --libdir=${libdir} --includedir=${includedir} --oldincludedir=${oldincludedir} \
+	sed -i 's:\./configure\(.[^-]\):./configure --build=${BUILD_SYS} --host=${HOST_SYS} \\\\\
+	        --target=${TARGET_SYS} --prefix=${prefix} --exec_prefix=${exec_prefix} \\\\\
+	        --bindir=${bindir} --sbindir=${sbindir} --libexecdir=${libexecdir} \\\\\
+	        --datadir=${datadir} --sysconfdir=${sysconfdir} \\\\\
+	        --sharedstatedir=${sharedstatedir} --localstatedir=${localstatedir} \\\\\
+	        --libdir=${libdir} --includedir=${includedir} --oldincludedir=${oldincludedir} \\\\\
 	        --infodir=${infodir} --mandir=${mandir}\1:' ${S}/Makefile.PL
 }
 
