@@ -7,8 +7,6 @@ require sysvinit.inc
 
 PR = "${INC_PR}.0"
 
-PROVIDES += "initscripts"
-
 do_install_append() {
 	mv ${D}${base_bindir}/pidof ${D}${base_bindir}/pidof.${DPN}
 

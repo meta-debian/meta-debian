@@ -47,6 +47,11 @@ do_install () {
 	oe_runmake install
 	# needed for xfsdump
 	oe_runmake install-dev
+
+	# Do not use absolute path for linking library
+	libname=`readlink ${D}${libdir}/libhandle.so | xargs basename`
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/${libname} ${D}${libdir}/libhandle.so
 }
 
 PACKAGES =+ "xfslibs-dev"

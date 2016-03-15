@@ -7,6 +7,8 @@ SUMMARY = "Network monitoring tools"
 DESCRIPTION = "Utilities for the IP protocol, including traceroute6, \
 tracepath, tracepath6, ping, ping6 and arping."
 
+PR = "r1"
+
 inherit debian-package
 
 LICENSE = "BSD & GPLv2+"
@@ -41,10 +43,10 @@ do_install () {
 # Ship packages follow Debian
 PACKAGES =+ "${PN}-ping ${PN}-tracepath ${PN}-clockdiff ${PN}-arping"
 
-FILES_${PN}-ping = "${base_bindir}/* ${mandir}/man8/ping*"
-FILES_${PN}-tracepath = "${bindir}/trace* ${mandir}/man8/trace*"
-FILES_${PN}-clockdiff = "${bindir}/clockdiff ${mandir}/man8/clockdiff.8"
-FILES_${PN}-arping = "${bindir}/arping ${mandir}/man8/arping.8"
+FILES_${PN}-ping = "${base_bindir}/ping*"
+FILES_${PN}-tracepath = "${bindir}/trace*"
+FILES_${PN}-clockdiff = "${bindir}/clockdiff"
+FILES_${PN}-arping = "${bindir}/arping"
 
 # Add update-alternatives definitions
 inherit update-alternatives

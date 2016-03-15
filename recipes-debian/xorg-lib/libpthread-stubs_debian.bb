@@ -26,5 +26,7 @@ BBCLASSEXTEND = "native nativesdk"
 # There is no Debian's patch
 DEBIAN_PATCH_TYPE = "nopatch"
 
-# Correct the package name follow Debian
-DEBIANNAME_${PN}-dev = "${PN}0-dev"
+# Create package follow Debian.
+PACKAGES = "${PN}0-dev"
+
+FILES_${PN}0-dev = "${libdir}"
