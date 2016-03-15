@@ -18,7 +18,7 @@ DESCRIPTION = "Kerberos is a system for authenticating users and services on a n
 HOMEPAGE = "http://web.mit.edu/Kerberos/"
 SECTION = "console/network"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -51,9 +51,8 @@ LDFLAGS_append = " -lpthread "
 PACKAGES =+ " \
 	${PN}-admin-server ${PN}-gss-samples ${PN}-kdc ${PN}-kdc-ldap \
 	${PN}-locales ${PN}-multidev ${PN}-otp ${PN}-pkinit ${PN}-user \
-	libgssapi-${PN}-2 libgssrpc4 libk5crypto3 libkadm5clnt-mit9 \
-	libkadm5srv-mit9 libkdb5-7 libkrad-dev libkrad0 libkrb5-3 \
-	libkrb5-dbg libkrb5-dev libkrb5support0 \
+	libgssapi-krb5 libgssrpc libk5crypto libkadm5clnt-mit \
+	libkadm5srv-mit libkdb5 libkrad-dev libkrad libkrb5 libkrb5support \
     "
 
 FILES_${PN}-admin-server = " \
@@ -89,54 +88,16 @@ FILES_${PN}-kdc-ldap = " \
 	${sbindir}/kdb5_ldap_util \	
     "
 
-FILES_libkrb5-dev = " \
-	${bindir}/krb5-config \ 
-	${includedir}/gssapi/* \
-	${includedir}/gssapi.h \
-	${includedir}/gssrpc/* \
-	${includedir}/kadm5/* \
-	${includedir}/kdb.h \
-	${includedir}/kdb5.h \
-	${includedir}/krb5/* \
-	${includedir}/profile.h \
-	${libdir}/libgssapi_krb5.so \
-	${libdir}/libgssrpc.so \
-	${libdir}/libk5crypto.so \
-	${libdir}/libkadm5clnt.so \
-	${libdir}/libkadm5clnt_mit.so \
-	${libdir}/libkadm5srv.so \
-	${libdir}/libkadm5srv_mit.so \
-	${libdir}/libkdb5.so \
-	${libdir}/libkrb5.so \
-	${libdir}/libkrb5support.so \
-	${libdir}/pkgconfig/gssrpc.pc \
-	${libdir}/pkgconfig/kadm-client.pc \
-	${libdir}/pkgconfig/kadm-server.pc \
-	${libdir}/pkgconfig/kdb.pc \	
-	${libdir}/pkgconfig/krb5-gssapi.pc \
-	${libdir}/pkgconfig/krb5.pc \	
-    "
-
 FILES_${PN}-multidev = " \
 	${bindir}/krb5-config.mit \
-	${bindir}/krb5-config.mit \
-	${includedir}/mit-krb5/gssapi/* \
-	${includedir}/mit-krb5/gssapi.h \
-	${includedir}/mit-krb5/gssrpc/* \
-	${includedir}/mit-krb5/kadm5/* \
-	${includedir}/mit-krb5/kdb.h \
-	${includedir}/mit-krb5/kdb5.h \
-	${includedir}/mit-krb5/krb5/* \
-	${includedir}/mit-krb5/profile.h \
+	${includedir}/mit-krb5/* \
 	${libdir}/mit-krb5/* \
-	${libdir}/pkgconfig/mit-* \
+	${libdir}/pkgconfig/mit-krb5*.pc \
 	${libdir}/pkgconfig/mit-krb5/* \	
     "
 
 FILES_${PN}-otp = "${libdir}/krb5/plugins/preauth/otp.so"
-
 FILES_${PN}-pkinit = "${libdir}/krb5/plugins/preauth/pkinit.so"
-
 FILES_${PN}-user = " \
 	${bindir}/k5srvutil \
 	${bindir}/kadmin \
@@ -150,69 +111,30 @@ FILES_${PN}-user = " \
 	${bindir}/kvno \
     "
 
-FILES_libgssapi-${PN}-2 = " \
-	${libdir}/libgssapi_krb5.so.2 \
-	${libdir}/libgssapi_krb5.so.2.2 \
-    "
-
-FILES_libgssrpc4 = " \
-	${libdir}/libgssrpc.so.4 \
-	${libdir}/libgssrpc.so.4.2 \
-    "
-
-FILES_libk5crypto3 = " \
-	${libdir}/libk5crypto.so.3 \
-	${libdir}/libk5crypto.so.3.1 \
-    "  
-
-FILES_libkadm5clnt-mit9 = " \
-	${libdir}/libkadm5clnt_mit.so.9 \
-	${libdir}/libkadm5clnt_mit.so.9.0 \
-    "
-
-FILES_libkadm5srv-mit9 = " \
-	${libdir}/libkadm5srv_mit.so.9 \
-	${libdir}/libkadm5srv_mit.so.9.0 \
-    "
-
-FILES_libkdb5-7 = " \
-	${libdir}/libkdb5.so.7 \
-	${libdir}/libkdb5.so.7.0 \
-    "
+FILES_libgssapi-krb5 = "${libdir}/libgssapi_krb5${SOLIBS}"
+FILES_libgssrpc = "${libdir}/libgssrpc${SOLIBS}"
+FILES_libk5crypto = "${libdir}/libk5crypto${SOLIBS}"
+FILES_libkadm5clnt-mit = "${libdir}/libkadm5clnt_mit${SOLIBS}"
+FILES_libkadm5srv-mit = "${libdir}/libkadm5srv_mit${SOLIBS}"
+FILES_libkdb5 = "${libdir}/libkdb5${SOLIBS}"
+FILES_libkrb5 = "${libdir}/libkrb5${SOLIBS}"
+FILES_libkrb5support = "${libdir}/libkrb5support${SOLIBS}"
+FILES_libkrad = "${libdir}/libkrad${SOLIBS}"
 
 FILES_libkrad-dev = " \
 	${includedir}/krad.h \
 	${libdir}/libkrad.so \
     "
 
-FILES_libkrad0 = " \
-	${libdir}/libkrad.so.0 \
-	${libdir}/libkrad.so.0.0 \
-    " 
-
-FILES_libkrb5-3 = " \
-	${libdir}/libkrb5.so.3 \
-	${libdir}/libkrb5.so.3.3 \
-    "
-
-FILES_libkrb5support0 = " \
-	${libdir}/libkrb5support.so.0 \
-	${libdir}/libkrb5support.so.0.1 \
-    "
-
 FILES_${PN} += "${datadir}/gnats"
-
 FILES_${PN}-doc += "${datadir}/examples"
-
 FILES_${PN}-dbg += " \
 	${libdir}/krb5/plugins/*/.debug \
 	${libdir}/mit-krb5/.debug \
     "
 
-python do_unpack() {    
-    bb.build.exec_func('base_do_unpack', d)
-    bb.build.exec_func('krb5_do_unpack', d)
-}
+DEBIANNAME_${PN}-dev = "libkrb5-dev"
+DEBIANNAME_${PN}-dbg = "libkrb5-dbg"
 
 do_configure() {
 	gnu-configize --force
