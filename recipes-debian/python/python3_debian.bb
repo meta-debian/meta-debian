@@ -9,10 +9,11 @@ DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib vir
 PR = "${INC_PR}"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
-
+# now-avoid-pgen.patch
+#   temporarily avoiding build pgen for avoid errors when cross compile
 SRC_URI += " \
+	file://now-avoid-pgen.patch \
 	file://python-config.patch \
-	file://000-cross-compile.patch \
 	file://020-dont-compile-python-files.patch \
 	file://030-fixup-include-dirs.patch \
 	file://070-dont-clean-ipkg-install.patch \
@@ -22,25 +23,22 @@ SRC_URI += " \
 	file://150-fix-setupterm.patch \
 	file://0001-h2py-Fix-issue-13032-where-it-fails-with-UnicodeDeco.patch \
 	file://makerace.patch \
-	${DISTRO_SRC_URI} \ 
 	file://03-fix-tkinter-detection.patch \
 	file://04-default-is-optimized.patch \ 
 	file://avoid_warning_about_tkinter.patch \
 	file://cgi_py.patch \
 	file://host_include_contamination.patch \
-	file://python-3.3-multilib.patch \
 	file://shutil-follow-symlink-fix.patch \
 	file://sysroot-include-headers.patch \
 	file://unixccompiler.patch \
 	file://avoid-ncursesw-include-path.patch \
 	file://python3-use-CROSSPYTHONPATH-for-PYTHON_FOR_BUILD.patch \
-	file://python3-setup.py-no-host-headers-libs.patch \
 	file://sysconfig.py-add-_PYTHON_PROJECT_SRC.patch \
-	file://setup.py-check-cross_compiling-when-get-FLAGS.patch \
 	file://setup.py-find-libraries-in-staging-dirs.patch \
 "
 
 DEBIAN_PATCH_TYPE = "quilt"
+#DEBIAN_PATCH_TYPE = "abnormal"
 
 inherit multilib_header python3native pkgconfig
 
@@ -164,9 +162,8 @@ do_install() {
 
 	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
 
-	if [ -e ${WORKDIR}/sitecustomize.py ]; then
-		install -m 0644 ${WORKDIR}/sitecustomize.py ${D}/${libdir}/python${PYTHON_MAJMIN}
-	fi
+	install -m 0644 ${S}/debian/sitecustomize.py.in ${D}/${libdir}/python${PYTHON_MAJMIN}/sitecustomize.py
+	
 
 	oe_multilib_header python${PYTHON_BINABI}/pyconfig.h
 
@@ -184,7 +181,7 @@ do_install() {
 	ln -s python3.4m ${D}${includedir}/python3.4
 	
 	install -d ${D}${sysconfdir}/python3.4
-	mv ${D}${libdir}/python3.4/sitecustomize.py ${D}${sysconfdir}/python3.4/
+	cp ${D}${libdir}/python3.4/sitecustomize.py ${D}${sysconfdir}/python3.4/
 	
 	install -m 0755 ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext3.4
 	ln -s ../lib/python3.4 ${D}${bindir}/pdb3.4 
@@ -194,6 +191,7 @@ do_install() {
 
 	rm ${D}${bindir}/python3-config 
         rm ${D}${bindir}/python3 
+	mv ${D}${libdir}/python3.4/config-3.4m- ${D}${libdir}/python3.4/config-3.4m
 }
 
 do_install_append_class-nativesdk () {

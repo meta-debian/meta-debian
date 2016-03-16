@@ -16,10 +16,8 @@ inherit native
 RPROVIDES += "python3-distutils-native python3-compression-native python3-textutils-native python3-core-native"
 
 EXTRA_OECONF_append = " --bindir=${bindir}/${PN} --without-ensurepip"
-
 SRC_URI += " \
 	file://python-config.patch \
-	file://000-cross-compile.patch \
 	file://020-dont-compile-python-files.patch \
 	file://030-fixup-include-dirs.patch \
 	file://070-dont-clean-ipkg-install.patch \
@@ -27,7 +25,6 @@ SRC_URI += " \
 	file://110-enable-zlib.patch \
 	file://130-readline-setup.patch \
 	file://150-fix-setupterm.patch \
-	file://python-3.3-multilib.patch \
 	file://03-fix-tkinter-detection.patch \
 	file://avoid_warning_about_tkinter.patch \
 	file://shutil-follow-symlink-fix.patch \
@@ -35,9 +32,7 @@ SRC_URI += " \
 	file://sysroot-include-headers.patch \
 	file://unixccompiler.patch \
 	file://makerace.patch \
-	${DISTRO_SRC_URI} \
 	file://sysconfig.py-add-_PYTHON_PROJECT_SRC.patch \
-	file://setup.py-check-cross_compiling-when-get-FLAGS.patch \
 "
 
 EXTRA_OEMAKE = '\
@@ -60,9 +55,7 @@ do_configure_append() {
 do_install() {
 	install -d ${D}${libdir}/pkgconfig
 	oe_runmake 'DESTDIR=${D}' install
-	if [ -e ${WORKDIR}/sitecustomize.py ]; then
-		install -m 0644 ${WORKDIR}/sitecustomize.py ${D}/${libdir}/python${PYTHON_MAJMIN}
-	fi
+	install -m 0644 ${S}/debian/sitecustomize.py.in ${D}/${libdir}/python${PYTHON_MAJMIN}/sitecustomize.py
 	install -d ${D}${bindir}/${PN}
 	install -m 0755 Parser/pgen ${D}${bindir}/${PN}
 
