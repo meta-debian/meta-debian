@@ -12,12 +12,16 @@
 # CONFIG_FEATURE_SH_STANDALONE is not set
 #   The standalone shell searches available applets without PATH.
 #   update-alternatives doesn't work with this feature.
+# CONFIG_FEATURE_TOP_SMP_CPU=y
+# CONFIG_FEATURE_TOP_DECIMALS=y
+# CONFIG_FEATURE_TOP_SMP_PROCESS=y
+#   multi core CPU becomes general also in embedded system
 #
 
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.22.1
-# Tue Mar 15 16:47:09 2016
+# Thu Mar 17 14:00:34 2016
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -926,9 +930,9 @@ CONFIG_FEATURE_MIME_CHARSET=""
 CONFIG_TOP=y
 CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
 CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
-# CONFIG_FEATURE_TOP_SMP_CPU is not set
-# CONFIG_FEATURE_TOP_DECIMALS is not set
-# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
+CONFIG_FEATURE_TOP_SMP_CPU=y
+CONFIG_FEATURE_TOP_DECIMALS=y
+CONFIG_FEATURE_TOP_SMP_PROCESS=y
 # CONFIG_FEATURE_TOPMEM is not set
 CONFIG_UPTIME=y
 CONFIG_FEATURE_UPTIME_UTMP_SUPPORT=y
