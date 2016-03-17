@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = " \
 	file://doc/coreutils.info;beginline=7;endline=14;md5=f469e5a24d5c598b086a4f3532834660 \
 "
 
-DEPENDS = "gmp libcap"
+DEPENDS = "gmp libcap libselinux"
 DEPENDS_class-native = ""
 
 DEBIAN_PATCH_TYPE = "dpatch"
