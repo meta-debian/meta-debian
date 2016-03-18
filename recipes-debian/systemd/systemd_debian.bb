@@ -14,7 +14,7 @@ file://LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c \
 PROVIDES = "udev"
 
 inherit debian-package
-inherit pkgconfig autotools
+inherit pkgconfig autotools useradd
 
 DEPENDS = "intltool-native \
            gperf-native \
@@ -336,3 +336,7 @@ ALTERNATIVE_LINK_NAME[runlevel] = "${base_sbindir}/runlevel"
 ALTERNATIVE_PRIORITY[runlevel] ?= "300"
 
 DEBIAN_NOAUTONAME = "1"
+
+USERADD_PACKAGES = "${PN}"
+USERADD_PARAM_${PN} +=  "--system --no-create-home --home /run/systemd --shell /bin/false --user-group systemd-timesync; --system --no-create-home --home /run/systemd/netif --shell /bin/false --user-group systemd-network; --system --no-create-home --home /run/systemd/resolve --shell /bin/false --user-group systemd-resolve; --system --no-create-home --home /run/systemd --shell /bin/false --user-group systemd-bus-proxy"
+GROUPADD_PARAM_${PN} += "--system systemd-journal"
