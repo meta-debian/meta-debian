@@ -56,6 +56,10 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --enable-dependency-tracking \
                "
 
+do_configure_prepend() {
+	export KMOD="${base_bindir}/kmod"
+}
+
 # append debian extra files and remove unneeded files
 do_install_append() {
 	# systemd package: setup base_bindir
