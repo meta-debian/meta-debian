@@ -14,7 +14,7 @@ The libcap-ng library is intended to make programming with POSIX\n\
 capabilities much easier than the traditional libcap library."
 HOMEPAGE = "http://people.redhat.com/sgrubb/libcap-ng"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -29,6 +29,7 @@ DEPENDS += "swig-native python"
 # Prevent using python headers from host system
 EXTRA_OEMAKE += "PYLIBVER='python${PYTHON_BASEVERSION}'"
 do_configure_prepend() {
+	sed -i -e "s: /usr/include/python: ${STAGING_INCDIR}/python:g" ${S}/configure.ac
 	sed -i -e "s:-I/usr/include/\$(PYLIBVER):-I${STAGING_INCDIR}/python${PYTHON_BASEVERSION}:g" \
 	          ${S}/bindings/python/Makefile.am
 }
