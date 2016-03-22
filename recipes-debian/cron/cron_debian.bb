@@ -71,7 +71,7 @@ do_install_append() {
 	# Install systemd service if systemd feature is enabled
 	if [ ${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} = "systemd" ];then
 		install -d ${D}${base_libdir}/systemd/system
-		install -m 755 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
+		install -m 644 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
 	fi	
 }
 
