@@ -1,7 +1,7 @@
 #
 # src-uri-check.bbclass
 #
-# Set INHERIT += "uri-check" to enable this class
+# Set INHERIT += "src-uri-check" to enable this class
 #
 # This class confirms that all sources in SRC_URI except local files
 # are fetched from one of allowed URIs (SRC_URI_ALLOWED).
@@ -15,14 +15,13 @@
 # if "1" raise ERROR, otherwise just print WARNING
 SRC_URI_CHECK_ERROR ?= ""
 
-base_do_fetch_append() {
+def check_src_uri(fetcher, d):
     import re
 
     allowed = d.getVar("SRC_URI_ALLOWED", True) or ""
     if allowed is "":
         return
 
-    # fetcher is built in base_do_fetch
     for u in fetcher.urls:
         # ignore local files
         if isinstance(fetcher.ud[u].method, bb.fetch2.local.Local):
@@ -36,4 +35,8 @@ base_do_fetch_append() {
             bb.fatal("%s doesn't match SRC_URI_ALLOWED" % uri)
         else:
             bb.warn("%s doesn't match SRC_URI_ALLOWED" % uri)
+
+base_do_fetch_append() {
+    # fetcher is built in base_do_fetch
+    check_src_uri(fetcher, d)
 }
