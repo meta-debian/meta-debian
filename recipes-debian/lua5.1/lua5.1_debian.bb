@@ -33,18 +33,27 @@ export LUA_MULTIARCH= "lua5.1-deb-multiarch.h"
 do_configure_prepend() {
 	echo "#ifndef _LUA_DEB_MULTIARCH_" > ${S}/src/${LUA_MULTIARCH}
         echo "#define _LUA_DEB_MULTIARCH_" >> ${S}/src/${LUA_MULTIARCH}
-        echo "#define DEB_HOST_MULTIARCH \"$(DEB_HOST_MULTIARCH)\"" >> \
+        echo "#define DEB_HOST_MULTIARCH \"${HOST_SYS}\"" >> \
                ${S}/src/${LUA_MULTIARCH}
         echo "#endif" >> ${S}/src/${LUA_MULTIARCH}
 }
 
-do_compile () {
+do_compile_class-target () {
 	# fix patch of libtool in Makefile
 	sed -i -e "s:= libtool:= ${STAGING_DIR_HOST}${bindir_crossscripts}/${HOST_PREFIX}libtool:g" ${S}/Makefile
 	oe_runmake \
 		debian_linux \
-		RPATH=${libdir}/$(DEB_HOST_MULTIARCH) \
-		LDFLAGS="$(LDFLAGS)"
+		RPATH=${libdir} \
+		LDFLAGS="${LDFLAGS}"
+}
+
+do_compile_class-native () {
+        # fix patch of libtool in Makefile
+        sed -i -e "s:= libtool:= ${STAGING_BINDIR_NATIVE}/${BUILD_SYS}-libtool:g" ${S}/Makefile
+        oe_runmake \
+                debian_linux \
+		RPATH=${libdir} \
+                LDFLAGS="${LDFLAGS}"
 }
 
 do_install () {
