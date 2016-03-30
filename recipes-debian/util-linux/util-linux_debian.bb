@@ -26,7 +26,7 @@ file://libmount/COPYING;md5=fb93f01d4361069c5616327705373b16 \
 file://libblkid/COPYING;md5=fb93f01d4361069c5616327705373b16"
 
 inherit autotools gettext pkgconfig systemd update-alternatives python-dir
-DEPENDS = "zlib ncurses"
+DEPENDS = "zlib ncurses elfutils"
 DEPENDS_append_class-native = " lzo-native"
 DEPENDS_append_class-nativesdk = " lzo-native"
 
