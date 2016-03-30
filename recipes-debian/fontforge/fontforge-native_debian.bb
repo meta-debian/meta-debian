@@ -42,3 +42,5 @@ EXTRA_OECONF_append = " --without-x"
 
 export HOST_SYS
 export BUILD_SYS
+export STAGING_INCDIR
+export STAGING_LIBDIR
