@@ -10,7 +10,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://www.lm-sensors.org"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package pythonnative
 
 LICENSE = "GPLv2+"
@@ -23,6 +23,7 @@ DEPENDS += "python"
 export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
+export STAGING_LIBDIR
 export LDSHARED="${CCLD} -shared"
 
 do_compile_append() {

@@ -5,7 +5,7 @@ some Type 3s, some Type 0s), TrueType, and OpenType (Type2), \
 CID-keyed, SVG, CFF and multiple-master fonts."
 HOMEPAGE = "http://fontforge.sourceforge.net/"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -40,6 +40,7 @@ EXTRA_OECONF = "--with-regular-link \
 # We don't need X on native
 EXTRA_OECONF_append = " --without-x"
 
+#export some variable from poky, to use for python command
 export HOST_SYS
 export BUILD_SYS
 export STAGING_INCDIR

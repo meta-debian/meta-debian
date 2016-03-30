@@ -12,7 +12,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://oss.oetiker.ch/rrdtool/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package pythonnative cpan
 
 LICENSE = "GPLv2+"
@@ -23,10 +23,13 @@ inherit autotools-brokensep pkgconfig gettext
 DEPENDS += "libxml2 glib-2.0 pango tcl lua5.1-native lua5.1 perl libpng"
 DEBIAN_PATCH_TYPE = "quilt"
 
+#export some variable from poky, to use for python command
 export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
+export STAGING_LIBDIR
 export LDSHARED="${CCLD} -shared"
+
 #correct-path-to-library_debian.patch:
 #	using the library in sysroot instead of host system
 SRC_URI += "file://correct-path-to-library_debian.patch"
