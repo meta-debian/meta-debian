@@ -16,7 +16,6 @@ RDEPENDS_${PN} = "python-core python-textutils python-distutils python-logging p
 
 SRC_URI += " \
 	file://adapt_install_layout_for_debian.patch \
-	file://Parse_proc_pid_stat_properly.patch \
 "
 
 EXTRA_OEMAKE += "PREFIX=${prefix} DESTDIR=${D}"
