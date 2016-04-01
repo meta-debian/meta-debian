@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = "\
 	file://COPYING.GPL;md5=751419260aa954499f7abaabaa882bbe"
 inherit autotools-brokensep pkgconfig
 
-DEPENDS += "libusb1 boost swig-native"
+DEPENDS += "libusb boost swig-native"
 
 #follow debian/rules
 ETRA_OECONF += "--enable-libftdipp --disable-python-binding"
