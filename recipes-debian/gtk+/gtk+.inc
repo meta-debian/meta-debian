@@ -59,7 +59,7 @@ FILES_libgail = " \
 	${libdir}/gtk-2.0/modules/libferret.so \
 	"
 
-GTKBASE_RRECOMMENDS ?= "gdk-pixbuf"
+GTKBASE_RRECOMMENDS ?= "liberation-fonts gdk-pixbuf"
 GTKGLIBC_RRECOMMENDS ?= "${GTKBASE_RRECOMMENDS} glibc-gconv-iso8859-1"
 
 RRECOMMENDS_${PN} = "${GTKBASE_RRECOMMENDS}"
