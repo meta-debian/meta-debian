@@ -29,6 +29,14 @@ do_configure() {
 		LINUX_CLIB="-DGLIBCV=${LINUX_CLIB}"
 		export LINUX_CLIB
 	fi
+
+	# LINUX_HASSELINUX is null by default in Debian.
+	# This means selinux is enabled only if selinux.h exists
+	# in include directories. Expressly set it to N here
+	# so that lsof works in small systems without selinux,
+	# instead of adding dependency on selinux.
+	export LINUX_HASSELINUX=N
+
 	yes | ./Configure -n $PLATFORM
 }
 
