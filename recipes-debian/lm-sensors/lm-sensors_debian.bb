@@ -8,7 +8,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://www.lm-sensors.org"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2.1+"
@@ -64,8 +64,6 @@ FILES_${PN} += "${base_libdir}${systemd_unitdir}/system/lm-sensors.service"
 
 #follow debian/control
 RDEPENDS_fancontrol += "lsb-base"
-RCONFLICTS_fancontrol += "${PN}"
-RREPLACES_fancontrol += "${PN}"
 RDEPENDS_sensord += "${PN} lsb-base"
 RDEPENDS_${PN}-dev += "libsensors"
 RCONFLICTS_${PN}-dev += "lm-sensors"
