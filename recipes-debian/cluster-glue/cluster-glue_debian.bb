@@ -9,6 +9,10 @@ DEPENDS = "libxml2 libtool glib-2.0 bzip2 util-linux libxslt"
 
 inherit autotools pkgconfig
 
+SRC_URI_append = " \
+    file://0001-don-t-compile-doc-and-Error-Fix.patch \
+"
+
 EXTRA_OECONF += "--disable-fatal-warnings --enable-doc=no \
 	--with-initdir=${sysconfdir}/init.d"
 
