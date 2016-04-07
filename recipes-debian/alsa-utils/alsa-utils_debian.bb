@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = " \
 	file://alsactl/utils.c;beginline=1;endline=20;md5=fe9526b055e246b5558809a5ae25c0b9 \
 "
 
-DEPENDS = "alsa-lib ncurses libsamplerate0 udev"
+DEPENDS = "alsa-lib ncurses libsamplerate udev"
 
 SRC_URI +=" \
 	file://0001-alsactl-don-t-let-systemd-unit-restore-the-volume-wh.patch \
