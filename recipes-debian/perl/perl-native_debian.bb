@@ -4,7 +4,7 @@
 # base commit: a6866222ef6feaa2112618f1442a8960840e394a
 #
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 require perl.inc
 
@@ -24,6 +24,21 @@ inherit native
 NATIVE_PACKAGE_PATH_SUFFIX = "/${PN}"
 
 export LD="${CCLD}"
+
+# In case DISTRO_FEATURES does not contain "largefile",
+# perl target recipe remove all largefile parameters out of configuration file,
+# this will make error when we build for qemux86 target on i386/x86 host machine,
+# so we remove these params out of perl-native recipe, too.
+do_nolargefile() {
+	sed -i -e "s,\(uselargefiles=\)'define',\1'undef',g" \
+               -e "s,\(d_readdir64_r=\)'define',\1'undef',g" \
+               -e "s,\(readdir64_r_proto=\)'\w+',\1'0',g" \
+               -e "/ccflags_uselargefiles/d" \
+               -e "s/-Duselargefiles//" \
+               -e "s/-D_FILE_OFFSET_BITS=64//" \
+               -e "s/-D_LARGEFILE_SOURCE//" \
+               ${S}/config.sh
+}
 
 do_configure () {
 	./Configure \
@@ -62,6 +77,8 @@ do_configure () {
 		-Ud_csh \
 		-Uusesfio \
 		-Uusenm -des
+
+	${@bb.utils.contains('DISTRO_FEATURES', 'largefile', '', 'do_nolargefile', d)}
 }
 
 do_install () {
