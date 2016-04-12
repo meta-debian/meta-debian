@@ -5,7 +5,7 @@
 
 require python3.inc
 
-DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz"
+DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz expat mpdecimal"
 PR = "${INC_PR}"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
@@ -190,8 +190,8 @@ do_install() {
 	rm ${D}${bindir}/pyvenv
 
 	rm ${D}${bindir}/python3-config 
-        rm ${D}${bindir}/python3 
-	mv ${D}${libdir}/python3.4/config-3.4m- ${D}${libdir}/python3.4/config-3.4m
+	rm ${D}${bindir}/python3 
+	mv ${D}${libdir}/python3.4/config-3.4m-* ${D}${libdir}/python3.4/config-3.4m
 }
 
 do_install_append_class-nativesdk () {
@@ -256,6 +256,7 @@ FILES_libpython3.4-dev = " \
 	${libdir}/python3.4/config-3.4m/* \
 	${libdir}/pkgconfig/* \
 	${libdir}/python3.4/libpython3.4*.so \
+	${libdir}/*/pkgconfig/* \
 "
 
 FILES_libpython3.4-minimal = " \
