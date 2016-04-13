@@ -1,0 +1,30 @@
+From 30ee44e75da1bc86901b546ea14233d288ce2309 Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Tue, 9 Dec 2014 18:15:51 +0900
+Subject: [PATCH] membership/ccm/Makefile.am: fix warning
+
+The compile log indicates that host include and/or library paths were used
+
+Upstream-Status: pending
+
+Signed-off-by: Li Xin <lixin.fnst@cn.fujitsu.com>
+---
+ membership/ccm/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/membership/ccm/Makefile.am b/membership/ccm/Makefile.am
+index 105069a..2a89de1 100644
+--- a/membership/ccm/Makefile.am
++++ b/membership/ccm/Makefile.am
+@@ -22,7 +22,7 @@ MAINTAINERCLEANFILES    = Makefile.in
+ INCLUDES                = -I$(top_builddir)/include -I$(top_srcdir)/include \
+ 			-I$(top_builddir)/linux-ha -I$(top_srcdir)/linux-ha \
+ 			-I$(top_builddir)/libltdl -I$(top_srcdir)/libltdl \
+-                        -I$(includedir)/clplumbing
++                        -I$(lt_sysroot)$(includedir)/clplumbing
+ 
+ hadir			= $(sysconfdir)/ha.d
+ halibdir		= $(libdir)/@HB_PKG@
+-- 
+1.8.4.2
+

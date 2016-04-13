@@ -1,0 +1,41 @@
+From 772da3c3bbb3eeca6f2ef92715c350f6bf0f8515 Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Tue, 9 Dec 2014 18:36:16 +0900
+Subject: [PATCH 2/2] Makefile.am: not chgrp in cross compile
+
+Upstream-Status: pending
+
+Signed-off-by: Li Xin <lixin.fnst@cn.fujitsu.com>
+---
+ membership/ccm/Makefile.am | 2 --
+ tools/Makefile.am          | 1 -
+ 2 files changed, 3 deletions(-)
+
+diff --git a/membership/ccm/Makefile.am b/membership/ccm/Makefile.am
+index 2a89de1..1b69c9c 100644
+--- a/membership/ccm/Makefile.am
++++ b/membership/ccm/Makefile.am
+@@ -108,8 +108,6 @@ clmtest_LDADD		= libclm.la libccmclient.la \
+ # additional installations not covered normally
+ install-exec-local:
+ 	$(mkinstalldirs) $(DESTDIR)$(ccmdir)
+-	-chgrp $(apigid) $(DESTDIR)/$(ccmdir)
+-	-chown $(ccmuid) $(DESTDIR)/$(ccmdir)
+ 	chmod 750 $(DESTDIR)/$(ccmdir)
+ 
+ 
+diff --git a/tools/Makefile.am b/tools/Makefile.am
+index 4e57de7..05d1253 100644
+--- a/tools/Makefile.am
++++ b/tools/Makefile.am
+@@ -47,7 +47,6 @@ cl_respawn_LDADD	= -lplumb	\
+ 			  $(top_builddir)/replace/libreplace.la
+ 
+ install-data-hook:    # install-exec-hook doesn't work (!)
+-	-chgrp $(apigid) $(DESTDIR)/$(habindir)/cl_status
+ 	-chmod g+s,a-w $(DESTDIR)/$(habindir)/cl_status
+ 
+ .PHONY: install-exec-hook
+-- 
+1.8.4.2
+

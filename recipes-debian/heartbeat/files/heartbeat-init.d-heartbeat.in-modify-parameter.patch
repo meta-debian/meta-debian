@@ -1,0 +1,27 @@
+From b28ecdd9939b2d2f5aef6aacd1ae12bcae34d209 Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Tue, 9 Dec 2014 18:33:05 +0900
+Subject: [PATCH 1/2] heartbeat/init.d/heartbeat.in: modify parameter
+
+Upstream-Status: pending
+
+Signed-off-by: Li Xin <lixin.fnst@cn.fujitsu.com>
+---
+ heartbeat/init.d/heartbeat.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/heartbeat/init.d/heartbeat.in b/heartbeat/init.d/heartbeat.in
+index 6e7c675..bed87a2 100755
+--- a/heartbeat/init.d/heartbeat.in
++++ b/heartbeat/init.d/heartbeat.in
+@@ -51,6 +51,7 @@
+ HA_DIR=@sysconfdir@/ha.d; export HA_DIR
+ CONFIG=$HA_DIR/ha.cf
+ . $HA_DIR/shellfuncs
++HA_NOARCHBIN=@HA_NOARCHDATAHBDIR@
+ 
+ LOCKDIR=@localstatedir@/lock/subsys
+ RUNDIR=@localstatedir@/run
+-- 
+1.8.4.2
+

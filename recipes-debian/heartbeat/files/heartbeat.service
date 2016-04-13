@@ -1,0 +1,10 @@
+[Unit]
+Description=High-availability services.
+
+[Service]
+Type=forking
+PIDFile=/var/run/heartbeat.pid
+ExecStart=/usr/lib/heartbeat/heartbeat.init start
+
+[Install]
+WantedBy=multi-user.target
