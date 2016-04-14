@@ -8,7 +8,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://www.lm-sensors.org"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2.1+"
@@ -41,15 +41,15 @@ do_install_append() {
 		${D}${sysconfdir}/logcheck/ignore.d.workstation/sensord
 
 	install -D -m 0644 ${S}/debian/fancontrol.service \
-		${D}${base_libdir}${systemd_unitdir}/system/fancontrol.service
+		${D}${systemd_system_unitdir}/fancontrol.service
 	install -m 0644 ${S}/debian/lm-sensors.service \
-		${D}${base_libdir}${systemd_unitdir}/system/lm-sensors.service
+		${D}${systemd_system_unitdir}/lm-sensors.service
 }
 DEBIANNAME_${PN}-dev = "libsensors4-dev"
 
 FILES_fancontrol = "\
 	${sysconfdir}/init.d/fancontrol ${sbindir}/fancontrol \
-	${base_libdir}${systemd_unitdir}/system/fancontrol.service \
+	${systemd_system_unitdir}/fancontrol.service \
 	${sbindir}/pwmconfig \
 	"
 FILES_libsensors = "\
@@ -60,10 +60,9 @@ FILES_sensord = "\
 	${sysconfdir}/default/sensord ${sysconfdir}/init.d/sensord \
 	${sysconfdir}/logcheck ${sbindir}/sensord \
 	"
-FILES_${PN} += "${base_libdir}${systemd_unitdir}/system/lm-sensors.service"
+FILES_${PN} += "${systemd_system_unitdir}/lm-sensors.service"
 
 #follow debian/control
 RDEPENDS_fancontrol += "lsb-base"
 RDEPENDS_sensord += "${PN} lsb-base"
 RDEPENDS_${PN}-dev += "libsensors"
-RCONFLICTS_${PN}-dev += "lm-sensors"
