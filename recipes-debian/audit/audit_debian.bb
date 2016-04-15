@@ -71,12 +71,11 @@ do_install_append() {
 	rmdir ${D}${sysconfdir}/sysconfig/
 
 	# replace init.d
-	install -m 0755 ${S}/debian/auditd.default ${D}${sysconfdir}/init.d/auditd
+	install -m 0755 ${S}/debian/auditd.init ${D}${sysconfdir}/init.d/auditd
 	rm -rf ${D}${sysconfdir}/rc.d
 	
 	# install systemd unit files
-	install -d ${D}${base_libdir}${systemd_unitdir}/system
-	install -m 0644 ${S}/init.d/auditd.service ${D}${base_libdir}${systemd_unitdir}/system
+	install -D -m 0644 ${S}/init.d/auditd.service ${D}${systemd_system_unitdir}
 
 	chmod 750 ${D}${sysconfdir}/audit ${D}${sysconfdir}/audit/rules.d
 	chmod 640 ${D}${sysconfdir}/audit/auditd.conf \
@@ -111,7 +110,7 @@ FILES_libauparse-dev = "${includedir}/auparse* ${libdir}/libauparse.so"
 FILES_libauparse = "${base_libdir}/libauparse.so.*"
 FILES_python-${PN} = "${libdir}/python*/dist-packages/*"
 FILES_${PN}-dbg += "${libdir}/python*/dist-packages/.debug"
-FILES_${PN} += "${base_libdir}${systemd_unitdir}"
+FILES_${PN} += "${systemd_unitdir}"
 
 DEBIANNAME_${PN} = "${PN}d"
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
