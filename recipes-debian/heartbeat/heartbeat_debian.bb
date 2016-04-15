@@ -10,7 +10,7 @@ SUMMARY = "Messaging and membership subsystem for High-Availability Linux"
 
 inherit debian-package
 
-LICENSE = "GPLv2+ & LGPLv2+"
+LICENSE = "GPLv2 & LGPLv2.1+"
 LIC_FILES_CHKSUM = " \
 	file://doc/COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b \
 	file://doc/COPYING.LGPL;md5=d8045f3b8f929c1cb29a1e3fd737b499 \
@@ -21,7 +21,6 @@ SRC_URI += " \
 	file://Makefile.am-not-chgrp-in-cross-compile.patch \
 	file://configure.in-Error-and-warning-fix.patch \
 	file://heartbeat-init.d-heartbeat.in-modify-parameter.patch \
-	file://heartbeat.service \
 	file://disable-build-doc.patch \
 "
 DEPENDS = "cluster-glue corosync gnutls"
@@ -61,19 +60,16 @@ do_compile_prepend() {
 	make clean
 }
 do_install_append () {
-	sed -i -e 's,/usr/lib/,${libdir}/,' ${WORKDIR}/heartbeat.service
 	if ${@base_contains('DISTRO_FEATURES','systemd','true','false',d)}; then
 		install -d ${D}${libexecdir}
 		install -m 0755 ${S}/${SOURCE1} ${D}${libexecdir}/heartbeat.init
 		install -d ${D}${systemd_unitdir}/system
-		install -m 0644 ${WORKDIR}/heartbeat.service ${D}${systemd_unitdir}/system/
 	fi
 	ln -sf ha.d ${D}${sysconfdir}/heartbeat
 
 }
 
 inherit systemd
-SYSTEMD_SERVICE_${PN} = "heartbeat.service"
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "-r haclient"
@@ -84,10 +80,10 @@ USERADD_PARAM_${PN} = " \
 
 PACKAGES =+ "libheartbeat2 libheartbeat2-dev"
 
-FILES_libheartbeat2 += "${libdir}/libapphb.so.2 ${libdir}/libapphb.so.2.0.0 \
-	${libdir}/libccmclient.so.1 ${libdir}/libccmclient.so.1.0.0 \
-	${libdir}/libclm.so.1 ${libdir}/libclm.so.1.0.0 \
-	${libdir}/libhbclient.so.1 ${libdir}/libhbclient.so.1.0.0"
+FILES_libheartbeat2 += "${libdir}/libapphb${SOLIBS} \
+	${libdir}/libccmclient${SOLIBS} \
+	${libdir}/libclm${SOLIBS} \
+	${libdir}/libhbclient${SOLIBS}"
 
 FILES_libheartbeat2-dev += "${includedir} ${libdir}/*.so ${libdir}/*.la"
 
