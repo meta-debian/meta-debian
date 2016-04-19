@@ -63,7 +63,6 @@ do_install_append () {
 	if ${@base_contains('DISTRO_FEATURES','systemd','true','false',d)}; then
 		install -d ${D}${libexecdir}
 		install -m 0755 ${S}/${SOURCE1} ${D}${libexecdir}/heartbeat.init
-		install -d ${D}${systemd_unitdir}/system
 	fi
 	ln -sf ha.d ${D}${sysconfdir}/heartbeat
 
