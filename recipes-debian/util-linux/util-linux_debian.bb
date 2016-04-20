@@ -9,7 +9,7 @@ DESCRIPTION = "Util-linux includes a suite of basic system administration utilit
 commonly found on most Linux systems.  Some of the more important utilities include \
 disk partitioning, kernel message management, filesystem creation, and system login."
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
 
@@ -92,18 +92,21 @@ do_install_append () {
 	mv ${D}${sbindir}/partx ${D}${bindir}
 	mv ${D}${sbindir}/delpart ${D}${bindir}
 	
+	# Install init script
 	install -d ${D}${sysconfdir}/init.d
-	install ${S}/debian/util-linux.hwclock.sh.init \
+	install -m 0755 ${S}/debian/util-linux.hwclock.sh.init \
 					${D}${sysconfdir}/init.d/hwclock.sh
+	install -m 0755 ${S}/misc-utils/uuidd.rc.in \
+					${D}${sysconfdir}/init.d/uuidd
 
 	# install pam
 	install -d ${D}${sysconfdir}/pam.d
-	install ${S}/debian/util-linux.runuser.pam ${D}${sysconfdir}/pam.d/runuser
-	install ${S}/debian/util-linux.runuser-l.pam ${D}${sysconfdir}/pam.d/runuser-l
+	install -m 0644 ${S}/debian/util-linux.runuser.pam ${D}${sysconfdir}/pam.d/runuser
+	install -m 0644 ${S}/debian/util-linux.runuser-l.pam ${D}${sysconfdir}/pam.d/runuser-l
 
 	# install /etc/default/hwclock
 	install -d ${D}${sysconfdir}/default
-	install ${S}/debian/util-linux.hwclock.default ${D}${sysconfdir}/default/hwclock
+	install -m 0644 ${S}/debian/util-linux.hwclock.default ${D}${sysconfdir}/default/hwclock
 
 	# create soft link getty to agetty command
 	ln -sf agetty ${D}/${base_sbindir}/getty.${DPN}
@@ -115,205 +118,73 @@ do_install_append () {
 }
 
 PACKAGES =+ " \
-	mount bsdutils libblkid-dev libblkid1 libmount-dev libmount1 \
-	libsmartcols-dev libsmartcols1 libuuid1 uuid-runtime uuid-dev \
-	libmount-staticdev libsmartcols-staticdev uuid-staticdev \
-	libblkid-staticdev ${PN}-bash-completion \
-	${PN}-agetty ${PN}-blkdiscard ${PN}-blkid ${PN}-blockdev \
-	${PN}-cfdisk ${PN}-chcpu ${PN}-ctrlaltdel ${PN}-fdisk \
-	${PN}-findfs ${PN}-fsck.cramfs ${PN}-fsck ${PN}-fsfreeze \
-	${PN}-fstrim ${PN}-hwclock ${PN}-isosize ${PN}-losetup \
-	${PN}-mkfs.cramfs ${PN}-mkfs ${PN}-mkswap ${PN}-pivot-root \
-	${PN}-raw ${PN}-runuser ${PN}-sfdisk ${PN}-swaplabel \
-	${PN}-swaponoff ${PN}-switch-root ${PN}-wipefs \
-	${PN}-fdformat ${PN}-ldattach ${PN}-readprofile \
-	${PN}-rtcwake ${PN}-tunelp ${PN}-uuidd \
-	${PN}-addpart ${PN}-chrt ${PN}-delpart ${PN}-fallocate ${PN}-flock \
-	${PN}-getopt ${PN}-ionice ${PN}-ipcmk ${PN}-ipcrm ${PN}-ipcs \
-	${PN}-line ${PN}-logger ${PN}-lscpu ${PN}-lslocks ${PN}-lslogins \
-	${PN}-mcookie ${PN}-namei ${PN}-nsenter ${PN}-pg ${PN}-partx \
-	${PN}-prlimit ${PN}-rename.ul ${PN}-renice ${PN}-resizepart \
-	${PN}-rev ${PN}-script ${PN}-scriptreplay ${PN}-setsid ${PN}-setterm \
-	${PN}-su ${PN}-taskset ${PN}-unshare ${PN}-utmpdump \
-	${PN}-whereis ${PN}-setarch \
-	${PN}-dmesg ${PN}-lsblk ${PN}-findmnt ${PN}-more \
-	${PN}-tailf ${PN}-mount ${PN}-wdctl \
-	"
+	bsdutils libblkid-dev libblkid1 libmount-dev libmount1 \
+	libsmartcols-dev libsmartcols1 libuuid1 mount uuid-dev \
+	uuid-runtime ${DPN}-locales"
 
-FILES_${PN}-agetty = "${base_sbindir}/*getty*"
-FILES_${PN}-blkdiscard = "${base_sbindir}/blkdiscard"
-FILES_${PN}-blkid = "${base_sbindir}/blkid*"
-FILES_${PN}-blockdev = "${base_sbindir}/blockdev*"
-FILES_${PN}-cfdisk = "${base_sbindir}/cfdisk"
-FILES_${PN}-chcpu = "${base_sbindir}/chcpu"
-FILES_${PN}-ctrlaltdel = "${base_sbindir}/ctrlaltdel"
-FILES_${PN}-fdisk = "${base_sbindir}/fdisk*"
-FILES_${PN}-findfs = "${base_sbindir}/findfs*"
-FILES_${PN}-fsck.cramfs = "${base_sbindir}/fsck.cramfs"
-FILES_${PN}-fsck = "${base_sbindir}/fsck*"
-FILES_${PN}-fsfreeze = "${base_sbindir}/fsfreeze"
-FILES_${PN}-fstrim = "${base_sbindir}/fstrim*"
-FILES_${PN}-hwclock = "${base_sbindir}/hwclock*"
-FILES_${PN}-isosize = "${base_sbindir}/isosize"
-FILES_${PN}-losetup = "${base_sbindir}/losetup"
-FILES_${PN}-mkfs.cramfs = "${base_sbindir}/mkfs.cramfs"
-FILES_${PN}-mkfs = "${base_sbindir}/mkfs*"
-FILES_${PN}-mkswap = "${base_sbindir}/mkswap*"
-FILES_${PN}-pivot-root = "${base_sbindir}/pivot_root*"
-FILES_${PN}-raw = "${base_sbindir}/raw"
-FILES_${PN}-runuser = "${base_sbindir}/runuser"
-FILES_${PN}-sfdisk = "${base_sbindir}/sfdisk"
-FILES_${PN}-swaplabel = "${base_sbindir}/swaplabel"
-FILES_${PN}-swaponoff = "${base_sbindir}/swapon ${base_sbindir}/swapoff"
-FILES_${PN}-switch-root = "${base_sbindir}/switch_root*"
-FILES_${PN}-wipefs = "${base_sbindir}/wipefs"
+FILES_bsdutils = "${bindir}/wall ${bindir}/logger ${bindir}/renice \
+		  ${bindir}/script ${bindir}/scriptreplay"
 
-FILES_${PN}-fdformat = "${sbindir}/fdformat"
-FILES_${PN}-ldattach = "${sbindir}/ldattach"
-FILES_${PN}-readprofile = "${sbindir}/readprofile"
-FILES_${PN}-rtcwake = "${sbindir}/rtcwake"
-FILES_${PN}-tunelp = "${sbindir}/tunelp"
-FILES_${PN}-uuidd = "${sbindir}/uuidd"
-
-FILES_${PN}-addpart = "${bindir}/addpart"
-FILES_${PN}-chrt = "${bindir}/chrt"
-FILES_${PN}-delpart = "${bindir}/delpart"
-FILES_${PN}-fallocate = "${bindir}/fallocate"
-FILES_${PN}-flock = "${bindir}/flock"
-FILES_${PN}-getopt = "${bindir}/getopt"
-FILES_${PN}-ionice = "${bindir}/ionice"
-FILES_${PN}-ipcmk = "${bindir}/ipcmk"
-FILES_${PN}-ipcrm = "${bindir}/ipcrm"
-FILES_${PN}-ipcs = "${bindir}/ipcs"
-FILES_${PN}-line = "${bindir}/line"
-FILES_${PN}-logger = "${bindir}/logger"
-FILES_${PN}-lscpu = "${bindir}/lscpu"
-FILES_${PN}-lslocks = "${bindir}/lslocks"
-FILES_${PN}-lslogins = "${bindir}/lslogins"
-FILES_${PN}-mcookie = "${bindir}/mcookie"
-FILES_${PN}-namei = "${bindir}/namei"
-FILES_${PN}-nsenter = "${bindir}/nsenter"
-FILES_${PN}-partx = "${bindir}/partx"
-FILES_${PN}-pg = "${bindir}/pg"
-FILES_${PN}-prlimit = "${bindir}/prlimit"
-FILES_${PN}-rename.ul = "${bindir}/rename.ul"
-FILES_${PN}-renice = "${bindir}/renice"
-FILES_${PN}-resizepart = "${bindir}/resizepart"
-FILES_${PN}-rev = "${bindir}/rev"
-FILES_${PN}-script = "${bindir}/script"
-FILES_${PN}-scriptreplay = "${bindir}/scriptreplay"
-FILES_${PN}-setsid = "${bindir}/setsid"
-FILES_${PN}-setterm = "${bindir}/setterm"
-FILES_${PN}-su = "${bindir}/su"
-FILES_${PN}-taskset = "${bindir}/taskset"
-FILES_${PN}-unshare = "${bindir}/unshare"
-FILES_${PN}-utmpdump = "${bindir}/utmpdump"
-FILES_${PN}-whereis = "${bindir}/whereis"
-FILES_${PN}-setarch = "${bindir}/*"
-
-FILES_${PN}-dmesg = "${base_bindir}/dmesg*"
-FILES_${PN}-findmnt = "${base_bindir}/findmnt"
-FILES_${PN}-lsblk = "${base_bindir}/lsblk"
-FILES_${PN}-more = "${base_bindir}/more*"
-FILES_${PN}-tailf = "${base_bindir}/tailf"
-FILES_${PN}-mount = "${base_bindir}/mount*"
-FILES_${PN}-wdctl = "${base_bindir}/wdctl"
-
-FILES_${PN}-bash-completion += "${datadir}/bash-completion"
-
-FILES_libblkid1 = "${base_libdir}/libblkid.so.*"
 FILES_libblkid-dev = " \
 		${includedir}/blkid/* \
 		${libdir}/libblkid.so \
 		${libdir}/pkgconfig/blkid.pc"
-FILES_libblkid-staticdev = "${libdir}/libblkid.a"
-FILES_libmount1 = "${base_libdir}/libmount.so*"
+
+FILES_libblkid1 = "${base_libdir}/libblkid.so.*"
+
 FILES_libmount-dev = " \
 		${includedir}/libmount/libmount.h \
 		${libdir}/libmount.so \
 		${libdir}/pkgconfig/mount.pc"
-FILES_libmount-staticdev = "${libdir}/libmount.a"
-FILES_libsmartcols1 = "${base_libdir}/libsmartcols.so*"
+
+FILES_libmount1 = "${base_libdir}/libmount.so*"
+
 FILES_libsmartcols-dev = " \
 		${includedir}/libsmartcols/libsmartcols.h \
 		${libdir}/libsmartcols.so \
 		${libdir}/pkgconfig/smartcols.pc"
-FILES_libsmartcols-staticdev = "${libdir}/libsmartcols.a"
+
+FILES_libsmartcols1 = "${base_libdir}/libsmartcols.so*"
+
 FILES_libuuid1 = "${base_libdir}/libuuid.so.*"
-FILES_bsdutils += "${bindir}/wall"
-RDEPENDS_bsdutils += " \
-		${PN}-logger ${PN}-renice  \
-		${PN}-script ${PN}-scriptreplay"
-FILES_mount += "${base_bindir}/umount"
-RDEPENDS_mount += " \
-		${PN}-swaponoff ${PN}-mount  \
-		${PN}-losetup ${PN}-findmnt "
-FILES_${PN} = "${sysconfdir}"
-RDEPENDS_${PN}_class-target +=" \
-		${PN}-agetty ${PN}-blkdiscard ${PN}-blkid ${PN}-blockdev \
-		${PN}-cfdisk ${PN}-chcpu ${PN}-ctrlaltdel ${PN}-fdisk \
-		${PN}-findfs ${PN}-fsck.cramfs ${PN}-fsck ${PN}-fsfreeze \
-		${PN}-fstrim ${PN}-hwclock ${PN}-isosize ${PN}-mkfs ${PN}-wipefs \
-		${PN}-mkfs.cramfs ${PN}-mkswap ${PN}-pivot-root ${PN}-raw \
-		${PN}-sfdisk ${PN}-swaplabel ${PN}-switch-root \
-		${PN}-dmesg ${PN}-lsblk ${PN}-more ${PN}-tailf ${PN}-wdctl \
-		${PN}-fdformat ${PN}-ldattach ${PN}-readprofile \
-		${PN}-rtcwake ${PN}-tunelp \
-		${PN}-addpart ${PN}-chrt ${PN}-delpart ${PN}-fallocate \
-		${PN}-flock ${PN}-getopt ${PN}-ionice ${PN}-ipcmk ${PN}-ipcrm \
-		${PN}-ipcs ${PN}-line ${PN}-lscpu ${PN}-lslocks ${PN}-mcookie \
-		${PN}-namei ${PN}-nsenter ${PN}-partx ${PN}-pg ${PN}-prlimit \
-		${PN}-rename.ul ${PN}-resizepart ${PN}-rev ${PN}-setarch ${PN}-setsid \
-		${PN}-setterm ${PN}-taskset ${PN}-unshare ${PN}-utmpdump ${PN}-whereis \
-		"
-RDEPENDS_${PN}_class-target += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${PN}-runuser', '', d)}"
-FILES_${PN}-doc = "${datadir}/doc ${datadir}/man"
-FILES_${PN}-dbg += "${prefix}/src/* \
-		${bindir}/.debug/* \
-		${base_sbindir}/.debug/*"
+
+FILES_mount = "${base_bindir}/umount ${base_sbindir}/swapon \
+	       ${base_sbindir}/swapoff ${base_bindir}/mount* \
+	       ${base_sbindir}/losetup ${base_bindir}/findmnt"
+
 FILES_uuid-dev = " \
 		${includedir}/uuid \
 		${libdir}/libuuid.so \
-		${libdir}/pkgconfig/uuid.pc \
-		${datadir}/man/man3/uuid*.3"
-FILES_uuid-staticdev = " \
-		${libdir}/libuuid.a"
-FILES_uuid-runtime += "${bindir}/uuidgen"
-RDEPENDS_uuid-runtime = "${PN}-uuidd"
+		${libdir}/pkgconfig/uuid.pc"
+
+FILES_uuid-runtime = "${bindir}/uuidgen ${sbindir}/uuidd \
+		      ${sysconfdir}/init.d/uuidd"
+
+FILES_${PN} += "${datadir}/bash-completion/"
 
 ALTERNATIVE_PRIORITY="100"
-ALTERNATIVE_${PN}-dmesg = "dmesg"
+ALTERNATIVE_${PN} = "dmesg more blkid blockdev fdisk findfs fsck fsck.minix \
+		     fstrim getty hwclock mkfs.minix mkswap pivot_root \
+		     switch_root "
 ALTERNATIVE_LINK_NAME[dmesg] = "${base_bindir}/dmesg"
-ALTERNATIVE_${PN}-more = "more"
 ALTERNATIVE_LINK_NAME[more] = "${base_bindir}/more"
-ALTERNATIVE_${PN}-blkid = "blkid"
 ALTERNATIVE_LINK_NAME[blkid] = "${base_sbindir}/blkid"
-ALTERNATIVE_${PN}-blockdev = "blockdev"
 ALTERNATIVE_LINK_NAME[blockdev] = "${base_sbindir}/blockdev"
-ALTERNATIVE_${PN}-fdisk = "fdisk"
 ALTERNATIVE_LINK_NAME[fdisk] = "${base_sbindir}/fdisk"
-ALTERNATIVE_${PN}-fsck = "fsck fsck.minix"
+ALTERNATIVE_LINK_NAME[findfs] = "${base_sbindir}/findfs"
 ALTERNATIVE_LINK_NAME[fsck] = "${base_sbindir}/fsck"
 ALTERNATIVE_LINK_NAME[fsck.minix] = "${base_sbindir}/fsck.minix"
-ALTERNATIVE_${PN}-fstrim = "fstrim"
 ALTERNATIVE_LINK_NAME[fstrim] = "${base_sbindir}/fstrim"
-ALTERNATIVE_${PN}-agetty = "getty"
 ALTERNATIVE_LINK_NAME[getty] = "${base_sbindir}/getty"
 ALTERNATIVE_TARGET[getty] = "${base_sbindir}/getty.${DPN}"
-ALTERNATIVE_${PN}-hwclock = "hwclock"
 ALTERNATIVE_LINK_NAME[hwclock] = "${base_sbindir}/hwclock"
-ALTERNATIVE_${PN}-mkfs = "mkfs.minix"
 ALTERNATIVE_LINK_NAME[mkfs.minix] = "${base_sbindir}/mkfs.minix"
-ALTERNATIVE_${PN}-mkswap = "mkswap"
 ALTERNATIVE_LINK_NAME[mkswap] = "${base_sbindir}/mkswap"
-ALTERNATIVE_${PN}-pivot-root = "pivot_root"
 ALTERNATIVE_LINK_NAME[pivot_root] = "${base_sbindir}/pivot_root"
-ALTERNATIVE_${PN}-switch-root = "switch_root"
 ALTERNATIVE_LINK_NAME[switch_root] = "${base_sbindir}/switch_root"
-ALTERNATIVE_${PN}-mount = "mount"
+
+ALTERNATIVE_mount = "mount"
 ALTERNATIVE_LINK_NAME[mount] = "${base_bindir}/mount"
-ALTERNATIVE_${PN}-findfs = "findfs"
-ALTERNATIVE_LINK_NAME[findfs] = "${base_sbindir}/findfs"
 
 SYSTEMD_SERVICE_${PN}-uuidd = "uuidd.socket uuidd.service"
 SYSTEMD_AUTO_ENABLE_${PN}-uuidd = "disable"
