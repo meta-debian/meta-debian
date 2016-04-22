@@ -7,7 +7,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://www.intra2net.com/en/developer/libftdi/"
 
-PR = "r0"
+PR = "r1"
 DPN = "libftdi"
 inherit debian-package
 
@@ -18,9 +18,11 @@ LIC_FILES_CHKSUM = "\
 	file://COPYING.GPL;md5=751419260aa954499f7abaabaa882bbe"
 inherit autotools-brokensep pkgconfig pythonnative
 
+#export some variable from poky, to use for python command
 export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
+export STAGING_LIBDIR
 
 DEPENDS += "libusb1 swig-native"
 

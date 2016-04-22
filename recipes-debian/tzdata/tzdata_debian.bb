@@ -10,10 +10,8 @@ PR = "r0"
 
 inherit debian-package
 
-LICENSE = "PD & BSD"
-LIC_FILES_CHKSUM = " \
-file://asia;beginline=2;endline=3;md5=996a9811747aa48db91ed239e5b355a1 \
-file://README;md5=89384111058c00057f4e3dee73d977a9"
+LICENSE = "PD & BSD & BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=76ae2becfcb9a685041c6f166b44c2c2"
 
 DEPENDS = "zic-native"
 

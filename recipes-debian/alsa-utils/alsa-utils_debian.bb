@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r2"
 
 inherit debian-package
 
@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = " \
 	file://alsactl/utils.c;beginline=1;endline=20;md5=fe9526b055e246b5558809a5ae25c0b9 \
 "
 
-DEPENDS = "alsa-lib ncurses libsamplerate0 udev"
+DEPENDS = "alsa-lib ncurses libsamplerate udev"
 
 SRC_URI +=" \
 	file://0001-alsactl-don-t-let-systemd-unit-restore-the-volume-wh.patch \
@@ -30,8 +30,8 @@ PACKAGECONFIG[xmlto] = "--enable-xmlto, --disable-xmlto, xmlto-native docbook-xm
 # Follow Debian
 EXTRA_OECONF += " \
 	--with-asound-state-dir=${localstatedir}/lib/alsa \
-	--with-alsactl-home-dir=${var}/run/alsa \
-	--with-systemdsystemunitdir=${systemd_unitdir}/system \
+	--with-alsactl-home-dir=${localstatedir}/run/alsa \
+	--with-systemdsystemunitdir=${systemd_system_unitdir} \
 	--disable-alsaconf \
 "
 # lazy hack. needs proper fixing in gettext.m4, see
@@ -66,7 +66,7 @@ RDEPENDS_${PN} += "${ALSA_UTILS_PKGS}"
 # init.d/alsa-utils require lsb-base
 RDEPENDS_alsa-utils-alsactl += "lsb-base"
 
-FILES_${PN} = ""
+FILES_${PN} = "${datadir}/alsa/utils.sh"
 FILES_alsa-utils-aplay       = "${bindir}/aplay ${bindir}/arecord"
 FILES_alsa-utils-amixer      = "${bindir}/amixer"
 FILES_alsa-utils-alsamixer   = "${bindir}/alsamixer"
@@ -102,5 +102,9 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/init ${D}${sysconfdir}/init.d/alsa-utils
 
-	ln -s /dev/null ${D}${systemd_unitdir}/system/alsa-utils.service
+	# Follow ${S}/debian/links
+	ln -s /dev/null ${D}${systemd_system_unitdir}/alsa-utils.service
+
+	# Follow ${S}/debian/install
+	install -m 0755 ${S}/debian/utils.sh ${D}${datadir}/alsa/
 }

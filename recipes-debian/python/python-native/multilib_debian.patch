@@ -44,6 +44,33 @@ index d2fe6e1..00ca515 100755
                                 "python"+sys.version[0:3])
          if (isinstance(object, type(os)) and
              (object.__name__ in ('errno', 'exceptions', 'gc', 'imp',
+diff --git a/Lib/site.py b/Lib/site.py
+index 3159ae1..6b6ae06 100644
+--- a/Lib/site.py
++++ b/Lib/site.py
+@@ -301,15 +301,19 @@ def getsitepackages():
+         if sys.platform in ('os2emx', 'riscos'):
+             sitepackages.append(os.path.join(prefix, "Lib", "site-packages"))
+         elif os.sep == '/':
+-            sitepackages.append(os.path.join(prefix, "local/lib",
++            sitepackages.append(os.path.join(prefix, "sys.lib",
+                                         "python" + sys.version[:3],
+                                         "dist-packages"))
+-            sitepackages.append(os.path.join(prefix, "lib",
++            if sys.lib != "lib":
++                sitepackages.append(os.path.join(prefix, "lib",
+                                         "python" + sys.version[:3],
+                                         "dist-packages"))
++            sitepackages.append(os.path.join(prefix, sys.lib, "site-python"))
++            if sys.lib != "lib":
++                sitepackages.append(os.path.join(prefix, "lib", "site-python"))
+         else:
+             sitepackages.append(prefix)
+-            sitepackages.append(os.path.join(prefix, "lib", "site-packages"))
++            sitepackages.append(os.path.join(prefix, "sys.lib", "site-packages"))
+         if sys.platform == "darwin":
+             # for framework builds *only* we add the standard Apple
+             # locations.
 diff --git a/Lib/test/test_dl.py b/Lib/test/test_dl.py
 index da9730f..c010ef2 100644
 --- a/Lib/test/test_dl.py

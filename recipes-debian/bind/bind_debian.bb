@@ -1,31 +1,17 @@
-#
-# base recipe: /meta/recipes-connectivity/bind/bind_9.10.2-P4.bb
-# base branch: master
-#
+require bind.inc
 
-SUMMARY = "ISC Internet Domain Name Server"
-HOMEPAGE = "http://www.isc.org/sw/bind/"
-SECTION = "console/network"
+PR = "${INC_PR}.0"
+DEPENDS += " bind-native"
 
-PR = "r3"
-DPN = "bind9"
-inherit debian-package
+# correct-path-to-gen-file.patch
+#	use gen file in sysroots when cross-compile, not build directory because gen file is a binary file	
 
-LICENSE = "ISC & BSD"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=a3df5f651469919a0e6cb42f84fb6ff1"
-
-DEPENDS = "openssl libcap krb5"
-DEBIAN_PATCH_TYPE = "nopatch"
-
-# fix-configure-for-gssapi.patch 
-#	fix path to gssapi.h file
-
-# not-build-dst.patch
-#	 temporary, avoid "wrong ELF class: ELFCLASS64", do not build dst 
+# correct-path-to-genrandom-file.patch
+#       use genrandom file in sysroots when cross-compile, not build directory because genrandom file is a binary file
 
 SRC_URI += " \
-	file://fix-configure-for-gssapi.patch \
-	file://not-build-dst.patch \
+	file://correct-path-to-gen-file.patch \
+	file://correct-path-to-genrandom-file.patch \
 "
 
 EXTRA_OECONF = " \
@@ -55,37 +41,9 @@ EXTRA_OECONF = " \
 	--enable-exportlib \
 "
 
-inherit autotools-brokensep systemd useradd pkgconfig
-
-PACKAGECONFIG ?= ""
-PACKAGECONFIG[httpstats] = "--with-libxml2,--without-libxml2,libxml2"
-
-USERADD_PACKAGES = "${PN}"
-USERADD_PARAM_${PN} = "--system --home /var/cache/bind --no-create-home \
-                       --user-group bind"
-
-INITSCRIPT_NAME = "bind"
-INITSCRIPT_PARAMS = "defaults"
-
-SYSTEMD_SERVICE_${PN} = "bind9-resolvconf.service bind9.service lwresd.service"
-
-PARALLEL_MAKE = ""
-
-RDEPENDS_${PN} = "python-core"
-RDEPENDS_${PN}-dev = ""
-
-do_install_prepend() {
-	# clean host path in isc-config.sh before the hardlink created
-	# by "make install":
-	#   bind9-config -> isc-config.sh
-	sed -i -e "s,${STAGING_LIBDIR},${libdir}," ${B}/isc-config.sh
-}
-
 do_install_append () {
 	install -D -m 644 ${S}/debian/apparmor-profile ${D}${sysconfdir}/apparmor.d/usr.sbin.named
-
 	install -D -m 644 ${S}/debian/apparmor-profile.local ${D}${sysconfdir}/apparmor.d/local/usr.sbin.named
-
 	install -D -m 444 ${S}/debian/db.0 ${D}${sysconfdir}/bind/db.0
 	install -D -m 444 ${S}/debian/db.127 ${D}${sysconfdir}/bind
 	install -D -m 444 ${S}/debian/db.0 ${D}${sysconfdir}/bind/db.255
@@ -277,4 +235,4 @@ FILES_lwresd = " \
 
 FILES_${PN} += "${localstatedir} /run" 
 
-PKG_${PN} = "${PN}9" 
+PKG_${PN} = "${PN}9"

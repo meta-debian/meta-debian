@@ -8,14 +8,13 @@ HOMEPAGE = "http://www.python.org"
 LICENSE = "PSFv2"
 SECTION = "devel/python"
 
-INC_PR = "r0"
+INC_PR = "r1"
 DPN = "python3.4"
 inherit debian-package
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=64fc2b30b67d0a8423c250e0386ed72f"
 
 PYTHON_MAJMIN = "3.4"
-DISTRO_SRC_URI ?= "file://sitecustomize.py"
 
 inherit autotools
 
@@ -34,3 +33,13 @@ EXTRA_OECONF = " \
 		--with-signal-module \
 		--enable-shared \
 "
+
+# create file series for apply patch file of debian
+do_debian_patch_prepend() {
+	# create series file from series.in file
+	cpp -E \
+		-D${DISTRO} \
+		-Darch_os_${HOST_OS} -Darch_${HOST_ARCH} \
+		-o - ${S}/debian/patches/series.in \
+		| egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
+}
