@@ -6,9 +6,10 @@ of the program. \
 The interfaces can also be edited with GLADE. \
 "
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
+DPN = "libglade2"
 LICENSE = "LGPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=55ca817ccb7d5b5b66355690e9abc605"
@@ -18,4 +19,5 @@ DEPENDS += "gtk+ atk libxml2 glib-2.0"
 
 FILES_${PN} += "${datadir}/xml"
 RDEPENDS_${PN}-dev += "gtk+-dev libxml2-dev python"
-DEBIANNAME_${PN} = "${PN}-0"
+PKG_${PN} = "${DPN}-0"
+PKG_${PN}-dev = "${DPN}-dev"

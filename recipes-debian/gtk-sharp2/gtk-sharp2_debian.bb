@@ -5,7 +5,7 @@ gtk-sharp2 is a metapackage containing dependencies for the GTK# 2.10 suite.\
 "
 HOMEPAGE = "http://www.mono-project.com/GtkSharp"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "LGPL-2.1"
@@ -22,7 +22,7 @@ EXTRA_OECONF += "\
 	RUNTIME=${STAGING_BINDIR_NATIVE}/mono \
 	CSC=${STAGING_BINDIR_NATIVE}/mono-csc \
 "
-DEPENDS += "gtk+ mono-native glib-2.0 pango cairo libglade2"
+DEPENDS += "gtk+ mono-native glib-2.0 pango cairo libglade"
 PARALLEL_MAKE = ""
 
 do_compile() {
@@ -69,7 +69,7 @@ do_install() {
 }
 
 #install follow dh-cligacpolicy script
-do_install_cligacpolicy() {
+do_install_append() {
 	cd ${S}/debian
 	sed -i -e '/^#/d' *.cligacpolicy
 	for file in *.cligacpolicy ; do
@@ -92,8 +92,6 @@ do_install_cligacpolicy() {
 	done
 	rm -r ${D}${libdir}/mono
 }
-
-addtask do_install_cligacpolicy after do_install before do_package
 
 PACKAGES =+ "\
 	${PN}-examples ${PN}-gapi libglade-cil libglade-cil-dev libglib-cil \
