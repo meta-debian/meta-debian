@@ -14,7 +14,7 @@ parts :\n\
  - the Prelude report server, collecting data from Prelude sensors,\n\
    and generating user-readable reports."
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -38,9 +38,10 @@ SRC_URI += " \
     file://libprelude-fix-uid-gid-conflicting-types.patch \
 "
 
-inherit autotools-brokensep gettext cpan-base binconfig pkgconfig perlnative
+inherit autotools-brokensep gettext cpan-base binconfig pkgconfig perlnative pythonnative distutils-base
 
-EXTRA_OECONF = "--with-perl-installdirs=vendor --without-python"
+# We don't want lua bindings because Debian don't
+EXTRA_OECONF = "--with-perl-installdirs=vendor --without-lua"
 
 # Currently, we don't have ruby recipe,
 # disable checking for ruby path to prevent using ruby from host system
@@ -48,6 +49,9 @@ CACHED_CONFIGUREVARS += "ac_cv_path_RUBY=no"
 
 export PERL_LIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
+
+export HOST_SYS
+export BUILD_SYS
 
 do_configure_append() {
 	perl_version=${PERLVERSION}
@@ -75,7 +79,25 @@ do_compile_prepend() {
 	rm -f bindings/low-level/perl/Prelude.c
 }
 
+# Follow debian/rules, build python modules
+PYFLAGS = "PYTHON=python${PYTHON_BASEVERSION} \
+           PYTHON_VERSION=${PYTHON_BASEVERSION} \
+           _capng_la_LIBADD=\"-lpython${PYTHON_BASEVERSION}\""
+do_compile_append() {
+	# Compile python modules
+	for i in bindings/python bindings/low-level/python; do
+		oe_runmake -C $i clean
+		oe_runmake -C $i ${PYFLAGS}
+	done
+}
+
 do_install_append() {
+	# Install python modules
+	for i in bindings/python bindings/low-level/python; do
+		oe_runmake -C $i ${PYFLAGS} DESTDIR=${D} install
+	done
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -name "*.pyc" -delete
+
 	# Remove build path
 	sed -i "s:${WORKDIR}/image::" ${D}${libdir}/perl5/*/auto/Prelude/.packlist
 	sed -i "s:${WORKDIR}/image::" ${D}${libdir}/perl5/*/auto/PreludeEasy/.packlist
@@ -88,9 +110,11 @@ CONFFILES_${PN} = "${sysconfdir}/prelude/default/client.conf \
                    ${sysconfdir}/prelude/default/tls.conf \
                    "
 
-PACKAGE_BEFORE_PN = "${PN}-perl"
+PACKAGES = "${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc \
+            ${PN}-perl python-prelude ${PN}"
 
 FILES_${PN}-perl = "${libdir}/perl5"
+FILES_python-prelude = "${PYTHON_SITEPACKAGES_DIR}"
 FILES_${PN}-dbg += "${libdir}/perl5/*/auto/*/.debug"
 
 PKG_${PN} = "${PN}2"
