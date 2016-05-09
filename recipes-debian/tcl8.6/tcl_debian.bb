@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 DPN = "tcl8.6"
 
@@ -36,7 +36,7 @@ SRC_URI_class-native = " \
 	${BASE_SRC_URI} \
 "
 
-inherit autotools ptest
+inherit autotools ptest binconfig
 
 VER = "8.6"
 
@@ -73,8 +73,6 @@ do_install() {
 	sed -i "s:${WORKDIR}:${STAGING_INCDIR}:g" tclConfig.sh
 	sed -i "s:-L${libdir}:-L=${libdir}:g" tclConfig.sh
 	sed -i "s:-I${includedir}:-I=${includedir}:g" tclConfig.sh
-	install -d ${D}${bindir_crossscripts}
-	install -m 0755 tclConfig.sh ${D}${bindir_crossscripts}
 	ln -sf tclsh8.6 ${D}${bindir}/tclsh
 
 	# Follow debian/rules
@@ -154,6 +152,9 @@ do_install_ptest() {
 	cp -r ${S}/../library ${D}${PTEST_PATH}
 	cp -r ${S}/../tests ${D}${PTEST_PATH}
 }
+
+# Fix some paths that might be used by Tcl extensions
+BINCONFIG_GLOB = "*Config.sh"
 
 # Fix the path in sstate
 SSTATE_SCAN_FILES += "*Config.sh"
