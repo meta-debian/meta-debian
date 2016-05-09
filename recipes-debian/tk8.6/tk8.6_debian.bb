@@ -5,7 +5,7 @@ look-and-feel and is implemented using the Tcl scripting language. \
 This package contains the windowing Tcl/Tk shell (wish). \
 "
 HOMEPAGE = "http://www.tcl.tk/"
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 S = "${DEBIAN_UNPACK_DIR}/unix"
@@ -13,7 +13,8 @@ TCL_VER = "8.6"
 LICENSE = "tcl"
 LIC_FILES_CHKSUM = "\
 	file://license.terms;md5=c88f99decec11afa967ad33d314f87fe"
-inherit autotools-brokensep
+
+inherit autotools-brokensep binconfig
 
 #configure follow debian/rules
 EXTRA_OECONF += "\
@@ -27,6 +28,8 @@ EXTRA_OECONF += "\
 	--enable-xft"
 
 DEPENDS += "tcl libx11 libxt libxext"
+
+BINCONFIG_GLOB = "*Config.sh"
 
 do_compile() {
 	sed -i -e "s:L\/usr\/lib:L${STAGING_LIBDIR}:g" ${S}/Makefile
@@ -65,6 +68,9 @@ do_install_append() {
 		${D}${datadir}/menu/tk${TCL_VER}
 	rm ${D}${libdir}/pkgconfig/tk.pc
 }
+
+# Fix the path in sstate
+SSTATE_SCAN_FILES += "*Config.sh"
 
 PACKAGES =+ "lib${PN}"
 
