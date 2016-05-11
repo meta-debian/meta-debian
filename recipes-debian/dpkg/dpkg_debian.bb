@@ -30,6 +30,7 @@ python () {
 
 export PERL = "${bindir}/perl"
 PERL_class-native = "${STAGING_BINDIR_NATIVE}/perl-native/perl"
+SRC_URI_append_class-native = " file://0001-use-nativeperl-instead-of-STAGING_BINDIR_NATIVE-perl.patch"
 
 export PERL_LIBDIR = "${libdir}/perl"
 PERL_LIBDIR_class-native = "${libdir}/perl-native/perl"
