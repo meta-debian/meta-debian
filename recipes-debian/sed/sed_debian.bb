@@ -1,9 +1,16 @@
 #
 # base recipe: meta/recipes-extended/sed/sed_4.2.2.bb
-# base branch: daisy
+# base branch: jethro
 #
 
-PR = "r0"
+SUMMARY = "The GNU sed stream editor"
+DESCRIPTION = "sed reads the specified files or the standard input if no \
+files are specified, makes editing changes according to a \
+list of commands, and writes the results to the standard \
+output."
+HOMEPAGE = "http://www.gnu.org/software/sed/"
+
+PR = "r1"
 
 inherit debian-package
 
@@ -14,7 +21,15 @@ LIC_FILES_CHKSUM = " \
 	file://debian/copyright;md5=27c0cc3a8e6b182f66de46caf568799a \
 "
 
-inherit autotools update-alternatives gettext
+SRC_URI += " \
+    file://sed-add-ptest.patch \
+    file://run-ptest \
+"
+
+DEPENDS = "libselinux"
+RDEPENDS_${PN}-ptest += "make ${PN}"
+
+inherit autotools texinfo update-alternatives gettext ptest
 
 # Follow debian/rules
 EXTRA_OECONF = " \
@@ -31,5 +46,15 @@ do_install () {
 ALTERNATIVE_${PN} = "sed"
 ALTERNATIVE_LINK_NAME[sed] = "${base_bindir}/sed"
 ALTERNATIVE_PRIORITY = "100"
+
+TESTDIR = "testsuite"
+
+do_compile_ptest() {
+	oe_runmake -C ${TESTDIR} buildtest-TESTS
+}
+
+do_install_ptest() {
+	oe_runmake -C ${TESTDIR} install-ptest BUILDDIR=${B} DESTDIR=${D}${PTEST_PATH} TESTDIR=${TESTDIR}
+}
 
 BBCLASSEXTEND = "native"
