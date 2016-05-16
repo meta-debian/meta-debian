@@ -26,7 +26,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=7eb5c1bf854e8881005d673599ee74d3"
 DEBIAN_QUILT_PATCHES = "${DEBIAN_UNPACK_DIR}/debian/patches-applied"
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEPENDS = "bison flex flex-native cracklib"
+DEPENDS = "bison flex flex-native cracklib libselinux"
 
 EXTRA_OECONF = "--with-db-uniquename=_pam \
 		--includedir=${includedir}/security \
