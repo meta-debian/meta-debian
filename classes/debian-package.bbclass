@@ -110,8 +110,9 @@ DEBIAN_DPATCH_PATCHES ?= "${DEBIAN_UNPACK_DIR}/debian/patches"
 debian_patch_dpatch() {
 	# Replace hardcode path in patch files
 	find ${DEBIAN_DPATCH_PATCHES} -name "*.dpatch" -type f -exec sed -i \
-	    -e "s@^#! /bin/sh /usr/share/dpatch/dpatch-run@#! /bin/sh ${STAGING_DATADIR_NATIVE}/dpatch/dpatch-run@g" {} \;
+	    -e "s@^#! /bin/sh /usr/share/dpatch/dpatch-run@#! /usr/bin/env dpatch-run@g" {} \;
 
+	export PATH="${STAGING_DATADIR_NATIVE}/dpatch:$PATH"
 	dpatch apply-all
 }
 
