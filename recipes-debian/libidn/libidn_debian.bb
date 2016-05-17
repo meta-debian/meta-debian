@@ -25,16 +25,23 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b35f8839295dd730a55f1a19ec086217 \
 inherit pkgconfig autotools gettext texinfo
 
 SRC_URI += "file://disable-doc.patch \
-	    file://Makefile-src.patch"
+	    file://Makefile-src.patch \
+            "
 
+# source format is 3.0 (quilt) but there is no debian patch
+DEBIAN_QUILT_PATCHES = ""
 EXTRA_OECONF += "--enable-gtk-doc-html=no"
+
+PARALLEL_MAKE = ""
 
 # command tool is under GPLv3+, while libidn itself is under LGPLv2.1+ or LGPLv3
 # so package command into a separate package
 PACKAGES =+ "idn"
-DEBIANNAME_${PN} = "${PN}11"
+
+FILES_${PN} += "${libdir}"
+FILES_idn = "${bindir}/idn ${datadir}/emacs"
+
 DEBIANNAME_${PN}-dev = "${PN}11-dev"
-FILES_idn = "${bindir}/ ${datadir}/emacs"
 
 do_compile_prepend() {
         export LD_LIBRARY_PATH=${STAGING_LIBDIR}:$LD_LIBRARY_PATH
