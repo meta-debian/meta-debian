@@ -14,7 +14,7 @@ inherit debian-package
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=a916467b91076e631dd8edb7424769c7"
 
-DEPENDS = "gtk+ libglade python-pycairo python-pygobject"
+DEPENDS = "gtk+ libglade pycairo python-pygobject"
 RDEPENDS_${PN} = "python-shell python-pycairo python-pygobject"
 
 # add-gtk-types.defs-into-gdk.c-dependence.patch:

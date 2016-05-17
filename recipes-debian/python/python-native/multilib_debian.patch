@@ -53,7 +53,7 @@ index 3159ae1..6b6ae06 100644
              sitepackages.append(os.path.join(prefix, "Lib", "site-packages"))
          elif os.sep == '/':
 -            sitepackages.append(os.path.join(prefix, "local/lib",
-+            sitepackages.append(os.path.join(prefix, "sys.lib",
++            sitepackages.append(os.path.join(prefix, sys.lib,
                                          "python" + sys.version[:3],
                                          "dist-packages"))
 -            sitepackages.append(os.path.join(prefix, "lib",
@@ -67,7 +67,7 @@ index 3159ae1..6b6ae06 100644
          else:
              sitepackages.append(prefix)
 -            sitepackages.append(os.path.join(prefix, "lib", "site-packages"))
-+            sitepackages.append(os.path.join(prefix, "sys.lib", "site-packages"))
++            sitepackages.append(os.path.join(prefix, sys.lib, "site-packages"))
          if sys.platform == "darwin":
              # for framework builds *only* we add the standard Apple
              # locations.

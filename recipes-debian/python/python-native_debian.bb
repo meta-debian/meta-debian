@@ -7,12 +7,15 @@ require python.inc
 
 EXTRANATIVEPATH += "bzip2-native"
 DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native expat-native"
-PR = "${INC_PR}.3"
+PR = "${INC_PR}.4"
 
 # revert_use_of_sysconfigdata.patch:
 # 	In current version, python uses _sysconfigdata.build_time_vars[],
 # 	which contains information from the HOST.
 # 	This patch reverts this behavior and uses Python.h and Makefile to get information.
+# add_site-packages_to_getsitepackages.patch:
+# 	Append "/usr/lib/python<version>/site-packages" to sitepackages
+# 	for looking for python modules.
 SRC_URI += "\
 	file://05-enable-ctypes-cross-build.patch \
 	file://11-distutils-never-modify-shebang-line.patch \
@@ -25,6 +28,7 @@ SRC_URI += "\
 	file://parallel-makeinst-create-bindir.patch \
 	file://revert_use_of_sysconfigdata.patch \
 	file://avoid_parallel_make_races_on_pgen.patch \
+	file://add_site-packages_to_getsitepackages.patch \
 "
 
 FILESEXTRAPATHS =. "${THISDIR}/${PN}:"
