@@ -10,6 +10,7 @@ inherit debian-package autotools-brokensep
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=dca69c9caec3af9b850379632f912f81"
 
+#EXTRA_OECONF += "includedir=${includedir}"
 # Fix Makefile to set variable for compiling successfully
 do_compile () {
 	sed -i -e "s:/local::" ${S}/Makefile
@@ -23,7 +24,11 @@ do_compile () {
 }
 
 # Install files follow Debian
-do_install_append () {
+do_install () {
+	oe_runmake install \
+		'includedir=${includedir}' \
+		'libdir=${libdir}' \
+		'bindir=${bindir}'
 	install -d ${D}${libdir}
 	install -m 0644 ${S}/*.a ${D}${libdir}
 	install -m 0755 libcdb.so.* ${D}${libdir}
