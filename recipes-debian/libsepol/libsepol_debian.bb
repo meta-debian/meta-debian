@@ -12,13 +12,20 @@ DEBIAN_QUILT_PATCHES = ""
 do_compile(){
 	oe_runmake
 }
+do_install_class-target(){
+	oe_runmake install DESTDIR=${D}
+}
 
-do_install(){
-	oe_runmake install DESTDIR=${D}  
+do_install_class-native(){
+	oe_runmake install \
+		'DESTDIR=${D}' \
+		'INCDIR=${includedir}/sepol' \
+		'LIBDIR=${libdir}' \
+		'INCLUDEDIR=${includedir}'
 }
 
 PACKAGES =+ "sepol-utils"
 
 FILES_sepol-utils += "${bindir}/chkcon"
 FILES_${PN} += "${base_libdir}/libsepol.so.1"
-
+BBCLASSEXTEND = "native"
