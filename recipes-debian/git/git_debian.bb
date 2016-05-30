@@ -284,6 +284,20 @@ RDEPENDS_gitk += "${PN}"
 RDEPENDS_${PN}-el += "${PN}"
 RDEPENDS_gitweb += "${PN}"
 
+# perl modules used by Git.pm, I18N.pm and IndexInfo.pm
+RDEPENDS_${PN} += " \
+perl-module-exporter \
+perl-module-carp \
+perl-module-cwd \
+perl-module-ipc-open2 \
+perl-module-fcntl \
+perl-module-time-local \
+perl-module-file-temp \
+perl-module-file-spec \
+perl-module-posix \
+"
+RSUGGESTS_${PN} += " perl"
+
 RCONFLICTS_${PN}-daemon-run = "${PN}-daemon-sysvinit"
 RCONFLICTS_${PN}-daemon-sysvinit = "${PN}-daemon-run"
 
