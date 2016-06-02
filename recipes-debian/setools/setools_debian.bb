@@ -21,7 +21,7 @@ LIC_FILES_CHKSUM = " \
     file://COPYING.LGPL;md5=fbc093901857fcd118f065f900982c24 \
 "
 
-DEPENDS = "bison-native flex-native python libglade2 \
+DEPENDS = "bison-native flex-native python libglade \
            libsepol libselinux libxml2 tcl tk8.6 gtk+ \
            "
 
