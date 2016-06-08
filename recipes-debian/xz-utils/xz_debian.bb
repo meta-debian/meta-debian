@@ -5,7 +5,7 @@
 SUMMARY = "Utilities for managing LZMA compressed files"
 HOMEPAGE = "http://tukaani.org/xz/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package autotools gettext
 DPN = "xz-utils"
 
@@ -20,11 +20,8 @@ LICENSE_${PN}-dev = "GPLv2+"
 LICENSE_${PN}-staticdev = "GPLv2+"
 LICENSE_${PN}-doc = "GPLv2+"
 LICENSE_${PN}-dbg = "GPLv2+"
-LICENSE_${PN}-locale = "GPLv2+"
 LICENSE_liblzma = "PD"
-LICENSE_liblzma-dev = "PD"
-LICENSE_liblzma-staticdev = "PD"
-LICENSE_liblzma-dbg = "PD"
+LICENSE_xzdec = "GPLv2+"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=c475b6c7dca236740ace4bba553e8e1c \
                     file://COPYING.GPLv2;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
@@ -32,17 +29,47 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c475b6c7dca236740ace4bba553e8e1c \
                     file://COPYING.LGPLv2.1;md5=4fbd65380cdd255951079008b364516c \
                     file://lib/getopt.c;endline=23;md5=2069b0ee710572c03bb3114e4532cd84 "
 
-PACKAGES =+ "liblzma liblzma-dev liblzma-staticdev liblzma-dbg"
-
-FILES_liblzma = "${libdir}/liblzma*${SOLIBS}"
-FILES_liblzma-dev = "${includedir}/lzma* ${libdir}/liblzma*${SOLIBSDEV} ${libdir}/liblzma.la ${libdir}/pkgconfig/liblzma.pc"
-FILES_liblzma-staticdev = "${libdir}/liblzma.a"
-FILES_liblzma-dbg = "${libdir}/.debug/liblzma*"
-
 BBCLASSEXTEND = "native nativesdk"
+
+# Set license GPLv2+ for {PN}-locale* packages
+python package_do_split_locales_append() {
+    for l in sorted(locales):
+        ln = legitimize_package_name(l)
+        pkg = pn + '-locale-' + ln
+        packages.append(pkg)
+        d.setVar('LICENSE_' + pkg, "GPLv2+")
+}
 
 # generate build-aux/config.rpath so autoreconf can see it
 do_configure_prepend() {
 	cd ${S}
 	./autogen.sh && cd -
 }
+
+do_compile_append () {
+	oe_runmake -C ${B}/po all-yes
+}
+
+do_install_append () {
+	install -d ${D}${base_libdir}
+	#follow debian/rules
+	mv ${D}${libdir}/liblzma.so.* ${D}${base_libdir}/
+	dso=$(basename $(readlink ${D}${libdir}/liblzma.so))
+	ln -s -f ../../lib/$dso ${D}${libdir}/liblzma.so
+
+	#remove the unwanted files
+	for file in lzcat lzcmp lzdiff lzegrep lzfgrep lzgrep lzless lzma lzmore unlzma; do
+		rm ${D}${bindir}/$file
+	done
+	rm ${D}${libdir}/liblzma.la
+	oe_runmake -C ${B}/po install-data-yes DESTDIR=${D}
+}
+
+PACKAGES =+ "liblzma xzdec"
+
+FILES_liblzma = "${base_libdir}/liblzma*${SOLIBS}"
+FILES_xzdec = "${bindir}/lzmadec ${bindir}/xzdec"
+
+DEBIANNAME_${PN} = "${DPN}"
+DEBIANNAME_${PN}-dev = "liblzma-dev"
+DEBIANNAME_${PN}-doc = "liblzma-doc"
