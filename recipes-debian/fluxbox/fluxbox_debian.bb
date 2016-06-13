@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "\
 	file://data/styles/bora_blue/theme.cfg;beginline=1;endline=2;md5=d7b703c84a3be84264906e7f87e3710b \	
 "
 
-DEPENDS = "virtual/libx11"
+DEPENDS = "virtual/libx11 libxt"
 PR = "r0"
 inherit autotools-brokensep pkgconfig
 

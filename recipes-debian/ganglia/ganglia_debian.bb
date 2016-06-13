@@ -47,6 +47,8 @@ do_install_append() {
 
 PACKAGES =+ "ganglia-monitor gmetad ganglia-monitor-python"
 
+FILES_${PN} += " ${base_libdir}/systemd/system/*"
+
 FILES_ganglia-monitor = " \
 	${sysconfdir}/${PN}/gmond.conf \
 	${sysconfdir}/init.d/ganglia-monitor \
