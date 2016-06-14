@@ -1,9 +1,12 @@
-Add 'buildtest' and 'runtest' targets to Makefile, to build and run tests
-cross-compiled.
+#
+# base patch: meta/recipes-connectivity/openssl/openssl/Makefiles-ptest.patch
+#
+#Add 'buildtest' and 'runtest' targets to Makefile, to build and run tests
+#cross-compiled.
 
-Signed-off-by: Anders Roxell <anders.roxell@enea.com>
-Signed-off-by: Maxin B. John <maxin.john@enea.com>
-Upstream-Status: Pending
+#Signed-off-by: Anders Roxell <anders.roxell@enea.com>
+#Signed-off-by: Maxin B. John <maxin.john@enea.com>
+#Upstream-Status: Pending
 ---
 diff -uNr a/Makefile b/Makefile
 --- a/Makefile.org	2012-05-10 17:06:02.000000000 +0200
@@ -26,6 +29,17 @@ diff -uNr a/Makefile b/Makefile
  	OPENSSL_CONF=apps/openssl.cnf util/opensslwrap.sh version -a
  
  report:
+@@ -468,7 +468,9 @@
+ 	@set -e; target=update; $(RECURSIVE_BUILD_CMD)
+ 
+ depend:
+-	@set -e; target=depend; $(RECURSIVE_BUILD_CMD)
++	# "test" is removed out of "DIRS"
++	# but we still need run "make depend" for "test".
++	@set -e; target=depend; $(RECURSIVE_BUILD_CMD); dir=test; $(BUILD_CMD)
+ 
+ lint:
+ 	@set -e; target=lint; $(RECURSIVE_BUILD_CMD)
 diff --git a/test/Makefile b/test/Makefile
 index 3912f82..1696767 100644
 --- a/test/Makefile
