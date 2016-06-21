@@ -62,8 +62,8 @@ FILES_libgail = " \
 GTKBASE_RRECOMMENDS ?= "liberation-fonts gdk-pixbuf"
 GTKGLIBC_RRECOMMENDS ?= "${GTKBASE_RRECOMMENDS} glibc-gconv-iso8859-1"
 
-RRECOMMENDS_${PN} = "${GTKBASE_RRECOMMENDS}"
-RRECOMMENDS_${PN}_libc-glibc = "${GTKGLIBC_RRECOMMENDS}"
+RRECOMMENDS_${PN}_class-target = "${GTKBASE_RRECOMMENDS}"
+RRECOMMENDS_${PN}_libc-glibc_class-target = "${GTKGLIBC_RRECOMMENDS}"
 
 ALTERNATIVE_${PN} = "gtk-update-icon-cache"
 ALTERNATIVE_TARGET[gtk-update-icon-cache] = "${bindir}/gtk-update-icon-cache-2.0"

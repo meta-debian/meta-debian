@@ -21,3 +21,5 @@ FILES_${PN} += "${datadir}/xml"
 RDEPENDS_${PN}-dev += "gtk+-dev libxml2-dev python"
 PKG_${PN} = "${DPN}-0"
 PKG_${PN}-dev = "${DPN}-dev"
+
+BBCLASSEXTEND = "native"

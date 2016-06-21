@@ -81,3 +81,5 @@ FILES_${PN} += "${datadir}/menu"
 FILES_${PN}-dev += "${libdir}/tk${TCL_VER}/tkConfig.sh"
 
 PKG_${PN}-dbg = "lib${PN}-dbg"
+
+BBCLASSEXTEND = "native"
