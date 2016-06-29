@@ -71,5 +71,6 @@ FILES_python-newt = "${libdir}/${PYTHON_DIR}/dist-packages"
 FILES_whiptail = "${bindir}/whiptail"
 FILES_libnewt0.52 += "${datadir}/locale*"
 FILES_newt-tcl = "${libdir}/whiptcl/whiptcl.so"
+FILES_${PN}-dbg += "${libdir}/*/.debug"
 
 BBCLASSEXTEND = "native"
