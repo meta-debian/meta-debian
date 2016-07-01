@@ -5,7 +5,7 @@
 
 require python3.inc
 
-PR = "${INC_PR}"
+PR = "${INC_PR}.1"
 
 DEBIAN_PATCH_TYPE = "quilt"
 EXTRANATIVEPATH += "bzip2-native"
@@ -24,6 +24,7 @@ SRC_URI += " \
 	file://080-distutils-dont_adjust_files.patch \
 	file://110-enable-zlib.patch \
 	file://130-readline-setup.patch \
+	file://12-distutils-prefix-is-inside-staging-area.patch \
 	file://150-fix-setupterm.patch \
 	file://03-fix-tkinter-detection.patch \
 	file://avoid_warning_about_tkinter.patch \
@@ -33,6 +34,7 @@ SRC_URI += " \
 	file://unixccompiler.patch \
 	file://makerace.patch \
 	file://sysconfig.py-add-_PYTHON_PROJECT_SRC.patch \
+	file://revert_use_of_sysconfigdata.patch \
 "
 
 EXTRA_OEMAKE = '\
@@ -47,7 +49,11 @@ EXTRA_OEMAKE = '\
 
 # No ctypes option for python 3
 PYTHONLSBOPTS = ""
-
+#Overwrite MULTIARCH variable by HOST_SYS to avoid MULTIARCH is empty
+#"${CC} --print-multiarch" is empty in some target-host
+do_configure_prepend() {
+	sed -i -e "s:@MULTIARCH@:${HOST_SYS}:g" ${S}/Makefile.pre.in
+}
 do_configure_append() {
 	autoreconf --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi
 }
