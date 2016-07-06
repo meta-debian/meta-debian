@@ -6,7 +6,7 @@
 
 inherit debian-package
 
-PR = "r0"
+PR = "r1"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\
@@ -75,7 +75,7 @@ do_install_append() {
 	rm -rf ${D}${sysconfdir}/rc.d
 	
 	# install systemd unit files
-	install -D -m 0644 ${S}/init.d/auditd.service ${D}${systemd_system_unitdir}
+	install -D -m 0644 ${S}/init.d/auditd.service ${D}${systemd_system_unitdir}/auditd.service
 
 	chmod 750 ${D}${sysconfdir}/audit ${D}${sysconfdir}/audit/rules.d
 	chmod 640 ${D}${sysconfdir}/audit/auditd.conf \
@@ -93,6 +93,17 @@ do_install_append() {
 
 	oe_runmake -C ${S}/bindings/python install DESTDIR=${D}
 	rm ${D}${libdir}/*/dist-packages/auparse.a
+
+	# Follow debian/auditd.dirs
+	install -d ${D}${localstatedir}/log/audit
+}
+
+# Follow debian/auditd.postinst
+pkg_postinst_${PN}() {
+	if [ ! -f $D${sysconfdir}/audit/audit.rules ]; then
+		cp -a $D${sysconfdir}/audit/rules.d/audit.rules \
+		      $D${sysconfdir}/audit/audit.rules
+	fi
 }
 
 PACKAGES =+ "\

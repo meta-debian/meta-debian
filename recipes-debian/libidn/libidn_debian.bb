@@ -3,7 +3,7 @@
 # base branch: jethro
 #
 
-PR = "r0"
+PR = "r1"
 
 SUMMARY = "Internationalized Domain Name support library"
 DESCRIPTION = "Implementation of the Stringprep, Punycode and IDNA \
@@ -28,8 +28,6 @@ SRC_URI += "file://disable-doc.patch \
 	    file://Makefile-src.patch \
             "
 
-# source format is 3.0 (quilt) but there is no debian patch
-DEBIAN_QUILT_PATCHES = ""
 EXTRA_OECONF += "--enable-gtk-doc-html=no"
 
 PARALLEL_MAKE = ""

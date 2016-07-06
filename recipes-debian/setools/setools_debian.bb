@@ -10,7 +10,7 @@ mandatory access controls to Linux. These are Tools for analysing \
 security policy on SELinux systems."
 HOMEPAGE = "http://oss.tresys.com/projects/setools"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -49,6 +49,11 @@ EXTRA_OECONF = "--enable-swig-python --enable-swig-tcl --disable-bwidget-check \
 # Change path of sepol and selinux to sysroot
 EXTRA_OECONF += "--with-sepol-devel=${STAGING_LIBDIR}/.. \
                  --with-selinux-devel=${STAGING_LIBDIR}/.."
+
+EXTRA_OECONF_append_class-native = " \
+    --with-tk=${STAGING_LIBDIR_NATIVE}/tk8.6 \
+    --with-tcl=${STAGING_LIBDIR_NATIVE}/tcl8.6 \
+"
 
 # need to export these variables for python-config to work
 export BUILD_SYS

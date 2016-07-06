@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=f2e071ab72978431b294a0d696327421 \
                     file://COPYING-MPL-1.1;md5=bfe1f75d606912a4111c90743d6c7325"
 
 DEPENDS = "cairo"
-PR = "r0"
+PR = "r1"
 
 inherit distutils pkgconfig
 
@@ -18,5 +18,11 @@ do_install_append () {
 	mv ${D}${datadir}/lib/* ${D}${libdir}
 	mv ${D}${datadir}/include ${D}${prefix}
 	rm -rf ${D}${datadir}
+	sed -i -e 's#prefix=.*#prefix=${prefix}#' ${D}${libdir}/pkgconfig/pycairo.pc
 }
+
+PKG_${PN} = "python-cairo"
+PKG_${PN}-dev = "python-cairo-dev"
+PKG_${PN}-dbg = "python-cairo-dbg"
+
 BBCLASSEXTEND = "native"
