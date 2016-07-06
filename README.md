@@ -52,6 +52,7 @@ You can change the target machine by setting `MACHINE` variable in `conf/local.c
 * qemux86-64
 * qemuarm
 * qemuppc
+* qemumips
 
 For example, the target machine is set to QEMU ARM by adding the following difinition to `conf/local.conf`.
 ```
