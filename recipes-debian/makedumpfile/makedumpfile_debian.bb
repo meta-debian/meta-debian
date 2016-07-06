@@ -17,6 +17,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
 DEPENDS = "zlib elfutils bzip2"
 
+# alias-powerpc-powerpc32.patch:
+# 	Create alias for target for powerpc as powerpc32
+SRC_URI += "file://alias-powerpc-powerpc32.patch"
+
 inherit binconfig
 
 EXTRA_OEMAKE = "TARGET=${TARGET_ARCH}"

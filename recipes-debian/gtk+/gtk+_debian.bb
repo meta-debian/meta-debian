@@ -53,3 +53,5 @@ do_configure_prepend() {
 	sed -i -e "s/GOBJECT_INTROSPECTION_CHECK/#GOBJECT_INTROSPECTION_CHECK/g" ${S}/configure.ac
 	sed -i -e "s/GTK_DOC_CHECK/#GTK_DOC_CHECK/g" ${S}/configure.ac
 }
+
+BBCLASSEXTEND = "native"

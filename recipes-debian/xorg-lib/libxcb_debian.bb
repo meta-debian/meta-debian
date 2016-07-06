@@ -22,7 +22,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d763b081cb10c223435b01e00dc0aba7"
 DEPENDS = "xcb-proto xproto libxau libxslt-native xcb-proto-native \
 	   libpthread-stubs libxdmcp"
 
-#PACKAGES_DYNAMIC = "^libxcb-.*"
+PACKAGES_DYNAMIC = "^libxcb-.*"
 
 FILES_${PN} = "${libdir}/libxcb.so.*"
 

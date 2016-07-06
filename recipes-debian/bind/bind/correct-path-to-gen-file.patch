@@ -1,0 +1,38 @@
+diff --git a/lib/export/dns/Makefile.in b/lib/export/dns/Makefile.in
+index 1e4540f..708c9c2 100644
+--- a/lib/export/dns/Makefile.in
++++ b/lib/export/dns/Makefile.in
+@@ -103,7 +103,7 @@ SUBDIRS =	include
+ TARGETS =	include/dns/enumtype.h include/dns/enumclass.h \
+ 		include/dns/rdatastruct.h timestamp
+ 
+-DEPENDEXTRA =	./gen -F include/dns/rdatastruct.h \
++DEPENDEXTRA =	gen -F include/dns/rdatastruct.h \
+ 		-s ${srcdir} -d >> Makefile ;
+ 
+ @BIND9_MAKE_RULES@
+@@ -152,20 +152,20 @@ include: include/dns/enumtype.h include/dns/enumclass.h \
+ rdata.@O@: code.h
+ 
+ include/dns/enumtype.h: gen
+-	./gen -s ${srcdir} -t > $@
++	gen -s ${srcdir} -t > $@
+ 
+ include/dns/enumclass.h: gen
+-	./gen -s ${srcdir} -c > $@
++	gen -s ${srcdir} -c > $@
+ 
+ include/dns/rdatastruct.h: gen \
+ 		${srcdir}/rdata/rdatastructpre.h \
+ 		${srcdir}/rdata/rdatastructsuf.h
+-	./gen -s ${srcdir} -i \
++	gen -s ${srcdir} -i \
+ 		-P ${srcdir}/rdata/rdatastructpre.h \
+ 		-S ${srcdir}/rdata/rdatastructsuf.h > $@
+ 
+ code.h:	gen
+-	./gen -s ${srcdir} > code.h
++	gen -s ${srcdir} > code.h
+ 
+ gen: ${srcdir}/gen.c
+ 	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}

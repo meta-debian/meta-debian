@@ -3,7 +3,14 @@
 # base branch: daisy
 #
 
-PR = "r0"
+SUMMARY = "GNU bc arbitrary precision calculator language"
+DESCRIPTION = "GNU bc is an interactive algebraic language with arbitrary precision which \
+follows the POSIX 1003.2 draft standard, with several extensions including \
+multi-character variable names, an `else' statement and full Boolean \
+expressions.  GNU bc does not require the separate GNU dc program."
+HOMEPAGE = "http://ftp.gnu.org/gnu/bc/"
+
+PR = "r1"
 
 inherit debian-package
 
@@ -17,7 +24,7 @@ LIC_FILES_CHKSUM = " \
 	file://lib/number.c;endline=30;md5=844a960b70c05456062f4d53b20f67b0 \
 "
 
-DEPENDS = "flex"
+DEPENDS = "flex-native"
 
 inherit autotools-brokensep
 

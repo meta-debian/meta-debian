@@ -1,0 +1,17 @@
+Use the specified $(AR), not "ar", for cross-compiling.
+
+---
+ libqpol/src/Makefile.am |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/libqpol/src/Makefile.am
++++ b/libqpol/src/Makefile.am
+@@ -64,7 +64,7 @@
+ 	mkdir -p $@
+ 	rm -f $@/*
+ 	cp $< $@
+-	(cd $@; ar x libsepol.a)
++	(cd $@; $(AR) x libsepol.a)
+ 
+ $(qpolso_DATA): $(tmp_sepol) $(libqpol_so_OBJS) libqpol.map
+ 	$(CC) -shared -o $@ $(libqpol_so_OBJS) $(AM_LDFLAGS) $(LDFLAGS) -Wl,-soname,$(LIBQPOL_SONAME),--version-script=$(srcdir)/libqpol.map,-z,defs -Wl,--whole-archive $(sepol_srcdir)/libsepol.a -Wl,--no-whole-archive @SELINUX_LIB_FLAG@ -lselinux -lsepol -lbz2

@@ -10,6 +10,10 @@ inherit debian-package
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
+# defined() must not be used for array and hash
+# this causes fatal errors from perl 5.22
+SRC_URI += "file://texi2html-dont-use-defined-for-arrays.patch"
+
 inherit autotools
 
 # autoreconf couldn't find acinclude.m4 when stepping into subdirectory. Instead of

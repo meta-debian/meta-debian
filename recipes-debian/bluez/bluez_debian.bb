@@ -17,7 +17,7 @@ LIC_FILES_CHKSUM = " \
 	file://src/main.c;beginline=1;endline=24;md5=9bc54b93cd7e17bf03f52513f39f926e \
 	file://tools/ubcsp.h;endline=27;md5=bd2dee23c6c551d84e308d07c2953479 \
 "
-DEPENDS = "udev libusb dbus-glib glib-2.0 libcheck readline"
+DEPENDS = "udev libusb dbus-glib glib-2.0 check readline"
 
 # init.d/bluetooth require lsb-base
 RDEPENDS_${PN} += "lsb-base"

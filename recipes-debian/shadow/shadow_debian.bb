@@ -22,18 +22,7 @@ DEPENDS_class-nativesdk = "bison-native"
 SRC_URI += "\
 	file://disable-build-man-dir.patch \
 	file://force-enable-subids-when-cross-compiling.patch \
-	file://login_defs_pam.sed \
-	${@bb.utils.contains('PACKAGECONFIG', 'pam', '${PAM_SRC_URI}', '', d)} \
 "
-
-# Additional Policy files for PAM
-PAM_SRC_URI = "file://pam.d/chfn \
-               file://pam.d/chpasswd \
-               file://pam.d/chsh \
-               file://pam.d/login \
-               file://pam.d/newusers \
-               file://pam.d/passwd \
-               file://pam.d/su"
 
 inherit autotools gettext update-alternatives
 
@@ -138,11 +127,16 @@ do_install_append() {
 	# defaults (see sed below).
 	install -d ${D}${localstatedir}/spool/mail
 
-	if [ -e ${WORKDIR}/pam.d ]; then
-		install -d ${D}${sysconfdir}/pam.d/
-		install -m 0644 ${WORKDIR}/pam.d/* ${D}${sysconfdir}/pam.d/
-		# Remove defaults that are not used when supporting PAM.
-		sed -i -f ${WORKDIR}/login_defs_pam.sed ${D}${sysconfdir}/login.defs
+	# Install pam files
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+		install -d ${D}${sysconfdir}/pam.d
+		install -m 0644 ${S}/debian/passwd.chfn.pam ${D}${sysconfdir}/pam.d/chfn
+		install -m 0644 ${S}/debian/passwd.chpasswd.pam ${D}${sysconfdir}/pam.d/chpasswd
+		install -m 0644 ${S}/debian/passwd.chsh.pam ${D}${sysconfdir}/pam.d/chsh
+		install -m 0644 ${S}/debian/login.pam ${D}${sysconfdir}/pam.d/login
+		install -m 0644 ${S}/debian/passwd.newusers.pam ${D}${sysconfdir}/pam.d/newusers
+		install -m 0644 ${S}/debian/passwd.passwd.pam ${D}${sysconfdir}/pam.d/passwd
+		install -m 0644 ${S}/debian/login.su.pam ${D}${sysconfdir}/pam.d/su
 	fi
 
 	install -d ${D}${sbindir} ${D}${base_bindir} 

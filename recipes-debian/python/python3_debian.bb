@@ -5,14 +5,15 @@
 
 require python3.inc
 
-DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz"
-PR = "${INC_PR}"
+DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz expat mpdecimal"
+PR = "${INC_PR}.1"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
-
+# now-avoid-pgen.patch
+#   temporarily avoiding build pgen for avoid errors when cross compile
 SRC_URI += " \
+	file://now-avoid-pgen.patch \
 	file://python-config.patch \
-	file://000-cross-compile.patch \
 	file://020-dont-compile-python-files.patch \
 	file://030-fixup-include-dirs.patch \
 	file://070-dont-clean-ipkg-install.patch \
@@ -22,21 +23,17 @@ SRC_URI += " \
 	file://150-fix-setupterm.patch \
 	file://0001-h2py-Fix-issue-13032-where-it-fails-with-UnicodeDeco.patch \
 	file://makerace.patch \
-	${DISTRO_SRC_URI} \ 
 	file://03-fix-tkinter-detection.patch \
 	file://04-default-is-optimized.patch \ 
 	file://avoid_warning_about_tkinter.patch \
 	file://cgi_py.patch \
 	file://host_include_contamination.patch \
-	file://python-3.3-multilib.patch \
 	file://shutil-follow-symlink-fix.patch \
 	file://sysroot-include-headers.patch \
 	file://unixccompiler.patch \
 	file://avoid-ncursesw-include-path.patch \
 	file://python3-use-CROSSPYTHONPATH-for-PYTHON_FOR_BUILD.patch \
-	file://python3-setup.py-no-host-headers-libs.patch \
 	file://sysconfig.py-add-_PYTHON_PROJECT_SRC.patch \
-	file://setup.py-check-cross_compiling-when-get-FLAGS.patch \
 	file://setup.py-find-libraries-in-staging-dirs.patch \
 "
 
@@ -164,10 +161,6 @@ do_install() {
 
 	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
 
-	if [ -e ${WORKDIR}/sitecustomize.py ]; then
-		install -m 0644 ${WORKDIR}/sitecustomize.py ${D}/${libdir}/python${PYTHON_MAJMIN}
-	fi
-
 	oe_multilib_header python${PYTHON_BINABI}/pyconfig.h
 
 	# install file follow file list of package idle-python3.4
@@ -183,8 +176,12 @@ do_install() {
 
 	ln -s python3.4m ${D}${includedir}/python3.4
 	
+	# Install sitecustomize.py
 	install -d ${D}${sysconfdir}/python3.4
-	mv ${D}${libdir}/python3.4/sitecustomize.py ${D}${sysconfdir}/python3.4/
+	cp ${S}/debian/sitecustomize.py.in \
+		${D}${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py
+	ln -s ../../../${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py \
+		${D}${libdir}/python${PYTHON_MAJMIN}/
 	
 	install -m 0755 ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext3.4
 	ln -s ../lib/python3.4 ${D}${bindir}/pdb3.4 
@@ -193,7 +190,8 @@ do_install() {
 	rm ${D}${bindir}/pyvenv
 
 	rm ${D}${bindir}/python3-config 
-        rm ${D}${bindir}/python3 
+	rm ${D}${bindir}/python3 
+	mv ${D}${libdir}/python3.4/config-3.4m-* ${D}${libdir}/python3.4/config-3.4m
 }
 
 do_install_append_class-nativesdk () {
@@ -220,272 +218,168 @@ RRECOMMENDS_${PN}-core = "${PN}-readline"
 RRECOMMENDS_${PN}-crypt = "openssl"
 RRECOMMENDS_${PN}-crypt_class-nativesdk = "nativesdk-openssl"
 
-PACKAGES =+ "libpython3.4 idle-python3.4 python3.4 python3.4-dev python3.4-examples python3.4-minimal python3.4-venv "
-FILES_idle-python3.4 += " ${bindir}/idle-python3.4 "
+FILES_${PN}-2to3 += "${bindir}/2to3-${PYTHON_MAJMIN}"
+FILES_${PN}-pydoc += "${bindir}/pydoc${PYTHON_MAJMIN} ${bindir}/pydoc3"
 
-FILES_python3.4 = " \
-	${bindir}/2to3-3.4 \
-	${bindir}/pdb3.4 \
-	${bindir}/pydoc3.4 \
-	${bindir}/pygettext3.4 \
-"
-FILES_python3.4-dev = " \
-	${bindir}/python3.4-config \
-	${bindir}/python3.4m-config \
-"
-
-FILES_python3.4-examples = " ${libdir}/python3.4/turtledemo/* "
-
-FILES_python3.4-minimal = " ${bindir}/python3.4*"
-
-FILES_python3.4-venv = " \
-	${bindir}/pyvenv-3.4 \
-	${libdir}/python3.4/ensurepip/ \
-"
+PACKAGES =+ "${PN}-pyvenv"
+FILES_${PN}-pyvenv += "${bindir}/pyvenv-${PYTHON_MAJMIN} \
+                       ${libdir}/python${PYTHON_MAJMIN}/ensurepip/* \
+                       "
 
 # package libpython3
-PACKAGES =+ " libpython3.4-staticdev libpython3.4-dev libpython3.4-minimal libpython3.4-stdlib libpython3.4-testsuite"
-
-FILES_libpython3.4-staticdev += "${libdir}/python3.4/config-3.4m/libpython3.4m.a"
-
-FILES_libpython3.4 = " \
-	${libdir}/libpython*.so.* \
-"
-
-FILES_libpython3.4-dev = " \
-	${includedir}/python3.4m/* \
-	${includedir}/python3.4 \
-	${libdir}/python3.4/config-3.4m/* \
-	${libdir}/pkgconfig/* \
-	${libdir}/python3.4/libpython3.4*.so \
-"
-
-FILES_libpython3.4-minimal = " \
-	${sysconfdir}/python3.4/sitecustomize.py \
-	${libdir}/python3.4/encodings/* \
-	${libdir}/python3.4/__future__.py \
-	${libdir}/python3.4/_bootlocale.py \
-	${libdir}/python3.4/_collections_abc.py \
-	${libdir}/python3.4/_compat_pickle.py \
-	${libdir}/python3.4/_sitebuiltins.py \
-	${libdir}/python3.4/_sysconfigdata.py \
-	${libdir}/python3.4/_threading_local.py \
-	${libdir}/python3.4/_weakrefset.py \
-	${libdir}/python3.4/abc.py \
-	${libdir}/python3.4/argparse.py \
-	${libdir}/python3.4/ast.py \
-	${libdir}/python3.4/base64.py \
-	${libdir}/python3.4/bisect.py \
-	${libdir}/python3.4/codecs.py \
-	${libdir}/python3.4/collections/* \
-	${libdir}/python3.4/enum.py \
-	${libdir}/python3.4/fnmatch.py \
-	${libdir}/python3.4/compileall.py \
-	${libdir}/python3.4/configparser.py \
-	${libdir}/python3.4/contextlib.py \
-	${libdir}/python3.4/copy.py \
-	${libdir}/python3.4/copyreg.py \
-	${libdir}/python3.4/dis.py \
-	${libdir}/python3.4/functools.py \
-        ${libdir}/python3.4/genericpath.py \
-	${libdir}/python3.4/getopt.py \
-	${libdir}/python3.4/glob.py \
-	${libdir}/python3.4/hashlib.py \
-	${libdir}/python3.4/heapq.py \
-	${libdir}/python3.4/imp.py \
-	${libdir}/python3.4/importlib/* \
-	${libdir}/python3.4/inspect.py \
-	${libdir}/python3.4/io.py \
-	${libdir}/python3.4/keyword.py \
-	${libdir}/python3.4/lib-dynload/* \ 
-	${libdir}/python3.4/linecache.py \
-	${libdir}/python3.4/locale.py \
-	${libdir}/python3.4/logging/* \
-	${libdir}/python3.4/opcode.py \
-	${libdir}/python3.4/operator.py \
-	${libdir}/python3.4/optparse.py \
-	${libdir}/python3.4/os.py \
-	${libdir}/python3.4/pickle.py \
-	${libdir}/python3.4/pkgutil.py \
-	${libdir}/python3.4/_sysconfigdata_m.py \
-	${libdir}/python3.4/platform.py \
-	${libdir}/python3.4/posixpath.py \
-	${libdir}/python3.4/py_compile.py \
-	${libdir}/python3.4/random.py \
-	${libdir}/python3.4/re.py \
-	${libdir}/python3.4/reprlib.py \
-	${libdir}/python3.4/runpy.py \
-	${libdir}/python3.4/selectors.py \
-	${libdir}/python3.4/site.py \
-	${libdir}/python3.4/sitecustomize.py \
-	${libdir}/python3.4/socket.py \
-	${libdir}/python3.4/sre_compile.py \
-	${libdir}/python3.4/sre_constants.py \
-	${libdir}/python3.4/sre_parse.py \
-	${libdir}/python3.4/ssl.py \
-	${libdir}/python3.4/stat.py \
-	${libdir}/python3.4/string.py \
-	${libdir}/python3.4/stringprep.py \
-	${libdir}/python3.4/struct.py \
-	${libdir}/python3.4/subprocess.py \
-	${libdir}/python3.4/sysconfig.py \
-	${libdir}/python3.4/tempfile.py \
-	${libdir}/python3.4/textwrap.py \
-	${libdir}/python3.4/threading.py \
-	${libdir}/python3.4/token.py \
-	${libdir}/python3.4/tokenize.py \
-	${libdir}/python3.4/traceback.py \
-	${libdir}/python3.4/types.py \
-	${libdir}/python3.4/warnings.py \
-	${libdir}/python3.4/weakref.py \
-"
-
-FILES_libpython3.4-stdlib = " \
-	${libdir}/python3.4/LICENSE.txt \
-	${libdir}/python3.4/__phello__.foo.py \
-	${libdir}/python3.4/_dummy_thread.py \
-	${libdir}/python3.4/_markupbase.py \
-	${libdir}/python3.4/_osx_support.py \
-	${libdir}/python3.4/_pyio.py \
-	${libdir}/python3.4/_strptime.py \
-	${libdir}/python3.4/aifc.py \
-	${libdir}/python3.4/antigravity.py \
-	${libdir}/python3.4/asynchat.py \
-	${libdir}/python3.4/asyncio/* \
-	${libdir}/python3.4/asyncore.py \
-	${libdir}/python3.4/bdb.py \
-	${libdir}/python3.4/binhex.py \
-	${libdir}/python3.4/bz2.py \
-	${libdir}/python3.4/cProfile.py \
-	${libdir}/python3.4/calendar.py \
-	${libdir}/python3.4/cgi.py \
-	${libdir}/python3.4/cgitb.py \
-	${libdir}/python3.4/chunk.py \
-	${libdir}/python3.4/cmd.py \
-	${libdir}/python3.4/code.py \
-	${libdir}/python3.4/codeop.py \
-	${libdir}/python3.4/colorsys.py \
-	${libdir}/python3.4/concurrent/* \
-	${libdir}/python3.4/crypt.py \
-	${libdir}/python3.4/csv.py \
-	${libdir}/python3.4/ctypes/* \
-	${libdir}/python3.4/curses/* \
-	${libdir}/python3.4/datetime.py \
-	${libdir}/python3.4/dbm/* \
-	${libdir}/python3.4/decimal.py \
-	${libdir}/python3.4/difflib.py \
-	${libdir}/python3.4/distutils/* \
-	${libdir}/python3.4/doctest.py \
-	${libdir}/python3.4/dummy_threading.py \
-	${libdir}/python3.4/email/* \
-	${libdir}/python3.4/filecmp.py \
-	${libdir}/python3.4/fileinput.py \
-	${libdir}/python3.4/formatter.py \
-	${libdir}/python3.4/fractions.py \
-	${libdir}/python3.4/ftplib.py \
-	${libdir}/python3.4/getpass.py \
-	${libdir}/python3.4/gettext.py \
-	${libdir}/python3.4/gzip.py \
-	${libdir}/python3.4/hmac.py \
-	${libdir}/python3.4/html/* \
-	${libdir}/python3.4/http/* \
-	${libdir}/python3.4/idlelib/* \
-	${libdir}/python3.4/imaplib.py \
-	${libdir}/python3.4/imghdr.py \
-	${libdir}/python3.4/ipaddress.py \
-	${libdir}/python3.4/json/* \
-	${libdir}/python3.4/lib-dynload/* \
-	${libdir}/python3.4/lib2to3/ \
-	${libdir}/python3.4/lzma.py \
-	${libdir}/python3.4/macpath.py \
-	${libdir}/python3.4/macurl2path.py \
-	${libdir}/python3.4/mailbox.py \
-	${libdir}/python3.4/mailcap.py \
-	${libdir}/python3.4/mimetypes.py \
-	${libdir}/python3.4/modulefinder.py \
-	${libdir}/python3.4/multiprocessing/* \
-	${libdir}/python3.4/netrc.py \
-	${libdir}/python3.4/nntplib.py \
-	${libdir}/python3.4/ntpath.py \
-	${libdir}/python3.4/nturl2path.py \
-	${libdir}/python3.4/numbers.py \
-	${libdir}/python3.4/pathlib.py \
-	${libdir}/python3.4/pdb.py \
-	${libdir}/python3.4/pickletools.py \
-	${libdir}/python3.4/pipes.py \
-	${libdir}/python3.4/plat-linux/* \
-	${libdir}/python3.4/plistlib.py \
-	${libdir}/python3.4/poplib.py \
-	${libdir}/python3.4/pprint.py \
-	${libdir}/python3.4/profile.py \
-	${libdir}/python3.4/pstats.py \
-	${libdir}/python3.4/pty.py \
-	${libdir}/python3.4/pyclbr.py \
-	${libdir}/python3.4/pydoc.py \
-	${libdir}/python3.4/pydoc_data/* \
-	${libdir}/python3.4/queue.py \
-	${libdir}/python3.4/quopri.py \
-	${libdir}/python3.4/rlcompleter.py \
-	${libdir}/python3.4/sched.py \
-	${libdir}/python3.4/shelve.py \
-	${libdir}/python3.4/shlex.py \
-	${libdir}/python3.4/smtpd.py \
-	${libdir}/python3.4/shutil.py \
-	${libdir}/python3.4/smtplib.py \
-	${libdir}/python3.4/sndhdr.py \
-	${libdir}/python3.4/socketserver.py \
-	${libdir}/python3.4/sqlite3/* \
-	${libdir}/python3.4/statistics.py \
-	${libdir}/python3.4/sunau.py \
-	${libdir}/python3.4/symbol.py \
-	${libdir}/python3.4/symtable.py \
-	${libdir}/python3.4/tabnanny.py \
-	${libdir}/python3.4/tarfile.py \
-	${libdir}/python3.4/telnetlib.py \
-	${libdir}/python3.4/test/__init__.py \
-	${libdir}/python3.4/test/pystone.py \
-	${libdir}/python3.4/test/regrtest.py \
-	${libdir}/python3.4/test/support/__init__.py \
-	${libdir}/python3.4/this.py \
-	${libdir}/python3.4/timeit.py \
-	${libdir}/python3.4/tkinter/* \
-	${libdir}/python3.4/trace.py \
-	${libdir}/python3.4/tracemalloc.py \
-	${libdir}/python3.4/tty.py \
-	${libdir}/python3.4/turtle.py \
-	${libdir}/python3.4/unittest/* \
-	${libdir}/python3.4/urllib/* \
-	${libdir}/python3.4/uu.py \
-	${libdir}/python3.4/uuid.py \
-	${libdir}/python3.4/venv/ \
-	${libdir}/python3.4/wave.py \
-	${libdir}/python3.4/webbrowser.py \
-	${libdir}/python3.4/wsgiref/* \
-	${libdir}/python3.4/xdrlib.py \
-	${libdir}/python3.4/xml/ \
-	${libdir}/python3.4/xmlrpc/* \
-	${libdir}/python3.4/zipfile.py \
-"
-
-FILES_libpython3.4-testsuite = " \
-	${libdir}/python3.4/ctypes/test/* \
-	${libdir}/python3.4/distutils/tests/* \
-	${libdir}/python3.4/idlelib/idle_test/* \
-	${libdir}/python3.4/lib2to3/tests/* \
-	${libdir}/python3.4/sqlite3/test/* \
-	${libdir}/python3.4/test/* \
-"
+PACKAGES =+ "libpython3 libpython3-staticdev"
+FILES_libpython3 = "${libdir}/libpython*.so.*"
+FILES_libpython3-staticdev += "${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}/libpython${PYTHON_BINABI}.a"
 
 # catch debug extensions (isn't that already in python-core-dbg?)
 FILES_${PN}-dbg += "${libdir}/python${PYTHON_MAJMIN}/lib-dynload/.debug"
 
-# catch all the rest (unsorted)
-PACKAGES += "${PN}-misc"
-RDEPENDS_${PN}-misc += "${PN}-core"
-FILES_${PN}-misc = "${libdir}/python${PYTHON_MAJMIN}"
-
 # catch manpage
 PACKAGES += "${PN}-man"
 FILES_${PN}-man = "${datadir}/man"
+
+#
+# Provide packages as Debian
+# but keep compatible with poky
+#
+
+# Get list file of libpython3.4-minimal
+python do_package_prepend() {
+    import re, os
+
+    dpn = d.getVar("DPN", True) or ""
+    s = d.getVar("S", True) or ""
+    libdir = d.getVar("libdir", True) or ""
+    sysconfdir = d.getVar("sysconfdir", True) or ""
+    python_majmin = d.getVar("PYTHON_MAJMIN", True) or ""
+    scriptdir = "%s/python%s" % (libdir, python_majmin)
+
+    readme_lmin = "%s/debian/PVER-minimal.README.Debian.in" % s
+    p_lmin = "lib%s-minimal" % dpn
+    files_lmin = d.getVar("FILES_%s" % p_lmin, True) or ""
+
+    # get list file from debian/PVER-minimal.README.Debian.in
+    # base on debian/rule (line71 - line85)
+    patern_mods = '^[ ]+\\w*\\t*module\\s*'
+    patern_exts = '^[ ]+\\w*\\t*extension\\w*\\s*'
+    patern_packages = '^[ ]+\\w*\\t*package\\s*'
+    min_mods = []
+    min_exts = []
+    min_packages = []
+    min_encodings = []
+
+    with open(readme_lmin, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            sline = line.split()
+            if re.match(patern_mods,line):
+                min_mods.append(sline[0])
+            if re.match(patern_exts,line):
+                min_exts.append(sline[0])
+            if re.match(patern_packages,line):
+                min_packages.append(sline[0])
+
+    filterout_encodings = ["big5.*", "bz2.*", "cp932.py", "cp949.py", \
+                        "cp950.py", "euc_.*", "gb.*" "iso2022.*", \
+                        "johab.py", "shift_jis.*"]
+    patern_encodings = "(" + ")|(".join(filterout_encodings) + ")"
+    for i in os.listdir("%s/Lib/encodings" % s):
+        if i.endswith(".py") and not re.match(patern_encodings,i):
+            min_encodings.append("encodings/%s" % i)
+    min_encodings.append("codecs.py")
+    min_encodings.append("stringprep.py")
+
+    # base on debian/rule (line841 - line851)
+    for i in min_mods:
+        files_lmin += " %s/%s.py" % (scriptdir, i)
+    for i in min_packages:
+        files_lmin += " %s/%s" % (scriptdir, i)
+    for i in min_encodings:
+        files_lmin += " %s/%s" % (scriptdir, i)
+    for i in min_exts:
+        files_lmin += " %s/lib-dynload/%s.*.so" % (scriptdir, i)
+
+    files_lmin += " \
+            %s/site.py \
+            %s/_sysconfigdata.py \
+            %s/plat-*/_sysconfigdata_m.py \
+            %s/python%s/sitecustomize.py \
+            %s/python%s/sitecustomize.py" \
+        % (scriptdir,scriptdir,scriptdir,scriptdir,python_majmin,sysconfdir,python_majmin)
+    d.setVar("FILES_%s" % p_lmin,files_lmin)
+}
+
+PACKAGES =+ "${DPN}-minimal ${DPN}-dev idle-${DPN} lib${DPN}-testsuite"
+PACKAGES += "${DPN}-examples lib${DPN}-minimal lib${DPN}-stdlib"
+
+FILES_${DPN}-minimal = " \
+    ${bindir}/python${PYTHON_MAJMIN} \
+    ${bindir}/python${PYTHON_BINABI} \
+"
+FILES_${DPN}-dev = "${bindir}/python*-config"
+FILES_lib${DPN}-testsuite = " \
+    ${libdir}/python${PYTHON_MAJMIN}/*/tests \
+    ${libdir}/python${PYTHON_MAJMIN}/ctypes/test \
+    ${libdir}/python${PYTHON_MAJMIN}/idlelib/idle_test \
+    ${libdir}/python${PYTHON_MAJMIN}/tkinter/test \
+    ${libdir}/python${PYTHON_MAJMIN}/unittest/test \
+"
+FILES_${PN}-core = "${bindir}/*"
+FILES_${PN}-dev += " \
+    ${libdir}/python${PYTHON_MAJMIN}/*.so \
+    ${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI} \
+"
+FILES_${DPN}-examples = " \
+    ${libdir}/python${PYTHON_MAJMIN}/turtledemo \
+    ${docdir}/python${PYTHON_MAJMIN}/examples \
+"
+FILES_lib${DPN}-stdlib = "${libdir}/python${PYTHON_MAJMIN}"
+FILES_idle-${DPN} = "${bindir}/idle-python${PYTHON_MAJMIN}"
+
+DEBIANNAME_lib${DPN}-minimal = "lib${DPN}-minimal"
+DEBIANNAME_lib${DPN}-stdlib = "lib${DPN}-stdlib"
+DEBIANNAME_lib${DPN}-testsuite = "lib${DPN}-testsuite"
+
+# python3-pyvenv as python3.4-venv
+RPROVIDES_${PN}-pyvenv += "${DPN}-venv"
+DEBIANNAME_${PN}-pyvenv = "${DPN}-venv"
+# libpython3 as libpython3.4
+RPROVIDES_libpython3 += "lib${DPN}"
+DEBIANNAME_libpython3 = "lib${DPN}"
+# python3-dev as libpython3.4-dev
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
+# python3-core as python3.4
+RPROVIDES_${PN}-core += "${DPN}"
+DEBIANNAME_${PN}-core = "${DPN}"
+# python3-misc as libpython3.4-stdlib
+RPROVIDES_lib${DPN}-stdlib = "${PN}-misc"
+
+RDEPENDS_lib${DPN}-minimal += " \
+    ${PN}-codecs ${PN}-compile ${PN}-crypt ${PN}-io ${PN}-importlib \
+    ${PN}-lang ${PN}-logging ${PN}-math ${PN}-netclient ${PN}-pickle \
+    ${PN}-pkgutil ${PN}-re ${PN}-reprlib ${PN}-textutils ${PN}-threading \
+    ${PN}-shell ${PN}-stringold ${PN}-subprocess \
+"
+RDEPENDS_lib${DPN}-stdlib += " \
+    ${PN}-2to3 ${PN}-asyncio ${PN}-audio ${PN}-codecs ${PN}-compression \
+    ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-db ${PN}-debugger \
+    ${PN}-difflib ${PN}-distutils ${PN}-doctest ${PN}-email ${PN}-html \
+    ${PN}-idle ${PN}-image ${PN}-io ${PN}-json ${PN}-lang ${PN}-mailbox \
+    ${PN}-math ${PN}-mime ${PN}-mmap ${PN}-multiprocessing ${PN}-netclient \
+    ${PN}-netserver ${PN}-numbers ${PN}-pickle ${PN}-pprint ${PN}-profile \
+    ${PN}-pydoc ${PN}-readline ${PN}-resource ${PN}-shell ${PN}-smtpd \
+    ${PN}-sqlite3 ${PN}-terminal ${PN}-textutils ${PN}-threading \
+    ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml \
+"
+RDEPENDS_${DPN} += "lib${DPN}-minimal lib${DPN}-stdlib"
+RDEPENDS_${DPN}-venv += "${DPN}"
+RDEPENDS_${DPN}-minimal += "lib${DPN}-minimal"
+RDEPENDS_lib${DPN} += "lib${DPN}-stdlib"
+RDEPENDS_${DPN}-examples += "${DPN}"
+RDEPENDS_${DPN}-dev += "${DPN} lib${DPN}-dev lib${DPN}"
+RDEPENDS_lib${DPN}-dev += "lib${DPN}-stdlib"
+RDEPENDS_lib${DPN}-testsuite += "${DPN} ${PN}-tests ${PN}-sqlite3-tests"
+RDEPENDS_idle-${DPN} += "${DPN}"
 
 BBCLASSEXTEND = "nativesdk"

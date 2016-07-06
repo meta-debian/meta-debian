@@ -26,7 +26,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=7eb5c1bf854e8881005d673599ee74d3"
 DEBIAN_QUILT_PATCHES = "${DEBIAN_UNPACK_DIR}/debian/patches-applied"
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEPENDS = "bison flex flex-native cracklib"
+DEPENDS = "bison flex flex-native cracklib libselinux"
 
 EXTRA_OECONF = "--with-db-uniquename=_pam \
 		--includedir=${includedir}/security \
@@ -64,6 +64,38 @@ do_install_append() {
 	if [ -d ${D}${localstatedir}/run ]; then
 		rm -rf ${D}${localstatedir}/run
 	fi
+	
+	# Add /etc/pam.d/common-*
+	cp ${D}/${datadir}/pam/common-*   ${D}/${sysconfdir}/pam.d/
+	rm ${D}/${sysconfdir}/pam.d/common-*.md5sums
+	
+	sed -i -e "s/\$session_primary/session [default=1]          pam_permit.so/g" \
+		${D}/${sysconfdir}/pam.d/common-session
+	sed -i -e "s/\$session_additional/session required              pam_unix.so/g" \
+		${D}/${sysconfdir}/pam.d/common-session
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+		echo "session optional              pam_systemd.so" >> ${D}/${sysconfdir}/pam.d/common-session
+	fi
+
+	sed -i -e "s/\$session_nonint_primary/session [default=1]          pam_permit.so/g" \
+		${D}/${sysconfdir}/pam.d/common-session-noninteractive
+	sed -i -e "s/\$session_nonint_additional/session required              pam_unix.so/g" \
+		${D}/${sysconfdir}/pam.d/common-session-noninteractive
+
+	sed -i -e "s/\$auth_primary/auth [success=1 default=ignore]          pam_unix.so nullok_secure/g" \
+		${D}/${sysconfdir}/pam.d/common-auth
+	sed -i -e "s/\$auth_additional//g" \
+		${D}/${sysconfdir}/pam.d/common-auth
+
+	sed -i -e "s/\$password_primary/password [success=1 default=ignore]    pam_unix.so obscure sha512/g" \
+		${D}/${sysconfdir}/pam.d/common-password
+	sed -i -e "s/\$password_additional//g" \
+		${D}/${sysconfdir}/pam.d/common-password
+
+	sed -i -e "s/\$account_primary/account [success=1 new_authtok_reqd=done default=ignore] pam_unix.so/g" \
+		${D}/${sysconfdir}/pam.d/common-account
+	sed -i -e "s/\$account_additional//g" \
+		${D}/${sysconfdir}/pam.d/common-account
 }
 
 PACKAGES =+ "${PN}-cracklib ${PN}-modules ${PN}-modules-bin \

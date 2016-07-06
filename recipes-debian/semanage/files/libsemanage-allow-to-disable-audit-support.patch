@@ -1,0 +1,123 @@
+From 7d23189c4541124469aad24fe1719f2a24b4ca48 Mon Sep 17 00:00:00 2001
+From: Wenzong Fan <wenzong.fan@windriver.com>
+Date: Mon, 20 Jan 2014 03:53:48 -0500
+Subject: [PATCH] libsemanage: allow to disable audit support
+
+Upstream-Status: Pending
+
+Signed-off-by: Wenzong Fan <wenzong.fan@windriver.com>
+---
+ src/Makefile        |   10 +++++++++-
+ src/seusers_local.c |   13 +++++++++++++
+ tests/Makefile      |   10 +++++++++-
+ 3 files changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 359d738..24dbf29 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -28,6 +28,14 @@ ifeq ($(DEBUG),1)
+ 	export LDFLAGS = -g
+ endif
+ 
++DISABLE_AUDIT ?= n
++ifeq ($(DISABLE_AUDIT),y)
++	LIBAUDIT =
++	CFLAGS += -DDISABLE_AUDIT
++else
++	LIBAUDIT = -laudit
++endif
++
+ LEX = flex
+ LFLAGS = -s
+ YACC = bison
+@@ -92,7 +100,7 @@ $(LIBA): $(OBJS)
+ 	$(RANLIB) $@
+ 
+ $(LIBSO): $(LOBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ -lsepol -laudit -lselinux -lbz2 -lustr -L$(LIBDIR) -Wl,-soname,$(LIBSO),--version-script=libsemanage.map,-z,defs
++	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ -lsepol $(LIBAUDIT) -lselinux -lbz2 -lustr -L$(LIBDIR) -Wl,-soname,$(LIBSO),--version-script=libsemanage.map,-z,defs
+ 	ln -sf $@ $(TARGET)
+ 
+ $(LIBPC): $(LIBPC).in ../VERSION
+diff --git a/src/seusers_local.c b/src/seusers_local.c
+index 63ab40c..8bdc7da 100644
+--- a/src/seusers_local.c
++++ b/src/seusers_local.c
+@@ -8,7 +8,11 @@ typedef struct semanage_seuser record_t;
+ 
+ #include <sepol/policydb.h>
+ #include <sepol/context.h>
++
++#ifndef DISABLE_AUDIT
+ #include <libaudit.h>
++#endif
++
+ #include <errno.h>
+ #include "user_internal.h"
+ #include "seuser_internal.h"
+@@ -51,6 +55,7 @@ static char *semanage_user_roles(semanage_handle_t * handle, const char *sename)
+ 	return roles;
+ }
+ 
++#ifndef DISABLE_AUDIT
+ static int semanage_seuser_audit(semanage_handle_t * handle,
+ 			  const semanage_seuser_t * seuser,
+ 			  const semanage_seuser_t * previous,
+@@ -114,6 +119,7 @@ err:
+ 	free(proles);
+ 	return rc;
+ }
++#endif
+ 
+ int semanage_seuser_modify_local(semanage_handle_t * handle,
+ 				 const semanage_seuser_key_t * key,
+@@ -157,8 +163,11 @@ int semanage_seuser_modify_local(semanage_handle_t * handle,
+ 	(void) semanage_seuser_query(handle, key, &previous);
+ 	handle->msg_callback = callback;
+ 	rc = dbase_modify(handle, dconfig, key, new);
++
++#ifndef DISABLE_AUDIT
+ 	if (semanage_seuser_audit(handle, new, previous, AUDIT_ROLE_ASSIGN, rc == 0) < 0)
+ 		rc = -1;
++#endif
+ err:
+ 	if (previous)
+ 		semanage_seuser_free(previous);
+@@ -174,8 +183,12 @@ int semanage_seuser_del_local(semanage_handle_t * handle,
+ 	dbase_config_t *dconfig = semanage_seuser_dbase_local(handle);
+ 	rc = dbase_del(handle, dconfig, key);
+ 	semanage_seuser_query(handle, key, &seuser);
++
++#ifndef DISABLE_AUDIT
+ 	if (semanage_seuser_audit(handle, NULL, seuser, AUDIT_ROLE_REMOVE, rc == 0) < 0)
+ 		rc = -1;
++#endif
++
+ 	if (seuser)
+ 		semanage_seuser_free(seuser);
+ 	return rc;
+diff --git a/tests/Makefile b/tests/Makefile
+index 418d701..7839db6 100644
+--- a/tests/Makefile
++++ b/tests/Makefile
+@@ -13,7 +13,15 @@ EXECUTABLE = libsemanage-tests
+ CC = gcc
+ CFLAGS = -c -g -o0 -Wall -W -Wundef -Wmissing-noreturn -Wmissing-format-attribute -Wno-unused-parameter
+ INCLUDE = -I$(TESTSRC) -I$(TESTSRC)/../include
+-LDFLAGS = -lcunit -lustr -lbz2 -laudit
++DISABLE_AUDIT ?= n
++ifeq ($(DISABLE_AUDIT),y)
++	LIBAUDIT =
++	CFLAGS += -DDISABLE_AUDIT
++else
++	LIBAUDIT = -laudit
++endif
++
++LDFLAGS = -lcunit -lustr -lbz2 $(LIBAUDIT)
+ OBJECTS = $(SOURCES:.c=.o) 
+ 
+ all: $(EXECUTABLE) 
+-- 
+1.7.9.5
+

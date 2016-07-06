@@ -7,18 +7,28 @@ require python.inc
 
 EXTRANATIVEPATH += "bzip2-native"
 DEPENDS = "openssl-native bzip2-replacement-native zlib-native readline-native sqlite3-native expat-native"
-PR = "${INC_PR}.2"
+PR = "${INC_PR}.4"
 
+# revert_use_of_sysconfigdata.patch:
+# 	In current version, python uses _sysconfigdata.build_time_vars[],
+# 	which contains information from the HOST.
+# 	This patch reverts this behavior and uses Python.h and Makefile to get information.
+# add_site-packages_to_getsitepackages.patch:
+# 	Append "/usr/lib/python<version>/site-packages" to sitepackages
+# 	for looking for python modules.
 SRC_URI += "\
 	file://05-enable-ctypes-cross-build.patch \
 	file://11-distutils-never-modify-shebang-line.patch \
 	file://12-distutils-prefix-is-inside-staging-area_debian.patch \
 	file://unixccompiler.patch \
+	file://nohostlibs_debian.patch \
 	file://multilib_debian.patch \
 	file://add-md5module-support.patch \
 	file://builddir.patch \
 	file://parallel-makeinst-create-bindir.patch \
+	file://revert_use_of_sysconfigdata.patch \
 	file://avoid_parallel_make_races_on_pgen.patch \
+	file://add_site-packages_to_getsitepackages.patch \
 "
 
 FILESEXTRAPATHS =. "${THISDIR}/${PN}:"
@@ -36,6 +46,20 @@ EXTRA_OEMAKE = '\
 	STAGING_LIBDIR=${STAGING_LIBDIR_NATIVE} \
 	STAGING_INCDIR=${STAGING_INCDIR_NATIVE} \
 '
+
+do_configure_prepend() {
+	# This fix is a workaround which relates to function get_makefile_filename
+	# in ${S}/Lib/distutils/sysconfig.py
+	#
+	# debian/patches set LIBPL to "$(LIBP)/config-$(MULTIARCH)$(DEBUG_EXT)".
+	# However, we cannot get LIBPL value by calling get_config_var() in function get_makefile_filename(),
+	# because it causes "RuntimeError: maximum recursion depth exceeded" if apply revert_use_of_sysconfigdata.patch.
+	#
+	# So revert LIBPL to its original value,
+	# and get Makefile path with a hardcode path lib_dir/config/Makefile.
+	# (see the last hunk in 12-distutils-prefix-is-inside-staging-area_debian.patch)
+	sed -i -e 's#^LIBPL=.*#LIBPL= $(LIBP)/config#g' ${S}/Makefile.pre.in
+}
 
 do_configure_append() {
 	autoreconf --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi

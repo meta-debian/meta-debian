@@ -12,6 +12,12 @@ PR = "r0"
 
 inherit debian-package autotools-brokensep
 
+RDEPENDS_${PN} = "python-core python-textutils python-distutils python-logging python-unixadmin"
+
+SRC_URI += " \
+	file://adapt_install_layout_for_debian.patch \
+"
+
 EXTRA_OEMAKE += "PREFIX=${prefix} DESTDIR=${D}"
 
 LICENSE = "GPLv2+"

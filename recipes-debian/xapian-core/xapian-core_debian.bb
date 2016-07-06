@@ -38,3 +38,5 @@ FILES_${PN}-dbg += "${libdir}/xapian-examples/examples/.debug/*"
 RDEPENDS_libxapian-dev += "libxapian libc6-dev"
 RDEPENDS_xapian-tools += "libxapian"
 
+# depends on uuid.h at the build time
+DEPENDS += "util-linux"

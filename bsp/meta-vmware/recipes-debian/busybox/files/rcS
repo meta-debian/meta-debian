@@ -1,0 +1,11 @@
+#!/bin/sh
+
+mount none -t proc /proc
+mount none -t sysfs /sys
+
+mkdir /dev/pts
+mount none -t devpts /dev/pts
+
+# this script assumes that rootfs is mounted with "ro" option by kernel,
+# because grub always add "ro" to the kernel command line by default
+mount -o remount,rw /

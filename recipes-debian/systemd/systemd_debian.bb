@@ -14,7 +14,7 @@ file://LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c \
 PROVIDES = "udev"
 
 inherit debian-package
-inherit pkgconfig autotools
+inherit pkgconfig autotools useradd
 
 DEPENDS = "intltool-native \
            gperf-native \
@@ -55,6 +55,10 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --disable-gtk-doc-html \
                 --enable-dependency-tracking \
                "
+
+do_configure_prepend() {
+	export KMOD="${base_bindir}/kmod"
+}
 
 # append debian extra files and remove unneeded files
 do_install_append() {
@@ -304,6 +308,9 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                      "
 RDEPENDS_${PN} += "systemd-sysv"
 
+# init script requires init-functions, procps's ps, and mountpoint
+RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"
+
 inherit update-alternatives
 
 ALTERNATIVE_${PN} = "init halt reboot shutdown poweroff runlevel"
@@ -333,3 +340,7 @@ ALTERNATIVE_LINK_NAME[runlevel] = "${base_sbindir}/runlevel"
 ALTERNATIVE_PRIORITY[runlevel] ?= "300"
 
 DEBIAN_NOAUTONAME = "1"
+
+USERADD_PACKAGES = "${PN}"
+USERADD_PARAM_${PN} +=  "--system --no-create-home --home /run/systemd --shell /bin/false --user-group systemd-timesync; --system --no-create-home --home /run/systemd/netif --shell /bin/false --user-group systemd-network; --system --no-create-home --home /run/systemd/resolve --shell /bin/false --user-group systemd-resolve; --system --no-create-home --home /run/systemd --shell /bin/false --user-group systemd-bus-proxy"
+GROUPADD_PARAM_${PN} += "--system systemd-journal"

@@ -3,24 +3,22 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=f9a8f968107345e0b75aa8c2ecaa7ec8"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=27ffa5d74bb5a337056c14b2ef93fbf6"
 
 # configure-targets.patch: provides targets needed by do_configure
 # shared-libs.patch: for cross-build, use environment variables in Makefiles
 # oe-ldflags.patch: for cross-build, works together with ${OE_}
-# openssl-fix-link.patch: fix the parallel build
 # find.sh: wrapper script; perl4 scripts require this, but perl5 doesn't have
 SRC_URI += " \
 file://configure-targets.patch \
 file://shared-libs.patch \
 file://oe-ldflags.patch \
-file://openssl-fix-link.patch \
 file://find.pl \
 "
 
@@ -46,8 +44,8 @@ EXTRA_OECONF_append_x86-64 = "enable-ec_nistp_64_gcc_128"
 AR_append = " r"
 EXTRA_OEMAKE = "-e MAKEFLAGS="
 # Only "test" is removed from the default targets because it includes
-# running tests. Instead, "buildteset" and "runtest" are added by
-# Makefiles-ptest.patchas as new targets
+# running tests. Instead, "buildtest" and "runtest" are added by
+# Makefiles-ptest.patch as new targets
 export DIRS = "crypto ssl engines apps tools"
 
 # works together with oe-ldflags.patch
@@ -56,6 +54,11 @@ export OE_LDFLAGS="${LDFLAGS}"
 # according to OE-core, parallel build and install are not supported
 PARALLEL_MAKE = ""
 PARALLEL_MAKEINST = ""
+
+# Configure only sets MAKEDEPPROG to $cc if $cc is "gcc"
+# but CC in bitbake doesn't match the value Configure assumes,
+# so we need set it here.
+EXTRA_OEMAKE += "'MAKEDEPPROG=${CC}'"
 
 # In "build-stamp" in debian/rules, "Configure" and "make" are called
 # at least more than one time for building "no-shared", "shared", and
@@ -157,6 +160,10 @@ do_configure () {
 }
 
 do_compile() {
+	# Directory ${S}/include is empty,
+	# so it is required to run "make depend" for necessary headers.
+	# https://github.com/openssl/openssl/issues/492
+	oe_runmake depend
 	oe_runmake
 }
 

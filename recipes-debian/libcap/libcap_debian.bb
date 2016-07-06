@@ -61,7 +61,8 @@ do_install_append() {
 	# libcap-dev:
 	#   Move the development files from lib/ to usr/lib.
 	mv ${D}${base_libdir}/*.a ${D}${libdir}
-	ln -sf ${base_libdir}/libcap.so.2 ${D}${libdir}/libcap.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libcap.so.2 ${D}${libdir}/libcap.so
 
 	# Remove unwanted/unused files
 	rm -rf ${D}${base_libdir}/*.so

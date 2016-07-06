@@ -1,0 +1,13 @@
+Index: libprelude-1.0.0/src/include/prelude-client-profile.h
+===================================================================
+--- libprelude-1.0.0.orig/src/include/prelude-client-profile.h
++++ libprelude-1.0.0/src/include/prelude-client-profile.h
+@@ -91,7 +91,7 @@ void prelude_client_profile_set_uid(prel
+ 
+ prelude_uid_t prelude_client_profile_get_uid(const prelude_client_profile_t *cp);
+ 
+-void prelude_client_profile_set_gid(prelude_client_profile_t *cp, prelude_uid_t gid);
++void prelude_client_profile_set_gid(prelude_client_profile_t *cp, prelude_gid_t gid);
+ 
+ prelude_gid_t prelude_client_profile_get_gid(const prelude_client_profile_t *cp);
+ 

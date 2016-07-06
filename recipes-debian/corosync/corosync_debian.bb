@@ -10,7 +10,7 @@ The Application Interface Specification is a software API and policies\n\
 which are used to develop applications that maintain service during\n\
 faults."
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -30,6 +30,12 @@ EXTRA_OECONF = " \
     --libexecdir=${libdir} \
     --with-socket-dir=${localstatedir}/run/${DPN} \
 "
+
+do_configure_prepend() {
+	# replace AC_REPLACE_FNMATCH by AC_FUNC_FNMATCH,
+	# because it causes linking error (fnmatch.h => fnmatch_.h)
+	sed -i -e "s@AC_REPLACE_FNMATCH@AC_FUNC_FNMATCH@g" ${S}/configure.ac
+}
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/corosync \

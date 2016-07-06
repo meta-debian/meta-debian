@@ -1,0 +1,28 @@
+diff --git a/testcases/commands/df/df01.sh b/testcases/commands/df/df01.sh
+index c74e052..804aa37 100755
+--- a/testcases/commands/df/df01.sh
++++ b/testcases/commands/df/df01.sh
+@@ -51,14 +51,16 @@ setup()
+ 
+ cleanup()
+ {
+-	grep -q ${TST_DEVICE} /proc/self/mounts
+-	if [ $? -eq 0 ]; then
+-		umount ${TST_DEVICE}
+-		if [ $? -ne 0 ];then
+-			tst_resm TWARN "'umount ${TST_DEVICE}' failed"
++	if [ -n "${TST_DEVICE}" ]; then
++		grep -q ${TST_DEVICE} /proc/self/mounts
++		if [ $? -eq 0 ]; then
++			umount ${TST_DEVICE}
++			if [ $? -ne 0 ];then
++				tst_resm TWARN "'umount ${TST_DEVICE}' failed"
++			fi
++		else
++			tst_resm TINFO "${TST_DEVICE} is not mounted"
+ 		fi
+-	else
+-		tst_resm TINFO "${TST_DEVICE} is not mounted"
+ 	fi
+ 
+ 	tst_release_device

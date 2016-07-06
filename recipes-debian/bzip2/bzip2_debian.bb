@@ -38,8 +38,9 @@ do_install_append_class-target() {
 	install -m 755 ${S}/bzexe ${D}${base_bindir}/
 	cp ${S}/bzexe.1 ${D}${mandir}/man1
 
-	mv ${D}${base_bindir}/bunzip2 ${D}${base_bindir}/bunzip2.${DPN}
-	mv ${D}${base_bindir}/bzcat ${D}${base_bindir}/bzcat.${DPN}
+	# Correct the softlink
+	ln -sf bzip2 ${D}${base_bindir}/bunzip2
+	ln -sf bzip2 ${D}${base_bindir}/bzcat
 }
 
 do_install_ptest () {
@@ -52,11 +53,8 @@ inherit update-alternatives
 ALTERNATIVE_PRIORITY = "100"
 ALTERNATIVE_${PN} = "bunzip2 bzcat bzip2"
 ALTERNATIVE_LINK_NAME[bunzip2] = "${base_bindir}/bunzip2"
-ALTERNATIVE_TARGET[bunzip2] = "${base_bindir}/bunzip2"
 ALTERNATIVE_LINK_NAME[bzcat] = "${base_bindir}/bzcat"
-ALTERNATIVE_TARGET[bzcat] = "${base_bindir}/bzcat"
 ALTERNATIVE_LINK_NAME[bzip2] = "${base_bindir}/bzip2"
-ALTERNATIVE_TARGET[bzip2] = "${base_bindir}/bzip2"
 
 FILES_libbz2 = "${libdir}/lib*${SOLIBS}"
 

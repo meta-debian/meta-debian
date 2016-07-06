@@ -46,15 +46,15 @@ PROVIDES += "libmodule-build-perl"
 inherit perlnative siteinfo
 
 # Where to find the native perl
-HOSTPERL = "${STAGING_BINDIR_NATIVE}/perl-native/perl${PV}"
+HOSTPERL = "${STAGING_BINDIR_NATIVE}/perl-native/perl${PERL_PV}"
 
 # Where to find .so files - use the -native versions not those from the target build
-export PERLHOSTLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
+export PERLHOSTLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PERL_PV}/"
 
 # Where to find perl @INC/#include files
 # - use the -native versions not those from the target build
-export PERL_LIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
-export PERL_ARCHLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
+export PERL_LIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PERL_PV}/"
+export PERL_ARCHLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PERL_PV}/"
 
 # LDFLAGS for shared libraries
 export LDDLFLAGS = "${LDFLAGS} -shared"
@@ -63,7 +63,7 @@ LDFLAGS_append = " -fstack-protector"
 
 # We're almost Debian, aren't we?
 CFLAGS += "-DDEBIAN"
-CFLAGS += "-I${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/CORE"
+CFLAGS += "-I${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PERL_PV}/CORE"
 
 do_nolargefile() {
 	sed -i -e "s,\(uselargefiles=\)'define',\1'undef',g" \
@@ -192,32 +192,32 @@ do_compile() {
 }
 
 do_install() {
-	#export hostperl="${STAGING_BINDIR_NATIVE}/perl-native/perl${PV}"
+	#export hostperl="${STAGING_BINDIR_NATIVE}/perl-native/perl${PERL_PV}"
 	oe_runmake install DESTDIR=${D}
 	# Add perl pointing at current version
-	ln -sf perl${PV} ${D}${bindir}/perl
+	ln -sf perl${PERL_PV} ${D}${bindir}/perl
 
 	ln -sf perl ${D}/${libdir}/perl5
 
 	# Remove unwanted file and empty directories
-	rm -f ${D}/${libdir}/perl/${PV}/.packlist
-	rmdir ${D}/${libdir}/perl/site_perl/${PV}
+	rm -f ${D}/${libdir}/perl/${PERL_PV}/.packlist
+	rmdir ${D}/${libdir}/perl/site_perl/${PERL_PV}
 	rmdir ${D}/${libdir}/perl/site_perl
 
 	# Fix up shared library
-	mv ${D}/${libdir}/perl/${PV}/CORE/libperl.so ${D}/${libdir}/libperl.so.${PV}
-	ln -sf libperl.so.${PV} ${D}/${libdir}/libperl.so.5
-	ln -sf ../../../libperl.so.${PV} ${D}/${libdir}/perl/${PV}/CORE/libperl.so
+	mv ${D}/${libdir}/perl/${PERL_PV}/CORE/libperl.so ${D}/${libdir}/libperl.so.${PERL_PV}
+	ln -sf libperl.so.${PERL_PV} ${D}/${libdir}/libperl.so.5
+	ln -sf ../../../libperl.so.${PERL_PV} ${D}/${libdir}/perl/${PERL_PV}/CORE/libperl.so
 
 	# target config, used by cpan.bbclass to extract version information
 	install config.sh ${D}${libdir}/perl
 
-	ln -s Config_heavy.pl ${D}${libdir}/perl/${PV}/Config_heavy-target.pl
+	ln -s Config_heavy.pl ${D}${libdir}/perl/${PERL_PV}/Config_heavy-target.pl
 }
 
 do_install_append_class-nativesdk () {
 	create_wrapper ${D}${bindir}/perl \
-            PERL5LIB='$PERL5LIB:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/site_perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/vendor_perl/${PV}'
+            PERL5LIB='$PERL5LIB:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/${PERL_PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/site_perl/${PERL_PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/vendor_perl/${PERL_PV}'
 }
 
 PACKAGE_PREPROCESS_FUNCS += "perl_package_preprocess"
@@ -240,76 +240,76 @@ perl_package_preprocess () {
             ${PKGD}${bindir}/pod2usage \
             ${PKGD}${bindir}/podchecker \
             ${PKGD}${bindir}/podselect \
-            ${PKGD}${libdir}/perl/${PV}/CORE/config.h \
-            ${PKGD}${libdir}/perl/${PV}/CORE/perl.h \
-            ${PKGD}${libdir}/perl/${PV}/CORE/pp.h \
-            ${PKGD}${libdir}/perl/${PV}/Config.pm \
-            ${PKGD}${libdir}/perl/${PV}/Config.pod \
-            ${PKGD}${libdir}/perl/${PV}/Config_heavy.pl \
-            ${PKGD}${libdir}/perl/${PV}/ExtUtils/Liblist/Kid.pm \
-            ${PKGD}${libdir}/perl/${PV}/FileCache.pm \
-            ${PKGD}${libdir}/perl/${PV}/pod/*.pod \
+            ${PKGD}${libdir}/perl/${PERL_PV}/CORE/config.h \
+            ${PKGD}${libdir}/perl/${PERL_PV}/CORE/perl.h \
+            ${PKGD}${libdir}/perl/${PERL_PV}/CORE/pp.h \
+            ${PKGD}${libdir}/perl/${PERL_PV}/Config.pm \
+            ${PKGD}${libdir}/perl/${PERL_PV}/Config.pod \
+            ${PKGD}${libdir}/perl/${PERL_PV}/Config_heavy.pl \
+            ${PKGD}${libdir}/perl/${PERL_PV}/ExtUtils/Liblist/Kid.pm \
+            ${PKGD}${libdir}/perl/${PERL_PV}/FileCache.pm \
+            ${PKGD}${libdir}/perl/${PERL_PV}/pod/*.pod \
             ${PKGD}${libdir}/perl/config.sh
 }
 
 PACKAGES = "perl-dbg perl perl-misc perl-dev perl-pod perl-doc perl-lib \
             perl-module-cpan perl-module-cpanplus perl-module-unicore"
-FILES_${PN} = "${bindir}/perl ${bindir}/perl${PV} \
-               ${libdir}/perl/${PV}/Config.pm \
-               ${libdir}/perl/${PV}/strict.pm \
-               ${libdir}/perl/${PV}/warnings.pm \
-               ${libdir}/perl/${PV}/warnings \
-               ${libdir}/perl/${PV}/vars.pm \
+FILES_${PN} = "${bindir}/perl ${bindir}/perl${PERL_PV} \
+               ${libdir}/perl/${PERL_PV}/Config.pm \
+               ${libdir}/perl/${PERL_PV}/strict.pm \
+               ${libdir}/perl/${PERL_PV}/warnings.pm \
+               ${libdir}/perl/${PERL_PV}/warnings \
+               ${libdir}/perl/${PERL_PV}/vars.pm \
               "
 FILES_${PN}_append_class-nativesdk = " ${bindir}/perl.real"
 RPROVIDES_${PN} += "perl-module-strict perl-module-vars perl-module-config perl-module-warnings \
                     perl-module-warnings-register"
-FILES_${PN}-dev = "${libdir}/perl/${PV}/CORE"
+FILES_${PN}-dev = "${libdir}/perl/${PERL_PV}/CORE"
 FILES_${PN}-lib = "${libdir}/libperl.so* \
                    ${libdir}/perl5 \
                    ${libdir}/perl/config.sh \
-                   ${libdir}/perl/${PV}/Config_heavy.pl \
-                   ${libdir}/perl/${PV}/Config_heavy-target.pl"
-FILES_${PN}-pod = "${libdir}/perl/${PV}/pod \
-		   ${libdir}/perl/${PV}/*.pod \
-                   ${libdir}/perl/${PV}/*/*.pod \
-                   ${libdir}/perl/${PV}/*/*/*.pod "
+                   ${libdir}/perl/${PERL_PV}/Config_heavy.pl \
+                   ${libdir}/perl/${PERL_PV}/Config_heavy-target.pl"
+FILES_${PN}-pod = "${libdir}/perl/${PERL_PV}/pod \
+		   ${libdir}/perl/${PERL_PV}/*.pod \
+                   ${libdir}/perl/${PERL_PV}/*/*.pod \
+                   ${libdir}/perl/${PERL_PV}/*/*/*.pod "
 FILES_perl-misc = "${bindir}/*"
-FILES_${PN}-dbg += "${libdir}/perl/${PV}/auto/*/.debug \
-                    ${libdir}/perl/${PV}/auto/*/*/.debug \
-                    ${libdir}/perl/${PV}/auto/*/*/*/.debug \
-                    ${libdir}/perl/${PV}/CORE/.debug \
-                    ${libdir}/perl/${PV}/*/.debug \
-                    ${libdir}/perl/${PV}/*/*/.debug \
-                    ${libdir}/perl/${PV}/*/*/*/.debug "
-FILES_${PN}-doc = "${libdir}/perl/${PV}/*/*.txt \
-                   ${libdir}/perl/${PV}/*/*/*.txt \
-                   ${libdir}/perl/${PV}/auto/XS/Typemap \
-                   ${libdir}/perl/${PV}/B/assemble \
-                   ${libdir}/perl/${PV}/B/cc_harness \
-                   ${libdir}/perl/${PV}/B/disassemble \
-                   ${libdir}/perl/${PV}/B/makeliblinks \
-                   ${libdir}/perl/${PV}/CGI/eg \
-                   ${libdir}/perl/${PV}/CPAN/PAUSE2003.pub \
-                   ${libdir}/perl/${PV}/CPAN/SIGNATURE \
-		   ${libdir}/perl/${PV}/CPANPLUS/Shell/Default/Plugins/HOWTO.pod \
-                   ${libdir}/perl/${PV}/Encode/encode.h \
-                   ${libdir}/perl/${PV}/ExtUtils/MANIFEST.SKIP \
-                   ${libdir}/perl/${PV}/ExtUtils/NOTES \
-                   ${libdir}/perl/${PV}/ExtUtils/PATCHING \
-                   ${libdir}/perl/${PV}/ExtUtils/typemap \
-                   ${libdir}/perl/${PV}/ExtUtils/xsubpp \
-		   ${libdir}/perl/${PV}/ExtUtils/Changes_EU-Install \
-                   ${libdir}/perl/${PV}/Net/*.eg \
-                   ${libdir}/perl/${PV}/unicore/mktables \
-                   ${libdir}/perl/${PV}/unicore/mktables.lst \
-                   ${libdir}/perl/${PV}/unicore/version "
+FILES_${PN}-dbg += "${libdir}/perl/${PERL_PV}/auto/*/.debug \
+                    ${libdir}/perl/${PERL_PV}/auto/*/*/.debug \
+                    ${libdir}/perl/${PERL_PV}/auto/*/*/*/.debug \
+                    ${libdir}/perl/${PERL_PV}/CORE/.debug \
+                    ${libdir}/perl/${PERL_PV}/*/.debug \
+                    ${libdir}/perl/${PERL_PV}/*/*/.debug \
+                    ${libdir}/perl/${PERL_PV}/*/*/*/.debug "
+FILES_${PN}-doc = "${libdir}/perl/${PERL_PV}/*/*.txt \
+                   ${libdir}/perl/${PERL_PV}/*/*/*.txt \
+                   ${libdir}/perl/${PERL_PV}/auto/XS/Typemap \
+                   ${libdir}/perl/${PERL_PV}/B/assemble \
+                   ${libdir}/perl/${PERL_PV}/B/cc_harness \
+                   ${libdir}/perl/${PERL_PV}/B/disassemble \
+                   ${libdir}/perl/${PERL_PV}/B/makeliblinks \
+                   ${libdir}/perl/${PERL_PV}/CGI/eg \
+                   ${libdir}/perl/${PERL_PV}/CPAN/PAUSE2003.pub \
+                   ${libdir}/perl/${PERL_PV}/CPAN/SIGNATURE \
+		   ${libdir}/perl/${PERL_PV}/CPANPLUS/Shell/Default/Plugins/HOWTO.pod \
+                   ${libdir}/perl/${PERL_PV}/Encode/encode.h \
+                   ${libdir}/perl/${PERL_PV}/ExtUtils/MANIFEST.SKIP \
+                   ${libdir}/perl/${PERL_PV}/ExtUtils/NOTES \
+                   ${libdir}/perl/${PERL_PV}/ExtUtils/PATCHING \
+                   ${libdir}/perl/${PERL_PV}/ExtUtils/typemap \
+                   ${libdir}/perl/${PERL_PV}/ExtUtils/xsubpp \
+		   ${libdir}/perl/${PERL_PV}/ExtUtils/Changes_EU-Install \
+                   ${libdir}/perl/${PERL_PV}/Net/*.eg \
+                   ${libdir}/perl/${PERL_PV}/unicore/mktables \
+                   ${libdir}/perl/${PERL_PV}/unicore/mktables.lst \
+                   ${libdir}/perl/${PERL_PV}/unicore/version "
 
-FILES_perl-module-cpan += "${libdir}/perl/${PV}/CPAN \
-                           ${libdir}/perl/${PV}/CPAN.pm"
-FILES_perl-module-cpanplus += "${libdir}/perl/${PV}/CPANPLUS \
-                               ${libdir}/perl/${PV}/CPANPLUS.pm"
-FILES_perl-module-unicore += "${libdir}/perl/${PV}/unicore"
+FILES_perl-module-cpan += "${libdir}/perl/${PERL_PV}/CPAN \
+                           ${libdir}/perl/${PERL_PV}/CPAN.pm"
+FILES_perl-module-cpanplus += "${libdir}/perl/${PERL_PV}/CPANPLUS \
+                               ${libdir}/perl/${PERL_PV}/CPANPLUS.pm"
+FILES_perl-module-unicore += "${libdir}/perl/${PERL_PV}/unicore"
 
 # Create a perl-modules package recommending all the other perl
 # packages (actually the non modules packages and not created too)
@@ -317,7 +317,7 @@ ALLOW_EMPTY_perl-modules = "1"
 PACKAGES_append = " perl-modules "
 
 python populate_packages_prepend () {
-    libdir = d.expand('${libdir}/perl/${PV}')
+    libdir = d.expand('${libdir}/perl/${PERL_PV}')
     do_split_packages(d, libdir, 'auto/([^.]*)/[^/]*\.(so|ld|ix|al)', 'perl-module-%s', 'perl module %s', recursive=True, match_path=True, prepend=False)
     do_split_packages(d, libdir, 'Module/([^\/]*)\.pm', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
     do_split_packages(d, libdir, 'Module/([^\/]*)/.*', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)

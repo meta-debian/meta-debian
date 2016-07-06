@@ -11,7 +11,7 @@ you can use the dpatch patching script directly.\n\
 .\n\
 It can easily apply patches only on specific architectures if needed."
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -43,4 +43,8 @@ do_install() {
 	find ${D}${bindir}/ ${D}${datadir}/dpatch/ -name \* -type f \
 		-exec sed -i -e "s@ /usr/bin@ ${bindir}@g" \
 		             -e "s@ /usr/share@ ${datadir}@g" {} \;
+
+	# Add execute permission to dpatch-run
+	# so we can find it by "/usr/bin/env dpatch-run"
+	chmod +x ${D}${datadir}/dpatch/dpatch-run
 }

@@ -6,7 +6,7 @@ DESCRIPTION = "	GNU implementation of the IPMI protocol - common files 		\
 		Platform Management Interface (IPMI v1.5 and v2.0) standards."
 HOMEPAGE = "http://www.gnu.org/software/freeipmi/"
 
-PR = "r2"
+PR = "r3"
 inherit debian-package
 
 LICENSE = "GPLv3+"
@@ -16,7 +16,7 @@ EXTRA_OECONF += "--without-random-device"
 
 inherit autotools
 #libgcrypt required to build libfreeipmi
-DEPENDS += "libgcrypt"
+DEPENDS += "libgcrypt chrpath-native"
 
 #Split the freeipmi to sub-packages list
 PACKAGES =+ 	" ${PN}-bmc-watchdog 	\
@@ -81,6 +81,12 @@ do_install_append() {
 	ln -s rmcpping ${D}${sbindir}/rmcp-ping
 	
 	rm ${D}${libdir}/*.la
+
+	#change the rpath or runpath in binaries files
+	for file in $(find ${D}${sbindir} -type f -exec file {} \; | \
+		grep ELF | grep executable | cut -d: -f1); do
+		chrpath -d $file
+	done
 }
 #correct the sub-package names
 DEBIANNAME_libipmimonitoring5a = "libipmimonitoring5a"

@@ -1,0 +1,26 @@
+Index: libprelude-1.0.0/bindings/low-level/perl/Makefile.PL.in
+===================================================================
+--- libprelude-1.0.0.orig/bindings/low-level/perl/Makefile.PL.in
++++ libprelude-1.0.0/bindings/low-level/perl/Makefile.PL.in
+@@ -7,7 +7,7 @@ use Cwd "abs_path";
+ my %attributs = (NAME => 'Prelude',
+ 		 INC => '-I@top_srcdir@ -I@top_builddir@/src/include -I@top_srcdir@/src/include -I@top_builddir@/src/libprelude-error',
+ 		 LIBS => ["-L@top_builddir@/src/.libs -lprelude", "-L$ENV{LIBDIR} -lprelude @LIBPRELUDE_LIBS@ @LIBADD_DL@ @LTLIBTHREAD@" ],
+-		 LDDLFLAGS => "-L@top_builddir@/src/.libs $Config{lddlflags}");
++		 LDDLFLAGS => "-L@top_builddir@/src/.libs $ENV{lddlflags}");
+ 
+ if ( abs_path("@top_srcdir@") ne abs_path("@top_builddir@") ) {
+     foreach my $filename ( qw/Prelude.c Prelude.pm/ ) {
+Index: libprelude-1.0.0/bindings/perl/Makefile.PL.in
+===================================================================
+--- libprelude-1.0.0.orig/bindings/perl/Makefile.PL.in
++++ libprelude-1.0.0/bindings/perl/Makefile.PL.in
+@@ -7,7 +7,7 @@ use Cwd "abs_path";
+ my %attributs = (NAME => 'PreludeEasy',
+ 		 INC => '-I@top_srcdir@ -I@top_builddir@/src/include -I@top_srcdir@/src/include -I@top_builddir@/src/libprelude-error -I@top_srcdir@/bindings/c++/include -I@top_srcdir@/libmissing -I@top_builddir@/libmissing',
+ 		 LIBS => ["-L@top_builddir@/src/.libs -lprelude -L@top_builddir@/bindings/c++/.libs -lpreludecpp", "-L$ENV{LIBDIR} -lprelude @LIBPRELUDE_LIBS@ @LIBADD_DL@ @LTLIBTHREAD@" ],
+-		 LDDLFLAGS => "-L@top_builddir@/src/.libs $Config{lddlflags}");
++		 LDDLFLAGS => "-L@top_builddir@/src/.libs $ENV{lddlflags}");
+ 
+ if ( abs_path("@top_srcdir@") ne abs_path("@top_builddir@") ) {
+     foreach my $filename ( qw/easy-idmef_wrap_perl.cxx PreludeEasy.pm/ ) {

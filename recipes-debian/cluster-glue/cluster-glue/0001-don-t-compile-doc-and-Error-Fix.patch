@@ -1,0 +1,75 @@
+From 86924cbbd595cde81584d74f6c93bcc4a080fcdd Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Tue, 18 Aug 2015 17:43:29 +0900
+Subject: [PATCH] don't compile doc and Error Fix
+
+| help2man: can't get `--help' info from ../../lrm/admin/lrmadmin
+| make[2]: *** [lrmadmin.8] Error 1
+
+| make[2]: a2x: Command not found
+| /usr/bin/xsltproc \
+|       --xinclude \
+|       http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl ha_logd.xml
+| make[2]: *** [hb_report.8] Error 127
+
+Upstream-Status: pending
+
+Signed-off-by: Li Xin <lixin.fnst@cn.fujitsu.com>
+---
+ Makefile.am           |  2 +-
+ configure.ac          |  6 ++++++
+ lrm/admin/Makefile.am | 14 +++++++-------
+ 3 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 93dbaf6..2f4d03b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,7 +23,7 @@ MAINTAINERCLEANFILES	= Makefile.in aclocal.m4 configure DRF/config-h.in \
+ 			  DRF/stamp-h.in libtool.m4 ltdl.m4 libltdl.tar
+ 
+ SUBDIRS			= include $(LIBLTDL_DIR) replace lib lrm logd \
+-			  hb_report doc config
++			  hb_report config
+ 
+ install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)/$(HA_COREDIR)
+diff --git a/configure.ac b/configure.ac
+index 36bcf12..809fae6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1437,3 +1437,9 @@ AC_MSG_RESULT([  CFLAGS                   = ${CFLAGS}])
+ AC_MSG_RESULT([  Libraries                = ${LIBS}])
+ AC_MSG_RESULT([  Stack Libraries          = ${CLUSTERLIBS}])
+ 
++if test "$TARGET_PYTHON"; then
++	TARGET_PYTHON=$TARGET_PYTHON
++else
++	TARGET_PYTHON=$PYTHON
++fi
++	AC_SUBST(TARGET_PYTHON)
+diff --git a/lrm/admin/Makefile.am b/lrm/admin/Makefile.am
+index a92cd72..de525ea 100644
+--- a/lrm/admin/Makefile.am
++++ b/lrm/admin/Makefile.am
+@@ -31,10 +31,10 @@ lrmadmin_LDFLAGS 	= 	$(COMMONLIBS)
+ lrmadmin_LDADD = $(top_builddir)/lib/$(LRM_DIR)/liblrm.la
+ lrmadmin_DEPENDENCIES = $(top_builddir)/lib/$(LRM_DIR)/liblrm.la
+ 
+-if BUILD_HELP
+-man8_MANS =	$(sbin_PROGRAMS:%=%.8)
+-%.8:	%
+-	echo Creating $@
+-	chmod a+x $<
+-	help2man --output $@ --no-info --section 8 --name "Part of the Linux-HA project" $(top_builddir)/lrm/admin/$<
+-endif
++#if BUILD_HELP
++#man8_MANS =	$(sbin_PROGRAMS:%=%.8)
++#%.8:	%
++#	echo Creating $@
++#	chmod a+x $<
++#	help2man --output $@ --no-info --section 8 --name "Part of the Linux-HA project" $(top_builddir)/lrm/admin/$<
++#endif
+-- 
+1.8.4.2
+

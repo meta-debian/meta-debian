@@ -6,7 +6,7 @@ DESCRIPTION = "Micro string library, very low overhead from plain strdup() (Ave.
 0-20B strings). Very easy to use in existing C code. At it's simplest you can \
 just include a single header file into your .c and start using it."
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "MIT | LGPLv2+ | BSD"
@@ -23,7 +23,7 @@ DEBIAN_PATCH_TYPE = "quilt"
 # ustr-makefile-fix.patch:
 # 	Don't run autoconf_64b or autoconf_vsnprintf
 # 	to avoid error when cross-compile.
-SRC_URI += " \
+SRC_URI_append_class-target = " \
     file://ustr-makefile-fix.patch \
 "
 
