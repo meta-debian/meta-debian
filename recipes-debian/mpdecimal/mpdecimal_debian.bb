@@ -25,3 +25,5 @@ EXTRA_OECONF = " \
 
 # Follow configure file. Don't set value of LD as poky in this package
 EXTRA_OECONF += "LD='${CC}'"
+
+BBCLASSEXTEND = "native nativesdk"
