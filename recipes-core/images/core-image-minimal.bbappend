@@ -9,6 +9,6 @@ ROOTFS_PKGMANAGE_BOOTSTRAP = ""
 # need to remove the dependency by this tricky code.
 python () {
     removed_task = "update-rc.d-native:do_populate_sysroot"
-    deps = d.getVarFlag("do_rootfs", "depends")
+    deps = d.getVarFlag("do_rootfs", "depends", False)
     d.setVarFlag("do_rootfs", "depends", deps.replace(removed_task, ""))
 }

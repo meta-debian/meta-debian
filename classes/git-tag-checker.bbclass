@@ -18,10 +18,10 @@
 #  completely ignored if GIT_REBUILD_TAG is defined.
 #
 
-SRCPV = ""
-python __anonymous () {
+SRCPV = "${@get_srcrev_new(d)}"
+def get_srcrev_new(d):
     import re
-    import commands
+    import subprocess
 
     git_tag = ""
     git_rebuild_tag = d.getVar("GIT_REBUILD_TAG", True) or ""
@@ -33,7 +33,6 @@ python __anonymous () {
         git_tag = git_preferred_tag
 
     if git_tag != "":
-        scms = 0
         src_uri_new = []
 
         # Get original SRC_URI
@@ -47,38 +46,41 @@ python __anonymous () {
             ud = fetcher.ud[u]
             git_specified_tag = ""
 
-            # check scms
-            if ud.method.supports_srcrev():
-                scms += 1
-
             # Set git_tag if specified GIT_REBUILD_TAG or GIT_PREFERRED_TAG
             if isinstance(ud.method, bb.fetch2.git.Git):
                 repourl = ud.method._get_repo_url(ud)
-                cmd = "%s ls-remote --exit-code %s %s" % (ud.basecmd, repourl, git_tag)
 
-                status, output = commands.getstatusoutput(cmd)
+                cmd = "%s ls-remote --exit-code %s %s" % (ud.basecmd, repourl, git_tag)
+                try:
+                    output = subprocess.check_output(cmd.split(), shell=False, stderr=subprocess.STDOUT).decode()
+                    status = 0
+                except subprocess.CalledProcessError as ex:
+                    output = ex.output.decode()
+                    status = ex.returncode
+
                 if status == 0:
                     git_specified_tag = git_tag
 
             # Set git_tag to URI
             if git_specified_tag != "":
+                # Delete current tag and SRCREV information
                 #u = re.sub(r';branch=[^;]*', '', u)
-                u += ";tag=%s" % git_specified_tag
+                u = re.sub(r';tag=[^;]*', '', u)
                 d.delVar("SRCREV")
+
+                # Insert new tag information
+                u += ";tag=%s" % git_specified_tag
 
             src_uri_new.append(u)
 
         # Set new SRC_URI
         d.setVar("SRC_URI", " ".join(src_uri_new))
 
-        # Set SRCPV if there is some scms
-        if scms != 0:
-            srcpv = bb.fetch2.get_srcrev(d)
-            d.setVar("SRCPV", srcpv)
-}
+    return bb.fetch2.get_srcrev(d)
+
 
 python base_do_unpack_append() {
-    import commands
+    import subprocess
 
     git_rebuild_tag = d.getVar("GIT_REBUILD_TAG", True) or ""
     if git_rebuild_tag != "":
@@ -88,12 +90,28 @@ python base_do_unpack_append() {
                 os.chdir(ud.destdir)
 
                 cmd = "git rev-parse %s" % git_rebuild_tag
-                status, tag_hash = commands.getstatusoutput(cmd)
+                try:
+                    tag_hash = subprocess.check_output(cmd.split(), shell=False, stderr=subprocess.STDOUT).decode()
+                    status = 0
+                except subprocess.CalledProcessError as ex:
+                    tag_hash = ex.output.decode()
+                    status = ex.returncode
+                if tag_hash[-1:] == '\n':
+                    tag_hash = tag_hash[:-1]
+
                 if status != 0:
                     bb.fatal("%s doesn't contain GIT_REBUILD_TAG(%s)" % (ud.destdir, git_rebuild_tag))
 
                 cmd = "git rev-parse HEAD"
-                status, head_hash = commands.getstatusoutput(cmd)
+                try:
+                    head_hash = subprocess.check_output(cmd.split(), shell=False, stderr=subprocess.STDOUT).decode()
+                    status = 0
+                except subprocess.CalledProcessError as ex:
+                    head_hash = ex.output.decode()
+                    status = ex.returncode
+                if head_hash[-1:] == '\n':
+                    head_hash = head_hash[:-1]
+
                 if status != 0:
                     bb.fatal("%s doesn't contain HEAD" % ud.destdir)
 
