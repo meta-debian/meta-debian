@@ -12,7 +12,7 @@
 
 python do_package_deb_prepend() {
     import os.path
-    import commands
+    import subprocess
     import re
 
     dpn = d.getVar("DPN", True) or ""
@@ -29,8 +29,14 @@ python do_package_deb_prepend() {
             bb.fatal("%s: DEBIAN_UNPACK_DIR is empty" % dpn)
         changelog = unpack_dir + "/debian/changelog"
         if os.path.isfile(changelog):
-            head = commands.getoutput("head -1 %s 2>/dev/null" % changelog)
-            if head is "":
+            cmd = "head -1 %s" % changelog
+            try:
+                head = subprocess.check_output(cmd.split(), shell=False, stderr=subprocess.STDOUT).decode()
+                status = 0
+            except subprocess.CalledProcessError as ex:
+                head = ex.output.decode()
+                status = ex.returncode
+            if status != 0:
                 bb.fatal("%s: failed to read %s" % (dpn, changelog))
             search = re.compile("\(.*\)").search(head)
             if search is None:
