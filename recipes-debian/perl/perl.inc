@@ -1,4 +1,4 @@
-INC_PR = "r0"
+INC_PR = "r1"
 
 inherit debian-package
 
@@ -13,7 +13,7 @@ file://Artistic;md5=2e6fd2475335af892494fe1f7327baf3 \
 
 # Base on debian/rules, create file patchlevel-debian.h
 # which is required by perl when build with option -DDEBIAN.
-do_compile_append(){
+do_compile_prepend(){
         cd ${S}
 
         export patches="debian/patches/series"
