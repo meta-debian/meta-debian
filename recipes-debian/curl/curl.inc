@@ -7,7 +7,7 @@ SUMMARY = "Command line tool and library for client-side URL transfers"
 HOMEPAGE = "http://curl.haxx.se/"
 BUGTRACKER = "http://curl.haxx.se/mail/list.cgi?list=curl-tracker"
 
-INC_PR = "r0"
+INC_PR = "r1"
 DPN = "curl"
 
 inherit debian-package
@@ -26,10 +26,11 @@ LIC_FILES_CHKSUM = " \
 SRC_URI += " \
 	file://configure_ac.patch \
 	file://pkgconfig_fix.patch \
+	file://correct-path-to-krb5-config_debian.patch \
 "
 
 inherit autotools pkgconfig binconfig multilib_header
-
+DEPENDS_class-target += "krb5"
 EXTRA_OECONF = " \
 	--without-libidn \
 	--enable-crypto-auth \
