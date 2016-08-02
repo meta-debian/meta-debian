@@ -4,6 +4,156 @@
 # base commit: a6866222ef6feaa2112618f1442a8960840e394a
 #
 
+#
+# Provide perl and perl-base as Debian.
+# Because perl modules have been shipped to other perl-module-* packages,
+# we need set RDEPENDS for perl and perl-base.
+#
+RDEPENDS_${PN}-base += " \
+    ${PN}-lib \
+    ${PN}-module-attributes \
+    ${PN}-module-autoloader \
+    ${PN}-module-base \
+    ${PN}-module-bytes \
+    ${PN}-module-bytes-heavy \
+    ${PN}-module-carp \
+    ${PN}-module-carp-heavy \
+    ${PN}-module-config-git \
+    ${PN}-module-constant \
+    ${PN}-module-cwd \
+    ${PN}-module-dynaloader \
+    ${PN}-module-errno \
+    ${PN}-module-exporter \
+    ${PN}-module-exporter-heavy \
+    ${PN}-module-fcntl \
+    ${PN}-module-feature \
+    ${PN}-module-fields \
+    ${PN}-module-file-basename \
+    ${PN}-module-file-glob \
+    ${PN}-module-file-path \
+    ${PN}-module-file-spec \
+    ${PN}-module-file-spec-unix \
+    ${PN}-module-file-temp \
+    ${PN}-module-filehandle \
+    ${PN}-module-getopt-long \
+    ${PN}-module-hash-util \
+    ${PN}-module-integer \
+    ${PN}-module-io \
+    ${PN}-module-io-file \
+    ${PN}-module-io-handle \
+    ${PN}-module-io-pipe \
+    ${PN}-module-io-seekable \
+    ${PN}-module-io-select \
+    ${PN}-module-io-socket \
+    ${PN}-module-io-socket-inet \
+    ${PN}-module-io-socket-ip \
+    ${PN}-module-io-socket-unix \
+    ${PN}-module-ipc-open2 \
+    ${PN}-module-ipc-open3 \
+    ${PN}-module-lib \
+    ${PN}-module-list-util \
+    ${PN}-module-locale \
+    ${PN}-module-overload \
+    ${PN}-module-overloading \
+    ${PN}-module-parent \
+    ${PN}-module-posix \
+    ${PN}-module-re \
+    ${PN}-module-scalar-util \
+    ${PN}-module-selectsaver \
+    ${PN}-module-socket \
+    ${PN}-module-symbol \
+    ${PN}-module-text-parsewords \
+    ${PN}-module-text-tabs \
+    ${PN}-module-text-wrap \
+    ${PN}-module-tie-hash \
+    ${PN}-module-unicore \
+    ${PN}-module-utf8 \
+    ${PN}-module-utf8-heavy \
+    ${PN}-module-xsloader \
+"
+RDEPENDS_${PN} += " \
+    ${PN}-module-arybase \
+    ${PN}-module-b \
+    ${PN}-module-b-concise \
+    ${PN}-module-b-showlex \
+    ${PN}-module-b-terse \
+    ${PN}-module-b-xref \
+    ${PN}-module-compress-raw-bzip2 \
+    ${PN}-module-compress-raw-zlib \
+    ${PN}-module-data-dumper \
+    ${PN}-module-devel-peek \
+    ${PN}-module-devel-ppport \
+    ${PN}-module-digest-md5 \
+    ${PN}-module-digest-sha \
+    ${PN}-module-encode \
+    ${PN}-module-encode-alias \
+    ${PN}-module-encode-byte \
+    ${PN}-module-encode-cjkconstants \
+    ${PN}-module-encode-cn \
+    ${PN}-module-encode-cn-hz \
+    ${PN}-module-encode-config \
+    ${PN}-module-encode-ebcdic \
+    ${PN}-module-encode-encoder \
+    ${PN}-module-encode-encoding \
+    ${PN}-module-encode-gsm0338 \
+    ${PN}-module-encode-guess \
+    ${PN}-module-encode-jp \
+    ${PN}-module-encode-jp-h2z \
+    ${PN}-module-encode-jp-jis7 \
+    ${PN}-module-encode-kr \
+    ${PN}-module-encode-kr-2022-kr \
+    ${PN}-module-encode-mime-header \
+    ${PN}-module-encode-mime-header-iso-2022-jp \
+    ${PN}-module-encode-mime-name \
+    ${PN}-module-encode-symbol \
+    ${PN}-module-encode-tw \
+    ${PN}-module-encode-unicode \
+    ${PN}-module-encode-unicode-utf7 \
+    ${PN}-module-encoding \
+    ${PN}-module-file-dosglob \
+    ${PN}-module-file-spec-cygwin \
+    ${PN}-module-file-spec-epoc \
+    ${PN}-module-file-spec-functions \
+    ${PN}-module-file-spec-mac \
+    ${PN}-module-file-spec-os2 \
+    ${PN}-module-file-spec-vms \
+    ${PN}-module-file-spec-win32 \
+    ${PN}-module-filter-util-call \
+    ${PN}-module-hash-util-fieldhash \
+    ${PN}-module-i18n-langinfo \
+    ${PN}-module-io-dir \
+    ${PN}-module-io-poll \
+    ${PN}-module-ipc-msg \
+    ${PN}-module-ipc-semaphore \
+    ${PN}-module-ipc-sharedmem \
+    ${PN}-module-ipc-sysv \
+    ${PN}-module-list-util-xs \
+    ${PN}-module-math-bigint-fastcalc \
+    ${PN}-module-mime-base64 \
+    ${PN}-module-mime-quotedprint \
+    ${PN}-module-mro \
+    ${PN}-module-o \
+    ${PN}-module-opcode \
+    ${PN}-module-ops \
+    ${PN}-module-perlio-encoding \
+    ${PN}-module-perlio-mmap \
+    ${PN}-module-perlio-scalar \
+    ${PN}-module-perlio-via \
+    ${PN}-module-sdbm-file \
+    ${PN}-module-storable \
+    ${PN}-module-sys-hostname \
+    ${PN}-module-sys-syslog \
+    ${PN}-module-threads \
+    ${PN}-module-threads-shared \
+    ${PN}-module-tie-hash-namedcapture \
+    ${PN}-module-time-hires \
+    ${PN}-module-time-piece \
+    ${PN}-module-time-seconds \
+    ${PN}-module-unicode-collate \
+    ${PN}-module-unicode-collate-locale \
+    ${PN}-module-unicode-normalize \
+"
+
 # To create/update the perl-rdepends_${PV}.inc use this piece of ugly script (modified for your arch/paths etc):
 
 #jiahongxu:5.20.0-r1$ pwd
@@ -18,8 +168,7 @@
 #| sed 's/^/RDEPENDS_/;s/perl-module-/${PN}-module-/g;s/module-\(module-\)/\1/g;s/\(module-load\)-conditional/\1/g;s/encode-configlocal/&-pm/;' 
 #| egrep -wv '=>|module-a|module-apache.?|module-apr|module-authen-sasl|module-b-asmdata|module-build-.*|module-convert-ebcdic|module-devel-size|module-digest-perl-md5|module-dumpvalue|module-extutils-constant-aaargh56hash|module-extutils-xssymset|module-file-bsdglob|module-for|module-it|module-io-string|module-ipc-system-simple|module-lexical|module-local-lib|metadata|module-modperl-util|module-pluggable-object|module-test-builder-io-scalar|module-text-unidecode|module-win32|objects\sload|syscall.ph|systeminfo.ph|%s' > /tmp/
 
-RDEPENDS_perl-misc += "perl"
-RDEPENDS_${PN}-pod += "perl"
+RDEPENDS_${PN}-pod += "${PN}-base"
 
 # Some additional dependencies that the above doesn't manage to figure out
 RDEPENDS_${PN}-module-file-spec += "${PN}-module-file-spec-unix"

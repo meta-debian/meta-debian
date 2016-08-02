@@ -6,7 +6,7 @@
 
 require perl.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 # Remove the patches which already available in Debian:
 # 	debian/* 
@@ -63,7 +63,6 @@ LDFLAGS_append = " -fstack-protector"
 
 # We're almost Debian, aren't we?
 CFLAGS += "-DDEBIAN"
-CFLAGS += "-I${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PERL_PV}/CORE"
 
 do_nolargefile() {
 	sed -i -e "s,\(uselargefiles=\)'define',\1'undef',g" \
@@ -252,9 +251,9 @@ perl_package_preprocess () {
             ${PKGD}${libdir}/perl/config.sh
 }
 
-PACKAGES = "perl-dbg perl perl-misc perl-dev perl-pod perl-doc perl-lib \
-            perl-module-cpan perl-module-cpanplus perl-module-unicore"
-FILES_${PN} = "${bindir}/perl ${bindir}/perl${PERL_PV} \
+PACKAGES = "${PN}-dbg ${PN}-base ${PN} ${PN}-dev ${PN}-pod ${PN}-doc ${PN}-lib \
+            ${PN}-module-cpan ${PN}-module-cpanplus ${PN}-module-unicore"
+FILES_${PN}-base = "${bindir}/perl ${bindir}/perl${PERL_PV} \
                ${libdir}/perl/${PERL_PV}/Config.pm \
                ${libdir}/perl/${PERL_PV}/strict.pm \
                ${libdir}/perl/${PERL_PV}/warnings.pm \
@@ -262,8 +261,8 @@ FILES_${PN} = "${bindir}/perl ${bindir}/perl${PERL_PV} \
                ${libdir}/perl/${PERL_PV}/vars.pm \
               "
 FILES_${PN}_append_class-nativesdk = " ${bindir}/perl.real"
-RPROVIDES_${PN} += "perl-module-strict perl-module-vars perl-module-config perl-module-warnings \
-                    perl-module-warnings-register"
+RPROVIDES_${PN} += "${PN}-module-strict ${PN}-module-vars ${PN}-module-config \
+                    ${PN}-module-warnings ${PN}-module-warnings-register ${PN}-misc"
 FILES_${PN}-dev = "${libdir}/perl/${PERL_PV}/CORE"
 FILES_${PN}-lib = "${libdir}/libperl.so* \
                    ${libdir}/perl5 \
@@ -274,7 +273,7 @@ FILES_${PN}-pod = "${libdir}/perl/${PERL_PV}/pod \
 		   ${libdir}/perl/${PERL_PV}/*.pod \
                    ${libdir}/perl/${PERL_PV}/*/*.pod \
                    ${libdir}/perl/${PERL_PV}/*/*/*.pod "
-FILES_perl-misc = "${bindir}/*"
+FILES_${PN} = "${bindir}/*"
 FILES_${PN}-dbg += "${libdir}/perl/${PERL_PV}/auto/*/.debug \
                     ${libdir}/perl/${PERL_PV}/auto/*/*/.debug \
                     ${libdir}/perl/${PERL_PV}/auto/*/*/*/.debug \
@@ -305,11 +304,11 @@ FILES_${PN}-doc = "${libdir}/perl/${PERL_PV}/*/*.txt \
                    ${libdir}/perl/${PERL_PV}/unicore/mktables.lst \
                    ${libdir}/perl/${PERL_PV}/unicore/version "
 
-FILES_perl-module-cpan += "${libdir}/perl/${PERL_PV}/CPAN \
+FILES_${PN}-module-cpan += "${libdir}/perl/${PERL_PV}/CPAN \
                            ${libdir}/perl/${PERL_PV}/CPAN.pm"
-FILES_perl-module-cpanplus += "${libdir}/perl/${PERL_PV}/CPANPLUS \
+FILES_${PN}-module-cpanplus += "${libdir}/perl/${PERL_PV}/CPANPLUS \
                                ${libdir}/perl/${PERL_PV}/CPANPLUS.pm"
-FILES_perl-module-unicore += "${libdir}/perl/${PERL_PV}/unicore"
+FILES_${PN}-module-unicore += "${libdir}/perl/${PERL_PV}/unicore"
 
 # Create a perl-modules package recommending all the other perl
 # packages (actually the non modules packages and not created too)
@@ -333,11 +332,39 @@ python populate_packages_prepend () {
 PACKAGES_DYNAMIC += "^perl-module-.*"
 PACKAGES_DYNAMIC_class-nativesdk += "^nativesdk-perl-module-.*"
 
-RPROVIDES_perl-lib = "perl-lib"
-
 require perl-rdepends.inc
-require perl-rprovides.inc
 require perl-ptest.inc
+
+# Base on debian/control
+RPROVIDES_${PN}-base += " \
+    perl5-base libscalar-list-utils-perl libxsloader-perl \
+    libsocket-perl libfile-temp-perl libfile-path-perl \
+    libio-socket-ip-perl \
+"
+RPROVIDES_${PN}-modules += " \
+    libpod-parser-perl libansicolor-perl libnet-perl libattribute-handlers-perl \
+    libi18n-langtags-perl liblocale-maketext-perl libmath-bigint-perl \
+    libnet-ping-perl libtest-harness-perl libtest-simple-perl \
+    liblocale-codes-perl libmodule-corelist-perl libio-zlib-perl libarchive-tar-perl \
+    libextutils-cbuilder-perl libmodule-load-perl liblocale-maketext-simple-perl \
+    libparams-check-perl libmodule-load-conditional-perl libversion-perl \
+    libpod-simple-perl libextutils-parsexs-perl libpod-escapes-perl libparse-cpan-meta-perl \
+    libparent-perl libautodie-perl libthread-queue-perl libfile-spec-perl libtime-local-perl \
+    podlators-perl libunicode-collate-perl libcpan-meta-perl libmath-complex-perl \
+    libextutils-command-perl libmodule-metadata-perl libjson-pp-perl libperl-ostype-perl \
+    libversion-requirements-perl libcpan-meta-yaml-perl libdigest-perl libextutils-install-perl \
+    libhttp-tiny-perl libcpan-meta-requirements-perl libexperimental-perl \
+"
+RPROVIDES_${PN} += " \
+    data-dumper perl5 libdigest-md5-perl libmime-base64-perl libtime-hires-perl \
+    libstorable-perl libdigest-sha-perl libsys-syslog-perl libcompress-zlib-perl \
+    libcompress-raw-zlib-perl libcompress-raw-bzip2-perl libio-compress-zlib-perl \
+    libio-compress-bzip2-perl libio-compress-base-perl libio-compress-perl \
+    libthreads-perl libthreads-shared-perl libtime-piece-perl libencode-perl \
+"
+
+RDEPENDS_${PN}-modules += "${PN}-base"
+RDEPENDS_${PN} += "${PN}-base ${PN}-modules"
 
 SSTATE_SCAN_FILES += "*.pm *.pod *.h *.pl *.sh"
 

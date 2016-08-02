@@ -79,7 +79,7 @@ do_install_append(){
 		install -d ${D}${sysconfdir}/pam.d
 		sed 's/^@IF_KEYINIT@//' ${S}/debian/openssh-server.sshd.pam.in
 			> ${D}${sysconfdir}/pam.d/sshd
-		sed -i -e 's:^# UsePAM yes:^UsePAM yes:' ${WORKDIR}/openssh-server.postinst
+		sed -i -e 's:^# UsePAM yes:UsePAM yes:' ${WORKDIR}/openssh-server.postinst
 	fi
 
 	# FIXME: Remove GSSAPIAuthentication and GSSAPIDelegateCredentials from ssh_config.

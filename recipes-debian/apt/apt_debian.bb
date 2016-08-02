@@ -9,7 +9,7 @@ require apt.inc
 SRC_URI += " \
 	file://gtest-skip-fix.patch \
 "
-DEPENDS += "curl db"
+DEPENDS += "curl db dpkg"
 
 do_configure_prepend() {
 	rm -rf ${S}/buildlib/config.sub
@@ -47,6 +47,41 @@ do_install() {
 	install -D -m 0755 ${S}/debian/apt.bug-script \
 		${D}${datadir}/bug/apt/script
 	cp -r ${B}/locale ${D}${datadir}
+
+	install -D -m 0644 ${S}/vendor/debian/sources.list \
+		${D}${docdir}/${DPN}/examples/sources.list
+	#follow debian/apt.dirs
+	install -d ${D}${libdir}/${DPN}/methods/apt
+	install -d ${D}${sysconfdir}/${DPN}/preferences.d
+	install -d ${D}${sysconfdir}/${DPN}/sources.list.d
+	install -d ${D}${sysconfdir}/${DPN}/trusted.gpg.d
+	install -d ${D}${localstatedir}/cache/${DPN}/archives/partial
+	install -d ${D}${localstatedir}/lib/${DPN}/lists/partial
+	install -d ${D}${localstatedir}/lib/${DPN}/mirrors/partial
+	install -d ${D}${localstatedir}/lib/${DPN}/periodic
+	install -d ${D}${localstatedir}/log/${DPN}
+
+	#Write the correct apt-architecture to apt.conf
+	APT_CONF=${D}${sysconfdir}/apt/apt.conf
+	echo 'APT::Architecture "${DPKG_ARCH}";' > ${APT_CONF}
+}
+# base on debian/postinst
+pkg_postinst_${PN} () {
+	set -e
+
+	create_apt_conf ()
+	{
+		EXAMPLE_SOURCE=$D${docdir}/${DPN}/examples/sources.list
+		if [ -f $EXAMPLE_SOURCE ]; then
+			cp $EXAMPLE_SOURCE $D${sysconfdir}/${DPN}/sources.list
+		fi
+	}
+	#
+	# If there is no /etc/apt/sources.list then create a default
+	#
+	if [ ! -f $D${sysconfdir}/${DPN}/sources.list ]; then
+		create_apt_conf
+	fi
 }
 PACKAGES =+ "${DPN}-transport-https ${DPN}-utils lib${DPN}-inst libapt-pkg"
 DEBIANNAME_${PN}-dev = "lib${DPN}-pkg-dev"

@@ -3,7 +3,7 @@
 # base recipe: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -37,10 +37,6 @@ do_install_append_class-target() {
 	# Install bzexe
 	install -m 755 ${S}/bzexe ${D}${base_bindir}/
 	cp ${S}/bzexe.1 ${D}${mandir}/man1
-
-	# Correct the softlink
-	ln -sf bzip2 ${D}${base_bindir}/bunzip2
-	ln -sf bzip2 ${D}${base_bindir}/bzcat
 }
 
 do_install_ptest () {

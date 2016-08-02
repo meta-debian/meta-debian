@@ -7,7 +7,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://www.intra2net.com/en/developer/libftdi/"
 
-PR = "r1"
+PR = "r3"
 DPN = "libftdi"
 inherit debian-package
 
@@ -36,19 +36,11 @@ do_compile_prepend() {
 }
 
 do_install_append() {
-	#remove the unwanted files
-	for file in ${D}${bindir}/*
-	do
-		[ $file != ${D}${bindir}/libftdi-config ] && rm $file
-	done
-	rm ${D}${libdir}/python2.7/dist-packages/libftdi-0.20.egg-info \
-		${D}${libdir}/python2.7/dist-packages/ftdi.pyc ${D}${libdir}/*.la
+	#remove these files conflicts with libftdi
+	rm -r ${D}${includedir} ${D}${bindir} ${D}${libdir}/pkgconfig
+	rm ${D}${libdir}/libftdi* 
 }
-PACKAGES =+ "python-ftdi"
 
 FILES_${PN}-dbg += "${libdir}/python2.7/dist-packages/.debug/*"
-FILES_python-ftdi = "${libdir}/python2.7/dist-packages/*"
-FILES_${PN}-dev += "${bindir}/${DPN}-config"
-PKG_${PN} = "${DPN}1"
-PKG_${PN}-dev = "${DPN}-dev"
-PKG_${PN}-dbg = "${DPN}1-dbg"
+FILES_${PN} = "${libdir}/python2.7/dist-packages/*"
+PKG_${PN} = "python-ftdi"

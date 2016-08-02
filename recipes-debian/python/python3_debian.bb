@@ -336,9 +336,9 @@ FILES_${DPN}-examples = " \
 FILES_lib${DPN}-stdlib = "${libdir}/python${PYTHON_MAJMIN}"
 FILES_idle-${DPN} = "${bindir}/idle-python${PYTHON_MAJMIN}"
 
-DEBIANNAME_lib${DPN}-minimal = "lib${DPN}-minimal"
-DEBIANNAME_lib${DPN}-stdlib = "lib${DPN}-stdlib"
-DEBIANNAME_lib${DPN}-testsuite = "lib${DPN}-testsuite"
+DEBIAN_NOAUTONAME_lib${DPN}-minimal = "1"
+DEBIAN_NOAUTONAME_lib${DPN}-stdlib = "1"
+DEBIAN_NOAUTONAME_lib${DPN}-testsuite = "1"
 
 # python3-pyvenv as python3.4-venv
 RPROVIDES_${PN}-pyvenv += "${DPN}-venv"
@@ -372,13 +372,18 @@ RDEPENDS_lib${DPN}-stdlib += " \
     ${PN}-sqlite3 ${PN}-terminal ${PN}-textutils ${PN}-threading \
     ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml \
 "
-RDEPENDS_${DPN} += "lib${DPN}-minimal lib${DPN}-stdlib"
-RDEPENDS_${DPN}-venv += "${DPN}"
+
+# python3-core as python3.4
+# python3-pyvenv as python3.4-venv
+# python3-dev as libpython3.4-dev
+RDEPENDS_${PN}-core += "${DPN}-minimal lib${DPN}-stdlib"
+RDEPENDS_${PN}-pyvenv += "${DPN}"
+RDEPENDS_lib${DPN}-stdlib += "lib${DPN}-minimal"
 RDEPENDS_${DPN}-minimal += "lib${DPN}-minimal"
 RDEPENDS_lib${DPN} += "lib${DPN}-stdlib"
 RDEPENDS_${DPN}-examples += "${DPN}"
 RDEPENDS_${DPN}-dev += "${DPN} lib${DPN}-dev lib${DPN}"
-RDEPENDS_lib${DPN}-dev += "lib${DPN}-stdlib"
+RDEPENDS_${PN}-dev += "lib${DPN}-stdlib"
 RDEPENDS_lib${DPN}-testsuite += "${DPN} ${PN}-tests ${PN}-sqlite3-tests"
 RDEPENDS_idle-${DPN} += "${DPN}"
 
