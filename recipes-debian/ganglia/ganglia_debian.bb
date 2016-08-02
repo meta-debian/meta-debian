@@ -3,7 +3,7 @@ DESCRIPTION = "Ganglia is a scalable, real-time cluster monitoring environment \
  that collects cluster statistics in an open and well-defined XML format."
 HOMEPAGE = "http://ganglia.info/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "BSD & LGPLv2+ & Apache-1.1"
@@ -11,7 +11,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=3b3c74375e67e92756770b3ee9debc5f \
                     file://lib/getopt_init.c;endline=19;md5=765b59293ed2609f223df9e582636879 \
                     file://lib/readdir.c;endline=47;md5=302a4cfe73766648336760988ae36035"
 DEPENDS = "apr confuse libpcre python rrdtool libtool"
-EXTRA_OECONF += "--with-gmetad --enable-shared"
+
+# Follow debian/rules
+EXTRA_OECONF += "--sysconfdir=${sysconfdir}/${DPN} --enable-shared --with-gmetad"
 
 inherit autotools-brokensep pythonnative
 
@@ -33,37 +35,46 @@ do_configure_append() {
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/init.d
-	install -d ${D}${sysconfdir}/${PN}
-	install -d ${D}${libdir}/${PN}/python_modules/
-	install -m 0644 ${S}/debian/gmond.conf ${D}${sysconfdir}/${PN}/
+	install -d ${D}${libdir}/${DPN}/python_modules/
+	install -m 0644 ${S}/debian/gmond.conf ${D}${sysconfdir}/${DPN}/
 	install -m 0755 ${S}/debian/ganglia-monitor.init ${D}${sysconfdir}/init.d/ganglia-monitor
-	mv ${D}${sysconfdir}/gmetad.conf ${D}${sysconfdir}/${PN}/
-	install -m 0755 ${S}/gmetad/gmetad.init ${D}${sysconfdir}/init.d/gmetad
+	install -m 0755 ${S}/debian/gmetad.init ${D}${sysconfdir}/init.d/gmetad
 
-	mv ${D}${sysconfdir}/conf.d ${D}${sysconfdir}/${PN}/	
-	cp ${S}/gmond/python_modules/conf.d/* ${D}${sysconfdir}/${PN}/conf.d
-	cp ${S}/gmond/python_modules/*/*.py ${D}${libdir}/${PN}/python_modules/	
+	# Empty out the dependency field in our .la files
+	for file in ${D}${libdir}/*.la; do
+		sed -i "/dependency_libs/ s/'.*'/''/" $file
+	done
+
+	install -d ${D}${sysconfdir}/${DPN}/conf.d
+	cp ${S}/debian/modpython.conf            ${D}${sysconfdir}/${DPN}/conf.d/
+	cp ${S}/gmond/python_modules/*/*.pyconf* ${D}${sysconfdir}/${DPN}/conf.d/
+	cp ${S}/gmond/python_modules/*/*.py      ${D}${libdir}/${DPN}/python_modules/
+	cp ${S}/gmetad/gmetad.conf               ${D}${sysconfdir}/${DPN}
 }
 
-PACKAGES =+ "ganglia-monitor gmetad ganglia-monitor-python"
+PACKAGES =+ "${PN}-monitor gmetad ${PN}-monitor-python"
 
-FILES_${PN} += " ${base_libdir}/systemd/system/*"
+FILES_${PN} += "${systemd_system_unitdir}"
 
-FILES_ganglia-monitor = " \
-	${sysconfdir}/${PN}/gmond.conf \
+FILES_${PN}-monitor = " \
+	${sysconfdir}/${DPN}/gmond.conf \
 	${sysconfdir}/init.d/ganglia-monitor \
 	${bindir}/gmetric \
 	${bindir}/gstat \
 	${sbindir}/gmond"
 
 FILES_gmetad = " \
-	${sysconfdir}/${PN}/gmetad.conf \
+	${sysconfdir}/${DPN}/gmetad.conf \
 	${sysconfdir}/init.d/gmetad \
 	${sbindir}/gmetad"
 
-FILES_ganglia-monitor-python = " \
-	${sysconfdir}/${PN}/conf.d/* \
-	${libdir}/${PN}/python_modules/*"
+FILES_${PN}-monitor-python = " \
+	${sysconfdir}/${DPN}/conf.d/* \
+	${libdir}/${DPN}/python_modules/*"
+
+RDEPENDS_gmetad += "${PN} start-stop-daemon"
+RDEPENDS_${PN}-monitor += "${PN} start-stop-daemon"
+RDEPENDS_${PN}-monitor-python += "${PN}-monitor"
 
 PKG_${PN} = "libganglia1"
 PKG_${PN}-dev = "libganglia1-dev"
