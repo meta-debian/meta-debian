@@ -1,8 +1,9 @@
 require sudo.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 #Add configuration options for sudo package
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF += "\
 	--prefix=${prefix} -v 						\
 	--with-pam 							\
@@ -20,7 +21,7 @@ EXTRA_OECONF += "\
 	--with-rundir=${localstatedir}${base_libdir}/sudo		\
 	--mandir=${mandir}	 					\
 	--libexecdir=${libdir}/sudo 					\
-	--with-selinux 							\
+	--without-selinux						\
 	--with-linux-audit 						\
 "
 #sudo packages conflict with sudo-ldap package; follow debian/control

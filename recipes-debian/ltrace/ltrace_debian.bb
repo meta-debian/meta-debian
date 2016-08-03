@@ -3,7 +3,7 @@
 #	http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-devtools/ltrace/ltrace_git.bb
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -17,9 +17,8 @@ DEPENDS = "elfutils"
 SRC_URI += "file://configure-allow-to-disable-selinux-support.patch"
 
 inherit autotools
-
-PACKAGECONFIG ?= "${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)}"
+# Don't use selinux support
+EXTRA_OECONF += "--disable-selinux"
 PACKAGECONFIG[unwind] = "--with-libunwind,--without-libunwind,libunwind"
-PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux"
 
 LDFLAGS += "-lstdc++"

@@ -1,4 +1,4 @@
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = " \
 inherit autotools-brokensep pkgconfig
 
 # Configure follow Debian
+# --disable-selinux: Don't use selinux support
 EXTRA_OECONF += " \
 	--exec-prefix= \
 	--sbindir=${base_sbindir} \
@@ -37,10 +38,8 @@ EXTRA_OECONF += " \
 	--enable-udev_rules \
 	--enable-udev_sync \
 	--disable-blkdeactivate \
+	--disable-selinux \
 "
-
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)}"
-PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux,"
 
 DEVMAPPER_ABINAME = "1.02.1"
 EXTRA_OEMAKE += "LIB_VERSION_DM=${DEVMAPPER_ABINAME}"

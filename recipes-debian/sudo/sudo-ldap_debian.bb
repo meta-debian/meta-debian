@@ -1,8 +1,9 @@
 require sudo.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 #Add configuration options for sudo-ldap package
 #Follow debian/rules
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF += "\	
 	--with-ldap 						\
 	--with-pam 						\
@@ -23,7 +24,7 @@ EXTRA_OECONF += "\
 	--with-ldap-conf-file=${sysconfdir}/sudo-ldap.conf 	\
 	--mandir=${mandir}	 				\
 	--libexecdir=${libdir}/sudo 				\
-	--with-selinux 						\
+	--without-selinux 					\
 	--with-linux-audit 					\
 "
 DEPENDS += "openldap"

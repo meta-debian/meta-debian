@@ -4,7 +4,7 @@
 # base commit: 3fb5191d4da52c6b352a23881c0ea63c2e348619
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -33,6 +33,7 @@ SYSTEMD_SERVICE_${PN} = "ssh.socket"
 CFLAGS += "-D__FILE_OFFSET_BITS=64"
 
 # Configure follow debian/rules
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 	--sysconfdir=${sysconfdir}/ssh \
 	--disable-strip \
@@ -43,6 +44,7 @@ EXTRA_OECONF = " \
 	--with-default-path=${DEFAULT_PATH} \
 	--with-superuser-path=${SUPERUSER_PATH} \
 	--with-cflags='${cflags}' \
+	--without-selinux \
 "
 cflags = "${CPPFLAGS} ${CFLAGS} -DLOGIN_PROGRAM=\"${base_bindir}/login\" -DLOGIN_NO_ENDOPT"
 DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
@@ -50,11 +52,9 @@ SUPERUSER_PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 PACKAGECONFIG ??= "tcp-wrappers \
 	${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
-	${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
-PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
 PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_LIBDIR}/..,--without-kerberos5,krb5"
 

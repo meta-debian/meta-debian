@@ -97,7 +97,7 @@ FILES_${PN}-module-exa = "${libdir}/xorg/modules/libexa.so"
 FILES_${PN}-module-xaa = "${libdir}/xorg/modules/libxaa.so"
 FILES_${PN}-module-libxf1bpp = "${libdir}/xorg/modules/libxf1bpp.so"
 FILES_${PN}-module-libxf4bpp = "${libdir}/xorg/modules/libxf4bpp.so"
-
+# --disable-xselinux: Don't use selinux support
 EXTRA_OECONF += "--with-fop=no \
                  --without-xmlto \
                  --with-pic \
@@ -114,6 +114,7 @@ EXTRA_OECONF += "--with-fop=no \
                  --localstatedir=/var \
                  --with-xkb-output=/var/lib/xkb \
                  ac_cv_file__usr_share_sgml_X11_defs_ent=no \
+                 --disable-xselinux \
 "
 
 PACKAGECONFIG ??= "udev ${@base_contains('DISTRO_FEATURES', 'opengl', 'dri dri2 glx', '', d)}"

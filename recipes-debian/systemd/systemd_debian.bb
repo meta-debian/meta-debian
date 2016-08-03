@@ -49,11 +49,13 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
 
 # --enable-dependency-tracking:
 #   avoid compile error "Cannot open src/*/org.freedesktop.*.policy"
+# --disable-selinux: Disable selinux support
 EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 ${@base_contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
                 --enable-dependency-tracking \
+                --disable-selinux \
                "
 
 do_configure_prepend() {

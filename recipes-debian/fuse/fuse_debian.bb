@@ -7,7 +7,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://fuse.sourceforge.net/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2+"
@@ -16,7 +16,6 @@ LIC_FILES_CHKSUM = "\
 		file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c"
 
 inherit autotools-brokensep
-DEPENDS += "libselinux"
 
 do_configure() {
         aclocal

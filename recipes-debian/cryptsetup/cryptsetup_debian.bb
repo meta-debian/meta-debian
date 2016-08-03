@@ -11,7 +11,7 @@ DESCRIPTION = "\
 	initramfs-tools and several supported ways to read a passphrase or key.   \
 "
 HOMEPAGE = "http://code.google.com/p/cryptsetup/"
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2+"
@@ -22,10 +22,13 @@ inherit autotools-brokensep pkgconfig gettext binconfig lib_package
 
 #inherit autotools-brokensep
 DEPENDS = "util-linux lvm2 popt libgcrypt chrpath-native"
+
+#disable-selinux: Don't use selinux support
 EXTRA_OECONF += "--enable-shared \
 		--libdir=${base_libdir} \
 		--sbindir=${base_sbindir} \
-		--enable-cryptsetup-reencrypt"
+		--enable-cryptsetup-reencrypt \
+		--disable-selinux"
 
 #install follow Debian jessie
 do_install_append() {

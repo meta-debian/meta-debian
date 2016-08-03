@@ -10,7 +10,7 @@ list of commands, and writes the results to the standard \
 output."
 HOMEPAGE = "http://www.gnu.org/software/sed/"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -26,14 +26,15 @@ SRC_URI += " \
     file://run-ptest \
 "
 
-DEPENDS = "libselinux"
 RDEPENDS_${PN}-ptest += "make ${PN}"
 
 inherit autotools texinfo update-alternatives gettext ptest
 
 # Follow debian/rules
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 	--without-included-regex \
+	--without-selinux \
 "
 
 do_install () {

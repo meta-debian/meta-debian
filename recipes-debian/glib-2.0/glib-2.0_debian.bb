@@ -5,7 +5,7 @@
 
 inherit debian-package
 
-PR = "r0"
+PR = "r1"
 DPN = "glib2.0"
 
 LICENSE = "LGPLv2 & PD"
@@ -47,7 +47,10 @@ inherit autotools gettext pkgconfig ptest
 CORECONF = "--disable-dtrace --disable-fam --disable-libelf --disable-systemtap --disable-man"
 
 PTEST_CONF = "${@bb.utils.contains('PTEST_ENABLED', '1', '--enable-installed-tests', '--disable-installed-tests', d)}"
-EXTRA_OECONF = "--enable-included-printf=no --with-pcre=system ${CORECONF} ${PTEST_CONF}"
+# --disable-selinux: Don't use selinux support
+EXTRA_OECONF = "\
+	--enable-included-printf=no --with-pcre=system ${CORECONF} ${PTEST_CONF} \
+	--disable-selinux"
 EXTRA_OECONF_class-native = "${CORECONF} --disable-selinux"
 EXTRA_OECONF_append_libc-uclibc = " --with-libiconv=gnu"
 
