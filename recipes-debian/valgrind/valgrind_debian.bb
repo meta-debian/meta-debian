@@ -6,7 +6,7 @@ DISCRIPTION = "Valgrind is a system for debugging and profiling Linux programs. 
  Valgrind to build new tools."
 HOMEPAGE = "http://valgrind.org/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2 & BSD"
@@ -25,11 +25,14 @@ EXTRA_OECONF = "--enable-tls"
 do_install_append () {
 	install -d ${D}${sysconfdir}/bash_completion.d
 	install -m 0644 ${S}/debian/valgrind.bash-completion ${D}${sysconfdir}/bash_completion.d/valgrind
+
+	# base on debian/valgrind.install
+	install -m 0755 ${S}/debian/valgrind.sh ${D}${bindir}
 	install -m 0644 ${S}/debian/supp/debian.supp ${D}${libdir}/valgrind/
 	
 	# follow debian/rules
 	mv -f ${D}${bindir}/valgrind ${D}${bindir}/valgrind.bin
-	mv -f ${S}/debian/valgrind.sh ${D}${bindir}/valgrind
+	mv -f ${D}${bindir}/valgrind.sh ${D}${bindir}/valgrind
 
 	# remove unnecessary files	
 	rm ${D}${includedir}/${PN}/pub*
