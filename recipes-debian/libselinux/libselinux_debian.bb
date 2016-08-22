@@ -7,7 +7,8 @@ DESCRIPTION = "SELinux runtime shared libraries"
 
 HOMEPAGE =  "http://packages.debian.org/source/sid/libs/libselinux"
 
-PR = "r1"
+PR = "r2"
+
 
 inherit debian-package lib_package pythonnative
 
@@ -19,6 +20,11 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS += "libsepol libpcre swig-native python"
 
+# EXTRA_OEMAKE is typically: -e MAKEFLAGS=
+# "MAKEFLAGS= " causes problems as ENV variables will not pass to subdirs, so
+# we redefine EXTRA_OEMAKE here
+EXTRA_OEMAKE = "-e"
+
 def get_policyconfigarch(d):
     import re
     target = d.getVar('TARGET_ARCH', True)
@@ -29,9 +35,7 @@ EXTRA_OEMAKE += "${@get_policyconfigarch(d)}"
 EXTRA_OEMAKE += "LDFLAGS='${LDFLAGS} -lpcre'"
 
 do_compile() {
-	oe_runmake all \
-	    INCLUDEDIR="${STAGING_INCDIR}" \
-	    LIBDIR="${STAGING_LIBDIR}"
+	oe_runmake all LIBDIR="${STAGING_LIBDIR}"
 
 	oe_runmake pywrap -j1 \
 	    INCLUDEDIR="${STAGING_INCDIR}" \
