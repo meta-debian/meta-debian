@@ -21,7 +21,7 @@ LICENSE = "MIT-style & MIT & PD"
 LIC_FILES_CHKSUM = " \
 file://COPYING;md5=7a0449e9bc5370402a94c00204beca3d \
 file://src/fcfreetype.c;endline=45;md5=5d9513e3196a1fbfdfa94051c09dfc84 \
-file://src/fccache.c;beginline=1131;endline=1146;md5=754c7b855210ee746e5f0b840fad9a9f \
+file://src/fccache.c;beginline=1209;endline=1217;md5=adb322c092298953d6bc608f47ffa239 \
 "
 
 DEPENDS = "expat freetype zlib"
