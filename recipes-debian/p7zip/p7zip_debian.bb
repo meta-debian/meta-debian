@@ -9,10 +9,20 @@ LIC_FILES_CHKSUM = "file://DOCS/copying.txt;md5=ecfc54c9e37b63ac58900061ce2eab5a
 
 inherit debian-package
 
+# The default makefile sets compiler to gcc and g++.
+# We need change them to ${CXX} and ${CC} for cross-compiling
+SRC_URI += "file://do-not-override-compiler.patch"
+
 DEBIAN_PATCH_TYPE = "quilt"
 
 # all3: to build bin/7za, bin/7z (with its plugins), bin/7zr and bin/7zCon.sfx
 EXTRA_OEMAKE = "all3"
+
+do_compile_prepend() {
+	sed -i -e "s@##CXX##@${CXX}@g" \
+	       -e "s@##CC##@${CC}@g" \
+	       ${S}/makefile.machine
+}
 
 do_install() {
         install -d ${D}${bindir}
