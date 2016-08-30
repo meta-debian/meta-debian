@@ -70,6 +70,35 @@ FILES_${PN}-dev += "${libdir}/openhpi/*${SOLIBSDEV}"
 
 RDEPENDS_${PN} += "lsb-base"
 
+# Debian provides openhpi package with doc files only,
+# but on Poky it becomes empty.
+ALLOW_EMPTY_${PN} = "1"
+
+# Follow debian/control
+RDEPENDS_${PN} += " \
+    ${PN}d ${PN}-clients ${PN}-plugin-ilo2-ribcl \
+    ${PN}-plugin-ipmi ${PN}-plugin-ipmidirect \
+    ${PN}-plugin-oa-soap ${PN}-plugin-snmp-bc \
+"
+RDEPENDS_${PN}-dev = "lib${PN} libopenipmi openipmi"
+RDEPENDS_${PN}d += "lib${PN} lsb-base"
+RDEPENDS_${PN}-clients += "lib${PN}"
+RDEPENDS_${PN}-plugin-ipmi += "libopenipmi openipmi"
+
+# All openhpi-plugin-* depend on libopenhpi
+python populate_packages_prepend(){
+    import re
+
+    pn = d.getVar("PN", True)
+    packages = d.getVar("PACKAGES", True)
+
+    patern_plugin_package = pn + '-plugin-.*'
+
+    for package in packages.split():
+        if re.match(patern_plugin_package,package):
+            d.appendVar("RDEPENDS_" + package, " lib" + pn)
+}
+
 DEBIANNAME_lib${PN} = "lib${PN}2"
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
 DEBIAN_NOAUTONAME_${PN}-plugin-snmp-bc = "1"
