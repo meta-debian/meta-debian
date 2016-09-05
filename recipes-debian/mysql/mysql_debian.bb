@@ -6,7 +6,7 @@ language in the world. The main goals of MySQL are speed, robustness and \
 ease of use \
 "
 HOMEPAGE = "http://dev.mysql.com/"
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+ & BSD-4-Clause & BSD & Zlib & PD & ISC"
@@ -126,4 +126,4 @@ RDEPENDS_libmysqlclient += "mysql-common"
 RDEPENDS_${PN} += "\
 	mysql-common debianutils "
 RDEPENDS_mysql-server += "\
-	passwd psmisc mysql-server-core ${PN} initscripts lsb-base"
+	passwd psmisc mysql-server-core ${PN} sysvinit-initscripts lsb-base"
