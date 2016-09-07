@@ -5,19 +5,9 @@
 # the original recipe to simplify this recipe
 #
 
-LICENSE = "GPLv2+"
-LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
+require u-boot.inc
 
 PROVIDES = "virtual/bootloader"
-
-# NOTE: if UBOOT_ENV is set, need to add ${UBOOT_ENV}.${UBOOT_ENV_SUFFIX}
-SRC_URI = "${BOOTLOADER_GIT_URI}/${BOOTLOADER_GIT_PREFIX}u-boot.git;protocol=${BOOTLOADER_GIT_PROTOCOL}"
-
-# latest stable: v2016.07
-SRCREV = "19ce924ff914f315dc2fdf79f357825c513aed6e"
-PV = "v2016.07+git${SRCPV}"
-
-S = "${WORKDIR}/git"
 
 # machine dependent package
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -53,8 +43,9 @@ SPL_SYMLINK ?= "${SPL_BINARY}-${MACHINE}"
 # or 'boot.scr', should be packaged along with u-boot as well as placed in the
 # deploy directory.  Machine configurations needing one of these files should
 # include it in the SRC_URI and set the UBOOT_ENV parameter.
-UBOOT_ENV ??= ""
 UBOOT_ENV_SUFFIX ?= "txt"
+# need to add ${UBOOT_ENV}.${UBOOT_ENV_SUFFIX} into SRC_URI if UBOOT_ENV is set
+UBOOT_ENV ??= ""
 UBOOT_ENV_BINARY ?= "${UBOOT_ENV}.${UBOOT_ENV_SUFFIX}"
 UBOOT_ENV_IMAGE ?= "${UBOOT_ENV}-${MACHINE}-${PV}-${PR}.${UBOOT_ENV_SUFFIX}"
 UBOOT_ENV_SYMLINK ?= "${UBOOT_ENV}-${MACHINE}.${UBOOT_ENV_SUFFIX}"
