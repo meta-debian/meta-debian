@@ -4,3 +4,5 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 LINUX_DEFCONFIG = "omap2plus_defconfig"
 
 KERNEL_DEVICETREE ?= "omap4-panda.dtb omap4-panda-es.dtb"
+
+KERNEL_EXTRA_ARGS += "LOADADDR=${UBOOT_ENTRYPOINT}"
