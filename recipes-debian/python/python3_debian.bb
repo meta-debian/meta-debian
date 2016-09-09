@@ -198,8 +198,7 @@ SSTATE_SCAN_FILES += "Makefile"
 PACKAGE_PREPROCESS_FUNCS += "py_package_preprocess"
 
 py_package_preprocess () {
-# copy back the old Makefile to fix target package
-# Remove references to buildmachine paths in target Makefile and _sysconfigdata
+	# Remove references to buildmachine paths in target Makefile and _sysconfigdata
 	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g \
 		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}*/Makefile \
 		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py
@@ -327,7 +326,6 @@ FILES_lib${DPN}-testsuite = " \
 FILES_${PN}-core = "${bindir}/*"
 FILES_${PN}-dev += " \
     ${libdir}/python${PYTHON_MAJMIN}/*.so \
-    ${libdir}/python${PYTHON_MAJMIN}/*/*.so \
     ${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}* \
     ${libdir}/*/pkgconfig \
 "
