@@ -1,0 +1,26 @@
+From 52d4bdb88f0713798d35f1dfb7c774d3dd60bf21 Mon Sep 17 00:00:00 2001
+From: Masahiro Yamada <masahiro17.yamada@toshiba.co.jp>
+Date: Tue, 6 Sep 2016 06:54:51 +0000
+Subject: [PATCH] Add "include macro.h" to mtd_probe.h
+
+Signed-off-by: Masahiro Yamada <masahiro17.yamada@toshiba.co.jp>
+---
+ src/udev/mtd_probe/mtd_probe.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/udev/mtd_probe/mtd_probe.h b/src/udev/mtd_probe/mtd_probe.h
+index 2a37ede..acb3125 100644
+--- a/src/udev/mtd_probe/mtd_probe.h
++++ b/src/udev/mtd_probe/mtd_probe.h
+@@ -19,6 +19,8 @@
+ 
+ #include <mtd/mtd-user.h>
+ 
++#include "macro.h"
++
+ /* Full oob structure as written on the flash */
+ struct sm_oob {
+         uint32_t reserved;
+-- 
+2.1.4
+
