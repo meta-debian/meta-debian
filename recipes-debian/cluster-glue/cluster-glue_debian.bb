@@ -20,7 +20,9 @@ do_configure_prepend() {
         cd ${S}
         ./autogen.sh && cd -
 }
-
+do_install_append() {
+	install -m 755 ${S}/debian/cluster-glue.logd.init ${D}${sysconfdir}/init.d/logd
+}
 PACKAGES =+ "liblrm2 liblrm2-dev libplumb2 libplumb2-dev libpils2 \
 	libpils2-dev libplumbgpl2 libstonith1 libstonith1-dev"
 
