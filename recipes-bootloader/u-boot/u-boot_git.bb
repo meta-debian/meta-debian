@@ -21,10 +21,10 @@ DEPENDS += "openssl-native dtc-native"
 # must be defined in machine configration
 UBOOT_MACHINE ??= ""
 
-# regarding the variables below, follow poky's namings
-# Some versions of u-boot use .bin and others use .img.  By default use .bin
-# but enable individual recipes to change this value.
-UBOOT_SUFFIX ??= "bin"
+# Regarding the variables below, follow poky's namings.
+# Some versions of u-boot use .bin and others use .img.
+# use .img by default, but enable individual recipes to change this value.
+UBOOT_SUFFIX ??= "img"
 UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.${UBOOT_SUFFIX}"
 UBOOT_BINARY ?= "u-boot.${UBOOT_SUFFIX}"
 UBOOT_SYMLINK ?= "u-boot-${MACHINE}.${UBOOT_SUFFIX}"
