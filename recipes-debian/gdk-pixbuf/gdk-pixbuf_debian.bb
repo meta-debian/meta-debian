@@ -48,7 +48,7 @@ PACKAGECONFIG_linuxstdbase = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x1
 PACKAGECONFIG_class-native = "${GDK_PIXBUF_LOADERS}"
 
 PACKAGECONFIG[png] = "--with-libpng,--without-libpng,libpng"
-PACKAGECONFIG[jpeg] = "--with-libjpeg,--without-libjpeg,jpeg"
+PACKAGECONFIG[jpeg] = "--with-libjpeg,--without-libjpeg,libjpeg-turbo"
 PACKAGECONFIG[tiff] = "--with-libtiff,--without-libtiff,tiff"
 PACKAGECONFIG[jpeg2000] = "--with-libjasper,--without-libjasper,jasper"
 
