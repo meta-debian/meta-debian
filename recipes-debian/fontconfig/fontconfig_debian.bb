@@ -26,16 +26,6 @@ file://src/fccache.c;beginline=1209;endline=1217;md5=adb322c092298953d6bc608f47f
 
 DEPENDS = "expat freetype zlib"
 
-PACKAGES =+ "fontconfig-utils"
-FILES_${PN} =+ "${datadir}/xml/*"
-FILES_fontconfig-utils = "${bindir}/*"
-
-# Work around past breakage in debian.bbclass
-RPROVIDES_fontconfig-utils = "libfontconfig-utils"
-RREPLACES_fontconfig-utils = "libfontconfig-utils"
-RCONFLICTS_fontconfig-utils = "libfontconfig-utils"
-DEBIAN_NOAUTONAME_fontconfig-utils = "1"
-
 inherit autotools pkgconfig
 
 EXTRA_OECONF = " --disable-docs --with-default-fonts=${datadir}/fonts"
@@ -45,3 +35,28 @@ BBCLASSEXTEND = "native"
 SRC_URI += " \
 	file://sysroot-arg.patch \
 "
+
+# Debian does not provide fontconfig-utils,
+# but fontconfig-utils is required by fontcache.bbclass,
+# so we need provide it too.
+PACKAGES =+ "${PN}-utils ${PN}-config lib${PN}"
+RDEPENDS_${PN}_class-target += "${PN}-utils"
+
+FILES_${PN}-utils = "${bindir}/*"
+FILES_${PN}-config = " \
+    ${sysconfdir} \
+    ${datadir}/fontconfig/conf.avail \
+    ${datadir}/xml/fontconfig/fonts.dtd \
+"
+FILES_lib${PN} = "${libdir}/libfontconfig${SOLIBS}"
+
+# Work around past breakage in debian.bbclass
+RPROVIDES_${PN}-utils = "lib${PN}-utils"
+RREPLACES_${PN}-utils = "lib${PN}-utils"
+RCONFLICTS_${PN}-utils = "lib${PN}-utils"
+DEBIAN_NOAUTONAME_${PN}-utils = "1"
+
+DEBIANNAME_${PN}-dev = "lib${PN}1-dev"
+DEBIANNAME_${PN}-dbg = "lib${PN}1-dbg"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN}-dbg += "lib${PN}-dbg"
