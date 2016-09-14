@@ -36,8 +36,9 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=7d847a9b446ddfe187acfac664189672"
 SRC_URI += "file://fix-using-host-library_debian.patch"
 
 DEPENDS_class-target = "\
-	zlib readline krb5 tcl libxml2 libxslt python3 python perl libpam"
-
+	zlib readline krb5 tcl libxml2 libxslt python3 python perl"
+DEPENDS_class-native = "\
+	libxml2-native libxslt-native python-native python3-native"
 inherit autotools-brokensep pkgconfig perlnative pythonnative systemd cpan-base
 
 export BUILD_SYS
@@ -71,12 +72,15 @@ COMMON_CONFIGURE_FLAGS = " \
 	--without-selinux \
 "
 EXTRA_OECONF = "\
-	--with-tcl --with-pam --with-openssl --with-perl \
+	--with-tcl --with-openssl --with-perl \
 	--with-python --with-libxml --with-libxslt \
 	--with-tclconfig=${STAGING_LIBDIR}/tcl${TCL_VER} \
 	--with-includes=${STAGING_INCDIR}/tcl${TCL_VER} \
 	${COMMON_CONFIGURE_FLAGS} \
 	"
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
+
 PARALLEL_MAKE = ""
 LDFLAGS =+ " -L${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}/CORE "
 do_configure_append() {
