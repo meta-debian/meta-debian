@@ -37,15 +37,15 @@ do_install_append() {
 	ln -sf libpng12 ${D}${includedir}/${BPN}
 }
 
-# Add package libpng12 and libpng3
-PACKAGES =+ "${PN}12"
+# We don't provide "libpng12" as Debian
+# because it conflicts with "libpng12" recipe from "meta" layer.
+PACKAGES =+ "libpng3"
 
-FILES_${PN}12 = " \
-	${base_libdir}/libpng12${SOLIBS} \
-	${libdir}/libpng12${SOLIBS} \
+FILES_libpng3 = " \
+	${libdir}/libpng.so.3* \
 "
 
 # Correct name of .deb file
-DEBIANNAME_${PN}-dev = "${PN}12-dev"
+DEBIAN_NOAUTONAME_libpng3 = "1"
 
 BBCLASSEXTEND = "native nativesdk"
