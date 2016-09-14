@@ -41,14 +41,9 @@ REQUIRED_DISTRO_FEATURES = ""
 #Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
-PACKAGES =+ "libpixman-1-0 libpixman-1-dev"
+DEBIANNAME_${PN}-dbg = "lib${PN}-1-0-dbg"
 
-FILES_libpixman-1-0 = "\
-		${libdir}/libpixman-1.so.0 \
-		${libdir}/libpixman-1.so.0.32.6 \
-"
-FILES_libpixman-1-dev = "\
-		${libdir}/libpixman-1.so \
-		${libdir}/pkgconfig \
-		${includedir}/* \
-"
+RPROVIDES_${PN} += "libpixman"
+RPROVIDES_${PN}-dev += "libpixman-dev"
+
+LEAD_SONAME = "libpixman*.so"

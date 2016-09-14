@@ -38,16 +38,14 @@ do_install_append() {
 }
 
 # Add package libpng12 and libpng3
-PACKAGES =+ "${PN}12 ${PN}3"
+PACKAGES =+ "${PN}12"
 
 FILES_${PN}12 = " \
 	${base_libdir}/libpng12${SOLIBS} \
 	${libdir}/libpng12${SOLIBS} \
 "
-FILES_libpng3 = "${libdir}/libpng.so.3"
 
 # Correct name of .deb file
-DEBIANNAME_${PN}12 = "${PN}12-0"
 DEBIANNAME_${PN}-dev = "${PN}12-dev"
 
 BBCLASSEXTEND = "native nativesdk"

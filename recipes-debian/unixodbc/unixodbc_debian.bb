@@ -54,9 +54,9 @@ do_install_append() {
 	ln -s $LINKLIB ${D}${libdir}/libodbc.so.1
 }
 
-PACKAGES =+ " libodbc1 odbcinst odbcinst1debian2 "
+PACKAGES =+ " libodbc odbcinst odbcinst1debian2 "
 
-FILES_libodbc1 = "\
+FILES_libodbc = "\
 	${libdir}/libodbc.so.* 		\
 	${libdir}/libodbccr.so.* 	\
 	${libdir}/odbc/libnn.so		\
@@ -72,5 +72,7 @@ FILES_odbcinst1debian2 = "		\
 	"
 FILES_${PN}-dbg += "${libdir}/odbc/.debug/*"
 
-DEBIANNAME_odbcinst1debian2 = "odbcinst1debian2"
+DEBIANNAME_libodbc = "libodbc1"
+DEBIAN_NOAUTONAME_odbcinst1debian2 = "1"
+
 BBCLASSEXTEND = "native"

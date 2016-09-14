@@ -182,7 +182,7 @@ do_install_append() {
 
 # Correct list of packages according to list of packages build from
 # nspr source in Debian Jessie
-PACKAGES = "lib${PN}4 lib${PN}4-0d lib${PN}4-dev lib${PN}4-staticdev lib${PN}-dbg"
+PACKAGES = "lib${PN} lib${PN}-0d lib${PN}-dev lib${PN}-staticdev lib${PN}-dbg"
 
 # Set files for debug package
 DOTDEBUG-dbg = "${bindir}/.debug ${sbindir}/.debug ${libexecdir}/.debug ${libdir}/.debug \
@@ -191,13 +191,18 @@ DOTDEBUG-dbg = "${bindir}/.debug ${sbindir}/.debug ${libexecdir}/.debug ${libdir
 
 DEBUGFILEDIRECTORY-dbg = "/usr/lib/debug /usr/src/debug"
 
-FILES_lib${PN}4 = "${libdir}/lib*.so"
-FILES_lib${PN}4-0d = "${libdir}/lib*.so.0d"
-FILES_lib${PN}4-staticdev = "${libdir}/*.a ${base_libdir}/*.a ${libdir}/${BPN}/*.a"
-FILES_lib${PN}4-dev = "${bindir}/* ${libdir}/nspr/tests/* ${libdir}/pkgconfig \
+FILES_lib${PN} = "${libdir}/lib*.so"
+FILES_lib${PN}-0d = "${libdir}/lib*.so.0d"
+FILES_lib${PN}-staticdev = "${libdir}/*.a ${base_libdir}/*.a ${libdir}/${BPN}/*.a"
+FILES_lib${PN}-dev = "${bindir}/* ${libdir}/nspr/tests/* ${libdir}/pkgconfig \
                 ${includedir}/* ${datadir}/aclocal/* "
 FILES_lib${PN}-dbg = "${@d.getVar(['DOTDEBUG-dbg', 'DEBUGFILEDIRECTORY-dbg'] \
 			[d.getVar('PACKAGE_DEBUG_SPLIT_STYLE', True) == 'debug-file-directory'], True)} \
 			${libdir}/nspr/tests/.debug/*"
+
+PKG_lib${PN} = "lib${PN}4"
+PKG_lib${PN}-0d = "lib${PN}4-0d"
+PKG_lib${PN}-dev = "lib${PN}4-dev"
+PKG_lib${PN}-dbg = "lib${PN}4-dbg"
 
 BBCLASSEXTEND = "native nativesdk"

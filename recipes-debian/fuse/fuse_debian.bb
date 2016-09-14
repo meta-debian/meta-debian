@@ -61,10 +61,12 @@ do_install_append() {
 	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libulockmgr.so	
 }
 
-PACKAGES =+ "lib${PN}2"
+PACKAGES =+ "lib${PN}"
 
 PKG_${PN}-dev = "lib${PN}-dev"
-FILES_lib${PN}2 = "${base_libdir}/*.so.*"
+PKG_lib${PN} = "lib${PN}2"
+
+FILES_lib${PN} = "${base_libdir}/*.so.*"
 FILES_${PN} += "\
 		${datadir}/initramfs-tools/hooks/fuse \
 		${base_libdir}/modules-load.d/fuse.conf"

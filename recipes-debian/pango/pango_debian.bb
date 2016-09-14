@@ -94,18 +94,18 @@ python populate_packages_prepend () {
 
 # Add more packages according to list of package build
 # from Debian source
-PACKAGES += "libpangocairo-1.0-0 libpangoft2-1.0-0 libpangoxft-1.0-0"
+PACKAGES += "libpangocairo libpangoft2 libpangoxft"
 
 # libpangoxft only avavailable when enable libx11 distro feature
-ALLOW_EMPTY_libpangoxft-1.0-0 = "1"
+ALLOW_EMPTY_libpangoxft = "1"
 
 # Rearrange files into packages
 FILES_${PN} = "${sysconfdir}/pango/* ${libdir}/libpango-*${SOLIBS}"
 FILES_${PN}-dbg += "${libdir}/pango/${LIBV}/modules/.debug"
 FILES_${PN}-dev += "${bindir}* ${libdir}/pango/${LIBV}/modules/*.la"
-FILES_libpangocairo-1.0-0 = "${libdir}/libpangocairo*${SOLIBS}"
-FILES_libpangoft2-1.0-0 = "${libdir}/libpangoft*${SOLIBS}"
-FILES_libpangoxft-1.0-0 = "${libdir}/libpangoxft*${SOLIBS}"
+FILES_libpangocairo = "${libdir}/libpangocairo*${SOLIBS}"
+FILES_libpangoft2 = "${libdir}/libpangoft*${SOLIBS}"
+FILES_libpangoxft = "${libdir}/libpangoxft*${SOLIBS}"
 
 # Keep compatible with meta
 RPROVIDES_${PN} += "pango-modules pango-module-indic-lang \
@@ -113,5 +113,9 @@ RPROVIDES_${PN} += "pango-modules pango-module-indic-lang \
 
 # Correct name of deb file
 DEBIANNAME_${PN} = "libpango-1.0-0"
-DEBIANNAME_${PN}-dbg = "libpango-1.0-0-dbg"
-DEBIANNAME_${PN}-dev = "libpango-1.0-dev"
+DEBIANNAME_${PN}-dbg = "libpango1.0-0-dbg"
+DEBIANNAME_${PN}-dev = "libpango1.0-dev"
+DEBIANNAME_${PN}-doc = "libpango1.0-doc"
+DEBIANNAME_libpangocairo = "libpangocairo-1.0-0"
+DEBIANNAME_libpangoft2 = "libpangoft2-1.0-0"
+DEBIANNAME_libpangoxft = "libpangoxft-1.0-0"

@@ -23,8 +23,8 @@ do_configure_prepend() {
 do_install_append() {
 	install -m 755 ${S}/debian/cluster-glue.logd.init ${D}${sysconfdir}/init.d/logd
 }
-PACKAGES =+ "liblrm2 liblrm2-dev libplumb2 libplumb2-dev libpils2 \
-	libpils2-dev libplumbgpl2 libstonith1 libstonith1-dev"
+PACKAGES =+ "liblrm liblrm-dev libplumb libplumb-dev libpils \
+	libpils-dev libplumbgpl libstonith libstonith-dev"
 
 FILES_${PN} += " \
 	${libdir}/stonith/plugins/xen0-ha-dom0-stonith-helper \
@@ -54,7 +54,7 @@ FILES_${PN}-dbg += " \
 	${libdir}/heartbeat/plugins/compress/.debug/* \
 	${libdir}/heartbeat/plugins/InterfaceMgr/.debug/* \
 	"
-	
+
 FILES_${PN}-dev += " \
 	${libdir}/stonith/plugins/stonith2/*.la \
 	${libdir}/heartbeat/plugins/RAExec/*.la \
@@ -70,35 +70,40 @@ FILES_${PN}-staticdev += " \
 	${libdir}/heartbeat/plugins/RAExec/*.a \
 	${libdir}/stonith/plugins/stonith2/*.a \
 	"
-FILES_liblrm2 = " \
+FILES_liblrm = " \
 	${libdir}/liblrm.so.2 \
 	${libdir}/liblrm.so.2.0.0 \
 	"
 
-FILES_liblrm2-dev = "${includedir}/heartbeat/lrm"
+FILES_liblrm-dev = "${includedir}/heartbeat/lrm"
 
-FILES_libplumb2 = " \
+FILES_libplumb = " \
 	${libdir}/libplumb.so.2 \
 	${libdir}/libplumb.so.2.1.0 \
 	"
 
-FILES_libplumb2-dev = "${includedir}/clplumbing"
+FILES_libplumb-dev = "${includedir}/clplumbing"
 
-FILES_libpils2 = " \
+FILES_libpils = " \
 	${libdir}/libpils.so.2 \
 	${libdir}/libpils.so.2.0.0 \
 	"
 
-FILES_libpils2-dev = "${includedir}/pils"
+FILES_libpils-dev = "${includedir}/pils"
 
-FILES_libplumbgpl2 = " \
+FILES_libplumbgpl = " \
 	${libdir}/libplumbgpl.so.2 \
 	${libdir}/libplumbgpl.so.2.0.0 \
 	"
 
-FILES_libstonith1 = " \
+FILES_libstonith = " \
 	${libdir}/libstonith.so.1 \
 	${libdir}/libstonith.so.1.0.0 \
 	"
 
-FILES_libstonith1-dev = "${includedir}/stonith"
+FILES_libstonith-dev = "${includedir}/stonith"
+
+DEBIANNAME_liblrm-dev = "liblrm2-dev"
+DEBIANNAME_libplumb-dev = "libplumb2-dev"
+DEBIANNAME_libpils-dev = "libpils2-dev"
+DEBIANNAME_libstonith-dev = "libstonith1-dev"

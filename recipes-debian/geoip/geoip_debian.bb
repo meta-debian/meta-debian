@@ -19,7 +19,7 @@ DEBIAN_QUILT_PATCHES = ""
 inherit autotools
 
 #split geoip package to sub-packages
-PACKAGES =+ "libgeoip1"
+PACKAGES =+ "libgeoip"
 
 #compile follow debian/rules
 do_compile_append () {
@@ -47,5 +47,7 @@ do_install_append() {
 #Correct the package name
 DEBIANNAME_${PN} = "${PN}-bin"
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+RPROVIDES_${PN} += "${PN}-bin"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"
 
-FILES_libgeoip1 = "${libdir}/libGeoIP.so.*"
+FILES_libgeoip = "${libdir}/libGeoIP.so.*"
