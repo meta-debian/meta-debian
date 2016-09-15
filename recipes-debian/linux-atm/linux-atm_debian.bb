@@ -16,7 +16,7 @@ DEPENDS = "virtual/kernel flex flex-native"
 
 # Add LDFLAGS_FOR_BUILD when doing link for qgen
 SRC_URI += " file://link-with-ldflags.patch"
- 
+
 EXTRA_OECONF += " --libdir=${base_libdir} "
 
 LIC_FILES_CHKSUM = " \
@@ -44,13 +44,13 @@ do_install_append (){
 }
 
 
-PACKAGES =+ " br2684ctl libatm1 libatm1-dev atm-tools "
+PACKAGES =+ " br2684ctl libatm libatm-dev atm-tools "
 
 FILES_br2684ctl = " ${sbindir}/br2684ctl"
 
-FILES_libatm1 = " ${base_libdir}/libatm.so.1* "
+FILES_libatm = " ${base_libdir}/libatm.so.1* "
 
-FILES_libatm1-dev = " \
+FILES_libatm-dev = " \
 	${includedir}/* \
 	${libdir}/libatm.so \
     "
@@ -61,3 +61,4 @@ FILES_atm-tools = " \
 	${sbindir}/* \
 	${bindir}/* \
     "
+DEBIANNAME_libatm-dev = "libatm1-dev"

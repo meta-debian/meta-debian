@@ -36,12 +36,13 @@ do_install () {
 }
 
 # Split files follow Debian
-PACKAGES =+ "libcdb1"
+PACKAGES =+ "libcdb"
 
-FILES_libcdb1 += "${libdir}/*.so.*"
+FILES_libcdb += "${libdir}/*.so.*"
 FILES_${PN}-doc += "${mandir}"
 
 DEBIANNAME_${PN}-dev = "libcdb-dev"
+RPROVIDES_${PN}-dev += "libcdb-dev"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"

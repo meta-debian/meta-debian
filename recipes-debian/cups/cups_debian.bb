@@ -11,7 +11,7 @@ SECTION = "console/utils"
 inherit debian-package autotools-brokensep binconfig
 
 PR = "r0"
-DEPENDS = "gnutls libpng jpeg dbus dbus-glib zlib libusb1"
+DEPENDS = "gnutls libpng libjpeg-turbo dbus dbus-glib zlib libusb1"
 
 LICENSE = "GPLv2 & LGPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=c5e50cb4b8f24b04636b719683a9102d"

@@ -23,7 +23,7 @@ LIC_FILES_CHKSUM = "\
 	file://GPL.txt;md5=133409beb2c017d3b0f406f22c5439e7 \
 	file://LGPL.txt;md5=4fbd65380cdd255951079008b364516c"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 #disable-build-doc_debian.patch:
@@ -38,7 +38,12 @@ inherit autotools-brokensep systemd pkgconfig update-alternatives
 # Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
 DEBIAN_QUILT_PATCHES = ""
 
+# Configure base on debian/rules
 EXTRA_OECONF += " \
+	--sysconfdir=${sysconfdir}/${DPN} \
+	--localstatedir=${localstatedir}/lib/${DPN} \
+	--datadir=${datadir}/${DPN} \
+	--libdir=${libdir}/${DPN} \
 	--enable-dynamic-linking 	\
 	--with-libmongo-client=system 	\
 	--with-librabbitmq-client=no 	\
@@ -82,10 +87,19 @@ PACKAGECONFIG[libmongo-client] = "\
 PACKAGECONFIG[hiredis] = "--enable-hiredis,--disable-hiredis,hiredis,"
 PACKAGECONFIG[eventlog] = "--enable-eventlog,--disable-eventlog,eventlog,"
 
+do_configure_append() {
+	# Arcoding Debian, the directory to install modules contains package version,
+	# so we need re-run configure with correct version from ${S}/VERSION
+	VERSION=`cat ${S}/VERSION`
+	oe_runconf --with-module-dir=${libdir}/${DPN}/$VERSION
+}
 
 #install follow debian jessie
-do_install_append() {
-	VERSION=`cat ${S}/VERSION`
+do_install() {
+	# Correct pkgconfigdir to /usr/lib/pkgconfig
+	oe_runmake DESTDIR=${D} \
+	           pkgconfigdir=${libdir}/pkgconfig \
+	           install
 	install -d ${D}${sysconfdir}/default
 	install -d ${D}${sysconfdir}/init
 	install -d ${D}${sysconfdir}/init.d
@@ -93,16 +107,9 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/logcheck/ignore.d.server
 	install -d ${D}${sysconfdir}/logcheck/violations.ignore.d
 	install -d ${D}${sysconfdir}/logrotate.d
-	install -d ${D}${sysconfdir}/syslog-ng/conf.d
-	install -d ${D}${libdir}/syslog-ng/$VERSION
-	install -d ${D}${libdir}/syslog-ng/syslog-ng
-	install -d ${D}${datadir}/syslog-ng
 
-	mv ${D}${libdir}/syslog-ng/libtest \
-		${D}${libdir}/syslog-ng/syslog-ng/
-	
-	mv ${D}${datadir}/include ${D}${datadir}/syslog-ng/
-	mv ${D}${datadir}/tools ${D}${datadir}/syslog-ng/
+	# Arcoding to debian/syslog-ng-core.dirs
+	install -d ${D}${sysconfdir}/${DPN}/conf.d
 
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.default \
 			${D}${sysconfdir}/default/syslog-ng
@@ -121,50 +128,36 @@ do_install_append() {
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.logrotate \
 			${D}${sysconfdir}/logrotate.d/syslog-ng
 	install -m 0644 ${S}/debian/syslog-ng.conf \
-			${D}${sysconfdir}/syslog-ng/syslog-ng.conf
+			${D}${sysconfdir}/${DPN}/syslog-ng.conf
 	install -m 0644 ${S}/debian/tty10.linux.conf \
-			${D}${datadir}/syslog-ng/include/scl/system/tty10.conf
-
-	install -m 0755 ${B}/modules/afstomp/.libs/libafstomp.so \
-			${D}${libdir}/syslog-ng/$VERSION/
-	
-	mv ${D}${sysconfdir}/scl.conf ${D}${sysconfdir}/syslog-ng/scl.conf
-	rm ${D}${sysconfdir}/syslog-ng.conf
-
-	mv ${D}${libdir}/syslog-ng/*.so ${D}${libdir}/syslog-ng/$VERSION/
-	mv ${D}${libdir}/*.so ${D}${libdir}/syslog-ng/
-	rm ${D}${libdir}/syslog-ng/*.la
-	rm ${D}${libdir}/*.la
-	mv ${D}${sysconfdir}/patterndb.d ${D}${sysconfdir}/syslog-ng/
-	LINKLIB=$(basename $(readlink ${D}${libdir}/syslog-ng/libsyslog-ng.so))
-	chmod 0644 ${D}${libdir}/syslog-ng/${LINKLIB}
-	chmod 0644 ${D}${libdir}/syslog-ng/$VERSION/*.so
+			${D}${datadir}/${DPN}/include/scl/system/tty10.conf
 }
 
-FILES_${PN}-mod-amqp = "${libdir}/syslog-ng/*/libafamqp.so"
-FILES_${PN}-mod-geoip = "${libdir}/syslog-ng/*/libtfgeoip.so"
-FILES_${PN}-mod-json = "${libdir}/syslog-ng/*/libjson-plugin.so"
-FILES_${PN}-mod-mongodb = "${libdir}/syslog-ng/*/libafmongodb.so"
-FILES_${PN}-mod-redis = "${libdir}/syslog-ng/*/libredis.so"
-FILES_${PN}-mod-smtp = "${libdir}/syslog-ng/*/libafsmtp.so"
-FILES_${PN}-mod-sql = "${libdir}/syslog-ng/*/libafsql.so"
-FILES_${PN}-mod-stomp = "${libdir}/syslog-ng/*/libafstomp.so"
+FILES_${PN}-mod-amqp = "${libdir}/${DPN}/*/libafamqp.so"
+FILES_${PN}-mod-geoip = "${libdir}/${DPN}/*/libtfgeoip.so"
+FILES_${PN}-mod-json = "${libdir}/${DPN}/*/libjson-plugin.so"
+FILES_${PN}-mod-mongodb = "${libdir}/${DPN}/*/libafmongodb.so"
+FILES_${PN}-mod-redis = "${libdir}/${DPN}/*/libredis.so"
+FILES_${PN}-mod-smtp = "${libdir}/${DPN}/*/libafsmtp.so"
+FILES_${PN}-mod-sql = "${libdir}/${DPN}/*/libafsql.so"
+FILES_${PN}-mod-stomp = "${libdir}/${DPN}/*/libafstomp.so"
 FILES_${PN}-dev += "\
 	${libdir}/pkgconfig/* \
-	${libdir}/syslog-ng/libsyslog-ng.so \
-	${datadir}/syslog-ng/tools/*"
+	${libdir}/${DPN}/libsyslog-ng.so \
+	${datadir}/${DPN}/tools/* \
+"
 FILES_${PN}-core = "\
 	${sysconfdir}/* 				\
 	${base_libdir}/systemd/system/syslog-ng.service \
 	${bindir}/* 					\
 	${sbindir}/* 					\
-	${libdir}/syslog-ng/*/*.so 			\
-	${libdir}/syslog-ng/libsyslog-ng-*.so 		\
-	${datadir}/syslog-ng/include/* 			\
-	${datadir}/syslog-ng/xsd/*"
+	${libdir}/${DPN}/*/*.so 			\
+	${libdir}/${DPN}/libsyslog-ng-*.so 		\
+	${datadir}/${DPN}/include/*			\
+"
 FILES_${PN} += "${datadir}/*"
-FILES_${PN}-dbg += "${libdir}/syslog-ng/*/.debug/*"
-FILES_${PN}-staticdev += "${libdir}/syslog-ng/syslog-ng/libtest/*.a"
+FILES_${PN}-dbg += "${libdir}/${DPN}/*/.debug/*"
+FILES_${PN}-staticdev += "${libdir}/${DPN}/syslog-ng/libtest/*.a"
 INSANE_SKIP_${PN}-core = "dev-so"
 
 #runtime depend, follow debian/control

@@ -44,9 +44,6 @@ do_install_append () {
 	rm -r ${D}${localstatedir}
 }
 
-PACKAGES =+ "libldap-2.4-2"
-PKG_${PN}-dev = "libldap2-minimal-dev"
-
-FILES_libldap-2.4-2 = "${libdir}/liblber*.so.* ${libdir}/libldap*.so.* ${sysconfdir}/ldap/ldap.conf"
+PKG_${PN} = "${PN}-2.4-2"
 
 BBCLASSEXTEND = "native"

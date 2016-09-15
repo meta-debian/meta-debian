@@ -19,7 +19,7 @@ PACKAGECONFIG ?= "cxx jpeg zlib lzma \
                   strip-chopping extrasample-as-alpha check-ycbcr-subsampling"
 
 PACKAGECONFIG[cxx] = "--enable-cxx,--disable-cxx,,"
-PACKAGECONFIG[jpeg] = "--enable-jpeg,--disable-jpeg,jpeg,"
+PACKAGECONFIG[jpeg] = "--enable-jpeg,--disable-jpeg,libjpeg-turbo,"
 PACKAGECONFIG[zlib] = "--enable-zlib,--disable-zlib,zlib,"
 PACKAGECONFIG[lzma] = "--enable-lzma,--disable-lzma,xz,"
 

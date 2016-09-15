@@ -44,18 +44,8 @@ do_install() {
 }
 
 #Ship paackges follow Debian
-PACKAGES = "ifrename ifrename-doc libiw-dev libiw-dbg libiw30 libiw30-staticdev \
-		${PN} ${PN}-doc ${PN}-dbg"
+PACKAGES =+ "ifrename libiw-dev libiw"
 
 FILES_ifrename = "${sysconfdir}/init.d ${base_libdir}/udev ${base_sbin}/ifrename"
-FILES_ifrename-doc = "${mandir}/man5 ${mandir}/man8/ifrename.8 \
-		      ${mandir}/fr.UTF-8/man5 ${mandir}/fr.UTF-8/man8/ifrename.8 \
-		      ${mandir}/fr.ISO8859-1/man5 ${mandir}/fr.ISO8859-1/man8/ifrename.8 \
-		      ${mandir}/cs/man5 ${mandir}/cs/man8/ifrename.8"
 FILES_libiw-dev = "${includedir} ${libdir}/*.so"
-FILES_libiw-dbg = "${base_libdir}/.debug"
-FILES_libiw30-staticdev = "${includedir} ${libdir}/*.a"
-FILES_libiw30 = "${base_libdir}/libiw.so.30"
-FILES_${PN} = "${sysconfdir}/network ${base_sbindir}/i*"
-FILES_${PN}-doc = "${mandir}"
-FILES_${PN}-dbg = "${prefix}/src/debug ${base_sbindir}/.debug"
+FILES_libiw = "${base_libdir}/libiw.so.30"

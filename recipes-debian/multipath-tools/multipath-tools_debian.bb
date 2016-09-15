@@ -68,6 +68,6 @@ FILES_${PN}-boot = "\
 FILES_${PN}-dbg += "${base_libdir}/multipath/.debug/*"
 
 #follow debian/control
-RDEPENDS_${PN} += "initscripts udev"
+RDEPENDS_${PN} += "sysvinit-initscripts udev"
 RDEPENDS_kpartx += "dmsetup udev"
 RDEPENDS_${PN}-boot += "${PN}"

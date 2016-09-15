@@ -45,12 +45,16 @@ do_install_append_class-native() {
 }
 
 # Add packages follow debian
-PACKAGES =+ "icu-devtools libicu52"
+PACKAGES =+ "icu-devtools libicu"
 
 # Rename packages follow debian
 PKG_${PN}-dev = "libicu-dev"
+PKG_libicu = "libicu52"
+PKG_${PN}-dbg = "libicu52-dbg"
+RPROVIDES_${PN}-dev += "libicu-dev"
+RPROVIDES_${PN}-dbg += "libicu-dbg"
 
 FILES_icu-devtools += "${bindir}/* ${sbindir}/*"
-FILES_libicu52 += "${libdir}/*.so.*"
+FILES_libicu += "${libdir}/*.so.*"
 
 BBCLASSEXTEND = "native nativesdk"
