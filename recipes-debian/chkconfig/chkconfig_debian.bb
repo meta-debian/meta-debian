@@ -20,3 +20,6 @@ do_install() {
 }
 
 FILES_${PN} += "${base_sbindir}/*"
+
+# chkconfig requires insserv to configure service
+RRECOMMENDS_${PN} += "insserv"
