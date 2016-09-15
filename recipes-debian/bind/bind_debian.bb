@@ -1,6 +1,6 @@
 require bind.inc
 
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 DEPENDS += " bind-native"
 
 # correct-path-to-gen-file.patch
@@ -35,7 +35,7 @@ EXTRA_OECONF = " \
 	--disable-threads \
 	--with-ecdsa=yes \
 	--with-gost=no \
-	--with-randomdev=no \
+	--with-randomdev=/dev/random \
 	--with-dlz-odbc=no \
 	--with-dlz-ldap=${STAGING_LIBDIR}/../ \
 "
@@ -138,6 +138,33 @@ do_install_append () {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/bind9.init ${D}${sysconfdir}/init.d/bind9
 	install -m 0755 ${S}/debian/lwresd.init ${D}${sysconfdir}/init.d/lwresd		
+}
+
+# Base on debian/bind9.postinst
+pkg_postinst_${PN}() {
+	mkdir -p $D${localstatedir}/lib/bind
+	chown root:bind $D${localstatedir}/lib/bind
+	chmod 755 $D${localstatedir}/lib/bind
+
+	if [ ! -s $D${sysconfdir}/bind/rndc.key ] && [ ! -s $D${sysconfdir}/bind/rndc.conf ]; then
+		rndc-confgen -r /dev/urandom -a -c $D${sysconfdir}/bind/rndc.key
+	fi
+
+	if [ ! -f $D${sysconfdir}/bind/named.conf.options ]; then
+		cp $D${datadir}/${DPN}/named.conf.options $D${sysconfdir}/bind/named.conf.options
+		chmod 644 $D${sysconfdir}/bind/named.conf.options
+	fi
+
+	uid=$(ls -ln $D${sysconfdir}/bind/rndc.key | awk '{print $3}')
+	if [ "$uid" = "0" ]; then
+		chown bind $D${sysconfdir}/bind/rndc.key
+		chgrp bind $D${sysconfdir}/bind
+		chmod g+s $D${sysconfdir}/bind
+		chgrp bind $D${sysconfdir}/bind/rndc.key $D${localstatedir}/cache/bind
+		chgrp bind $D${sysconfdir}/bind/named.conf* || true
+		chmod g+r $D${sysconfdir}/bind/rndc.key $D${sysconfdir}/bind/named.conf* || true
+		chmod g+rwx $D${localstatedir}/cache/bind
+	fi
 }
 
 CONFFILES_${PN} = " \
