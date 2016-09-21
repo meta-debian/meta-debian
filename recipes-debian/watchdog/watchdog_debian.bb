@@ -11,7 +11,7 @@ it will reboot the system."
 HOMEPAGE = "http://watchdog.sourceforge.net/"
 BUGTRACKER = "http://sourceforge.net/tracker/?group_id=172030&atid=860194"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 #Declare debian pactch type
@@ -21,15 +21,11 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=ecc0551bf54ad97f6b541720f84d6569"
 
 #fixsepbuild.patch:
 #	this patch is correct the path to watchdog-conf file
-#watchdog-conf.patch:
-#	declare path for watchdog-device	
-SRC_URI += "file://fixsepbuild.patch \
-	   file://watchdog-conf.patch"
+SRC_URI += "file://fixsepbuild.patch" 
 
 inherit autotools
 
-INITSCRIPT_NAME = "watchdog.sh"
-INITSCRIPT_PARAMS = "start 15 1 2 3 4 5 . stop 85 0 6 ."
+EXTRA_OECONF = "--with-configfile=${sysconfdir}/watchdog.conf"
 
 RRECOMMENDS_${PN} = "kernel-module-softdog"
 
@@ -45,17 +41,19 @@ do_install_append() {
 	chmod 755 ${D}${base_libdir}/systemd/system
 	
 	#Create /etc/init.d folder
-	install -d ${D}${sysconfdir}
 	install -d ${D}${sysconfdir}/init.d
-	chmod 755 ${D}${sysconfdir}/init.d
 
 	#Install lib/systemd/sytem/watchdog.service and wd_keepalive.service
 	install -m 0644 ${S}/debian/watchdog.service ${D}${base_libdir}/systemd/system/
 	install -m 0644 ${S}/debian/wd_keepalive.service ${D}${base_libdir}/systemd/system/
 	
 	#Install /etc/init.d/watchdog and wd_keepalive
-	install -m 0644 ${S}/debian/init ${D}${sysconfdir}/init.d/watchdog
-	install -m 0644 ${S}/debian/wd_keepalive.init ${D}${sysconfdir}/init.d/wd_keepalive
-		 
-	install -D ${S}/redhat/watchdog.init ${D}/${sysconfdir}/init.d/watchdog.sh
+	install -m 0755 ${S}/debian/init ${D}${sysconfdir}/init.d/watchdog
+	install -m 0755 ${S}/debian/wd_keepalive.init ${D}${sysconfdir}/init.d/wd_keepalive
+
+	install -d -m 0750 ${D}${localstatedir}/log/watchdog
+	install -d ${D}${sysconfdir}/default
+	install -m 0644 ${S}/debian/watchdog.default ${D}${sysconfdir}/default/watchdog
 }
+
+RDEPENDS_${PN} += "lsb-base"
