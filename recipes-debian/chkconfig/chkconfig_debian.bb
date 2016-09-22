@@ -6,11 +6,17 @@ DESCRIPTION = "\
 	of the drudgery of manually editing the symbolic links."
 HOMEPAGE = "http://fedorahosted.org/releases/c/h/chkconfig"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://t/libtap.sh;md5=6c36428024c005158a85a2881975599c"
+
+# rcd-path.diff:
+#     This patch is based on debian/patches/rcd-path.diff.
+#     The patches in debian/patches are ignored because debian/source/format is "3.0 (native)"
+#     However, we need this patch to correct path to "rc*.d" directory
+SRC_URI += "file://rcd-path.diff"
 
 #install follow Debian jessie
 do_install() {

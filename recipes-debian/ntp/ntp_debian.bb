@@ -3,7 +3,7 @@
 #	http://cgit.openembedded.org/meta-openembedded/tree/meta-networking/recipes-support/ntp/ntp_4.2.8p3.bb
 #
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -19,7 +19,7 @@ USERADD_PARAM_${PN} = "--system --home-dir ${NTP_USER_HOME} \
                        --shell /bin/false --user-group ntp"
 
 # Configure follow debian/rules
-EXTRA_OECONF += "--enable-SHM \
+EXTRA_OECONF += "--enable-all-clocks --enable-parse-clocks --enable-SHM \
                 --disable-debugging --sysconfdir=/var/lib/ntp \
                 --with-sntp=no \
                 --with-lineeditlibs=edit \
@@ -29,7 +29,7 @@ EXTRA_OECONF += "--enable-SHM \
                 --disable-dependency-tracking \
 "
 
-PACKAGECONFIG ??= "openssl"
+PACKAGECONFIG ??= "openssl cap"
 PACKAGECONFIG[openssl] = "--with-openssl-libdir=${STAGING_LIBDIR} \
                           --with-openssl-incdir=${STAGING_INCDIR} \
                           --with-crypto, \
@@ -37,7 +37,6 @@ PACKAGECONFIG[openssl] = "--with-openssl-libdir=${STAGING_LIBDIR} \
                           openssl"
 PACKAGECONFIG[cap] = "--enable-linuxcaps,--disable-linuxcaps,libcap"
 PACKAGECONFIG[readline] = "--with-lineeditlibs,--without-lineeditlibs,readline"
-PACKAGECONFIG[refclocks] = "--enable-all-clocks,--disable-all-clocks,pps-tools"
 
 do_install_append(){
 	# Follow debian/rules

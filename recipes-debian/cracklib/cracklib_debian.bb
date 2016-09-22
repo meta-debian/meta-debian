@@ -29,10 +29,6 @@ do_install_append() {
 	src_dir="${D}${libdir}/${PYTHON_DIR}/site-packages"
 	rm -f $src_dir/*.pyo
 	
-	# remove unused files
-	rm -f ${D}${libdir}/*.la ${D}${libdir}/libcrack.so
-	rm -rf ${D}${datadir}/${PN}
-
 	ln -sf libcrack.so.2 ${D}${libdir}/libcrack.so
 
 	install -d -m 0755 ${D}${sysconfdir}/${PN}/
@@ -47,41 +43,22 @@ do_install_append() {
 
 BBCLASSEXTEND = "native nativesdk"
 
-PACKAGES += "${PN}-runtime libcrack2 libcrack2-dev python-${PN}"
+PACKAGE_BEFORE_PN = "${PN}-runtime python-${PN}"
 
-FILES_python-${PN} = " \
-	${libdir}/${PYTHON_DIR}/* \
-    "
-
-FILES_${PN}-dbg += " \
-	${libdir}/${PYTHON_DIR}/site-packages/.debug \
-	${libdir}/.debug \
-    "
-
-FILES_libcrack2-dev = " \
-	${includedir}/crack.h \
-	${includedir}/packer.h \
-	${libdir}/libcrack.so \
-    "
-
-FILES_libcrack2 = " \
-	${libdir}/libcrack.so.2 \
-	${libdir}/libcrack.so.2.9.0 \
-    "
-
+FILES_python-${PN} = "${libdir}/${PYTHON_DIR}/*"
+FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/site-packages/.debug"
 FILES_${PN}-runtime = " \
-	${sysconfdir}/${PN}/cracklib.conf \
-	${sysconfdir}/cron.daily/cracklib-runtime \
-	${sbindir}/cracklib-check \
-	${sbindir}/cracklib-format \
-	${sbindir}/cracklib-packer \
-	${sbindir}/cracklib-unpacker \
-	${sbindir}/create-cracklib-dict \
-	${sbindir}/update-cracklib \
-    "
+    ${sysconfdir}/* \
+    ${sbindir}/* \
+    ${datadir} \
+"
+FILES_${PN}-staticdev += "${libdir}/${PYTHON_DIR}/*-packages/*.a"
 
-FILES_${PN}-staticdev += " \
-	${libdir}/${PYTHON_DIR}/site-packages/_cracklib.a \
-    "
-FILES_${PN}-doc += "${datadir}"
+RDEPENDS_${PN}-runtime += "${PN}"
+RDEPENDS_python-${PN} += "${PN}-runtime"
 
+DEBIANNAME_${PN}-dev = "libcrack2-dev"
+DEBIAN_NOAUTONAME_${PN}-runtime = "1"
+
+RPROVIDES_${PN} += "libcrack"
+RPROVIDES_${PN}-dev += "libcrack-dev"

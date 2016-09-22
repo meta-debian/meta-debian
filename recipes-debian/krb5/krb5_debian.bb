@@ -255,7 +255,21 @@ do_install_append() {
 	ln -s libkadm5srv_mit.so ${D}${libdir}/mit-krb5/libkadm5srv.so
 }
 
-RCONFLICTS_lib${PN}-dev = "hemidal-dev"
-RREPLACES_lib${PN}-dev = "hemidal-dev"
+RCONFLICTS_${PN}-dev = "hemidal-dev"
+RREPLACES_${PN}-dev = "hemidal-dev"
+
+# Dependencies between krb5's packages base on debian/control
+RDEPENDS_${PN}-user += "libkrb5"
+RDEPENDS_${PN}-kdc += "libkrb5 libkadm5srv-mit ${PN}-user"
+RDEPENDS_${PN}-kdc-ldap += "${PN}-kdc"
+RDEPENDS_${PN}-admin-server += "libkrb5 ${PN}-kdc"
+RDEPENDS_${PN}-pkinit += "libkrb5"
+RDEPENDS_${PN}-otp += "libkrad"
+RDEPENDS_libkrb5 += "libkrb5support"
+RDEPENDS_libgssapi-krb5 += "libkrb5"
+
+# lsb-base is required for init scripts
+RDEPENDS_${PN}-admin-server += "lsb-base"
+RDEPENDS_${PN}-kdc += "lsb-base"
 
 INSANE_SKIP_${PN}-multidev = "dev-so"
