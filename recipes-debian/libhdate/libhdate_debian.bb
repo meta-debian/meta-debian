@@ -16,6 +16,9 @@ SRC_URI += "file://bindings-cross-compile.patch"
 
 inherit autotools-brokensep gettext pythonnative cpan-base
 
+# hdate python binding depends on swig in configure
+DEPENDS += "swig"
+
 EXTRA_OECONF = " \
     PY_PREFIX=${STAGING_DIR_HOST}${prefix} \
     PE_PREFIX=${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)} \
