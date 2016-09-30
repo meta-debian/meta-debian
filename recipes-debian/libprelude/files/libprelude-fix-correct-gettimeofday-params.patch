@@ -1,0 +1,13 @@
+diff --git a/libmissing/sys_time.in.h b/libmissing/sys_time.in.h
+index 00a497f..ec5859c 100644
+--- a/libmissing/sys_time.in.h
++++ b/libmissing/sys_time.in.h
+@@ -59,7 +59,7 @@ struct timeval
+ #  if @REPLACE_GETTIMEOFDAY@
+ #   undef gettimeofday
+ #   define gettimeofday rpl_gettimeofday
+-extern int gettimeofday (struct timeval *restrict, void *restrict)
++extern int gettimeofday (struct timeval *__restrict, void *__restrict)
+      _GL_ARG_NONNULL ((1));
+ #  endif
+ # elif defined GNULIB_POSIXCHECK
