@@ -254,8 +254,20 @@ python do_package_prepend() {
     python_majmin = d.getVar("PYTHON_MAJMIN", True) or ""
     scriptdir = "%s/python%s" % (libdir, python_majmin)
 
+    # Get package name of libpython3.4-minimal which depends on target building or nativesdk building:
+    #     libpython3.4-minimal
+    #     nativesdk-libpython3.4-minimal
+    #     libpython3.4-minimal-nativesdk
+    p_lmin = ""
+    pattern_lmin = ".*lib%s-minimal.*" % dpn
+    packages = d.getVar("PACKAGES", True) or ""
+    arr_packages = packages.split()
+    for pkg in arr_packages:
+        if re.match(pattern_lmin,pkg):
+            p_lmin = pkg
+            break
+
     readme_lmin = "%s/debian/PVER-minimal.README.Debian.in" % s
-    p_lmin = "lib%s-minimal" % dpn
     files_lmin = d.getVar("FILES_%s" % p_lmin, True) or ""
 
     # get list file from debian/PVER-minimal.README.Debian.in
