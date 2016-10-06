@@ -14,8 +14,8 @@ X11DEPENDS = "virtual/libx11 libxext libxcursor libxrandr libxdamage libxrender 
 DEPENDS = "glib-2.0 pango atk libjpeg-turbo libpng gdk-pixbuf-native \
  cairo gdk-pixbuf"
 
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
-           ${@base_contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)} \
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
+           ${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)} \
 "
 
 PACKAGECONFIG[x11] = "--with-x=yes --with-gdktarget=x11,--with-x=no,${X11DEPENDS}"

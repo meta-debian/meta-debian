@@ -26,4 +26,4 @@ do_install() {
 	install -m 0644 ${S}/usb_modeswitch@.service ${D}${systemd_unitdir}/system
 }
 
-FILES_${PN} += "${@base_contains('DISTRO_FEATURES', 'systemd', '${systemd_unitdir}', '', d)}"
+FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_unitdir}', '', d)}"

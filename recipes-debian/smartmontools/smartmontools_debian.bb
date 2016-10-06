@@ -38,7 +38,7 @@ EXTRA_OECONF = " \
 "
 
 PACKAGECONFIG ??= " \
-    ${@base_contains('DISTRO_FEATURES', 'libcap-ng', 'libcap-ng', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'libcap-ng', 'libcap-ng', '', d)} \
 "
 PACKAGECONFIG[libcap-ng] = "--with-libcap-ng=yes,--with-libcap-ng=no,libcap-ng"
 

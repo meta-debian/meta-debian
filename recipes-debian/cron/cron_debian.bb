@@ -19,7 +19,7 @@ file://debian/copyright;md5=3de9a1b9c8691191a6bb88b6e4388c62"
 
 inherit autotools-brokensep
 
-DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
 # init.d/cron require lsb-base
 RDEPENDS_${PN} += "lsb-base"
@@ -32,7 +32,7 @@ do_configure() {
 }
 
 do_compile_prepend() {
-	if [ ${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
+	if [ ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
 		export PAM_DEFS="-DUSE_PAM"
 		export PAM_LIBS="-lpam"
 	fi
@@ -63,13 +63,13 @@ do_install_append() {
 	install -m 755 ${S}/debian/cron.init ${D}${sysconfdir}/init.d/cron
 	
 	# Install pam if enable pam feature
-	if [ ${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
+	if [ ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
 		install -d ${D}${sysconfdir}/pam.d
 		install -m 755 ${S}/debian/cron.pam ${D}${sysconfdir}/pam.d/cron	
 	fi
 	
 	# Install systemd service if systemd feature is enabled
-	if [ ${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} = "systemd" ];then
+	if [ ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} = "systemd" ];then
 		install -d ${D}${base_libdir}/systemd/system
 		install -m 644 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
 	fi	

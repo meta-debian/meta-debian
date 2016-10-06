@@ -38,7 +38,7 @@ EXTRA_OECONF += "\
 	andrew_cv_runpath_switch=none"
 
 PACKAGECONFIG ??= "ntlm ldap \
-	${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
         "
 PACKAGECONFIG[pam]  = "--with-pam,--without-pam,libpam,"
 PACKAGECONFIG[opie] = "--with-opie,--without-opie,opie,"

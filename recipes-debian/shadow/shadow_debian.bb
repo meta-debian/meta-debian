@@ -152,8 +152,8 @@ PACKAGES =+ "login uidmap passwd"
 FILES_login = "  ${base_bindir}/* \
                  ${sysconfdir}/login.defs \
                  ${sysconfdir}/securetty \
-                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/login', '', d)} \
-                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/su', '', d)} \
+                 ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/login', '', d)} \
+                 ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/su', '', d)} \
                  ${bindir}/faillog \
                  ${bindir}/lastlog \
                  ${bindir}/newgrp \
@@ -164,7 +164,7 @@ FILES_uidmap = " ${bindir}/newgidmap \
                  ${bindir}/newuidmap \
 "
 FILES_passwd = " ${sysconfdir}/default/useradd \
-                 ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/*', '', d)} \
+                 ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/*', '', d)} \
                  ${base_sbindir}/shadowconfig \
                  ${bindir}/* \
                  ${sbindir}/* \

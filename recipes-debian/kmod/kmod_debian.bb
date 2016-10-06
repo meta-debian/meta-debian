@@ -33,7 +33,7 @@ do_compile_ptest () {
 	oe_runmake buildtest-TESTS rootfs
 }
 
-INHIBIT_PACKAGE_STRIP = "${@base_contains("DISTRO_FEATURES", "ptest", "1", "0", d)}"
+INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains("DISTRO_FEATURES", "ptest", "1", "0", d)}"
 INSANE_SKIP_${PN}-ptest = "arch"
 
 PROVIDES += "module-init-tools"

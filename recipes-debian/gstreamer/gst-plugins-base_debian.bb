@@ -26,7 +26,7 @@ DEPENDS += "alsa-lib libogg pango libvorbis libtheora util-linux \
 EXTRA_OECONF += "\
 	--disable-freetypetest --enable-nls"
 
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} pango"
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} pango"
 
 PACKAGECONFIG[gnomevfs] = "--enable-gnome_vfs,--disable-gnome_vfs,gnome-vfs"
 PACKAGECONFIG[orc] = "--enable-orc,--disable-orc,orc"

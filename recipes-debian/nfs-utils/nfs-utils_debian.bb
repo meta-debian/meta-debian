@@ -42,7 +42,7 @@ EXTRA_OECONF = "--with-statduser=nobody \
                "
 
 PACKAGECONFIG ??= "tcp-wrappers nfsv41 \
-		${@base_contains('DISTRO_FEATURES', 'ipv6', 'ipv6', '', d)} \
+		${@bb.utils.contains('DISTRO_FEATURES', 'ipv6', 'ipv6', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[ipv6] = "--enable-ipv6 --with-tirpcinclude=${STAGING_INCDIR}/tirpc,--disable-ipv6,libtirpc,libtirpc"

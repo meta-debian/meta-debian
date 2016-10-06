@@ -72,7 +72,7 @@ USE_ALTERNATIVES_FOR = " \
 	gprof \
 	ld \
 	ld.bfd \
-	${@base_contains('DISTRO_FEATURES', 'ld-is-gold', 'ld.gold dwp', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-gold', 'ld.gold dwp', '', d)} \
 	nm \
 	objcopy \
 	objdump \
@@ -99,11 +99,11 @@ EXTRA_OECONF = "--program-prefix=${TARGET_PREFIX} \
 		--enable-plugins \
 		--enable-threads \
                 ${LDGOLD} \
-                ${@base_contains('DISTRO_FEATURES', 'multiarch', '--enable-64-bit-bfd', '', d)}"
+                ${@bb.utils.contains('DISTRO_FEATURES', 'multiarch', '--enable-64-bit-bfd', '', d)}"
 
 LDGOLD_class-native = ""
 LDGOLD_class-crosssdk = ""
-LDGOLD ?= "${@base_contains('DISTRO_FEATURES', 'ld-is-gold', '--enable-gold=default --enable-threads', '', d)}"
+LDGOLD ?= "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-gold', '--enable-gold=default --enable-threads', '', d)}"
 
 # This is necessary due to a bug in the binutils Makefiles
 # EXTRA_OEMAKE = "configure-build-libiberty all"

@@ -79,7 +79,7 @@ do_configure () {
 
 #Available PACKAGECONFIG options are acl
 PACKAGECONFIG ??= ""
-PACKAGECONFIG += "${@base_contains('DISTRO_FEATURES', 'acl', 'acl', '', d)}"
+PACKAGECONFIG += "${@bb.utils.contains('DISTRO_FEATURES', 'acl', 'acl', '', d)}"
 
 PACKAGECONFIG[acl] = "--enable-acl,--disable-acl,acl,"
 

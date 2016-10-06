@@ -52,7 +52,7 @@ DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
 SUPERUSER_PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 PACKAGECONFIG ??= "tcp-wrappers \
-	${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
@@ -76,7 +76,7 @@ do_configure_prepend(){
 }
 
 do_install_append(){
-	if [ "${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
 		install -d ${D}${sysconfdir}/pam.d
 		sed 's/^@IF_KEYINIT@//' ${S}/debian/openssh-server.sshd.pam.in
 			> ${D}${sysconfdir}/pam.d/sshd

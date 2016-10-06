@@ -30,7 +30,7 @@ file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac \
 file://COPYING.LIB;md5=79ffa0ec772fa86740948cb7327a0cc7"
 
 DEPENDS = "glib-2.0 zlib pixman dtc \
-           ${@base_contains('DISTRO_FEATURES', 'x11', 'virtual/libx11', '', d)}"
+           ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'virtual/libx11', '', d)}"
 DEPENDS_class-native = "zlib-native glib-2.0-native pixman-native dtc-native"
 DEPENDS_class-nativesdk = "nativesdk-zlib nativesdk-glib-2.0 nativesdk-pixman nativesdk-dtc"
 RDEPENDS_${PN}_class-target += "bash python"
@@ -91,7 +91,7 @@ do_configure_prepend_class-native() {
 }
 
 do_configure_prepend_class-nativesdk() {
-	if [ "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}" = "" ] ; then
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}" = "" ] ; then
 		# Undo the -lX11 added by linker-flags.patch
 		sed -i 's/-lX11//g' Makefile.target
 	fi

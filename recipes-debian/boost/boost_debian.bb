@@ -39,7 +39,7 @@ BOOST_LIBS = "\
 # optional boost-python library
 PACKAGECONFIG ??= "python"
 PACKAGECONFIG[python] = ",,python"
-BOOST_LIBS += "${@base_contains('PACKAGECONFIG', 'python', 'python', '', d)}"
+BOOST_LIBS += "${@bb.utils.contains('PACKAGECONFIG', 'python', 'python', '', d)}"
 inherit python-dir
 PYTHON_ROOT = "${STAGING_DIR_HOST}/${prefix}"
 

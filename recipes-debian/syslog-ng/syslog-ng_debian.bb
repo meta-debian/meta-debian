@@ -63,7 +63,7 @@ PACKAGES =+ "\
 PACKAGECONFIG ??= "\
 	openssl json dbi smtp geoip tcp-wrapers libnet 			  \
 	eventlog hiredis libmongo-client ivykis 			  \
-	${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
 	"
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
 PACKAGECONFIG[systemd] = "\
