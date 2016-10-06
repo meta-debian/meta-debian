@@ -15,11 +15,6 @@ LIC_FILES_CHKSUM = "file://cdjpeg.h;endline=10;md5=1bcf902368f1944039dccd2a3b1b0
                     file://jpeglib.h;endline=14;md5=a08bb0a80f782a9f8da313cc4015ed6f \
                     file://djpeg.c;endline=25;md5=ffaea149a9776cd9da74d6b61a451fa1 \
     "
-# Drop-in replacement for jpeg
-PROVIDES = "jpeg"
-RPROVIDES_${PN} += "jpeg"
-RREPLACES_${PN} += "jpeg"
-RCONFLICTS_${PN} += "jpeg"
 
 inherit autotools pkgconfig
 
@@ -29,23 +24,21 @@ do_install_append (){
 	install -m 644 ${S}/debian/extra/exifautotran ${D}${bindir}/exifautotran
 }
 
-PACKAGES =+ " libturbojpeg1-dev ${PN}-progs libjpeg62-turbo libjpeg62-turbo-dev libturbojpeg1 "
+PACKAGES =+ "libturbojpeg libturbojpeg-dev ${PN}-progs"
 
 FILES_${PN}-progs =  "${bindir}/*"
+FILES_libturbojpeg = "${libdir}/libturbojpeg${SOLIBS}"
+FILES_libturbojpeg-dev = " \
+    ${includedir}/turbojpeg.h \
+    ${libdir}/libturbojpeg${SOLIBSDEV} \
+"
 
-FILES_libjpeg62-turbo = "${libdir}/libjpeg.so.62*"
+DEBIANNAME_${PN} = "libjpeg62-turbo"
+DEBIANNAME_${PN}-dev = "libjpeg62-turbo-dev"
+DEBIANNAME_${PN}-dbg = "libjpeg62-turbo-dbg"
+DEBIANNAME_libturbojpeg-dev = "libturbojpeg1-dev"
 
-FILES_libjpeg62-turbo-dev = "${includedir}/* \
-	${libdir}/libjpeg.so \
-	${libdir}/pkgconfig/libjpeg.pc \	
-    "
-
-FILES_libturbojpeg1 = " ${libdir}/libturbojpeg.so.1* "
-
-FILES_libturbojpeg1-dev = " ${includedir}/turbojpeg.h \
-	${libdir}/libturbojpeg.so \
-   " 
+# Prevent libjpeg-turbo-progs change to libjpeg-progs
+DEBIAN_NOAUTONAME_${PN}-progs = "1"
 
 BBCLASSEXTEND = "native"
-
-LEAD_SONAME = "libjpeg.so.62"

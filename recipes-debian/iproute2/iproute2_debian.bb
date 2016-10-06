@@ -21,7 +21,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a \
 # CFLAGS are computed in Makefile and reference CCOPTS
 EXTRA_OEMAKE_append = " CCOPTS='${CFLAGS}'"
 
-DEPENDS = "flex-native db bison-native iptables elfutils libselinux"
+DEPENDS = "flex-native db bison-native iptables elfutils"
 
 EXTRA_OEMAKE = "CC='${CC}' KERNEL_INCLUDE=${STAGING_INCDIR} DOCDIR=${docdir}/iproute2 \
 SUBDIRS='lib ip tc bridge misc netem genl' SBINDIR='${base_sbindir}' LIBDIR='${libdir}'"

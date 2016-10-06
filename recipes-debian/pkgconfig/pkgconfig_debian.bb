@@ -3,7 +3,12 @@
 # base branch: daisy
 #
 
-PR = "r0"
+SUMMARY = "manage compile and link flags for libraries"
+DESCRIPTION = "pkg-config is a system for managing library compile and link flags that \
+works with automake and autoconf."
+HOMEPAGE = "http://pkg-config.freedesktop.org"
+
+PR = "r1"
 
 inherit debian-package
 
@@ -22,6 +27,7 @@ SRC_URI += " \
 	file://pkg-config-native.in \
 	file://fix-glib-configure-libtool-usage.patch \
 	file://obsolete_automake_macros.patch \
+	file://0001-Strip-system-library-directories-reliably.patch \
 "
 
 inherit autotools

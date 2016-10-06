@@ -7,7 +7,7 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://fuse.sourceforge.net/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2+ & LGPLv2+"
@@ -16,7 +16,6 @@ LIC_FILES_CHKSUM = "\
 		file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c"
 
 inherit autotools-brokensep
-DEPENDS += "libselinux"
 
 do_configure() {
         aclocal
@@ -62,10 +61,12 @@ do_install_append() {
 	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libulockmgr.so	
 }
 
-PACKAGES =+ "lib${PN}2"
+PACKAGES =+ "lib${PN}"
 
 PKG_${PN}-dev = "lib${PN}-dev"
-FILES_lib${PN}2 = "${base_libdir}/*.so.*"
+PKG_lib${PN} = "lib${PN}2"
+
+FILES_lib${PN} = "${base_libdir}/*.so.*"
 FILES_${PN} += "\
 		${datadir}/initramfs-tools/hooks/fuse \
 		${base_libdir}/modules-load.d/fuse.conf"

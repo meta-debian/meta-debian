@@ -8,23 +8,25 @@ DESCRIPTION = "The prelink package contains a utility which modifies ELF shared 
 libraries and executables, so that far fewer relocations need to be resolved at \
 runtime and thus programs come up faster."
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"
-
+# file://configure-allow-to-disable-selinux-support_debian.patch:
+#	this patch allow configure to enable or disable selinux support
 # Patch prelink_cross.diff was created to enable option --root
 SRC_URI += " \
+file://configure-allow-to-disable-selinux-support_debian.patch \
 file://prelink_cross.diff \
 "
 
 inherit autotools
 DEPENDS = "elfutils binutils"
 
-# Follow debian/rules
-EXTRA_OECONF = "--disable-libtool-lock --disable-dependency-tracking"
+# Follow debian/rules and disable selinux support
+EXTRA_OECONF = "--disable-libtool-lock --disable-dependency-tracking --disable-selinux"
 
 # Install package follow debian/rules
 do_install_append () {

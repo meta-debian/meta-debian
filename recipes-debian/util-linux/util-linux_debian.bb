@@ -9,7 +9,7 @@ DESCRIPTION = "Util-linux includes a suite of basic system administration utilit
 commonly found on most Linux systems.  Some of the more important utilities include \
 disk partitioning, kernel message management, filesystem creation, and system login."
 
-PR = "r3"
+PR = "r4"
 
 inherit debian-package
 
@@ -35,6 +35,7 @@ RDEPENDS_${PN}_class-target += "lsb-base"
 
 # Follow Debian/rules
 # and add configs: --disable-use-tty-group for building successfully.
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF = "--enable-line --libdir=${base_libdir} \
 		--libexecdir=${libdir} --localstatedir=/run \
 		--disable-silent-rules --disable-login \
@@ -42,7 +43,8 @@ EXTRA_OECONF = "--enable-line --libdir=${base_libdir} \
 		--disable-last --disable-mesg --disable-mountpoint \
 		--disable-kill --disable-eject --disable-chfn-chsh \
 		--enable-raw --enable-partx --enable-tunelp\
-		--sbindir=${base_sbindir} --disable-use-tty-group"
+		--sbindir=${base_sbindir} --disable-use-tty-group \
+		--without-selinux"
 PACKAGECONFIG_class-target ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
 PACKAGECONFIG[pam] = "--enable-su --enable-runuser,--disable-su --disable-runuser, libpam,"
 # Respect the systemd feature for uuidd

@@ -15,12 +15,12 @@ LIC_FILES_CHKSUM = "\
 	file://plugins/sudoers/redblack.c;beginline=1;endline=41;md5=e2dbb155fc49beea947515300bab99e0 \
 	file://include/queue.h;beginline=5;endline=27;md5=449af4cc57fc7d46f42090608ba3e681 \
 "
-INC_PR = "r0"
+INC_PR = "r1"
 
 inherit debian-package
 DPN = "sudo"
 
-DEPENDS += "libpam libselinux audit"
+DEPENDS += "libpam audit"
 inherit autotools
 
 # Explicitly create ${localstatedir}/lib before do_install to ensure
@@ -33,3 +33,6 @@ do_install_prepend (){
 }
 #follow debian/control
 RDEPENDS_${PN} += "libpam-modules"
+
+# Avoid a parallel build problem
+PARALLEL_MAKE = ""

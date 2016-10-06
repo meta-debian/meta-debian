@@ -30,6 +30,10 @@ inherit autotools pkgconfig pythonnative
 
 python populate_packages_prepend () {
     do_split_packages(d, '${libdir}', '^libxcb-(.*)\.so\..*$', 'libxcb-%s', 'XCB library module for %s', allow_links=True)
+    do_split_packages(d, '${includedir}/xcb', '^(.*)\.h$', 'libxcb-%s-dev', 'X C Binding, %s extension, development files', allow_links=True)
+    do_split_packages(d, '${libdir}/pkgconfig', '^xcb-(.*)\.pc$', 'libxcb-%s-dev', 'X C Binding, %s extension, development files', allow_links=True)
+    do_split_packages(d, '${libdir}', '^libxcb-(.*)\.so$', 'libxcb-%s-dev', 'X C Binding, %s extension, development files', allow_links=True)
+
 }
 
 SRC_URI += " \
@@ -38,3 +42,9 @@ SRC_URI += " \
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
+
+FILES_${PN}-dev = " \
+    ${libdir}/libxcb.so \
+    ${libdir}/pkgconfig/xcb.pc \
+    ${libdir}/*.la \
+"

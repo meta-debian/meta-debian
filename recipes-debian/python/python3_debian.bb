@@ -6,7 +6,7 @@
 require python3.inc
 
 DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz expat mpdecimal"
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
 # now-avoid-pgen.patch
@@ -57,6 +57,7 @@ CACHED_CONFIGUREVARS = " \
 TARGET_CC_ARCH_append_armv6 = " -D__SOFTFP__"
 TARGET_CC_ARCH_append_armv7a = " -D__SOFTFP__"
 TARGET_CC_ARCH += "-DNDEBUG -fno-inline"
+SDK_CC_ARCH += "-DNDEBUG -fno-inline"
 EXTRA_OEMAKE += "CROSS_COMPILE=yes"
 EXTRA_OECONF += "CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ --without-ensurepip"
 
@@ -64,12 +65,12 @@ export CROSS_COMPILE = "${TARGET_PREFIX}"
 export _PYTHON_PROJECT_BASE = "${B}"
 export _PYTHON_PROJECT_SRC = "${S}"
 export CCSHARED = "-fPIC"
-
 # Fix ctypes cross compilation
 export CROSSPYTHONPATH = "${B}/build/lib.linux-${TARGET_ARCH}-${PYTHON_MAJMIN}:${S}/Lib:${S}/Lib/plat-linux"
 
 # No ctypes option for python 3
 PYTHONLSBOPTS = ""
+
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
 	autoreconf -Wcross --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi
@@ -100,6 +101,7 @@ do_compile() {
 		-e 's,includedir=${includedir},includedir=${STAGING_INCDIR},g' \
 		-e 's,^INCLUDEDIR=.*,INCLUDE=${STAGING_INCDIR},g' \
 		-e 's,^CONFINCLUDEDIR=.*,CONFINCLUDE=${STAGING_INCDIR},g' \
+		-e 's,^SCRIPTDIR=.*,SCRIPTDIR=${STAGING_BASELIBDIR},g' \
 		Makefile
 	# save copy of it now, because if we do it in do_install and 
 	# then call do_install twice we get Makefile.orig == Makefile.sysroot
@@ -131,9 +133,6 @@ do_install() {
 	# go to ${D}${STAGING...}/...
 	install -m 0644 Makefile.orig Makefile
 
-	install -d ${D}${libdir}/pkgconfig
-	install -d ${D}${libdir}/python${PYTHON_MAJMIN}/config
-
 	# rerun the build once again with original makefile this time
 	# run install in a separate step to avoid compile/install race
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python3-native/pgen \
@@ -159,19 +158,18 @@ do_install() {
 	# avoid conflict with 2to3 from Python 2
 	rm -f ${D}/${bindir}/2to3
 
-	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
-
 	oe_multilib_header python${PYTHON_BINABI}/pyconfig.h
 
 	# install file follow file list of package idle-python3.4
 	mv ${D}${bindir}/idle3.4 ${D}${bindir}/idle-python3.4
 	rm -rf ${D}${bindir}/idle3
 
-	# install file follow file list of package libpython3.4	
+	# install file follow file list of package libpython3.4	and libpython3.4-dev
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libpython3.4m.so))
-	rm ${D}${libdir}/libpython3.4m.so
-	ln -s ../${LINKLIB} ${D}${libdir}/python3.4/libpython3.4m.so
-	ln -s ../${LINKLIB} ${D}${libdir}/python3.4/libpython3.4.so
+	cd ${D}${libdir}/python3.4/config-${PYTHON_BINABI}*
+	ln -s ../../${LINKLIB} libpython3.4m.so
+	ln -s ../../${LINKLIB} libpython3.4.so
+	cd -
 	ln -s ${LINKLIB} ${D}${libdir}/libpython3.4m.so.1
 
 	ln -s python3.4m ${D}${includedir}/python3.4
@@ -184,14 +182,13 @@ do_install() {
 		${D}${libdir}/python${PYTHON_MAJMIN}/
 	
 	install -m 0755 ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext3.4
-	ln -s ../lib/python3.4 ${D}${bindir}/pdb3.4 
+	ln -s ../lib/python3.4/pdb.py ${D}${bindir}/pdb3.4 
 
 	rm ${D}${bindir}/pydoc3
 	rm ${D}${bindir}/pyvenv
 
 	rm ${D}${bindir}/python3-config 
 	rm ${D}${bindir}/python3 
-	mv ${D}${libdir}/python3.4/config-3.4m-* ${D}${libdir}/python3.4/config-3.4m
 }
 
 do_install_append_class-nativesdk () {
@@ -202,14 +199,17 @@ SSTATE_SCAN_FILES += "Makefile"
 PACKAGE_PREPROCESS_FUNCS += "py_package_preprocess"
 
 py_package_preprocess () {
-	# copy back the old Makefile to fix target package
-	install -m 0644 ${B}/Makefile.orig ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
 	# Remove references to buildmachine paths in target Makefile and _sysconfigdata
 	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g \
-		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile \
+		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}*/Makefile \
 		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py
 }
 
+SYSROOT_PREPROCESS_FUNCS += "postgresql_sysroot_preprocess"
+postgresql_sysroot_preprocess () {
+	install -D -m 0644 ${B}/Makefile.sysroot \
+		${SYSROOT_DESTDIR}${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}-${HOST_SYS}/Makefile
+}
 require python-${PYTHON_MAJMIN}-manifest.inc
 
 # manual dependency additions
@@ -229,7 +229,7 @@ FILES_${PN}-pyvenv += "${bindir}/pyvenv-${PYTHON_MAJMIN} \
 # package libpython3
 PACKAGES =+ "libpython3 libpython3-staticdev"
 FILES_libpython3 = "${libdir}/libpython*.so.*"
-FILES_libpython3-staticdev += "${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}/libpython${PYTHON_BINABI}.a"
+FILES_libpython3-staticdev += "${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}*/libpython${PYTHON_BINABI}.a"
 
 # catch debug extensions (isn't that already in python-core-dbg?)
 FILES_${PN}-dbg += "${libdir}/python${PYTHON_MAJMIN}/lib-dynload/.debug"
@@ -254,8 +254,20 @@ python do_package_prepend() {
     python_majmin = d.getVar("PYTHON_MAJMIN", True) or ""
     scriptdir = "%s/python%s" % (libdir, python_majmin)
 
+    # Get package name of libpython3.4-minimal which depends on target building or nativesdk building:
+    #     libpython3.4-minimal
+    #     nativesdk-libpython3.4-minimal
+    #     libpython3.4-minimal-nativesdk
+    p_lmin = ""
+    pattern_lmin = ".*lib%s-minimal.*" % dpn
+    packages = d.getVar("PACKAGES", True) or ""
+    arr_packages = packages.split()
+    for pkg in arr_packages:
+        if re.match(pattern_lmin,pkg):
+            p_lmin = pkg
+            break
+
     readme_lmin = "%s/debian/PVER-minimal.README.Debian.in" % s
-    p_lmin = "lib%s-minimal" % dpn
     files_lmin = d.getVar("FILES_%s" % p_lmin, True) or ""
 
     # get list file from debian/PVER-minimal.README.Debian.in
@@ -327,7 +339,8 @@ FILES_lib${DPN}-testsuite = " \
 FILES_${PN}-core = "${bindir}/*"
 FILES_${PN}-dev += " \
     ${libdir}/python${PYTHON_MAJMIN}/*.so \
-    ${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI} \
+    ${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}* \
+    ${libdir}/*/pkgconfig \
 "
 FILES_${DPN}-examples = " \
     ${libdir}/python${PYTHON_MAJMIN}/turtledemo \
@@ -336,9 +349,9 @@ FILES_${DPN}-examples = " \
 FILES_lib${DPN}-stdlib = "${libdir}/python${PYTHON_MAJMIN}"
 FILES_idle-${DPN} = "${bindir}/idle-python${PYTHON_MAJMIN}"
 
-DEBIANNAME_lib${DPN}-minimal = "lib${DPN}-minimal"
-DEBIANNAME_lib${DPN}-stdlib = "lib${DPN}-stdlib"
-DEBIANNAME_lib${DPN}-testsuite = "lib${DPN}-testsuite"
+DEBIAN_NOAUTONAME_lib${DPN}-minimal = "1"
+DEBIAN_NOAUTONAME_lib${DPN}-stdlib = "1"
+DEBIAN_NOAUTONAME_lib${DPN}-testsuite = "1"
 
 # python3-pyvenv as python3.4-venv
 RPROVIDES_${PN}-pyvenv += "${DPN}-venv"
@@ -372,14 +385,20 @@ RDEPENDS_lib${DPN}-stdlib += " \
     ${PN}-sqlite3 ${PN}-terminal ${PN}-textutils ${PN}-threading \
     ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml \
 "
-RDEPENDS_${DPN} += "lib${DPN}-minimal lib${DPN}-stdlib"
-RDEPENDS_${DPN}-venv += "${DPN}"
+
+# python3-core as python3.4
+# python3-pyvenv as python3.4-venv
+# python3-dev as libpython3.4-dev
+RDEPENDS_${PN}-core += "${DPN}-minimal lib${DPN}-stdlib"
+RDEPENDS_${PN}-pyvenv += "${DPN}"
+RDEPENDS_lib${DPN}-stdlib += "lib${DPN}-minimal"
 RDEPENDS_${DPN}-minimal += "lib${DPN}-minimal"
 RDEPENDS_lib${DPN} += "lib${DPN}-stdlib"
 RDEPENDS_${DPN}-examples += "${DPN}"
 RDEPENDS_${DPN}-dev += "${DPN} lib${DPN}-dev lib${DPN}"
-RDEPENDS_lib${DPN}-dev += "lib${DPN}-stdlib"
+RDEPENDS_${PN}-dev += "lib${DPN}-stdlib"
 RDEPENDS_lib${DPN}-testsuite += "${DPN} ${PN}-tests ${PN}-sqlite3-tests"
 RDEPENDS_idle-${DPN} += "${DPN}"
 
+PARALLEL_MAKE = ""
 BBCLASSEXTEND = "nativesdk"

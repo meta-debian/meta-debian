@@ -7,7 +7,7 @@ SUMMARY = "D-Bus message bus"
 DESCRIPTION = "D-Bus is a message bus system, a simple way for applications to talk to one another. In addition to interprocess communication, D-Bus helps coordinate process lifecycle; it makes it simple and reliable to code a \"single instance\" application or daemon, and to launch applications and daemons on demand when their services are needed."
 HOMEPAGE = "http://dbus.freedesktop.org"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "AFL-2.1 | GPLv2+"
@@ -88,6 +88,7 @@ pkg_postinst_dbus() {
 	fi
 }
 
+# --disable-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 		--disable-tests \
 		--disable-xml-docs \
@@ -95,9 +96,8 @@ EXTRA_OECONF = " \
 		--disable-libaudit \
 		--disable-systemd \
 		--without-dbus-glib \
+		--disable-selinux \
 "
-
-EXTRA_OECONF_append_class-native = " --disable-selinux"
 
 # Follow debian/rules, libexecdir is ${prefix}/lib/dbus-1.0
 libexecdir = "${libdir}/dbus-1.0"

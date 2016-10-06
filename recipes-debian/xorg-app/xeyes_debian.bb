@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=3ea51b365051ac32d1813a7dbaa4bfc6"
 
 DPN = "x11-apps"
 
-DEPENDS += "libxt libxext libxmu"
+DEPENDS += "libxt libxext libxmu libxrender"
 
 # Apply patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"

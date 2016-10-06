@@ -6,7 +6,7 @@ hard disks. It is derived from the smartsuite package, and includes support \
 for ATA/ATAPI-5 disks. It should run on any modern Linux system."
 HOMEPAGE = "http://smartmontools.sourceforge.net/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 
 LICENSE = "GPLv2"
@@ -19,6 +19,7 @@ inherit autotools systemd
 SYSTEMD_SERVICE_${PN} = "smartd.service"
 
 #Follow debian/rules
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
     --with-initscriptdir=no \
     --with-docdir=${docdir}/${DPN} \
@@ -33,14 +34,13 @@ EXTRA_OECONF = " \
     --with-smartdscriptdir=${datadir}/${DPN} \
     --with-smartdplugindir=${sysconfdir}/${DPN}/smartd_warning.d \
     --with-systemdenvfile=${sysconfdir}/default/smartmontools \
+    --without-selinux \
 "
 
 PACKAGECONFIG ??= " \
     ${@base_contains('DISTRO_FEATURES', 'libcap-ng', 'libcap-ng', '', d)} \
-    ${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[libcap-ng] = "--with-libcap-ng=yes,--with-libcap-ng=no,libcap-ng"
-PACKAGECONFIG[selinux] = "--with-selinux=yes,--with-selinux=no,libselinux"
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/default \

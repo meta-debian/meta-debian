@@ -3,7 +3,7 @@ for the exchange of management information between agents (servers) \
 and clients."
 HOMEPAGE = "http://net-snmp.sourceforge.net/"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -18,7 +18,12 @@ DEPENDS = "lm-sensors python-distribute-native"
 # man-makefile-parallel.diff:
 # 	Fix dependencies for auto-generated man pages.
 # 	https://sourceforge.net/p/net-snmp/bugs/2540/
-SRC_URI += "file://man-makefile-parallel.diff"
+# correct-extramibs-filename.patch:
+# 	Correct mibs filename in mibs/Makefile.in
+SRC_URI += " \
+    file://man-makefile-parallel.diff \
+    file://correct-extramibs-filename.patch \
+"
 
 inherit autotools-brokensep cpan-base perlnative pythonnative distutils-base useradd
 

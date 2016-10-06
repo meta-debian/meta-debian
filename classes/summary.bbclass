@@ -10,10 +10,15 @@
 # parsing information embedded in packages included in rootfs/SDK.
 #
 
+# if "1" add value of LIC_FILES_CHKSUM to summary, otherwise don't
+SUMMARY_LIC_FILES_CHKSUM ?= ""
+
 python do_package_deb_prepend() {
     import os.path
     import subprocess
     import re
+
+    add_licfiles = d.getVar("SUMMARY_LIC_FILES_CHKSUM", True) == "1"
 
     dpn = d.getVar("DPN", True) or ""
 
@@ -61,6 +66,12 @@ python do_package_deb_prepend() {
             remote_uris.append(uri)
         remote_src_uri = " ".join(remote_uris)
 
+    if add_licfiles:
+        # LicenseFiles
+        licfiles = d.getVar("LIC_FILES_CHKSUM", True) or ""
+        if licfiles is "":
+            bb.fatal("LIC_FILES_CHKSUM is empty")
+
     for pkg in d.getVar("PACKAGES", True).split():
         # License
         license = d.getVar("LICENSE_" + pkg, True) or ""
@@ -74,10 +85,12 @@ python do_package_deb_prepend() {
             metadata = metadata + "DebianSourceVersion: " + deb_src_ver + "\n"
         metadata = metadata + "RemoteSourceURI: " + remote_src_uri + "\n"
         metadata = metadata + "License: " + license + "\n"
+        if add_licfiles:
+            metadata = metadata + "LicenseFiles: " + licfiles + "\n"
         d.setVar("PACKAGE_ADD_METADATA_DEB_" + pkg, metadata)
 }
 
-def gen_summary(tree, csv):
+def gen_summary(d, tree, csv):
     import os.path
     import re
 
@@ -91,6 +104,9 @@ def gen_summary(tree, csv):
                 "RemoteSourceURI", \
                 "License"
     ]
+    if d.getVar("SUMMARY_LIC_FILES_CHKSUM", True) == "1":
+        fields.append("LicenseFiles")
+
     # field names are put according to these mappings
     fields_map = { \
                 "Package":"PackageName", \
@@ -143,7 +159,7 @@ def gen_summary(tree, csv):
 python gen_rootfs_summary() {
     tree = d.getVar("IMAGE_ROOTFS", True)
     csv = os.path.join(d.getVar("WORKDIR", True), "rootfs-summary.csv")
-    gen_summary(tree, csv)
+    gen_summary(d, tree, csv)
 }
 
 python gen_sdk_target_summary() {
@@ -151,13 +167,13 @@ python gen_sdk_target_summary() {
     sdk_path_target = d.getVar('SDKTARGETSYSROOT', True).strip("/")
     tree = os.path.join(sdk_output, sdk_path_target)
     csv = os.path.join(d.getVar("WORKDIR", True), "sdk-target-summary.csv")
-    gen_summary(tree, csv)
+    gen_summary(d, tree, csv)
 }
 
 python gen_sdk_host_summary() {
     tree = d.getVar("SDK_OUTPUT", True)
     csv = os.path.join(d.getVar("WORKDIR", True), "sdk-host-summary.csv")
-    gen_summary(tree, csv)
+    gen_summary(d, tree, csv)
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "gen_rootfs_summary ; "

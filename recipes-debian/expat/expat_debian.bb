@@ -13,7 +13,7 @@ inherit debian-package
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1b71f681713d1256e1c23b0890920874"
 
-inherit autotools lib_package gzipnative
+inherit autotools gzipnative
 
 # This package uses an archive format known to have issue with some
 # versions of gzip
@@ -23,6 +23,13 @@ do_configure_prepend () {
         rm -f ${S}/conftools/libtool.m4
 }
 
-BBCLASSEXTEND = "native nativesdk"
+PACKAGES =+ "lib${PN}"
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=1b71f681713d1256e1c23b0890920874"
+FILES_lib${PN} = "${libdir}/lib*${SOLIBS}"
+
+DEBIANNAME_${PN}-dev = "lib${PN}1-dev"
+
+# expat-dev is equal to libexpat-dev
+RPROVIDES_${PN}-dev += "lib${PN}-dev"
+
+BBCLASSEXTEND = "native nativesdk"

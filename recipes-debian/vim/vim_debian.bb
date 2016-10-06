@@ -5,7 +5,7 @@
 
 SUMMARY = "Vi IMproved - enhanced vi editor"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -63,7 +63,8 @@ EXTRA_OECONF += "vim_cv_toupper_broken=yes \
 		--with-tlib=ncurses \
 		"
 # Configuration to disable strip
-EXTRA_OECONF += "ac_cv_prog_STRIP=/bin/true"
+# --disable-selinux: Don't use selinux support
+EXTRA_OECONF += "ac_cv_prog_STRIP=/bin/true --disable-selinux"
 
 # vim configure.in contains functions which got 'dropped' by autotools.bbclass
 do_configure () {
@@ -76,13 +77,11 @@ do_configure () {
 	touch auto/config.mk auto/config.h
 }
 
-#Available PACKAGECONFIG options are acl, selinux
+#Available PACKAGECONFIG options are acl
 PACKAGECONFIG ??= ""
 PACKAGECONFIG += "${@base_contains('DISTRO_FEATURES', 'acl', 'acl', '', d)}"
-PACKAGECONFIG += "${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)}"
 
 PACKAGECONFIG[acl] = "--enable-acl,--disable-acl,acl,"
-PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux,"
 
 # Install package follow debian
 do_install_append () {

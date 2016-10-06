@@ -3,7 +3,7 @@
 # base branch: master
 #
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -62,6 +62,7 @@ inherit autotools
 inherit pythonnative
 inherit pkgconfig
 inherit gettext
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF += "--host=${HOST_SYS} \
 		--program-prefix= \
 		--prefix=${prefix} \
@@ -84,6 +85,7 @@ EXTRA_OECONF += "--host=${HOST_SYS} \
 		--enable-shared \
 		--enable-python \
 		--with-external-db \
+		--without-selinux \
 		"
 LDFLAGS_append = " -Wl,-Bsymbolic-functions -ffunction-sections"
 CCFLAGS_append = " -fPIC "

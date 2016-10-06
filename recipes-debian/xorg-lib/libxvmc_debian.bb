@@ -22,13 +22,5 @@ DEPENDS += "libxext libxv videoproto"
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
 
-PACKAGES = "${PN}-dev ${PN}1 ${PN}1-dbg ${PN}-staticdev"
-
-FILES_${PN}-dev = "${libdir}/*.so ${libdir}/pkgconfig \
-		   ${libdir}/*.la ${includedir} ${datadir} "
-
-FILES_${PN}1 = "${libdir}/*.so*"
-
-FILES_${PN}1-dbg = "${libdir}/.debug /usr/src/debug"
-
-FILES_${PN}-staticdev = "${libdir}/*.a"
+PKG_${PN} = "${PN}1"
+PKG_${PN}-dbg = "${PN}1-dbg"

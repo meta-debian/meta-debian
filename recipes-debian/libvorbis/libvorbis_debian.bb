@@ -35,12 +35,12 @@ do_install_append() {
 }
 
 # Add more packages according to Debian packages
-PACKAGES += "libvorbisenc2 libvorbisfile3"
+PACKAGES += "libvorbisenc libvorbisfile"
 
 # Set list of files in each package accorindg based on Debian
 FILES_${PN} = "${libdir}/libvorbis.so.*"
-FILES_libvorbisenc2 = "${libdir}/libvorbisenc.so.*"
-FILES_libvorbisfile3 = "${libdir}/libvorbisfile.so.*"
+FILES_libvorbisenc = "${libdir}/libvorbisenc.so.*"
+FILES_libvorbisfile = "${libdir}/libvorbisfile.so.*"
 
 # Change name of .deb file according to Debian package name
 DEBIANNAME_${PN} = "libvorbis0a"

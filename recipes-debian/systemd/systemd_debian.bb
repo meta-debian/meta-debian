@@ -10,11 +10,12 @@ LIC_FILES_CHKSUM = " \
 file://LICENSE.GPL2;md5=751419260aa954499f7abaabaa882bbe \
 file://LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c \
 "
-
 PROVIDES = "udev"
 
 inherit debian-package
 inherit pkgconfig autotools useradd
+
+SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"
 
 DEPENDS = "intltool-native \
            gperf-native \
@@ -49,11 +50,13 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
 
 # --enable-dependency-tracking:
 #   avoid compile error "Cannot open src/*/org.freedesktop.*.policy"
+# --disable-selinux: Disable selinux support
 EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 ${@base_contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
                 --enable-dependency-tracking \
+                --disable-selinux \
                "
 
 do_configure_prepend() {

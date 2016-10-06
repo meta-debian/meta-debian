@@ -5,17 +5,16 @@
 
 require dpkg.inc
 
-PR = "${INC_PR}.3"
+PR = "${INC_PR}.4"
 
 inherit systemd
 
-DEPENDS = "zlib bzip2 perl ncurses xz libselinux"
+DEPENDS = "zlib bzip2 perl ncurses xz"
 DEPENDS_class-native = "bzip2-replacement-native \
                         zlib-native \
                         gettext-native \
                         perl-native \
                         xz-native \
-                        libselinux-native \
                         "
 RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_update-alternatives} xz"
 RDEPENDS_${PN}_class-native = "xz-native"
@@ -38,13 +37,14 @@ export PERL_LIBDIR = "${libdir}/perl"
 PERL_LIBDIR_class-native = "${libdir}/perl-native/perl"
 
 # update-alternatives and start-stop-daemon are provided by dpkg-utils recipe
+# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 	--disable-update-alternatives \
 	--disable-start-stop-daemon \
 	--with-zlib \
 	--with-bz2 \
 	--with-liblzma \
-	--with-selinux \
+	--without-selinux \
 "
 
 do_configure () {
@@ -142,7 +142,7 @@ pkg_postinst_${PN} () {
 PACKAGES =+ "dselect lib${PN}-perl lib${PN}-dev"
 
 RDEPENDS_${PN} += "update-alternatives start-stop-daemon"
-
+RDEPENDS_lib${PN}-perl += "libtimedate-perl"
 FILES_dselect = " \
     ${bindir}/dselect \
     ${sysconfdir}/${DPN}/dselect.cfg* \

@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = " \
     file://LICENSE;md5=720ee0a73f821888ee48f5d239cf6d73 \
 "
 
-DEPENDS = "cairo-native freetype-native giflib-native jpeg-native \
+DEPENDS = "cairo-native freetype-native giflib-native libjpeg-turbo-native \
            libspiro-native libtool-native libxml2-native pango-native tiff-native"
 
 # python_c-missing-semicolon.patch:

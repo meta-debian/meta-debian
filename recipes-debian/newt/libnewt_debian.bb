@@ -14,6 +14,7 @@ slang library."
 
 HOMEPAGE = "https://fedorahosted.org/newt/"
 
+PR = "r1"
 inherit debian-package
 
 LICENSE = "LGPLv2"
@@ -22,21 +23,31 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=5f30f0716dfdd0d91eb439ebec522ec2"
 # slang needs to be >= 2.2
 DEPENDS = "slang popt tcl"
 
+# remove_slang_include.patch:
+#     Remove host include path /usr/include/slang
+# fix_SHAREDDIR.patch:
+#     Ensure the directory ${SHAREDDIR} exists to avoid parallel-make issue
+# cross_ar.patch:
+#     Replace host's ar by cross ar from sysroot
 SRC_URI += " \
+	file://remove_slang_include.patch \
 	file://fix_SHAREDDIR.patch \
 	file://cross_ar.patch \
 "
 
 DPN = "newt"
 
+# base on debian/rules
 EXTRA_OECONF = " \
-	--without-tcl \
 	--with-gpm-support \
-	--with-colorsfile=/etc/newt/palette \
-	CFLAGS="-I${STAGING_INCDIR_NATIVE}/tcl8.6 $(CFLAGS)" \
-	"
+	--with-colorsfile=${sysconfdir}/newt/palette \
+	CFLAGS="-I${STAGING_INCDIR}/tcl8.6 ${CFLAGS}" \
+"
 
-inherit autotools-brokensep python-dir
+inherit autotools-brokensep pythonnative
+
+# Prevent Makefile searching for python from host system
+EXTRA_OEMAKE += "PYTHONVERS=${PYTHON_DIR}"
 
 CLEANBROKEN = "1"
 
@@ -46,31 +57,45 @@ export STAGING_LIBDIR
 export BUILD_SYS
 export HOST_SYS
 
-PACKAGES_prepend = "whiptail "
-
 do_configure_prepend() {
-    sh autogen.sh
+	sh autogen.sh
 }
 
 do_compile_prepend() {
-    # Make sure the recompile is OK
-    rm -f ${B}/.depend
+	# Make sure the recompile is OK
+	rm -f ${B}/.depend
 }
 
 do_install_append() {
-	install -D ${S}/whiptcl.so ${D}${libdir}/whiptcl/whiptcl.so
-	install -D ${S}/snack.py ${D}${libdir}/${PYTHON_DIR}/dist-packages/snack.py
-	install -D ${S}/_snack.so ${D}${libdir}/${PYTHON_DIR}/dist-packages/_snack.so
-	install -D ${S}/_snack.so ${D}${libdir}/${PYTHON_DIR}/dist-packages/_snack_d.so
+	install -d ${D}${libdir}/whiptcl \
+	           ${D}${sysconfdir}/newt \
+	           ${D}${sysconfdir}/bash_completion.d
+	install -m 0644 ${S}/newt*.ver ${D}${libdir}/libnewt_pic.map
+	install -m 0644 ${S}/debian/palette.original ${D}${sysconfdir}/newt/
+	install -m 0644 ${S}/debian/bash_completion.d/* ${D}${sysconfdir}/bash_completion.d/
+	install -m 0644 ${S}/whiptcl.so ${D}${libdir}/whiptcl
 }
 
-PACKAGES += "python-newt python-newt-dbg newt-tcl"
+PACKAGE_BEFORE_PN = "python-${DPN} ${DPN}-tcl ${PN}-pic whiptail"
 
-FILES_python-newt-dbg = "${libdir}/${PYTHON_DIR}/dist-packages/_snack_d.so"
-FILES_python-newt = "${libdir}/${PYTHON_DIR}/dist-packages"
-FILES_whiptail = "${bindir}/whiptail"
-FILES_libnewt0.52 += "${datadir}/locale*"
-FILES_newt-tcl = "${libdir}/whiptcl/whiptcl.so"
-FILES_${PN}-dbg += "${libdir}/*/.debug"
+FILES_python-${DPN} = "${libdir}/${PYTHON_DIR}/*-packages/*"
+FILES_${DPN}-tcl = "${libdir}/whiptcl/whiptcl.so"
+FILES_${PN}-pic = "${libdir}/libnewt_pic.map"
+FILES_whiptail = " \
+    ${bindir}/whiptail \
+    ${sysconfdir}/bash_completion.d/whiptail \
+"
+FILES_${PN}-dbg += " \
+    ${libdir}/*/.debug \
+    ${libdir}/${PYTHON_DIR}/*-packages/.debug \
+"
+
+RDEPENDS_${PN}-pic += "${PN}-dev"
+RDEPENDS_${DPN}-tcl += "${PN}"
+RDEPENDS_python-${DPN} += "${PN}"
+
+# According debian/control, libnewt-pic depends on libnewt-dev.
+# Skip 'QA Issue: libnewt-pic rdepends on libnewt-dev [dev-deps]'.
+INSANE_SKIP_${PN}-pic += "dev-deps"
 
 BBCLASSEXTEND = "native"

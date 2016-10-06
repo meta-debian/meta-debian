@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c963eb366b781252b0bf0fdf1624d9e9 \
 
 PR = "r0"
 
-inherit debian-package autotools lib_package
+inherit debian-package autotools
 
 DPN = "ust"
 
@@ -30,10 +30,12 @@ do_install_append() {
 	fi
 }
 
-PACKAGES =+ "lib${PN}-ctl2"
+PACKAGES =+ "lib${PN}-ctl"
 
-FILES_lib${PN}-ctl2 += "${libdir}/lib${PN}-ctl.so.*"
+FILES_lib${PN}-ctl = "${libdir}/lib${PN}-ctl.so.*"
+FILES_${PN}-dev += "${bindir}/*"
+
+LEAD_SONAME = "liblttng-ust.so.*"
 
 # Correct the package name
-PKG_${PN}-dev = "lib${PN}-dev"
-PKG_${PN} = "lib${PN}0"
+DEBIANNAME_lib${PN}-ctl = "lib${PN}-ctl2"

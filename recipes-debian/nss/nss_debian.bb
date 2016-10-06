@@ -21,7 +21,6 @@ RDEPENDS_${PN} = "perl"
 inherit siteinfo debian-package
 
 LICENSE = "MPLv2 | (MPLv2 & GPLv2+) | (MPLv2 & LGPLv2.1+)"
-                                                                                
 LIC_FILES_CHKSUM = "file://nss/lib/freebl/mpi/doc/LICENSE;md5=491f158d09d948466afce85d6f1fe18f \
                     file://nss/lib/freebl/mpi/doc/LICENSE-MPL;md5=6bf96825e3d7ce4de25621ae886cc859"
 
@@ -212,35 +211,38 @@ pkg_postinst_${PN} () {
 }
 
 # Add more packages according to list of packages in Debian
-PACKAGES = "libnss3 libnss3-dbg libnss3-dev libnss3-tools libnss3-1d"
+PACKAGES = "lib${PN} lib${PN}-dbg lib${PN}-dev lib${PN}-tools lib${PN}-1d"
 
 # Set correct files to new package
-FILES_libnss3-1d = " \
-	${libdir}/libnss3.so.1d \
-	${libdir}/libnssutil3.so.1d \
-	${libdir}/libsmime3.so.1d \
-	${libdir}/libssl3.so.1d \
+FILES_lib${PN}-1d = " \
+	${libdir}/lib*.so.1d \
 	"
 
-FILES_libnss3-tools = " \
+FILES_lib${PN}-tools = " \
 	${bindir} \
 	"
 
-FILES_libnss3 = "\
+FILES_lib${PN} = "\
 	${sysconfdir} \
 	${libdir}/lib*.chk \
 	${libdir}/lib*.so \
 	"
 
-FILES_libnss3-dev = "\
+FILES_lib${PN}-dev = "\
 	${libdir}/nss \
 	${libdir}/pkgconfig/* \
 	${includedir}/* \
 	"
 
-FILES_libnss3-dbg = "\
+FILES_lib${PN}-dbg = "\
 	${bindir}/.debug/* \
 	${libdir}/.debug/* \
 	"
+
+PKG_lib${PN} = "lib${PN}3"
+PKG_lib${PN}-dbg = "lib${PN}3-dbg"
+PKG_lib${PN}-dev = "lib${PN}3-dev"
+PKG_lib${PN}-tools = "lib${PN}3-tools"
+PKG_lib${PN}-1d = "lib${PN}3-1d"
 
 BBCLASSEXTEND = "native nativesdk"

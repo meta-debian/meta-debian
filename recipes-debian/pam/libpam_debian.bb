@@ -10,7 +10,7 @@ a flexible mechanism for authenticating users"
 HOMEPAGE = "https://fedorahosted.org/linux-pam/"
 BUGTRACKER = "https://fedorahosted.org/linux-pam/newticket"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -26,15 +26,17 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=7eb5c1bf854e8881005d673599ee74d3"
 DEBIAN_QUILT_PATCHES = "${DEBIAN_UNPACK_DIR}/debian/patches-applied"
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEPENDS = "bison flex flex-native cracklib libselinux"
+DEPENDS = "bison flex flex-native cracklib"
 
+# --disable-selinux: Don't use selinux support
 EXTRA_OECONF = "--with-db-uniquename=_pam \
 		--includedir=${includedir}/security \
                 --libdir=${base_libdir} \
                 --sbindir=${base_sbindir} \
 		--disable-nis \
                 --disable-regenerate-docu \
-		--disable-prelude"
+		--disable-prelude \
+		--disable-selinux"
 
 inherit autotools gettext pkgconfig
 

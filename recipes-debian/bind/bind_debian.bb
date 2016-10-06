@@ -1,6 +1,6 @@
 require bind.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.2"
 DEPENDS += " bind-native"
 
 # correct-path-to-gen-file.patch
@@ -15,7 +15,7 @@ SRC_URI += " \
 "
 
 EXTRA_OECONF = " \
-	--sysconfdir=/etc/bind \
+	--sysconfdir=${sysconfdir}/bind \
 	--enable-threads \
 	--enable-largefile \
 	--with-libtool \
@@ -35,72 +35,136 @@ EXTRA_OECONF = " \
 	--disable-threads \
 	--with-ecdsa=yes \
 	--with-gost=no \
-	--with-randomdev=no \
+	--with-randomdev=/dev/random \
 	--with-dlz-odbc=no \
 	--with-dlz-ldap=${STAGING_LIBDIR}/../ \
-	--enable-exportlib \
 "
 
+# Split building exportable library base on debian/rules
+do_configure_append() {
+	# Base on debian/rules
+	olddir=`pwd`
+	test -e ${B}/export || mkdir ${B}/export && cp -r ${S}/* ${B}/export || true
+	cd ${B}/export
+	oe_runconf --disable-epoll \
+	           --disable-kqueue \
+	           --disable-devpoll \
+	           --disable-threads \
+	           --disable-linux-caps \
+	           --without-openssl \
+	           --without-libxml2 \
+	           --enable-ipv6 \
+	           --enable-shared \
+	           --enable-exportlib \
+	           --with-libtool \
+	           --with-gssapi=no \
+	           --with-export-libdir=${libdir} \
+	           --with-export-includedir=${includedir}/bind-export
+	cd $olddir
+}
+
+do_compile_prepend() {
+	oe_runmake -C ${B}/export
+}
+
+do_install_prepend() {
+	oe_runmake -C ${B}/export install DESTDIR=${D}
+}
+
+# Install files base on debian/rules
 do_install_append () {
-	install -D -m 644 ${S}/debian/apparmor-profile ${D}${sysconfdir}/apparmor.d/usr.sbin.named
-	install -D -m 644 ${S}/debian/apparmor-profile.local ${D}${sysconfdir}/apparmor.d/local/usr.sbin.named
-	install -D -m 444 ${S}/debian/db.0 ${D}${sysconfdir}/bind/db.0
-	install -D -m 444 ${S}/debian/db.127 ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/db.0 ${D}${sysconfdir}/bind/db.255
-	install -D -m 444 ${S}/debian/db.empty ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/db.local ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/db.root ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/named.conf ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/named.conf.default-zones ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/named.conf.local ${D}${sysconfdir}/bind
-	install -D -m 444 ${S}/debian/zones.rfc1918 ${D}${sysconfdir}/bind
+	find ${D} -name *.la -execdir rm -f {} \;
 
-	install -D ${S}/debian/ip-up.d ${D}${sysconfdir}/network/if-up.d/bind9
-	install -D ${S}/debian/ip-down.d ${D}${sysconfdir}/network/if-down.d/bind9
+	if [ "${libdir}" != "${base_libdir}" ]; then
+		test -d ${D}${base_libdir} || install -d ${D}${base_libdir}
+		mv ${D}${libdir}/*-export.so.* ${D}${base_libdir}/
 
-	install -D ${S}/debian/ip-up.d ${D}${sysconfdir}/ppp/ip-up.d/bind9
-	install -D ${S}/debian/ip-down.d ${D}${sysconfdir}/ppp/ip-down.d/bind9
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		cd ${D}${libdir} && for link in *-export.so; do
+			file=$(basename $(readlink $link))
+			ln -sf $rel_lib_prefix${base_libdir}/$file $link
+		done
+	fi
 
-	install -D -m 644 ${S}/debian/bind9.ufw.profile ${D}${sysconfdir}/ufw/applications.d/bind9
+	# Base on debian/bind9.dirs
+	install -d ${D}${sysconfdir}/ufw/applications.d \
+	           ${D}${sysconfdir}/apparmor.d/force-complain \
+	           ${D}${sysconfdir}/apparmor.d/local \
+	           ${D}${localstatedir}/cache/bind \
+	           ${D}${datadir}/${DPN} \
+	           ${D}${sysconfdir}/ppp/ip-up.d \
+	           ${D}${sysconfdir}/ppp/ip-down.d \
+	           ${D}${sysconfdir}/network/if-up.d \
+	           ${D}${sysconfdir}/network/if-down.d
 
+	ETCBIND=${D}${sysconfdir}/bind
+	ETCAPP=${D}${sysconfdir}/apparmor.d
+
+	install -c -o bin -g bin -m 444 ${S}/debian/db.0 ${ETCBIND}/db.0
+	install -c -o bin -g bin -m 444 ${S}/debian/db.0 ${ETCBIND}/db.255
+	install -c -o bin -g bin -m 444 ${S}/debian/db.empty ${ETCBIND}
+	install -c -o bin -g bin -m 444 ${S}/debian/zones.rfc1918 ${ETCBIND}
+	install -c -o bin -g bin -m 444 ${S}/debian/db.127 ${ETCBIND}
+	install -c -o bin -g bin -m 444 ${S}/debian/db.local ${ETCBIND}
+	install -c -o bin -g bin -m 444 ${S}/debian/db.root ${ETCBIND}
+	install -c -o bin -g bin -m 440 ${S}/debian/named.conf ${ETCBIND}
+	install -c -o bin -g bin -m 440 ${S}/debian/named.conf.local ${ETCBIND}
+	install -c -o bin -g bin -m 440 ${S}/debian/named.conf.default-zones ${ETCBIND}
+	install -c -o bin -g bin -m 440 ${S}/bind.keys ${ETCBIND}
+
+	install -c -o bin -g bin -m 440 ${S}/debian/named.conf.options ${D}${datadir}/${DPN}/
+
+	install -m 644 -o root -g root ${S}/debian/apparmor-profile ${ETCAPP}/usr.sbin.named
+	install -m 644 -o root -g root ${S}/debian/apparmor-profile.local ${ETCAPP}/local/usr.sbin.named
+
+	install ${S}/debian/ip-up.d ${D}${sysconfdir}/ppp/ip-up.d/bind9
+	install ${S}/debian/ip-down.d ${D}${sysconfdir}/ppp/ip-down.d/bind9
+	install ${S}/debian/ip-up.d ${D}${sysconfdir}/network/if-up.d/bind9
+	install ${S}/debian/ip-down.d ${D}${sysconfdir}/network/if-down.d/bind9
+	install -m644 ${S}/debian/bind9.ufw.profile ${D}${sysconfdir}/ufw/applications.d/bind9
+
+	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${libdir}/tmpfiles.d/bind9.conf
+	install -D -m 644 ${S}/debian/lwresd.tmpfile ${D}${libdir}/tmpfiles.d/lwresd.conf
+
+	# Base on debian/libbind-dev.install
+	install -m 0644 ${S}/lib/dns/include/dns/dlz_dlopen.h ${D}${includedir}/dns/
+
+	# Install systemd service
 	install -D -m 644 ${S}/bind9.service ${D}${systemd_system_unitdir}/bind9.service
 	install -D -m 644 ${S}/bind9-resolvconf.service ${D}${systemd_system_unitdir}/bind9-resolvconf.service
-	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${libdir}/tmpfiles.d/lwresd.conf
 	install -D -m 644 ${S}/debian/lwresd.service ${D}${systemd_system_unitdir}/lwresd.service
-	
-	mv ${D}${libdir}/bind9/* ${D}${libdir}/
-	rm -r ${D}${libdir}/bind9/
 
-	ln -sf libbind9.so.90.0.9 ${D}${libdir}/libbind9.so
-	ln -sf libdns.so.100.2.2 ${D}${libdir}/libdns.so
-	ln -sf libisc.so.95.5.0 ${D}${libdir}/libisc.so
-	ln -sf libisccc.so.90.0.6 ${D}${libdir}/libisccc.so
-	ln -sf liblwres.so.90.0.7 ${D}${libdir}/liblwres.so
-
-	ln -sf libdns-export.so.100.2.2 ${D}${libdir}/libdns-export.so
-	ln -sf libirs-export.so.91.0.0 ${D}${libdir}/libirs-export.so
-	ln -sf libisc-export.so.95.5.0 ${D}${libdir}/libisc-export.so
-	ln -sf libisccfg-export.so.90.1.0 ${D}${libdir}/libisccfg-export.so
-	ln -sf libbind9.so.90.0.9 ${D}${libdir}/libbind9.so.90
-	ln -sf libdns-export.so.100.2.2 ${D}${libdir}/libdns-export.so.100
-	ln -sf libdns.so.100.2.2 ${D}${libdir}/libdns.so.100
-	ln -sf libirs-export.so.91.0.0 ${D}${libdir}/libirs-export.so.91
-	ln -sf libisc-export.so.95.5.0 ${D}${libdir}/libisc-export.so.95
-	ln -sf libisc.so.95.5.0 ${D}${libdir}/libisc.so.95
-	ln -sf libisccc.so.90.0.6 ${D}${libdir}/libisccc.so.90
-	ln -sf libisccfg-export.so.90.1.0 ${D}${libdir}/libisccfg-export.so.90
-
-	# Install script follow Debian
+	# Install sysvinit init script
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/bind9.init ${D}${sysconfdir}/init.d/bind9
 	install -m 0755 ${S}/debian/lwresd.init ${D}${sysconfdir}/init.d/lwresd		
-	
-	install -d ${D}${includedir}/bind-export/
-	mv ${D}${includedir}/bind9/dns ${D}${includedir}/bind-export/
-	mv ${D}${includedir}/bind9/dst ${D}${includedir}/bind-export/
-	mv ${D}${includedir}/bind9/isc ${D}${includedir}/bind-export/
-	mv ${D}${includedir}/bind9/irs ${D}${includedir}/bind-export/
-	mv ${D}${includedir}/bind9/isccfg ${D}${includedir}/bind-export/
+}
+
+# Base on debian/bind9.postinst
+pkg_postinst_${PN}() {
+	mkdir -p $D${localstatedir}/lib/bind
+	chown root:bind $D${localstatedir}/lib/bind
+	chmod 755 $D${localstatedir}/lib/bind
+
+	if [ ! -s $D${sysconfdir}/bind/rndc.key ] && [ ! -s $D${sysconfdir}/bind/rndc.conf ]; then
+		rndc-confgen -r /dev/urandom -a -c $D${sysconfdir}/bind/rndc.key
+	fi
+
+	if [ ! -f $D${sysconfdir}/bind/named.conf.options ]; then
+		cp $D${datadir}/${DPN}/named.conf.options $D${sysconfdir}/bind/named.conf.options
+		chmod 644 $D${sysconfdir}/bind/named.conf.options
+	fi
+
+	uid=$(ls -ln $D${sysconfdir}/bind/rndc.key | awk '{print $3}')
+	if [ "$uid" = "0" ]; then
+		chown bind $D${sysconfdir}/bind/rndc.key
+		chgrp bind $D${sysconfdir}/bind
+		chmod g+s $D${sysconfdir}/bind
+		chgrp bind $D${sysconfdir}/bind/rndc.key $D${localstatedir}/cache/bind
+		chgrp bind $D${sysconfdir}/bind/named.conf* || true
+		chmod g+r $D${sysconfdir}/bind/rndc.key $D${sysconfdir}/bind/named.conf* || true
+		chmod g+rwx $D${localstatedir}/cache/bind
+	fi
 }
 
 CONFFILES_${PN} = " \
@@ -112,19 +176,17 @@ CONFFILES_${PN} = " \
 	${sysconfdir}/bind/db.empty \
 	${sysconfdir}/bind/db.local \
 	${sysconfdir}/bind/db.root \
-    "
+"
 
-PACKAGES =+ "${PN}9-host ${PN}9utils dnsutils host libbind-dev \
-	libbind-export-dev libbind9-90 libdns-export100 libdns100 \
-	libirs-export91 libisc-export95 libisc95 libisccc90 \
-	libisccfg-export90 libisccfg90 liblwres90 lwresd \
-    "
+PACKAGES =+ "${DPN}-host ${DPN}utils dnsutils \
+             lib${PN}-export-dev lib${DPN} libdns-export libdns \
+             libirs-export libisc-export libisc libisccc \
+             libisccfg-export libisccfg liblwres lwresd \
+             "
 
-FILES_${PN}9-host = " \
-	${bindir}/host \
-    "
+FILES_${DPN}-host = "${bindir}/host"
 
-FILES_${PN}9utils = " \
+FILES_${DPN}utils = " \
 	${sbindir}/dnssec-checkds \
 	${sbindir}/dnssec-coverage \
 	${sbindir}/dnssec-dsfromkey \
@@ -137,102 +199,61 @@ FILES_${PN}9utils = " \
 	${sbindir}/named-checkconf \
 	${sbindir}/named-checkzone \
 	${sbindir}/named-compilezone \
-	${sbindir}/rndc \
-	${sbindir}/rndc-confgen \
-    "
+	${sbindir}/rndc* \
+"
 
 FILES_dnsutils = " \
 	${bindir}/dig \
 	${bindir}/nslookup \
 	${bindir}/nsupdate \
-    "
+"
 
-FILES_libbind-dev = " \
-	${bindir}/isc-config.sh \
-	${includedir}/bind-export/dns/* \
-	${includedir}/bind-export/dst/* \
-	${includedir}/bind-export/irs/* \
-	${includedir}/bind-export/isc/* \
-	${includedir}/bind-export/isccfg \
-	${includedir}/bind9/*.h \
-	${includedir}/dns/* \
-	${includedir}/dst/* \
-	${includedir}/isc/* \
-	${includedir}/isccc/* \
-	${includedir}/isccfg/* \
-	${includedir}/lwres/* \
-	${libdir}/libbind9.so \
-	${libdir}/libdns.so \
-	${libdir}/libisc.so \
-	${libdir}/libisccc.so \
-	${libdir}/libisccfg.so \
-	${libdir}/liblwres.so \
-    "
-
-FILES_libbind-export-dev = " \
-	${libdir}/libdns-export.so \
-	${libdir}/libirs-export.so \
-	${libdir}/libisc-export.so \
-	${libdir}/libisccfg-export.so \
-    "
-
-FILES_libbind9-90 = " \
-	${libdir}/libbind9.so.90 \
-	${libdir}/libbind9.so.90.0.9 \
-    "
-
-FILES_libdns-export100 = " \
-	${libdir}/libdns-export.so.100 \
-	${libdir}/libdns-export.so.100.2.2 \
-    "
-
-FILES_libdns100 = " \
-	${libdir}/libdns.so.100 \
-	${libdir}/libdns.so.100.2.2 \
-    "
-
-FILES_libirs-export91 = " \
-	${libdir}/libirs-export.so.91 \
-	${libdir}/libirs-export.so.91.0.0 \
-    "
-
-FILES_libisc-export95 = " \
-	${libdir}/libisc-export.so.95 \
-	${libdir}/libisc-export.so.95.5.0 \
-    "
-
-FILES_libisc95 = " \
-	${libdir}/libisc.so.95 \
-	${libdir}/libisc.so.95.5.0 \
-    "
-
-FILES_libisccc90 = " \
-	${libdir}/libisccc.so.90 \
-	${libdir}/libisccc.so.90.0.6 \
-    "
-
-FILES_libisccfg-export90 = " \
-	${libdir}/libisccfg-export.so.90 \
-	${libdir}/libisccfg-export.so.90.1.0 \
-    "
-
-FILES_libisccfg90 = " \
-	${libdir}/libisccfg.so.90 \
-	${libdir}/libisccfg.so.90.1.0 \
-    "
-
-FILES_liblwres90 = " \
-	${libdir}/liblwres.so.90 \
-	${libdir}/liblwres.so.90.0.7 \
-    "
+FILES_lib${PN}-export-dev = "${libdir}/lib*-export${SOLIBSDEV}"
+FILES_lib${DPN} = "${libdir}/libbind9${SOLIBS}"
+FILES_libdns-export = "${base_libdir}/libdns-export${SOLIBS}"
+FILES_libdns = "${libdir}/libdns${SOLIBS}"
+FILES_libirs-export = "${base_libdir}/libirs-export${SOLIBS}"
+FILES_libisc-export = "${base_libdir}/libisc-export${SOLIBS}"
+FILES_libisc = "${libdir}/libisc${SOLIBS}"
+FILES_libisccc = "${libdir}/libisccc${SOLIBS}"
+FILES_libisccfg-export = "${base_libdir}/libisccfg-export${SOLIBS}"
+FILES_libisccfg = "${libdir}/libisccfg${SOLIBS}"
+FILES_liblwres = "${libdir}/liblwres${SOLIBS}"
 
 FILES_lwresd = " \
 	${sysconfdir}/init.d/lwresd \
 	${systemd_system_unitdir}/lwresd.service \
 	${libdir}/tmpfiles.d/lwresd.conf \
 	${sbindir}/lwresd \
-    "
+"
 
-FILES_${PN} += "${localstatedir} /run" 
+FILES_${PN} += " \
+	/run \
+	${libdir}/tmpfiles.d/bind9.conf \
+	${datadir}/${DPN} \
+	${localstatedir} \
+"
+FILES_${PN}-dev += " \
+	${bindir}/isc-config.sh \
+"
 
-PKG_${PN} = "${PN}9"
+# Package "bind" and "bind-dev" on Poky are equal to "bind9" and "libbind-dev" on Debian
+DEBIANNAME_${PN} = "${DPN}"
+DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+RPROVIDES_${PN} += "${DPN}"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"
+
+# Package "host" is provided by "bind9-host" arcoding to debian/control
+RPROVIDES_${DPN}-host += "host"
+
+# Dependencies between bind's packages base on debian/control
+RDEPENDS_${PN} += "libdns libisccfg libisc libisccc ${DPN}utils liblwres lib${DPN}"
+RDEPENDS_${DPN}-host += "libdns libisccfg libisc liblwres lib${DPN}"
+RDEPENDS_${PN}-dev += "libdns libisccfg libisc liblwres lib${DPN}"
+RDEPENDS_lib${DPN} += "libdns libisccfg libisc"
+RDEPENDS_libdns += "libisc"
+RDEPENDS_libisccc += "libisc"
+RDEPENDS_libisccfg += "libdns libisccc libisc"
+RDEPENDS_dnsutils += "libdns libisccfg libisc liblwres lib${DPN}"
+RDEPENDS_lwresd += "libdns libisccfg libisccc libisc liblwres lib${DPN}"
+RDEPENDS_lib${PN}-export-dev += "${DPN}-host libdns-export libisccfg-export libisc-export libirs-export"

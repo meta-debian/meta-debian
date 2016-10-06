@@ -28,10 +28,13 @@ LIC_FILES_CHKSUM = " \
 #	Fix "error: 'LC_ALL' undeclared (first use in this function)"
 # gettext_debian.patch: base on gettext.patch from base recipe
 #	Fix "*** No rule to make target 'Makevars', needed by 'Makefile'.  Stop."
+# fix-removing-in-the-host-development-system.patch
+#       Fix "rm: cannot remove '/usr/bin/sx': Permission denied"
 SRC_URI += " \
     file://lrzsz_fix_for_automake-1.12.patch \
     file://lrzsz-check-locale.h.patch \
     file://gettext_debian.patch \
+    file://fix-removing-in-the-host-development-system.patch \
 "
 
 inherit autotools-brokensep gettext

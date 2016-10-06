@@ -6,7 +6,7 @@ DISCRIPTION = "Valgrind is a system for debugging and profiling Linux programs. 
  Valgrind to build new tools."
 HOMEPAGE = "http://valgrind.org/"
 
-PR = "r0"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv2 & BSD"
@@ -18,6 +18,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c46082167a314d785d012a244748d803 \
 X11DEPENDS = "virtual/libx11"
 DEPENDS = "gdb ${@bb.utils.contains('DISTRO_FEATURES', 'x11', '${X11DEPENDS}', '', d)}"
 
+# enable.building.on.4.x.kernel.patch:
+#     Enable building valgrind on host with 4.x kernel.
+SRC_URI += "file://enable.building.on.4.x.kernel.patch"
+
 inherit autotools-brokensep
 
 EXTRA_OECONF = "--enable-tls"
@@ -25,11 +29,14 @@ EXTRA_OECONF = "--enable-tls"
 do_install_append () {
 	install -d ${D}${sysconfdir}/bash_completion.d
 	install -m 0644 ${S}/debian/valgrind.bash-completion ${D}${sysconfdir}/bash_completion.d/valgrind
+
+	# base on debian/valgrind.install
+	install -m 0755 ${S}/debian/valgrind.sh ${D}${bindir}
 	install -m 0644 ${S}/debian/supp/debian.supp ${D}${libdir}/valgrind/
 	
 	# follow debian/rules
 	mv -f ${D}${bindir}/valgrind ${D}${bindir}/valgrind.bin
-	mv -f ${S}/debian/valgrind.sh ${D}${bindir}/valgrind
+	mv -f ${D}${bindir}/valgrind.sh ${D}${bindir}/valgrind
 
 	# remove unnecessary files	
 	rm ${D}${includedir}/${PN}/pub*

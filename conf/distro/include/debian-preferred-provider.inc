@@ -14,9 +14,5 @@ PREFERRED_PROVIDER_virtual/update-alternatives = "dpkg-utils"
 PREFERRED_PROVIDER_virtual/update-alternatives-native = "dpkg-utils-native"
 PREFERRED_PROVIDER_virtual/nativesdk-update-alternatives = "nativesdk-dpkg-utils"
 
-# Use libjpeg-turbo instead of jpeg
-PREFERRED_PROVIDER_jpeg = "libjpeg-turbo"
-PREFERRED_PROVIDER_jpeg-native = "libjpeg-turbo-native"
-
 # Use libusb instead of libusb-compat
 PREFERRED_PROVIDER_libusb = "libusb"

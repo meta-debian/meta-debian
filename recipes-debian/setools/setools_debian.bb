@@ -10,7 +10,7 @@ mandatory access controls to Linux. These are Tools for analysing \
 security policy on SELinux systems."
 HOMEPAGE = "http://oss.tresys.com/projects/setools"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -21,7 +21,7 @@ LIC_FILES_CHKSUM = " \
     file://COPYING.LGPL;md5=fbc093901857fcd118f065f900982c24 \
 "
 
-DEPENDS = "bison-native flex-native python libglade \
+DEPENDS = "bison-native flex-native tcl-native python libglade \
            libsepol libselinux libxml2 tcl tk8.6 gtk+ \
            "
 
@@ -71,6 +71,7 @@ do_configure_prepend() {
 	export PYTHON_CPPFLAGS="-I${STAGING_INCDIR}/${PYLIBVER}"
 	export PYTHON_LDFLAGS="${STAGING_LIBDIR}/lib${PYLIBVER}.so"
 	export PYTHON_SITE_PKG="${libdir}/${PYLIBVER}/site-packages"
+	export REAL_TCL_BIN_DIR=${STAGING_BINDIR_NATIVE}
 }
 
 do_install_append() {

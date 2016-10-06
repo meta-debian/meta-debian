@@ -21,8 +21,3 @@ DPN = "x11proto-core"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
-
-# Correct the package name follow Debian
-PACKAGES = "${DPN}-dev"
-
-FILES_${DPN}-dev = "${prefix}"
