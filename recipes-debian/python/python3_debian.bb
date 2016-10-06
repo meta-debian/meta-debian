@@ -57,6 +57,7 @@ CACHED_CONFIGUREVARS = " \
 TARGET_CC_ARCH_append_armv6 = " -D__SOFTFP__"
 TARGET_CC_ARCH_append_armv7a = " -D__SOFTFP__"
 TARGET_CC_ARCH += "-DNDEBUG -fno-inline"
+SDK_CC_ARCH += "-DNDEBUG -fno-inline"
 EXTRA_OEMAKE += "CROSS_COMPILE=yes"
 EXTRA_OECONF += "CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ --without-ensurepip"
 
@@ -253,8 +254,20 @@ python do_package_prepend() {
     python_majmin = d.getVar("PYTHON_MAJMIN", True) or ""
     scriptdir = "%s/python%s" % (libdir, python_majmin)
 
+    # Get package name of libpython3.4-minimal which depends on target building or nativesdk building:
+    #     libpython3.4-minimal
+    #     nativesdk-libpython3.4-minimal
+    #     libpython3.4-minimal-nativesdk
+    p_lmin = ""
+    pattern_lmin = ".*lib%s-minimal.*" % dpn
+    packages = d.getVar("PACKAGES", True) or ""
+    arr_packages = packages.split()
+    for pkg in arr_packages:
+        if re.match(pattern_lmin,pkg):
+            p_lmin = pkg
+            break
+
     readme_lmin = "%s/debian/PVER-minimal.README.Debian.in" % s
-    p_lmin = "lib%s-minimal" % dpn
     files_lmin = d.getVar("FILES_%s" % p_lmin, True) or ""
 
     # get list file from debian/PVER-minimal.README.Debian.in

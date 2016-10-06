@@ -6,7 +6,7 @@ DISCRIPTION = "Valgrind is a system for debugging and profiling Linux programs. 
  Valgrind to build new tools."
 HOMEPAGE = "http://valgrind.org/"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "GPLv2 & BSD"
@@ -17,6 +17,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c46082167a314d785d012a244748d803 \
 
 X11DEPENDS = "virtual/libx11"
 DEPENDS = "gdb ${@bb.utils.contains('DISTRO_FEATURES', 'x11', '${X11DEPENDS}', '', d)}"
+
+# enable.building.on.4.x.kernel.patch:
+#     Enable building valgrind on host with 4.x kernel.
+SRC_URI += "file://enable.building.on.4.x.kernel.patch"
 
 inherit autotools-brokensep
 
