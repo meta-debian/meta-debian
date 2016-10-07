@@ -21,8 +21,9 @@ RDEPENDS_${PN} = "perl"
 inherit siteinfo debian-package
 
 LICENSE = "MPLv2 | (MPLv2 & GPLv2+) | (MPLv2 & LGPLv2.1+)"
-LIC_FILES_CHKSUM = "file://nss/lib/freebl/mpi/doc/LICENSE;md5=491f158d09d948466afce85d6f1fe18f \
-                    file://nss/lib/freebl/mpi/doc/LICENSE-MPL;md5=6bf96825e3d7ce4de25621ae886cc859"
+LIC_FILES_CHKSUM = "file://nss/COPYING;md5=3b1e88e1b9c0b5a4b2881d46cce06a18 \
+                    file://nss/lib/freebl/mpi/doc/LICENSE;md5=491f158d09d948466afce85d6f1fe18f \
+                    file://nss/lib/freebl/mpi/doc/LICENSE-MPL;md5=5d425c8f3157dbf212db2ec53d9e5132"
 
 SRC_URI += "\                                                                    
     file://nss-fix-support-cross-compiling.patch \                              
@@ -156,7 +157,7 @@ do_install() {
 	# Remove redundant binaries compare to list of file in Debian
 	# packages
 	rm ${D}/${bindir}/atob ${D}/${bindir}/baddbdir ${D}/${bindir}/bltest \
-		${D}/${bindir}/btoa ${D}/${bindir}/certcgi ${D}/${bindir}/checkcert \
+		${D}/${bindir}/btoa ${D}/${bindir}/certcgi \
 		${D}/${bindir}/crmftest ${D}/${bindir}/dertimetest ${D}/${bindir}/smime \
 		${D}/${bindir}/digest ${D}/${bindir}/encodeinttest ${D}/${bindir}/fipstest \
 		${D}/${bindir}/listsuites ${D}/${bindir}/makepqg ${D}/${bindir}/mangle \
@@ -237,6 +238,7 @@ FILES_lib${PN}-dev = "\
 FILES_lib${PN}-dbg = "\
 	${bindir}/.debug/* \
 	${libdir}/.debug/* \
+	/usr/src/debug \
 	"
 
 PKG_lib${PN} = "lib${PN}3"
