@@ -15,7 +15,7 @@ HOMEPAGE = "https://www.gnu.org/software/groff/"
 PR = "r0"
 inherit debian-package
 
-DEPENDS += "texinfo libx11 libxmu groff-native libxt libxaw"
+DEPENDS += "texinfo groff-native"
 DEPENDS_class-native = ""
 
 LICENSE = "GPLv3+ & GFDL-1.3 & MIT & BSD-4-Clause"
@@ -26,7 +26,12 @@ LIC_FILES_CHKSUM = "\
 	file://tmac/doc.tmac;beginline=1;endline=28;md5=6ea1a309490948cb2b294971734b30b1"
 
 inherit autotools-brokensep
+
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
+
+PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG[x11] = "--with-x, --without-x, libx11 libxmu libxt libxaw"
+
 PACKAGES =+ "${PN}-base"
 
 do_configure_append() {
