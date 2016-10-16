@@ -10,7 +10,7 @@ mandatory access controls to Linux. These are Tools for analysing \
 security policy on SELinux systems."
 HOMEPAGE = "http://oss.tresys.com/projects/setools"
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
 
@@ -21,8 +21,8 @@ LIC_FILES_CHKSUM = " \
     file://COPYING.LGPL;md5=fbc093901857fcd118f065f900982c24 \
 "
 
-DEPENDS = "bison-native flex-native tcl-native python libglade \
-           libsepol libselinux libxml2 tcl tk8.6 gtk+ \
+DEPENDS = "bison-native flex-native tcl-native python \
+           libsepol libselinux libxml2 tcl \
            "
 
 # setools-configure-ac_debian.patch:
@@ -40,8 +40,7 @@ inherit autotools-brokensep pythonnative pkgconfig
 
 # Follow debian/rules
 EXTRA_OECONF = "--enable-swig-python --enable-swig-tcl --disable-bwidget-check \
-                --with-tk=${STAGING_BINDIR_CROSS} --with-tcl=${STAGING_BINDIR_CROSS} \
-                --with-tkinclude=${STAGING_INCDIR}/tcl8.6 \
+                --with-tcl=${STAGING_BINDIR_CROSS} \
                 --with-tclinclude=${STAGING_INCDIR}/tcl8.6 \
                 --disable-selinux-check \
 "
@@ -51,9 +50,13 @@ EXTRA_OECONF += "--with-sepol-devel=${STAGING_LIBDIR}/.. \
                  --with-selinux-devel=${STAGING_LIBDIR}/.."
 
 EXTRA_OECONF_append_class-native = " \
-    --with-tk=${STAGING_LIBDIR_NATIVE}/tk8.6 \
+    --disable-gui \
     --with-tcl=${STAGING_LIBDIR_NATIVE}/tcl8.6 \
 "
+
+PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'tk gui', '', d)}"
+PACKAGECONFIG[tk] = "--with-tk=${STAGING_BINDIR_CROSS} --with-tkinclude=${STAGING_INCDIR}/tcl8.6, --without-tk, tk8.6"
+PACKAGECONFIG[gui] = "--enable-gui, --disable-gui, gtk+ libglade"
 
 # need to export these variables for python-config to work
 export BUILD_SYS
@@ -79,15 +82,21 @@ do_install_append() {
 	mkdir -p ${D}${sysconfdir}/logwatch/conf/logfiles/ \
 	         ${D}${sysconfdir}/logwatch/scripts/services/ \
 	         ${D}${sysconfdir}/logwatch/conf/services/
-	cp ${S}/seaudit/seaudit-report-group.conf \
+	# seaudit will be built if gui is enabled,
+	# we need check if files existed before install
+	test -f ${S}/seaudit/seaudit-report-group.conf && \
+	    cp ${S}/seaudit/seaudit-report-group.conf \
 	         ${D}${sysconfdir}/logwatch/conf/logfiles/
-	cp ${S}/seaudit/seaudit-report-service \
+	test -f ${S}/seaudit/seaudit-report-service && \
+	    cp ${S}/seaudit/seaudit-report-service \
 	         ${D}${sysconfdir}/logwatch/scripts/services/
-	cp ${S}/seaudit/seaudit-report-service.conf \
+	test -f ${S}/seaudit/seaudit-report-service.conf && \
+	    cp ${S}/seaudit/seaudit-report-service.conf \
 	         ${D}${sysconfdir}/logwatch/conf/services/
 
-	mkdir -p ${D}${datadir}/menu
-	cp ${S}/debian/setools-gui.menu ${D}${datadir}/menu/setools-gui
+	test -f ${S}/debian/setools-gui.menu && \
+	    mkdir -p ${D}${datadir}/menu && \
+	    cp ${S}/debian/setools-gui.menu ${D}${datadir}/menu/setools-gui
 
 	# Remove unnecessary files
 	find ${D}${libdir} -name '*.pyc' -delete
@@ -97,8 +106,14 @@ do_install_append() {
 	# Fix permission follow debian/rules
 	find ${D}${libdir}/setools/ -type f -name '*.tcl' -exec chmod -x {} \;
 	find ${D}${libdir}/setools/ -type f -name '*.tcl' -exec chmod -x {} \;
-	chmod +x ${D}${sysconfdir}/logwatch/scripts/services/seaudit-report-service
-	chmod +x ${D}${datadir}/setools/3.3/seaudit-report-service
+
+	if [ -f ${D}${sysconfdir}/logwatch/scripts/services/seaudit-report-service ]; then
+		chmod +x ${D}${sysconfdir}/logwatch/scripts/services/seaudit-report-service
+	fi
+
+	if [ -f ${D}${datadir}/setools/3.3/seaudit-report-service ]; then
+		chmod +x ${D}${datadir}/setools/3.3/seaudit-report-service
+	fi
 }
 
 PACKAGE_BEFORE_PN =+ "libapol libpoldiff libqpol libseaudit libsefs \

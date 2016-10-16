@@ -30,7 +30,11 @@ do_debian_patch[noexec] = "1"
 do_configure[noexec] = "1"
 
 do_compile() {
-	oe_runmake KSRC=${STAGING_KERNEL_DIR}
+	#Clear LDFLAGS to avoid error: unrecognized option '-Wl,-O1' on PPC target
+	if [ "${TARGET_ARCH}" = "powerpc" ]; then
+		unset LDFLAGS
+	fi
+	oe_runmake KSRC=${STAGING_KERNEL_DIR} LDFLAGS="$LDFLAGS"
 }
 do_install() {
 	# Userspace utilities
