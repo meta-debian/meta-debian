@@ -29,8 +29,8 @@ inherit debian-package
 
 DPN = "postgresql-9.4"
 
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=7d847a9b446ddfe187acfac664189672"
+LICENSE = "PostgreSQL"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=3a9c1120056a102a8c8c4013cd828dce"
 
 #fix error looked at host include and/or library paths: remove -L/usr/local/lib
 SRC_URI += "file://fix-using-host-library_debian.patch"
@@ -74,7 +74,7 @@ COMMON_CONFIGURE_FLAGS = " \
 EXTRA_OECONF = "\
 	--with-tcl --with-openssl --with-perl \
 	--with-python --with-libxml --with-libxslt \
-	--with-tclconfig=${STAGING_LIBDIR}/tcl${TCL_VER} \
+	--with-tclconfig=${STAGING_BINDIR_CROSS} \
 	--with-includes=${STAGING_INCDIR}/tcl${TCL_VER} \
 	${COMMON_CONFIGURE_FLAGS} \
 	"
