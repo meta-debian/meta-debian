@@ -14,7 +14,7 @@ slang library."
 
 HOMEPAGE = "https://fedorahosted.org/newt/"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 LICENSE = "LGPLv2"
@@ -29,10 +29,13 @@ DEPENDS = "slang popt tcl"
 #     Ensure the directory ${SHAREDDIR} exists to avoid parallel-make issue
 # cross_ar.patch:
 #     Replace host's ar by cross ar from sysroot
+# disable_python_dbg.patch:
+#     Currently, we don't provide package python*-dbg so disable support for python debug.
 SRC_URI += " \
 	file://remove_slang_include.patch \
 	file://fix_SHAREDDIR.patch \
 	file://cross_ar.patch \
+	file://disable_python_dbg.patch \
 "
 
 DPN = "newt"
