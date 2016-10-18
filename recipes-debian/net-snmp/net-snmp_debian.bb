@@ -35,6 +35,9 @@ USERADD_PARAM_snmpd = "--system --user-group --home-dir ${SNMPDIR} \
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
+PARALLEL_MAKE = ""
+CCACHE = ""
+
 # Configure follow debian/rules
 OLD_MIBS_DIR ?="${datadir}/mibs/site:${datadir}/snmp/mibs:${datadir}/mibs/iana:${datadir}/mibs/ietf:${datadir}/mibs/netsnmp"
 MIBS_DIR ?="${datadir}/snmp/mibs:${datadir}/snmp/mibs/iana:${datadir}/snmp/mibs/ietf"
