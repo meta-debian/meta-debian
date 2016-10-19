@@ -2,7 +2,7 @@ SUMMARY = "Intelligent Platform Management Interface"
 DESCRIPTION = "IPMI allows remote monitoring and remote management of devices."
 HOMEPAGE = "http://openipmi.sourceforge.net/"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -24,6 +24,8 @@ inherit autotools
 # Set --with-swig=no to avoid using swig from swig-native.
 EXTRA_OECONF = "--without-openssl \
                 --with-swig=no \
+                --without-python \
+                --without-tcl \
 "
 PARALLEL_MAKEINST = ""
 
