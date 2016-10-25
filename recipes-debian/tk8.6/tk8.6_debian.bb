@@ -5,7 +5,7 @@ look-and-feel and is implemented using the Tcl scripting language. \
 This package contains the windowing Tcl/Tk shell (wish). \
 "
 HOMEPAGE = "http://www.tcl.tk/"
-PR = "r1"
+PR = "r2"
 inherit debian-package
 
 S = "${DEBIAN_UNPACK_DIR}/unix"
@@ -16,12 +16,13 @@ LIC_FILES_CHKSUM = "\
 
 inherit autotools-brokensep binconfig
 
+EXTRA_OECONF_class-target = " --with-tcl=${STAGING_BINDIR_CROSS}"
+EXTRA_OECONF_class-native = " --with-tcl=${STAGING_LIBDIR_NATIVE}/tcl${TCL_VER}"
+
 #configure follow debian/rules
-EXTRA_OECONF += "\
+EXTRA_OECONF_append = "\
 	TK_LIBRARY=${datadir}/tcltk/tk${TCL_VER} \
-	--with-tcl=${STAGING_LIBDIR}/tcl${TCL_VER} \
 	--includedir=${includedir}/tcl${TCL_VER} \
-	TCL_SRC_DIR=${STAGING_INCDIR}/tcl${TCL_VER}/tcl-private \
 	--enable-shared \
 	--enable-threads \
 	--disable-rpath \
