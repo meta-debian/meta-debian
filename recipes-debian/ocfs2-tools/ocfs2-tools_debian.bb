@@ -21,7 +21,8 @@ inherit autotools-brokensep pkgconfig pythonnative
 #follow debian/rules
 EXTRA_OECONF += "--disable-debug --enable-dynamic-ctl --enable-dynamic-fsck"
 
-DEPENDS += "e2fsprogs util-linux glib-2.0 pygtk"
+DEPENDS += "e2fsprogs util-linux glib-2.0 \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'pygtk', '', d)}"
 
 oe_runconf_prepend() {
 	#correct path to header file Python.h
@@ -58,7 +59,7 @@ PACKAGES =+ "ocfs2console"
 FILES_ocfs2console = "\
 	${PYTHON_SITEPACKAGES_DIR}/ocfs2interface/*.py \
 	${libdir}/pyshared/python${PYTHON_BASEVERSION}/ocfs2interface/*.py \
-	${sbindir}/ocfs2console ${datadir}/pyshared"
+	${sbindir} ${datadir}/pyshared"
 FILES_${PN}-dev += "\
 	${libdir}/pyshared/python${PYTHON_BASEVERSION}/ocfs2interface/*.so \
 	${PYTHON_SITEPACKAGES_DIR}/ocfs2interface/*.so"
