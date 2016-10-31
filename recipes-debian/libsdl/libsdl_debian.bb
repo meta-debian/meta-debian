@@ -25,7 +25,7 @@ DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d
            ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'virtual/libx11 \
 	    libxext libxrandr libxrender', '', d)} \
            ${@bb.utils.contains('DISTRO_FEATURES', 'x11 opengl', 'libglu', '', d)} \
-           tslib"
+           "
 DEPENDS_class-nativesdk = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 			   'virtual/nativesdk-libx11 nativesdk-libxrandr \
 			   nativesdk-libxrender nativesdk-libxext', '', d)}"

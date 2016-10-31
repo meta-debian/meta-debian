@@ -29,8 +29,8 @@ inherit debian-package
 
 DPN = "postgresql-9.4"
 
-LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=7d847a9b446ddfe187acfac664189672"
+LICENSE = "PostgreSQL"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=3a9c1120056a102a8c8c4013cd828dce"
 
 #fix error looked at host include and/or library paths: remove -L/usr/local/lib
 SRC_URI += "file://fix-using-host-library_debian.patch"
@@ -38,7 +38,7 @@ SRC_URI += "file://fix-using-host-library_debian.patch"
 DEPENDS_class-target = "\
 	zlib readline krb5 tcl libxml2 libxslt python3 python perl"
 DEPENDS_class-native = "\
-	libxml2-native libxslt-native python-native python3-native"
+	tcl-native libxml2-native libxslt-native python-native python3-native"
 inherit autotools-brokensep pkgconfig perlnative pythonnative systemd cpan-base
 
 export BUILD_SYS
@@ -71,11 +71,19 @@ COMMON_CONFIGURE_FLAGS = " \
 	--with-system-tzdata=${STAGING_DATADIR}/zoneinfo \
 	--without-selinux \
 "
-EXTRA_OECONF = "\
+
+EXTRA_OECONF_class-target = " \
+    --with-tclconfig=${STAGING_BINDIR_CROSS} \
+    --with-includes=${STAGING_INCDIR}/tcl${TCL_VER} \
+"
+EXTRA_OECONF_class-native = " \
+    --with-tclconfig=${STAGING_LIBDIR_NATIVE}/tcl${TCL_VER} \
+    --with-includes=${STAGING_INCDIR_NATIVE}/tcl${TCL_VER} \
+"
+
+EXTRA_OECONF_append = " \
 	--with-tcl --with-openssl --with-perl \
 	--with-python --with-libxml --with-libxslt \
-	--with-tclconfig=${STAGING_LIBDIR}/tcl${TCL_VER} \
-	--with-includes=${STAGING_INCDIR}/tcl${TCL_VER} \
 	${COMMON_CONFIGURE_FLAGS} \
 	"
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"

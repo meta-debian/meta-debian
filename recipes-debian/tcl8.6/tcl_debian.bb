@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r2"
+PR = "r3"
 inherit debian-package
 DPN = "tcl8.6"
 
@@ -125,7 +125,9 @@ do_install() {
 
 SYSROOT_PREPROCESS_FUNCS += "tcl_sysroot_preprocess"
 tcl_sysroot_preprocess () {
-	sysroot_stage_dir ${D}${bindir_crossscripts} ${SYSROOT_DESTDIR}${bindir_crossscripts}
+	sed -i -e "s:^\(TCL_SRC_DIR='\)/usr/include:\1${STAGING_INCDIR}:g" \
+	       -e "s:^\(TCL_BUILD_STUB_LIB_PATH='\)/usr/lib:\1${B}:g" \
+	       ${SYSROOT_DESTDIR}${bindir_crossscripts}/tclConfig.sh
 }
 
 PACKAGES =+ "tcl-lib"

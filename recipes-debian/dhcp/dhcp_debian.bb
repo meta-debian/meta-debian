@@ -17,7 +17,7 @@ inherit debian-package
 DPN = "isc-dhcp"
 
 LICENSE = "ISC"
-LIC_FILES_CHKSUM = "file://LICENSE;beginline=4;md5=c5c64d696107f84b56fe337d14da1753"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=cd834c80467e962621bf1b82ee363c34"
 
 DEPENDS = "openssl bind"
 
@@ -77,28 +77,28 @@ do_install_append () {
 	install -m 0755 ${S}/client/scripts/linux ${D}${base_sbindir}/dhclient-script
 }
 
-PACKAGES += "isc-dhcp-server isc-dhcp-server-config isc-dhcp-client isc-dhcp-relay isc-dhcp-common"
+PACKAGES =+ "isc-dhcp-server isc-dhcp-server-config isc-dhcp-client isc-dhcp-relay isc-dhcp-common"
 
-FILES_isc-${PN}-server = " \
+FILES_isc-dhcp-server = " \
 	${sbindir}/dhcpd \
-	${sysconfdir}/init.d/dhcp-server \
+	${sysconfdir}/init.d/isc-dhcp-server \
 	${sbindir}/dhcp-lease-list \
 	${sysconfdir}/dhcp/dhcpd.conf \
     "
 
-FILES_isc-${PN}-relay = " \
+FILES_isc-dhcp-relay = " \
 	${sbindir}/dhcrelay \
-	${sysconfdir}/init.d/dhcp-relay \
+	${sysconfdir}/init.d/isc-dhcp-relay \
     "
 
-FILES_isc-${PN}-client = " \
+FILES_isc-dhcp-client = " \
 	${base_sbindir}/dhclient \
 	${base_sbindir}/dhclient-script \
 	${sysconfdir}/dhcp/dhclient* \
     "
-RDEPENDS_isc-${PN}-client = "bash"
+RDEPENDS_isc-dhcp-client = "bash"
 
-FILES_isc-${PN}-common = "${bindir}/omshell"
+FILES_isc-dhcp-common = "${bindir}/omshell"
 
 PKG_${PN}-dev = "isc-${PN}-dev"
 pkg_postinst_isc-dhcp-server() {
