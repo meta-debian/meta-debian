@@ -28,4 +28,6 @@ do_configure_prepend() {
 
 inherit autotools
 
+PARALLEL_MAKE = ""
+
 BBCLASSEXTEND = "native nativesdk"
