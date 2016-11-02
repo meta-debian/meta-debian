@@ -10,7 +10,7 @@ inherit debian-package
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
-DEPENDS = "elfutils"
+DEPENDS = "elfutils binutils"
 
 # configure-allow-to-disable-selinux-support.patch:
 #	Add option to enable/disable selinux support.
