@@ -174,6 +174,10 @@ do_configure() {
 		sed -e 's|\([ "^'\''I]\+\)/usr/include/|\1${STAGING_INCDIR}/|g' -i $foo
 	done
 
+	echo "installvendorlib='${datadir}/perl5'" >> config.sh-${TARGET_ARCH}-${TARGET_OS}
+	echo "vendorlib='${datadir}/perl5'" >> config.sh-${TARGET_ARCH}-${TARGET_OS}
+	echo "vendorlibexp='${datadir}/perl5'" >> config.sh-${TARGET_ARCH}-${TARGET_OS}
+
 	rm -f config
 	echo "ARCH = ${TARGET_ARCH}" > config
 	echo "OS = ${TARGET_OS}" >> config
