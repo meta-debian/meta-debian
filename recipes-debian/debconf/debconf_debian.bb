@@ -26,4 +26,11 @@ do_install() {
 	prefix="${D}" oe_runmake install-rest
 }
 
+PACKAGES =+ "${PN}-utils"
+FILES_${PN}-utils = " \
+${bindir}/debconf-get-selections \
+${bindir}/debconf-getlang \
+${bindir}/debconf-loadtemplate \
+${bindir}/debconf-mergetemplate \
+"
 FILES_${PN} += "${datadir} ${libdir}"
