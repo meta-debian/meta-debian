@@ -13,7 +13,7 @@ TLS, PKCS 5, PKCS 7, PKCS 11, PKCS 12, S/MIME, X.509 \
 v3 certificates, and other security standards."
 HOMEPAGE = "http://www.mozilla.org/projects/security/pki/nss/"
 
-PR = "r0"
+PR = "r1"
 DEPENDS = "sqlite3 nspr zlib nss-native"
 DEPENDS_class-native = "sqlite3-native nspr-native zlib-native"
 RDEPENDS_${PN} = "perl"
@@ -29,6 +29,7 @@ SRC_URI += "\
     file://nss-fix-support-cross-compiling.patch \                              
     file://nss-no-rpath-for-cross-compiling.patch \                             
     file://nss-fix-incorrect-shebang-of-perl.patch \                            
+    file://nss-fix-nsinstall-build.patch \
 "
 
 SRC_URI_append_class-target = "\
