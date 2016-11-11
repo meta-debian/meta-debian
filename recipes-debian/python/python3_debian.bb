@@ -24,7 +24,7 @@ SRC_URI += " \
 	file://0001-h2py-Fix-issue-13032-where-it-fails-with-UnicodeDeco.patch \
 	file://makerace.patch \
 	file://03-fix-tkinter-detection.patch \
-	file://04-default-is-optimized.patch \ 
+	file://04-default-is-optimized.patch \
 	file://avoid_warning_about_tkinter.patch \
 	file://cgi_py.patch \
 	file://host_include_contamination.patch \
@@ -103,7 +103,7 @@ do_compile() {
 		-e 's,^CONFINCLUDEDIR=.*,CONFINCLUDE=${STAGING_INCDIR},g' \
 		-e 's,^SCRIPTDIR=.*,SCRIPTDIR=${STAGING_BASELIBDIR},g' \
 		Makefile
-	# save copy of it now, because if we do it in do_install and 
+	# save copy of it now, because if we do it in do_install and
 	# then call do_install twice we get Makefile.orig == Makefile.sysroot
 	install -m 0644 Makefile Makefile.sysroot
 
@@ -115,7 +115,7 @@ do_compile() {
 		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
-		OPT="${CFLAGS}" libpython3.so 
+		OPT="${CFLAGS}" libpython3.so
 
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python3-native/pgen \
 		HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python3-native/python3 \
@@ -125,7 +125,7 @@ do_compile() {
 		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
-		OPT="${CFLAGS}" 
+		OPT="${CFLAGS}"
 }
 
 do_install() {
@@ -144,7 +144,7 @@ do_install() {
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
 		DESTDIR=${D} LIBDIR=${libdir}
-	
+
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python3-native/pgen \
 		HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python3-native/python3 \
 		STAGING_LIBDIR=${STAGING_LIBDIR} \
@@ -173,14 +173,14 @@ do_install() {
 	ln -s ${LINKLIB} ${D}${libdir}/libpython3.4m.so.1
 
 	ln -s python3.4m ${D}${includedir}/python3.4
-	
+
 	# Install sitecustomize.py
 	install -d ${D}${sysconfdir}/python3.4
 	cp ${S}/debian/sitecustomize.py.in \
 		${D}${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py
 	ln -s ../../../${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py \
 		${D}${libdir}/python${PYTHON_MAJMIN}/
-	
+
 	#
 	# Base on debian/rules
 	#
