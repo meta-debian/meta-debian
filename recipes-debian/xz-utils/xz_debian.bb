@@ -65,7 +65,10 @@ do_install_append () {
 	oe_runmake -C ${B}/po install-data-yes DESTDIR=${D}
 }
 
-PACKAGES =+ "liblzma xzdec"
+PACKAGES =+ "liblzma xzdec xz-utils"
+
+RDPENEDS_xz-utils += "${PN}"
+ALLOW_EMPTY_xz-utils = "1"
 
 FILES_liblzma = "${base_libdir}/liblzma*${SOLIBS}"
 FILES_xzdec = "${bindir}/lzmadec ${bindir}/xzdec"
