@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = " \
 	file://src/netname.c;beginline=1;endline=27;md5=f8a8cd2cb25ac5aa16767364fb0e3c24 \
 "
 
-DEPENDS += "xz-native"
+DEPENDS += "xz-utils-native"
 PROVIDES = "virtual/librpc"
 
 # Get patch file from meta/recipes-extended/libtirpc/,

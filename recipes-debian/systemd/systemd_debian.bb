@@ -23,7 +23,7 @@ DEPENDS = "intltool-native \
            dbus \
            glib-2.0 \
            acl \
-           xz \
+           xz-utils \
            libgcrypt \
            kmod \
            util-linux \

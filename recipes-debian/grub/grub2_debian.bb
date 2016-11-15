@@ -27,7 +27,7 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
-DEPENDS = "flex-native bison-native xz"
+DEPENDS = "flex-native bison-native xz-utils"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'
 

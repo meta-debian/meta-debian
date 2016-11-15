@@ -5,7 +5,7 @@
 
 require python3.inc
 
-DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz expat mpdecimal"
+DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz-utils expat mpdecimal"
 PR = "${INC_PR}.3"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"

@@ -5,9 +5,9 @@
 SUMMARY = "Utilities for managing LZMA compressed files"
 HOMEPAGE = "http://tukaani.org/xz/"
 
-PR = "r1"
 inherit debian-package autotools gettext
 DPN = "xz-utils"
+PROVIDES = "xz"
 
 DEPENDS += "gettext-native"
 # The source includes bits of PD, GPLv2, GPLv3, LGPLv2.1+, but the only file
@@ -65,10 +65,7 @@ do_install_append () {
 	oe_runmake -C ${B}/po install-data-yes DESTDIR=${D}
 }
 
-PACKAGES =+ "liblzma xzdec xz-utils"
-
-RDPENEDS_xz-utils += "${PN}"
-ALLOW_EMPTY_xz-utils = "1"
+PACKAGES =+ "liblzma xzdec"
 
 FILES_liblzma = "${base_libdir}/liblzma*${SOLIBS}"
 FILES_xzdec = "${bindir}/lzmadec ${bindir}/xzdec"

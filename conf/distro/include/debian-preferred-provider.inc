@@ -16,3 +16,7 @@ PREFERRED_PROVIDER_virtual/nativesdk-update-alternatives = "nativesdk-dpkg-utils
 
 # Use libusb instead of libusb-compat
 PREFERRED_PROVIDER_libusb = "libusb"
+
+# Use xz-utils instead of xz
+PREFERRED_PROVIDER_xz = "xz-utils"
+PREFERRED_PROVIDER_xz-native = "xz-utils-native"

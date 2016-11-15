@@ -51,10 +51,10 @@ file://fix_libdir.patch \
 file://rpm-scriptetexechelp.patch \
 "
 
-DEPENDS = "db libxml2 xz file popt nss bzip2 elfutils patch attr \
+DEPENDS = "db libxml2 xz-utils file popt nss bzip2 elfutils patch attr \
                zlib acl gzip make binutils python"
 DEPENDS_append_class-native = " file-replacement-native"
-DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz nativesdk-file \
+DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz-utils nativesdk-file \
 		nativesdk-popt nativesdk-nss nativesdk-bzip2 nativesdk-elfutils nativesdk-attr \
 		nativesdk-zlib nativesdk-acl nativesdk-make nativesdk-python"
 
