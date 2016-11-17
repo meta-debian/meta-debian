@@ -2,7 +2,7 @@ Description="Heimdal is a Kerberos 5 implementation."
 
 PR = "r0"
 
-inherit debian-package autotools-brokensep
+inherit debian-package autotools-brokensep binconfig
 
 LICENSE = "PD & BSD-3-Clause"
 LIC_FILES_CHKSUM = "\
@@ -13,8 +13,11 @@ file://lib/hcrypto/libtommath/LICENSE;md5=4f6fbdd737299a6d5dac1428f38422c8"
 #   patch file for cross-compiling.
 SRC_URI += "file://Makefile_debian.patch"
 
-DEPENDS += "libjson-perl heimdal-native db libxt e2fsprogs"
+DEPENDS += "libjson-perl heimdal-native db e2fsprogs \
+	${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'libxt', '', d)}"
 
+# "have_x=yes" only x11 is enable in DISTRO_FEATURES
+CACHED_CONFIGUREVARS += "${@bb.utils.contains('DISTRO_FEATURES', 'x11', '', 'ac_cv_have_x="have_x=no"', d)}"
 EXTRA_OECONF += "\
 	--libexecdir="${sbindir}" \
 	--prefix="${prefix}" \
@@ -47,32 +50,27 @@ do_configure_prepend() {
 do_install_append() {
 	# Remove unwanted files
 	rm -rf ${D}${includedir}/com_err.h
-	rm -rf ${D}${libdir}/libcom_err.a
-	
+	rm -rf ${D}${libdir}/libcom_err.*
+	rm -f ${D}${libdir}/windc.so*
+	rm -f ${D}${libdir}/windc.a
 	install -d ${D}${datadir}/heimdal-kdc
 	cp ${S}/debian/extras/kdc.conf ${D}${datadir}/heimdal-kdc
 	cp ${S}/debian/extras/kadmind.acl ${D}${datadir}/heimdal-kdc
 	
 	mkdir -p ${D}${infodir}
-	mkdir -p ${D}${libdir}/${BPN}
+	mkdir -p ${D}${libdir}/${BPN}/pkgconfig
 	mv ${D}${libdir}/*.a ${D}${libdir}/${BPN}
-	#mv ${D}${libdir}/*.so ${D}${libdir}/${BPN}
-	
+	cp -P ${D}${libdir}/*.so ${D}${libdir}/${BPN}
+	for file in ${D}${libdir}/${BPN}/*.so; do
+		ln -sf ../$(basename $(readlink $file)) $file
+	done
 	# remove general purpose utilities
 	rm -f ${D}${libdir}/bsearch ${D}${libdir}/idn-lookup \
 		${D}${mandir}/man1/bsearch.1 ${D}${mandir}/man1/idn-lookup.1
 	
-	# remove unwanted files
-	rm -f ${D}${libdir}/windc.so*
-	rm -f ${D}${libdir}/windc.a
-	
 	# no translations for the moment
 	rm -r ${D}${datadir}/locale
 	
-	# rewrite symlinks to symlinks to point directly to file
-	#for l in ${D}${libdir}/${BPN}/*.a ${D}${libdir}/${BPN}/*.so; do
-	#	ln ${BPN}/$l ${D}${libdir}/$l;
-	#done
 	mv ${D}${bindir}/krb5-config ${D}${bindir}/krb5-config.heimdal
 	mv ${D}${mandir}/man1/krb5-config.1 ${D}${mandir}/man1/krb5-config.heimdal.1
 	mkdir -p ${D}${sysconfdir}/default
@@ -119,7 +117,10 @@ do_install_append() {
 		${D}${libdir}/pkgconfig/*.pc
 	sed -i "s/includedir=.*/includedir=\/usr\/include\/heimdal/" \
 		${D}${libdir}/pkgconfig/*.pc
-	
+
+	cp ${D}${libdir}/pkgconfig/krb5*.pc ${D}${libdir}/${BPN}/pkgconfig
+	cp ${D}${libdir}/pkgconfig/kadm*.pc ${D}${libdir}/${BPN}/pkgconfig
+
 	# Install init script
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0644 ${S}/debian/heimdal-kcm.init \
@@ -141,6 +142,10 @@ do_install_append() {
 	mv ${D}${sbindir}/${BPN}/asn1_compile ${D}${bindir}
 	mv ${D}${sbindir}/${BPN}/asn1_print ${D}${bindir}
 	mv ${D}${sbindir}/${BPN}/slc ${D}${bindir}
+	install -d ${D}${includedir}/${BPN}
+	cd ${D}${includedir}
+	mv `ls --hide=${BPN}` ${BPN}
+	cd -
 
 	# install heimdal-servers package
 	install -d ${D}${libdir}/${BPN}-servers
@@ -149,10 +154,12 @@ do_install_append() {
 	mv ${D}${sbindir}/kfd ${D}${libdir}/${BPN}-servers
 
 	# install heimdal-servers-x package
-	mv ${D}${sbindir}/kxd ${D}${libdir}/${BPN}-servers
+	if [ "${@base_contains('DISTRO_FEATURES', 'x11', '', 'x11', d)}" = "" ] ; then
+		mv ${D}${sbindir}/kxd ${D}${libdir}/${BPN}-servers
+	fi
 }
 
-PACKAGES =+ "${BPN}-servers-x ${BPN}-servers ${BPN}-multidev-static \
+PACKAGES =+ "${BPN}-servers-x ${BPN}-servers ${BPN}-multidev \
 		${BPN}-clients-x ${BPN}-clients ${BPN}-kdc ${BPN}-kcm"
 
 FILES_${BPN}-clients-x += "\
@@ -183,13 +190,36 @@ FILES_${BPN}-multidev += " \
 	${libdir}/pkgconfig/heimdal-kadm-client.pc \
 	${libdir}/pkgconfig/heimdal-kadm-server.pc \
 	${libdir}/pkgconfig/heimdal-krb5.pc \
-	${libdir}/pkgconfig/kafs.pc "
+	${libdir}/pkgconfig/kafs.pc \
+	${libdir}/${BPN}/pkgconfig/*"
 FILES_${BPN}-servers += " \
 	${libdir}/${BPN}-servers/*"
 FILES_${BPN}-servers-x += " \
 	${libdir}/${BPN}-servers/kxd"
 FILES_${PN}-dbg += "${sbindir}/heimdal/.debug \
 	${libdir}/${BPN}-servers/.debug"
-BBCLASSEXTEND = "native nativesdk"
 
+BBCLASSEXTEND = "native nativesdk"
 PARALLEL_MAKE = ""
+
+# Install cross script to sysroot by inheriting binconfig
+BINCONFIG_GLOB = "krb5-config.heimdal"
+SYSROOT_PREPROCESS_FUNCS_class-target += " binconfig_sysroot_preprocess heimdal_sysroot_preprocess"
+heimdal_sysroot_preprocess () {
+	sed -i ${SYSROOT_DESTDIR}${bindir_crossscripts}/krb5-config.heimdal -e "s:libdir=\/usr\/lib\/heimdal:libdir=${STAGING_LIBDIR}\/heimdal:"
+	sed -i ${SYSROOT_DESTDIR}${bindir_crossscripts}/krb5-config.heimdal -e "s:libdir=\/usr\/lib\/heimdal:libdir=${STAGING_INCDIR}\/heimdal:"
+
+	# Remove these conflicts files with krb5-dev packages in sysroot
+	# Using the library and header in heimdal-multidev for these packages depends on heimdal-dev
+	rm -rf ${SYSROOT_DESTDIR}${libdir}/*.so \
+		${SYSROOT_DESTDIR}${libdir}/pkgconfig/krb5*.pc \
+		${SYSROOT_DESTDIR}${libdir}/pkgconfig/kadm*.pc
+}
+binconfig_sysroot_preprocess () {
+	for config in `find ${D} -name '${BINCONFIG_GLOB}'` `find ${B} -name '${BINCONFIG_GLOB}'`; do
+		configname=`basename $config`
+		install -d ${SYSROOT_DESTDIR}${bindir_crossscripts}
+		sed ${@get_binconfig_mangle(d)} $config > ${SYSROOT_DESTDIR}${bindir_crossscripts}/$configname
+		chmod u+x ${SYSROOT_DESTDIR}${bindir_crossscripts}/$configname
+	done
+}
