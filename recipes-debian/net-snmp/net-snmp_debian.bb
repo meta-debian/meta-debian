@@ -3,7 +3,7 @@ for the exchange of management information between agents (servers) \
 and clients."
 HOMEPAGE = "http://net-snmp.sourceforge.net/"
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
 
@@ -79,6 +79,7 @@ export PERLHOSTLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${@get_perl_vers
 do_configure_prepend() {
 	sed -i -e "s:\(perlcflags=\).*:\1-I${PERL_INC}:g" \
 	       -e "s:\(netsnmp_perlldopts=\).*:\1-L${PERL_INC}:g" \
+	       -e "s:\(^\s*PERLCC=.*-=\\\w\\\s\):\1\\\.:g" \
 	       ${S}/configure.d/config_project_perl_python
 }
 
