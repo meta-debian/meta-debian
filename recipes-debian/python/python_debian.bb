@@ -5,7 +5,7 @@
 
 require python.inc
 DEPENDS = "python-native libffi bzip2 db gdbm openssl readline sqlite3 zlib"
-PR = "${INC_PR}"
+PR = "${INC_PR}.1"
 
 DISTRO_SRC_URI_linuxstdbase = ""
 SRC_URI += "\
@@ -26,6 +26,7 @@ SRC_URI += "\
 	file://parallel-makeinst-create-bindir.patch \
 	file://use_sysroot_ncurses_instead_of_host.patch \
 	file://avoid_parallel_make_races_on_pgen.patch \
+	file://add_site-packages_to_getsitepackages.patch \
 "
 
 inherit autotools multilib_header python-dir pythonnative
