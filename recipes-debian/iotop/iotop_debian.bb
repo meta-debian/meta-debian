@@ -17,3 +17,12 @@ DEBIAN_QUILT_PATCHES = ""
 do_install_append() {
 	rm ${D}${libdir}/python2.7/site-packages/${DPN}/*.pyc
 }
+
+RDEPENDS_${PN} += " \
+    python-ctypes \
+    python-curses \
+    python-pprint \
+    python-shell \
+    python-subprocess \
+    python-textutils \
+"
