@@ -4,7 +4,7 @@
 # base commit: 3fb5191d4da52c6b352a23881c0ea63c2e348619
 #
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -18,6 +18,7 @@ SRC_URI += " \
 	file://add-test-support-for-busybox.patch \
 	file://run-ptest \
 	file://openssh-server.postinst \
+	file://sshd_config \
 "
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
@@ -79,7 +80,7 @@ do_install_append(){
 		install -d ${D}${sysconfdir}/pam.d
 		sed 's/^@IF_KEYINIT@//' ${S}/debian/openssh-server.sshd.pam.in
 			> ${D}${sysconfdir}/pam.d/sshd
-		sed -i -e 's:^# UsePAM yes:UsePAM yes:' ${WORKDIR}/openssh-server.postinst
+		sed -i -e 's:^#\s*\(UsePAM\s*\).*:\1yes:' ${WORKDIR}/sshd_config
 	fi
 
 	# FIXME: Remove GSSAPIAuthentication and GSSAPIDelegateCredentials from ssh_config.
@@ -88,8 +89,7 @@ do_install_append(){
 	sed -i '/^    GSSAPIAuthentication yes/d' ${D}${sysconfdir}/ssh/ssh_config
 	sed -i '/^    GSSAPIDelegateCredentials no/d' ${D}${sysconfdir}/ssh/ssh_config
 
-	# Use sshd_config from Debian instead
-	rm ${D}${sysconfdir}/ssh/sshd_config
+	install -m 0644 ${WORKDIR}/sshd_config ${D}${sysconfdir}/ssh/sshd_config
 
 	# Remove version control tags to avoid unnecessary conffile
 	# resolution steps for administrators.
