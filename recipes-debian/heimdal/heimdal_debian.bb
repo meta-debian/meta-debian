@@ -223,3 +223,5 @@ binconfig_sysroot_preprocess () {
 		chmod u+x ${SYSROOT_DESTDIR}${bindir_crossscripts}/$configname
 	done
 }
+
+INSANE_SKIP_${BPN}-multidev += "dev-so"
