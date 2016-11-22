@@ -27,11 +27,11 @@ EXTRA_OECONF += "\
 	--datarootdir="${datadir}" \
 	--libdir="${libdir}" \
 	--without-krb4 \
-	--with-cross-tools=${STAGING_BINDIR_NATIVE} \ 
+	--with-cross-tools=${STAGING_BINDIR_NATIVE} \
 	ac_cv_func_getpwnam_r_posix=yes \
 "
 
-# Using perl command from sysroot instead of host 
+# Using perl command from sysroot instead of host
 do_configure_prepend() {
 	sed -i -e "s:##perl##:${STAGING_BINDIR_NATIVE}/perl-native/perl:g" ${B}/lib/asn1/Makefile.am
 	sed -i -e "s:##perl##:${STAGING_BINDIR_NATIVE}/perl-native/perl:g" ${B}/lib/hx509/Makefile.am
@@ -56,7 +56,7 @@ do_install_append() {
 	install -d ${D}${datadir}/heimdal-kdc
 	cp ${S}/debian/extras/kdc.conf ${D}${datadir}/heimdal-kdc
 	cp ${S}/debian/extras/kadmind.acl ${D}${datadir}/heimdal-kdc
-	
+
 	mkdir -p ${D}${infodir}
 	mkdir -p ${D}${libdir}/${BPN}/pkgconfig
 	mv ${D}${libdir}/*.a ${D}${libdir}/${BPN}
@@ -67,10 +67,10 @@ do_install_append() {
 	# remove general purpose utilities
 	rm -f ${D}${libdir}/bsearch ${D}${libdir}/idn-lookup \
 		${D}${mandir}/man1/bsearch.1 ${D}${mandir}/man1/idn-lookup.1
-	
+
 	# no translations for the moment
 	rm -r ${D}${datadir}/locale
-	
+
 	mv ${D}${bindir}/krb5-config ${D}${bindir}/krb5-config.heimdal
 	mv ${D}${mandir}/man1/krb5-config.1 ${D}${mandir}/man1/krb5-config.heimdal.1
 	mkdir -p ${D}${sysconfdir}/default
@@ -127,17 +127,17 @@ do_install_append() {
 			${D}${sysconfdir}/init.d/heimdal-kcm
 	install -m 0644 ${S}/debian/heimdal-kdc.init \
 			${D}${sysconfdir}/init.d/heimdal-kdc
-	
+
 	install -d ${D}${sysconfdir}/logrotate.d
 	install -m 0644 ${S}/debian/heimdal-kdc.logrotate \
-			${D}${sysconfdir}/logrotate.d/heimdal-kdc	
-	
+			${D}${sysconfdir}/logrotate.d/heimdal-kdc
+
 	# install heimdal-kdc package
 	install -d ${D}${libdir}/${BPN}-servers
 	mv ${D}${sbindir}/kadmind ${D}${libdir}/${BPN}-servers
 	mv ${D}${sbindir}/kdc ${D}${libdir}/${BPN}-servers
 	mv ${D}${sbindir}/kpasswdd ${D}${libdir}/${BPN}-servers
-	
+
 	# install heimdal-multidev package
 	mv ${D}${sbindir}/${BPN}/asn1_compile ${D}${bindir}
 	mv ${D}${sbindir}/${BPN}/asn1_print ${D}${bindir}
