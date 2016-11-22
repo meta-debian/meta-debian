@@ -1,4 +1,4 @@
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -7,6 +7,8 @@ LIC_FILES_CHKSUM = " \
 	file://lsb_release;beginline=3;endline=18;md5=c6eddaa75f90d557582cda8d81bd26a1 \
 	file://init-functions;beginline=3;endline=28;md5=253d9c2ede4edede28a861d7e77e33c5 \
 "
+
+inherit python-dir
 
 # Follow Debian:
 # ${S}/debian/*.install
@@ -33,6 +35,8 @@ do_install(){
 	install -m 0755 ${S}/lsb_release ${D}${bindir}
 	install -d ${D}${datadir}/pyshared
 	install lsb_release.py ${D}${datadir}/pyshared
+	install -d ${D}${PYTHON_SITEPACKAGES_DIR}
+	ln -s ../../../share/pyshared/lsb_release.py ${D}${PYTHON_SITEPACKAGES_DIR}/
 }
 
 PACKAGES =+ "${PN}-base ${PN}-core ${PN}-invalid-mta ${PN}-release"
@@ -40,11 +44,47 @@ PACKAGES =+ "${PN}-base ${PN}-core ${PN}-invalid-mta ${PN}-release"
 FILES_${PN}-base = "${base_libdir}/${DPN}/*"
 FILES_${PN}-core = "${libexecdir}/*"
 FILES_${PN}-invalid-mta = "${libdir}/sendmail ${sbindir}/sendmail"
-FILES_${PN}-release = "${bindir}/lsb_release ${datadir}/pyshared/*"
+FILES_${PN}-release = " \
+    ${bindir}/lsb_release \
+    ${datadir}/pyshared/* \
+    ${PYTHON_SITEPACKAGES_DIR}/lsb_release.py \
+"
 
 # Follow debian/control
 RDEPENDS_${PN} += "${PN}-core"
 RDEPENDS_${PN}-core += "${PN}-base ${PN}-invalid-mta ${PN}-release"
+
+# Required for running lsb_release
+RDEPENDS_${PN}-release += " \
+    dpkg \
+    python-subprocess \
+    python-textutils \
+"
+
+# Add RPROVIDES for lsb packages base on debian/rules and debian/control.
+# Many packages does not exist because of empty
+# but they are still configured here for future works.
+python () {
+    # Map Debian architectures to LSB architectures
+    darch = d.getVar('DPKG_ARCH',True)
+    lsbarch = darch
+    if lsbarch == "i386":
+        lsbarch = "ia32"
+    elif lsbarch == "powerpc":
+        lsbarch = "ppc32"
+
+    pn = d.getVar('PN', True) or ""
+    lsb_packages = ["core","graphics","cxx","desktop","languages","multimedia","printing","security"]
+
+    for i in lsb_packages:
+        package = pn + "-" + i
+        rprovides = d.getVar('RPROVIDES_%s' % package, True) or ""
+        rprovides += " %s-noarch %s-%s" % (package,package,lsbarch)
+
+        if i == "desktop":
+            rprovides += " %s-qt4 %s-qt4-noarch %s-qt4-%s" % (pn,pn,pn,lsbarch)
+        d.setVar('RPROVIDES_%s' % package, rprovides)
+}
 
 # Base on meta/recipes-extended/lsb/lsb_4.1.bb:do_install_append
 # and debian/lsb-core.postinst
