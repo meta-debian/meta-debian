@@ -28,7 +28,7 @@ USERADD_PARAM_${PN} = "--system --no-create-home \
 	--home-dir ${localstatedir}/run/sshd --shell /bin/false --user-group sshd"
 
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "ssh.socket"
+SYSTEMD_SERVICE_${PN} = "ssh.service"
 
 # LFS support:
 CFLAGS += "-D__FILE_OFFSET_BITS=64"
