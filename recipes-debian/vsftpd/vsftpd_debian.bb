@@ -40,3 +40,7 @@ do_install () {
 }
 
 FILES_${PN} += "${sysconfdir} ${base_libdir}"
+
+inherit systemd
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "vsftpd.service"
