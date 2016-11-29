@@ -145,6 +145,7 @@ FILES_${PN} += " \
     ${sysconfdir}/ssh/sshd_config \
     ${libdir}/tmpfiles.d \
     /run \
+    ${base_libdir}/systemd/system \
 "
 
 RPROVIDES_${PN} = "${PN}-server"
