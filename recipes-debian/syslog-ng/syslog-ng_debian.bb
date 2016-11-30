@@ -88,7 +88,7 @@ PACKAGECONFIG[hiredis] = "--enable-hiredis,--disable-hiredis,hiredis,"
 PACKAGECONFIG[eventlog] = "--enable-eventlog,--disable-eventlog,eventlog,"
 
 do_configure_append() {
-	# Arcoding Debian, the directory to install modules contains package version,
+	# According to Debian, the directory to install modules contains package version,
 	# so we need re-run configure with correct version from ${S}/VERSION
 	VERSION=`cat ${S}/VERSION`
 	oe_runconf --with-module-dir=${libdir}/${DPN}/$VERSION
@@ -108,7 +108,7 @@ do_install() {
 	install -d ${D}${sysconfdir}/logcheck/violations.ignore.d
 	install -d ${D}${sysconfdir}/logrotate.d
 
-	# Arcoding to debian/syslog-ng-core.dirs
+	# According to debian/syslog-ng-core.dirs
 	install -d ${D}${sysconfdir}/${DPN}/conf.d
 
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.default \
