@@ -70,6 +70,11 @@ ALLOW_EMPTY_${BPN}-localedatas = "1"
 PACKAGES += "${BPN}-localedatas"
 RRECOMMENDS_${BPN}-localedatas =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-localedata") != -1])}"
 
+# Create a locales-all package
+ALLOW_EMPTY_locales-all = "1"
+PACKAGES += "locales-all"
+RRECOMMENDS_locales-all =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("locale-base-") != -1])}"
+
 DESCRIPTION_localedef = "glibc: compile locale definition files"
 
 # glibc-gconv is dynamically added into PACKAGES, thus
