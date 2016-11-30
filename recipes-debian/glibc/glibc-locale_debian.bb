@@ -2,9 +2,9 @@ include glibc-collateral.inc
 
 SUMMARY = "Locale data from glibc"
 
+BPN = "glibc"
 inherit debian-package
 PR = "r1"
-DPN = "glibc"
 
 do_debian_fix_timestamp[noexec] = "1"
 do_debian_patch[noexec] = "1"
