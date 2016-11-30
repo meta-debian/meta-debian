@@ -57,6 +57,7 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --disable-gtk-doc-html \
                 --enable-dependency-tracking \
                 --disable-selinux \
+                --enable-compat-libs \
                "
 
 do_configure_prepend() {
@@ -188,6 +189,17 @@ do_install_append() {
 	ln -s /bin/systemctl ${D}${base_sbindir}/runlevel
 	ln -s /bin/systemctl ${D}${base_sbindir}/shutdown
 	ln -s /bin/systemctl ${D}${base_sbindir}/telinit
+
+    # remove .so for deprecated compatibility libraries
+    rm -f ${D}${libdir}/libsystemd-daemon.*
+    rm -f ${D}${libdir}/libsystemd-login.*
+    rm -f ${D}${libdir}/libsystemd-id128.*
+    rm -f ${D}${libdir}/libsystemd-journal.*
+    rm -f ${D}${base_libdir}/libsystemd-daemon.*
+    rm -f ${D}${base_libdir}/libsystemd-login.*
+    rm -f ${D}${base_libdir}/libsystemd-id128.*
+    rm -f ${D}${base_libdir}/libsystemd-journal.*
+
 }
 
 # the following nonessential packages are excluded
@@ -202,7 +214,17 @@ PACKAGES =+ "libsystemd-dev \
              libgudev-1.0-dev \
              libgudev-1.0-0 \
              systemd-sysv \
+             libsystemd-daemon-dev \
+             libsystemd-login-dev \
+             libsystemd-id128-dev \
+             libsystemd-journal-dev \
             "
+
+
+FILES_libsystemd-daemon-dev = "${libdir}/pkgconfig/libsystemd-daemon.pc"
+FILES_libsystemd-login-dev = "${libdir}/pkgconfig/libsystemd-login.pc"
+FILES_libsystemd-id128-dev = "${libdir}/pkgconfig/libsystemd-id128.pc"
+FILES_libsystemd-journal-dev = "${libdir}/pkgconfig/libsystemd-journal.pc"
 
 FILES_${PN} = "${base_bindir} \
                ${bindir} \
@@ -310,6 +332,10 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                        ${base_sbindir}/telinit \
                      "
 RDEPENDS_${PN} += "systemd-sysv"
+RDEPENDS_libsystemd-daemon-dev  += "libsystemd-dev"
+RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
+RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
+RDEPENDS_libsystemd-journal-dev += "libsystemd-dev"
 
 # init script requires init-functions, procps's ps, and mountpoint
 RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"
