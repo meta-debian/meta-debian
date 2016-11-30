@@ -115,7 +115,7 @@ do_install() {
 			${D}${sysconfdir}/default/syslog-ng
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.upstart \
 			${D}${sysconfdir}/init/syslog-ng.conf
-	# NOTE: "inherit systemd" remove ${sysconfdir}/init.d if DISTRO_FEATURES 
+	# NOTE: "inherit systemd" remove ${sysconfdir}/init.d if DISTRO_FEATURES
 	#includes systemd but not sysvinit.
 	install -m 0755 ${S}/debian/syslog-ng-core.syslog-ng.init \
 			${D}${sysconfdir}/init.d/syslog-ng
