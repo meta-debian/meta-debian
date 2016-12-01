@@ -18,7 +18,7 @@ DESCRIPTION = "Kerberos is a system for authenticating users and services on a n
 HOMEPAGE = "http://web.mit.edu/Kerberos/"
 SECTION = "console/network"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 
@@ -149,22 +149,22 @@ do_install_append() {
 	install -d ${D}${base_libdir}/systemd/system/
 	install -m 0755 ${S}/../debian/krb5-admin-server.init ${D}${sysconfdir}/init.d/krb5-admin-server
 	install -m 0644 ${S}/../debian/krb5-admin-server.service ${D}${base_libdir}/systemd/system/
-	install -m 0644 ${S}/../debian/krb5_newrealm ${D}${sbindir}/    
+	install -m 0755 ${S}/../debian/krb5_newrealm ${D}${sbindir}/
 
 	mv ${D}${sbindir}/gss-server ${D}${bindir}/gss-server
     
 	install -m 0755 ${S}/../debian/krb5-kdc.init ${D}${sysconfdir}/init.d/krb5-kdc
-	install -m 0755 ${S}/../debian/krb5-kdc.service ${D}${systemd_system_unitdir}/
+	install -m 0644 ${S}/../debian/krb5-kdc.service ${D}${systemd_system_unitdir}/
 
 	# install for krb5-kdc-ldap package 
 	install -d ${D}${sysconfdir}/insserv/overrides/
-	install -m 0755 ${S}/../debian/krb5-kdc-ldap.insserv-override ${D}${sysconfdir}/insserv/overrides/krb5-kdc
+	install -m 0644 ${S}/../debian/krb5-kdc-ldap.insserv-override ${D}${sysconfdir}/insserv/overrides/krb5-kdc
     
 	install -d ${D}${systemd_system_unitdir}/krb5-admin-server.service.d/
-	install -m 0755 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-admin-server.service.d/
+	install -m 0644 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-admin-server.service.d/
     
 	install -d ${D}${systemd_system_unitdir}/krb5-kdc.service.d/
-	install -m 0755 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-kdc.service.d/
+	install -m 0644 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-kdc.service.d/
     
 	cp ${D}${libdir}/libkdb_ldap.so.1* ${D}${libdir}/krb5/
     
