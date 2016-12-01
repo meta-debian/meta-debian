@@ -1,0 +1,22 @@
+diff --git a/Makefile.in b/Makefile.in
+index d58075d..60b38a8 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -784,6 +784,17 @@ $(SWIG_PL_DIR)/native/Makefile.PL: $(SWIG_SRC_DIR)/perl/native/Makefile.PL.in
+ $(SWIG_PL_DIR)/native/Makefile: $(SWIG_PL_DIR)/native/Makefile.PL
+ 	cd $(SWIG_PL_DIR)/native; \
+ 		$(PERL) Makefile.PL INSTALLDIRS=vendor; \
++		sed -i -e 's@^CC =.*@CC = ##CC##@g' -e 's@^LD = .*@LD = ##LD##@g' \
++			-e 's@^LDFLAGS = .*@LDFLAGS = ##LDFLAGS##@g' \
++			-e 's@^CCFLAGS = .*@CCFLAGS = ##CCFLAGS##@g' \
++			-e 's@^LDDLFLAGS = .*@LDDLFLAGS = ##LDDLFLAGS##@g' \
++			-e 's@^INSTALLVENDORLIB =.*@INSTALLVENDORLIB = ##INSTALLVENDORLIB##@g' \
++			-e 's@^INSTALLVENDORARCH =.*@INSTALLVENDORARCH = ##INSTALLVENDORARCH##@g' \
++			-e 's@^INSTALLSITELIB =.*@INSTALLSITELIB = ##INSTALLSITELIB##@g' \
++			-e 's@^INSTALLSITEARCH =.*@INSTALLSITEARCH = ##INSTALLSITEARCH##@g' \
++			-e 's@^INSTALLSITEMAN3DIR =.*@INSTALLSITEMAN3DIR =##INSTALLSITEMAN3DIR##@g' \
++			-e 's@^INSTALLMAN3DIR =.*@INSTALLMAN3DIR =##INSTALLMAN3DIR##@g' \
++			-e 's@^INSTALLVENDORMAN3DIR =.*@INSTALLVENDORMAN3DIR =##INSTALLVENDORMAN3DIR##@g' Makefile Makefile.[a-z]*
+ 		sed -i -e '/^LD_RUN_PATH/s/^/#/' Makefile Makefile.[a-z]*
+ 
+ # There is a "readlink -f" command on some systems for the same purpose,
