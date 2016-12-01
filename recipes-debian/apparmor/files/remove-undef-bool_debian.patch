@@ -1,0 +1,13 @@
+diff --git a/libraries/libapparmor/swig/perl/Makefile.am b/libraries/libapparmor/swig/perl/Makefile.am
+index 901fc62..81e8da0 100644
+--- a/libraries/libapparmor/swig/perl/Makefile.am
++++ b/libraries/libapparmor/swig/perl/Makefile.am
+@@ -5,7 +5,7 @@ noinst_DATA =LibAppArmor.so
+ 
+ libapparmor_wrap.c: $(srcdir)/../SWIG/libapparmor.i
+ 	$(SWIG) -perl -I$(srcdir)/../../include -module LibAppArmor -o $@ $(srcdir)/../SWIG/libapparmor.i
+-
++	sed -i -e "s:#undef bool::" $@
+ MOSTLYCLEANFILES=libapparmor_wrap.c LibAppArmor.pm
+ 
+ LibAppArmor.pm: libapparmor_wrap.c
