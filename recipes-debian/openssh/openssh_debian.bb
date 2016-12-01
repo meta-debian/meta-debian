@@ -78,8 +78,10 @@ do_configure_prepend(){
 do_install_append(){
 	if [ "${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
 		install -d ${D}${sysconfdir}/pam.d
-		sed 's/^@IF_KEYINIT@//' ${S}/debian/openssh-server.sshd.pam.in
-			> ${D}${sysconfdir}/pam.d/sshd
+        install -m 0644 ${S}/debian/openssh-server.sshd.pam.in ${D}${sysconfdir}/pam.d/sshd
+        FROM="^@IF_KEYINIT@"
+        INTO=""
+        sed -i 's/'"$FROM"'/'"$INTO"'/' ${D}${sysconfdir}/pam.d/sshd
 		sed -i -e 's:^#\s*\(UsePAM\s*\).*:\1yes:' ${WORKDIR}/sshd_config
 	fi
 
