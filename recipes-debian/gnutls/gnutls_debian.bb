@@ -31,6 +31,7 @@ EXTRA_OECONF="--enable-ld-version-script \
               --disable-gtk-doc \
               --disable-gtk-doc \
               --disable-guile \
+              --enable-local-libopts \
               "
 
 do_configure_prepend() {
