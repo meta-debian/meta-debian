@@ -45,6 +45,7 @@ do_configure_prepend() {
 	sed -i -e "s:##perl##:${STAGING_BINDIR_NATIVE}/perl-native/perl:g" ${B}/kcm/Makefile.am
 	sed -i -e "s:##compile_et##:${STAGING_BINDIR_NATIVE}/:g" ${B}/configure.ac
 	sed -i -e "s:##compile_et##:${STAGING_BINDIR_NATIVE}/:g" ${B}/cf/check-compile-et.m4
+	sed -i -e "s:##STAGING_INCDIR##:${STAGING_INCDIR}:g" ${B}/cf/check-compile-et.m4
 }
 
 do_install_append() {

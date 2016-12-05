@@ -213,3 +213,18 @@ index 53ed60d..6c9954f 100644
  
  $(libheimntlm_la_OBJECTS): $(srcdir)/heimntlm-protos.h ntlm_err.h
  
+diff --git a/cf/check-compile-et.m4 b/cf/check-compile-et.m4
+index 22efc77..b353928 100644
+--- a/cf/check-compile-et.m4
++++ b/cf/check-compile-et.m4
+@@ -24,8 +24,8 @@ EOF
+ if ${COMPILE_ET} conftest_et.et >/dev/null 2>&1; then
+   dnl XXX Some systems have <et/com_err.h>.
+   save_CPPFLAGS="${CPPFLAGS}"
+-  if test -d "/usr/include/et"; then
+-    CPPFLAGS="-I/usr/include/et ${CPPFLAGS}"
++  if test -d "##STAGING_INCDIR##/et"; then
++    CPPFLAGS="-I##STAGING_INCDIR##/et ${CPPFLAGS}"
+   fi
+   dnl Check that the `prefix' and `index' directives were honored.
+   AC_RUN_IFELSE([
