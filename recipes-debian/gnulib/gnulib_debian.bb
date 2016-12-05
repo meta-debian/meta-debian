@@ -49,7 +49,7 @@ do_install() {
 	chmod 0644 ${D}${datadir}/gnulib/tests/test-fflush.c
 	chmod 0755 ${D}${datadir}/gnulib/tests/test-posix_spawn1.in.sh
 	chmod 0755 ${D}${datadir}/gnulib/tests/test-posix_spawn2.in.sh
- 
+
 	# Removing unused files
 	rm -f ${D}${datadir}/gnulib/modules/COPYING
 	rm -f ${D}${datadir}/gnulib/*/.cvsignore
