@@ -27,7 +27,7 @@ EXTRA_OECONF="--enable-ld-version-script \
               --disable-libdane \
               --without-tpm \
               --disable-heartbeat-support \
-              -disable-silent-rules \
+              --disable-silent-rules \
               --disable-gtk-doc \
               --disable-gtk-doc \
               --disable-guile \
