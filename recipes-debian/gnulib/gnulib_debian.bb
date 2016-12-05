@@ -58,3 +58,6 @@ do_install() {
 }
 PACKAGES =+ "git-merge-changelog"
 FILES_git-merge-changelog = "${bindir}/git-merge-changelog"
+
+# workaround for re-build without clean
+CLEANBROKEN = "1"
