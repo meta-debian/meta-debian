@@ -30,12 +30,19 @@ do_install_append() {
 	# move libbsd.so.0* file from ${libdir} to ${base_libdir} as debian jessie
 	install -d ${D}${base_libdir}
 	mv ${D}${libdir}/libbsd.so.0* ${D}${base_libdir}/
-	
+
 	# Relink library
-	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`	
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	libname=`readlink ${D}${libdir}/libbsd.so | xargs basename`
 	ln -sf ${rel_lib_prefix}${base_libdir}/${libname} ${D}${libdir}/libbsd.so
 }
 
 FILES_${PN}0 += "${base_libdir}/*"
 
+# Using -I${includedir} to use library in sysroot \
+# when crosscompiling package that use pkg-config to determine CFLAGS
+SYSROOT_PREPROCESS_FUNCS += "libbsd_sysroot_preprocess"
+libbsd_sysroot_preprocess () {
+	sed -i -e "s|^Cflags:.*|Cflags: -I\$\{includedir\}/bsd -DLIBBSD_OVERLAY|" \
+	          ${SYSROOT_DESTDIR}${libdir}/pkgconfig/libbsd-overlay.pc
+}
