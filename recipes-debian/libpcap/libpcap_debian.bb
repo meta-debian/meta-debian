@@ -48,3 +48,5 @@ FILES_${PN}-dev += "${bindir}/pcap-config"
 DEBIANNAME_${PN} = "${PN}0.8"
 DEBIANNAME_${PN}-dev = "${PN}0.8-dev"
 DEBIANNAME_${PN}-dbg = "${PN}0.8-dbg"
+
+BBCLASSEXTEND="native"
