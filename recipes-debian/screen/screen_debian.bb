@@ -36,6 +36,7 @@ SRC_URI += " \
     file://Skip-host-file-system-checks-when-cross-compiling.patch \
     file://Avoid-mis-identifying-systems-as-SVR4.patch \
     file://fix-parallel-make.patch \
+    file://0001-fix-for-multijob-build.patch \
 "
 
 inherit autotools-brokensep texinfo

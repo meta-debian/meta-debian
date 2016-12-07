@@ -1,0 +1,13 @@
+diff --git a/libraries/libapparmor/swig/perl/Makefile.am b/libraries/libapparmor/swig/perl/Makefile.am
+index 81e8da0..104f12b 100644
+--- a/libraries/libapparmor/swig/perl/Makefile.am
++++ b/libraries/libapparmor/swig/perl/Makefile.am
+@@ -11,7 +11,7 @@ MOSTLYCLEANFILES=libapparmor_wrap.c LibAppArmor.pm
+ LibAppArmor.pm: libapparmor_wrap.c
+ 
+ Makefile.perl: Makefile.PL LibAppArmor.pm
+-	$(PERL) $< PREFIX=$(prefix) MAKEFILE=$@
++	$(PERL) $< PREFIX=$(prefix) MAKEFILE=$@ ##PERL_CONF##
+ 	sed -ie 's/^LD_RUN_PATH.*//g' Makefile.perl
+ 
+ LibAppArmor.so: libapparmor_wrap.c Makefile.perl

@@ -56,6 +56,7 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
                 --enable-dependency-tracking \
+                --enable-compat-libs \
                 --disable-selinux \
                 --enable-compat-libs \
                "

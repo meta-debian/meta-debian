@@ -1,0 +1,36 @@
+diff --git a/configure b/configure
+index 7498998..74278f8 100755
+--- a/configure
++++ b/configure
+@@ -23055,6 +23055,7 @@ $as_echo_n "checking perl version... " >&6; }
+ $as_echo "$PERL_VERSION" >&6; }
+     if test "$PERL_VERSION" -ge "5008000"; then
+       SWIG_PL_INCLUDES="\$(SWIG_INCLUDES) `$PERL -MExtUtils::Embed -e ccopts`"
++      SWIG_PL_INCLUDES="`echo $SWIG_PL_INCLUDES | sed "s:\-I\/usr\/local\/include::g"`"
+     else
+       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: perl bindings require perl 5.8.0 or newer." >&5
+ $as_echo "$as_me: WARNING: perl bindings require perl 5.8.0 or newer." >&2;}
+@@ -23538,6 +23539,7 @@ $as_echo_n "checking perl version... " >&6; }
+ $as_echo "$PERL_VERSION" >&6; }
+     if test "$PERL_VERSION" -ge "5008000"; then
+       SWIG_PL_INCLUDES="\$(SWIG_INCLUDES) `$PERL -MExtUtils::Embed -e ccopts`"
++      SWIG_PL_INCLUDES="`echo $SWIG_PL_INCLUDES | sed "s:\-I\/usr\/local\/include::g"`"
+     else
+       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: perl bindings require perl 5.8.0 or newer." >&5
+ $as_echo "$as_me: WARNING: perl bindings require perl 5.8.0 or newer." >&2;}
+@@ -24021,6 +24023,7 @@ $as_echo_n "checking perl version... " >&6; }
+ $as_echo "$PERL_VERSION" >&6; }
+     if test "$PERL_VERSION" -ge "5008000"; then
+       SWIG_PL_INCLUDES="\$(SWIG_INCLUDES) `$PERL -MExtUtils::Embed -e ccopts`"
++      SWIG_PL_INCLUDES="`echo $SWIG_PL_INCLUDES | sed "s:\-I\/usr\/local\/include::g"`"
+     else
+       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: perl bindings require perl 5.8.0 or newer." >&5
+ $as_echo "$as_me: WARNING: perl bindings require perl 5.8.0 or newer." >&2;}
+@@ -24507,6 +24510,7 @@ $as_echo_n "checking perl version... " >&6; }
+ $as_echo "$PERL_VERSION" >&6; }
+     if test "$PERL_VERSION" -ge "5008000"; then
+       SWIG_PL_INCLUDES="\$(SWIG_INCLUDES) `$PERL -MExtUtils::Embed -e ccopts`"
++      SWIG_PL_INCLUDES="`echo $SWIG_PL_INCLUDES | sed "s:\-I\/usr\/local\/include::g"`"
+     else
+       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: perl bindings require perl 5.8.0 or newer." >&5
+ $as_echo "$as_me: WARNING: perl bindings require perl 5.8.0 or newer." >&2;}

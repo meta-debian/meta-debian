@@ -1,0 +1,13 @@
+diff --git a/build-outputs.mk b/build-outputs.mk
+index 3126b3f..b27369b 100644
+--- a/build-outputs.mk
++++ b/build-outputs.mk
+@@ -436,7 +436,7 @@ libsvn_swig_py_PATH = subversion/bindings/swig/python/libsvn_swig_py
+ libsvn_swig_py_DEPS =  subversion/bindings/swig/python/libsvn_swig_py/swigutil_py.lo subversion/libsvn_client/libsvn_client-1.la subversion/libsvn_wc/libsvn_wc-1.la subversion/libsvn_ra/libsvn_ra-1.la subversion/libsvn_delta/libsvn_delta-1.la subversion/libsvn_subr/libsvn_subr-1.la
+ libsvn_swig_py_OBJECTS = swigutil_py.lo
+ subversion/bindings/swig/python/libsvn_swig_py/libsvn_swig_py-1.la: $(libsvn_swig_py_DEPS)
+-	cd subversion/bindings/swig/python/libsvn_swig_py && $(LINK) $(libsvn_swig_py_LDFLAGS) -o libsvn_swig_py-1.la $(LT_NO_UNDEFINED) $(libsvn_swig_py_OBJECTS) ../../../../../subversion/libsvn_client/libsvn_client-1.la ../../../../../subversion/libsvn_wc/libsvn_wc-1.la ../../../../../subversion/libsvn_ra/libsvn_ra-1.la ../../../../../subversion/libsvn_delta/libsvn_delta-1.la ../../../../../subversion/libsvn_subr/libsvn_subr-1.la $(SVN_APRUTIL_LIBS) $(SVN_APR_LIBS) $(LIBS)
++	cd subversion/bindings/swig/python/libsvn_swig_py && $(LINK_LIB) $(libsvn_swig_py_LDFLAGS) -o libsvn_swig_py-1.la $(LT_NO_UNDEFINED) $(libsvn_swig_py_OBJECTS) ../../../../../subversion/libsvn_client/libsvn_client-1.la ../../../../../subversion/libsvn_wc/libsvn_wc-1.la ../../../../../subversion/libsvn_ra/libsvn_ra-1.la ../../../../../subversion/libsvn_delta/libsvn_delta-1.la ../../../../../subversion/libsvn_subr/libsvn_subr-1.la $(SVN_APRUTIL_LIBS) $(SVN_APR_LIBS) $(LIBS)
+ 
+ libsvn_swig_ruby_PATH = subversion/bindings/swig/ruby/libsvn_swig_ruby
+ libsvn_swig_ruby_DEPS =  subversion/bindings/swig/ruby/libsvn_swig_ruby/swigutil_rb.lo subversion/libsvn_client/libsvn_client-1.la subversion/libsvn_wc/libsvn_wc-1.la subversion/libsvn_delta/libsvn_delta-1.la subversion/libsvn_subr/libsvn_subr-1.la

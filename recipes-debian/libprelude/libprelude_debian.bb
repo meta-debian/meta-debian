@@ -26,14 +26,18 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "gnutls libgcrypt zlib libtool chrpath-native swig-native"
 
-# libprelude-dont-regenerate-perl-makefile.patch:
-# 	Disable generating perl Makefile. We will generate it with our configuration.
+# libprelude-fix-correct-gettimeofday-params.patch:
+# 	Correct the params of gettimeofday function, avoid error: 
+# 	"conflicting declaration"
+# libprelude-fix-generate-perl-makefile.patch:
+# 	We will generate perl Makefile with our configuration.
 # libprelude-perl-build-with-gnu-hash.patch:
 # 	Use lddflags from environment.
 # libprelude-fix-uid-gid-conflicting-types.patch. Fix error:
 # 	| prelude-client-profile.c:676:6: error: conflicting types for 'prelude_client_profile_set_gid'
 SRC_URI += " \
-    file://libprelude-dont-regenerate-perl-makefile.patch \
+    file://libprelude-fix-correct-gettimeofday-params.patch \
+    file://libprelude-fix-generate-perl-makefile.patch \
     file://libprelude-perl-build-with-gnu-hash.patch \
     file://libprelude-fix-uid-gid-conflicting-types.patch \
 "
@@ -53,25 +57,23 @@ export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version
 export HOST_SYS
 export BUILD_SYS
 
-do_configure_append() {
+do_configure_prepend() {
 	perl_version=${PERLVERSION}
 	short_perl_version=`echo ${perl_version%.*}`
 	. ${STAGING_LIBDIR}/perl/config.sh
-	for i in bindings/perl bindings/low-level/perl; do
-		olddir=`pwd`
-		cd $i
-		export lddlflags
-		yes '' | perl Makefile.PL ${EXTRA_CPANFLAGS} CC="${cc}" LD="${ld}" LDFLAGS="${ldflags}" CCFLAGS="${ccflags}"
-		sed -i -e "s:\(SITELIBEXP = \).*:\1${sitelibexp}:" \
-		       -e "s:\(SITEARCHEXP = \).*:\1${sitearchexp}:" \
-		       -e "s:\(INSTALLVENDORLIB = \).*:\1${D}${datadir}/perl5:" \
-		       -e "s:\(INSTALLVENDORARCH = \).*:\1${D}${libdir}/perl5:" \
-		       -e "s:\(LDDLFLAGS.*\)${STAGING_LIBDIR_NATIVE}:\1${STAGING_LIBDIR}:" \
-		       -e "s:^\(INSTALLSITELIB = \).*:\1${libdir}/perl5/$short_perl_version:" \
-		       -e "s:^\(INSTALLSITEARCH = \).*:\1${libdir}/perl5/$short_perl_version:" \
-		       Makefile
-		cd $olddir
-	done
+	sed -i -e "s:##EXTRA_CPANFLAGS##:${EXTRA_CPANFLAGS}:" \
+	       -e "s:##CC##:${cc}:" \
+	       -e "s:##LD##:${ld}:" \
+	       -e "s:##LDFLAGS##:${ldflags}:" \
+	       -e "s:##CCFLAGS##:${ccflags}:" \
+	       -e "s:##LDDLFLAGS##:${lddlflags}:" \
+	       -e "s:##TMP##:SITELIBEXP=${sitelibexp} SITEARCHEXP=${sitearchexp} \
+	                     INSTALLVENDORLIB=${D}${datadir}/perl5 \
+	                     INSTALLVENDORARCH=${D}${libdir}/perl5 \
+	                     INSTALLSITELIB=${libdir}/perl5/$short_perl_version \
+	                     INSTALLSITEARCH=${libdir}/perl5/$short_perl_version \
+	                     :" \
+	       ${S}/bindings/Makefile.am ${S}/bindings/low-level/Makefile.am
 }
 
 do_compile_prepend() {

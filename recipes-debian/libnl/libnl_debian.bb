@@ -34,6 +34,9 @@ do_install_append() {
 	libname=`readlink ${D}${libdir}/libnl-genl-3.so | xargs basename`
 	ln -sf ..${libdir}/${libname} ${D}${base_libdir}/libnl-genl-3.so
 	rm -rf ${D}${libdir}/libnl-genl-3.so
+
+	#correct the path to libnl-3.so* file
+	sed -i -e "s:libdir='${libdir}':libdir='${base_libdir}':" ${D}${libdir}/libnl-3.la
 }
 
 FILES_libnl-3-200 = " \

@@ -9,12 +9,9 @@ DESCRIPTION = "DHCP (Dynamic Host Configuration Protocol) is a protocol \
 which allows individual devices on an IP network to get their own \
 network configuration information from a server.  DHCP helps make it \
 easier to administer devices."
-
 HOMEPAGE = "http://www.isc.org/"
 
-PR = "r0"
 inherit debian-package
-DPN = "isc-dhcp"
 
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=cd834c80467e962621bf1b82ee363c34"
@@ -24,11 +21,9 @@ DEPENDS = "openssl bind"
 # define-macro-_PATH_DHCPD_CONF-and-_PATH_DHCLIENT_CON.patch
 # 	Define this if you want the dhcpd.conf file to go somewhere other than
 # 	the default location.   By default, it goes in /etc/dhcpd.conf
-
 # link-with-lcrypto.patch
 # 	-lcrypto check was removed and we compile static libraries
 # 	from bind that are linked to libcrypto
-
 # fixsepbuild.patch
 #	Fix out of tree builds
 SRC_URI += " \
@@ -63,7 +58,8 @@ do_install_append () {
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/dhcp
 	install -m 0755 ${S}/debian/isc-dhcp-server.init.d ${D}${sysconfdir}/init.d/isc-dhcp-server
-	
+	install -m 0755 ${S}/debian/isc-dhcp-relay.init.d ${D}${sysconfdir}/init.d/isc-dhcp-relay
+
 	install -m 0755 ${S}/contrib/dhcp-lease-list.pl ${D}${sbindir}/dhcp-lease-list
 	rm -f ${D}${sysconfdir}/dhclient.conf*
 	rm -f ${D}${sysconfdir}/dhcpd.conf*
@@ -77,41 +73,35 @@ do_install_append () {
 	install -m 0755 ${S}/client/scripts/linux ${D}${base_sbindir}/dhclient-script
 }
 
-PACKAGES =+ "isc-dhcp-server isc-dhcp-server-config isc-dhcp-client isc-dhcp-relay isc-dhcp-common"
+PACKAGES =+ "${PN}-client ${PN}-relay ${PN}-common"
 
-FILES_isc-dhcp-server = " \
-	${sbindir}/dhcpd \
-	${sysconfdir}/init.d/isc-dhcp-server \
-	${sbindir}/dhcp-lease-list \
-	${sysconfdir}/dhcp/dhcpd.conf \
-    "
-
-FILES_isc-dhcp-relay = " \
+FILES_${PN}-relay = " \
 	${sbindir}/dhcrelay \
 	${sysconfdir}/init.d/isc-dhcp-relay \
     "
-
-FILES_isc-dhcp-client = " \
+FILES_${PN}-client = " \
 	${base_sbindir}/dhclient \
 	${base_sbindir}/dhclient-script \
 	${sysconfdir}/dhcp/dhclient* \
     "
-RDEPENDS_isc-dhcp-client = "bash"
+FILES_${PN}-common = "${bindir}/omshell"
 
-FILES_isc-dhcp-common = "${bindir}/omshell"
+RDEPENDS_${PN}-client = "bash"
 
-PKG_${PN}-dev = "isc-${PN}-dev"
-pkg_postinst_isc-dhcp-server() {
+PKG_${PN} = "${PN}-server"
+RPROVIDES_${PN} += "${PN}-server"
+
+pkg_postinst_${PN}() {
 	mkdir -p $D/${localstatedir}/lib/dhcp
 	touch $D/${localstatedir}/lib/dhcp/dhcpd.leases
 	touch $D/${localstatedir}/lib/dhcp/dhcpd6.leases
 }
 
-pkg_postinst_isc-dhcp-client() {
+pkg_postinst_${PN}-client() {
 	mkdir -p $D/${localstatedir}/lib/dhcp
 }
 
-pkg_postrm_isc-dhcp-server() {
+pkg_postrm_${PN}() {
 	rm -f $D/${localstatedir}/lib/dhcp/dhcpd.leases
 	rm -f $D/${localstatedir}/lib/dhcp/dhcpd6.leases
 
@@ -120,7 +110,7 @@ pkg_postrm_isc-dhcp-server() {
 	fi
 }
 
-pkg_postrm_isc-dhcp-client() {
+pkg_postrm_${PN}-client() {
 	rm -f $D/${localstatedir}/lib/dhcp/dhclient.leases
 	rm -f $D/${localstatedir}/lib/dhcp/dhclient6.leases
 

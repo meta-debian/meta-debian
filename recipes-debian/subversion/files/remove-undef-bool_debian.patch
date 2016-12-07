@@ -1,0 +1,96 @@
+diff --git a/subversion/bindings/swig/perl/native/core.c b/subversion/bindings/swig/perl/native/core.c
+index 8f4ef44..3e52afe 100644
+--- a/subversion/bindings/swig/perl/native/core.c
++++ b/subversion/bindings/swig/perl/native/core.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_client.c b/subversion/bindings/swig/perl/native/svn_client.c
+index 838afa1..a8ccef3 100644
+--- a/subversion/bindings/swig/perl/native/svn_client.c
++++ b/subversion/bindings/swig/perl/native/svn_client.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_delta.c b/subversion/bindings/swig/perl/native/svn_delta.c
+index 88e40e1..02777e1 100644
+--- a/subversion/bindings/swig/perl/native/svn_delta.c
++++ b/subversion/bindings/swig/perl/native/svn_delta.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_diff.c b/subversion/bindings/swig/perl/native/svn_diff.c
+index 0e75a59..b01addc 100644
+--- a/subversion/bindings/swig/perl/native/svn_diff.c
++++ b/subversion/bindings/swig/perl/native/svn_diff.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_fs.c b/subversion/bindings/swig/perl/native/svn_fs.c
+index e11adde..a1a0353 100644
+--- a/subversion/bindings/swig/perl/native/svn_fs.c
++++ b/subversion/bindings/swig/perl/native/svn_fs.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_ra.c b/subversion/bindings/swig/perl/native/svn_ra.c
+index 1331c8e..54b902a 100644
+--- a/subversion/bindings/swig/perl/native/svn_ra.c
++++ b/subversion/bindings/swig/perl/native/svn_ra.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_repos.c b/subversion/bindings/swig/perl/native/svn_repos.c
+index 594ad6c..8acfcee 100644
+--- a/subversion/bindings/swig/perl/native/svn_repos.c
++++ b/subversion/bindings/swig/perl/native/svn_repos.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
+diff --git a/subversion/bindings/swig/perl/native/svn_wc.c b/subversion/bindings/swig/perl/native/svn_wc.c
+index 4202d64..3968991 100644
+--- a/subversion/bindings/swig/perl/native/svn_wc.c
++++ b/subversion/bindings/swig/perl/native/svn_wc.c
+@@ -1475,7 +1475,6 @@ SWIG_Perl_SetModule(swig_module_info *module) {
+ #ifdef bool
+   /* Leave if macro is from C99 stdbool.h */
+   #ifndef __bool_true_false_are_defined
+-    #undef bool
+   #endif
+ #endif
+ 
