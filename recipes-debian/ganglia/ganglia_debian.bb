@@ -27,7 +27,7 @@ do_configure_prepend () {
 # AC_OUTPUT list -- it reconfigures libmetrics using its own rules.
 # Unfortunately this means an OE autoreconf will not regenerate
 # ltmain.sh (and others) in libmetrics and as such the build will
-# fail.  We explicitly force regeneration of that directory. 
+# fail.  We explicitly force regeneration of that directory.
 do_configure_append() {
 	(cd ${S} ; autoreconf -fvi )
 	(cd ${S}/libmetrics ; autoreconf -fvi)
