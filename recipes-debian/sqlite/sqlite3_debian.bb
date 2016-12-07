@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 
@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = " \
   file://src/sqlite.h.in;endline=11;md5=65f0a57ca6928710b418c094b3570bb0 \
 "
 
-DEPENDS = "readline ncurses tcl-native"
+DEPENDS = "readline ncurses tcl"
 DEPENDS_class-native = "tcl-native"
 
 # Required to avoid a compile error
@@ -42,8 +42,15 @@ TARGET_CFLAGS += " \
 	-DSQLITE_MAX_SCHEMA_RETRY=25 \
 	-DSQLITE_MAX_VARIABLE_NUMBER=250000 \
 "
-EXTRA_OECONF = "--enable-shared --enable-threadsafe --enable-load-extension"
-EXTRA_OECONF_class-native = "--enable-shared --enable-threadsafe --disable-readline"
+EXTRA_OECONF = " \
+    --enable-shared --enable-threadsafe --enable-load-extension \
+    --with-tcl=${STAGING_BINDIR_CROSS} TCLLIBDIR=${libdir}/tcltk/sqlite3 \
+"
+EXTRA_OECONF_class-native = " \
+    --enable-shared --enable-threadsafe --disable-readline \
+    --with-tcl=${STAGING_LIBDIR}/tcl8.6 TCLLIBDIR=${libdir}/tcltk/sqlite3 \
+"
+
 export config_BUILD_CC = "${BUILD_CC}"
 export config_BUILD_CFLAGS = "${BUILD_CFLAGS}"
 export config_BUILD_LIBS = "${BUILD_LDFLAGS}"
@@ -93,7 +100,7 @@ SRC_URI_DEBIAN_TEST = "\
 DEBIAN_NATIVE_TESTS = "run_native_test_sqlite3"
 TEST_DIR = "${B}/native-test"
 
-PACKAGES = "lib${DPN} lib${DPN}-dev lib${DPN}-doc ${PN}-dbg lib${DPN}-staticdev ${PN}"
+PACKAGES = "lib${DPN} lib${DPN}-dev lib${DPN}-doc ${PN}-dbg lib${DPN}-staticdev lib${PN}-tcl ${PN}"
 
 FILES_${PN} = "${bindir}/*"
 FILES_lib${DPN} = "${libdir}/*.so.*"
@@ -101,6 +108,9 @@ FILES_lib${DPN}-dev = "${libdir}/*.la ${libdir}/*.so \
 			${libdir}/pkgconfig ${includedir}"
 FILES_lib${DPN}-doc = "${docdir} ${mandir} ${infodir}"
 FILES_lib${DPN}-staticdev = "${libdir}/lib*.a"
+FILES_lib${PN}-tcl = "${libdir}/tcltk/sqlite3/*"
+FILES_${PN}-dbg += "${libdir}/tcltk/sqlite3/.debug"
+
 AUTO_LIBNAME_PKGS = "${MLPREFIX}lib${DPN}"
 
 BBCLASSEXTEND = "native nativesdk"
