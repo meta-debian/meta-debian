@@ -21,8 +21,7 @@ DEPENDS = "nasm-native util-linux e2fsprogs"
 
 COMPATIBLE_HOST = '(x86_64|i.86).*-(linux|freebsd.*)'
 # Don't let the sanity checker trip on the 32 bit real mode BIOS binaries
-INSANE_SKIP_${PN}-misc = "arch"
-INSANE_SKIP_${PN}-chain = "arch"
+INSANE_SKIP_${PN}-common = "arch"
 
 EXTRA_OEMAKE = " \
 	BINDIR=${bindir} SBINDIR=${sbindir} LIBDIR=${libdir} \
