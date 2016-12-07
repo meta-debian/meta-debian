@@ -35,6 +35,10 @@ DEPENDS = "intltool-native \
 DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --with-rootlibdir=${base_libdir} \
                    --with-firmware-path=/lib/firmware \
+                   --with-ntp-servers="" \
+                   --with-dns-servers="" \
+                   --with-system-uid-max=999 \
+                   --with-system-gid-max=999 \
                    --disable-coredump \
                    --disable-efi \
                    --disable-myhostname \
@@ -42,10 +46,6 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --disable-microhttpd \
                    --disable-sysusers \
                    --disable-silent-rules \
-                   --with-ntp-servers="" \
-                   --with-dns-servers="" \
-                   --with-system-uid-max=999 \
-                   --with-system-gid-max=999 \
                   "
 
 # --enable-dependency-tracking:
@@ -55,9 +55,8 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 ${@base_contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
-                --enable-dependency-tracking \
-                --enable-compat-libs \
                 --disable-selinux \
+                --enable-dependency-tracking \
                 --enable-compat-libs \
                "
 
