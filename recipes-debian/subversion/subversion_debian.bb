@@ -178,6 +178,10 @@ do_install_append() {
 	   ${D}${libdir}/apache2/modules/mod_dontdothat.so
 }
 PACKAGES =+ "libapache2-mod-svn libsvn-perl python-subversion libsvn subversion-tools"
+
+# Provide libsvn-dev package, useful for satisfying runtime dependencies.
+RPROVIDES_${PN}-dev = "libsvn-dev"
+
 FILES_libapache2-mod-svn = "\
 	${sysconfdir}/apache2/mods-available \
 	${libdir}/apache2/modules/*"
