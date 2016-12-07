@@ -14,7 +14,7 @@ slang library."
 
 HOMEPAGE = "https://fedorahosted.org/newt/"
 
-PR = "r2"
+PR = "r3"
 inherit debian-package
 
 LICENSE = "LGPLv2"
@@ -46,6 +46,8 @@ EXTRA_OECONF = " \
 	--with-colorsfile=${sysconfdir}/newt/palette \
 	CFLAGS="-I${STAGING_INCDIR}/tcl8.6 ${CFLAGS}" \
 "
+CACHED_CONFIGUREVARS_append_class-target = " ac_cv_c_tclconfig=${STAGING_BINDIR_CROSS}"
+CACHED_CONFIGUREVARS_append_class-native = " ac_cv_c_tclconfig=${STAGING_LIBDIR}/tcl8.6"
 
 inherit autotools-brokensep pythonnative
 
@@ -76,7 +78,7 @@ do_install_append() {
 	install -m 0644 ${S}/newt*.ver ${D}${libdir}/libnewt_pic.map
 	install -m 0644 ${S}/debian/palette.original ${D}${sysconfdir}/newt/
 	install -m 0644 ${S}/debian/bash_completion.d/* ${D}${sysconfdir}/bash_completion.d/
-	install -m 0644 ${S}/whiptcl.so ${D}${libdir}/whiptcl
+	mv ${D}${libdir}/whiptcl.so ${D}${libdir}/whiptcl/
 }
 
 PACKAGE_BEFORE_PN = "python-${DPN} ${DPN}-tcl ${PN}-pic whiptail"
