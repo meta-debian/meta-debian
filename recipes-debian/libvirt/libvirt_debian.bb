@@ -47,6 +47,7 @@ EXTRA_OECONF += "\
 DEPENDS += "libnl libxml2 libxslt-native apparmor audit"
 PACKAGECONFIG ??= "box udev audit libcap-ng macvtap qemu storage-lvm storage-disk"
 
+PACKAGECONFIG[libpcap] = "--with-libpcap,--without-libpcap,libpcap,"
 PACKAGECONFIG[numa] = "--with-numactl,--without-numactl,numactl,"
 PACKAGECONFIG[avahi] = "--with-avahi,--without-avahi,avahi,"
 PACKAGECONFIG[netcf] = "--with-netcf,--without-netcf,netcf,"
@@ -87,41 +88,51 @@ do_install_append() {
 	install -m 0755 ${B}/tools/libvirt-guests.sh \
 		${D}${sysconfdir}/init.d/libvirt-guests
 	install -D -m 0644 ${S}/debian/polkit/60-libvirt.rules \
-		${D}${datadir}/polkit-1/rules.d
+		${D}${datadir}/polkit-1/rules.d/60-libvirt.rules
 
 	rm -rf  ${D}${libdir}/systemd \
 		${D}${sysconfdir}/sysconfig \
 		${D}${libdir}/sysctl.d \
 		${D}${localstatedir}/run
 }
-ALLOW_EMPTY_${DPN}-bin = "1"
-PACKAGES =+ "${DPN}-bin ${DPN}-daemon-system ${DPN}-clients ${DPN}-daemon"
-FILES_${DPN}-clients = "\
-	${sysconfdir}/${DPN}/libvirt.conf \
-	${sysconfdir}/${DPN}/virt-login-shell.conf \
+ALLOW_EMPTY_${PN}-bin = "1"
+PACKAGES =+ "${PN}-bin ${PN}-clients ${PN}-daemon-system ${PN}-daemon"
+FILES_${PN}-bin = ""
+FILES_${PN}-clients = "\
+	${sysconfdir}/${PN}/libvirt.conf \
+	${sysconfdir}/${PN}/virt-login-shell.conf \
 	${bindir}/*"
-FILES_${DPN}-daemon = "\
-	${libdir}/${DPN}/connection-driver/*.so \
-	${libdir}/${DPN}/libvirt-guests.sh \
-	${libdir}/${DPN}/libvirt_iohelper \
-	${libdir}/${DPN}/libvirt_leaseshelper \
-	${libdir}/${DPN}/libvirt_lxc \
-	${libdir}/${DPN}/libvirt_parthelper \
-	${libdir}/${DPN}/libvirt_sanlock_helper \
-	${libdir}/${DPN}/lock-driver/*.so \
+FILES_${PN}-daemon = "\
+	${libdir}/${PN}/connection-driver/*.so \
+	${libdir}/${PN}/libvirt-guests.sh \
+	${libdir}/${PN}/libvirt_iohelper \
+	${libdir}/${PN}/libvirt_leaseshelper \
+	${libdir}/${PN}/libvirt_lxc \
+	${libdir}/${PN}/libvirt_parthelper \
+	${libdir}/${PN}/libvirt_sanlock_helper \
+	${libdir}/${PN}/lock-driver/*.so \
 	${sbindir}/libvirtd* \
-	${datadir}/augeas ${datadir}/${DPN}"
-FILES_${DPN}-daemon-system = "\
+	${sbindir}/virtlockd \
+	${datadir}/augeas \
+	${datadir}/${PN}/schemas/* \
+	${datadir}/${PN}/libvirtLogo.png \
+	${datadir}/${PN}/cpu_map.xml"
+FILES_${PN}-daemon-system = "\
 	${sysconfdir}/* \
 	${systemd_system_unitdir} \
-	${libdir}/${DPN}/virt-aa-helper \
+	${libdir}/${PN}/virt-aa-helper \
 	${datadir}/polkit-1/* \
 	${localstatedir}/lib/*"
 FILES_${PN}-dbg += "\
-	${libdir}/${DPN}/connection-driver/.debug \
-	${libdir}/${DPN}/lock-driver/.debug"
-
+	${libdir}/${PN}/connection-driver/.debug \
+	${libdir}/${PN}/lock-driver/.debug"
+FILES_${PN}-dev += "\
+	${libdir}/${PN}/*/*.la \
+	${datadir}/${PN}/api/* \
+	"
 # Follow debian/control
-RDEPENDS_${DPN}-bin += "${DPN}-daemon-system ${DPN}-clients"
-RDEPENDS_${DPN}-daemon-system += "\
-	adduser ${DPN}-clients ${DPN}-daemon logrotate"
+RDEPENDS_${PN}-bin += "${PN}-daemon-system ${PN}-clients"
+RDEPENDS_${PN}-daemon-system += "\
+	adduser ${PN}-clients ${PN}-daemon logrotate gettext-runtime"
+
+PKG_${PN} = "${PN}0"
