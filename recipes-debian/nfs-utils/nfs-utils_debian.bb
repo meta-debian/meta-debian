@@ -41,13 +41,14 @@ EXTRA_OECONF = "--with-statduser=nobody \
                 --with-statdpath=/var/lib/nfs/statd \
                "
 
-PACKAGECONFIG ??= "tcp-wrappers nfsv41 \
+PACKAGECONFIG ??= "tcp-wrappers nfsv41 tirpc \
 		${@base_contains('DISTRO_FEATURES', 'ipv6', 'ipv6', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[ipv6] = "--enable-ipv6 --with-tirpcinclude=${STAGING_INCDIR}/tirpc,--disable-ipv6,libtirpc,libtirpc"
 PACKAGECONFIG[nfsv41] = "--enable-nfsv41,--disable-nfsv41,lvm2"
 PACKAGECONFIG[gss] = "--enable-gss,--disable-gss,krb5"
+PACKAGECONFIG[tirpc] = "--enable-tirpc --with-tirpcinclude=${STAGING_INCDIR}/tirpc,--disable-tirpc,libtirpc"
 
 # Make clean needed because the package comes with
 # precompiled 64-bit objects that break the build
