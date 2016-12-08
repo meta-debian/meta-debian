@@ -53,6 +53,10 @@ EXTRA_OECONF += "\
 	--with-sasl=${STAGING_DIR_HOST}${prefix} \
 	--with-swig=${STAGING_DIR_NATIVE}${prefix_native} \
 "
+# Currently, we don't have ruby recipe,
+# disable checking for ruby path to prevent using ruby from host system
+CACHED_CONFIGUREVARS += "ac_cv_path_RUBY=no"
+
 PACKAGECONFIG ??= "apache2"
 PACKAGECONFIG[serf] = "--with-serf=${STAGING_DIR_HOST}${prefix}, --without-serf, serf,"
 PACKAGECONFIG[gnome-keyring] = "--with-gnome-keyring, --without-gnome-keyring,libgnome-keyring,"
