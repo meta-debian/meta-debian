@@ -1,10 +1,10 @@
 require apache2.inc
 
-PR = "${INC_PR}.3"
+PR = "${INC_PR}.4"
 
 DEPENDS = " \
     libtool-native dpkg-native apache2-native libtimedate-perl-native \
-    openssl expat pcre apr apr-util \
+    apr apr-util \
 "
 
 # Base on
@@ -34,12 +34,13 @@ EXTRA_OECONF += " \
     LDFLAGS="-Wl,--as-needed ${LDFLAGS}" LTFLAGS="--no-silent" \
 "
 
-EXTRA_OECONF += " \
-    --enable-ssl \
-    --with-ssl=${STAGING_LIBDIR}/.. \
-    --with-expat=${STAGING_LIBDIR}/.. \
-"
-CFLAGS_prepend = " -I${STAGING_INCDIR}/openssl "
+PACKAGECONFIG ??= "expat lua pcre ssl xml zlib"
+PACKAGECONFIG[expat] = "--with-expat=${STAGING_LIBDIR}/..,--without-expat,expat"
+PACKAGECONFIG[lua] = "--with-lua=${STAGING_LIBDIR}/..,--without-lua,lua5.1"
+PACKAGECONFIG[pcre] = "--with-pcre=${STAGING_BINDIR_CROSS}/pcre-config,--without-pcre,libpcre"
+PACKAGECONFIG[ssl] = "--enable-ssl --with-ssl=${STAGING_LIBDIR}/..,--disable-ssl,openssl"
+PACKAGECONFIG[xml] = "--with-libxml2=${STAGING_LIBDIR}/..,--without-libxml2,libxml2"
+PACKAGECONFIG[zlib] = "--with-z=${STAGING_LIBDIR}/..,--without-z,zlib"
 
 do_debian_patch_append() {
 	# Apply patch for suexec
