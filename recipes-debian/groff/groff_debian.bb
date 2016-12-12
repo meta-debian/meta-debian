@@ -6,7 +6,7 @@ troff, nroff, tbl, eqn, and pic. This package contains additional devices  \
 and drivers for output to DVI, HTML (when recommended packages are         \
 installed - see below), PDF, HP LaserJet printers, and Canon CAPSL LBP-4   \
 and LBP-8 printers. \
-The X75, X75-12, X100, and X100-12 devices, which allow groff output to be \ 
+The X75, X75-12, X100, and X100-12 devices, which allow groff output to be \
 conveniently viewed on an X display using the standard X11 fonts, are now  \
 included here. They were previously in a separate package, groff-x11       \
 "
@@ -70,7 +70,7 @@ do_install_append() {
 		${D}${libdir}/mime/packages/groff-base
 
 	ln -s eqn ${D}${bindir}/geqn
-	ln -s pic ${D}${bindir}/gpic 
+	ln -s pic ${D}${bindir}/gpic
 	ln -s tbl ${D}${bindir}/gtbl
 }
 
@@ -99,7 +99,7 @@ python __anonymous() {
     for prog in d.getVar('datadir_progs_font',True).split():
         val += " " + datadir + "/groff/*/font/" + prog
 
-    val += " " + d.getVar('sysconfdir', True) + "/groff"	
+    val += " " + d.getVar('sysconfdir', True) + "/groff"
     val += " " + d.getVar('libdir', True) + "/mime/packages/groff-base"
     val += " " + d.getVar('datadir', True) + "/groff/*/eign"
     val += " " + d.getVar('datadir', True) + "/groff/site-tmac"
