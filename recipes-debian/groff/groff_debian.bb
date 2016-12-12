@@ -105,4 +105,5 @@ python __anonymous() {
     val += " " + d.getVar('datadir', True) + "/groff/site-tmac"
     d.setVar('FILES_groff-base', val)
 }
+PARALLEL_MAKE = ""
 BBCLASSEXTEND = "native"
