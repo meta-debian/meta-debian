@@ -1,5 +1,5 @@
 #
-# base recipe: http://cgit.openembedded.org/cgit.cgi/meta-openembedded/tree/meta-oe/recipes-connectivity/krb5/krb5_1.12.2.bb?h=dizzy 
+# base recipe: http://cgit.openembedded.org/cgit.cgi/meta-openembedded/tree/meta-oe/recipes-connectivity/krb5/krb5_1.12.2.bb?h=dizzy
 #
 
 SUMMARY = "A network authentication protocol"
@@ -76,7 +76,7 @@ FILES_${PN}-kdc = " \
 	${sbindir}/krb5kdc \
 	${sysconfdir}/init.d/krb5-kdc \
 	${systemd_system_unitdir}/krb5-kdc.service \
-	${libdir}/krb5/plugins/kdb/db2.so \	
+	${libdir}/krb5/plugins/kdb/db2.so \
     "
 
 FILES_${PN}-kdc-ldap = " \
@@ -85,7 +85,7 @@ FILES_${PN}-kdc-ldap = " \
 	${systemd_system_unitdir}/krb5-kdc.service.d/slapd-before-kdc.conf \
 	${libdir}/krb5/libkdb_ldap.so.1* \
 	${libdir}/krb5/plugins/kdb/kldap.so \
-	${sbindir}/kdb5_ldap_util \	
+	${sbindir}/kdb5_ldap_util \
     "
 
 FILES_${PN}-multidev = " \
@@ -93,7 +93,7 @@ FILES_${PN}-multidev = " \
 	${includedir}/mit-krb5/* \
 	${libdir}/mit-krb5/* \
 	${libdir}/pkgconfig/mit-krb5*.pc \
-	${libdir}/pkgconfig/mit-krb5/* \	
+	${libdir}/pkgconfig/mit-krb5/* \
     "
 
 FILES_${PN}-otp = "${libdir}/krb5/plugins/preauth/otp.so"
@@ -144,7 +144,7 @@ do_configure() {
 
 do_install_append() {
 	rm -r ${D}${localstatedir_nativesdk}
- 
+
 	install -d ${D}${sysconfdir}/init.d/
 	install -d ${D}${base_libdir}/systemd/system/
 	install -m 0755 ${S}/../debian/krb5-admin-server.init ${D}${sysconfdir}/init.d/krb5-admin-server
@@ -152,22 +152,22 @@ do_install_append() {
 	install -m 0755 ${S}/../debian/krb5_newrealm ${D}${sbindir}/
 
 	mv ${D}${sbindir}/gss-server ${D}${bindir}/gss-server
-    
+
 	install -m 0755 ${S}/../debian/krb5-kdc.init ${D}${sysconfdir}/init.d/krb5-kdc
 	install -m 0644 ${S}/../debian/krb5-kdc.service ${D}${systemd_system_unitdir}/
 
-	# install for krb5-kdc-ldap package 
+	# install for krb5-kdc-ldap package
 	install -d ${D}${sysconfdir}/insserv/overrides/
 	install -m 0644 ${S}/../debian/krb5-kdc-ldap.insserv-override ${D}${sysconfdir}/insserv/overrides/krb5-kdc
-    
+
 	install -d ${D}${systemd_system_unitdir}/krb5-admin-server.service.d/
 	install -m 0644 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-admin-server.service.d/
-    
+
 	install -d ${D}${systemd_system_unitdir}/krb5-kdc.service.d/
 	install -m 0644 ${S}/../debian/slapd-before-kdc.conf ${D}${systemd_system_unitdir}/krb5-kdc.service.d/
-    
+
 	cp ${D}${libdir}/libkdb_ldap.so.1* ${D}${libdir}/krb5/
-    
+
 	# install for krb5-multidev package
 	cp ${D}${bindir}/krb5-config ${D}${bindir}/krb5-config.mit
 	install -d ${D}${includedir}/mit-krb5/
@@ -175,17 +175,17 @@ do_install_append() {
 	install -d ${D}${includedir}/mit-krb5/gssrpc/
 	install -d ${D}${includedir}/mit-krb5/kadm5/
 	install -d ${D}${includedir}/mit-krb5/krb5/
-	install -d ${D}${libdir}/mit-krb5/	
+	install -d ${D}${libdir}/mit-krb5/
 	install -d ${D}${libdir}/pkgconfig/mit-krb5/
 
-	mv ${D}${includedir}/gssapi.h ${D}${includedir}/mit-krb5/ 
-	mv ${D}${includedir}/krb5.h ${D}${includedir}/mit-krb5/ 
+	mv ${D}${includedir}/gssapi.h ${D}${includedir}/mit-krb5/
+	mv ${D}${includedir}/krb5.h ${D}${includedir}/mit-krb5/
 	mv ${D}${includedir}/gssapi/* ${D}${includedir}/mit-krb5/gssapi/
 	mv ${D}${includedir}/gssrpc/* ${D}${includedir}/mit-krb5/gssrpc/
 	mv ${D}${includedir}/kadm5/* ${D}${includedir}/mit-krb5/kadm5/
 	mv ${D}${includedir}/krb5/* ${D}${includedir}/mit-krb5/krb5/
-	
-	mv ${D}${libdir}/libgssapi_krb5.so ${D}${libdir}/mit-krb5/	
+
+	mv ${D}${libdir}/libgssapi_krb5.so ${D}${libdir}/mit-krb5/
 	mv ${D}${libdir}/libgssrpc.so ${D}${libdir}/mit-krb5/
 	mv ${D}${libdir}/libk5crypto.so ${D}${libdir}/mit-krb5/
 	mv ${D}${libdir}/libkadm5clnt.so ${D}${libdir}/mit-krb5/
@@ -210,9 +210,9 @@ do_install_append() {
 		rm $f
 		ln -s ../$LINKLIB $f
 	done
-	
-	ln -s mit-krb5/gssapi.h ${D}${includedir}/gssapi.h 
-	ln -s mit-krb5/krb5.h ${D}${includedir}/krb5.h 
+
+	ln -s mit-krb5/gssapi.h ${D}${includedir}/gssapi.h
+	ln -s mit-krb5/krb5.h ${D}${includedir}/krb5.h
 
 	for f in ${D}${includedir}/mit-krb5/gssapi/*.h; do
 		LINKLIB=$(basename $f)
@@ -234,23 +234,23 @@ do_install_append() {
 		ln -s ../mit-krb5/krb5/$LINKLIB ${D}${includedir}/krb5/$LINKLIB
 	done
 
-	ln -s mit-krb5/libgssapi_krb5.so ${D}${libdir}/libgssapi_krb5.so 
-	ln -s mit-krb5/libgssrpc.so ${D}${libdir}/libgssrpc.so 
-	ln -s mit-krb5/libk5crypto.so ${D}${libdir}/libk5crypto.so 
-	ln -s mit-krb5/libkadm5clnt.so ${D}${libdir}/libkadm5clnt.so 
-	ln -s mit-krb5/libkadm5clnt_mit.so ${D}${libdir}/libkadm5clnt_mit.so 
-	ln -s mit-krb5/libkadm5srv.so ${D}${libdir}/libkadm5srv.so 
-	ln -s mit-krb5/libkadm5srv_mit.so ${D}${libdir}/libkadm5srv_mit.so 
-	ln -s mit-krb5/libkdb5.so ${D}${libdir}/libkdb5.so 
+	ln -s mit-krb5/libgssapi_krb5.so ${D}${libdir}/libgssapi_krb5.so
+	ln -s mit-krb5/libgssrpc.so ${D}${libdir}/libgssrpc.so
+	ln -s mit-krb5/libk5crypto.so ${D}${libdir}/libk5crypto.so
+	ln -s mit-krb5/libkadm5clnt.so ${D}${libdir}/libkadm5clnt.so
+	ln -s mit-krb5/libkadm5clnt_mit.so ${D}${libdir}/libkadm5clnt_mit.so
+	ln -s mit-krb5/libkadm5srv.so ${D}${libdir}/libkadm5srv.so
+	ln -s mit-krb5/libkadm5srv_mit.so ${D}${libdir}/libkadm5srv_mit.so
+	ln -s mit-krb5/libkdb5.so ${D}${libdir}/libkdb5.so
 	ln -s mit-krb5/libkrb5.so ${D}${libdir}/libkrb5.so
-	ln -s mit-krb5/libkrb5support.so  ${D}${libdir}/libkrb5support.so 
+	ln -s mit-krb5/libkrb5support.so  ${D}${libdir}/libkrb5support.so
 	ln -s mit-krb5/gssrpc.pc ${D}${libdir}/pkgconfig/gssrpc.pc
-	ln -s mit-krb5/kadm-client.pc ${D}${libdir}/pkgconfig/kadm-client.pc 
-	ln -s mit-krb5/kadm-server.pc ${D}${libdir}/pkgconfig/kadm-server.pc 
-	ln -s mit-krb5/kdb.pc ${D}${libdir}/pkgconfig/kdb.pc 
-	ln -s mit-krb5/krb5-gssapi.pc ${D}${libdir}/pkgconfig/krb5-gssapi.pc 
+	ln -s mit-krb5/kadm-client.pc ${D}${libdir}/pkgconfig/kadm-client.pc
+	ln -s mit-krb5/kadm-server.pc ${D}${libdir}/pkgconfig/kadm-server.pc
+	ln -s mit-krb5/kdb.pc ${D}${libdir}/pkgconfig/kdb.pc
+	ln -s mit-krb5/krb5-gssapi.pc ${D}${libdir}/pkgconfig/krb5-gssapi.pc
 	ln -s mit-krb5/krb5.pc ${D}${libdir}/pkgconfig/krb5.pc
-	
+
 	ln -s libkadm5clnt_mit.so ${D}${libdir}/mit-krb5/libkadm5clnt.so
 	ln -s libkadm5srv_mit.so ${D}${libdir}/mit-krb5/libkadm5srv.so
 }
