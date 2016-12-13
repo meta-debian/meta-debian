@@ -37,6 +37,7 @@ BUSYBOX_INITTAB_GETTYS ?= \
 SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
+file://0001-menuconfig-check-lxdiaglog.sh-Allow-specification-of.patch \
 file://defconfig \
 file://inittab \
 file://rcS \
