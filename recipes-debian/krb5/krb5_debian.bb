@@ -273,3 +273,5 @@ RDEPENDS_${PN}-admin-server += "lsb-base"
 RDEPENDS_${PN}-kdc += "lsb-base"
 
 INSANE_SKIP_${PN}-multidev = "dev-so"
+
+PARALLEL_MAKE = ""
