@@ -127,3 +127,13 @@ RDEPENDS_${PN} += "\
 	mysql-common debianutils "
 RDEPENDS_mysql-server += "\
 	passwd psmisc mysql-server-core ${PN} sysvinit-initscripts lsb-base"
+
+inherit binconfig
+
+BINCONFIG_GLOB = "mysql_config"
+SYSROOT_PREPROCESS_FUNCS += "mysql_sysroot_preprocess"
+mysql_sysroot_preprocess() {
+	sed -i -e "s:='${libdir}:='${STAGING_LIBDIR}:g" \
+	       -e "s:='${includedir}:='${STAGING_INCDIR}:g" \
+	       ${SYSROOT_DESTDIR}${bindir_crossscripts}/mysql_config
+}
