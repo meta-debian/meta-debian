@@ -33,6 +33,7 @@ EXTRA_OECONF += "--disable-silent-rules \
                  --with-boot-tty=/dev/tty7 \
                  --with-shutdown-tty=/dev/tty7 \
                  --libexecdir=${libdir} \
+                 --enable-documentation=no \
                  "
 PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'gtk drm', '', d)}"
 PACKAGECONFIG[gtk] = "--enable-gtk --with-log-viewer,--disable-gtk --without-log-viewer,gtk+,"
