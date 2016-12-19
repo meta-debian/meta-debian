@@ -13,7 +13,7 @@ PR = "r1"
 
 inherit debian-package
 
-DEPENDS = "apr expat"
+DEPENDS = "apr expat autotools-dev-native"
 
 BBCLASSEXTEND = "native"
 
@@ -69,6 +69,8 @@ inherit autotools-brokensep lib_package binconfig
 OE_BINCONFIG_EXTRA_MANGLE = " -e 's:location=source:location=installed:'"
 
 do_configure_prepend() {
+	# use config.guess and config.sub in sysroot
+	sed -i "s|/usr/share|${STAGING_DATADIR_NATIVE}|g" ${S}/buildconf
 	./buildconf --with-apr=$(apr-1-config --srcdir)
 }
 
