@@ -18,7 +18,7 @@ LIC_FILES_CHKSUM = "\
 	file://doc/COPYING.LESSERv2;md5=4fbd65380cdd255951079008b364516c \
 	file://doc/COPYING.LESSERv3;md5=e6a600fd5e1d9cbde2d983680233ad02 \
 	file://doc/gnulib.texi;beginline=21;endline=34;md5=76bfc6d3b1f0371d2414b0f5a52044ea"
-inherit autotools-brokensep
+inherit autotools-brokensep allarch
 
 #install follow Debian jessie
 do_install() {
