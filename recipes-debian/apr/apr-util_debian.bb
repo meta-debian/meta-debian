@@ -70,7 +70,7 @@ OE_BINCONFIG_EXTRA_MANGLE = " -e 's:location=source:location=installed:'"
 
 do_configure_prepend() {
 	# use config.guess and config.sub in sysroot
-	sed -i "s|/usr/share|${STAGING_DATADIR_NATIVE}|g" ${S}/buildconf
+	sed -i "s|\([[:space:]]\)/usr/share|\1${STAGING_DATADIR_NATIVE}|g" ${S}/buildconf
 	./buildconf --with-apr=$(apr-1-config --srcdir)
 }
 
