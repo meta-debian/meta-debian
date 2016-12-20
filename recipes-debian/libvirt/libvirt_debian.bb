@@ -22,9 +22,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 #	Remove trailing curly brace in patch without matching closing brace
 SRC_URI += "\
 	file://Disable-failing-virnetsockettest_debian.patch \
-	file://Fix-trailing-curly-brace-from-upstream-patch_debian.patch"
+	file://Fix-trailing-curly-brace-from-upstream-patch_debian.patch \
+	"
 
-inherit autotools gettext pkgconfig
+inherit autotools gettext pkgconfig useradd
 
 EXTRA_OECONF += "\
         --with-storage-rbd \
@@ -44,7 +45,23 @@ EXTRA_OECONF += "\
         --without-firewalld \
         --without-attr \
 	"
-DEPENDS += "libnl libxml2 libxslt-native apparmor audit"
+CACHED_CONFIGUREVARS += "\
+ac_cv_path_DNSMASQ=${sbindir}/dnsmasq \
+ac_cv_path_XMLLINT=${bindir}/xmllint \
+ac_cv_path_XMLCATLOG=${bindir}/xmlcatalog \
+ac_cv_path_TC=${base_sbindir}/tc \
+ac_cv_path_UDEVADM=${base_sbindir}/udevadm \
+ac_cv_path_MODPROBE=${base_sbindir}/modprobe \
+ac_cv_path_IPTABLES_PATH=${base_sbindir}/iptables \
+ac_cv_path_IP6TABLES_PATH=${base_sbindir}/ip6tables \
+ac_cv_path_MOUNT=${base_bindir}/mount \
+ac_cv_path_UMOUNT=${base_bindir}/umount \
+ac_cv_path_PARTED=${base_sbindir}/parted \
+ac_cv_path_DMSETUP=${base_sbindir}/dmsetup \
+ac_cv_path_IP_PATH=${base_sbindir}/ip \
+"
+
+DEPENDS += "libnl libxml2 libxslt-native apparmor audit dnsmasq qemu"
 PACKAGECONFIG ??= "box udev audit libcap-ng macvtap qemu storage-lvm storage-disk"
 
 PACKAGECONFIG[libpcap] = "--with-libpcap,--without-libpcap,libpcap,"
@@ -94,7 +111,70 @@ do_install_append() {
 		${D}${sysconfdir}/sysconfig \
 		${D}${libdir}/sysctl.d \
 		${D}${localstatedir}/run
+
+	# Base on debian/libvirt-daemon-system.dirs
+	install -d ${D}${localstatedir}/lib/libvirt/boot \
+	           ${D}${localstatedir}/lib/libvirt/images \
+	           ${D}${localstatedir}/lib/libvirt/channel/target \
+	           ${D}${localstatedir}/lib/libvirt/sanlock \
+	           ${D}${localstatedir}/cache/libvirt/qemu \
+	           ${D}${localstatedir}/log/libvirt/qemu \
+	           ${D}${localstatedir}/log/libvirt/uml \
+	           ${D}${localstatedir}/log/libvirt/lxc \
+	           ${D}${localstatedir}/lib/polkit-1/localauthority/10-vendor.d/
 }
+# Base on debian/libvirt-daemon-system.postinst
+pkg_postinst_${PN}-daemon-system() {
+    add_statoverrides()
+    {
+        ROOT_DIRS="\
+            $D${localstatedir}/lib/libvirt/images/ \
+            $D${localstatedir}/lib/libvirt/boot/   \
+            $D${localstatedir}/cache/libvirt/      \
+        "
+
+        QEMU_DIRS="\
+             $D${localstatedir}/lib/libvirt/qemu/   \
+             $D${localstatedir}/cache/libvirt/qemu/ \
+             $D${localstatedir}/lib/libvirt/qemu/channel/ \
+             $D${localstatedir}/lib/libvirt/qemu/channel/target/ \
+        "
+
+        SANLOCK_DIR="$D${localstatedir}/lib/libvirt/sanlock"
+
+        QEMU_CONF="$D${sysconfdir}/libvirt/qemu.conf"
+
+        for dir in ${ROOT_DIRS}; do
+            [ ! -e "${dir}" ] || chown root:root "${dir}"
+            [ ! -e "${dir}" ] || chmod 0711 "${dir}"
+        done
+
+        for dir in ${QEMU_DIRS}; do
+            [ ! -e "${dir}" ] || chown libvirt-qemu:libvirt-qemu "${dir}"
+            [ ! -e "${dir}" ] || chmod 0750 "${dir}"
+        done
+
+        [ ! -e "${SANLOCK_DIR}" ] || chown root:root "${SANLOCK_DIR}"
+        [ ! -e "${SANLOCK_DIR}" ] || chmod 0700 "${SANLOCK_DIR}"
+
+        [ ! -e "${QEMU_CONF}" ] || chown root:root "${QEMU_CONF}"
+        [ ! -e "${QEMU_CONF}" ] || chmod 0600 "${QEMU_CONF}"
+    }
+    add_statoverrides
+    # Make sure the directories don't get removed on package removal since
+    # logrotate chokes otherwise.
+    for dir in qemu uml lxc; do
+        touch $D${localstatedir}/log/libvirt/"${dir}"/.placeholder
+    done
+
+    # Force refresh of capabilties (#731815)
+    rm -f $D${localstatedir}/cache/libvirt/qemu/capabilities/*.xml
+}
+USERADD_PACKAGES = "${PN}-daemon-system"
+GROUPADD_PARAM_${PN}-daemon-system = "-r libvirt; -r kvm; -r libvirt-qemu"
+USERADD_PARAM_${PN}-daemon-system = "-r -g libvirt-qemu -G kvm --home-dir /var/lib/libvirt \
+                              --no-create-home libvirt-qemu \
+                              "
 ALLOW_EMPTY_${PN}-bin = "1"
 PACKAGES =+ "${PN}-bin ${PN}-clients ${PN}-daemon-system ${PN}-daemon"
 FILES_${PN}-bin = ""
@@ -134,5 +214,8 @@ FILES_${PN}-dev += "\
 RDEPENDS_${PN}-bin += "${PN}-daemon-system ${PN}-clients"
 RDEPENDS_${PN}-daemon-system += "\
 	adduser ${PN}-clients ${PN}-daemon logrotate gettext-runtime"
+RRECOMMENDS_${PN}-daemon += "libxml2-utils qemu"
+RRECOMMENDS_${PN}-daemon-system += "dmidecode dnsmasq-base iproute2 iptables parted ebtables"
+RRECOMMENDS_${PN} += "lvm2"
 
 PKG_${PN} = "${PN}0"
