@@ -14,4 +14,8 @@ EXTRA_OECONF += " \
 do_install_append() {
 	install -d ${D}${bindir}
 	install -m 0755 ${B}/server/gen_test_char ${D}${bindir}
+	local shebang_length=`head  -n 1 ${D}/${bindir}/apxs | wc -m`
+	if [ ${shebang_length} -gt 127 ]; then
+		sed -i -e "s|${OECMAKE_PERLNATIVE_DIR}/perl -w|/usr/bin/env perl|" ${D}/${bindir}/apxs
+	fi
 }
