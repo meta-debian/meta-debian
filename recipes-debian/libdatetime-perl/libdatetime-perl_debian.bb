@@ -27,12 +27,5 @@ RDEPENDS_${PN} += "\
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
-do_install_append() {
-	perl_version=${PERLVERSION}
-	short_perl_version=`echo ${perl_version%.*}`
-	install -d ${D}${libdir}/perl5/$short_perl_version
-	mv ${D}${libdir}/perl/vendor_perl/${PERLVERSION}/* \
-		${D}${libdir}/perl5/$short_perl_version
-}
 FILES_${PN} += "${libdir}/*"
 FILES_${PN}-dbg += "${libdir}/perl5/*/auto/DateTime/.debug"
