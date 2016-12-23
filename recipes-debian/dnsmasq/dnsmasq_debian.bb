@@ -18,11 +18,15 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=0636e73ff0215e8d672dc4c32c317bb3 \
 
 inherit autotools-brokensep
 
+# We use the version string in contents of the VERSION file to build into a binary.
+# instead of use "git describe" command to get version, this command failed when
+# we don't have any tags in git repo
+SRC_URI += "file://Fix-get-version-of-dnsmasq_debian.patch"
+
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"
 
 EXTRA_OEMAKE += "PREFIX=${prefix}"
-CACHED_CONFIGUREVARS += "ac_cv_path_DNSMASQ=${sbindir}/dnsmasq"
 inherit useradd
 
 # Base on debian/rules
