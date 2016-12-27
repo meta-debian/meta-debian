@@ -18,7 +18,8 @@ SRC_URI = "${DEBIAN_SRC_URI}"
 # By default, always use latest version of the default branch
 SRCREV = "${AUTOREV}"
 
-PV = "git${SRCPV}"
+# intentionally exclude SRCPV to avoid network latency of get_srcrev()
+PV = "git"
 
 DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
 
