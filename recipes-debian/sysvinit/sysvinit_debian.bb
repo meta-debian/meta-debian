@@ -71,8 +71,8 @@ FILES_${PN}-utils += " \
 		${base_bindir}/pidof* \
 		${base_libdir}/init/init-d-script \
 		${base_sbindir}/fstab-decode \
-		${base_sbindir}/killall5 \
-		${base_sbindir}/sulogin \
+		${base_sbindir}/killall5* \
+		${base_sbindir}/sulogin* \
 		${bindir}/last \
 		${bindir}/lastb \
 		${bindir}/mesg \
