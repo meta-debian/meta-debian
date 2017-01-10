@@ -25,6 +25,8 @@ do_install_append() {
 	   ${D}${sysconfdir}/default/ebtables
 	rm -rf ${D}${base_sbindir}/ebtables-save \
 	       ${D}${base_sbindir}/ebtables-restore
+    rm -f ${D}${sysconfdir}/init.d/ebtables
+    install -m 0755 ${S}/debian/ebtables.init ${D}${sysconfdir}/init.d/ebtables
 }
 RRECOMMENDS_${PN} += "iptables kmod"
 # Avoid a parallel build problem
