@@ -57,7 +57,7 @@ pkg_postinst_${PN} () {
 	# If a symlink doesn't exist and can be created, then create it.
 	if [ ! -e $D${sysconfdir}/nginx/sites-enabled/default ] &&
 	   [ -d $D${sysconfdir}/nginx/sites-enabled ] && [ -d $D${sysconfdir}/nginx/sites-available ]; then
-		ln -s $D${sysconfdir}/nginx/sites-available/default $D${sysconfdir}/nginx/sites-enabled/default
+		ln -s ${sysconfdir}/nginx/sites-available/default $D${sysconfdir}/nginx/sites-enabled/default
 	fi
 
 	# Create a default index page when not already present.
