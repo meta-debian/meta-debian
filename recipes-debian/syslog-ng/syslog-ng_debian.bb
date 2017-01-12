@@ -52,6 +52,8 @@ EXTRA_OECONF += " \
 	--enable-amqp 			\
 	--with-librabbitmq-client=internal \
 	--disable-build-docs \
+	--disable-doc \
+	--disable-tools \
 "
 
 PACKAGES =+ "\
@@ -86,7 +88,6 @@ PACKAGECONFIG[libmongo-client] = "\
 	--enable-libmongo-client,--disable-libmongo-client,libmongo-client,"
 PACKAGECONFIG[hiredis] = "--enable-hiredis,--disable-hiredis,hiredis,"
 PACKAGECONFIG[eventlog] = "--enable-eventlog,--disable-eventlog,eventlog,"
-
 do_configure_append() {
 	# According to Debian, the directory to install modules contains package version,
 	# so we need re-run configure with correct version from ${S}/VERSION
