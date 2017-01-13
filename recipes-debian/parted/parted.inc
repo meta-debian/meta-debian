@@ -19,6 +19,7 @@ it, and do so at your own risk."
 HOMEPAGE = "http://www.gnu.org/software/parted"
 
 inherit debian-package
+PV = "3.2"
 INC_PR = "r0"
 
 LICENSE = "GPLv3+"

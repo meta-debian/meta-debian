@@ -23,6 +23,7 @@ DEPENDS += "libice xproto xtrans e2fsprogs"
 BBCLASSEXTEND = "native"
 
 inherit debian-package
+PV = "1.2.2"
 
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"

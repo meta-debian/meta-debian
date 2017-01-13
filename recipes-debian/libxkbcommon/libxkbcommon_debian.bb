@@ -11,6 +11,7 @@ includes Wayland, kmscon, GTK+, Clutter, and more."
 HOMEPAGE = "http://www.xkbcommon.org/"
 
 inherit debian-package
+PV = "0.4.3"
 
 LICENSE = "MIT & MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=9c0b824e72a22f9d2c40b9c93b1f0ddc"

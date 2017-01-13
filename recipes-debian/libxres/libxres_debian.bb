@@ -8,6 +8,7 @@ usage of various clients (pixmaps, et al). \
 "
 PR = "r0"
 inherit debian-package pkgconfig
+PV = "1.0.7"
 
 LICENSE = "XFree86-1.0"
 LIC_FILES_CHKSUM = "\

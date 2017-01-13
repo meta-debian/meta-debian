@@ -6,6 +6,7 @@ structure is tuned for fast reading."
 PR = "r0"
 
 inherit debian-package autotools-brokensep
+PV = "0.78"
 
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=dca69c9caec3af9b850379632f912f81"

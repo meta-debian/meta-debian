@@ -2,6 +2,7 @@ SUMMARY = "This package provides the GSSAPI plugin, compiled with the MIT Kerber
 
 PR = "r0"
 inherit debian-package
+PV = "2.1.26.dfsg1"
 
 LICENSE = "BSD-4-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3f55e0974e3d6db00ca6f57f2d206396"

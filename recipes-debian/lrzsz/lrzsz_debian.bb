@@ -15,6 +15,7 @@ HOMEPAGE = "https://ohse.de/uwe/software/lrzsz.html"
 PR = "r0"
 
 inherit debian-package
+PV = "0.12.21"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \

@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.antigrain.com"
 PR = "r0"
 
 inherit debian-package
+PV = "2.5+dfsg1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://copying;md5=751419260aa954499f7abaabaa882bbe"

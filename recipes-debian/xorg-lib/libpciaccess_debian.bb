@@ -9,6 +9,7 @@ DESCRIPTION = "libpciaccess provides functionality for X to access the \
 PCI bus and devices in a platform-independent way."
 
 require xorg-lib-common.inc
+PV = "0.13.2"
 
 PR = "${INC_PR}.0"
 

@@ -6,6 +6,7 @@
 PR = "r1"
 
 inherit debian-package
+PV = "3.0.2.dfsg"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

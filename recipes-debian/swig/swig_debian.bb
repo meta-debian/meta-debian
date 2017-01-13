@@ -3,6 +3,7 @@ DESCRIPTION = "SWIG - Simplified Wrapper and Interface Generator"
 PR = "r1"
 
 inherit debian-package
+PV = "2.0.12"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

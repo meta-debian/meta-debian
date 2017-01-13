@@ -9,6 +9,7 @@ DESCRIPTION = "The mdadm utility can be used to create, manage, and monitor MD \
 HOMEPAGE = "http://neil.brown.name/blog/mdadm"
 
 inherit debian-package
+PV = "3.3.2"
 
 # Some files are GPLv2+ while others are GPLv2.
 LICENSE = "GPLv2 & GPLv2+"

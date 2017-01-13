@@ -17,6 +17,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 # to overwrite SRC_URI value.
 inherit gnomebase allarch
 inherit debian-package
+PV = "3.14.0"
 
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""

@@ -12,6 +12,7 @@ specified in the Proceedings of the 2001 Usenix Technical Conference \
 [RANDR]."
 
 require xorg-lib-common.inc
+PV = "1.4.2"
 
 PR = "${INC_PR}.0"
 

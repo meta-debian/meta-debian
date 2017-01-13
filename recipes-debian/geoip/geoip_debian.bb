@@ -9,6 +9,7 @@ HOMEPAGE = "http://dev.maxmind.com/geoip/"
 
 PR = "r1"
 inherit debian-package
+PV = "1.6.2"
 
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d5d53d6b948c064f4070183180a4fa89"

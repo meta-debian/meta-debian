@@ -8,6 +8,7 @@ the running session."
 HOMEPAGE = "http://www.X.org"
 
 inherit debian-package
+PV = "1.2.2"
 
 LICENSE = "MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=21fd154ee757813632ada871a34113fb"

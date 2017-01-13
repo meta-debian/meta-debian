@@ -5,6 +5,7 @@
 
 PR = "r4"
 inherit debian-package
+PV = "8.6.2+dfsg"
 DPN = "tcl8.6"
 
 LICENSE = "BSD-3-Clause"

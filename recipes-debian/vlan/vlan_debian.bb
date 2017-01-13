@@ -9,6 +9,7 @@ You need a VLAN Linux kernel for this.  Linux kernel versions >= 2.4.14\n\
 have VLAN support."
 
 inherit debian-package
+PV = "1.9"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \

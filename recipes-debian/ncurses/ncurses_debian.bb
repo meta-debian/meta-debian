@@ -9,6 +9,7 @@ DESCRIPTION = "SVr4 and XSI-Curses compatible curses library and terminfo tools 
 HOMEPAGE = "http://www.gnu.org/software/ncurses/ncurses.html"
 
 inherit debian-package autotools binconfig multilib_header update-alternatives
+PV = "5.9+20140913"
 
 PR = "r1"
 DEPENDS = "ncurses-native"

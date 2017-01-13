@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.2.8.dfsg"
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \

@@ -12,6 +12,7 @@ HOMEPAGE = "http://apr.apache.org/"
 PR = "r1"
 
 inherit debian-package
+PV = "1.5.1"
 
 DEPENDS = "util-linux"
 

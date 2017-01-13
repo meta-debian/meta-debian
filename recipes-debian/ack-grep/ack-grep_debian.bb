@@ -10,6 +10,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://beyondgrep.com/"
 PR = "r0"
 inherit debian-package cpan
+PV = "2.14"
 
 LICENSE = "Artistic-2.0 & GPL-2+ & (Artistic-1.0 | GPL-1+)"
 LIC_FILES_CHKSUM = "\

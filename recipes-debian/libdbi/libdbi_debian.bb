@@ -8,6 +8,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.9.0"
 
 DESCRIPTION = "Database Independent Abstraction Layer for C"
 HOMEPAGE = "http://libdbi.sourceforge.net/"

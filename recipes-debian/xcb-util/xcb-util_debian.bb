@@ -10,6 +10,7 @@ the X protocol but which have traditionally been provided by Xlib. \
 HOMEPAGE = "http://xcb.freedesktop.org"
 PR = "r0"
 inherit debian-package
+PV = "0.3.8"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.gnu.org/software/libunistring/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.9.3"
 
 LICENSE = "GPLv3+ & LGPLv3+"
 LICENSE_${PN}-doc = "GPLv3+ | GFDL-1.2+"

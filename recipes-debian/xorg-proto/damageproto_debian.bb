@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.2.1"
 
 SUMMARY = "Xdamage: X Damage extension headers"
 

@@ -9,6 +9,7 @@ DESCRIPTION = "MailTools is a set of Perl modules related to mail applications"
 HOMEPAGE = "http://search.cpan.org/dist/MailTools/"
 
 inherit debian-package
+PV = "2.13"
 
 PR = "r0"
 

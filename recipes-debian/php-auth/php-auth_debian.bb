@@ -3,6 +3,7 @@ DESCRIPTION = "PHP PEAR modules for creating an authentication system"
 PR = "r0"
 
 inherit debian-package
+PV = "1.6.4"
 
 LICENSE = "PHP-3.0 & BSD-3-Clause"
 LIC_FILES_CHKSUM = " \

@@ -8,6 +8,7 @@ file, and changing Kerberos passwords. \
 HOMEPAGE = "http://www.eyrie.org/~eagle/software/pam-krb5/"
 PR = "r0"
 inherit debian-package
+PV = "4.6"
 
 LICENSE = "BSD & FSF-Unlimited & GPLv2+"
 LIC_FILES_CHKSUM = "\

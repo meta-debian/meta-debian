@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.2.2"
 
 SUMMARY = "Xscrnsaver: X Screen Saver extension headers"
 

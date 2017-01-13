@@ -1,4 +1,5 @@
 inherit debian-package
+PV = "1.0~pre4"
 DEBIAN_PATCH_TYPE = "quilt"
 
 SUMMARY = "displays bandwidth usage information on an network interface"

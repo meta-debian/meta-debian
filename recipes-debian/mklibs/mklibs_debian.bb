@@ -7,6 +7,7 @@ DESCRIPTION = "\
 	"
 PR = "r0"
 inherit debian-package
+PV = "0.1.40"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

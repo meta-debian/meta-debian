@@ -3,6 +3,7 @@ DESCRIPTION = "This package provides commands which can be used to display the s
 DNS name, and to display or set its hostname or NIS domain name."
 
 inherit debian-package
+PV = "3.15"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=86dc5e6760b0845ece4d5be3a9d397d9"

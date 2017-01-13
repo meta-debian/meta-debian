@@ -11,6 +11,7 @@ INC_PR = "r1"
 DPN = "curl"
 
 inherit debian-package
+PV = "7.38.0"
 
 LICENSE = "MIT & ISC & BSD-3-Clause & BSD-4-Clause"
 LIC_FILES_CHKSUM = " \

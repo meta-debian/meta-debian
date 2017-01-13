@@ -1,6 +1,7 @@
 SUMMARY = "X11 Athena Widget library"
 
 inherit debian-package autotools pkgconfig
+PV = "1.0.12"
 
 PR = "r0"
 DEPENDS += "libx11 libxext libxmu libxt libxpm"

@@ -9,6 +9,7 @@ HOMEPAGE = "http://libusb.sf.net"
 BUGTRACKER = "http://www.libusb.org/report"
 
 inherit debian-package autotools pkgconfig
+PV = "1.0.19"
 
 PR = "r0"
 DPN = "libusb-1.0"

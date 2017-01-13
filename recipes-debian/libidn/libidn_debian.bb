@@ -12,6 +12,7 @@ working group."
 HOMEPAGE = "http://www.gnu.org/software/libidn/"
 
 inherit debian-package autotools-brokensep
+PV = "1.29"
 
 DEPENDS = "gengetopt-native texinfo-native fastjar-native"
 

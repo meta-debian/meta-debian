@@ -8,7 +8,7 @@ DESCRIPTION = "The encodings that map to specific characters for a \
 number of Xorg and common fonts."
 
 require xorg-font-common.inc
-
+PV = "1.0.4"
 PR = "${INC_PR}.0"
 
 LICENSE = "PD"

@@ -16,6 +16,7 @@ abstractions provided by the X Window System while still remaining \
 independent of any particular user interface policy or style."
 
 require xorg-lib-common.inc
+PV = "1.1.4"
 
 PR = "${INC_PR}.0"
 

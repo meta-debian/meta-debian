@@ -13,6 +13,7 @@ BUGTRACKER = "https://fedorahosted.org/linux-pam/newticket"
 PR = "r2"
 
 inherit debian-package
+PV = "1.1.8"
 
 DPN = "pam"
 

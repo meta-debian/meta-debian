@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
                     file://intl/gettext.c;endline=17;md5=235b186f82eb78ee2b3937e9231a0273"
 
 inherit debian-package
+PV = "2.54"
 
 DEPENDS += "plymouth libnih"
 

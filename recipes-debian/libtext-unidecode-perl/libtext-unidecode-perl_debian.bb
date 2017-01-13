@@ -3,6 +3,7 @@ DESCRIPTION = "Text::Unidecode -- US-ASCII transliterations of Unicode text"
 PR = "r0"
 
 inherit debian-package
+PV = "1.22"
 
 LICENSE = "Artistic-1.0 | GPLv1+"
 LIC_FILES_CHKSUM = " \

@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.OpenLDAP.org/license.html"
 
 INC_PR = "r0"
 inherit debian-package
+PV = "2.4.40+dfsg"
 LICENSE = "OLDAP-2.8"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=f2bdbaa4f50199a00b6de2ca7ec1db05 \
                     file://LICENSE;md5=153d07ef052c4a37a8fac23bc6031972 \

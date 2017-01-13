@@ -5,6 +5,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.9.7"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b8c006c6415de700eaa7b10661ebbaab"

@@ -8,6 +8,7 @@ The interfaces can also be edited with GLADE. \
 
 PR = "r1"
 inherit debian-package
+PV = "2.6.4"
 
 DPN = "libglade2"
 LICENSE = "LGPLv2+"

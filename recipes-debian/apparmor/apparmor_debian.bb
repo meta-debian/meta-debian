@@ -13,6 +13,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 inherit debian-package autotools
+PV = "2.9.0"
 inherit systemd pythonnative cpan-base perlnative
 
 PR = "r0"

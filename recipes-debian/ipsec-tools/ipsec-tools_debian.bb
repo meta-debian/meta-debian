@@ -8,6 +8,7 @@ SECTION = "console/network"
 
 PR = "r0"
 inherit debian-package
+PV = "0.8.2+20140711"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://src/libipsec/pfkey.c;beginline=6;endline=31;md5=bc9b7ff40beff19fe6bc6aef26bd2b24"

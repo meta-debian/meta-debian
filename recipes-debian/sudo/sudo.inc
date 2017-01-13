@@ -18,6 +18,7 @@ LIC_FILES_CHKSUM = "\
 INC_PR = "r1"
 
 inherit debian-package
+PV = "1.8.10p3"
 DPN = "sudo"
 
 DEPENDS += "libpam audit"

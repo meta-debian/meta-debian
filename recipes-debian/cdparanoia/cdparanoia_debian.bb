@@ -7,6 +7,7 @@ information without any artifacts such as jitter. \
 HOMEPAGE = "http://www.xiph.org/paranoia/"
 PR = "r0"
 inherit debian-package
+PV = "3.10.2+debian"
 
 LICENSE = "GPLv2+ & LGPLv2.1+"
 LIC_FILES_CHKSUM = "\

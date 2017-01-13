@@ -12,6 +12,7 @@ DEPENDS = "libpam"
 
 PR = "r0"
 inherit debian-package
+PV = "2.3.11"
 
 do_install() {
 	install -d ${D}

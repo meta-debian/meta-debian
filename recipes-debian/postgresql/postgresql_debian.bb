@@ -26,6 +26,7 @@ HOMEPAGE = "http://www.postgresql.com"
 PR = "r0"
 
 inherit debian-package
+PV = "9.4.9"
 
 DPN = "postgresql-9.4"
 

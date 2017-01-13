@@ -10,6 +10,7 @@ System, otherwise known as 'Xlib'.  It provides a complete API for the \
 basic functions of the window system."
 
 require xorg-lib-common.inc
+PV = "1.6.2"
 
 PR = "${INC_PR}.0"
 

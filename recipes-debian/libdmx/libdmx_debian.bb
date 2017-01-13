@@ -8,6 +8,7 @@ display to clients. \
 "
 PR = "r0"
 inherit debian-package
+PV = "1.1.3"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

@@ -3,6 +3,7 @@ DESCRIPTION = "password strength checking and policy enforcement toolset"
 PR="r0"
 
 inherit debian-package autotools-brokensep
+PV = "1.3.0"
 
 LICENSE = "BSD & PD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1b4af6f3d4ee079a38107366e93b334d"

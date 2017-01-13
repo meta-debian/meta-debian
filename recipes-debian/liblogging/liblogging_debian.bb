@@ -11,6 +11,7 @@ SECTION = "libs"
 
 PR = "r0"
 inherit debian-package
+PV = "1.0.4"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=63fe03535d83726f5655072502bef1bc"

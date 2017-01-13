@@ -13,6 +13,7 @@ HOMEPAGE = "http://ftp.gnu.org/gnu/bc/"
 PR = "r1"
 
 inherit debian-package
+PV = "1.06.95"
 
 LICENSE = "GPLv2+ & LGPLv2.1+ & MIT"
 LIC_FILES_CHKSUM = " \

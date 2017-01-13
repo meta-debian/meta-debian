@@ -26,6 +26,7 @@ HOMEPAGE = "http://la-samhna.de/samhain/index.html"
 PR = "r1"
 
 inherit debian-package
+PV = "3.1.0"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \

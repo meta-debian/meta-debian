@@ -7,6 +7,7 @@ HOMEPAGE = "https://metacpan.org/release/Crypt-OpenSSL-X509/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.8.4"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=20f729223c405227d6d39279518db307"

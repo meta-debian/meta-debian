@@ -10,6 +10,7 @@ HOMEPAGE = "http://subversion.apache.org/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.8.10"
 
 LICENSE = "Apache-2.0 & BSD"
 LIC_FILES_CHKSUM = "\

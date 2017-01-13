@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package autotools-brokensep
+PV = "2.22.6+dfsg0"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ff95bfe019feaf92f524b73dd79e76eb"

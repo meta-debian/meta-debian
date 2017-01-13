@@ -1,4 +1,5 @@
 inherit debian-package
+PV = "1.15"
 DEBIAN_PATCH_TYPE = "nopatch"
 
 SUMMARY = "store /etc in git, mercurial, bzr or darcs"

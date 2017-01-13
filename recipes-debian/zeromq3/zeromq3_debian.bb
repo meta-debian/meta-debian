@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.zeromq.org"
 
 PR = "r0"
 inherit debian-package pkgconfig
+PV = "4.0.5+dfsg"
 
 LICENSE = "GPLv3+ & LGPLv3+ & MIT"
 LIC_FILES_CHKSUM = "\

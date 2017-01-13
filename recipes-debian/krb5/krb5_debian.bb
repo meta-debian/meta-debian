@@ -21,6 +21,7 @@ SECTION = "console/network"
 PR = "r2"
 
 inherit debian-package
+PV = "1.12.1+dfsg"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://./../NOTICE;md5=450c80c6258ce03387bd09df37638ebc"

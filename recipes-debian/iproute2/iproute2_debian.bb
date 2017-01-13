@@ -13,6 +13,7 @@ SECTION = "base"
 
 PR = "r0"
 inherit debian-package update-alternatives
+PV = "3.16.0"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a \

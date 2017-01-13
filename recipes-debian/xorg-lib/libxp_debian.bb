@@ -1,4 +1,5 @@
 require xorg-lib-common.inc
+PV = "1.0.2"
 
 DESCRIPTION = "X Printing Extension (Xprint) client library"
 

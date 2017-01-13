@@ -12,6 +12,7 @@ BUGTRACKER = "http://ppp.samba.org/cgi-bin/ppp-bugs"
 PR = "r0"
 
 inherit debian-package
+PV = "2.4.6"
 
 DEPENDS = "libpcap"
 # Set depend on pam if pam feature is enabled in DISTOR_FEATURES.

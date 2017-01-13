@@ -26,6 +26,7 @@ BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=XCB"
 PR = "r1"
 
 inherit debian-package
+PV = "1.10"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

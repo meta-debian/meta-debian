@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.lm-sensors.org"
 
 PR = "r1"
 inherit debian-package pythonnative
+PV = "3.1.1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

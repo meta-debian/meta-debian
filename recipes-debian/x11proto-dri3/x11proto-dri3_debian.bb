@@ -6,6 +6,7 @@ they provide a complete direct rendering solution for OpenGL or other APIs."
 HOMEPAGE = "http://www.X.org"
 
 inherit debian-package
+PV = "1.0"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://dri3proto.h;endline=21;md5=ac90d1d416be3cb13e1d3c88cd5166bf"

@@ -14,6 +14,7 @@ DESCRIPTION = " rngd is a daemon that runs conditioning tests (from FIPS 140-2,\
 
 PR = "r0"
 inherit debian-package
+PV = "2-unofficial-mt.14"
 
 LICENSE = "GPL-2.0+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"

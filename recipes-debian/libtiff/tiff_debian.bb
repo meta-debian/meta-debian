@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=34da3db46fab7501992f9615d7e158cf"
 HOMEPAGE = "http://www.remotesensing.org/libtiff/"
 
 inherit autotools debian-package
-
+PV = "4.0.3"
 PR = "r0"
 
 CACHED_CONFIGUREVARS = "ax_cv_check_gl_libgl=no"

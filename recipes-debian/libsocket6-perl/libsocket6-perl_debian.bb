@@ -12,6 +12,7 @@ HOMEPAGE = "https://metacpan.org/release/Socket6"
 PR = "r0"
 
 inherit debian-package
+PV = "0.25"
 
 LICENSE = "BSD-3-Clause & ISC"
 LIC_FILES_CHKSUM = " \

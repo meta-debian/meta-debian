@@ -6,6 +6,7 @@
 PR = "r2"
 
 inherit debian-package
+PV = "4.2.6.p5+dfsg"
 
 LICENSE = "NTP"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=fea4b50c33b18c2194b4b1c9ca512670"

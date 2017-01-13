@@ -7,6 +7,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://git.fedorahosted.org/git/hwdata.git"
 PR = "r0"
 inherit debian-package
+PV = "0.267"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

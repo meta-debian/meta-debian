@@ -1,6 +1,7 @@
 SUMMARY = "X server utilities"
 
 inherit debian-package
+PV = "7.7+3"
 DPN = "x11-xserver-utils"
 
 LICENSE = "MIT"

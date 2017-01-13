@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.11.0"
 
 SUMMARY = "Generic font configuration library"
 DESCRIPTION = "Fontconfig is a font configuration and customization library, \

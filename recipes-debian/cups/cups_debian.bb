@@ -9,6 +9,7 @@ SUMMARY = "An Internet printing system for Unix"
 SECTION = "console/utils"
 
 inherit debian-package autotools-brokensep binconfig
+PV = "1.7.5"
 
 PR = "r0"
 DEPENDS = "gnutls libpng libjpeg-turbo dbus dbus-glib zlib libusb1"

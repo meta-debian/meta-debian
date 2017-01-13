@@ -13,6 +13,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://oss.sgi.com/projects/xfs/"
 PR = "r0"
 inherit debian-package
+PV = "3.1.4"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

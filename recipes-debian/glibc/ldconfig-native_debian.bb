@@ -6,6 +6,7 @@
 SUMMARY = "A standalone native ldconfig build"
 
 inherit debian-package
+PV = "2.19"
 PR = "r0"
 DPN = "glibc"
 

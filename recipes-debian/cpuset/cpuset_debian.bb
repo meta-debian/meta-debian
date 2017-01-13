@@ -11,6 +11,7 @@ HOMEPAGE = "http://code.google.com/p/cpuset/"
 PR = "r0"
 
 inherit debian-package autotools-brokensep
+PV = "1.5.6"
 
 RDEPENDS_${PN} = "python-core python-textutils python-distutils python-logging python-unixadmin"
 

@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "2.3.1"
 
 SUMMARY = "XFree86-VM: XFree86 video mode extension headers"
 

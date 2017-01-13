@@ -1,6 +1,7 @@
 SUMMARY = "X applications"
 
 inherit debian-package
+PV = "7.7+4"
 DPN = "x11-apps"
 
 LICENSE = "MIT-X"

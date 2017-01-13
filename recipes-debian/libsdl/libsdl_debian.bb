@@ -13,6 +13,7 @@ BUGTRACKER = "http://bugzilla.libsdl.org/"
 
 PR = "r1"
 inherit debian-package
+PV = "1.2.15"
 
 #Correct the debian package name
 DPN ="libsdl1.2"

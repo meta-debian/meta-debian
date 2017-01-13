@@ -10,6 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c312653532e8e669f30e5ec8bdc23be3"
 
 PR = "r0"
 inherit debian-package
+PV = "1.0.3"
 
 DEBIAN_PATCH_TYPE = "quilt"
 

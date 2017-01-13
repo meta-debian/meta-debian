@@ -14,6 +14,7 @@ HOMEPAGE = "http://freecode.com/projects/fio"
 PR = "r1"
 
 inherit debian-package
+PV = "2.1.11"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"

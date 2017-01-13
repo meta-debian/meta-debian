@@ -18,6 +18,7 @@ DESCRIPTION = "The EventLog library aims to be a replacement of the 	\
 
 PR = "r1"
 inherit debian-package
+PV = "0.2.12"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b8ba8e77bcda9a53fac0fe39fe957767"

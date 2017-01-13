@@ -6,6 +6,7 @@
 PR = "r2"
 
 inherit debian-package
+PV = "4.11.3"
 
 SUMMARY = "The RPM package management system"
 DESCRIPTION = "The RPM Package Manager (RPM) is a powerful command line driven \

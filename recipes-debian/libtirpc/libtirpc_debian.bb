@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.2.5"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = " \

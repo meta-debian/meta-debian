@@ -7,6 +7,7 @@ HOMEPAGE = "https://github.com/algernon/libmongo-client"
 
 PR = "r0"
 inherit debian-package
+PV = "0.1.8"
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"

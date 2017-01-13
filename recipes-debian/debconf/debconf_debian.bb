@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package allarch
+PV = "1.5.56"
 
 SUMMARY = "Debian configuration management system"
 DESCRIPTION = "\

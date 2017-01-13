@@ -11,6 +11,7 @@ zone information and is available from <URL:ftp://ftp.iana.org/tz/releases/>. \
 HOMEPAGE = "http://datetime.perl.org/"
 PR = "r0"
 inherit debian-package
+PV = "1.75"
 
 LICENSE = "Artistic-1.0 | GPL-1+"
 LIC_FILES_CHKSUM = "\

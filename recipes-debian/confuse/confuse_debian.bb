@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.nongnu.org/confuse/"
 
 LICENSE = "GPLv2+ & GPLv3+"
 inherit debian-package
+PV = "2.7"
 PR = "r0"
 LIC_FILES_CHKSUM = "file://support/missing;beginline=6;endline=25;md5=40b23661ee5b2d5c1ec9e09e5e928e56 \
                     file://support/config.guess;beginline=7;endline=25;md5=e443b5b496d01ee52219d5269560d697"

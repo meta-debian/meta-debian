@@ -11,6 +11,7 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b4e3ffd607d6686c6cb2f63394370841"
 
 inherit debian-package autotools
+PV = "3.1.2"
 # lib_package??
 
 # needed to build with a separated build tree

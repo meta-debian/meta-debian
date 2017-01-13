@@ -5,6 +5,7 @@
 #
 
 inherit debian-package
+PV = "2.4"
 
 PR = "r0"
 

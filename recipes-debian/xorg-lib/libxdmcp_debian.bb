@@ -12,6 +12,7 @@ keyboard, mouse, processor, network interface) is a prime example of an \
 autonomous display."
 
 require xorg-lib-common.inc
+PV = "1.1.1"
 
 PR = "${INC_PR}.0"
 

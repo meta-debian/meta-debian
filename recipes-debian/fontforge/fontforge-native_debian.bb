@@ -8,6 +8,7 @@ HOMEPAGE = "http://fontforge.sourceforge.net/"
 PR = "r1"
 
 inherit debian-package
+PV = "20120731.b"
 
 LICENSE = "BSD-3-Clause & GPLv2"
 LIC_FILES_CHKSUM = " \

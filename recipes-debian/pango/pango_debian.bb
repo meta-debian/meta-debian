@@ -28,6 +28,7 @@ BBCLASSEXTEND = "native"
 DEPENDS_class-native = "glib-2.0-native cairo-native harfbuzz-native"
 
 inherit gnomebase gtk-doc qemu debian-package
+PV = "1.36.8"
 
 # Remove dependency on gnome
 DEPENDS_remove = "gnome-common-native"

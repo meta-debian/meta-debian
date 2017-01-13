@@ -14,6 +14,7 @@ done by using the DateTime::TimeZone module. \
 HOMEPAGE = "http://datetime.perl.org/"
 PR = "r0"
 inherit debian-package
+PV = "1.12"
 
 LICENSE = "Artistic-2.0"
 LIC_FILES_CHKSUM = "\

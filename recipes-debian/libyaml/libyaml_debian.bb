@@ -5,6 +5,7 @@ HOMEPAGE = "http://pyyaml.org/wiki/LibYAML"
 
 PR = "r0"
 inherit debian-package
+PV = "0.1.6"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6015f088759b10e0bc2bf64898d4ae17"

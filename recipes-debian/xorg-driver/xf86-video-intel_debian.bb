@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-video.inc
+PV = "2.21.15"
 
 SUMMARY = "X.Org X server -- Intel integrated graphics chipsets driver"
 

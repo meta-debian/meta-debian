@@ -8,6 +8,7 @@ just include a single header file into your .c and start using it."
 
 PR = "r2"
 inherit debian-package
+PV = "1.0.4"
 
 LICENSE = "MIT | LGPLv2+ | BSD"
 LIC_FILES_CHKSUM = " \

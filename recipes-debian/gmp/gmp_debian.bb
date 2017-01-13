@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "6.0.0+dfsg"
 
 SUMMARY = "GNU multiprecision arithmetic library"
 DESCRIPTION = "GMP is a free library for arbitrary precision arithmetic, \

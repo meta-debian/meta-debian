@@ -4,6 +4,7 @@ HOMEPAGE = "http://www.mono-project.com/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.2.8+dfsg"
 
 LICENSE = "LGPLv2+ & GPLv2+ & MIT & MPL-1.1"
 LIC_FILES_CHKSUM = "\

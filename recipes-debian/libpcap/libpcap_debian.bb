@@ -20,6 +20,7 @@ DEPENDS = "flex-native bison-native"
 
 PR = "r0"
 inherit debian-package
+PV = "1.6.2"
 
 inherit autotools-brokensep bluetooth
 

@@ -10,6 +10,7 @@ HOMEPAGE = "http://mhash.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.9.9.9"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3bf50002aefd002f49e7bb854063f7e7"

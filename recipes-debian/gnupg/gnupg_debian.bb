@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.gnupg.org/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.4.18"
 
 LICENSE = "GPLv3+ & bzip2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f27defe1e96c2e1ecd4e0c9be8967949 \

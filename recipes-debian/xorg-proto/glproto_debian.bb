@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.4.17"
 
 SUMMARY = "OpenGL: X OpenGL extension headers"
 

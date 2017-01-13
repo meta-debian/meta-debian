@@ -5,6 +5,7 @@
 #
 
 require xorg-app-common.inc
+PV = "1.0.9"
 SUMMARY = "X authority utilities"
 DESCRIPTION = "X application to edit and display the authorization \
 information used in connecting to the X server."

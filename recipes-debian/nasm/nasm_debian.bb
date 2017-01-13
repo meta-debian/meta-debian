@@ -13,6 +13,7 @@ which uses the same instruction table as NASM."
 HOMEPAGE = "http://nasm.sourceforge.net/"
 
 inherit debian-package
+PV = "2.11.05"
 
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=90904486f8fbf1861cf42752e1a39efe"

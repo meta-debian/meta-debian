@@ -14,6 +14,7 @@ utility functions to aid authors of client APIs for X protocol \
 extensions."
 
 require xorg-lib-common.inc
+PV = "1.3.3"
 
 PR = "${INC_PR}.0"
 

@@ -13,6 +13,7 @@ PR = "r0"
 DPN = "make-dfsg"
 
 inherit autotools gettext pkgconfig debian-package
+PV = "4.0"
 
 LICENSE = "GPLv3 & LGPLv2"
 LIC_FILES_CHKSUM = " \

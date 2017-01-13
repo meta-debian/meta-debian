@@ -2,6 +2,7 @@ HOMEPAGE = "http://pyyaml.org/"
 DPN = "pyyaml"
 INC_PR = "r0"
 inherit debian-package
+PV = "3.11"
 
 # Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"

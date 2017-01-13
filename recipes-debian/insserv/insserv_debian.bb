@@ -16,6 +16,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
 PR = "r0"
 inherit debian-package
+PV = "1.14.0"
 
 #Add option -D-GNU_SOURCE: The O_NOATIME variable in insserv.c \
 #is depends on __USE_GNU and __USE_GNU depends on _GNU_SOURCE

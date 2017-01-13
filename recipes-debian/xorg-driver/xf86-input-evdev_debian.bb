@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-input.inc
+PV = "2.9.0"
 
 SUMMARY = "X.Org X server -- event devices (evdev) input driver"
 

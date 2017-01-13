@@ -3,6 +3,7 @@ DESCRIPTION = "LibTomMath is a C language library that provides a vast array \
 of highly optimized functions for number theory."
 
 inherit debian-package autotools-brokensep
+PV = "0.42.0"
 PR = "r0"
 
 LICENSE = "PD"

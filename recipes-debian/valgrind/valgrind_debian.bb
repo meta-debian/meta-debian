@@ -8,6 +8,7 @@ HOMEPAGE = "http://valgrind.org/"
 
 PR = "r2"
 inherit debian-package
+PV = "3.10.0"
 
 LICENSE = "GPLv2 & BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c46082167a314d785d012a244748d803 \

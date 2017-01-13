@@ -17,6 +17,7 @@ HOMEPAGE = "http://savannah.gnu.org/projects/screen"
 PR = "r0"
 
 inherit debian-package
+PV = "4.2.1"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

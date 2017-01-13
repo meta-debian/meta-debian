@@ -11,6 +11,7 @@ runtime and thus programs come up faster."
 PR = "r1"
 
 inherit debian-package
+PV = "0.0.20130503"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"

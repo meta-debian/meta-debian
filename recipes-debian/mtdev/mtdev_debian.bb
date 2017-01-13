@@ -5,6 +5,7 @@ drivers that have not been updated to use the newer protocol."
 HOMEPAGE = "http://bitmath.org/code/mtdev/"
 
 inherit debian-package
+PV = "1.1.5"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ea6bd0268bb0fcd6b27698616ceee5d6"

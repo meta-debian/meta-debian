@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=124500c21e856f0912df29295ba104c7"
 
 PR = "r0"
 inherit debian-package
+PV = "4.9"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

@@ -4,6 +4,7 @@
 #
 
 inherit debian-package
+PV = "2.19"
 DPN = "glibc"
 
 require glibc-ld.inc

@@ -16,6 +16,7 @@ destination-hashing, and source-hashing)."
 SECTION = "net"
 
 inherit debian-package
+PV = "1.26"
 PR = "r0"
 
 LICENSE = "GPL-2.0"

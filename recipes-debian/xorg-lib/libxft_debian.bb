@@ -16,6 +16,7 @@ is not compatible with the core fonts system: usage of Xft requires \
 fairly extensive changes to toolkits (user-interface libraries)."
 
 require xorg-lib-common.inc
+PV = "2.3.2"
 
 PR = "${INC_PR}.0"
 

@@ -9,6 +9,7 @@ DESCRIPTION = "XvMC extends the X Video extension (Xv) and enables \
 hardware rendered motion compensation support."
 
 require xorg-lib-common.inc
+PV = "1.0.8"
 
 PR = "${INC_PR}.0"
 

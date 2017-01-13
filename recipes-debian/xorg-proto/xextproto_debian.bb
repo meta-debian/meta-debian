@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "7.3.0"
 
 SUMMARY = "XExt: X Extension headers"
 

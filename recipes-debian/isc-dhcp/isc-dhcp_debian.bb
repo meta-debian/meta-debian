@@ -12,6 +12,7 @@ easier to administer devices."
 HOMEPAGE = "http://www.isc.org/"
 
 inherit debian-package
+PV = "4.3.1"
 
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=cd834c80467e962621bf1b82ee363c34"

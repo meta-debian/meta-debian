@@ -7,6 +7,7 @@ HOMEPAGE = "http://software.es.net/iperf/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.0.7"
 
 LICENSE = "BSD-3-Clause & MIT & NCSA"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9ceb58c78d73a576a15ad224f23a6cdc \

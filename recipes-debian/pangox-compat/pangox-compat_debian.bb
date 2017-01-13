@@ -13,6 +13,7 @@ four different font backends:\n\
  - Native fonts on Microsoft backends"
 
 inherit debian-package
+PV = "0.0.2"
 
 LICENSE = "LGPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3bf50002aefd002f49e7bb854063f7e7"

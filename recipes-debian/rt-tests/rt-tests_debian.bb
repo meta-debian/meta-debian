@@ -9,6 +9,7 @@ HOMEPAGE = "https://rt.wiki.kernel.org/index.php/Cyclictest"
 PR = "r0"
 
 inherit debian-package
+PV = "0.89"
 
 LICENSE = "GPLv2 & GPLv2+"
 LIC_FILES_CHKSUM = "\

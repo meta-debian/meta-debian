@@ -3,6 +3,7 @@ Description="Heimdal is a Kerberos 5 implementation."
 PR = "r0"
 
 inherit debian-package autotools-brokensep binconfig
+PV = "1.6~rc2+dfsg"
 
 LICENSE = "PD & BSD-3-Clause"
 LIC_FILES_CHKSUM = "\

@@ -9,6 +9,7 @@ DESCRIPTION = "Common X11 Bitmaps"
 PR = "r0"
 
 inherit debian-package
+PV = "1.1.1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=dbd075aaffa4a60a8d00696f2e4b9a8f"

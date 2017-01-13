@@ -6,6 +6,7 @@ HOMEPAGE = "http://net-snmp.sourceforge.net/"
 PR = "r3"
 
 inherit debian-package
+PV = "5.7.2.1+dfsg"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = " \

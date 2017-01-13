@@ -15,6 +15,7 @@ PR = "r1"
 DEPENDS =+ "zlib"
 
 inherit autotools pkgconfig binconfig pythonnative debian-package
+PV = "2.9.1+dfsg1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

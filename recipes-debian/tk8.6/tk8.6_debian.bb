@@ -7,6 +7,7 @@ This package contains the windowing Tcl/Tk shell (wish). \
 HOMEPAGE = "http://www.tcl.tk/"
 PR = "r2"
 inherit debian-package
+PV = "8.6.2"
 
 S = "${DEBIAN_UNPACK_DIR}/unix"
 TCL_VER = "8.6"

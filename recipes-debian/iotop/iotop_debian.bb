@@ -6,6 +6,7 @@ HOMEPAGE = "http://guichaz.free.fr/iotop/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.6"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4325afd396febcb659c36b49533135d4"

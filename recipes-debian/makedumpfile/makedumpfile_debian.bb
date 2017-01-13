@@ -11,6 +11,7 @@ images without extra uneeded information (zero pages, userspace programs, etc)."
 PR = "r0"
 
 inherit debian-package
+PV = "1.5.3"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"

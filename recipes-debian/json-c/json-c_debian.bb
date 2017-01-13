@@ -12,6 +12,7 @@ HOMEPAGE = "https://github.com/json-c/json-c/wiki"
 
 PR = "r0"
 inherit debian-package
+PV = "0.11"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=de54b60fbbc35123ba193fea8ee216f2"

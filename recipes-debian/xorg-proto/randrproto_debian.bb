@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.4.0"
 
 SUMMARY = "XRandR: X Resize, Rotate and Reflect extension headers"
 

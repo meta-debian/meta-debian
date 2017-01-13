@@ -10,6 +10,7 @@ HOMEPAGE = " http://perl-openssl.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.14"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 

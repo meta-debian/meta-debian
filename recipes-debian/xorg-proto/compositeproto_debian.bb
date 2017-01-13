@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "0.4.2"
 
 SUMMARY = "Xcomposite: X composite extension headers"
 

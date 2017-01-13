@@ -4,6 +4,7 @@
 #
 
 require xorg-lib-common.inc
+PV = "1.7.4"
 
 SUMMARY = "XI: X Input extension library"
 

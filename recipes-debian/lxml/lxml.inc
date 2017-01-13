@@ -15,6 +15,7 @@ HOMEPAGE = "http://lxml.de/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.4.0"
 
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"

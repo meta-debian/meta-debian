@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.8.3"
 
 SUMMARY = "Key/value database library with extensible hashing"
 HOMEPAGE = "http://www.gnu.org/software/gdbm/"

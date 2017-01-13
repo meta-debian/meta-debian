@@ -17,6 +17,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
 
 INC_PR = "r0"
 inherit debian-package
+PV = "18"
 
 DEPENDS += "pkgconfig-native"
 

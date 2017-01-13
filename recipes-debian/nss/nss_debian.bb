@@ -19,6 +19,7 @@ DEPENDS_class-native = "sqlite3-native nspr-native zlib-native"
 RDEPENDS_${PN} = "perl"
 
 inherit siteinfo debian-package
+PV = "3.26"
 
 LICENSE = "MPLv2 | (MPLv2 & GPLv2+) | (MPLv2 & LGPLv2.1+)"
 LIC_FILES_CHKSUM = "file://nss/COPYING;md5=3b1e88e1b9c0b5a4b2881d46cce06a18 \

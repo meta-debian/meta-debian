@@ -8,6 +8,7 @@ HOMEPAGE = " http://www.gnu.org/software/gnulib/"
 
 PR = "r0"
 inherit debian-package
+PV = "20140202+stable"
 
 LICENSE = "GPLv3+ & GPLv2+ & LGPLv2+ & LGPLv3+ & GFDL-1.3"
 LIC_FILES_CHKSUM = "\

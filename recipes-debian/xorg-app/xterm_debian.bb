@@ -10,6 +10,7 @@ HOMEPAGE = "http://invisible-island.net/xterm/xterm.html"
 PR = "r0"
 
 inherit debian-package autotools
+PV = "312"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

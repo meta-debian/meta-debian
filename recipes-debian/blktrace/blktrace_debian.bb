@@ -34,6 +34,7 @@ SRC_URI = "file://ldflags.patch \
 "
 
 inherit debian-package
+PV = "1.0.5"
 DEBIAN_PATCH_TYPE = "quilt"
 
 EXTRA_OEMAKE = "\

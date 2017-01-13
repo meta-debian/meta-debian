@@ -6,6 +6,7 @@
 PR = "r2"
 
 inherit debian-package
+PV = "1.0.28"
 
 SUMMARY = "ALSA sound utilities"
 HOMEPAGE = "http://www.alsa-project.org"

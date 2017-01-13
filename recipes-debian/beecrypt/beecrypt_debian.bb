@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "4.2.1"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = " \

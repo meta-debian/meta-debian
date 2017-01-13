@@ -7,6 +7,7 @@ HOMEPAGE = "http://www.geocities.jp/kosako3/oniguruma/"
 PR = "r0"
 
 inherit debian-package
+PV = "5.9.5"
 
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=0d4861b5bc0c392a5aa90d9d76ebd86f"

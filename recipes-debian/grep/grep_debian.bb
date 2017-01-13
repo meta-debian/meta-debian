@@ -15,6 +15,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.gnu.org/software/grep/"
 PR = "r0"
 inherit debian-package
+PV = "2.20"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "\

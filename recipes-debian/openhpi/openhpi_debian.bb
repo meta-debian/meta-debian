@@ -7,6 +7,7 @@ HOMEPAGE = "http://openhpi.org"
 PR = "r0"
 
 inherit debian-package
+PV = "2.14.1"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e3c772a32386888ccb5ae1c0ba95f1a4"

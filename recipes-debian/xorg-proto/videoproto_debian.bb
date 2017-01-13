@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "2.3.2"
 
 SUMMARY = "Xv: X Video extension headers"
 

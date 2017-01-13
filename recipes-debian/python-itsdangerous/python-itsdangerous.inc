@@ -12,6 +12,7 @@ HOMEPAGE = "http://pythonhosted.org/itsdangerous/"
 DPN = "python-itsdangerous"
 INC_PR = "r0"
 inherit debian-package
+PV = "0.24+dfsg1"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=b61841e2bf5f07884148e2a6f1bcab0c"

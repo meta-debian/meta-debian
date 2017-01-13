@@ -21,6 +21,7 @@ LIC_FILES_CHKSUM = "file://debian/copyright;md5=446c4cd854b8364d9eba40e36507fd0f
 PR = "r0"
 
 inherit debian-package
+PV = "20140911.1"
 
 inherit allarch
 

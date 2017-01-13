@@ -9,6 +9,7 @@ HOMEPAGE = "http://pypi.python.org/pypi/pytz/"
 DPN = "python-tz"
 INC_PR = "r0"
 inherit debian-package
+PV = "2012c+dfsg"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=22b38951eb857cf285a4560a914b7cd6"

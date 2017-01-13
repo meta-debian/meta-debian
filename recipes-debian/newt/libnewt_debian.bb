@@ -16,6 +16,7 @@ HOMEPAGE = "https://fedorahosted.org/newt/"
 
 PR = "r3"
 inherit debian-package
+PV = "0.52.17"
 
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=5f30f0716dfdd0d91eb439ebec522ec2"

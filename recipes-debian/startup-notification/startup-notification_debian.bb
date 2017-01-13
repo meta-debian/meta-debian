@@ -5,6 +5,7 @@ using a busy cursor. This library is currently used by GNOME programs, but \
 is part of the freedesktop.org suite of cross-desktop libraries."
 
 inherit debian-package
+PV = "0.12"
 
 LICENSE = "LGPLv2+ & MIT"
 LIC_FILES_CHKSUM = " \

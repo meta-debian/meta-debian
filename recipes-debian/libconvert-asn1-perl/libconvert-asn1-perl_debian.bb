@@ -6,6 +6,7 @@ HOMEPAGE = "https://metacpan.org/release/Convert-ASN1"
 PR = "r0"
 
 inherit debian-package
+PV = "0.27"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=5dcf3d33a7661af01c7deb0bf01f2c1a"

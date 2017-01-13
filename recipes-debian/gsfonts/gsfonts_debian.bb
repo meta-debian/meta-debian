@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "8.11+urwcyr1.0.7~pre44"
 
 DESCRIPTION = "Fonts for the Ghostscript interpreter"
 HOMEPAGE = "http://www.ghostscript.com/"
