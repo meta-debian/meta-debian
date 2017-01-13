@@ -9,6 +9,7 @@ HOMEPAGE = "http://pythonhosted.org/six/"
 INC_PR = "r0"
 
 inherit debian-package
+PV = "1.8.0"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=530f34047c21ad45b3199946dd90bea5"

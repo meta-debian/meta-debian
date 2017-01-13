@@ -1,4 +1,4 @@
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 require six.inc
 
@@ -16,5 +16,5 @@ do_install_append() {
 }
 
 PKG_${PN} = "python-${PN}"
-
+RPROVIDES_${PN} += "python-${PN}"
 BBCLASSEXTEND = "native"
