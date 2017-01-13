@@ -14,13 +14,13 @@ DESCRIPTION = "uWSGI presents a complete stack for networked/clustered web appli
  different technology on top of the same core."
 HOMEPAGE = "http://projects.unbit.it/uwsgi/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 PV = "2.0.7"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=33ab1ce13e2312dddfad07f97f66321f"
-inherit setuptools pkgconfig python3native update-alternatives
+inherit setuptools pkgconfig update-alternatives
 
 # Required by python command
 export HOST_SYS
@@ -30,7 +30,7 @@ export BUILD_SYS
 export UWSGI_INCLUDES = "${STAGING_INCDIR}"
 
 DEPENDS += "zeromq3 apache2 libpam openssl libyaml curl geoip tcp-wrappers \
-            lua5.1 libmatheval jansson python3-setuptools-native  postgresql"
+            lua5.1 libmatheval jansson postgresql"
 UWSGI_SRCPLUGINS_CORE="\
  cache carbon cgi cheaper_backlog2 cheaper_busyness clock_monotonic clock_realtime \
  corerouter echo emperor_amqp emperor_zeromq fastrouter http logfile logsocket \
@@ -112,7 +112,7 @@ PACKAGES =+ "\
  ${PN}-plugin-alarm-curl ${PN}-plugin-curl-cron ${PN}-plugin-lua5.1 \
  ${PN}-plugin-geoip ${PN}-plugin-graylog2 ${PN}-plugin-ldap \
  ${PN}-plugin-router-access ${PN}-plugin-sqlite3 ${PN}-plugin-xslt \
- ${PN}-emperor ${PN}-plugin-python3 ${PN}-core python3-uwsgidecorators \
+ ${PN}-emperor ${PN}-plugin-python ${PN}-core python-uwsgidecorators \
  "
 FILES_${PN}-plugin-alarm-curl    = "${libdir}/${PN}/plugins/alarm_curl_plugin.so \
                                     ${bindir}/uwsgi_alarm_curl \
@@ -149,16 +149,16 @@ FILES_${PN}-emperor              = "${sysconfdir}/default/uwsgi-emperor \
                                     ${sysconfdir}/logrotate.d/uwsgi-emperor \
                                     ${sysconfdir}/uwsgi-emperor/* \
                                    "
-FILES_${PN}-plugin-python3       = "${libdir}/${PN}/plugins/python*.so \
+FILES_${PN}-plugin-python       = "${libdir}/${PN}/plugins/python*.so \
                                     ${bindir}/uwsgi_python* \
                                    "
-FILES_python3-uwsgidecorators    = "${PYTHON_SITEPACKAGES_DIR}"
+FILES_python-uwsgidecorators    = "${PYTHON_SITEPACKAGES_DIR}"
 FILES_${PN}-dbg                 += "${libdir}/${PN}/plugins/.debug/*"
 
 # follow debian/control
 RDEPENDS_${PN}                      += "${PN}-core lsb-base sysvinit-initscripts"
-RDEPENDS_${PN}-plugin-python3       += "${PN}-core"
-RPROVIDES_${PN}-plugin-python3      += "httpd-wsgi"
+RDEPENDS_${PN}-plugin-python        += "${PN}-core"
+RPROVIDES_${PN}-plugin-python       += "httpd-wsgi"
 RDEPENDS_${PN}-emperor              += "${PN}-core lsb-base sysvinit-initscripts"
 RDEPENDS_${PN}-plugin-alarm-curl    += "${PN}-core"
 RDEPENDS_${PN}-plugin-curl-cron     += "${PN}-core"
@@ -170,7 +170,7 @@ RDEPENDS_${PN}-plugin-ldap          += "${PN}-core"
 RDEPENDS_${PN}-plugin-router-access += "${PN}-core"
 RDEPENDS_${PN}-plugin-sqlite3       += "${PN}-core"
 RDEPENDS_${PN}-plugin-xslt          += "${PN}-core"
-RDEPENDS_python3-uwsgidecorators    += "${PN}-core ${PN}-plugin-python3"
+RDEPENDS_python-uwsgidecorators     += "${PN}-core ${PN}-plugin-python"
 
 # Base on debian/uwsgi-core.postinst
 ALTERNATIVE_${PN}-core = "uwsgi"
