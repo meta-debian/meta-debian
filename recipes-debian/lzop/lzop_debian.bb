@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.lzop.org/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.03"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

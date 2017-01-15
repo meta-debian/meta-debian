@@ -9,6 +9,7 @@ basic framework, enabling a text-mode animation."
 HOMEPAGE = "http://www.freedesktop.org/wiki/Software/Plymouth"
 
 inherit debian-package
+PV = "0.9.0"
 
 PR = "r0"
 

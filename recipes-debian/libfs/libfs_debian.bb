@@ -5,6 +5,7 @@ outside of these implementations."
 HOMEPAGE = "http://www.X.org"
 
 inherit debian-package
+PV = "1.0.6"
 
 LICENSE = "MIT & MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=0763cdab49e33d2000689ab9ab9b6f95"

@@ -15,6 +15,7 @@ HOMEPAGE = "http://libbsd.freedesktop.org/wiki/"
 PR = "r0"
 
 inherit debian-package
+PV = "0.7.0"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

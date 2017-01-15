@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.12"
 
 SUMMARY = "DMI (Desktop Management Interface) table related utilities"
 HOMEPAGE = "http://www.nongnu.org/dmidecode/"

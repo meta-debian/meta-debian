@@ -12,6 +12,7 @@ shutting down connections, for performing authentication, for \
 negotiating versions, and for reporting errors. "
 
 require xorg-lib-common.inc
+PV = "1.0.9"
 
 PR = "${INC_PR}.0"
 

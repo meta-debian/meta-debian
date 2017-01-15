@@ -13,6 +13,7 @@ trade off between conversion speed and conversion quality \
 HOMEPAGE = "http://www.mega-nerd.com/SRC/"
 PR = "r0"
 inherit debian-package
+PV = "0.1.8"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

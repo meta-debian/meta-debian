@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.gnu.org/software/libmatheval/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.1.11+dfsg"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f27defe1e96c2e1ecd4e0c9be8967949"

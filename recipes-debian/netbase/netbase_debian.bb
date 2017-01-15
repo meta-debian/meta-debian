@@ -13,6 +13,7 @@ LIC_FILES_CHKSUM = "file://debian/copyright;md5=3dd6192d306f582dee7687da3d8748ab
 PR = "r0"
 
 inherit debian-package
+PV = "5.3"
 
 SRC_URI += " \
 file://hosts \

@@ -15,6 +15,7 @@ PR = "0"
 DEPENDS = "zlib"
 
 inherit debian-package
+PV = "2.3.1"
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \

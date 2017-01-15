@@ -8,6 +8,7 @@ HOMEPAGE = "http://rpm5.org/"
 PR = "r0"
 
 inherit debian-package
+PV = "1.16"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=cb0613c30af2a8249b8dcc67d3edb06d"

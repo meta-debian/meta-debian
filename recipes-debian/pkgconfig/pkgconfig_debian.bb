@@ -11,6 +11,7 @@ HOMEPAGE = "http://pkg-config.freedesktop.org"
 PR = "r1"
 
 inherit debian-package
+PV = "0.28"
 
 DPN = "pkg-config"
 

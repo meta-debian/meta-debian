@@ -13,6 +13,7 @@ for attributes (see Attribute::Params::Validate for details). \
 HOMEPAGE = "https://metacpan.org/release/Params-Validate"
 PR = "r0"
 inherit debian-package
+PV = "1.13"
 
 LICENSE = "Artistic-2.0"
 LIC_FILES_CHKSUM = "\

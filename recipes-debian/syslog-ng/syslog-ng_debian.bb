@@ -25,6 +25,7 @@ LIC_FILES_CHKSUM = "\
 
 PR = "r1"
 inherit debian-package
+PV = "3.5.6"
 
 #disable-build-doc_debian.patch:
 #	this patch to disable build doc, \

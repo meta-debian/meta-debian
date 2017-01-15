@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-input.inc
+PV = "1.9.1"
 
 SUMMARY = "X.Org X server -- mouse input driver"
 

@@ -7,6 +7,7 @@ HOMEPAGE = "http://jinja.pocoo.org/"
 DPN = "jinja2"
 INC_PR = "r0"
 inherit debian-package
+PV = "2.7.3"
 
 LICENSE = "BSD-3-Clause & GPLv2+"
 LIC_FILES_CHKSUM = "\

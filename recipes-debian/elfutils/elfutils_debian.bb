@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package autotools gettext
+PV = "0.159"
 
 LICENSE = "GPL-2.0 & GPL-3.0 & LGPL-3.0"
 LIC_FILES_CHKSUM = " \

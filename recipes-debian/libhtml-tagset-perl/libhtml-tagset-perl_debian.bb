@@ -7,6 +7,7 @@ HOMEPAGE = "http://search.cpan.org/dist/HTML-Tagset/"
 PR = "r0"
 
 inherit debian-package
+PV = "3.20"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=60;md5=16ddda2d845a5546f615e6b122d1dbad"

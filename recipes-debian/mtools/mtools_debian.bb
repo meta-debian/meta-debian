@@ -11,6 +11,7 @@ density 3 1/2 disk)."
 HOMEPAGE = "http://www.gnu.org/software/mtools/"
 
 inherit debian-package
+PV = "4.0.18"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

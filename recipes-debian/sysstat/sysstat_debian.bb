@@ -10,6 +10,7 @@ HOMEPAGE = "http://sebastien.godard.pagesperso-orange.fr/"
 PR = "r0"
 
 inherit debian-package autotools-brokensep gettext
+PV = "11.0.1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"

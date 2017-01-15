@@ -5,6 +5,7 @@ access without running a separate RDBMS process. \
 "
 PR = "r0"
 inherit debian-package
+PV = "2.8.17"
 
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "\

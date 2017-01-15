@@ -6,7 +6,7 @@
 SUMMARY = "X.Org font package creation/installation utilities"
 
 require xorg-font-common.inc
-
+PV = "7.7+2"
 PR = "${INC_PR}.0"
 
 #Unicode is MIT

@@ -8,6 +8,7 @@ SUMMARY = "PNG image format decoding library"
 HOMEPAGE = "http://www.libpng.org/"
 
 inherit debian-package
+PV = "1.2.50"
 inherit autotools binconfig pkgconfig
 
 PR = "r1"

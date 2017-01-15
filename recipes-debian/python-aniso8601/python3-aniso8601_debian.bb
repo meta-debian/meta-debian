@@ -11,6 +11,7 @@ HOMEPAGE = "https://bitbucket.org/nielsenb/aniso8601"
 DPN = "python-aniso8601"
 INC_PR = "r0"
 inherit debian-package
+PV = "0.83"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8f0e2cd40e05189ec81232da84bd6e1a"

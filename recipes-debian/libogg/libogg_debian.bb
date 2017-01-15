@@ -11,7 +11,7 @@ HOMEPAGE = "http://xiph.org/"
 BUGTRACKER = "https://trac.xiph.org/newticket"
 
 inherit autotools pkgconfig debian-package
-
+PV = "1.3.2"
 PR = "r0"
 
 # There is no debian patch

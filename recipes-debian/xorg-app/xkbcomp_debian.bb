@@ -4,6 +4,7 @@
 #
 
 require xorg-app-common.inc
+PV = "7.7+1"
 
 SUMMARY = "A program to compile XKB keyboard description"
 

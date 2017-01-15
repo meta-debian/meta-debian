@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "2.1.1"
 
 SUMMARY = "XFree86-DRI: XFree86 Direct Rendering Infrastructure extension headers"
 

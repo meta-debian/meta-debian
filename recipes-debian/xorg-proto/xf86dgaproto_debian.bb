@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "2.1"
 
 SUMMARY = "XFree86-DGA: XFree86 Direct Graphics Access extension headers"
 

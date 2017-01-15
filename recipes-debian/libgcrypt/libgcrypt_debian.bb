@@ -9,6 +9,7 @@ HOMEPAGE = "http://directory.fsf.org/project/libgcrypt/"
 BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
 inherit debian-package autotools-brokensep binconfig pkgconfig
+PV = "1.6.3"
 
 PR = "r3"
 DPN = "libgcrypt20"

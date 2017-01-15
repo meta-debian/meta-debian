@@ -16,6 +16,7 @@ DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 DEPENDS_class-native = "perl-native-runtime"
 
 inherit debian-package
+PV = "2.24"
 inherit lib_package
 
 PR = "r0"

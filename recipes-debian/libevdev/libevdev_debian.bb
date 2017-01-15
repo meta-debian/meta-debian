@@ -2,7 +2,7 @@ SUMMARY = "Wrapper library for evdev devices"
 HOMEPAGE = "http://www.freedesktop.org/wiki/Software/libevdev/"
 
 inherit autotools pkgconfig debian-package
-
+PV = "1.3+dfsg"
 PR = "r1"
 
 LICENSE = "MIT-X"

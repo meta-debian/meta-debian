@@ -7,6 +7,7 @@ HOMEPAGE = "http://www.mono-project.com/GtkSharp"
 
 PR = "r1"
 inherit debian-package
+PV = "2.12.10"
 
 LICENSE = "LGPL-2.1"
 LIC_FILES_CHKSUM = "\

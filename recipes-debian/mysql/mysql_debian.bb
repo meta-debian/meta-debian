@@ -20,6 +20,7 @@ LIC_FILES_CHKSUM = "\
 	"
 inherit cmake
 VER = "5.5"
+PV = "5.5.53"
 DPN = "mysql-${VER}"
 
 EXTRA_OECMAKE += " \

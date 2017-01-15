@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "3.1.16"
 
 DEBIAN_PATCH_TYPE = "nopatch"
 

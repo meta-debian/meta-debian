@@ -10,6 +10,7 @@ BUGTRACKER = "https://bugzilla.gnome.org/"
 PR = "r0"
 
 inherit debian-package
+PV = "2.31.1"
 
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3bf50002aefd002f49e7bb854063f7e7 \

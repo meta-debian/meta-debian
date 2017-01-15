@@ -7,6 +7,7 @@ machines. \
 "
 PR = "r0"
 inherit debian-package
+PV = "2.3.1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

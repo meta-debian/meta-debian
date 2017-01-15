@@ -11,6 +11,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://xapian.org/"
 PR = "r1"
 inherit debian-package
+PV = "1.2.19"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

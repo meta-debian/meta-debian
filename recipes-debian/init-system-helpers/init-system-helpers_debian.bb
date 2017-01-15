@@ -12,6 +12,7 @@ HOMEPAGE = "https://packages.qa.debian.org/i/init-system-helpers.html"
 
 PR = "r0"
 inherit debian-package
+PV = "1.22"
 
 LICENSE = "GPLv3+ & BSD"
 LIC_FILES_CHKSUM = "\

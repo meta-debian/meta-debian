@@ -17,6 +17,7 @@ HOMEPAGE = "http://github.com/redis/hiredis"
 
 PR = "r0"
 inherit debian-package
+PV = "0.11.0"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d84d659a35c666d23233e54503aaea51"

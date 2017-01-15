@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.vorbis.com/"
 BUGTRACKER = "https://trac.xiph.org"
 
 inherit debian-package autotools pkgconfig
+PV = "1.3.4"
 
 PR = "r0"
 DEPENDS = "libogg"

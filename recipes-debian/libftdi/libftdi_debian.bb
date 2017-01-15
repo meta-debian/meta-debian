@@ -8,6 +8,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.intra2net.com/en/developer/libftdi/"
 PR = "r0"
 inherit debian-package
+PV = "0.20"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\

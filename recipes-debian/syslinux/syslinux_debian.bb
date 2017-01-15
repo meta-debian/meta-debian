@@ -10,6 +10,7 @@ filesystems (SYSLINUX), Linux ext2/ext3/ext4, btrfs, and xfs filesystems \
 HOMEPAGE = "http://www.syslinux.org/"
 
 inherit debian-package
+PV = "6.03+dfsg"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \

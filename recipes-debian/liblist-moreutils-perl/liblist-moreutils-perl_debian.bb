@@ -12,6 +12,7 @@ HOMEPAGE = "https://metacpan.org/release/List-MoreUtils"
 PR = "r0"
 
 inherit debian-package
+PV = "0.33"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=385c55653886acac3821999a3ccd17b3"

@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.102"
 
 SUMMARY = "High level language (GLib) binding for D-Bus"
 DESCRIPTION = "GLib bindings for the D-Bus message bus that integrate \

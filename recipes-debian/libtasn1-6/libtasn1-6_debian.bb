@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.gnu.org/software/libtasn1/"
 
 PR = "r0"
 inherit debian-package
+PV = "4.2"
 
 LICENSE = "GPLv3+ & LGPLv2.1+"
 LICENSE_${PN}-bin = "GPLv3+"

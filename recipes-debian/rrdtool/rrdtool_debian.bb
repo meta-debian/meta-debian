@@ -14,6 +14,7 @@ HOMEPAGE = "http://oss.oetiker.ch/rrdtool/"
 
 PR = "r1"
 inherit debian-package pythonnative cpan
+PV = "1.4.8"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

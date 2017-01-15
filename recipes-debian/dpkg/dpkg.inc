@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 inherit debian-package
+PV = "1.17.27"
 
 # Patch file no-vla-warning.patch, dpkg-1.17.4-CVE-2014-0471.patch and
 # dpkg-1.17.4-CVE-2014-0471-CVE-2014-3127.patch are no need since

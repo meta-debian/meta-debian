@@ -3,6 +3,7 @@
 # base commit: d83dfe6f2c49ea74ebb65a2a49a57b3feec68834
 
 inherit debian-package
+PV = "20141019+deb8u1"
 
 SUMMARY = "Common CA certificates"
 DESCRIPTION = "This package includes PEM files of CA certificates to allow \

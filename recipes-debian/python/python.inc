@@ -6,6 +6,7 @@
 INC_PR = "r1"
 
 inherit debian-package
+PV = "2.7.9"
 
 DPN = "python2.7"
 

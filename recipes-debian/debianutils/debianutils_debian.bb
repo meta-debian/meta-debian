@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://debian/copyright;md5=f01a5203d50512fc4830b4332b696a9f
 
 PR = "r0"
 inherit debian-package
+PV = "4.4"
 
 inherit autotools update-alternatives
 

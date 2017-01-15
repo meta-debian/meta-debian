@@ -6,6 +6,7 @@ SUMMARY = "Utilities for managing LZMA compressed files"
 HOMEPAGE = "http://tukaani.org/xz/"
 
 inherit debian-package autotools gettext
+PV = "5.1.1alpha+20120614"
 DPN = "xz-utils"
 PROVIDES = "xz"
 

@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.2.20"
 
 LICENSE = "NCSA"
 LIC_FILES_CHKSUM = " \

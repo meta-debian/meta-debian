@@ -8,6 +8,7 @@ HOMEPAGE = "http://smartmontools.sourceforge.net/"
 
 PR = "r1"
 inherit debian-package
+PV = "6.3+svn4002"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"

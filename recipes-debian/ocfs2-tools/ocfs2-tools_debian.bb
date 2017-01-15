@@ -12,6 +12,7 @@ HOMEPAGE = "http://oss.oracle.com/projects/ocfs2-tools/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.6.4"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

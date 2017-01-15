@@ -13,6 +13,7 @@ faults."
 PR = "r1"
 
 inherit debian-package
+PV = "1.4.6"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=25656171d1e4054c636a9893067f8c30"

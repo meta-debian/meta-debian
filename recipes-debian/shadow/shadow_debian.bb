@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "4.2"
 
 SUMMARY = "Tools to change and administer password and group data"
 HOMEPAGE = "http://pkg-shadow.alioth.debian.org"

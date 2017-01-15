@@ -4,6 +4,7 @@
 #
 
 inherit debian-package
+PV = "2.42.1"
 
 PR = "r1"
 DPN = "glib2.0"

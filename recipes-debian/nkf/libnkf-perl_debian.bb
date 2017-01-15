@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.13"
 DPN = "nkf"
 
 LICENSE = "Zlib"

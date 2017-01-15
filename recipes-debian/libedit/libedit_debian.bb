@@ -7,6 +7,7 @@
 PR = "r0"
 
 inherit debian-package autotools
+PV = "3.1-20140620"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1e4228d0c5a9093b01aeaaeae6641533"

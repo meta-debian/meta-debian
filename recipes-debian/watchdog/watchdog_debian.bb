@@ -13,6 +13,7 @@ BUGTRACKER = "http://sourceforge.net/tracker/?group_id=172030&atid=860194"
 
 PR = "r1"
 inherit debian-package
+PV = "5.14"
 
 #Declare debian pactch type
 DEBIAN_PATCH_TYPE = "nopatch"

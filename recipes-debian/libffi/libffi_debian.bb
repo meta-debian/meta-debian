@@ -13,7 +13,7 @@ library really only provides the lowest, machine dependent layer of a fully feat
 A layer must exist above `libffi' that handles type conversions for values passed between the two languages."
 
 inherit autotools debian-package
-
+PV = "3.1"
 PR = "0"
 
 LICENSE = "MIT"

@@ -13,6 +13,7 @@ HOMEPAGE = "http://site.icu-project.org/"
 PR = "r0"
 
 inherit debian-package
+PV = "52.1"
 
 LICENSE = "ICU"
 LIC_FILES_CHKSUM = "file://../license.html;md5=3a0605ebb7852070592fbd57e8967f3f"

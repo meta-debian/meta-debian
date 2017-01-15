@@ -4,6 +4,7 @@ HOMEPAGE = "http://www.gnu.org/software/ed/"
 PR = "r0"
 
 inherit debian-package
+PV = "1.10"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

@@ -10,6 +10,7 @@ BUGTRACKER = "http://lttng.org/project/issues"
 PR = "r0"
 
 inherit debian-package autotools
+PV = "0.8.5"
 
 LICENSE = "LGPLv2.1+ & MIT-style"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0f060c30a27922ce9c0d557a639b4fa3 \

@@ -7,6 +7,7 @@ easily customizable through the addition of new locales. \
 HOMEPAGE = "http://datetime.perl.org/"
 PR = "r0"
 inherit debian-package
+PV = "0.45"
 
 LICENSE = "Artistic-1.0 | GPL-1+"
 LIC_FILES_CHKSUM = "\

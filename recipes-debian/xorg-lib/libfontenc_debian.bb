@@ -9,6 +9,7 @@ DESCRIPTION = "libfontenc is a library which helps font libraries \
 portably determine and deal with different encodings of fonts."
 
 require xorg-lib-common.inc
+PV = "1.1.2"
 
 PR = "${INC_PR}.0"
 

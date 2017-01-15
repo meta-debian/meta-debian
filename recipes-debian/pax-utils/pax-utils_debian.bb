@@ -20,6 +20,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 inherit debian-package
+PV = "0.8.1"
 
 # Add option to compile with libcap
 do_compile_prepend() {

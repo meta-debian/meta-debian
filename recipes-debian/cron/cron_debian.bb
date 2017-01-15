@@ -8,6 +8,7 @@ DESCRIPTION = "process scheduling daemon"
 PR = "r0"
 
 inherit debian-package
+PV = "3.0pl1"
 
 # Fix Makefile to disable stripping
 SRC_URI += "file://fix-makefile.patch"

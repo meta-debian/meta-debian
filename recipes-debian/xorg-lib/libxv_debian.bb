@@ -11,6 +11,7 @@ accelerated drawing of videos.  Hardware adaptors are exposed to \
 clients, which may draw in a number of colourspaces, including YUV."
 
 require xorg-lib-common.inc
+PV = "1.0.10"
 
 PR = "${INC_PR}.0"
 

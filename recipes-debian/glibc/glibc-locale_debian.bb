@@ -4,6 +4,7 @@ SUMMARY = "Locale data from glibc"
 
 BPN = "glibc"
 inherit debian-package
+PV = "2.19"
 PR = "r1"
 
 do_debian_fix_timestamp[noexec] = "1"

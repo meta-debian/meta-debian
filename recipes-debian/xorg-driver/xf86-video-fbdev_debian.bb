@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-video.inc
+PV = "0.4.4"
 
 SUMMARY = "X.Org X server -- fbdev display driver"
 DESCRIPTION = "fbdev is an Xorg driver for framebuffer devices. \

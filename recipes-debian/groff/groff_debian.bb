@@ -14,6 +14,7 @@ HOMEPAGE = "https://www.gnu.org/software/groff/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.22.2"
 
 DEPENDS += "texinfo groff-native"
 DEPENDS_class-native = ""

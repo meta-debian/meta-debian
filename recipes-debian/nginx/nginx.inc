@@ -10,6 +10,7 @@ HOMEPAGE = "http://nginx.net"
 DPN = "nginx"
 INC_PR = "r0"
 inherit debian-package
+PV = "1.6.2"
 
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=9d3b27bad611f5204a84ba6a572698e1"

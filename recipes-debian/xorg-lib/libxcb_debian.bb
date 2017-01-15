@@ -13,6 +13,7 @@ BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=XCB"
 PR = "r0"
 
 inherit debian-package
+PV = "1.10"
 
 BBCLASSEXTEND = "native nativesdk"
 

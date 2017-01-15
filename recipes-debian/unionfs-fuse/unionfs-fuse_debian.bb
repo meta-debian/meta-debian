@@ -4,6 +4,7 @@ DESCRIPTION = "\
 
 PR = "r0"
 inherit debian-package
+PV = "0.24"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7e5a37fce17307066eec6b23546da3b3"

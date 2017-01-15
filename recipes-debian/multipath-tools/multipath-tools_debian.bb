@@ -8,6 +8,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://christophe.varoqui.free.fr/"
 PR = "r0"
 inherit debian-package
+PV = "0.5.0"
 
 LICENSE = "LGPLv2+ & GPLv2+"
 LIC_FILES_CHKSUM = "\

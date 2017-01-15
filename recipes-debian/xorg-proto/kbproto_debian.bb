@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.0.6"
 
 SUMMARY = "XKB: X Keyboard extension headers"
 

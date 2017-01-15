@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package autotools-brokensep
+PV = "1.4.0+dfsg"
 
 LICENSE = "GPLv2 | BSD"
 LIC_FILES_CHKSUM = " \

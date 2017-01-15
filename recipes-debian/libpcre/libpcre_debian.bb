@@ -12,7 +12,7 @@ SUMMARY = "Perl Compatible Regular Expressions"
 HOMEPAGE = "http://www.pcre.org"
 
 inherit autotools binconfig ptest debian-package
-
+PV = "8.35"
 PR = "r0"
 DPN = "pcre3"
 DEPENDS += "bzip2 zlib"

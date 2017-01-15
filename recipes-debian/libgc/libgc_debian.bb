@@ -14,6 +14,7 @@ HOMEPAGE = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/"
 
 PR = "r0"
 inherit debian-package
+PV = "7.2d"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://doc/README;endline=37;md5=9f4fd307082acf7a8af3e3897245163b"

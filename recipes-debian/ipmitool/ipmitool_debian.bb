@@ -5,6 +5,7 @@ HOMEPAGE = "http://ipmitool.sourceforge.net"
 
 PR = "r0"
 inherit debian-package
+PV = "1.8.14"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=9aa91e13d644326bf281924212862184"

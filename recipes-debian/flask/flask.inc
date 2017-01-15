@@ -16,6 +16,7 @@ HOMEPAGE = "http://flask.pocoo.org/"
 DPN = "flask"
 INC_PR = "r0"
 inherit debian-package
+PV = "0.10.1"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=79aa8b7bc4f781210d6b5c06d6424cb0"

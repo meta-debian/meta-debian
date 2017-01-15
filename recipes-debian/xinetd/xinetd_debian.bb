@@ -7,6 +7,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.3.15"
 
 # xinetd is a BSD-like license
 # Apple and Gentoo say BSD here.

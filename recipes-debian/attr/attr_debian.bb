@@ -4,7 +4,7 @@
 #
 
 require ea-acl.inc
-
+PV = "2.4.47"
 PR = "r0"
 
 LICENSE = "LGPLv2.1+ & GPLv2"

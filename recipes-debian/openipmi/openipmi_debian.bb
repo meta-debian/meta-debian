@@ -5,6 +5,7 @@ HOMEPAGE = "http://openipmi.sourceforge.net/"
 PR = "r2"
 
 inherit debian-package
+PV = "2.0.16"
 
 LICENSE = "GPLv2+ & LGPLv2.1+ & BSD"
 LIC_FILES_CHKSUM = " \

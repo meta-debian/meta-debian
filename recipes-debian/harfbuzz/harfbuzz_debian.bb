@@ -11,6 +11,7 @@ HOMEPAGE = "http://www.freedesktop.org/wiki/Software/HarfBuzz"
 PR = "r0"
 
 inherit debian-package
+PV = "0.9.35"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

@@ -6,6 +6,7 @@
 PR = "r1"
 
 inherit debian-package
+PV = "1.0.1t"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"

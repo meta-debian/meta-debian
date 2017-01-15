@@ -18,6 +18,7 @@ HOMEPAGE = "http://userspace.selinuxproject.org/"
 PR = "r0"
 
 inherit debian-package
+PV = "2.3"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"

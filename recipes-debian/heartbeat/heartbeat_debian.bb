@@ -9,6 +9,7 @@ PR = "r0"
 SUMMARY = "Messaging and membership subsystem for High-Availability Linux"
 
 inherit debian-package
+PV = "3.0.5+hg12629"
 
 LICENSE = "GPLv2 & LGPLv2.1+"
 LIC_FILES_CHKSUM = " \

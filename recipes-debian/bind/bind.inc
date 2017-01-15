@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.isc.org/sw/bind/"
 INC_PR = "r0"
 DPN = "bind9"
 inherit debian-package
+PV = "9.9.5.dfsg"
 
 LICENSE = "ISC & BSD"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=a3df5f651469919a0e6cb42f84fb6ff1"

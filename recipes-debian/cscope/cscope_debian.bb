@@ -7,6 +7,7 @@ PR = "r0"
 DEPENDS = "ncurses"
 
 inherit debian-package
+PV = "15.8a"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d4667b67b483823043fcffa489ea343b"

@@ -1,4 +1,5 @@
 inherit debian-package autotools gettext native pythonnative
+PV = "0.1.40"
 
 PR = "r0"
 

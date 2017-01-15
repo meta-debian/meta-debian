@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.14.2"
 
 SUMMARY = "XRecord: X Record extension headers"
 

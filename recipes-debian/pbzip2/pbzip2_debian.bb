@@ -14,6 +14,7 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=a0103c113a3613a95e551b86ad99d63d"
 
 inherit debian-package
+PV = "1.1.9"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

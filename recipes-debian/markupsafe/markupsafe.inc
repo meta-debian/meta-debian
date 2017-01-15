@@ -7,6 +7,7 @@ HOMEPAGE = "http://pypi.python.org/pypi/MarkupSafe"
 DPN = "markupsafe"
 INC_PR = "r0"
 inherit debian-package
+PV = "0.23"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c6d1adcf45d69359f256c1cea3254127"

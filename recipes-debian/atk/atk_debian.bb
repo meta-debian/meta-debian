@@ -19,6 +19,7 @@ DEPENDS = "glib-2.0"
 # debian-package must be inherit after gnomebase to overwrite SRC_URI
 inherit gnomebase gtk-doc
 inherit debian-package
+PV = "2.14.0"
 
 GNOME_COMPRESS_TYPE = "xz"
 

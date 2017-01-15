@@ -10,6 +10,7 @@ itself. The clients can be traditional applications, X servers \
 HOMEPAGE = "http://wayland.freedesktop.org/"
 PR = "r0"
 inherit debian-package
+PV = "1.6.0"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

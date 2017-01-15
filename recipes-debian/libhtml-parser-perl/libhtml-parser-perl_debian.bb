@@ -17,6 +17,7 @@ HOMEPAGE = "https://metacpan.org/release/HTML-Parser/"
 PR = "r0"
 
 inherit debian-package
+PV = "3.71"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=59;md5=e530c3545d6f8db92fb5f9a29b420d00"

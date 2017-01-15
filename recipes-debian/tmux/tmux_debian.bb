@@ -14,6 +14,7 @@ HOMEPAGE = "http://tmux.sourceforge.net/"
 PR = "r0"
 
 inherit debian-package
+PV = "1.9"
 
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f7d9aab84ec6567139a4755c48d147fb"

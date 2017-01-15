@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.gnu.org/software/inetutils"
 PR = "r0"
 
 inherit debian-package
+PV = "1.9.2.39.3a460"
 
 #inetutils-1.9-PATH_PROCNET_DEV.patch: 
 #    The patch file for define PATH_PROCNET_DEV if not already defined

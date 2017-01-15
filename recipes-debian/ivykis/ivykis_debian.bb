@@ -9,6 +9,7 @@ HOMEPAGE = "http://libivykis.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.36.2"
 
 LICENSE = "LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"

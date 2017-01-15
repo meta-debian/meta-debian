@@ -15,6 +15,7 @@ PR = "r2"
 DPN = "readline6"
 
 inherit debian-package
+PV = "6.3"
 
 DEPENDS += "ncurses"
 

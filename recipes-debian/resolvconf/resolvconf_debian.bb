@@ -8,6 +8,7 @@ libraries)."
 HOMEPAGE = "http://alioth.debian.org/projects/resolvconf/"
 
 inherit debian-package
+PV = "1.76.1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"

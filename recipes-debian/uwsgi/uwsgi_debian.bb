@@ -16,6 +16,7 @@ HOMEPAGE = "http://projects.unbit.it/uwsgi/"
 
 PR = "r0"
 inherit debian-package
+PV = "2.0.7"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=33ab1ce13e2312dddfad07f97f66321f"

@@ -7,6 +7,7 @@
 INC_PR = "r0"
 
 inherit debian-package
+PV = "2.25"
 
 DPN = "binutils"
 

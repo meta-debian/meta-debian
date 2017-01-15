@@ -12,6 +12,7 @@ HOMEPAGE = "http://savannah.nongnu.org/projects/sysvinit/"
 INC_PR = "r0"
 
 inherit debian-package
+PV = "2.88dsf"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe \

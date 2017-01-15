@@ -8,6 +8,7 @@ SUMMARY = "Runtime configuration and test of XInput devices"
 DESCRIPTION = "Xinput is an utility for configuring and testing XInput devices."
 
 require xorg-app-common.inc
+PV = "1.6.1"
 
 PR = "${INC_PR}.0"
 

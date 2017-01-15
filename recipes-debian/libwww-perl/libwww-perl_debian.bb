@@ -14,6 +14,7 @@ HOMEPAGE = "https://metacpan.org/release/libwww-perl"
 PR = "r0"
 
 inherit debian-package
+PV = "6.08"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=92;endline=98;md5=3da13bc02f8f17ed35ac5d192cae6fe4"

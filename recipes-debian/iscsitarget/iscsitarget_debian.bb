@@ -13,6 +13,7 @@ requirements. \
 HOMEPAGE = "http://iscsitarget.sourceforge.net/"
 PR = "r0"
 inherit debian-package
+PV = "1.4.20.3+svn502"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

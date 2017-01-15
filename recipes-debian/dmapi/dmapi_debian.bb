@@ -14,6 +14,7 @@ HOMEPAGE = "http://oss.sgi.com/projects/xfs"
 
 PR = "r0"
 inherit debian-package
+PV = "2.2.10"
 
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://doc/COPYING;md5=1678edfe8de9be9564d23761ae2fa794"

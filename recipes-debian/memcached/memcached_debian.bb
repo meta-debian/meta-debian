@@ -10,6 +10,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.memcached.org/"
 PR = "r0"
 inherit debian-package
+PV = "1.4.21"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=7e5ded7363d335e1bb18013ca08046ff"

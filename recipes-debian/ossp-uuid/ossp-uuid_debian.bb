@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.6.2"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://README;beginline=30;endline=55;md5=b394fadb039bbfca6ad9d9d769ee960e \

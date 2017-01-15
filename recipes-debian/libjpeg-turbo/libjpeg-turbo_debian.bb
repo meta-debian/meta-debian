@@ -9,6 +9,7 @@ HOMEPAGE = "http://libjpeg-turbo.org/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.3.1"
 
 LICENSE ="BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://cdjpeg.h;endline=10;md5=1bcf902368f1944039dccd2a3b1b07eb \

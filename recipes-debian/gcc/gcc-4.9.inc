@@ -1,6 +1,7 @@
 require gcc-common.inc
 
 inherit debian-package
+PV = "4.9.2"
 DPN = "gcc-4.9"
 
 DEBIAN_PATCH_TYPE = "quilt"

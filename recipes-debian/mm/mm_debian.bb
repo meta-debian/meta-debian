@@ -7,6 +7,7 @@ DESCRIPTION = "\
 
 PR = "r0"
 inherit debian-package
+PV = "1.4.2"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0ba10c36898067a75f550bfa27a47b8b"

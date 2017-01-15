@@ -6,6 +6,7 @@ HOMEPAGE = "http://www.magnicomp.com/rdist/"
 
 PR = "r0"
 inherit debian-package
+PV = "6.1.5"
 
 LICENSE = "BSD-4-Clause"
 LIC_FILES_CHKSUM = "file://Copyright;md5=3f47ec9f64b11c8192ee05a66b5c2755"

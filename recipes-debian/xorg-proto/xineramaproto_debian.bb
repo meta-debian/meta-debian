@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "1.2.1"
 
 SUMMARY = "Xinerama: Xinerama extension headers"
 

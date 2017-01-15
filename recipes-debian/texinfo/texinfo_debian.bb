@@ -4,6 +4,7 @@ This is another unionfs implementation using filesystem in userspace (fuse)"
 
 PR = "r0"
 inherit debian-package
+PV = "5.2.0.dfsg.1"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

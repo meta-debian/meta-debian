@@ -12,6 +12,7 @@ client-side tessellation into either triangles or trapezoids.  Text is \
 drawn by loading glyphs into the server and rendering sets of them."
 
 require xorg-lib-common.inc
+PV = "0.9.8"
 
 PR = "${INC_PR}.0"
 

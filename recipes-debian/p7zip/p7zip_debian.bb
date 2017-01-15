@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://DOCS/copying.txt;md5=ecfc54c9e37b63ac58900061ce2eab5a
                     "
 
 inherit debian-package
+PV = "9.20.1~dfsg.1"
 
 # The default makefile sets compiler to gcc and g++.
 # We need change them to ${CXX} and ${CC} for cross-compiling

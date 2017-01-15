@@ -1,6 +1,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.25"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d9c6a2a0ca6017fda7cd905ed2739b37"

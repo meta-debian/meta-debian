@@ -15,6 +15,7 @@ supports following encoding names additionally:\n\
 PR = "r0"
 
 inherit debian-package
+PV = "0.0.20021209"
 DPN = "libapache-mod-encoding"
 
 LICENSE = "Apache-1.0"

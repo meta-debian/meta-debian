@@ -11,6 +11,7 @@ their own packages. Also here was tsort, which is now in the "coreutils"\n\
  package."
 
 inherit debian-package
+PV = "9.0.6"
 
 LICENSE="BSD-4-Clause"
 LIC_FILES_CHKSUM="file://usr.bin/hexdump/hexdump.h;endline=35;md5=148f6a2793c64631604a03a5d41a2cdc"

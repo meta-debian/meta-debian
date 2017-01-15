@@ -30,4 +30,4 @@ do_unpack_extra() {
 	rm -r ${S}/gcc-$PV_ORIG
 }
 
-addtask unpack_extra after do_unpack before do_debian_fix_timestamp
+addtask unpack_extra after do_unpack before do_debian_verify_version

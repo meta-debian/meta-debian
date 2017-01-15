@@ -10,6 +10,7 @@ and video post-processing to the GPU video-hardware. \
 HOMEPAGE = "http://cgit.freedesktop.org/~aplattner/libvdpau"
 PR = "r0"
 inherit debian-package pkgconfig
+PV = "0.8"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

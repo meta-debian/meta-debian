@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "2.3.1"
 
 SUMMARY = "XI: X Input extension headers"
 

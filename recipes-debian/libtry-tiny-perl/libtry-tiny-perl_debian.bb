@@ -10,6 +10,7 @@ to write correct eval blocks without 5 lines of boilerplate each time. \
 HOMEPAGE = "https://metacpan.org/release/Try-Tiny"
 PR = "r0"
 inherit debian-package
+PV = "0.22"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

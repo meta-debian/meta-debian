@@ -10,6 +10,7 @@ tracepath, tracepath6, ping, ping6 and arping."
 PR = "r1"
 
 inherit debian-package
+PV = "20121221"
 
 LICENSE = "BSD & GPLv2+"
 LIC_FILES_CHKSUM = " \

@@ -13,6 +13,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://code.google.com/p/openpgm/"
 PR = "r0"
 inherit debian-package
+PV = "5.1.118-1~dfsg"
 
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=fbc093901857fcd118f065f900982c24"

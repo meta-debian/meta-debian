@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.2.2"
 
 SUMMARY = "XC-MISC: X XC-Miscellaneous extension headers"
 

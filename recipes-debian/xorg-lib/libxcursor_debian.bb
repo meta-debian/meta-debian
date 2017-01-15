@@ -12,6 +12,7 @@ can exist in several sizes and the library automatically picks the best \
 size."
 
 require xorg-lib-common.inc
+PV = "1.1.14"
 
 PR = "${INC_PR}.0"
 

@@ -5,6 +5,7 @@ synchronization between the X server and direct-rendering clients. \
 "
 PR = "r0"
 inherit debian-package pkgconfig
+PV = "1.1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\

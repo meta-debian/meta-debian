@@ -6,6 +6,7 @@ HOMEPAGE = "http://ebtables.sourceforge.net"
 
 PR = "r0"
 inherit debian-package
+PV = "2.0.10.4"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=53b4a999993871a28ab1488fdbd2e73e"

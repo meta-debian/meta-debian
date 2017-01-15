@@ -9,6 +9,7 @@ HOMEPAGE = "https://github.com/tianon/cgroupfs-mount"
 
 PR = "r0"
 inherit debian-package
+PV = "1.1"
 
 LICENSE = "GPL-3.0+"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=748441b371c032eda4cfc3e5b703997a \

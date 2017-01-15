@@ -5,6 +5,7 @@
 #
 
 inherit debian-package
+PV = "1.4.17"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = " \

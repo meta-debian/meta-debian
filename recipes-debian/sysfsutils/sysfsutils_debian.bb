@@ -10,6 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=3d06403ea54c7574a9e581c6478cc393 \
                     file://lib/LGPL;md5=b75d069791103ffe1c0d6435deeff72e"
 PR = "r1"
 inherit debian-package
+PV = "2.1.0+repack"
 
 SRC_URI += " \
 	file://obsolete_automake_macros.patch \

@@ -10,6 +10,7 @@ require xorg-proto-common.inc
 PR = "r0"
 
 inherit debian-package
+PV = "1.0"
 
 DPN = "x11proto-present"
 

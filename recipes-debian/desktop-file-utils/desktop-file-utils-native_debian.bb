@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.22"
 
 SECTION = "console/utils"
 SUMMARY = "Command line utilities for working with *.desktop files"

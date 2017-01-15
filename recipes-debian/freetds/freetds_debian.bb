@@ -6,6 +6,7 @@ connecting to MS SQL and Sybase servers over TCP/IP. \
 HOMEPAGE = "http://www.freetds.org/"
 PR = "r0"
 inherit debian-package
+PV = "0.91"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\

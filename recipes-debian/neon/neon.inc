@@ -5,6 +5,7 @@ SECTION = "libs"
 PR = "r0"
 
 inherit debian-package
+PV = "0.30.1"
 DPN = "neon27"
 
 LICENSE = "LGPLv2+"

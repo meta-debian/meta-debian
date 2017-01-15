@@ -11,6 +11,7 @@ HOMEPAGE = "http://kernel.org/pub/linux/utils/kernel/kexec/"
 PR = "r0"
 
 inherit debian-package
+PV = "2.0.7"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = " \

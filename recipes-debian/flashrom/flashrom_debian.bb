@@ -16,6 +16,7 @@ flash chip. \
 HOMEPAGE = "http://www.flashrom.org"
 PR = "r0"
 inherit debian-package
+PV = "0.9.7+r1782"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\

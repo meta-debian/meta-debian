@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "0.10.36"
 
 DPN = "gstreamer0.10"
 

@@ -13,6 +13,7 @@ file://LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c \
 PROVIDES = "udev"
 
 inherit debian-package
+PV = "215"
 inherit pkgconfig autotools useradd
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"

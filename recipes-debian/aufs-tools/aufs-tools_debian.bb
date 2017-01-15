@@ -15,6 +15,7 @@ HOMEPAGE = "http://aufs.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.2+20130722"
 
 LICENSE = "GPL-2.0+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=892f569a555ba9c07a568a7c0c4fa63a"

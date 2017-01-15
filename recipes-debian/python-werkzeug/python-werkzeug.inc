@@ -11,6 +11,7 @@ HOMEPAGE = "http://werkzeug.pocoo.org/"
 DPN = "python-werkzeug"
 INC_PR = "r0"
 inherit debian-package
+PV = "0.9.6+dfsg"
 
 LICENSE = "BSD-3-Clause & (MIT | GPLv2)"
 LIC_FILES_CHKSUM = "\

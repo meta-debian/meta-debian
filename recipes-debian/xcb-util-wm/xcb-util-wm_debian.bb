@@ -8,6 +8,7 @@ the X protocol but which have traditionally been provided by Xlib."
 HOMEPAGE = "http://xcb.freedesktop.org"
 
 inherit debian-package
+PV = "0.4.1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d81840e50417975d93d04c9097b86e36"

@@ -15,6 +15,7 @@ require xorg-lib-common.inc
 PR = "${INC_PR}.0"
 
 inherit debian-package
+PV = "0.32.6"
 
 LICENSE = "MIT & MIT-style & PD"
 LIC_FILES_CHKSUM = " \

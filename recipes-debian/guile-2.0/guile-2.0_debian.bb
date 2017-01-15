@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.gnu.org/software/guile/"
 
 PR = "r0"
 inherit debian-package
+PV = "2.0.11+1"
 
 LICENSE = "GPLv3+ & LGPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \

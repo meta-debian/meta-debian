@@ -9,6 +9,7 @@ SECTION = "libs"
 
 PR = "r0"
 inherit debian-package
+PV = "2.5.1"
 
 LICENSE = "GPL-2.0 & LGPL-2.0"
 

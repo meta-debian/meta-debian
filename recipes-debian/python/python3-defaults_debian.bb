@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.python.org/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.4.2"
 
 LICENSE = "PSFv2 & MIT"
 LIC_FILES_CHKSUM = " \

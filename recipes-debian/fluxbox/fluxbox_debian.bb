@@ -17,6 +17,7 @@ PR = "r0"
 inherit autotools-brokensep pkgconfig
 
 inherit debian-package
+PV = "1.3.5"
 DEBIAN_SECTION = "x11"
 EXTRA_OECONF += "\
 	--with-windowmenu=${sysconfdir}/X11/${DPN}/window.menu \
