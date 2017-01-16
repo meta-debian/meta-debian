@@ -9,7 +9,7 @@ HOMEPAGE = "http://dbus.freedesktop.org"
 
 PR = "r1"
 inherit debian-package
-PV = "1.8.20"
+PV = "1.8.22"
 
 LICENSE = "AFL-2.1 | GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=10dded3b58148f3f1fd804b26354af3e \
