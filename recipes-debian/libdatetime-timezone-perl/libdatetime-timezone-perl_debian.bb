@@ -21,4 +21,4 @@ inherit cpan
 do_install_append() {
 	rm ${D}${PERLLIBDIRS}/vendor_perl/*/DateTime/TimeZone/Local/Win32.pm
 }
-RDEPENDS_${PN} += "libparams-validate-perl"
+RDEPENDS_${PN} += "libparams-validate-perl libclass-load-perl libclass-singleton-perl"
