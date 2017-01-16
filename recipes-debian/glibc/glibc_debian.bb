@@ -43,7 +43,6 @@ SRC_URI += " \
 	file://ppc-sqrt_finite.patch \
 	file://ppc_slow_ieee754_sqrt.patch \
 	file://add_resource_h_to_wait_h.patch \
-	file://fsl-ppc-no-fsqrt.patch \
 	file://0001-R_ARM_TLS_DTPOFF32.patch \
 	file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
 	file://ppce6500-32b_slow_ieee754_sqrt.patch \
