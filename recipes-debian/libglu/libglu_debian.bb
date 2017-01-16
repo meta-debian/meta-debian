@@ -13,6 +13,7 @@ up projection matrices and unprojecting screen coordinates to world \
 coordinates."
 
 inherit debian-package
+PV = "9.0.0"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

@@ -7,6 +7,7 @@ DESCRIPTION = "Motif is the industry standard GUI component toolkit for *NIX."
 HOMEPAGE = "http://motif.ics.com/"
 
 inherit debian-package
+PV = "2.3.4"
 
 LICENSE = "LGPLv2+ & MIT-X"
 LIC_FILES_CHKSUM = " \

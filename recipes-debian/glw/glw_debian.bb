@@ -2,6 +2,7 @@ SUMMARY = "GL widget library for Athena and Motif"
 HOMEPAGE = "http://mesa3d.sourceforge.net/"
 
 inherit debian-package
+PV = "8.0.0"
 
 LICENSE = "SGI-1"
 LIC_FILES_CHKSUM = "file://README;beginline=22;md5=79f8740be8fa859f7e489a288be7fa2a"
