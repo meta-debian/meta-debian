@@ -46,7 +46,7 @@ EXTRA_OECMAKE += " \
         -DWITH_FEDERATED_STORAGE_ENGINE=ON \
         -DWITH_EXTRA_CHARSETS=all \
 "
-DEPENDS += "libaio libbsd mysql-native"
+DEPENDS += "libaio libbsd mysql-native readline"
 PACKAGES =+ "\
         libmysqlclient libmysqld-pic mysql-common \
         mysql-server mysql-server-core"
