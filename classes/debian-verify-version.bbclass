@@ -21,7 +21,7 @@ do_debian_verify_version() {
 	# DEB_SRC_VERSION means the upstream version.
 	# About Debian native packages, DEB_SRC_VERSION is
 	# just same as DEB_NOEPOCH_VERSION.
-	DEB_VERSION=$(head -n 1 ${DEBIAN_CHANGELOG} | sed "s|.*(\([^()]*\)).*|\1|")
+	DEB_VERSION=$(head -n 1 ${DEBIAN_CHANGELOG} | sed "s@[^()]*(\([^()]*\)).*@\1@")
 	DEB_NOEPOCH_VERSION=$(echo $DEB_VERSION | cut -d: -f2-)
 	DEB_SRC_VERSION=$(echo $DEB_NOEPOCH_VERSION | sed 's/-[^-]*$//')
 
