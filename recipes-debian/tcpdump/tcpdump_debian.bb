@@ -12,7 +12,7 @@ PV = "4.6.2"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1d4b0366557951c84a94fabe3529f867"
 
-DEPENDS = "libcap libcap-native libpcap libpcap-native"
+DEPENDS = "libpcap libpcap-native"
 
 # tcpdump-cross-getaddrinfo.patch:
 #	Fix getaddinfo check when cross compiling
