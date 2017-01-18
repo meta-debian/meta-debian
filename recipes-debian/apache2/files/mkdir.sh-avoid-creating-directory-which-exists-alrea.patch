@@ -1,0 +1,26 @@
+From 5fdf60d835b3744904b98ad035cda6afd6aa210d Mon Sep 17 00:00:00 2001
+From: Toshiko YOSHIDA <toshiko.yoshida@toshiba.co.jp>
+Date: Wed, 18 Jan 2017 13:25:10 +0900
+Subject: [PATCH] mkdir.sh: avoid creating directory which exists already
+
+Signed-off-by: Toshiko YOSHIDA <toshiko.yoshida@toshiba.co.jp>
+---
+ build/mkdir.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/mkdir.sh b/build/mkdir.sh
+index e2d5bb6..6d16fdc 100755
+--- a/build/mkdir.sh
++++ b/build/mkdir.sh
+@@ -39,7 +39,7 @@ for file in ${1+"$@"} ; do
+         esac
+         if test ! -d "$pathcomp"; then
+             echo "mkdir $pathcomp" 1>&2
+-            mkdir "$pathcomp" || errstatus=$?
++            test -d "$pathcomp" || mkdir "$pathcomp" || errstatus=$?
+         fi
+         pathcomp="$pathcomp/"
+     done
+-- 
+2.1.4
+
