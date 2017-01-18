@@ -1,5 +1,5 @@
 require flask.inc
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 do_install_append() {
 	# base on debian/python-flask.pyinstall
 	install -D -m 0644 ${S}/debian/__init__.py \
@@ -10,4 +10,4 @@ do_install_append() {
 		${D}${datadir}/python/dist/python-flask
 }
 RRECOMMENDS_${PN} += "python-pkg-resources"
-RDEPENDS_${PN} += "python-itsdangerous python-jinja2 python-werkzeug"
+RDEPENDS_${PN} += "python-itsdangerous python-jinja2 python-werkzeug python-threading"
