@@ -16,10 +16,6 @@ SRC_URI += " \
     file://server-makefile.patch \
 "
 
-SRC_URI =+ " \
-    file://mkdir.sh-avoid-creating-directory-which-exists-alrea.patch \
-"
-
 # Configure follow debian/rules
 EXTRA_OECONF += " \
     --enable-layout=Debian --enable-so --with-program-name=${DPN} \
