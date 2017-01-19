@@ -1,6 +1,7 @@
 #
 # base recipe: http://git.yoctoproject.org/cgit/cgit.cgi/meta-virtualization/tree/recipes-extended/libvirt/libvirt_1.3.5.bb
 # base branch: master
+# base commit: 66997c4dcfc5cabd0b357ea46d6ac15ec3163c51
 #
 
 SUMMARY = "programs for the libvirt library"
