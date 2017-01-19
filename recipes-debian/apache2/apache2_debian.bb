@@ -14,6 +14,7 @@ DEPENDS = " \
 #	to avoid exec format error.
 SRC_URI += " \
     file://server-makefile.patch \
+    file://httpd-2.4.3-fix-race-issue-of-dir-install.patch \
 "
 
 # Configure follow debian/rules
