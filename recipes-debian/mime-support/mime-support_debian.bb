@@ -37,3 +37,4 @@ do_install () {
 	ln -s run-mailcap ${D}${bindir}/compose
 	ln -s run-mailcap ${D}${bindir}/print
 }
+BBCLASSEXTEND = "nativesdk"
