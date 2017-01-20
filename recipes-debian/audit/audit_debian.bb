@@ -7,7 +7,7 @@
 inherit debian-package
 PV = "2.4"
 
-PR = "r1"
+PR = "r2"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\
@@ -40,6 +40,7 @@ EXTRA_OECONF += "--with-prelude \
 	--with-python \
 	--libdir=${base_libdir} \
 	--sbindir=${base_sbindir} \
+	--without-golang \
 	"
 EXTRA_OECONF_append_arm = " --with-arm=yes"
 
