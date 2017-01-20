@@ -29,3 +29,6 @@ do_install_append() {
 }
 
 FILES_${PN}-dbg += "${libdir}/debug"
+
+RPROVIDES_${PN} += "lib${PN}"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"

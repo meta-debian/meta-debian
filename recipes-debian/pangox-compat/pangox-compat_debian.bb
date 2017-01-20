@@ -27,3 +27,6 @@ inherit autotools pkgconfig distro_features_check
 
 # depends on virtual/libx11
 REQUIRED_DISTRO_FEATURES = "x11"
+
+RPROVIDES_${PN} += "libpangox-1.0"
+RPROVIDES_${PN}-dev += "libpangox-1.0-dev"

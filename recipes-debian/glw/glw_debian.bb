@@ -22,5 +22,5 @@ do_install_append() {
 
 DEBIANNAME_${PN} = "lib${PN}1-mesa"
 DEBIANNAME_${PN}-dev = "lib${PN}1-mesa-dev"
-RPROVIDES_${PN} = "lib${PN}-mesa"
-RPROVIDES_${PN} = "lib${PN}-mesa-dev"
+RPROVIDES_${PN} += "lib${PN}-mesa"
+RPROVIDES_${PN}-dev += "lib${PN}-mesa-dev"
