@@ -6,9 +6,9 @@ language in the world. The main goals of MySQL are speed, robustness and \
 ease of use \
 "
 HOMEPAGE = "http://dev.mysql.com/"
-PR = "r0"
+
 inherit debian-package native
-PV = "5.5.53"
+PV = "5.5.54"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "\
