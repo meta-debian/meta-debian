@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 5a06f7d..9928456 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -367,7 +367,7 @@ dnl Variables needed for substitution
+ AC_CHECK_HEADERS(heartbeat/glue_config.h)
+ 
+ if test "$ac_cv_header_heartbeat_glue_config_h" = "yes"; then
+-  OCF_ROOT_DIR=`extract_header_define heartbeat/glue_config.h OCF_ROOT_DIR`
++  OCF_ROOT_DIR="${libdir}/ocf"
+ else
+   enable_libnet=no
+ fi
