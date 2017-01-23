@@ -39,7 +39,7 @@ SRC_URI += "file://fix-using-host-library_debian.patch"
 DEPENDS_class-target = "\
 	zlib readline krb5 tcl libxml2 libxslt python3 python perl"
 DEPENDS_class-native = "\
-	tcl-native libxml2-native libxslt-native python-native python3-native"
+	tcl-native libxml2-native libxslt-native python-native python3-native perl-native"
 inherit autotools-brokensep pkgconfig perlnative pythonnative systemd cpan-base
 
 export BUILD_SYS
