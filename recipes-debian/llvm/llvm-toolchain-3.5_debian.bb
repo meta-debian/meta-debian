@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.llvm.org/"
 
 inherit debian-package
 PV = "3.5"
+PR = "r1"
 
 # 3-clause BSD-like
 # University of Illinois/NCSA Open Source License
@@ -129,7 +130,6 @@ do_install_append() {
 	cd -
 
 	install -d ${D}${bindir}
-	cp ${S}/compiler-rt/lib/asan/scripts/asan_symbolize.py ${D}${bindir}/asan_symbolize-${PV}
 
 	# Create this fake directory to make the install libclang-common-dev happy
 	# under the unsupported archs of compiler-rt
@@ -148,6 +148,8 @@ do_install_append() {
 	done
 	cd -
 
+	cp ${S}/compiler-rt/lib/asan/scripts/asan_symbolize.py ${D}${bindir}/asan_symbolize-${PV}
+
 	# Rename some stuff with the version name
 	cp ${B}/tools/clang/docs/tools/clang.1      ${B}/tools/clang/docs/tools/clang-${PV}.1
 	cp ${S}/clang/tools/scan-build/scan-build.1 ${S}/clang/tools/scan-build/scan-build-${PV}.1
@@ -161,10 +163,6 @@ do_install_append() {
 	cp -fR ${S}/clang/tools/scan-build ${S}/clang/tools/scan-build-${PV}
 	rm -rf ${S}/clang/tools/scan-view-${PV}
 	cp -fR ${S}/clang/tools/scan-view  ${S}/clang/tools/scan-view-${PV}
-
-	# Remove some license files
-	rm -f ${D}${libdir}/llvm-${PV}/include/llvm/Support/LICENSE.TXT \
-	      ${D}${libdir}/llvm-${PV}/build/autoconf/LICENSE.TXT
 
 	# Managed in lldb-X.Y.links.in
 	rm -f ${B}/Release/lib/python*/site-packages/lldb/_lldb.so
@@ -218,6 +216,10 @@ do_install_append() {
 	cp ${S}/utils/emacs/emacs.el         ${D}${datadir}/emacs/site-lisp/llvm-${PV}/
 	cp ${S}/utils/emacs/llvm-mode.el     ${D}${datadir}/emacs/site-lisp/llvm-${PV}/
 	cp ${S}/utils/emacs/tablegen-mode.el ${D}${datadir}/emacs/site-lisp/llvm-${PV}/
+
+	# Remove some license files
+	rm -f ${D}${libdir}/llvm-${PV}/include/llvm/Support/LICENSE.TXT \
+	      ${D}${libdir}/llvm-${PV}/build/autoconf/LICENSE.TXT
 
 	# According to debian/llvm-X.Y-runtime.install.in
 	sed -e "s|@LLVM_VERSION@|${PV}|g" ${S}/debian/llvm-X.Y-runtime.binfmt.in \
