@@ -23,3 +23,4 @@ do_install() {
 	ln -s ack ${D}${bindir}/ack-grep
 }
 FILES_${PN} += "${datadir}"
+RDEPENDS_${PN} += "libfile-next-perl perl"
