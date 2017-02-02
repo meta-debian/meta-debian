@@ -6,6 +6,10 @@ DEPENDS = "expat-native pcre-native apr-native apr-util-native"
 
 inherit native
 
+SRC_URI += " \
+    file://httpd-2.4.3-fix-race-issue-of-dir-install.patch \
+"
+
 EXTRA_OECONF += " \
     --with-apr=${STAGING_BINDIR_CROSS}/apr-1-config \
     --with-apr-util=${STAGING_BINDIR_CROSS}/apu-1-config \
