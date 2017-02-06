@@ -18,7 +18,7 @@ DESCRIPTION = "Kerberos is a system for authenticating users and services on a n
 HOMEPAGE = "http://web.mit.edu/Kerberos/"
 SECTION = "console/network"
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
 PV = "1.12.1+dfsg"
@@ -254,6 +254,17 @@ do_install_append() {
 
 	ln -s libkadm5clnt_mit.so ${D}${libdir}/mit-krb5/libkadm5clnt.so
 	ln -s libkadm5srv_mit.so ${D}${libdir}/mit-krb5/libkadm5srv.so
+
+	# According to debian/krb5-kdc.dirs.in
+	install -d ${D}${localstatedir}/lib/krb5kdc \
+	           ${D}${sysconfdir}/krb5kdc
+	# According to debian/libgssapi-krb5-2.dirs
+	install -d ${D}${sysconfdir}/gss/mech.d
+	# According to debian/libkrb5-3.dirs.in
+	install -d ${D}${libdir}/krb5/plugins/krb5
+
+	chmod 700 ${D}${localstatedir}/lib/krb5kdc
+	chmod 700 ${D}${sysconfdir}/krb5kdc
 }
 
 RCONFLICTS_${PN}-dev = "hemidal-dev"
