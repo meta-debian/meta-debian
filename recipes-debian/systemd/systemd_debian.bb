@@ -14,6 +14,8 @@ PROVIDES = "udev"
 
 inherit debian-package
 PV = "215"
+PR = "r1"
+
 inherit pkgconfig autotools useradd
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"
@@ -59,6 +61,7 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --disable-selinux \
                 --enable-dependency-tracking \
                 --enable-compat-libs \
+                --disable-libcryptsetup \
                "
 
 do_configure_prepend() {
