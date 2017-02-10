@@ -35,3 +35,6 @@ FILES_lib${PN} = "${libdir}/*${SOLIBS}"
 
 LEAD_SONAME = "libOpenIPMI.so"
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+
+# Follow debian/control
+RDEPENDS_${PN}-dev += "libgdbm-dev"
