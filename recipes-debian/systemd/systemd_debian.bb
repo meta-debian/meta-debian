@@ -16,7 +16,7 @@ inherit debian-package
 PV = "215"
 PR = "r1"
 
-inherit pkgconfig autotools useradd
+inherit pkgconfig autotools useradd python3native
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"
 
@@ -31,6 +31,7 @@ DEPENDS = "intltool-native \
            kmod \
            util-linux \
            ${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)} \
+           python3-lxml-native \
           "
 
 # These options are almost same as CONFFLAGS in debian/rules.
@@ -49,6 +50,7 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --disable-microhttpd \
                    --disable-sysusers \
                    --disable-silent-rules \
+                   PYTHON="${PYTHON}" \
                   "
 
 # --enable-dependency-tracking:
@@ -185,7 +187,7 @@ do_install_append() {
 	ln -s ${base_bindir}/udevadm ${D}${base_sbindir}
 	ln -s ${base_libdir}/systemd/systemd-udevd ${D}${base_sbindir}/udevd
 
-    # systemd-sysv
+	# systemd-sysv
 	ln -s /bin/systemd   ${D}${base_sbindir}/init
 	ln -s /bin/systemctl ${D}${base_sbindir}/halt
 	ln -s /bin/systemctl ${D}${base_sbindir}/poweroff
@@ -194,16 +196,18 @@ do_install_append() {
 	ln -s /bin/systemctl ${D}${base_sbindir}/shutdown
 	ln -s /bin/systemctl ${D}${base_sbindir}/telinit
 
-    # remove .so for deprecated compatibility libraries
-    rm -f ${D}${libdir}/libsystemd-daemon.*
-    rm -f ${D}${libdir}/libsystemd-login.*
-    rm -f ${D}${libdir}/libsystemd-id128.*
-    rm -f ${D}${libdir}/libsystemd-journal.*
-    rm -f ${D}${base_libdir}/libsystemd-daemon.*
-    rm -f ${D}${base_libdir}/libsystemd-login.*
-    rm -f ${D}${base_libdir}/libsystemd-id128.*
-    rm -f ${D}${base_libdir}/libsystemd-journal.*
+	# remove .so for deprecated compatibility libraries
+	rm -f ${D}${libdir}/libsystemd-daemon.*
+	rm -f ${D}${libdir}/libsystemd-login.*
+	rm -f ${D}${libdir}/libsystemd-id128.*
+	rm -f ${D}${libdir}/libsystemd-journal.*
+	rm -f ${D}${base_libdir}/libsystemd-daemon.*
+	rm -f ${D}${base_libdir}/libsystemd-login.*
+	rm -f ${D}${base_libdir}/libsystemd-id128.*
+	rm -f ${D}${base_libdir}/libsystemd-journal.*
 
+	# remove unwanted files
+	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
 }
 
 # the following nonessential packages are excluded
@@ -222,9 +226,10 @@ PACKAGES =+ "libsystemd-dev \
              libsystemd-login-dev \
              libsystemd-id128-dev \
              libsystemd-journal-dev \
+             python3-systemd \
             "
 
-
+FILES_python3-systemd = "${PYTHON_SITEPACKAGES_DIR}/systemd/*"
 FILES_libsystemd-daemon-dev = "${libdir}/pkgconfig/libsystemd-daemon.pc"
 FILES_libsystemd-login-dev = "${libdir}/pkgconfig/libsystemd-login.pc"
 FILES_libsystemd-id128-dev = "${libdir}/pkgconfig/libsystemd-id128.pc"
@@ -246,6 +251,7 @@ FILES_${PN}-dbg += "${base_libdir}/systemd/.debug \
                     ${base_libdir}/systemd/system-generators/.debug \
                     ${base_libdir}/udev/.debug \
                     ${@base_contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
+                    ${PYTHON_SITEPACKAGES_DIR}/systemd/.debug \
                    "
 FILES_${PN}-dev = ""
 ALLOW_EMPTY_${PN}-dev = "1"
