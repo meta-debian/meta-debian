@@ -25,3 +25,6 @@ SRC_URI += " \
 do_configure_prepend() {
 	sed -i -e "s/-lgdbm//g" ${S}/Makefile.in
 }
+
+# provide libgdbm-dev packages
+RPROVIDES_${PN}-dev = "lib${PN}-dev"
