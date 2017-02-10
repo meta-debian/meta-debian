@@ -7,3 +7,6 @@ do_install_append() {
 	rm -rf ${D}${libdir}/python*/*/${DPN}/__pycache__ \
 	       ${D}${libdir}/python*/*/${DPN}/*/__pycache__
 }
+
+# Provide python3-lxml-native
+BBCLASSEXTEND = "native"
