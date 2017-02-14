@@ -30,5 +30,7 @@ inherit autotools distro_features_check pkgconfig
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
-DEBIANNAME_${PN} = "libstartup-notification0"
-DEBIANNAME_${PN}-dev = "libstartup-notification0-dev"
+DEBIANNAME_${PN} = "lib${DPN}0"
+DEBIANNAME_${PN}-dev = "lib${DPN}0-dev"
+RPROVIDES_${PN} += "lib${DPN}"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"

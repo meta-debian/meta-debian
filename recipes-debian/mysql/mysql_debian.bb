@@ -6,7 +6,7 @@ language in the world. The main goals of MySQL are speed, robustness and \
 ease of use \
 "
 HOMEPAGE = "http://dev.mysql.com/"
-PR = "r1"
+
 inherit debian-package
 
 LICENSE = "GPLv2+ & BSD-4-Clause & BSD & Zlib & PD & ISC"
@@ -20,7 +20,7 @@ LIC_FILES_CHKSUM = "\
 	"
 inherit cmake
 VER = "5.5"
-PV = "5.5.53"
+PV = "5.5.54"
 DPN = "mysql-${VER}"
 
 EXTRA_OECMAKE += " \

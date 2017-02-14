@@ -28,5 +28,9 @@ do_install_append() {
 	#remove unwanted files
 	rm ${D}${libdir}/*.la
 }
+
 PKG_${PN}-dev = "lib${PN}0-dev"
 RDEPENDS_${PN}-dev += "libxcb-dev"
+
+RPROVIDES_${PN} += "lib${PN}"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"

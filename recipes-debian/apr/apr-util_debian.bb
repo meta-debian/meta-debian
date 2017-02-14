@@ -9,7 +9,7 @@ that provides a predictable and consistent interface to underlying \
 platform-specific implementations."
 HOMEPAGE = "http://apr.apache.org/"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 PV = "1.5.4"
@@ -64,6 +64,7 @@ PACKAGECONFIG[openssl] = " \
 PACKAGECONFIG[pgsql] = "--with-pgsql=${STAGING_DIR_HOST}${prefix},--without-pgsql,postgresql"
 PACKAGECONFIG[sqlite3] = "--with-sqlite3=${STAGING_DIR_HOST}${prefix},--without-sqlite3,sqlite3"
 PACKAGECONFIG[sqlite2] = "--with-sqlite2=${STAGING_DIR_HOST}${prefix},--without-sqlite2,sqlite"
+PACKAGECONFIG[freetds] = "--with-freetds=${STAGING_DIR_HOST}${prefix},--without-freetds,freetds"
 
 inherit autotools-brokensep lib_package binconfig
 

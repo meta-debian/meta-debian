@@ -25,3 +25,7 @@ do_install_append() {
 	rm -r ${D}${libdir}
 }
 FILES_${PN}-dev += "${datadir}/pkgconfig"
+
+# ${PN} is empty so we need to tweak -dev and -dbg package dependencies
+RDEPENDS_${PN}-dev = ""
+RRECOMMENDS_${PN}-dbg = "${PN}-dev (= ${EXTENDPKGV})"
