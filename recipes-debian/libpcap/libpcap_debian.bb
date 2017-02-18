@@ -44,6 +44,12 @@ do_configure_prepend () {
 	sed -i -e's,^V_RPATH_OPT=.*$,V_RPATH_OPT=,' ${S}/pcap-config.in
 }
 
+do_install_prepend() {
+	if [ -L ${B}/libpcap.so ]; then
+		touch ${B}/libpcap.so
+	fi
+}
+
 FILES_${PN}-dev += "${bindir}/pcap-config"
 
 DEBIANNAME_${PN} = "${PN}0.8"
