@@ -18,7 +18,9 @@ DEPENDS = "expat flex-native bison-native udev"
 
 PROVIDES = "virtual/libgl virtual/libgles1 virtual/libgles2 virtual/egl virtual/mesa"
 
-inherit autotools pkgconfig pythonnative gettext
+inherit autotools pkgconfig pythonnative gettext distro_features_check
+
+REQUIRED_DISTRO_FEATURES = "opengl"
 
 PACKAGECONFIG ??= "dri dri3 egl gallium openvg r600 gles vdpau xa xvmc \
                 ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
