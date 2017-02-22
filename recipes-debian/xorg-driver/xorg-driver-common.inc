@@ -41,3 +41,8 @@ def add_abi_depends(d, name):
 
     pn = d.getVar("PN", True)
     d.appendVar('RDEPENDS_' + pn, ' ' + abi)
+
+
+PKG_${PN} = "${DPN}"
+PKG_${PN}-dev = "${DPN}-dev"
+PKG_${PN}-dbg = "${DPN}-dbg"
