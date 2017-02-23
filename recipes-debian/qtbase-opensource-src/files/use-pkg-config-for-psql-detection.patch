@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 5a09ae3..94315c6 100755
+--- a/configure
++++ b/configure
+@@ -4373,6 +4373,8 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
+                 fi
+                 [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
+                 [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
++                [ -z "$QT_CFLAGS_PSQL" ] && QT_CFLAGS_PSQL=`pkg-config --cflags libpq`
++                [ -z "$QT_LFLAGS_PSQL" ] && QT_LFLAGS_PSQL=`pkg-config --libs libpq`
+                 # But, respect PSQL_LIBS if set
+                 [ -z "$PSQL_LIBS" ] || QT_LFLAGS_PSQL="$PSQL_LIBS"
+                 if compileTest unix/psql "PostgreSQL" $QT_LFLAGS_PSQL $QT_CFLAGS_PSQL; then

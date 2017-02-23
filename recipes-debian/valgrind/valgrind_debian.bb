@@ -45,3 +45,7 @@ do_install_append () {
 	rm ${D}${includedir}/${PN}/config.h
 	rm -rf ${D}${includedir}/${PN}/vki	
 }
+
+# valgrind requires debug files from glibc to run
+INSANE_SKIP_${PN} += "debug-deps"
+RDEPENDS_${PN} += "glibc-dbg"
