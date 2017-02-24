@@ -51,6 +51,7 @@ You can change the target machine by setting `MACHINE` variable in `conf/local.c
 * qemux86 (default)
 * qemux86-64
 * qemuarm
+* qemuarm64
 * qemuppc
 * qemumips
 
