@@ -212,12 +212,12 @@ FILES_${PN}-dev += "${bindir}/mib2c* \
 PKG_libsnmp = "libsnmp30"
 
 PKG_${PN} = "snmp"
-RPROVIDES_${PN} = "snmp"
+RPROVIDES_${PN} += "snmp"
 PKG_${PN}-dev = "libsnmp-dev"
-RPROVODES_${PN}-dev = "libsnmp-dev"
+RPROVIDES_${PN}-dev += "libsnmp-dev"
 
-RDEPEMDS_libsnmp += "libsnmp-base"
+RDEPENDS_libsnmp += "libsnmp-base"
 RDEPENDS_snmpd += "lsb-base libsnmp-base"
 RDEPENDS_snmptrapd += "snmpd"
 RDEPENDS_tkmib += "libsnmp-perl"
-RDEPEMDS_${PN} += "libsnmp-base"
+RDEPENDS_${PN} += "libsnmp-base"
