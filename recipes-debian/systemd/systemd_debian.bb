@@ -14,7 +14,7 @@ PROVIDES = "udev"
 
 inherit debian-package
 PV = "215"
-PR = "r1"
+PR = "r2"
 
 inherit pkgconfig autotools useradd python3native
 
@@ -65,6 +65,9 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 --enable-compat-libs \
                 --disable-libcryptsetup \
                "
+
+PACKAGECONFIG ??= "audit"
+PACKAGECONFIG[audit] = "--enable-audit,--disable-audit,audit"
 
 do_configure_prepend() {
 	export KMOD="${base_bindir}/kmod"
