@@ -8,6 +8,7 @@ HOMEPAGE = "http://motif.ics.com/"
 
 inherit debian-package
 PV = "2.3.4"
+PR = "r1"
 
 LICENSE = "LGPLv2+ & MIT-X"
 LIC_FILES_CHKSUM = " \
@@ -32,6 +33,8 @@ EXTRA_OECONF = " \
     --with-xmbinddir="${datadir}/X11/bindings" \
     --with-x11rgbdir="${sysconfdir}/X11" \
 "
+EXTRA_OECONF += "--x-includes=${STAGING_INCDIR} --x-libraries=${STAGING_LIBDIR}"
+
 PACKAGECONFIG ??= "jpeg png"
 PACKAGECONFIG[jpeg] = "--enable-jpeg,--disable-jpeg,libjpeg-turbo"
 PACKAGECONFIG[png] = "--enable-png,--disable-png,libpng"
