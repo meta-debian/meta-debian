@@ -18,7 +18,7 @@ DESCRIPTION = "Kerberos is a system for authenticating users and services on a n
 HOMEPAGE = "http://web.mit.edu/Kerberos/"
 SECTION = "console/network"
 
-PR = "r3"
+PR = "r4"
 
 inherit debian-package
 PV = "1.12.1+dfsg"
@@ -78,6 +78,7 @@ FILES_${PN}-kdc = " \
 	${sysconfdir}/init.d/krb5-kdc \
 	${systemd_system_unitdir}/krb5-kdc.service \
 	${libdir}/krb5/plugins/kdb/db2.so \
+	${datadir}/krb5-kdc \
     "
 
 FILES_${PN}-kdc-ldap = " \
@@ -156,6 +157,12 @@ do_install_append() {
 
 	install -m 0755 ${S}/../debian/krb5-kdc.init ${D}${sysconfdir}/init.d/krb5-kdc
 	install -m 0644 ${S}/../debian/krb5-kdc.service ${D}${systemd_system_unitdir}/
+
+	install -d ${D}${datadir}/krb5-kdc ${D}${docdir}/krb5-kdc/examples
+	install -m 0644 ${DEBIAN_UNPACK_DIR}/debian/kdc.conf \
+	        ${D}${datadir}/krb5-kdc/kdc.conf.template
+	ln -sf ${datadir}/krb5-kdc/kdc.conf.template \
+	        ${D}${docdir}/krb5-kdc/examples/kdc.conf
 
 	# install for krb5-kdc-ldap package
 	install -d ${D}${sysconfdir}/insserv/overrides/
@@ -267,12 +274,62 @@ do_install_append() {
 	chmod 700 ${D}${sysconfdir}/krb5kdc
 }
 
+# Base on debian/krb5-kdc.postinst
+pkg_postinst_${PN}-kdc () {
+    DEFAULT_REALM="EXAMPLE.COM"
+    # Try to get default realm from /etc/krb5.conf
+    if [ -f $D${sysconfdir}/krb5.conf ]; then
+        DEFAULT_REALM=$(grep "^\s*default_realm\s*=" $D${sysconfdir}/krb5.conf | cut -d= -f2 | xargs)
+    fi
+
+    if [ ! -f "$D${sysconfdir}/krb5kdc/kdc.conf" ]; then
+        sed -e "s/@MYREALM/$DEFAULT_REALM/" \
+            $D${datadir}/krb5-kdc/kdc.conf.template > $D${sysconfdir}/krb5kdc/kdc.conf
+    fi
+
+    if [ ! -d "$D${sysconfdir}/default" ]; then
+        mkdir $D${sysconfdir}/default
+    fi
+
+    if [ -f "$D${sysconfdir}/default/krb5-kdc" ] ; then
+            . $D${sysconfdir}/default/krb5-kdc
+    fi
+    cat <<'EOF' > $D${sysconfdir}/default/krb5-kdc
+
+# Automatically generated.  Only the value of DAEMON_ARGS will be preserved.
+# If you change anything in this file other than DAEMON_ARGS, first run
+# dpkg-reconfigure krb5-kdc and disable managing the KDC configuration with
+# debconf.  Otherwise, changes will be overwritten.
+
+EOF
+    if [ -n "$DAEMON_ARGS" ] ; then
+        echo "DAEMON_ARGS=\"$DAEMON_ARGS\"" >> $D${sysconfdir}/default/krb5-kdc
+    fi
+}
+
+# Base on debian/krb5-admin-server.postinst
+pkg_postinst_${PN}-admin-server () {
+    if [ -f "$D${sysconfdir}/default/krb5-admin-server" ] ; then
+        . $D${sysconfdir}/default/krb5-admin-server
+    fi
+    cat <<'EOF' > $D${sysconfdir}/default/krb5-admin-server
+# Automatically generated.  If you change anything in this file other than the
+# values of  DAEMON_ARGS, first run dpkg-reconfigure
+# krb5-admin-server and disable managing the kadmin configuration with
+# debconf.  Otherwise, changes will be overwritten.
+
+EOF
+    if [ -n "$DAEMON_ARGS" ] ; then
+        echo "DAEMON_ARGS=\"$DAEMON_ARGS\"" \
+            >> $D${sysconfdir}/default/krb5-admin-server
+    fi
+}
+
 RCONFLICTS_${PN}-dev = "hemidal-dev"
 RREPLACES_${PN}-dev = "hemidal-dev"
 
-# Dependencies between krb5's packages base on debian/control
-RDEPENDS_${PN}-user += "libkrb5"
-RDEPENDS_${PN}-kdc += "libkrb5 libkadm5srv-mit ${PN}-user"
+RDEPENDS_${PN}-user += "libkrb5 krb5-config"
+RDEPENDS_${PN}-kdc += "libkrb5 libkadm5srv-mit ${PN}-user krb5-config"
 RDEPENDS_${PN}-kdc-ldap += "${PN}-kdc"
 RDEPENDS_${PN}-admin-server += "libkrb5 ${PN}-kdc"
 RDEPENDS_${PN}-pkinit += "libkrb5"
