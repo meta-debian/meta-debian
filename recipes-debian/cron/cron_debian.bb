@@ -3,9 +3,22 @@
 # Base branch: daisy
 #
 
-DESCRIPTION = "process scheduling daemon"
+SUMMARY = "process scheduling daemon"
+DESCRIPTION = "The cron daemon is a background process that runs particular programs at\n\
+particular times (for example, every minute, day, week, or month), as\n\
+specified in a crontab. By default, users may also create crontabs of\n\
+their own so that processes are run on their behalf.\n\
+.\n\
+Output from the commands is usually mailed to the system administrator\n\
+(or to the user in question); you should probably install a mail system\n\
+as well so that you can receive these messages.\n\
+.\n\
+This cron package does not provide any system maintenance tasks. Basic\n\
+periodic maintenance tasks are provided by other packages, such\n\
+as checksecurity."
+HOMEPAGE = "http://ftp.isc.org/isc/cron/"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 PV = "3.0pl1"
@@ -18,7 +31,10 @@ LICENSE = "GPL-2+ & ISC"
 LIC_FILES_CHKSUM = " \
 file://debian/copyright;md5=3de9a1b9c8691191a6bb88b6e4388c62"
 
-inherit autotools-brokensep
+inherit autotools-brokensep useradd
+
+USERADD_PACKAGES = "${PN}"
+GROUPADD_PARAM_${PN} = "--system crontab"
 
 DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
@@ -73,7 +89,17 @@ do_install_append() {
 	if [ ${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} = "systemd" ];then
 		install -d ${D}${base_libdir}/systemd/system
 		install -m 644 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
-	fi	
+	fi
+
+	install -d ${D}${localstatedir}/spool/cron/crontabs
+}
+
+pkg_postinst_${PN} () {
+	crondir="${localstatedir}/spool/cron"
+	if [ -d $D$crondir/crontabs ] ; then
+		chown root:crontab $D$crondir/crontabs
+		chmod 1730 $D$crondir/crontabs
+	fi
 }
 
 FILES_${PN} += "${base_libdir}/*"
