@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 PV = "4.2"
@@ -21,8 +21,9 @@ DEPENDS_class-native = "bison-native"
 DEPENDS_class-nativesdk = "bison-native"
 
 SRC_URI += "\
-	file://disable-build-man-dir.patch \
-	file://force-enable-subids-when-cross-compiling.patch \
+    file://disable-build-man-dir.patch \
+    file://force-enable-subids-when-cross-compiling.patch \
+    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_login-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools gettext update-alternatives
@@ -35,7 +36,6 @@ EXTRA_OECONF += " \
 		--without-attr \
 		--without-audit \
 		--without-libcrack \
-		--without-selinux \
 		--without-tcb \
 		--with-group-name-max-length=24 \
 		--enable-subordinate-ids=yes \
@@ -48,12 +48,16 @@ NSCDOPT_class-nativesdk = "--without-nscd"
 NSCDOPT_libc-uclibc = " --without-nscd"
 NSCDOPT_libc-glibc = "${@bb.utils.contains('DISTRO_FEATURES', 'libc-spawn', '--with-nscd', '--without-nscd', d)}"
 
-PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
+"
 PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
 PACKAGECONFIG[pam] = "--with-libpam,--without-libpam,libpam,libpam-modules"
 PACKAGECONFIG[attr] = "--with-attr,--without-attr,attr"
 PACKAGECONFIG[acl] = "--with-acl,--without-acl,acl"
+PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,selinux"
 
 RDEPENDS_${PN} = " \
                   base-passwd \

@@ -4,7 +4,7 @@
 # base commit: 3fb5191d4da52c6b352a23881c0ea63c2e348619
 #
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
 PV = "6.7p1"
@@ -16,10 +16,11 @@ DEPENDS = "zlib openssl"
 
 # openssh-server.postinst is created base on ${S}/debian/openssh-server.postinst
 SRC_URI += " \
-	file://add-test-support-for-busybox.patch \
-	file://run-ptest \
-	file://openssh-server.postinst \
-	file://sshd_config \
+    file://add-test-support-for-busybox.patch \
+    file://run-ptest \
+    file://openssh-server.postinst \
+    file://sshd_config \
+    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
@@ -35,7 +36,6 @@ SYSTEMD_SERVICE_${PN} = "ssh.service"
 CFLAGS += "-D__FILE_OFFSET_BITS=64"
 
 # Configure follow debian/rules
-# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 	--sysconfdir=${sysconfdir}/ssh \
 	--disable-strip \
@@ -46,7 +46,6 @@ EXTRA_OECONF = " \
 	--with-default-path=${DEFAULT_PATH} \
 	--with-superuser-path=${SUPERUSER_PATH} \
 	--with-cflags='${cflags}' \
-	--without-selinux \
 "
 cflags = "${CPPFLAGS} ${CFLAGS} -DLOGIN_PROGRAM=\"${base_bindir}/login\" -DLOGIN_NO_ENDOPT"
 DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
@@ -54,11 +53,13 @@ SUPERUSER_PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 PACKAGECONFIG ??= "tcp-wrappers \
 	${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+	${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
 PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_LIBDIR}/..,--without-kerberos5,krb5"
+PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 
 # passwd path is hardcoded in sshd
 CACHED_CONFIGUREVARS += "ac_cv_path_PATH_PASSWD_PROG=${bindir}/passwd"
