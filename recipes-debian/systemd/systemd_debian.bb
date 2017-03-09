@@ -350,6 +350,8 @@ RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-journal-dev += "libsystemd-dev"
 
+RRECOMMENDS_${PN} += "libpam-systemd"
+
 # init script requires init-functions, procps's ps, and mountpoint
 RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"
 
