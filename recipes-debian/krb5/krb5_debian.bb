@@ -24,7 +24,7 @@ inherit debian-package
 PV = "1.12.1+dfsg"
 
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://./../NOTICE;md5=450c80c6258ce03387bd09df37638ebc"
+LIC_FILES_CHKSUM = "file://../NOTICE;md5=450c80c6258ce03387bd09df37638ebc"
 
 DEPENDS = "ncurses util-linux e2fsprogs e2fsprogs-native"
 
@@ -32,13 +32,18 @@ inherit autotools-brokensep binconfig perlnative
 
 S = "${DEBIAN_UNPACK_DIR}/src/"
 
-PACKAGECONFIG ??= "openssl ldap"
+PACKAGECONFIG ??= "openssl ldap verto"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
 PACKAGECONFIG[openssl] = "--with-pkinit-crypto-impl=openssl,,openssl"
 PACKAGECONFIG[ldap] = "--with-ldap,--without-ldap,libldap"
 PACKAGECONFIG[readline] = "--with-readline,--without-readline,readline"
+PACKAGECONFIG[verto] = "--with-system-verto,--without-system-verto,libverto"
 
-EXTRA_OECONF += " --without-tcl --with-system-et --disable-rpath"
+EXTRA_OECONF += " \
+    --localstatedir=${sysconfdir} \
+    --with-system-et --with-system-ss \
+    --disable-rpath --enable-shared --without-tcl \
+"
 
 CACHED_CONFIGUREVARS += " \
 	krb5_cv_attr_constructor_destructor=yes ac_cv_func_regcomp=yes \
@@ -75,10 +80,12 @@ FILES_${PN}-kdc = " \
 	${sbindir}/kpropd \
 	${sbindir}/kproplog \
 	${sbindir}/krb5kdc \
+	${sysconfdir}/krb5kdc \
 	${sysconfdir}/init.d/krb5-kdc \
 	${systemd_system_unitdir}/krb5-kdc.service \
 	${libdir}/krb5/plugins/kdb/db2.so \
 	${datadir}/krb5-kdc \
+	${localstatedir}/lib/krb5kdc \
     "
 
 FILES_${PN}-kdc-ldap = " \
@@ -113,13 +120,19 @@ FILES_${PN}-user = " \
 	${bindir}/kvno \
     "
 
-FILES_libgssapi-krb5 = "${libdir}/libgssapi_krb5${SOLIBS}"
+FILES_libgssapi-krb5 = " \
+	${libdir}/libgssapi_krb5${SOLIBS} \
+	${sysconfdir}/gss/mech.d \
+"
 FILES_libgssrpc = "${libdir}/libgssrpc${SOLIBS}"
 FILES_libk5crypto = "${libdir}/libk5crypto${SOLIBS}"
 FILES_libkadm5clnt-mit = "${libdir}/libkadm5clnt_mit${SOLIBS}"
 FILES_libkadm5srv-mit = "${libdir}/libkadm5srv_mit${SOLIBS}"
 FILES_libkdb5 = "${libdir}/libkdb5${SOLIBS}"
-FILES_libkrb5 = "${libdir}/libkrb5${SOLIBS}"
+FILES_libkrb5 = " \
+	${libdir}/libkrb5${SOLIBS} \
+	${libdir}/krb5/plugins/krb5 \
+"
 FILES_libkrb5support = "${libdir}/libkrb5support${SOLIBS}"
 FILES_libkrad = "${libdir}/libkrad${SOLIBS}"
 
@@ -145,8 +158,6 @@ do_configure() {
 }
 
 do_install_append() {
-	rm -r ${D}${localstatedir_nativesdk}
-
 	install -d ${D}${sysconfdir}/init.d/
 	install -d ${D}${base_libdir}/systemd/system/
 	install -m 0755 ${S}/../debian/krb5-admin-server.init ${D}${sysconfdir}/init.d/krb5-admin-server
