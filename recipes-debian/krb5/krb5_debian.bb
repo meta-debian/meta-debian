@@ -28,7 +28,11 @@ LIC_FILES_CHKSUM = "file://../NOTICE;md5=450c80c6258ce03387bd09df37638ebc"
 
 DEPENDS = "ncurses util-linux e2fsprogs e2fsprogs-native"
 
-inherit autotools-brokensep binconfig perlnative
+inherit autotools-brokensep binconfig perlnative systemd
+
+SYSTEMD_PACKAGES = "${PN}-admin-server ${PN}-kdc"
+SYSTEMD_SERVICE_${PN}-admin-server = "krb5-admin-server.service"
+SYSTEMD_SERVICE_${PN}-kdc = "krb5-kdc.service"
 
 S = "${DEBIAN_UNPACK_DIR}/src/"
 
