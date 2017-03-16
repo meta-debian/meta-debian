@@ -186,7 +186,7 @@ ALLOW_EMPTY_libpython${PYTHON_MAJMIN}-minimal = "1"
 DEBIAN_NOAUTONAME_libpython${PYTHON_MAJMIN}-stdlib = "1"
 DEBIAN_NOAUTONAME_libpython${PYTHON_MAJMIN}-minimal = "1"
 
-RDEPENDS_libpython${PYTHON_MAJMIN}-stdlib += "\
+RRECOMMENDS_libpython${PYTHON_MAJMIN}-stdlib += "\
 	${PN}-2to3 ${PN}-argparse ${PN}-audio ${PN}-bsddb ${PN}-codecs ${PN}-compiler \
 	${PN}-compression ${PN}-core ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-db \
 	${PN}-debugger ${PN}-difflib ${PN}-distutils ${PN}-doctest ${PN}-email ${PN}-hotshot \
@@ -197,7 +197,7 @@ RDEPENDS_libpython${PYTHON_MAJMIN}-stdlib += "\
 	${PN}-sqlite3-tests ${PN}-stringold ${PN}-terminal ${PN}-tests ${PN}-textutils \
 	${PN}-threading ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml ${PN}-xmlrpc \
 "
-RDEPENDS_libpython${PYTHON_MAJMIN}-minimal += "\
+RRECOMMENDS_libpython${PYTHON_MAJMIN}-minimal += "\
 	${PN}-2to3 ${PN}-bsddb ${PN}-codecs ${PN}-compile ${PN}-compiler ${PN}-contextlib \
 	${PN}-core ${PN}-crypt ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-distutils \
 	${PN}-email ${PN}-hotshot ${PN}-idle ${PN}-importlib ${PN}-io ${PN}-json ${PN}-lang \
