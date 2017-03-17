@@ -16,7 +16,7 @@ inherit debian-package
 PV = "215"
 PR = "r2"
 
-inherit pkgconfig autotools useradd python3native systemd
+inherit pkgconfig autotools useradd python3native
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"
 
@@ -211,11 +211,6 @@ do_install_append() {
 
 	# remove unwanted files
 	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
-}
-
-pkg_postinst_${PN}() {
-	# Create /etc/machine-id to pass the first boot
-	touch $D${sysconfdir}/machine-id
 }
 
 # the following nonessential packages are excluded
