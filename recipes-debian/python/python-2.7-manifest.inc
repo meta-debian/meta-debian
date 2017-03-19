@@ -69,6 +69,7 @@ RDEPENDS_${PN}-debugger="${PN}-io ${PN}-lang ${PN}-re ${PN}-stringold ${PN}-shel
 FILES_${PN}-debugger="${libdir}/python2.7/bdb.* ${libdir}/python2.7/pdb.* "
 
 SUMMARY_${PN}-dev="Python development package"
+RDEPENDS_${PN}-dev = "lib${BPN}2"
 FILES_${PN}-dev="${includedir} ${libdir}/lib*${SOLIBSDEV} ${libdir}/*.la ${libdir}/*.a ${libdir}/*.o ${libdir}/pkgconfig ${base_libdir}/*.a ${base_libdir}/*.o ${datadir}/aclocal ${datadir}/pkgconfig "
 
 SUMMARY_${PN}-difflib="Python helpers for computing deltas between objects"
