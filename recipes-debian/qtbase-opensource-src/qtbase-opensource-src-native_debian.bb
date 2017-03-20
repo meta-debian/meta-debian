@@ -4,6 +4,7 @@
 #
 
 require qtbase-opensource-src.inc
+PR = "${INC_PR}.0"
 
 DEPENDS = "zlib-native dbus-native"
 QT_MODULE = "qtbase"

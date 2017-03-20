@@ -4,6 +4,7 @@
 #
 
 require qtbase-opensource-src.inc
+PR = "${INC_PR}.1"
 
 inherit qmake5
 
@@ -189,7 +190,8 @@ do_configure() {
 	            -no-strip \
 	            -no-separate-debug-info \
 	            ${cpu_opt} \
-	            $oe_config
+	            $oe_config \
+	            ${EXTRA_OECONF}
 
 	qmake5_base_do_configure
 }
@@ -342,14 +344,11 @@ DEBIANNAME_${PN}-dev = "qtbase5-dev"
 
 RPROVIDES_${PN}-dev += "qtbase5-dev"
 
-# package ${PN}-dev is empty, but ${PN}-dev depends on it by default
-ALLOW_EMPTY_${PN} = "1"
-
 # As Debian, qt5-default depends on qtbase5-dev
 # skip checking dev-deps for qt5-default on do_package_qa
 INSANE_SKIP_qt5-default += "dev-deps"
 
-RDEPENDS_${PN}-dev += "qt5-qmake qtbase5-dev-tools"
+RDEPENDS_${PN}-dev = "qt5-qmake qtbase5-dev-tools"
 RDEPENDS_qtbase5-private-dev += "${PN}-dev"
 RDEPENDS_qt5-default += "${PN}-dev"
 RDEPENDS_libqt5opengl-dev += "${PN}-dev"
