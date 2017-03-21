@@ -6,7 +6,7 @@
 require qtbase-opensource-src.inc
 PR = "${INC_PR}.1"
 
-inherit qmake5
+inherit qmake5 pkgconfig
 
 B = "${S}"
 
@@ -44,10 +44,11 @@ PACKAGECONFIG_GL_arm ?= "${@base_contains('DISTRO_FEATURES', 'opengl', 'gles2 km
 PACKAGECONFIG_FB ?= "${@base_contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)}"
 PACKAGECONFIG_X11 ?= "${@base_contains('DISTRO_FEATURES', 'x11', \
 	'xcb xvideo xsync xshape xrender xrandr xfixes xinput2 xinput xinerama xcursor gtkstyle xkb', '', d)}"
-PACKAGECONFIG_FONTS ?= ""
+PACKAGECONFIG_FONTS ?= "freetype fontconfig"
 PACKAGECONFIG_SYSTEM ?= "jpeg libpng zlib harfbuzz"
 PACKAGECONFIG_MULTIMEDIA ?= "${@base_contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio', '', d)}"
-PACKAGECONFIG_DISTRO ?= "sql-mysql sql-psql sql-odbc sql-sqlite sql-tds icu glib accessibility examples linuxfb"
+PACKAGECONFIG_DISTRO ?= "sql-mysql sql-psql sql-odbc sql-sqlite sql-tds \
+                         icu glib accessibility examples linuxfb cups mtdev"
 # Either release or debug, can be overridden in bbappends
 PACKAGECONFIG_RELEASE ?= "release"
 PACKAGECONFIG_OPENSSL ?= "openssl"
@@ -130,6 +131,7 @@ PACKAGECONFIG[alsa] = "-alsa,-no-alsa,alsa-lib"
 PACKAGECONFIG[pulseaudio] = "-pulseaudio,-no-pulseaudio,pulseaudio"
 PACKAGECONFIG[nis] = "-nis,-no-nis"
 PACKAGECONFIG[widgets] = "-widgets,-no-widgets"
+PACKAGECONFIG[cups] = "-cups,-no-cups,cups"
 
 do_generate_qt_config_file_append() {
 	cat >> ${QT_CONF_PATH} <<EOF
@@ -151,6 +153,10 @@ OE_QMAKE_QMAKE = "bin/qmake"
 # submodule.
 cpu_opt = ""
 cpu_opt_x86 = "-no-sse2 -no-pch"
+# with -march=core2, __SSE2__ is predefined
+# we need remove this definition or building will fail
+OE_QMAKE_CFLAGS_append_x86 = " -U__SSE2__"
+OE_QMAKE_CXXFLAGS_append_x86 = " -U__SSE2__"
 
 do_configure() {
 	# we need symlink in path relative to source, because
