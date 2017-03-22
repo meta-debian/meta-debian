@@ -22,8 +22,8 @@ inherit autotools pkgconfig pythonnative gettext distro_features_check
 
 REQUIRED_DISTRO_FEATURES = "opengl"
 
-PACKAGECONFIG ??= "dri dri3 egl gallium openvg r600 gles vdpau xa xvmc \
-                ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
+PACKAGECONFIG ??= "dri dri3 egl gallium openvg r600 gles xa \
+                ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11 xvmc vdpau', '', d)} \
                 ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)} \
                 "
 
