@@ -1,7 +1,7 @@
 #
 # Base recipe: meta-oe/recipes-graphics/xorg-data/xbitmaps_1.1.1.bb
 # Base branch: master
-#
+# Base commit: d523cc183903fd0bc2e53af6af99a88ea1652e0d
 
 HOMEPAGE = "http://www.x.org"
 DESCRIPTION = "Common X11 Bitmaps"
