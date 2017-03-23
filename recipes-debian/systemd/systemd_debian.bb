@@ -38,6 +38,8 @@ DEPENDS = "intltool-native \
 # Other target specific CONFFLAGS in debian/rules are ignored.
 DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --with-rootlibdir=${base_libdir} \
+                   --with-sysvinit-path=${sysconfdir}/init.d \
+                   --with-sysvrcnd-path=${sysconfdir} \
                    --with-firmware-path=/lib/firmware \
                    --with-ntp-servers="" \
                    --with-dns-servers="" \
@@ -344,7 +346,7 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                        ${base_sbindir}/shutdown \
                        ${base_sbindir}/telinit \
                      "
-RDEPENDS_${PN} += "systemd-sysv"
+RDEPENDS_${PN} += "systemd-sysv sysv-rc"
 RDEPENDS_libsystemd-daemon-dev  += "libsystemd-dev"
 RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
