@@ -93,11 +93,44 @@ PKG_${PN} = "${PN}-server"
 RPROVIDES_${PN} += "${PN}-server"
 
 pkg_postinst_${PN}() {
+	INITCONFFILE="$D${sysconfdir}/default/isc-dhcp-server"
+
+	# We generate several files during the postinst, and we don't want
+	#       them to be readable only by root.
+	umask 022
+
+	# Generate configuration file if it does not exist, using default values.
+	[ -r "${INITCONFFILE}" ] || {
+		echo Generating ${INITCONFFILE}... >&2
+		cat >${INITCONFFILE} <<'EOFMAGICNUMBER1234'
+# Defaults for isc-dhcp-server initscript
+# sourced by /etc/init.d/isc-dhcp-server
+# installed at /etc/default/isc-dhcp-server by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# Path to dhcpd's config file (default: /etc/dhcp/dhcpd.conf).
+#DHCPD_CONF=/etc/dhcp/dhcpd.conf
+
+# Path to dhcpd's PID file (default: /var/run/dhcpd.pid).
+#DHCPD_PID=/var/run/dhcpd.pid
+
+# Additional options to start dhcpd with.
+#       Don't use options -cf or -pf here; use DHCPD_CONF/ DHCPD_PID instead
+#OPTIONS=""
+
+# On what interfaces should the DHCP server (dhcpd) serve DHCP requests?
+#       Separate multiple interfaces with spaces, e.g. "eth0 eth1".
+INTERFACES=""
+EOFMAGICNUMBER1234
+
 	mkdir -p $D/${localstatedir}/lib/dhcp
 	touch $D/${localstatedir}/lib/dhcp/dhcpd.leases
 	touch $D/${localstatedir}/lib/dhcp/dhcpd6.leases
+	}
 }
-
 pkg_postinst_${PN}-client() {
 	mkdir -p $D/${localstatedir}/lib/dhcp
 }
