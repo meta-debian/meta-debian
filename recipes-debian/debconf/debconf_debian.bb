@@ -35,3 +35,5 @@ ${bindir}/debconf-loadtemplate \
 ${bindir}/debconf-mergetemplate \
 "
 FILES_${PN} += "${datadir} ${libdir}"
+
+BBCLASSEXTEND = "native"
