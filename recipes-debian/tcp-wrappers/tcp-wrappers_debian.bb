@@ -88,6 +88,7 @@ FILES_${PN} = "${sbindir}"
 FILES_${PN}-doc = "${mandir}/man8"
 
 DEBIANNAME_${PN} = "tcpd"
+RPROVIDES_${PN} += "tcpd"
 
 # Base on libwrap0.postinst
 pkg_postinst_libwrap() {
