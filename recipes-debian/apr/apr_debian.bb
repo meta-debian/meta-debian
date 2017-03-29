@@ -55,6 +55,11 @@ CACHED_CONFIGUREVARS_append_class-target = " \
     apr_cv_tcp_nodelay_with_cork=yes \
     apr_cv_process_shared_works=yes \
 "
+# not support on cross compiling
+CACHED_CONFIGUREVARS_append_class-target = " \
+    apr_cv_mutex_robust_shared=no \
+"
+
 CACHED_CONFIGUREVARS_append_class-target = " \
     ${@base_conditional('SITEINFO_BITS','32','ac_cv_sizeof_struct_iovec=8','',d)}"
 CACHED_CONFIGUREVARS_append_class-target = " \
