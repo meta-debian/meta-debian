@@ -8,6 +8,7 @@ HOMEPAGE = "http://mesa3d.sourceforge.net/"
 
 inherit debian-package
 PV = "10.3.2"
+PR = "r1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://docs/license.html;md5=6a23445982a7a972ac198e93cc1cb3de"
@@ -47,10 +48,10 @@ EGL_DISPLAYS .="${@bb.utils.contains('PACKAGECONFIG', 'x11', ',x11', '', d)}"
 EGL_DISPLAYS .="${@bb.utils.contains('PACKAGECONFIG', 'wayland', ',wayland', '', d)}"
 PACKAGECONFIG[egl] = "--enable-egl --with-egl-platforms=${EGL_DISPLAYS}, --disable-egl"
 
-GALLIUM_DRIVERS = ""
-GALLIUM_DRIVERS_append_arm = "freedreno"
+GALLIUM_DRIVERS = "nouveau,svga"
+GALLIUM_DRIVERS_append_arm = ",freedreno"
 PACKAGECONFIG[r600] = ""
-GALLIUM_DRIVERS_LLVM = "r300,svga,nouveau${@bb.utils.contains('PACKAGECONFIG', 'r600', ',radeonsi,r600', '', d)}"
+GALLIUM_DRIVERS_LLVM = ",r300${@bb.utils.contains('PACKAGECONFIG', 'r600', ',radeonsi,r600', '', d)}"
 GALLIUM_DRIVERS_append = "${@bb.utils.contains('PACKAGECONFIG', 'gallium-llvm', ',${GALLIUM_DRIVERS_LLVM}', '', d)}"
 GALLIUM_DRIVERS_append_x86 = ",swrast"
 GALLIUM_DRIVERS_append_x86-64 = ",swrast"
@@ -148,10 +149,10 @@ FILES_libosmesa-dev = " \
     ${libdir}/libOSMesa${SOLIBSDEV} \
     ${libdir}/pkgconfig/osmesa.pc \
 "
-FILES_mesa-vdpau-drivers = "${libdir}/vdpau"
+FILES_mesa-vdpau-drivers = "${libdir}/vdpau/*${SOLIBS}"
 
 FILES_${PN}-dbg += "${libdir}/*/.debug"
-FILES_${PN}-dev += "${libdir}/*/*.la"
+FILES_${PN}-dev += "${libdir}/*/*.la ${libdir}/vdpau/*${SOLIBSDEV}"
 
 # Remove the mesa dependency on mesa-dev, as mesa is empty
 RDEPENDS_${PN}-dev = ""
