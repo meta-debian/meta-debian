@@ -62,7 +62,11 @@ do_install_append() {
 	           ${D}${localstatedir}/cache/${DPN}/mod_cache_disk \
 	           ${D}${sysconfdir}/cron.daily \
 	           ${D}${sysconfdir}/default \
-	           ${D}${sysconfdir}/logrotate.d
+	           ${D}${sysconfdir}/logrotate.d \
+	           ${D}${sysconfdir}/${DPN}/mods-enabled \
+	           ${D}${sysconfdir}/${DPN}/conf-enabled \
+	           ${D}${sysconfdir}/${DPN}/sites-enabled
+
 	cp ${S}/debian/bash_completion/apache2 ${D}${sysconfdir}/bash_completion.d/
 	cp ${S}/debian/apache2.cron.daily      ${D}${sysconfdir}/cron.daily/apache2
 	cp -r ${S}/debian/config-dir/*         ${D}${sysconfdir}/${DPN}/
@@ -152,9 +156,54 @@ do_install_append() {
 	sed -i -e 's,${OECMAKE_PERLNATIVE_DIR},${bindir},g' ${D}${sbindir}/split-logfile
 }
 
-pkg_postints_${PN}() {
-	chown -R www-data:www-data ${D}${localstatedir}/cache/apache2/mod_cache_disk
-	chown root:adm ${D}${localstatedir}/log/apache2
+pkg_postinst_${PN}() {
+	chown -R www-data:www-data $D${localstatedir}/cache/apache2/mod_cache_disk
+	chown root:adm $D${localstatedir}/log/apache2
+
+	# enable default mpm
+	ln -sf ../mods-available/mpm_event.conf \
+		$D${sysconfdir}/${DPN}/mods-enabled/mpm_event.conf
+	ln -sf ../mods-available/mpm_event.load \
+		$D${sysconfdir}/${DPN}/mods-enabled/mpm_event.load
+
+	# enable default modules
+	for module in authz_host auth_basic access_compat authn_file authz_user \
+	              alias dir autoindex authn_core authz_core \
+	              env mime negotiation setenvif \
+	              filter deflate \
+	              status reqtimeout ; do
+		if [ ! -L $D${sysconfdir}/${DPN}/mods-enabled/${module}.conf -a \
+		     ! -f $D${sysconfdir}/${DPN}/mods-enabled/${module}.conf -a \
+		     -f $D${sysconfdir}/${DPN}/mods-available/${module}.conf ]; then
+			ln -sf ../mods-available/${module}.conf \
+				$D${sysconfdir}/${DPN}/mods-enabled/${module}.conf
+		fi
+		if [ ! -L $D${sysconfdir}/${DPN}/mods-enabled/${module}.load -a \
+		     ! -f $D${sysconfdir}/${DPN}/mods-enabled/${module}.load ]; then
+			ln -sf ../mods-available/${module}.load \
+				$D${sysconfdir}/${DPN}/mods-enabled/${module}.load
+		fi
+	done
+
+	# enable default conf
+	for conf in charset localized-error-pages other-vhosts-access-log security ; do
+		ln -sf ../conf-available/${conf}.conf \
+			$D${sysconfdir}/${DPN}/conf-enabled/${conf}.conf
+	done
+
+	# install default site
+	if [ ! -L $D${sysconfdir}/${DPN}/sites-enabled/000-default.conf -a \
+             ! -f $D${sysconfdir}/${DPN}/sites-enabled/000-default.conf ]; then
+		ln -sf ../sites-available/000-default.conf \
+			$D${sysconfdir}/${DPN}/sites-enabled/000-default.conf
+	fi
+	touch $D${localstatedir}/log/apache2/error.log $D${localstatedir}/log/apache2/access.log
+	chown root:adm $D${localstatedir}/log/apache2/error.log $D${localstatedir}/log/apache2/access.log
+	chmod 0640 $D${localstatedir}/log/apache2/error.log $D${localstatedir}/log/apache2/access.log
+
+	touch $D${localstatedir}/log/apache2/other_vhosts_access.log
+	chown root:adm $D${localstatedir}/log/apache2/other_vhosts_access.log
+	chmod 0640 $D${localstatedir}/log/apache2/other_vhosts_access.log
 }
 
 pkg_postinst_${PN}-suexec-custom() {
