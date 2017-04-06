@@ -41,6 +41,16 @@ TARGET_CC_ARCH_append_armv7a = " -D__SOFTFP__"
 # The following is a hack until we drop ac_cv_sizeof_off_t from site files
 EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'largefile', 'ac_cv_sizeof_off_t=8', '', d)} ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no"
 
+do_configure_prepend() {
+	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
+	# result of this command will be empty when gcc don't support multiarch.
+	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
+	else
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
+	fi
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
+}
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
         autoreconf -Wcross --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi

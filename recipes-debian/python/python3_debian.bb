@@ -71,6 +71,19 @@ export CROSSPYTHONPATH = "${B}/build/lib.linux-${TARGET_ARCH}-${PYTHON_MAJMIN}:$
 # No ctypes option for python 3
 PYTHONLSBOPTS = ""
 
+do_configure_prepend() {
+	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
+	# result of this command will be empty when gcc don't support multiarch.
+	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
+	else
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
+	fi
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
+
+	# Correct path to install pkgconfig files
+	sed -i -e "s|^LIBPC=.*|LIBPC=\$(LIBDIR)/pkgconfig|" ${S}/Makefile.pre.in
+}
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
 	autoreconf -Wcross --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi

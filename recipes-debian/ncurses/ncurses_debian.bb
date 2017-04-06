@@ -342,6 +342,7 @@ FILES_libncurses5 = " \
 "
 
 FILES_libncurses5-dev = " \
+  ${bindir}/ncurses5-config \
   ${includedir}/*.h \
   ${libdir}/pkgconfig/form.pc \
   ${libdir}/pkgconfig/menu.pc \
@@ -377,6 +378,7 @@ FILES_libncursesw5 = " \
 "
 
 FILES_libncursesw5-dev = "\
+  ${bindir}/ncursesw5-config \
   ${includedir}/ncursesw/ \
   ${libdir}/pkgconfig/formw.pc \
   ${libdir}/pkgconfig/menuw.pc \
@@ -437,5 +439,11 @@ DOTDEBUG-dbg = "${bindir}/.debug ${sbindir}/.debug ${libexecdir}/.debug ${libdir
 DEBUGFILEDIRECTORY-dbg = "/usr/lib/debug /usr/src/debug"
 
 FILES_${PN}-dbg = "${@d.getVar(['DOTDEBUG-dbg', 'DEBUGFILEDIRECTORY-dbg'][d.getVar('PACKAGE_DEBUG_SPLIT_STYLE', True) == 'debug-file-directory'], True)}"
+
+RDEPENDS_libncurses5 += "libtinfo5"
+RDEPENDS_libncurses5-dev += "libtinfo-dev ncurses-bin"
+RDEPENDS_libncursesw5 += "libtinfo5"
+RDEPENDS_libncursesw5-dev += "libtinfo-dev ncurses-bin"
+RDEPENDS_ncurses-term += "ncurses-base"
 
 BBCLASSEXTEND = "native nativesdk"

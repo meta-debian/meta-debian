@@ -4,6 +4,7 @@ HOMEPAGE = "http://qt-project.org/"
 
 inherit debian-package
 PV = "5.3.2+dfsg"
+INC_PR = "r1"
 
 LICENSE = "GFDL-1.3 & (LGPL-2.1 | GPL-3.0)"
 LIC_FILES_CHKSUM = "file://LICENSE.LGPL;md5=2abca611d56c23eb99943bde21c80a0d \
@@ -18,6 +19,7 @@ SRC_URI += "\
     file://0004-configureapp-Prefix-default-LIBDIRS-and-INCDIRS-with.patch \
     file://0005-qt_module-Fix-pkgconfig-and-libtool-replacements.patch \
     file://0008-configure-bump-path-length-from-256-to-512-character.patch \
+    file://0010-Revert-Use-the-gcc-feature-in-simd.prf.patch \
 "
 
 inherit qmake5_base

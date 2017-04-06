@@ -8,7 +8,7 @@ HOMEPAGE = "http://motif.ics.com/"
 
 inherit debian-package
 PV = "2.3.4"
-PR = "r1"
+PR = "r2"
 
 LICENSE = "LGPLv2+ & MIT-X"
 LIC_FILES_CHKSUM = " \
@@ -42,9 +42,10 @@ PACKAGECONFIG[png] = "--enable-png,--disable-png,libpng"
 do_compile() {
 	(
 		# HACK: build a native binaries need during the build
-		unset CC LD CXX CCLD CFLAGS
 		oe_runmake -C config/util \
-		    CC="${BUILD_CC}" LD="${BUILD_LD}" CXX="${BUILD_CXX}" LIBS="" makestrs
+		    CC="${BUILD_CC}" LD="${BUILD_LD}" CXX="${BUILD_CXX}" \
+		    CPPFLAGS="${BUILD_CPPFLAGS}" CFLAGS="${BUILD_CFLAGS}" \
+		    X_CFLAGS="" LIBS="" makestrs
 	)
 	if [ "$?" != "0" ]; then
 		exit 1

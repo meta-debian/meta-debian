@@ -4,6 +4,7 @@
 #
 
 require qtbase-opensource-src.inc
+PR = "${INC_PR}.0"
 
 DESCRIPTION = "SDK version of Qt/[X11|Mac|Embedded]"
 DEPENDS = "nativesdk-zlib nativesdk-dbus qtbase-native"

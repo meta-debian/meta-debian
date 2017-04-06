@@ -1,6 +1,6 @@
 # base recipe: https://github.com/openembedded/meta-openembedded/tree/master/meta-webserver/recipes-httpd/nginx
 # base branch: master
-
+# base commit: 9d40291916136ed3c4480102708e75d81cc77ef1
 SUMMARY = "nginx web/proxy server"
 DESCRIPTION = "Nginx ("engine X") is a high-performance web and reverse proxy server \
  created by Igor Sysoev. It can be used both as a standalone web server \
