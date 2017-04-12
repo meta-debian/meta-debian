@@ -45,3 +45,5 @@ DEBIANNAME_${PN}-dev = "${PN}11-dev"
 do_compile_prepend() {
         export LD_LIBRARY_PATH=${STAGING_LIBDIR}:$LD_LIBRARY_PATH
 }
+
+BBCLASSEXTEND = "nativesdk"
