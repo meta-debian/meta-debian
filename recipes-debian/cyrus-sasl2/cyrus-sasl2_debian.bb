@@ -49,6 +49,7 @@ PACKAGECONFIG[ldap] = "--with-ldap=${STAGING_LIBDIR} --enable-ldapdb,\
 PACKAGECONFIG[ntlm] = "--with-ntlm,--without-ntlm,,"
 
 CFLAGS += "-fPIC"
+PARALLEL_MAKE = ""
 PARALLEL_MAKEINST = ""
 
 #runtime depends follow debian/control
