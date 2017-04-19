@@ -20,3 +20,4 @@ PREFERRED_PROVIDER_libusb = "libusb"
 # Use xz-utils instead of xz
 PREFERRED_PROVIDER_xz = "xz-utils"
 PREFERRED_PROVIDER_xz-native = "xz-utils-native"
+PREFERRED_PROVIDER_nativesdk-xz = "nativesdk-xz-utils"
