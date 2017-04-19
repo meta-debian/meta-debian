@@ -21,3 +21,7 @@ PREFERRED_PROVIDER_libusb = "libusb"
 PREFERRED_PROVIDER_xz = "xz-utils"
 PREFERRED_PROVIDER_xz-native = "xz-utils-native"
 PREFERRED_PROVIDER_nativesdk-xz = "nativesdk-xz-utils"
+
+# Use six recipes in meta-debian to provide python-six,
+# instead of using python-six from poky
+PREFERRED_PROVIDER_python-six = "six"
