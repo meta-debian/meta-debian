@@ -352,7 +352,7 @@ RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-journal-dev += "libsystemd-dev"
 
-RRECOMMENDS_${PN} += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"
+RRECOMMENDS_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"
 
 # init script requires init-functions, procps's ps, and mountpoint
 RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"

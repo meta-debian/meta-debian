@@ -18,7 +18,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 inherit autotools texinfo
 
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11 floppyd', '', d)}"
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11 floppyd', '', d)}"
 PACKAGECONFIG[libbsd] = "ac_cv_lib_bsd_main=yes,ac_cv_lib_bsd_main=no,libbsd"
 PACKAGECONFIG[floppyd] = "--enable-floppyd,--disable-floppyd,"
 PACKAGECONFIG[x11] = "--with-x,--without-x,libx11"
