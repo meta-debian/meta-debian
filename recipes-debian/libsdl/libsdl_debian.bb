@@ -13,6 +13,7 @@ BUGTRACKER = "http://bugzilla.libsdl.org/"
 
 PR = "r1"
 inherit debian-package
+PV = "1.2.15"
 
 #Correct the debian package name
 DPN ="libsdl1.2"
@@ -25,7 +26,7 @@ DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d
            ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'virtual/libx11 \
 	    libxext libxrandr libxrender', '', d)} \
            ${@bb.utils.contains('DISTRO_FEATURES', 'x11 opengl', 'libglu', '', d)} \
-           tslib"
+           "
 DEPENDS_class-nativesdk = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 			   'virtual/nativesdk-libx11 nativesdk-libxrandr \
 			   nativesdk-libxrender nativesdk-libxext', '', d)}"

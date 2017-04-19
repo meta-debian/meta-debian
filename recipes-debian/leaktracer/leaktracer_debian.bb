@@ -12,6 +12,7 @@ It uses gdb to display source-file information."
 PR = "r0"
 
 inherit debian-package
+PV = "2.4"
 
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://README;beginline=192;endline=195;md5=534c638c0d1a099bb244718ec9eb2f1b"

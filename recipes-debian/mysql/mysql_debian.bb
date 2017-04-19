@@ -6,7 +6,7 @@ language in the world. The main goals of MySQL are speed, robustness and \
 ease of use \
 "
 HOMEPAGE = "http://dev.mysql.com/"
-PR = "r1"
+
 inherit debian-package
 
 LICENSE = "GPLv2+ & BSD-4-Clause & BSD & Zlib & PD & ISC"
@@ -20,6 +20,7 @@ LIC_FILES_CHKSUM = "\
 	"
 inherit cmake
 VER = "5.5"
+PV = "5.5.54"
 DPN = "mysql-${VER}"
 
 EXTRA_OECMAKE += " \
@@ -45,7 +46,7 @@ EXTRA_OECMAKE += " \
         -DWITH_FEDERATED_STORAGE_ENGINE=ON \
         -DWITH_EXTRA_CHARSETS=all \
 "
-DEPENDS += "libaio libbsd mysql-native"
+DEPENDS += "libaio libbsd mysql-native readline"
 PACKAGES =+ "\
         libmysqlclient libmysqld-pic mysql-common \
         mysql-server mysql-server-core"
@@ -127,3 +128,13 @@ RDEPENDS_${PN} += "\
 	mysql-common debianutils "
 RDEPENDS_mysql-server += "\
 	passwd psmisc mysql-server-core ${PN} sysvinit-initscripts lsb-base"
+
+inherit binconfig
+
+BINCONFIG_GLOB = "mysql_config"
+SYSROOT_PREPROCESS_FUNCS += "mysql_sysroot_preprocess"
+mysql_sysroot_preprocess() {
+	sed -i -e "s:='${libdir}:='${STAGING_LIBDIR}:g" \
+	       -e "s:='${includedir}:='${STAGING_INCDIR}:g" \
+	       ${SYSROOT_DESTDIR}${bindir_crossscripts}/mysql_config
+}

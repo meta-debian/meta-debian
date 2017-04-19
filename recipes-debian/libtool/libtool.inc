@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.gnu.org/software/libtool/libtool.html"
 INC_PR = "r1"
 
 inherit  debian-package autotools
+PV = "2.4.2"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\

@@ -10,6 +10,7 @@ the X protocol but which have traditionally been provided by Xlib. \
 HOMEPAGE = "http://xcb.freedesktop.org"
 PR = "r0"
 inherit debian-package
+PV = "0.3.8"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "\
@@ -27,5 +28,9 @@ do_install_append() {
 	#remove unwanted files
 	rm ${D}${libdir}/*.la
 }
+
 PKG_${PN}-dev = "lib${PN}0-dev"
 RDEPENDS_${PN}-dev += "libxcb-dev"
+
+RPROVIDES_${PN} += "lib${PN}"
+RPROVIDES_${PN}-dev += "lib${PN}-dev"

@@ -4,6 +4,7 @@
 #
 
 require xorg-app-common.inc
+PV = "7.7+2"
 
 SUMMARY = "Utility to display window and font properties of an X server"
 

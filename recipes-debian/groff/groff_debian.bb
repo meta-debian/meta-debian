@@ -6,7 +6,7 @@ troff, nroff, tbl, eqn, and pic. This package contains additional devices  \
 and drivers for output to DVI, HTML (when recommended packages are         \
 installed - see below), PDF, HP LaserJet printers, and Canon CAPSL LBP-4   \
 and LBP-8 printers. \
-The X75, X75-12, X100, and X100-12 devices, which allow groff output to be \ 
+The X75, X75-12, X100, and X100-12 devices, which allow groff output to be \
 conveniently viewed on an X display using the standard X11 fonts, are now  \
 included here. They were previously in a separate package, groff-x11       \
 "
@@ -14,8 +14,9 @@ HOMEPAGE = "https://www.gnu.org/software/groff/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.22.2"
 
-DEPENDS += "texinfo libx11 libxmu groff-native libxt libxaw"
+DEPENDS += "texinfo groff-native"
 DEPENDS_class-native = ""
 
 LICENSE = "GPLv3+ & GFDL-1.3 & MIT & BSD-4-Clause"
@@ -26,7 +27,12 @@ LIC_FILES_CHKSUM = "\
 	file://tmac/doc.tmac;beginline=1;endline=28;md5=6ea1a309490948cb2b294971734b30b1"
 
 inherit autotools-brokensep
+
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
+
+PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG[x11] = "--with-x, --without-x, libx11 libxmu libxt libxaw"
+
 PACKAGES =+ "${PN}-base"
 
 do_configure_append() {
@@ -65,7 +71,7 @@ do_install_append() {
 		${D}${libdir}/mime/packages/groff-base
 
 	ln -s eqn ${D}${bindir}/geqn
-	ln -s pic ${D}${bindir}/gpic 
+	ln -s pic ${D}${bindir}/gpic
 	ln -s tbl ${D}${bindir}/gtbl
 }
 
@@ -94,10 +100,11 @@ python __anonymous() {
     for prog in d.getVar('datadir_progs_font',True).split():
         val += " " + datadir + "/groff/*/font/" + prog
 
-    val += " " + d.getVar('sysconfdir', True) + "/groff"	
+    val += " " + d.getVar('sysconfdir', True) + "/groff"
     val += " " + d.getVar('libdir', True) + "/mime/packages/groff-base"
     val += " " + d.getVar('datadir', True) + "/groff/*/eign"
     val += " " + d.getVar('datadir', True) + "/groff/site-tmac"
     d.setVar('FILES_groff-base', val)
 }
+PARALLEL_MAKE = ""
 BBCLASSEXTEND = "native"

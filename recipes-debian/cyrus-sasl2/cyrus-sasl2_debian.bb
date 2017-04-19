@@ -11,6 +11,7 @@ the client or server side to provide authentication and authorization services"
 
 PR = "r0"
 inherit debian-package
+PV = "2.1.26.dfsg1"
 
 DEPENDS = "openssl virtual/db"
 #DEPENDS = "openssl virtual/db heimdal"
@@ -48,6 +49,7 @@ PACKAGECONFIG[ldap] = "--with-ldap=${STAGING_LIBDIR} --enable-ldapdb,\
 PACKAGECONFIG[ntlm] = "--with-ntlm,--without-ntlm,,"
 
 CFLAGS += "-fPIC"
+PARALLEL_MAKE = ""
 PARALLEL_MAKEINST = ""
 
 #runtime depends follow debian/control

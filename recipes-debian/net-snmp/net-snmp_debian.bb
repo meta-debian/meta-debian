@@ -3,9 +3,10 @@ for the exchange of management information between agents (servers) \
 and clients."
 HOMEPAGE = "http://net-snmp.sourceforge.net/"
 
-PR = "r2"
+PR = "r3"
 
 inherit debian-package
+PV = "5.7.2.1+dfsg"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = " \
@@ -34,6 +35,9 @@ USERADD_PARAM_snmpd = "--system --user-group --home-dir ${SNMPDIR} \
                        --shell /usr/sbin/nologin snmp"
 
 TARGET_CC_ARCH += "${LDFLAGS}"
+
+PARALLEL_MAKE = ""
+CCACHE = ""
 
 # Configure follow debian/rules
 OLD_MIBS_DIR ?="${datadir}/mibs/site:${datadir}/snmp/mibs:${datadir}/mibs/iana:${datadir}/mibs/ietf:${datadir}/mibs/netsnmp"
@@ -76,6 +80,7 @@ export PERLHOSTLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${@get_perl_vers
 do_configure_prepend() {
 	sed -i -e "s:\(perlcflags=\).*:\1-I${PERL_INC}:g" \
 	       -e "s:\(netsnmp_perlldopts=\).*:\1-L${PERL_INC}:g" \
+	       -e "s:\(^\s*PERLCC=.*-=\\\w\\\s\):\1\\\.:g" \
 	       ${S}/configure.d/config_project_perl_python
 }
 
@@ -207,12 +212,12 @@ FILES_${PN}-dev += "${bindir}/mib2c* \
 PKG_libsnmp = "libsnmp30"
 
 PKG_${PN} = "snmp"
-RPROVIDES_${PN} = "snmp"
+RPROVIDES_${PN} += "snmp"
 PKG_${PN}-dev = "libsnmp-dev"
-RPROVODES_${PN}-dev = "libsnmp-dev"
+RPROVIDES_${PN}-dev += "libsnmp-dev"
 
-RDEPEMDS_libsnmp += "libsnmp-base"
+RDEPENDS_libsnmp += "libsnmp-base"
 RDEPENDS_snmpd += "lsb-base libsnmp-base"
 RDEPENDS_snmptrapd += "snmpd"
 RDEPENDS_tkmib += "libsnmp-perl"
-RDEPEMDS_${PN} += "libsnmp-base"
+RDEPENDS_${PN} += "libsnmp-base"

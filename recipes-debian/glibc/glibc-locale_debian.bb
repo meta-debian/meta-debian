@@ -2,9 +2,10 @@ include glibc-collateral.inc
 
 SUMMARY = "Locale data from glibc"
 
+BPN = "glibc"
 inherit debian-package
+PV = "2.19"
 PR = "r1"
-DPN = "glibc"
 
 do_debian_fix_timestamp[noexec] = "1"
 do_debian_patch[noexec] = "1"
@@ -45,6 +46,7 @@ PROVIDES = "virtual/libc-locale"
 PACKAGES = "localedef ${PN}-dbg"
 
 PACKAGES_DYNAMIC = "^locale-base-.* \
+                    ^glibc-locale-.* \
                     ^glibc-gconv-.* ^glibc-charmap-.* ^glibc-localedata-.* ^glibc-binary-localedata-.* \
                     ^glibc-gconv-.*  ^glibc-charmap-.*  ^glibc-localedata-.*  ^glibc-binary-localedata-.* \
                     ^${MLPREFIX}glibc-gconv$"
@@ -68,6 +70,11 @@ RRECOMMENDS_${BPN}-gconvs =  "${@" ".join([p for p in d.getVar('PACKAGES', True)
 ALLOW_EMPTY_${BPN}-localedatas = "1"
 PACKAGES += "${BPN}-localedatas"
 RRECOMMENDS_${BPN}-localedatas =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-localedata") != -1])}"
+
+# Create a locales-all package
+ALLOW_EMPTY_locales-all = "1"
+PACKAGES += "locales-all"
+RRECOMMENDS_locales-all =  "${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("locale-base-") != -1])}"
 
 DESCRIPTION_localedef = "glibc: compile locale definition files"
 

@@ -12,6 +12,7 @@ written for the libvisual framework.\
 HOMEPAGE = "http://sourceforge.net/projects/libvisual/"
 PR = "r0"
 inherit debian-package
+PV = "0.4.0"
 LIB_VER = "0.4"
 
 LICENSE = "LGPLv2.1+"

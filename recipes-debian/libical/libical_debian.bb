@@ -8,6 +8,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://freeassociation.sourceforge.net"
 PR = "r0"
 inherit debian-package
+PV = "1.0"
 
 LICENSE = "MPL-1.0 | LGPL-2.1"
 LIC_FILES_CHKSUM = "\

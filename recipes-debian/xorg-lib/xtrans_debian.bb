@@ -13,6 +13,7 @@ support for new platforms without making any changes to the source \
 except in the X Transport Interface code."
 
 require xorg-lib-common.inc
+PV = "1.3.4"
 
 PR = "${INC_PR}.0"
 

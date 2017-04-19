@@ -5,6 +5,7 @@ HOMEPAGE = "http://www.cryptopp.com"
 PR = "r0"
 
 inherit debian-package
+PV = "5.6.1"
 DPN = "libcrypto--"
 
 LICENSE = "PD"

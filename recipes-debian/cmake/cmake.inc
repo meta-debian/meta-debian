@@ -12,6 +12,7 @@ LIC_FILES_CHKSUM = "file://Copyright.txt;md5=4fcaad71b713480012fa9bc127027300 \
 PR = "r0"
 
 inherit debian-package autotools
+PV = "3.0.2"
 
 SRC_URI += " \
 file://support-oe-qt4-tools-names.patch \

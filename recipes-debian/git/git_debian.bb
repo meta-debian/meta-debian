@@ -10,6 +10,7 @@ HOMEPAGE = "http://git-scm.com"
 PR = "r0"
 
 inherit debian-package
+PV = "2.1.4"
 
 LICENSE = "GPLv2 & LGPLv2.1+"
 LIC_FILES_CHKSUM = " \
@@ -159,8 +160,10 @@ do_install () {
 	rm ${D}${exec_prefix}/lib/perl-native/perl/*/Error.pm
 
 	# man3 was installed in wrong location
-	mv ${D}${prefix}/man/man3 ${D}${mandir}/
-	rm -rf ${D}${prefix}/man
+	if [ -e ${D}${prefix}/man/man3 ]; then
+		mv ${D}${prefix}/man/man3 ${D}${mandir}/
+		rm -rf ${D}${prefix}/man
+	fi
 }
 
 perl_native_fixup () {

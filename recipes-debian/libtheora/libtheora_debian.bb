@@ -9,7 +9,7 @@ HOMEPAGE = "http://xiph.org/"
 BUGTRACKER = "https://trac.xiph.org/newticket"
 
 inherit autotools pkgconfig debian-package
-
+PV = "1.1.1+dfsg.1"
 PR = "r0"
 DEPENDS = "libogg"
 

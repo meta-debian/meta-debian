@@ -23,9 +23,10 @@ Main features\n\
          + support for stealth operation"
 HOMEPAGE = "http://la-samhna.de/samhain/index.html"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
+PV = "3.1.0"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \
@@ -71,6 +72,11 @@ do_configure_prepend_aarch64() {
 # throw back the error "unrecognized option: --oldincludedir=/usr/include"
 do_configure () {
 	cd ${S}
+	cat << EOF > ./config-site.${BP}
+ssp_cv_lib=no
+sh_cv_va_copy=yes
+EOF
+	export CONFIG_SITE=./config-site.${BP}
 	./configure \
 	    --build=${BUILD_SYS} \
 	    --host=${HOST_SYS} \

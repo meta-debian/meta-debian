@@ -18,8 +18,6 @@ SRC_URI = "${DEBIAN_SRC_URI}"
 # By default, always use latest version of the default branch
 SRCREV = "${AUTOREV}"
 
-PV = "git${SRCPV}"
-
 DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
 
 # sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
@@ -193,3 +191,9 @@ EXPORT_FUNCTIONS do_debian_patch
 ###############################################################################
 
 inherit debian-fix-timestamp
+
+###############################################################################
+# do_debian_verify_version
+###############################################################################
+
+inherit debian-verify-version

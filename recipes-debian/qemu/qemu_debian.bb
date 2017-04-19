@@ -9,6 +9,7 @@ HOMEPAGE = "http://qemu.org"
 PR = "r1"
 
 inherit debian-package
+PV = "2.1+dfsg"
 
 # qemu-enlarge-env-entry-size.patch:
 #   Add addition environment space to boot loader qemu-system-mips

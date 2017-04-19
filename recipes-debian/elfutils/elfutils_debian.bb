@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package autotools gettext
+PV = "0.159"
 
 LICENSE = "GPL-2.0 & GPL-3.0 & LGPL-3.0"
 LIC_FILES_CHKSUM = " \
@@ -72,14 +73,7 @@ EXTRA_OEMAKE_class-nativesdk = ""
 BBCLASSEXTEND = "native nativesdk"
 
 # Package utilities separately
-PACKAGES =+ "${PN}-binutils libelf libasm libdw libdw-dev libasm-dev libelf-dev"
-FILES_${PN}-binutils = "\
-    ${bindir}/eu-addr2line \
-    ${bindir}/eu-ld \
-    ${bindir}/eu-nm \
-    ${bindir}/eu-readelf \
-    ${bindir}/eu-size \
-    ${bindir}/eu-strip"
+PACKAGES =+ "libelf libasm libdw libdw-dev libasm-dev libelf-dev"
 
 FILES_libelf = "${libdir}/libelf-*.so ${libdir}/libelf.so.*"
 FILES_libasm = "${libdir}/libasm-*.so ${libdir}/libasm.so.*"

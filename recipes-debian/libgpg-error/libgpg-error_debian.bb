@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.gnupg.org/related_software/libgpg-error/"
 BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
 inherit debian-package autotools binconfig pkgconfig gettext
+PV = "1.17"
 
 PR = "r0"
 

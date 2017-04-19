@@ -14,6 +14,7 @@ PR = "r0"
 DPN = "lzo2"
 
 inherit autotools debian-package
+PV = "2.08"
 
 SRC_URI += " \
 	file://acinclude.m4 \

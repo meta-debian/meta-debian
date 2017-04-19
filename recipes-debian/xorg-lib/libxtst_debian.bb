@@ -4,6 +4,7 @@
 #
 
 require xorg-lib-common.inc
+PV = "1.2.2"
 
 SUMMARY = "XTest: X Test extension library"
 

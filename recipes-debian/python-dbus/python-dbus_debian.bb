@@ -12,6 +12,7 @@ HOMEPAGE = "http://www.freedesktop.org/wiki/Software/DBusBindings#Python"
 PR = "r0"
 
 inherit debian-package
+PV = "1.2.0"
 DPN = "dbus-python"
 
 LICENSE = "MIT"

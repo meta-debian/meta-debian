@@ -11,7 +11,7 @@ LICENSE = "LGPLv3"
 SECTION = "libs"
 
 inherit autotools debian-package pkgconfig
-
+PV = "1.0.2"
 PR = "r0"
 DEPENDS = "gmp mpfr"
 DPN = "mpclib3"

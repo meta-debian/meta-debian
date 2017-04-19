@@ -7,16 +7,15 @@
 PR = "r0"
 
 inherit debian-package
+PV = "4.9.0"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1d4b0366557951c84a94fabe3529f867"
 
-DEPENDS = "libpcap"
+DEPENDS = "libpcap libpcap-native"
 
-# tcpdump-cross-getaddrinfo.patch:
-#	Fix getaddinfo check when cross compiling
 SRC_URI += " \
-    file://tcpdump-cross-getaddrinfo.patch \
+    file://unnecessary-to-check-libpcap.patch \
     file://add-ptest.patch \
     file://run-ptest \
 "
@@ -26,9 +25,8 @@ export LIBS = " -lpcap"
 inherit autotools-brokensep ptest
 CACHED_CONFIGUREVARS = "ac_cv_linux_vers=${ac_cv_linux_vers=2}"
 
-PACKAGECONFIG ??= "openssl ipv6"
+PACKAGECONFIG ??= "openssl"
 PACKAGECONFIG[openssl] = "--with-crypto=yes,--without-crypto,openssl"
-PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,"
 PACKAGECONFIG[smi] = "--with-smi,--without-smi,libsmi"
 
 EXTRA_AUTORECONF += " -I m4"

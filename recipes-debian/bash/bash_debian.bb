@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "4.3"
 
 LICENSE = "GPLv3+ & BSD-4-Clause"
 LIC_FILES_CHKSUM = " \
@@ -88,10 +89,13 @@ do_install_ptest () {
 }
 
 pkg_postinst_${PN} () {
+    # Add /bin/sh and /bin/bash to /etc/shells.
+	grep -q "^${base_bindir}/sh$" $D${sysconfdir}/shells || echo ${base_bindir}/sh >> $D${sysconfdir}/shells
 	grep -q "^${base_bindir}/bash$" $D${sysconfdir}/shells || echo ${base_bindir}/bash >> $D${sysconfdir}/shells
 }
 
 pkg_postrm_${PN} () {
+    # There must be /bin/sh in /etc/shells even though bash is not installed.
 	printf "$(grep -v "^${base_bindir}/bash$" $D${sysconfdir}/shells)\n" > $D${sysconfdir}/shells
 }
 

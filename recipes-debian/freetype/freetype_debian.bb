@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.5.2"
 
 SUMMARY = "Freetype font rendering library"
 DESCRIPTION = "FreeType is a software font engine that is designed to be \

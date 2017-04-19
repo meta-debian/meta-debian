@@ -13,7 +13,10 @@ file://LICENSE.LGPL2.1;md5=4fbd65380cdd255951079008b364516c \
 PROVIDES = "udev"
 
 inherit debian-package
-inherit pkgconfig autotools useradd
+PV = "215"
+PR = "r2"
+
+inherit pkgconfig autotools useradd python3native
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"
 
@@ -23,11 +26,12 @@ DEPENDS = "intltool-native \
            dbus \
            glib-2.0 \
            acl \
-           xz \
+           xz-utils \
            libgcrypt \
            kmod \
            util-linux \
            ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)} \
+           python3-lxml-native \
           "
 
 # These options are almost same as CONFFLAGS in debian/rules.
@@ -35,6 +39,10 @@ DEPENDS = "intltool-native \
 DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --with-rootlibdir=${base_libdir} \
                    --with-firmware-path=/lib/firmware \
+                   --with-ntp-servers="" \
+                   --with-dns-servers="" \
+                   --with-system-uid-max=999 \
+                   --with-system-gid-max=999 \
                    --disable-coredump \
                    --disable-efi \
                    --disable-myhostname \
@@ -42,10 +50,7 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --disable-microhttpd \
                    --disable-sysusers \
                    --disable-silent-rules \
-                   --with-ntp-servers="" \
-                   --with-dns-servers="" \
-                   --with-system-uid-max=999 \
-                   --with-system-gid-max=999 \
+                   PYTHON="${PYTHON}" \
                   "
 
 # --enable-dependency-tracking:
@@ -55,9 +60,14 @@ EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
                 ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
-                --enable-dependency-tracking \
                 --disable-selinux \
+                --enable-dependency-tracking \
+                --enable-compat-libs \
+                --disable-libcryptsetup \
                "
+
+PACKAGECONFIG ??= "audit"
+PACKAGECONFIG[audit] = "--enable-audit,--disable-audit,audit"
 
 do_configure_prepend() {
 	export KMOD="${base_bindir}/kmod"
@@ -180,7 +190,7 @@ do_install_append() {
 	ln -s ${base_bindir}/udevadm ${D}${base_sbindir}
 	ln -s ${base_libdir}/systemd/systemd-udevd ${D}${base_sbindir}/udevd
 
-    # systemd-sysv
+	# systemd-sysv
 	ln -s /bin/systemd   ${D}${base_sbindir}/init
 	ln -s /bin/systemctl ${D}${base_sbindir}/halt
 	ln -s /bin/systemctl ${D}${base_sbindir}/poweroff
@@ -188,6 +198,19 @@ do_install_append() {
 	ln -s /bin/systemctl ${D}${base_sbindir}/runlevel
 	ln -s /bin/systemctl ${D}${base_sbindir}/shutdown
 	ln -s /bin/systemctl ${D}${base_sbindir}/telinit
+
+	# remove .so for deprecated compatibility libraries
+	rm -f ${D}${libdir}/libsystemd-daemon.*
+	rm -f ${D}${libdir}/libsystemd-login.*
+	rm -f ${D}${libdir}/libsystemd-id128.*
+	rm -f ${D}${libdir}/libsystemd-journal.*
+	rm -f ${D}${base_libdir}/libsystemd-daemon.*
+	rm -f ${D}${base_libdir}/libsystemd-login.*
+	rm -f ${D}${base_libdir}/libsystemd-id128.*
+	rm -f ${D}${base_libdir}/libsystemd-journal.*
+
+	# remove unwanted files
+	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
 }
 
 # the following nonessential packages are excluded
@@ -202,7 +225,18 @@ PACKAGES =+ "libsystemd-dev \
              libgudev-1.0-dev \
              libgudev-1.0-0 \
              systemd-sysv \
+             libsystemd-daemon-dev \
+             libsystemd-login-dev \
+             libsystemd-id128-dev \
+             libsystemd-journal-dev \
+             python3-systemd \
             "
+
+FILES_python3-systemd = "${PYTHON_SITEPACKAGES_DIR}/systemd/*"
+FILES_libsystemd-daemon-dev = "${libdir}/pkgconfig/libsystemd-daemon.pc"
+FILES_libsystemd-login-dev = "${libdir}/pkgconfig/libsystemd-login.pc"
+FILES_libsystemd-id128-dev = "${libdir}/pkgconfig/libsystemd-id128.pc"
+FILES_libsystemd-journal-dev = "${libdir}/pkgconfig/libsystemd-journal.pc"
 
 FILES_${PN} = "${base_bindir} \
                ${bindir} \
@@ -220,6 +254,7 @@ FILES_${PN}-dbg += "${base_libdir}/systemd/.debug \
                     ${base_libdir}/systemd/system-generators/.debug \
                     ${base_libdir}/udev/.debug \
                     ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
+                    ${PYTHON_SITEPACKAGES_DIR}/systemd/.debug \
                    "
 FILES_${PN}-dev = ""
 ALLOW_EMPTY_${PN}-dev = "1"
@@ -310,6 +345,12 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                        ${base_sbindir}/telinit \
                      "
 RDEPENDS_${PN} += "systemd-sysv"
+RDEPENDS_libsystemd-daemon-dev  += "libsystemd-dev"
+RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
+RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
+RDEPENDS_libsystemd-journal-dev += "libsystemd-dev"
+
+RRECOMMENDS_${PN} += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"
 
 # init script requires init-functions, procps's ps, and mountpoint
 RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"

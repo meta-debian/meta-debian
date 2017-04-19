@@ -8,6 +8,7 @@ HOMEPAGE = "http://fedorahosted.org/releases/c/h/chkconfig"
 
 PR = "r2"
 inherit debian-package
+PV = "11.4.54.60.1debian1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://t/libtap.sh;md5=6c36428024c005158a85a2881975599c"

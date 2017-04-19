@@ -14,6 +14,7 @@ HOMEPAGE = "http://code.google.com/p/mod-auth-external"
 PR = "r0"
 
 inherit debian-package
+PV = "3.3.2"
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://mod_authnz_external.c;endline=51;md5=a69d0121d4f89aa67b2cc840b9c0958b"

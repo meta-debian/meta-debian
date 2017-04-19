@@ -17,6 +17,7 @@ DEPENDS = "zlib"
 EXTRA_OEMAKE = "-e MAKEFLAGS="
 
 inherit debian-package
+PV = "2.3.1"
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \

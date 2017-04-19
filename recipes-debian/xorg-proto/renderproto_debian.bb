@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "0.11.1"
 
 SUMMARY = "XRender: X rendering Extension headers"
 

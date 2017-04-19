@@ -9,6 +9,7 @@ SECTION = "console/utils"
 
 PR = "r0"
 inherit debian-package 
+PV = "3.0"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=04d43c5d70b496c032308106e26ae17d"

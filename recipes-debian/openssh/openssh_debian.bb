@@ -4,9 +4,10 @@
 # base commit: 3fb5191d4da52c6b352a23881c0ea63c2e348619
 #
 
-PR = "r1"
+PR = "r3"
 
 inherit debian-package
+PV = "6.7p1"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://LICENCE;md5=e326045657e842541d3f35aada442507"
@@ -15,9 +16,11 @@ DEPENDS = "zlib openssl"
 
 # openssh-server.postinst is created base on ${S}/debian/openssh-server.postinst
 SRC_URI += " \
-	file://add-test-support-for-busybox.patch \
-	file://run-ptest \
-	file://openssh-server.postinst \
+    file://add-test-support-for-busybox.patch \
+    file://run-ptest \
+    file://openssh-server.postinst \
+    file://sshd_config \
+    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
@@ -27,13 +30,12 @@ USERADD_PARAM_${PN} = "--system --no-create-home \
 	--home-dir ${localstatedir}/run/sshd --shell /bin/false --user-group sshd"
 
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "ssh.socket"
+SYSTEMD_SERVICE_${PN} = "ssh.service"
 
 # LFS support:
 CFLAGS += "-D__FILE_OFFSET_BITS=64"
 
 # Configure follow debian/rules
-# --without-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 	--sysconfdir=${sysconfdir}/ssh \
 	--disable-strip \
@@ -45,7 +47,6 @@ EXTRA_OECONF = " \
 	--with-superuser-path=${SUPERUSER_PATH} \
 	--with-cflags='${cflags}' \
 	--libexecdir=${libdir}/${BPN} \
-	--without-selinux \
 "
 cflags = "${CPPFLAGS} ${CFLAGS} -DLOGIN_PROGRAM=\"${base_bindir}/login\" -DLOGIN_NO_ENDOPT"
 DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
@@ -53,11 +54,13 @@ SUPERUSER_PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 PACKAGECONFIG ??= "tcp-wrappers \
 	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
 PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_LIBDIR}/..,--without-kerberos5,krb5"
+PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 
 # passwd path is hardcoded in sshd
 CACHED_CONFIGUREVARS += "ac_cv_path_PATH_PASSWD_PROG=${bindir}/passwd"
@@ -78,9 +81,11 @@ do_configure_prepend(){
 do_install_append(){
 	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
 		install -d ${D}${sysconfdir}/pam.d
-		sed 's/^@IF_KEYINIT@//' ${S}/debian/openssh-server.sshd.pam.in
-			> ${D}${sysconfdir}/pam.d/sshd
-		sed -i -e 's:^# UsePAM yes:UsePAM yes:' ${WORKDIR}/openssh-server.postinst
+        install -m 0644 ${S}/debian/openssh-server.sshd.pam.in ${D}${sysconfdir}/pam.d/sshd
+        FROM="^@IF_KEYINIT@"
+        INTO=""
+        sed -i 's/'"$FROM"'/'"$INTO"'/' ${D}${sysconfdir}/pam.d/sshd
+		sed -i -e 's:^#\s*\(UsePAM\s*\).*:\1yes:' ${WORKDIR}/sshd_config
 	fi
 
 	# FIXME: Remove GSSAPIAuthentication and GSSAPIDelegateCredentials from ssh_config.
@@ -89,8 +94,7 @@ do_install_append(){
 	sed -i '/^    GSSAPIAuthentication yes/d' ${D}${sysconfdir}/ssh/ssh_config
 	sed -i '/^    GSSAPIDelegateCredentials no/d' ${D}${sysconfdir}/ssh/ssh_config
 
-	# Use sshd_config from Debian instead
-	rm ${D}${sysconfdir}/ssh/sshd_config
+	install -m 0644 ${WORKDIR}/sshd_config ${D}${sysconfdir}/ssh/sshd_config
 
 	# Remove version control tags to avoid unnecessary conffile
 	# resolution steps for administrators.
@@ -136,12 +140,18 @@ do_install_ptest () {
 PACKAGES =+ "${PN}-client ${PN}-sftp-server"
 
 FILES_${PN}-client = " \
-	${sysconfdir}/ssh \
+	${sysconfdir}/ssh/ssh_config \
+	${sysconfdir}/ssh/moduli \
 	${bindir}/* \
 	${libexecdir}/ssh-* \
 "
 FILES_${PN}-sftp-server = "${libexecdir}/sftp-server ${libdir}/sftp-server"
-FILES_${PN} += "${libdir}/tmpfiles.d /run"
+FILES_${PN} += " \
+    ${sysconfdir}/ssh/sshd_config \
+    ${libdir}/tmpfiles.d \
+    /run \
+    ${base_libdir}/systemd/system \
+"
 
 RPROVIDES_${PN} = "${PN}-server"
 PKG_${PN} = "${PN}-server"

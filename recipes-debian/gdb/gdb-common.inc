@@ -4,6 +4,8 @@
 #
 
 inherit debian-package
+PV = "7.7.1+dfsg"
+DPN = "gdb"
 
 LICENSE = "GPLv2+ & GPLv3+ & LGPLv2+ & LGPLv3+ & LGPLv2.1+ & BSD-3-Clause"
 LIC_FILES_CHKSUM = " \

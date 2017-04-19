@@ -37,6 +37,7 @@ python populate_packages_prepend () {
 #Meta-debian
 #
 inherit debian-package
+PV = "2.24.25"
 DPN = "gtk-2.0"
 
 SRC_URI += " \

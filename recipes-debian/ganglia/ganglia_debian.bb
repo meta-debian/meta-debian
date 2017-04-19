@@ -5,6 +5,7 @@ HOMEPAGE = "http://ganglia.info/"
 
 PR = "r1"
 inherit debian-package
+PV = "3.6.0"
 
 LICENSE = "BSD & LGPLv2+ & Apache-1.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3b3c74375e67e92756770b3ee9debc5f \
@@ -27,7 +28,7 @@ do_configure_prepend () {
 # AC_OUTPUT list -- it reconfigures libmetrics using its own rules.
 # Unfortunately this means an OE autoreconf will not regenerate
 # ltmain.sh (and others) in libmetrics and as such the build will
-# fail.  We explicitly force regeneration of that directory. 
+# fail.  We explicitly force regeneration of that directory.
 do_configure_append() {
 	(cd ${S} ; autoreconf -fvi )
 	(cd ${S}/libmetrics ; autoreconf -fvi)

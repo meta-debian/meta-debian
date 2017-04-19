@@ -12,6 +12,7 @@ systems. When this first client exits, xinit will kill the X server and \
 then terminate."
 
 require xorg-app-common.inc
+PV = "1.3.4"
 
 PR = "${INC_PR}.0"
 

@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "2.8"
 
 SUMMARY = "DRI2: Direct Rendering Infrastructure 2 headers"
 

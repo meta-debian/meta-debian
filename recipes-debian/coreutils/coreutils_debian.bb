@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "8.23"
 
 LICENSE = "GPLv3+ & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \
@@ -80,6 +81,8 @@ do_install_append() {
 	mv ${D}${bindir}/chroot ${D}${sbindir}/chroot
 	sed s/\"1\"/\"8\"/1 ${D}${mandir}/man1/chroot.1 > ${D}${mandir}/man8/chroot.8
 	rm ${D}${mandir}/man1/chroot.1
+
+    ln -s ${base_bindir}/touch ${D}${bindir}/touch
 }
 
 do_install_append_class-native(){

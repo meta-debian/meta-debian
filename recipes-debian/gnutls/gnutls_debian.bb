@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "3.3.8"
 
 LICENSE = "GPLv3+ & LGPLv2.1+ & ISC"
 LIC_FILES_CHKSUM = " \
@@ -27,10 +28,11 @@ EXTRA_OECONF="--enable-ld-version-script \
               --disable-libdane \
               --without-tpm \
               --disable-heartbeat-support \
-              -disable-silent-rules \
+              --disable-silent-rules \
               --disable-gtk-doc \
               --disable-gtk-doc \
               --disable-guile \
+              --enable-local-libopts \
               "
 
 do_configure_prepend() {

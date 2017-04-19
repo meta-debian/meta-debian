@@ -1,4 +1,5 @@
 require xorg-proto-common.inc
+PV = "1.0.5"
 
 PR = "${INC_PR}.0"
 DPN = "x11proto-print"

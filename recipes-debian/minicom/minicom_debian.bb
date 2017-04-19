@@ -10,6 +10,7 @@ HOMEPAGE = "https://alioth.debian.org/projects/minicom/"
 
 PR = "r0"
 inherit debian-package
+PV = "2.7"
 
 DEPENDS = "ncurses"
 LICENSE = "GPLv2+"

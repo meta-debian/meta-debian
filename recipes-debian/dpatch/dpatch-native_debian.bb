@@ -14,6 +14,7 @@ It can easily apply patches only on specific architectures if needed."
 PR = "r1"
 
 inherit debian-package
+PV = "2.0.35"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=876a2203d96d26da30e0bff0355d7f5b"

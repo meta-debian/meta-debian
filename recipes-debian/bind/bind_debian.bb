@@ -243,7 +243,7 @@ DEBIANNAME_${PN}-dev = "lib${PN}-dev"
 RPROVIDES_${PN} += "${DPN}"
 RPROVIDES_${PN}-dev += "lib${PN}-dev"
 
-# Package "host" is provided by "bind9-host" arcoding to debian/control
+# Package "host" is provided by "bind9-host" according to debian/control
 RPROVIDES_${DPN}-host += "host"
 
 # Dependencies between bind's packages base on debian/control

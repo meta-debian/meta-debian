@@ -11,10 +11,13 @@ SECTION = "devel/python"
 INC_PR = "r1"
 DPN = "python3.4"
 inherit debian-package
+PV = "3.4.2"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=64fc2b30b67d0a8423c250e0386ed72f"
 
 PYTHON_MAJMIN = "3.4"
+
+SRC_URI += "file://add_site-packages_to_getsitepackages.patch"
 
 inherit autotools
 

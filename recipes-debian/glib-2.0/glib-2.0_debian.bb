@@ -4,6 +4,7 @@
 #
 
 inherit debian-package
+PV = "2.42.1"
 
 PR = "r1"
 DPN = "glib2.0"
@@ -90,16 +91,18 @@ do_install_append () {
 }
 
 RDEPENDS_${PN}-ptest += "\
-            gnome-desktop-testing \
             tzdata \
             tzdata-americas \
             tzdata-asia \
             tzdata-europe \
             tzdata-posix \
-            python-pygobject \
             python-dbus \
-            shared-mime-info \
            "
+#RDEPENDS_${PN}-ptest += "\
+#            gnome-desktop-testing \
+#            python-pygobject \
+#            shared-mime-info \
+#           "
 
 RDEPENDS_${PN}-ptest_append_libc-glibc = "\
             glibc-gconv-utf-16 \

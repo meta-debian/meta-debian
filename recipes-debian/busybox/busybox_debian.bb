@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.22.0"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=de10de48642ab74318e893a61105afbb"
@@ -37,6 +38,7 @@ BUSYBOX_INITTAB_GETTYS ?= \
 SRC_URI += " \
 file://busybox-appletlib-dependency.patch \
 file://0001-build-system-Specify-nostldlib-when-linking-to-.o-fi.patch \
+file://0001-menuconfig-check-lxdiaglog.sh-Allow-specification-of.patch \
 file://defconfig \
 file://inittab \
 file://rcS \

@@ -13,6 +13,7 @@ BUGTRACKER = "https://fedorahosted.org/linux-pam/newticket"
 PR = "r2"
 
 inherit debian-package
+PV = "1.1.8"
 
 DPN = "pam"
 
@@ -28,7 +29,6 @@ DEBIAN_PATCH_TYPE = "quilt"
 
 DEPENDS = "bison flex flex-native cracklib"
 
-# --disable-selinux: Don't use selinux support
 EXTRA_OECONF = "--with-db-uniquename=_pam \
 		--includedir=${includedir}/security \
                 --libdir=${base_libdir} \
@@ -40,8 +40,11 @@ EXTRA_OECONF = "--with-db-uniquename=_pam \
 
 inherit autotools gettext pkgconfig
 
-PACKAGECONFIG ??= ""
+PACKAGECONFIG ??= " \
+    ${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
+"
 PACKAGECONFIG[audit] = "--enable-audit,--disable-audit,audit,"
+PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux"
 
 # Install files follow Debian
 do_install_append() {

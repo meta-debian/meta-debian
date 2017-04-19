@@ -10,6 +10,7 @@ authorisation handling, which controls authorisation for X connections, \
 both client-side and server-side."
 
 require xorg-lib-common.inc
+PV = "1.0.8"
 
 PR = "${INC_PR}.0"
 

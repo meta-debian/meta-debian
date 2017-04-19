@@ -16,6 +16,7 @@ HOMEPAGE = " http://perl-openssl.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.28"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 
@@ -27,13 +28,4 @@ inherit cpan
 DEPENDS += "openssl libcrypt-openssl-random-perl libcrypt-openssl-bignum-perl"
 RDEPENDS_${PN} += "libcrypt-openssl-bignum-perl"
 
-#install follow debian jessie
-do_install_append () {
-	mv ${D}${libdir}/perl/vendor_perl/* ${D}${libdir}/perl/
-	rm -r ${D}${libdir}/perl/vendor_perl
-	mv ${D}${libdir}/perl/5.20.2 ${D}${libdir}/perl/5.20
-	mv ${D}${libdir}/perl ${D}${libdir}/perl5
-	chmod 0644 ${D}${libdir}/perl5/5.20/auto/Crypt/OpenSSL/RSA/RSA.so
-}
 FILES_${PN} = "${libdir}/*"
-FILES_${PN}-dbg += "${libdir}/perl5/5.20/auto/Crypt/OpenSSL/RSA/.debug"

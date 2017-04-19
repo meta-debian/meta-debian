@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.1.2"
 
 SUMMARY = "BigReqs: X Big Requests extension headers"
 

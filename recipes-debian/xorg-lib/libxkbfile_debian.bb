@@ -9,6 +9,7 @@ DESCRIPTION = "libxkbfile provides an interface to read and manipulate \
 description files for XKB, the X11 keyboard configuration extension."
 
 require xorg-lib-common.inc
+PV = "1.0.8"
 
 PR = "${INC_PR}.0"
 

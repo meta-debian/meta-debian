@@ -17,6 +17,7 @@ RDEPENDS_${PN}-dev += "perl"
 TARGET_CC_ARCH += "${LDFLAGS}"
 
 inherit autotools-brokensep debian-package
+PV = "4.12"
 
 S = "${WORKDIR}/git/nspr"
 

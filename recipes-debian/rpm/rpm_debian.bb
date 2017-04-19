@@ -6,6 +6,7 @@
 PR = "r2"
 
 inherit debian-package
+PV = "4.11.3"
 
 SUMMARY = "The RPM package management system"
 DESCRIPTION = "The RPM Package Manager (RPM) is a powerful command line driven \
@@ -51,10 +52,10 @@ file://fix_libdir.patch \
 file://rpm-scriptetexechelp.patch \
 "
 
-DEPENDS = "db libxml2 xz file popt nss bzip2 elfutils patch attr \
+DEPENDS = "db libxml2 xz-utils file popt nss bzip2 elfutils patch attr \
                zlib acl gzip make binutils python"
 DEPENDS_append_class-native = " file-replacement-native"
-DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz nativesdk-file \
+DEPENDS_class-nativesdk = "nativesdk-db nativesdk-libxml2 nativesdk-xz-utils nativesdk-file \
 		nativesdk-popt nativesdk-nss nativesdk-bzip2 nativesdk-elfutils nativesdk-attr \
 		nativesdk-zlib nativesdk-acl nativesdk-make nativesdk-python"
 
@@ -107,7 +108,7 @@ do_configure_prepend() {
 do_configure () {
         # configure cannot find sechash.h by default
         export CPPFLAGS="-I${STAGING_INCDIR_NATIVE} -I${STAGING_INCDIR_NATIVE}/nss3"
-        # set some variables so python can see Python.h header 
+        # set some variables so python can see Python.h header
         export BUILD_SYS=${BUILD_SYS}
         export HOST_SYS=${HOST_SYS}
         export STAGING_INCDIR=${STAGING_INCDIR}

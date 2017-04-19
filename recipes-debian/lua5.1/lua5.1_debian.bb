@@ -6,6 +6,7 @@ HOMEPAGE = "http://www.lua.org/"
 
 PR = "r1"
 inherit debian-package
+PV = "5.1.5"
 
 DEPENDS = "readline libtool"
 

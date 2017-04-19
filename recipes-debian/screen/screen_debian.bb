@@ -17,6 +17,7 @@ HOMEPAGE = "http://savannah.gnu.org/projects/screen"
 PR = "r0"
 
 inherit debian-package
+PV = "4.2.1"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
@@ -36,6 +37,7 @@ SRC_URI += " \
     file://Skip-host-file-system-checks-when-cross-compiling.patch \
     file://Avoid-mis-identifying-systems-as-SVR4.patch \
     file://fix-parallel-make.patch \
+    file://0001-fix-for-multijob-build.patch \
 "
 
 inherit autotools-brokensep texinfo

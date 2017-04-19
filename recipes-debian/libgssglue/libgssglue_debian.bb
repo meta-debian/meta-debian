@@ -4,6 +4,7 @@ gssapi mechanisms itself; instead it calls gssapi routines in other libraries, \
 depending on the mechanism."
 
 inherit debian-package autotools
+PV = "0.4"
 
 PR = "r0"
 

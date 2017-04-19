@@ -11,6 +11,7 @@ provide the minimal server-side support necessary to eliminate problems \
 caused by these workarounds."
 
 require xorg-lib-common.inc
+PV = "5.0.1"
 
 PR = "${INC_PR}.0"
 

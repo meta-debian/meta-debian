@@ -12,8 +12,9 @@ DESCRIPTION = "\
 "
 HOMEPAGE = "http://oss.oetiker.ch/rrdtool/"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package pythonnative cpan
+PV = "1.4.8"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
@@ -38,7 +39,9 @@ EXTRA_OECONF += "\
 	PYTHON=${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} \
 	--disable-python --enable-lua --enable-tcl --enable-lua-site-install \
 	--with-tcllib=${STAGING_LIBDIR}/tcl8.6 \
-	--with-perl-options='INSTALLDIRS="vendor" INSTALL_BASE=' "
+	--with-perl-options='INSTALLDIRS="vendor" INSTALL_BASE=' \
+	--disable-ruby \
+"
 
 do_configure_prepend() {
 	sed -i -e "s:##STAGING_DIR_HOST##:${STAGING_DIR_HOST}:g" \

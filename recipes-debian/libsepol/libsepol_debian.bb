@@ -1,5 +1,6 @@
 SUMMARY = "SELinux library for manipulating binary security policies"
 inherit debian-package
+PV = "2.3"
 
 PR = "r0"
 

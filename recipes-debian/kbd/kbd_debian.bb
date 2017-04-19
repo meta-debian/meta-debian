@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.15.5"
 
 SUMMARY = "Keytable files and keyboard utilities"
 # everything minus console-fonts is GPLv2+

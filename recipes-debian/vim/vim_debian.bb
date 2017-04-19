@@ -8,6 +8,7 @@ SUMMARY = "Vi IMproved - enhanced vi editor"
 PR = "r1"
 
 inherit debian-package
+PV = "7.4.488"
 
 # vimdiff doesn't like busybox diff
 RSUGGESTS_${PN} = "diffutils"

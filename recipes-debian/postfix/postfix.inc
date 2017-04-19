@@ -10,6 +10,7 @@ HOMEPAGE = "http://www.postfix.org"
 
 INC_PR = "r0"
 inherit debian-package autotools-brokensep
+PV = "2.11.3"
 
 LICENSE = "IPL-1.0"
 LIC_FILES_CHKSUM = "\

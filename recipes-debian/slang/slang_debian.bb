@@ -17,6 +17,7 @@ HOMEPAGE = "http://www.jedsoft.org/slang/"
 PR = "r0"
 
 inherit debian-package
+PV = "2.3.0"
 DPN = "slang2"
 
 LICENSE = "GPLv2+"

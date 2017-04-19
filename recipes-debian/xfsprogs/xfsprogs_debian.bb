@@ -13,6 +13,7 @@ DEPENDS = "util-linux"
 
 PR = "r1"
 inherit debian-package
+PV = "3.2.1"
 
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"

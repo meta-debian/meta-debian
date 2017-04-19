@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "3.16"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

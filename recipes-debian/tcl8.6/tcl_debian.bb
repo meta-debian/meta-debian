@@ -3,8 +3,9 @@
 # base branch: daisy
 #
 
-PR = "r2"
+PR = "r4"
 inherit debian-package
+PV = "8.6.2+dfsg"
 DPN = "tcl8.6"
 
 LICENSE = "BSD-3-Clause"
@@ -71,8 +72,6 @@ do_install() {
 		install
 	sed -i "s:-L${B}:-L${STAGING_LIBDIR}:g" tclConfig.sh
 	sed -i "s:${WORKDIR}:${STAGING_INCDIR}:g" tclConfig.sh
-	sed -i "s:-L${libdir}:-L=${libdir}:g" tclConfig.sh
-	sed -i "s:-I${includedir}:-I=${includedir}:g" tclConfig.sh
 	ln -sf tclsh8.6 ${D}${bindir}/tclsh
 
 	# Follow debian/rules
@@ -125,7 +124,9 @@ do_install() {
 
 SYSROOT_PREPROCESS_FUNCS += "tcl_sysroot_preprocess"
 tcl_sysroot_preprocess () {
-	sysroot_stage_dir ${D}${bindir_crossscripts} ${SYSROOT_DESTDIR}${bindir_crossscripts}
+	sed -i -e "s:^\(TCL_SRC_DIR='\)/usr/include:\1${STAGING_INCDIR}:g" \
+	       -e "s:^\(TCL_BUILD_STUB_LIB_PATH='\)/usr/lib:\1${B}:g" \
+	       ${SYSROOT_DESTDIR}${bindir_crossscripts}/tclConfig.sh
 }
 
 PACKAGES =+ "tcl-lib"
@@ -141,7 +142,7 @@ DEBIANNAME_tcl-lib = "lib${DPN}"
 RDEPENDS_${PN} += "tcl-lib"
 RDEPENDS_${PN}_class-native = ""
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
 
 do_compile_ptest() {
 	oe_runmake tcltest

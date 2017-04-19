@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "2.1.3"
 
 SUMMARY = "XFont: X Font rasterisation headers"
 

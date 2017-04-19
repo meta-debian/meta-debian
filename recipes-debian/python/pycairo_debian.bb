@@ -4,6 +4,7 @@ DISCRIPTION = "This package contains modules that allow you to use the Cairo vec
 HOMEPAGE = "http://cairographics.org/pycairo"
 
 inherit debian-package
+PV = "1.8.8"
 LICENSE = "LGPLv2.1 & MPL-1.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=f2e071ab72978431b294a0d696327421 \
                     file://COPYING-LGPL-2.1;md5=fad9b3332be894bab9bc501572864b29 \

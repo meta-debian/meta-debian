@@ -9,6 +9,7 @@ HOMEPAGE = "http://fuse.sourceforge.net/"
 
 PR = "r1"
 inherit debian-package
+PV = "2.9.3"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\

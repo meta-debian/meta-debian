@@ -31,6 +31,7 @@ o  The intent is to make the tool independent of Linux version dependencies,\n\
 PR = "r0"
 
 inherit debian-package
+PV = "7.0.8"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING3;md5=d32239bcb673463ab874e80d47fae504"

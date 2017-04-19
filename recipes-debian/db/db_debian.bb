@@ -17,6 +17,7 @@ HOMEPAGE = "http://www.oracle.com/technology/products/berkeley-db/db/index.html"
 
 PR = "r0"
 inherit debian-package
+PV = "5.3.28"
 DPN = "db5.3"
 
 LICENSE = "Sleepycat"

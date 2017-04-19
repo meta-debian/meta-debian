@@ -16,6 +16,7 @@ HOMEPAGE = "http://git.kernel.org/cgit/network/tftp/tftp-hpa.git"
 
 PR = "r0"
 inherit debian-package
+PV = "5.2+20140608"
 
 LICENSE = "BSD-4-Clause"
 LIC_FILES_CHKSUM = "\

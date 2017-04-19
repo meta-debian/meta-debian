@@ -8,6 +8,7 @@ HOMEPAGE = "https://fedorahosted.org/liberation-fonts/"
 PR = "r0"
 
 inherit debian-package
+PV = "1.07.4"
 DPN = "fonts-liberation"
 
 LICENSE = "GPLv2"

@@ -8,6 +8,7 @@ HOMEPAGE = "http://valgrind.org/"
 
 PR = "r2"
 inherit debian-package
+PV = "3.10.0"
 
 LICENSE = "GPLv2 & BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c46082167a314d785d012a244748d803 \
@@ -44,3 +45,7 @@ do_install_append () {
 	rm ${D}${includedir}/${PN}/config.h
 	rm -rf ${D}${includedir}/${PN}/vki	
 }
+
+# valgrind requires debug files from glibc to run
+INSANE_SKIP_${PN} += "debug-deps"
+RDEPENDS_${PN} += "glibc-dbg"

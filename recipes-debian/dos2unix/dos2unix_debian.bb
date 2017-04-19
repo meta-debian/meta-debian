@@ -3,6 +3,7 @@ HOMEPAGE = "http://freshmeat.net/projects/dos2unix"
 PR = "r0"
 
 inherit debian-package
+PV = "6.0.4"
 
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://COPYING.txt;md5=37ef5b0498ecd2c4c7f2e2be47a75d5e"

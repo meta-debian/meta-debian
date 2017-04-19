@@ -19,6 +19,9 @@ SRC_URI_append_qemuarm = " file://qemu.config file://${MACHINE}.config"
 LINUX_DEFCONFIG_qemumips ?= "malta_defconfig"
 SRC_URI_append_qemumips = " file://qemu.config file://${MACHINE}.config"
 
+LINUX_DEFCONFIG_qemuarm64 ?= "defconfig"
+SRC_URI_append_qemuarm64 = " file://qemu.config"
+
 # TODO: should be based on a defconfig
 LINUX_DEFCONFIG_qemuppc ?= ""
 SRC_URI_append_qemuppc = " file://${MACHINE}.config"

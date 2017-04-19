@@ -14,8 +14,9 @@ slang library."
 
 HOMEPAGE = "https://fedorahosted.org/newt/"
 
-PR = "r1"
+PR = "r3"
 inherit debian-package
+PV = "0.52.17"
 
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=5f30f0716dfdd0d91eb439ebec522ec2"
@@ -29,10 +30,13 @@ DEPENDS = "slang popt tcl"
 #     Ensure the directory ${SHAREDDIR} exists to avoid parallel-make issue
 # cross_ar.patch:
 #     Replace host's ar by cross ar from sysroot
+# disable_python_dbg.patch:
+#     Currently, we don't provide package python*-dbg so disable support for python debug.
 SRC_URI += " \
 	file://remove_slang_include.patch \
 	file://fix_SHAREDDIR.patch \
 	file://cross_ar.patch \
+	file://disable_python_dbg.patch \
 "
 
 DPN = "newt"
@@ -43,6 +47,8 @@ EXTRA_OECONF = " \
 	--with-colorsfile=${sysconfdir}/newt/palette \
 	CFLAGS="-I${STAGING_INCDIR}/tcl8.6 ${CFLAGS}" \
 "
+CACHED_CONFIGUREVARS_append_class-target = " ac_cv_c_tclconfig=${STAGING_BINDIR_CROSS}"
+CACHED_CONFIGUREVARS_append_class-native = " ac_cv_c_tclconfig=${STAGING_LIBDIR}/tcl8.6"
 
 inherit autotools-brokensep pythonnative
 
@@ -73,7 +79,7 @@ do_install_append() {
 	install -m 0644 ${S}/newt*.ver ${D}${libdir}/libnewt_pic.map
 	install -m 0644 ${S}/debian/palette.original ${D}${sysconfdir}/newt/
 	install -m 0644 ${S}/debian/bash_completion.d/* ${D}${sysconfdir}/bash_completion.d/
-	install -m 0644 ${S}/whiptcl.so ${D}${libdir}/whiptcl
+	mv ${D}${libdir}/whiptcl.so ${D}${libdir}/whiptcl/
 }
 
 PACKAGE_BEFORE_PN = "python-${DPN} ${DPN}-tcl ${PN}-pic whiptail"

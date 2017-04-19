@@ -13,6 +13,7 @@ HOMEPAGE = "http://www.gnu.org/software/sed/"
 PR = "r2"
 
 inherit debian-package
+PV = "4.2.2"
 
 LICENSE = "GPLv2+ & GPLv3+"
 LIC_FILES_CHKSUM = " \

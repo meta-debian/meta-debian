@@ -5,7 +5,7 @@
 
 require python.inc
 DEPENDS = "python-native libffi bzip2 db gdbm openssl readline sqlite3 zlib"
-PR = "${INC_PR}"
+PR = "${INC_PR}.1"
 
 DISTRO_SRC_URI_linuxstdbase = ""
 SRC_URI += "\
@@ -26,6 +26,7 @@ SRC_URI += "\
 	file://parallel-makeinst-create-bindir.patch \
 	file://use_sysroot_ncurses_instead_of_host.patch \
 	file://avoid_parallel_make_races_on_pgen.patch \
+	file://add_site-packages_to_getsitepackages.patch \
 "
 
 inherit autotools multilib_header python-dir pythonnative
@@ -40,6 +41,16 @@ TARGET_CC_ARCH_append_armv7a = " -D__SOFTFP__"
 # The following is a hack until we drop ac_cv_sizeof_off_t from site files
 EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'largefile', 'ac_cv_sizeof_off_t=8', '', d)} ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no"
 
+do_configure_prepend() {
+	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
+	# result of this command will be empty when gcc don't support multiarch.
+	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
+	else
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
+	fi
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
+}
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
         autoreconf -Wcross --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi
@@ -178,5 +189,36 @@ do_install_ptest() {
 # catch manpage
 PACKAGES += "${PN}-man"
 FILES_${PN}-man = "${datadir}/man"
+
+PACKAGES += "libpython${PYTHON_MAJMIN}-stdlib libpython${PYTHON_MAJMIN}-minimal"
+ALLOW_EMPTY_libpython${PYTHON_MAJMIN}-stdlib = "1"
+ALLOW_EMPTY_libpython${PYTHON_MAJMIN}-minimal = "1"
+DEBIAN_NOAUTONAME_libpython${PYTHON_MAJMIN}-stdlib = "1"
+DEBIAN_NOAUTONAME_libpython${PYTHON_MAJMIN}-minimal = "1"
+
+RRECOMMENDS_libpython${PYTHON_MAJMIN}-stdlib += "\
+	${PN}-2to3 ${PN}-argparse ${PN}-audio ${PN}-bsddb ${PN}-codecs ${PN}-compiler \
+	${PN}-compression ${PN}-core ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-db \
+	${PN}-debugger ${PN}-difflib ${PN}-distutils ${PN}-doctest ${PN}-email ${PN}-hotshot \
+	${PN}-html ${PN}-idle ${PN}-image ${PN}-importlib ${PN}-io ${PN}-json ${PN}-lang \
+	${PN}-logging ${PN}-mailbox ${PN}-math ${PN}-mime ${PN}-misc ${PN}-multiprocessing \
+	${PN}-netclient ${PN}-netserver ${PN}-numbers ${PN}-pickle ${PN}-pprint ${PN}-profile \
+	${PN}-pydoc ${PN}-readline ${PN}-robotparser ${PN}-shell ${PN}-smtpd ${PN}-sqlite3 \
+	${PN}-sqlite3-tests ${PN}-stringold ${PN}-terminal ${PN}-tests ${PN}-textutils \
+	${PN}-threading ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml ${PN}-xmlrpc \
+"
+RRECOMMENDS_libpython${PYTHON_MAJMIN}-minimal += "\
+	${PN}-2to3 ${PN}-bsddb ${PN}-codecs ${PN}-compile ${PN}-compiler ${PN}-contextlib \
+	${PN}-core ${PN}-crypt ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-distutils \
+	${PN}-email ${PN}-hotshot ${PN}-idle ${PN}-importlib ${PN}-io ${PN}-json ${PN}-lang \
+	${PN}-logging ${PN}-math ${PN}-misc ${PN}-multiprocessing ${PN}-netclient ${PN}-pickle \
+	${PN}-pkgutil ${PN}-pydoc ${PN}-re ${PN}-shell ${PN}-sqlite3 ${PN}-sqlite3-tests \
+	${PN}-stringold ${PN}-subprocess ${PN}-tests ${PN}-textutils ${PN}-tkinter \
+	${PN}-unittest ${PN}-xml \
+"
+RDEPENDS_libpython${PYTHON_MAJMIN}-stdlib += "libpython${PYTHON_MAJMIN}-minimal mime-support"
+RRECOMMENDS_libpython${PYTHON_MAJMIN}-minimal += "libpython${PYTHON_MAJMIN}-stdlib"
+RDEPENDS_lib${BPN}2 += "libpython${PYTHON_MAJMIN}-stdlib"
+RDEPENDS_${PN}-core += "libpython${PYTHON_MAJMIN}-stdlib libpython${PYTHON_MAJMIN}-minimal mime-support"
 
 BBCLASSEXTEND = "nativesdk"

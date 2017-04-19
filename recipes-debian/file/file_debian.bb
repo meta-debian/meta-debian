@@ -11,6 +11,7 @@ DESCRIPTION = "File attempts to classify files depending \
 on their contents and prints a description if a match is found."
 
 inherit debian-package
+PV = "5.22+15"
 
 LICENSE = "BSD-2-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=975f248ba2aad6c08f97d927adf001c4"

@@ -71,8 +71,8 @@ FILES_${PN}-utils += " \
 		${base_bindir}/pidof* \
 		${base_libdir}/init/init-d-script \
 		${base_sbindir}/fstab-decode \
-		${base_sbindir}/killall5 \
-		${base_sbindir}/sulogin \
+		${base_sbindir}/killall5* \
+		${base_sbindir}/sulogin* \
 		${bindir}/last \
 		${bindir}/lastb \
 		${bindir}/mesg \
@@ -166,6 +166,9 @@ fi
 if [ -x $D${sysconfdir}/init.d/checkroot.sh ]; then
 update-rc.d checkroot.sh           defaults >/dev/null || exit $?
 fi
+if [ -x $D${sysconfdir}/init.d/checkroot-bootclean.sh ]; then
+update-rc.d checkroot-bootclean.sh defaults >/dev/null || exit $?
+fi
 if [ -x $D${sysconfdir}/init.d/checkfs.sh ]; then
 update-rc.d checkfs.sh             defaults >/dev/null || exit $?
 fi
@@ -173,12 +176,6 @@ if [ -x $D${sysconfdir}/init.d/mountall.sh ]; then
 update-rc.d mountall.sh            defaults >/dev/null || exit $?
 fi
 if [ -x $D${sysconfdir}init.d/mountall-bootclean.sh ]; then
-update-rc.d mountall-bootclean.sh  defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountnfs.sh ]; then
-update-rc.d mountnfs.sh            defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountnfs-bootclean.sh ]; then
 update-rc.d mountall-bootclean.sh  defaults >/dev/null || exit $?
 fi
 if [ -x $D${sysconfdir}/init.d/mountnfs.sh ]; then

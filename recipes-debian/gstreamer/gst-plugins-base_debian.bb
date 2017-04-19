@@ -9,6 +9,7 @@ PR = "r9"
 inherit debian-package gettext pkgconfig
 #Version of gst-plugins-base
 VER = "0.10"
+PV = "0.10.36"
 DPN = "gst-plugins-base${VER}"
 
 LICENSE = "GPLv2+ & LGPLv2+"

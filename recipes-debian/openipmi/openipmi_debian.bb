@@ -2,9 +2,10 @@ SUMMARY = "Intelligent Platform Management Interface"
 DESCRIPTION = "IPMI allows remote monitoring and remote management of devices."
 HOMEPAGE = "http://openipmi.sourceforge.net/"
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
+PV = "2.0.16"
 
 LICENSE = "GPLv2+ & LGPLv2.1+ & BSD"
 LIC_FILES_CHKSUM = " \
@@ -24,6 +25,8 @@ inherit autotools
 # Set --with-swig=no to avoid using swig from swig-native.
 EXTRA_OECONF = "--without-openssl \
                 --with-swig=no \
+                --without-python \
+                --without-tcl \
 "
 PARALLEL_MAKEINST = ""
 
@@ -32,3 +35,6 @@ FILES_lib${PN} = "${libdir}/*${SOLIBS}"
 
 LEAD_SONAME = "libOpenIPMI.so"
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+
+# Follow debian/control
+RDEPENDS_${PN}-dev += "libgdbm-dev"

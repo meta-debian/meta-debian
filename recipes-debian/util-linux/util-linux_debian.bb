@@ -12,6 +12,7 @@ disk partitioning, kernel message management, filesystem creation, and system lo
 PR = "r4"
 
 inherit debian-package
+PV = "2.25.2"
 
 LICENSE = "GPLv2+ & LGPLv2.1+ & BSD"
 LIC_FILES_CHKSUM = " \

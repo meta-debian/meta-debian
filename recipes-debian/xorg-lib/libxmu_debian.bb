@@ -12,6 +12,7 @@ Widgets (libXaw) or X Toolkit Instrinsics (libXt) are provided in a \
 second library, libXmuu."
 
 require xorg-lib-common.inc
+PV = "1.1.2"
 
 PR = "${INC_PR}.0"
 

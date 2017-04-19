@@ -12,6 +12,7 @@ appear in the input stream, such as the prompt from a shell. \
 HOMEPAGE = "https://metacpan.org/release/Net-Telnet/"
 PR = "r0"
 inherit debian-package
+PV = "3.04"
 
 LICENSE = "Artistic-1.0 | GPL-1+"
 LIC_FILES_CHKSUM = "\

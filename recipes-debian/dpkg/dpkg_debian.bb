@@ -9,15 +9,15 @@ PR = "${INC_PR}.4"
 
 inherit systemd
 
-DEPENDS = "zlib bzip2 perl ncurses xz"
+DEPENDS = "zlib bzip2 perl ncurses xz-utils"
 DEPENDS_class-native = "bzip2-replacement-native \
                         zlib-native \
                         gettext-native \
                         perl-native \
-                        xz-native \
+                        xz-utils-native \
                         "
-RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_update-alternatives} xz"
-RDEPENDS_${PN}_class-native = "xz-native"
+RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_update-alternatives} xz-utils"
+RDEPENDS_${PN}_class-native = "xz-utils-native"
 
 PARALLEL_MAKE = ""
 

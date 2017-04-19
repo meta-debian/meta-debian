@@ -13,6 +13,7 @@ HOMEPAGE = "http://libnet-dev.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.1.6+dfsg"
 
 LICENSE = "BSD-2-Clause & BSD-3-Clause & BSD-4-Clause"
 LIC_FILES_CHKSUM = "\

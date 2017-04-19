@@ -11,6 +11,7 @@ PR = "r2"
 
 
 inherit debian-package lib_package pythonnative
+PV = "2.3"
 
 LICENSE = "PD & GPLv2"
 LIC_FILES_CHKSUM = " \

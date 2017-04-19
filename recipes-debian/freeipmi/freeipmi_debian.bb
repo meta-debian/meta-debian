@@ -8,6 +8,7 @@ HOMEPAGE = "http://www.gnu.org/software/freeipmi/"
 
 PR = "r3"
 inherit debian-package
+PV = "1.4.5"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

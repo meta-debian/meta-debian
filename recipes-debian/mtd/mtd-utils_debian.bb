@@ -21,6 +21,7 @@ LIC_FILES_CHKSUM = " \
 DEPENDS = "zlib lzo util-linux"
 
 inherit debian-package
+PV = "1.5.1"
 DEBIAN_PATCH_TYPE = "nopatch"
 
 # xattr support creates an additional compile-time dependency on acl because

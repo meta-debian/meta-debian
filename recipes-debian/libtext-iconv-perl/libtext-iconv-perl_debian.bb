@@ -14,6 +14,7 @@ documentation."
 
 PR = "r0"
 inherit debian-package
+PV = "1.7"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=3;endline=6;md5=fadf2919c7128e887d26b4d905f90649"

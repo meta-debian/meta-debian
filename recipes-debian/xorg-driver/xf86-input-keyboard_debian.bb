@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-input.inc
+PV = "1.8.0"
 
 SUMMARY = "X.Org X server -- keyboard input driver"
 

@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "1.14.1"
 
 DPN = "automake-1.14"
 

@@ -13,6 +13,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=2d5025d4aa3495befef8f17206a5b0a1"
 
 PR = "r0"
 inherit debian-package
+PV = "1.1.5"
 
 # patch file for fix macro error
 # compile error when build on almost all architectures

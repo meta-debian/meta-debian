@@ -1,4 +1,5 @@
 require xorg-proto-common.inc
+PV = "1.2.0"
 
 SUMMARY = "X11 Big Fonts extension wire protocol"
 

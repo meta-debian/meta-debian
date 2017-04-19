@@ -8,6 +8,7 @@ and manipulate the various components that make up these strings."
 
 PR = "r0"
 inherit debian-package
+PV = "1.64"
 
 SECTION = "libs"
 LICENSE = "Artistic-1.0 | GPL-1.0+"

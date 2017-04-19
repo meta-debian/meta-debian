@@ -9,9 +9,10 @@ HOMEPAGE = "ftp://elsie.nci.nih.gov/pub/"
 PR = "r0"
 
 inherit debian-package
+PV = "2016j"
 
 LICENSE = "PD & BSD & BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=76ae2becfcb9a685041c6f166b44c2c2"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=ef1a352b901ee7b75a75df8171d6aca7"
 
 DEPENDS = "zic-native"
 

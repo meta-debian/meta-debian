@@ -17,6 +17,7 @@ BUGTRACKER = "http://bugs.freedesktop.org"
 INC_PR = "r0"
 
 inherit debian-package
+PV = "1.14.0"
 
 LICENSE = "MPL-1 & LGPLv2.1"
 LIC_FILES_CHKSUM = " \

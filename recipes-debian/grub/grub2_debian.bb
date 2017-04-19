@@ -10,6 +10,7 @@ LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 inherit debian-package autotools gettext
+PV = "2.02~beta2"
 
 # autogen.sh-exclude-pc:
 #	Exclude the .pc from po/POTFILES.in
@@ -27,7 +28,7 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
-DEPENDS = "flex-native bison-native xz"
+DEPENDS = "flex-native bison-native xz-utils"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'
 

@@ -7,6 +7,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.gnu.org/software/cpio/"
 PR = "r0"
 inherit debian-package
+PV = "2.11+dfsg"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "\

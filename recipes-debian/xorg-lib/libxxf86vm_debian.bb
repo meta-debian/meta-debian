@@ -11,6 +11,7 @@ get and set video mode timings in extensive detail.  It is used by the \
 xvidtune program in particular."
 
 require xorg-lib-common.inc
+PV = "1.1.3"
 
 PR = "${INC_PR}.0"
 

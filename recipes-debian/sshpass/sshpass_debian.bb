@@ -10,6 +10,7 @@ HOMEPAGE = "http://sourceforge.net/projects/sshpass"
 
 PR = "r0"
 inherit debian-package
+PV = "1.05"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

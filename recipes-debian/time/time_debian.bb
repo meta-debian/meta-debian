@@ -11,6 +11,7 @@ HOMEPAGE = "http://www.gnu.org/software/time/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.7"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"

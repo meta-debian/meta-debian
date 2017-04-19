@@ -8,4 +8,5 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
 PR = "r0"
 
 inherit debian-package autotools
+PV = "1.0b12"
 

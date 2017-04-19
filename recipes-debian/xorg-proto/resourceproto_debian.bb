@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "1.2.0"
 
 SUMMARY = "XRes: X Resource extension headers"
 

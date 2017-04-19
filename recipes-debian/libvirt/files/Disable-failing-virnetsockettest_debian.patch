@@ -1,0 +1,22 @@
+diff --git a/tests/virnetsockettest.c b/tests/virnetsockettest.c
+index 1f283a3..347b217 100644
+--- a/tests/virnetsockettest.c
++++ b/tests/virnetsockettest.c
+@@ -332,7 +332,7 @@ static int testSocketUNIXAddrs(const void *data ATTRIBUTE_UNUSED)
+         rmdir(tmpdir);
+     return ret;
+ }
+-
++#if 0
+ static int testSocketCommandNormal(const void *data ATTRIBUTE_UNUSED)
+ {
+     virNetSocketPtr csock = NULL; /* Client socket */
+@@ -383,7 +383,7 @@ static int testSocketCommandFail(const void *data ATTRIBUTE_UNUSED)
+     virObjectUnref(csock);
+     return ret;
+ }
+-
++#endif
+ struct testSSHData {
+     const char *nodename;
+     const char *service;

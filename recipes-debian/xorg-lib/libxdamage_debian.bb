@@ -17,6 +17,7 @@ amount of data transmitted as well as reduce the processing latency once \
 the repaint operation has started."
 
 require xorg-lib-common.inc
+PV = "1.1.4"
 
 PR = "${INC_PR}.0"
 

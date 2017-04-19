@@ -7,6 +7,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "3.113+nmu3"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = " \
@@ -19,6 +20,10 @@ do_install() {
 	install -d ${D}${sbindir}
 	install -m 0755 ${S}/adduser ${D}${sbindir}
 	install -m 0755 ${S}/deluser ${D}${sbindir}
+
+	# base on debian/rules
+	ln -s adduser ${D}${sbindir}/addgroup
+	ln -s deluser ${D}${sbindir}/delgroup
 
 	install -d ${D}${libdir}/perl/${PERLVERSION}/Debian
 	install -m 0644 ${S}/AdduserCommon.pm \

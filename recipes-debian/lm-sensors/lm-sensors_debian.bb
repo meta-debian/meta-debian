@@ -10,6 +10,7 @@ HOMEPAGE = "http://www.lm-sensors.org"
 
 PR = "r2"
 inherit debian-package
+PV = "3.3.5"
 
 LICENSE = "GPLv2+ & LGPLv2.1+"
 LIC_FILES_CHKSUM = "\

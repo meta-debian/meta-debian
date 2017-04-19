@@ -13,6 +13,7 @@ requirements. \
 HOMEPAGE = "http://iscsitarget.sourceforge.net/"
 PR = "r0"
 inherit debian-package
+PV = "1.4.20.3+svn502"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
@@ -30,7 +31,11 @@ do_debian_patch[noexec] = "1"
 do_configure[noexec] = "1"
 
 do_compile() {
-	oe_runmake KSRC=${STAGING_KERNEL_DIR}
+	#Clear LDFLAGS to avoid error: unrecognized option '-Wl,-O1' on PPC target
+	if [ "${TARGET_ARCH}" = "powerpc" ]; then
+		unset LDFLAGS
+	fi
+	oe_runmake KSRC=${STAGING_KERNEL_DIR} LDFLAGS="$LDFLAGS"
 }
 do_install() {
 	# Userspace utilities

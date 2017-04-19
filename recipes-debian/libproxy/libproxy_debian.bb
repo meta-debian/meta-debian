@@ -11,6 +11,7 @@ HOMEPAGE = "http://code.google.com/p/libproxy/"
 PR = "r0"
 
 inherit debian-package
+PV = "0.4.11"
 
 LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = " \

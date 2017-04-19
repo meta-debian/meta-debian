@@ -8,6 +8,7 @@ SECTION = "libs/network"
 PR = "r0"
 DPN = "libnl3"
 inherit debian-package
+PV = "3.2.24"
 
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4fbd65380cdd255951079008b364516c"
@@ -34,6 +35,9 @@ do_install_append() {
 	libname=`readlink ${D}${libdir}/libnl-genl-3.so | xargs basename`
 	ln -sf ..${libdir}/${libname} ${D}${base_libdir}/libnl-genl-3.so
 	rm -rf ${D}${libdir}/libnl-genl-3.so
+
+	#correct the path to libnl-3.so* file
+	sed -i -e "s:libdir='${libdir}':libdir='${base_libdir}':" ${D}${libdir}/libnl-3.la
 }
 
 FILES_libnl-3-200 = " \

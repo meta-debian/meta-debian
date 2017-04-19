@@ -31,7 +31,8 @@ DEPENDS += "gperf-native"
 #         0002-eglibc-menuconfig-hex-string-options_debian.patch
 #         0003-eglibc-menuconfig-build-instructions.patch
 # because Debian distro does not support kconfig-frontend
-
+# correct-valencia-locale-supported_debian.patch:
+# 	This patch is fix "QA Issue: locale-base-ca-es is listed in PACKAGES multiple times"
 SRC_URI += " \
 	file://eglibc-svn-arm-lowlevellock-include-tls.patch \
 	file://IO-acquire-lock-fix.patch \
@@ -42,12 +43,12 @@ SRC_URI += " \
 	file://ppc-sqrt_finite.patch \
 	file://ppc_slow_ieee754_sqrt.patch \
 	file://add_resource_h_to_wait_h.patch \
-	file://fsl-ppc-no-fsqrt.patch \
 	file://0001-R_ARM_TLS_DTPOFF32.patch \
 	file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
 	file://ppce6500-32b_slow_ieee754_sqrt.patch \
 	file://grok_gold.patch \
 	file://0013-sysdeps-gnu-configure.ac-handle-correctly-libc_cv_ro.patch \
+	file://correct-valencia-locale-supported_debian.patch \
 "
 
 B = "${WORKDIR}/build-${TARGET_SYS}"

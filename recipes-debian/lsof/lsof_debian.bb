@@ -14,6 +14,7 @@ HOMEPAGE = "http://people.freebsd.org/~abe/"
 PR = "r0"
 
 inherit debian-package
+PV = "4.86+dfsg"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://00README;beginline=642;endline=677;md5=36fe5cec79840589378d1deffb8fa37f"

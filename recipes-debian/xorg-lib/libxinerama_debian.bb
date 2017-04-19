@@ -4,6 +4,7 @@
 #
 
 require xorg-lib-common.inc
+PV = "1.1.3"
 
 SUMMARY = "Xinerama: Xinerama extension library"
 

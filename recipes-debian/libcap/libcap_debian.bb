@@ -16,6 +16,7 @@ DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 DEPENDS_class-native = "hostperl-runtime-native"
 
 inherit debian-package
+PV = "2.24"
 inherit lib_package
 
 PR = "r0"

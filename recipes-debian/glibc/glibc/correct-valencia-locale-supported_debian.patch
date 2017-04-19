@@ -1,0 +1,13 @@
+diff --git a/localedata/SUPPORTED b/localedata/SUPPORTED
+index a263dbe..8155eda 100644
+--- a/localedata/SUPPORTED
++++ b/localedata/SUPPORTED
+@@ -79,7 +79,7 @@ ca_AD/ISO-8859-15 \
+ ca_ES.UTF-8/UTF-8 \
+ ca_ES/ISO-8859-1 \
+ ca_ES@euro/ISO-8859-15 \
+-ca_ES.UTF-8@valencia/UTF-8 \
++ca_ES@valencia.UTF-8/UTF-8 \
+ ca_ES@valencia/ISO-8859-15 \
+ ca_FR.UTF-8/UTF-8 \
+ ca_FR/ISO-8859-15 \

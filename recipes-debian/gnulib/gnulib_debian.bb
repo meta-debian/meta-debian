@@ -8,6 +8,7 @@ HOMEPAGE = " http://www.gnu.org/software/gnulib/"
 
 PR = "r0"
 inherit debian-package
+PV = "20140202+stable"
 
 LICENSE = "GPLv3+ & GPLv2+ & LGPLv2+ & LGPLv3+ & GFDL-1.3"
 LIC_FILES_CHKSUM = "\
@@ -18,7 +19,7 @@ LIC_FILES_CHKSUM = "\
 	file://doc/COPYING.LESSERv2;md5=4fbd65380cdd255951079008b364516c \
 	file://doc/COPYING.LESSERv3;md5=e6a600fd5e1d9cbde2d983680233ad02 \
 	file://doc/gnulib.texi;beginline=21;endline=34;md5=76bfc6d3b1f0371d2414b0f5a52044ea"
-inherit autotools-brokensep
+inherit autotools-brokensep allarch
 
 #install follow Debian jessie
 do_install() {
@@ -49,7 +50,7 @@ do_install() {
 	chmod 0644 ${D}${datadir}/gnulib/tests/test-fflush.c
 	chmod 0755 ${D}${datadir}/gnulib/tests/test-posix_spawn1.in.sh
 	chmod 0755 ${D}${datadir}/gnulib/tests/test-posix_spawn2.in.sh
- 
+
 	# Removing unused files
 	rm -f ${D}${datadir}/gnulib/modules/COPYING
 	rm -f ${D}${datadir}/gnulib/*/.cvsignore
@@ -58,3 +59,6 @@ do_install() {
 }
 PACKAGES =+ "git-merge-changelog"
 FILES_git-merge-changelog = "${bindir}/git-merge-changelog"
+
+# workaround for re-build without clean
+CLEANBROKEN = "1"

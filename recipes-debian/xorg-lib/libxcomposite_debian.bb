@@ -16,6 +16,7 @@ window.  In external parent, a mechanism for providing redirection of \
 compositing transformations through a client."
 
 require xorg-lib-common.inc
+PV = "0.4.4"
 
 PR = "${INC_PR}.0"
 

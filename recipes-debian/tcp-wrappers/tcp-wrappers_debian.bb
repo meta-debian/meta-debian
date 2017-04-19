@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "7.6.q"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://DISCLAIMER;md5=071bd69cb78b18888ea5e3da5c3127fa"

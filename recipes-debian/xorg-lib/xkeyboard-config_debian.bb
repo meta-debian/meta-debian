@@ -14,9 +14,10 @@ systems."
 HOMEPAGE = "http://freedesktop.org/wiki/Software/XKeyboardConfig"
 BUGTRACKER = "https://bugs.freedesktop.org/enter_bug.cgi?product=xkeyboard-config"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
+PV = "2.12"
 
 LICENSE = "MIT & MIT-style"
 LIC_FILES_CHKSUM = "file://COPYING;md5=0e7f21ca7db975c63467d2e7624a12f9"
@@ -28,6 +29,9 @@ EXTRA_OECONF = "\
 		--with-xkb-rules-symlink=xfree86,xorg \
 		--with-xkb-base=${datadir}/X11/xkb \
 "
+# There are dependencies which are run-time dependencies only and not required for building.
+# Skip this check with --disable-runtime-deps.
+EXTRA_OECONF += "--disable-runtime-deps"
 
 inherit autotools pkgconfig
 

@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=34da3db46fab7501992f9615d7e158cf"
 HOMEPAGE = "http://www.remotesensing.org/libtiff/"
 
 inherit autotools debian-package
-
+PV = "4.0.3"
 PR = "r0"
 
 CACHED_CONFIGUREVARS = "ax_cv_check_gl_libgl=no"
@@ -21,7 +21,7 @@ PACKAGECONFIG ?= "cxx jpeg zlib lzma \
 PACKAGECONFIG[cxx] = "--enable-cxx,--disable-cxx,,"
 PACKAGECONFIG[jpeg] = "--enable-jpeg,--disable-jpeg,libjpeg-turbo,"
 PACKAGECONFIG[zlib] = "--enable-zlib,--disable-zlib,zlib,"
-PACKAGECONFIG[lzma] = "--enable-lzma,--disable-lzma,xz,"
+PACKAGECONFIG[lzma] = "--enable-lzma,--disable-lzma,xz-utils,"
 
 # Convert single-strip uncompressed images to multiple strips of specified
 # size (default: 8192) to reduce memory usage

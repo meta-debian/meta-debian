@@ -6,6 +6,7 @@ HOMEPAGE = "http://www.unixodbc.org"
 
 PR = "r0"
 inherit debian-package
+PV = "2.3.1"
 
 LICENSE = "LGPL-2.0+ & GPLv2+"
 LIC_FILES_CHKSUM = "\

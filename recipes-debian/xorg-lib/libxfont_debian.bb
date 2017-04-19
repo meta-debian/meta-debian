@@ -10,6 +10,7 @@ notably font selection and rasterisation (through external libraries \
 such as freetype)."
 
 require xorg-lib-common.inc
+PV = "1.5.1"
 
 PR = "${INC_PR}.0"
 

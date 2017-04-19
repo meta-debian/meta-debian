@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "5.23"
 
 SUMMARY = "Linux Bluetooth Stack Userland V5"
 DESCRIPTION = "Linux Bluetooth stack V5 userland components.  These include a system configurations, daemons, tools and system libraries."

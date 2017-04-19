@@ -13,6 +13,7 @@ RRECOMMENDS_${PN} = "file"
 
 PR = "r0"
 inherit debian-package
+PV = "3.58"
 
 DEBIAN_PATCH_TYPE = "nopatch"
 
@@ -36,3 +37,4 @@ do_install () {
 	ln -s run-mailcap ${D}${bindir}/compose
 	ln -s run-mailcap ${D}${bindir}/print
 }
+BBCLASSEXTEND = "nativesdk"

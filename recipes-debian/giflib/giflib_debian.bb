@@ -6,6 +6,7 @@ HOMEPAGE = "http://giflib.sourceforge.net/"
 PR = "r0"
 
 inherit debian-package
+PV = "4.1.6"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ae11c61b04b2917be39b11f78d71519a"

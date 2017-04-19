@@ -15,6 +15,7 @@ PR = "r0"
 DEPENDS = "libxml2"
 
 inherit debian-package
+PV = "1.1.28"
 
 EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto"
 

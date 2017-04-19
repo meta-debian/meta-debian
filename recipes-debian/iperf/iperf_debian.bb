@@ -6,6 +6,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://iperf.sourceforge.net/"
 PR = "r0"
 inherit debian-package
+PV = "2.0.5+dfsg1"
 
 LICENSE = "NCSA"
 LIC_FILES_CHKSUM = "\

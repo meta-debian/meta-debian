@@ -4,6 +4,7 @@ described in the InfiniBand Architecture Specification and the RDMA Protocol Ver
 HOMEPAGE = "https://www.openfabrics.org/"
 
 inherit debian-package autotools
+PV = "1.1.8"
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

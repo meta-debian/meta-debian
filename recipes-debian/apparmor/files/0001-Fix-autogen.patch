@@ -1,0 +1,59 @@
+From dc125816dd799d98af961273abc8fd46fb0e5352 Mon Sep 17 00:00:00 2001
+From: Masahiro Yamada <masahiro17.yamada@toshiba.co.jp>
+Date: Thu, 13 Oct 2016 05:36:27 +0000
+Subject: [PATCH] Fix autogen.sh to use libtools under sysroots.
+
+Signed-off-by: Masahiro Yamada <masahiro17.yamada@toshiba.co.jp>
+---
+ libraries/libapparmor/autogen.sh | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/libraries/libapparmor/autogen.sh b/libraries/libapparmor/autogen.sh
+index 7e06e0c..c5827bf 100755
+--- a/libraries/libapparmor/autogen.sh
++++ b/libraries/libapparmor/autogen.sh
+@@ -3,7 +3,7 @@
+ DIE=0
+ package=libapparmor
+ 
+-(autoconf --version) < /dev/null > /dev/null 2>&1 || {
++(${STAGING_BINDIR_NATIVE}/autoconf --version) < /dev/null > /dev/null 2>&1 || {
+         echo
+         echo "You must have autoconf installed to compile $package."
+         echo "Download the appropriate package for your distribution,"
+@@ -11,7 +11,7 @@ package=libapparmor
+         DIE=1
+ }
+ 
+-(automake --version) < /dev/null > /dev/null 2>&1 || {
++(${STAGING_BINDIR_NATIVE}/automake --version) < /dev/null > /dev/null 2>&1 || {
+         echo
+         echo "You must have automake installed to compile $package."
+ 	echo "Download the appropriate package for your system,"
+@@ -20,7 +20,7 @@ package=libapparmor
+         DIE=1
+ }
+ 
+-(libtoolize --version) < /dev/null > /dev/null 2>&1 || {
++(${STAGING_BINDIR_NATIVE}/libtoolize --version) < /dev/null > /dev/null 2>&1 || {
+ 	echo
+ 	echo "You must have libtool installed to compile $package."
+ 	echo "Download the appropriate package for your system,"
+@@ -34,10 +34,10 @@ if test "$DIE" -eq 1; then
+ fi
+ 
+ echo "Running aclocal"
+-aclocal
++${STAGING_BINDIR_NATIVE}/aclocal
+ echo "Running autoconf"
+-autoconf --force
++${STAGING_BINDIR_NATIVE}/autoconf --force
+ echo "Running libtoolize"
+-libtoolize --automake -c
++${STAGING_BINDIR_NATIVE}/libtoolize --automake -c
+ echo "Running automake"
+-automake -ac
++${STAGING_BINDIR_NATIVE}/automake -ac
+-- 
+2.1.4
+

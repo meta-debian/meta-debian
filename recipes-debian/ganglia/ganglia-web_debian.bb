@@ -5,6 +5,7 @@ HOMEPAGE = "http://ganglia.info/"
 
 PR = "r0"
 inherit debian-package
+PV = "3.6.1"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3b3c74375e67e92756770b3ee9debc5f"

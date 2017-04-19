@@ -4,6 +4,7 @@
 #
 
 require xorg-proto-common.inc
+PV = "5.0"
 
 SUMMARY = "XFixes: X Fixes extension headers"
 

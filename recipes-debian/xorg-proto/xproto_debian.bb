@@ -3,6 +3,7 @@
 # Base branch: daisy
 #
 require xorg-proto-common.inc
+PV = "7.0.26"
 
 SUMMARY = "Xlib: C Language X interface headers"
 

@@ -11,6 +11,7 @@ DEPENDS += "expat expat-native"
 
 PR = "r0"
 inherit debian-package
+PV = "2.41"
 
 EXTRA_CPANFLAGS = "EXPATLIBPATH=${STAGING_LIBDIR} EXPATINCPATH=${STAGING_INCDIR} CC=${CC} LD=${LD} FULL_AR=${AR}"
 

@@ -20,6 +20,7 @@ DEPENDS = "flex-native bison-native"
 
 PR = "r0"
 inherit debian-package
+PV = "1.6.2"
 
 inherit autotools-brokensep bluetooth
 
@@ -43,8 +44,16 @@ do_configure_prepend () {
 	sed -i -e's,^V_RPATH_OPT=.*$,V_RPATH_OPT=,' ${S}/pcap-config.in
 }
 
+do_install_prepend() {
+	if [ -L ${B}/libpcap.so ]; then
+		touch ${B}/libpcap.so
+	fi
+}
+
 FILES_${PN}-dev += "${bindir}/pcap-config"
 
 DEBIANNAME_${PN} = "${PN}0.8"
 DEBIANNAME_${PN}-dev = "${PN}0.8-dev"
 DEBIANNAME_${PN}-dbg = "${PN}0.8-dbg"
+
+BBCLASSEXTEND="native"

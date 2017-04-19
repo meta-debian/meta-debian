@@ -5,8 +5,8 @@
 
 require python3.inc
 
-DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz expat mpdecimal"
-PR = "${INC_PR}.2"
+DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz-utils expat mpdecimal"
+PR = "${INC_PR}.3"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
 # now-avoid-pgen.patch
@@ -24,7 +24,7 @@ SRC_URI += " \
 	file://0001-h2py-Fix-issue-13032-where-it-fails-with-UnicodeDeco.patch \
 	file://makerace.patch \
 	file://03-fix-tkinter-detection.patch \
-	file://04-default-is-optimized.patch \ 
+	file://04-default-is-optimized.patch \
 	file://avoid_warning_about_tkinter.patch \
 	file://cgi_py.patch \
 	file://host_include_contamination.patch \
@@ -71,6 +71,19 @@ export CROSSPYTHONPATH = "${B}/build/lib.linux-${TARGET_ARCH}-${PYTHON_MAJMIN}:$
 # No ctypes option for python 3
 PYTHONLSBOPTS = ""
 
+do_configure_prepend() {
+	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
+	# result of this command will be empty when gcc don't support multiarch.
+	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
+	else
+		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
+	fi
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
+
+	# Correct path to install pkgconfig files
+	sed -i -e "s|^LIBPC=.*|LIBPC=\$(LIBDIR)/pkgconfig|" ${S}/Makefile.pre.in
+}
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
 	autoreconf -Wcross --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi
@@ -103,7 +116,7 @@ do_compile() {
 		-e 's,^CONFINCLUDEDIR=.*,CONFINCLUDE=${STAGING_INCDIR},g' \
 		-e 's,^SCRIPTDIR=.*,SCRIPTDIR=${STAGING_BASELIBDIR},g' \
 		Makefile
-	# save copy of it now, because if we do it in do_install and 
+	# save copy of it now, because if we do it in do_install and
 	# then call do_install twice we get Makefile.orig == Makefile.sysroot
 	install -m 0644 Makefile Makefile.sysroot
 
@@ -115,7 +128,7 @@ do_compile() {
 		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
-		OPT="${CFLAGS}" libpython3.so 
+		OPT="${CFLAGS}" libpython3.so
 
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python3-native/pgen \
 		HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python3-native/python3 \
@@ -125,7 +138,7 @@ do_compile() {
 		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
-		OPT="${CFLAGS}" 
+		OPT="${CFLAGS}"
 }
 
 do_install() {
@@ -144,7 +157,7 @@ do_install() {
 		LIB=${baselib} \
 		ARCH=${TARGET_ARCH} \
 		DESTDIR=${D} LIBDIR=${libdir}
-	
+
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python3-native/pgen \
 		HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python3-native/python3 \
 		STAGING_LIBDIR=${STAGING_LIBDIR} \
@@ -173,22 +186,91 @@ do_install() {
 	ln -s ${LINKLIB} ${D}${libdir}/libpython3.4m.so.1
 
 	ln -s python3.4m ${D}${includedir}/python3.4
-	
+
 	# Install sitecustomize.py
 	install -d ${D}${sysconfdir}/python3.4
 	cp ${S}/debian/sitecustomize.py.in \
 		${D}${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py
 	ln -s ../../../${sysconfdir}/python${PYTHON_MAJMIN}/sitecustomize.py \
 		${D}${libdir}/python${PYTHON_MAJMIN}/
-	
-	install -m 0755 ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext3.4
-	ln -s ../lib/python3.4/pdb.py ${D}${bindir}/pdb3.4 
 
-	rm ${D}${bindir}/pydoc3
-	rm ${D}${bindir}/pyvenv
+	#
+	# Base on debian/rules
+	#
+	VER=${PYTHON_MAJMIN}
+	PVER=python${VER}
+	PRIORITY=$(echo ${VER} | tr -d '.')0
+	scriptdir=${libdir}/python${VER}
 
-	rm ${D}${bindir}/python3-config 
-	rm ${D}${bindir}/python3 
+	for f in ${S}/debian/*.in; do
+		f2=`echo $f | sed "s,PVER,${PVER},g;s/@VER@/${VER}/g;s,\.in$,,"`;
+		if [ $f2 != ${S}/debian/control ]; then
+			sed -e "s/@PVER@/${PVER}/g;s/@VER@/${VER}/g;s/@SVER@/${SVER}/g" \
+			    -e "s/@PRIORITY@/${PRIORITY}/g" \
+			    -e "s,@SCRIPTDIR@,/${scriptdir},g" \
+			    -e "s,@HOST_QUAL@,:${HOST_ARCH},g" \
+			  <$f >$f2
+		fi
+	done
+
+	# remove files, which are not packaged
+	rm -rf ${D}${libdir}/python${VER}/ctypes/macholib
+	rm -f ${D}/$scriptdir/plat-*/regen
+	rm -f ${D}/$scriptdir/lib2to3/*.pickle
+	rm -f ${D}${mandir}/man1/python3.1
+
+	# cannot build it, zlib maintainer won't provide a mingw build
+	find ${D} -name 'wininst*.exe' | xargs -r rm -f
+
+	# fix some file permissions
+	for i in runpy fractions lib2to3/refactor tkinter/tix; do
+		chmod a-x ${D}/$scriptdir/$i.py
+	done
+	chmod a-x ${D}/$scriptdir/test/test_pathlib.py
+
+	cp ${S}/Misc/python.man ${D}${mandir}/man1/python${VER}.1
+	ln -sf python${VER}.1 ${D}${mandir}/man1/python${VER}m.1
+	cp ${S}/debian/pydoc.1 ${D}${mandir}/man1/pydoc${VER}.1
+
+	# Symlinks to /usr/bin for some tools
+	ln -sf ../lib/python${VER}/pdb.py ${D}${bindir}/pdb${VER}
+	cp ${S}/debian/pdb.1 ${D}${mandir}/man1/pdb${VER}.1
+	cp ${S}/debian/2to3-3.1 ${D}${mandir}/man1/2to3-${VER}.1
+	cp ${S}/debian/pysetup3.1 ${D}${mandir}/man1/pysetup${VER}.1
+	cp ${S}/debian/pyvenv3.1 ${D}${mandir}/man1/pyvenv-${VER}.1
+
+	# versioned install only
+	for i in 2to3 idle3 pydoc3 pysetup3 python3 python3-config; do
+		rm -f ${D}${bindir}/$i
+	done
+	rm -f ${D}${libdir}/pkgconfig/python3.pc
+
+	cp ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext${VER}
+	cp ${S}/debian/pygettext.1 ${D}${mandir}/man1/pygettext${VER}.1
+
+	# test_ctypes fails with test_macholib.py installed
+	rm -f ${D}/$scriptdir/ctypes/test/test_macholib.py
+	# test_bdist_wininst fails, '*.exe' files are not installed
+	rm -f ${D}/$scriptdir/distutils/tests/test_bdist_wininst.py
+
+	# fixed upstream ...
+	chmod -x ${D}/$scriptdir/test/test_dbm_gnu.py
+	chmod -x ${D}/$scriptdir/test/test_dbm_ndbm.py
+
+	install -d ${D}${docdir}/python${VER}/examples
+	cp -r ${S}/Tools/* ${D}${docdir}/python${VER}/examples/
+	rm -rf ${D}${docdir}/python${VER}/examples/Tools/buildbot
+	rm -rf ${D}${docdir}/python${VER}/examples/Tools/msi
+	# We don't need rgb.txt, we'll use our own:
+	rm -rf ${D}${docdir}/python${VER}/examples/Tools/pynche/X
+
+	# IDLE
+	test -f ${D}${bindir}/idle${VER} && mv ${D}${bindir}/idle${VER} ${D}${bindir}/idle-python${VER}
+	rm -f ${D}${libdir}/python${VER}/idlelib/idle.bat
+	cp ${S}/debian/idle-${PVER}.1 ${D}${mandir}/man1/
+
+	rm -f ${D}${bindir}/python
+	rm -f ${D}${bindir}/pyvenv
 }
 
 do_install_append_class-nativesdk () {

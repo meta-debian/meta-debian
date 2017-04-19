@@ -4,6 +4,7 @@ HOMEPAGE = "https://security.appspot.com/vsftpd.html"
 PR = "r0"
 
 inherit debian-package
+PV = "3.0.2"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = " \
@@ -40,3 +41,7 @@ do_install () {
 }
 
 FILES_${PN} += "${sysconfdir} ${base_libdir}"
+
+inherit systemd
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "vsftpd.service"

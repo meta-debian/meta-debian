@@ -14,11 +14,12 @@ HOMEPAGE = "http://www.stafford.uklinux.net/libesmtp/"
 
 PR = "r0"
 inherit debian-package
+PV = "1.0.6"
 
 LICENSE = "GPL-2.0+ & LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f \
                     file://auth-client.h;md5=955622f1ac3009c083042cfd8c34a2b5"
-inherit autotools
+inherit autotools binconfig
 DEPENDS = "openssl"
 
 #Configure follow debian/rules

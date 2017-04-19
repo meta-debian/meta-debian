@@ -4,6 +4,7 @@
 #
 
 require xorg-driver-video.inc
+PV = "2.3.3"
 
 SUMMARY = "X.Org X server -- Generic Vesa video driver"
 

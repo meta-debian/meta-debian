@@ -6,6 +6,7 @@ HOMEPAGE = "http://guichaz.free.fr/iotop/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.6"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4325afd396febcb659c36b49533135d4"
@@ -17,3 +18,12 @@ DEBIAN_QUILT_PATCHES = ""
 do_install_append() {
 	rm ${D}${libdir}/python2.7/site-packages/${DPN}/*.pyc
 }
+
+RDEPENDS_${PN} += " \
+    python-ctypes \
+    python-curses \
+    python-pprint \
+    python-shell \
+    python-subprocess \
+    python-textutils \
+"

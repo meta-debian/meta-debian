@@ -25,6 +25,7 @@ LIC_FILES_CHKSUM = "\
 
 PR = "r1"
 inherit debian-package
+PV = "3.5.6"
 
 #disable-build-doc_debian.patch:
 #	this patch to disable build doc, \
@@ -52,6 +53,8 @@ EXTRA_OECONF += " \
 	--enable-amqp 			\
 	--with-librabbitmq-client=internal \
 	--disable-build-docs \
+	--disable-doc \
+	--disable-tools \
 "
 
 PACKAGES =+ "\
@@ -68,7 +71,7 @@ PACKAGECONFIG ??= "\
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
 PACKAGECONFIG[systemd] = "\
 	--enable-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/,\
-	--disable-systemd --without-systemdsystemunitdir,systemd,"
+	--disable-systemd --without-systemdsystemunitdir, systemd, libsystemd-daemon-dev"
 PACKAGECONFIG[linux-caps] = "--enable-linux-caps,--disable-linux-caps,libcap,"
 PACKAGECONFIG[pcre] = "--enable-pcre,--disable-pcre,libpcre,"
 PACKAGECONFIG[dbi] = "--enable-sql,--disable-sql,libdbi,"
@@ -86,9 +89,8 @@ PACKAGECONFIG[libmongo-client] = "\
 	--enable-libmongo-client,--disable-libmongo-client,libmongo-client,"
 PACKAGECONFIG[hiredis] = "--enable-hiredis,--disable-hiredis,hiredis,"
 PACKAGECONFIG[eventlog] = "--enable-eventlog,--disable-eventlog,eventlog,"
-
 do_configure_append() {
-	# Arcoding Debian, the directory to install modules contains package version,
+	# According to Debian, the directory to install modules contains package version,
 	# so we need re-run configure with correct version from ${S}/VERSION
 	VERSION=`cat ${S}/VERSION`
 	oe_runconf --with-module-dir=${libdir}/${DPN}/$VERSION
@@ -108,14 +110,14 @@ do_install() {
 	install -d ${D}${sysconfdir}/logcheck/violations.ignore.d
 	install -d ${D}${sysconfdir}/logrotate.d
 
-	# Arcoding to debian/syslog-ng-core.dirs
+	# According to debian/syslog-ng-core.dirs
 	install -d ${D}${sysconfdir}/${DPN}/conf.d
 
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.default \
 			${D}${sysconfdir}/default/syslog-ng
 	install -m 0644 ${S}/debian/syslog-ng-core.syslog-ng.upstart \
 			${D}${sysconfdir}/init/syslog-ng.conf
-	# NOTE: "inherit systemd" remove ${sysconfdir}/init.d if DISTRO_FEATURES 
+	# NOTE: "inherit systemd" remove ${sysconfdir}/init.d if DISTRO_FEATURES
 	#includes systemd but not sysvinit.
 	install -m 0755 ${S}/debian/syslog-ng-core.syslog-ng.init \
 			${D}${sysconfdir}/init.d/syslog-ng
@@ -159,6 +161,8 @@ FILES_${PN} += "${datadir}/*"
 FILES_${PN}-dbg += "${libdir}/${DPN}/*/.debug/*"
 FILES_${PN}-staticdev += "${libdir}/${DPN}/syslog-ng/libtest/*.a"
 INSANE_SKIP_${PN}-core = "dev-so"
+# ignore to check dev-so because syslog-ng has dependency to libsystemd-daemon-dev
+INSANE_SKIP_${PN} += "dev-deps"
 
 #runtime depend, follow debian/control
 RDEPENDS_${PN} += "${PN}-core"

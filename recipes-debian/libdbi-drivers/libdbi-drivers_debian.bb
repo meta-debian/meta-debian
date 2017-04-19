@@ -3,6 +3,7 @@ HOMEPAGE = "http://libdbi.sourceforge.net/"
 
 PR = "r0"
 inherit debian-package
+PV = "0.9.0"
 
 LICENSE = "LGPLv2+"
 LIC_FILES_CHKSUM = "\

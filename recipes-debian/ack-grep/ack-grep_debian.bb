@@ -10,6 +10,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://beyondgrep.com/"
 PR = "r0"
 inherit debian-package cpan
+PV = "2.14"
 
 LICENSE = "Artistic-2.0 & GPL-2+ & (Artistic-1.0 | GPL-1+)"
 LIC_FILES_CHKSUM = "\
@@ -22,3 +23,4 @@ do_install() {
 	ln -s ack ${D}${bindir}/ack-grep
 }
 FILES_${PN} += "${datadir}"
+RDEPENDS_${PN} += "libfile-next-perl perl"

@@ -16,6 +16,7 @@ HOMEPAGE = "http://www.linuxfoundation.org/collaborate/workgroups/networking/bon
 
 PR = "r1"
 inherit debian-package
+PV = "2.6"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://ifenslave;md5=5b971c6ad58cb00d10e12e5bf460037c"

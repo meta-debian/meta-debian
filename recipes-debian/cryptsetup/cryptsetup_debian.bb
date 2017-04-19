@@ -13,6 +13,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://code.google.com/p/cryptsetup/"
 PR = "r2"
 inherit debian-package
+PV = "1.6.6"
 
 LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\

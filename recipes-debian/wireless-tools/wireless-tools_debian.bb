@@ -9,6 +9,7 @@ HOMEPAGE = "http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html"
 PR = "r0"
 
 inherit debian-package
+PV = "30~pre9"
 
 LICENSE = "GPLv2 & (LGPLv2.1 | MPL-1.1 | BSD)"
 LIC_FILES_CHKSUM = "\

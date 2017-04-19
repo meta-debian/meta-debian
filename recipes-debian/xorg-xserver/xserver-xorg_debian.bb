@@ -36,6 +36,7 @@ RCONFLICTS_${PN} = "${PN}-extension-dri \
 #Meta-debian
 #
 inherit debian-package
+PV = "1.16.4"
 DPN = "xorg-server"
 
 DEBIAN_PATCH_TYPE = "quilt"

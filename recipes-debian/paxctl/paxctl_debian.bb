@@ -19,6 +19,7 @@ LIC_FILES_CHKSUM = "file://paxctl.c;beginline=1;endline=5;md5=0ddd065c61020dda79
 
 PR = "r0"
 inherit debian-package
+PV = "0.9"
 
 do_install() {
 	oe_runmake 'DESTDIR=${D}' install

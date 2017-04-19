@@ -9,6 +9,7 @@ LIC_FILES_CHKSUM = "file://lzma.txt;beginline=18;endline=31;md5=a6f4e9d10359abb5
 PR = "r0"
 
 inherit debian-package
+PV = "9.22"
 
 export SRC_DIR_C="C/Util/Lzma"
 export SRC_DIR_CPP="CPP/7zip/Bundles/LzmaCon"

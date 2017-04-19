@@ -14,7 +14,7 @@ diff --git a/Makefile.in b/Makefile.in
 index 8c35a45..4fb8ae6 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -428,9 +428,17 @@ distclean:
+@@ -436,9 +435,17 @@ distclean:
  	    tests/failure-outputs.txt
  	rm -rf autom4te.cache tests/DIFF tests/NEW
  
@@ -25,12 +25,12 @@ index 8c35a45..4fb8ae6 100644
  	(cd tests && ./TESTrun.sh)
  
 +install-ptest:
-+	cp -r tests			$(DESTDIR) 
++	cp -r tests			$(DESTDIR)
 +	cp -r config.h			$(DESTDIR)
 +	install -m 0755 Makefile 	$(DESTDIR)
 +	ln -sf /usr/sbin/tcpdump	$(DESTDIR)/tcpdump
 +
- tags: $(TAGFILES)
+ extags: $(TAGFILES)
  	ctags -wtd $(TAGFILES)
  
 -- 

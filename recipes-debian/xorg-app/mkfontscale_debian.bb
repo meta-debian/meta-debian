@@ -4,6 +4,7 @@
 #
 
 require xorg-app-common.inc
+PV = "7.7+2"
 
 SUMMARY = "A program to create an index of scalable font files for X"
 

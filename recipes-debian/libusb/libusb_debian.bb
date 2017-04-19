@@ -5,6 +5,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.linux-usb.org/"
 
 inherit debian-package autotools pkgconfig
+PV = "0.1.12"
 
 PR = "r0"
 

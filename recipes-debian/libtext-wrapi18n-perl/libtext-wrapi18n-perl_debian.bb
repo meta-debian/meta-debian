@@ -3,6 +3,7 @@ DESCRIPTION = "internationalized substitute of Text::Wrap"
 PR = "r0"
 
 inherit debian-package cpan
+PV = "0.06"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=44;md5=e66988112aaf864a328fad61627fe75b"

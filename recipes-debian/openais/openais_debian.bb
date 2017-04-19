@@ -9,6 +9,7 @@ DESCRIPTION = "\
 "
 PR = "r1"
 inherit debian-package
+PV = "1.1.4"
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "\

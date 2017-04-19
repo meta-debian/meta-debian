@@ -6,6 +6,7 @@
 INC_PR = "r1"
 
 inherit debian-package
+PV = "2.7.9"
 
 DPN = "python2.7"
 
@@ -25,7 +26,6 @@ EXTRA_OECONF = " \
 	--enable-ipv6 \
 	--enable-unicode=ucs4 \
 	--with-dbmliborder=bdb:gdbm \
-	--with-system-expat \
 	--with-threads \
 	--with-pymalloc \
 	--without-cxx-main \
@@ -34,6 +34,9 @@ EXTRA_OECONF = " \
 	ac_cv_header_bluetooth_bluetooth_h=no ac_cv_header_bluetooth_h=no \
 	${PYTHONLSBOPTS} \
 "
+
+PACKAGECONFIG ??= "system-expat"
+PACKAGECONFIG[system-expat] = "--with-system-expat,,expat"
 
 # series file need to be processed before using for applying patches according
 # to Debian rules

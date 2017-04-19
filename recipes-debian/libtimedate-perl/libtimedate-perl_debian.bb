@@ -6,6 +6,7 @@
 PR = "r0"
 
 inherit debian-package
+PV = "2.3000"
 
 LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://README;beginline=21;md5=576b7cb41e5e821501a01ed66f0f9d9e"
