@@ -23,7 +23,7 @@ DEPENDS_class-nativesdk = "bison-native"
 SRC_URI += "\
     file://disable-build-man-dir.patch \
     file://force-enable-subids-when-cross-compiling.patch \
-    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_login-Remove-selinux-rule.patch', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_login-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools gettext update-alternatives

@@ -39,14 +39,14 @@ DEPENDS += "qtbase-opensource-src-native"
 
 # gl or gles needs to be enabled in order to build qtdeclarative
 # http://qt.gitorious.org/qt/qtdeclarative/commit/e988998a08b1420ed10bd02d9d4b3b8ed2289df9
-PACKAGECONFIG_GL ?= "${@base_contains('DISTRO_FEATURES', 'opengl', 'gl kms', '', d)}"
-PACKAGECONFIG_GL_arm ?= "${@base_contains('DISTRO_FEATURES', 'opengl', 'gles2 kms', '', d)}"
-PACKAGECONFIG_FB ?= "${@base_contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)}"
-PACKAGECONFIG_X11 ?= "${@base_contains('DISTRO_FEATURES', 'x11', \
+PACKAGECONFIG_GL ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gl kms', '', d)}"
+PACKAGECONFIG_GL_arm ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2 kms', '', d)}"
+PACKAGECONFIG_FB ?= "${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'directfb', '', d)}"
+PACKAGECONFIG_X11 ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 	'xcb xvideo xsync xshape xrender xrandr xfixes xinput2 xinput xinerama xcursor gtkstyle xkb', '', d)}"
 PACKAGECONFIG_FONTS ?= "freetype fontconfig"
 PACKAGECONFIG_SYSTEM ?= "jpeg libpng zlib harfbuzz"
-PACKAGECONFIG_MULTIMEDIA ?= "${@base_contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio', '', d)}"
+PACKAGECONFIG_MULTIMEDIA ?= "${@bb.utils.contains('DISTRO_FEATURES', 'pulseaudio', 'pulseaudio', '', d)}"
 PACKAGECONFIG_DISTRO ?= "sql-mysql sql-psql sql-odbc sql-sqlite sql-tds \
                          icu glib accessibility examples linuxfb cups mtdev"
 # Either release or debug, can be overridden in bbappends

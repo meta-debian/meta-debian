@@ -30,7 +30,7 @@ inherit autotools-brokensep
 
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
 
-PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG_class-target ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 PACKAGECONFIG[x11] = "--with-x, --without-x, libx11 libxmu libxt libxaw"
 
 PACKAGES =+ "${PN}-base"

@@ -20,7 +20,7 @@ SRC_URI += " \
     file://run-ptest \
     file://openssh-server.postinst \
     file://sshd_config \
-    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
