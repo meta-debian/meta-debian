@@ -31,3 +31,10 @@ LIC_FILES_CHKSUM = "\
 inherit setuptools
 
 DEPENDS += "libxml2 libxslt zlib"
+
+# need to export these variables for python runtime
+# fix error:
+#	PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#	TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS
