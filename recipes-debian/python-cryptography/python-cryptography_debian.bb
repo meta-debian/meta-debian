@@ -23,11 +23,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 PR = "r0"
 inherit debian-package
 PV = "0.6.1"
-DEBIAN_QUILT_PATCHES = ""
-
-# https://patchwork.openembedded.org/patch/123775/
-SRC_URI += "file://Remove_SSLv2_bindings.patch;pnum=2 \
-            file://Comment_lingering_SSLv2_symbol.patch;pnum=2"
 
 inherit setuptools
 
