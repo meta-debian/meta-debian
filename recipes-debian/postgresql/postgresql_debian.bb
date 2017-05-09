@@ -24,12 +24,12 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.postgresql.com"
 
 inherit debian-package
-PV = "9.4.10"
+PV = "9.4.11"
 
 DPN = "postgresql-9.4"
 
 LICENSE = "PostgreSQL"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=3a9c1120056a102a8c8c4013cd828dce"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=81b69ddb31a8be66baafd14a90146ee2"
 
 #fix error looked at host include and/or library paths: remove -L/usr/local/lib
 SRC_URI += "file://fix-using-host-library_debian.patch"
