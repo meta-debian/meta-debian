@@ -8,10 +8,10 @@ Index: git/sbin/update-ca-certificates
 ===================================================================
 --- git.orig/sbin/update-ca-certificates
 +++ git/sbin/update-ca-certificates
-@@ -40,6 +40,39 @@ do
-   shift
- done
+@@ -23,6 +23,39 @@ do
  
+ verbose=0
+ fresh=0
 +if [ -z "$SYSROOT" ]; then
 +  local_which () {
 +    if [ $# -lt 1 ]; then

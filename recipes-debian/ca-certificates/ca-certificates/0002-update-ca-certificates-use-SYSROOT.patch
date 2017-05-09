@@ -14,10 +14,10 @@ Index: git/sbin/update-ca-certificates
 ===================================================================
 --- git.orig/sbin/update-ca-certificates
 +++ git/sbin/update-ca-certificates
-@@ -37,11 +37,11 @@ do
-   shift
- done
+@@ -23,12 +23,12 @@
  
+ verbose=0
+ fresh=0
 -CERTSCONF=/etc/ca-certificates.conf
 -CERTSDIR=/usr/share/ca-certificates
 -LOCALCERTSDIR=/usr/local/share/ca-certificates
@@ -26,11 +26,13 @@ Index: git/sbin/update-ca-certificates
 +LOCALCERTSDIR=$SYSROOT/usr/local/share/ca-certificates
  CERTBUNDLE=ca-certificates.crt
 -ETCCERTSDIR=/etc/ssl/certs
+-HOOKSDIR=/etc/ca-certificates/update.d
 +ETCCERTSDIR=$SYSROOT/etc/ssl/certs
++HOOKSDIR=$SYSROOT/etc/ca-certificates/update.d
  
- cleanup() {
-   rm -f "$TEMPBUNDLE"
-@@ -64,9 +64,9 @@ add() {
+ while [ $# -gt 0 ];
+ do
+@@ -88,9 +88,9 @@ add() {
    PEM="$ETCCERTSDIR/$(basename "$CERT" .crt | sed -e 's/ /_/g' \
                                                    -e 's/[()]/=/g' \
                                                    -e 's/,/_/g').pem"
@@ -42,14 +44,5 @@ Index: git/sbin/update-ca-certificates
      echo +$PEM >> "$ADDED"
    fi
    # Add trailing newline to certificate, if it is missing (#635570)
-@@ -151,7 +151,7 @@ mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
- 
- echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
- 
--HOOKSDIR=/etc/ca-certificates/update.d
-+HOOKSDIR=$SYSROOT/etc/ca-certificates/update.d
- echo -n "Running hooks in $HOOKSDIR...."
- VERBOSE_ARG=
- [ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
 -- 
 2.1.4
