@@ -107,6 +107,8 @@ do_install_append() {
 	chrpath -d ${D}${bindir}/prelude-admin
 }
 
+PARALLEL_MAKEINST = ""
+
 CONFFILES_${PN} = "${sysconfdir}/prelude/default/client.conf \
                    ${sysconfdir}/prelude/default/global.conf \
                    ${sysconfdir}/prelude/default/idmef-client.conf \
