@@ -43,7 +43,7 @@ SRC_URI += " \
 PACKAGES =+ "${PN}-utils ${PN}-config lib${PN}"
 RDEPENDS_${PN}_class-target += "${PN}-utils"
 
-do_install_append() {
+do_install_append_class-target() {
 	sed -i -e "s|${STAGING_DIR_HOST}||" \
 		${D}${libdir}/pkgconfig/fontconfig.pc
 }
