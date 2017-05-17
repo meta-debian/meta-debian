@@ -41,7 +41,7 @@ SRC_URI += " \
 # but fontconfig-utils is required by fontcache.bbclass,
 # so we need provide it too.
 PACKAGES =+ "${PN}-utils ${PN}-config lib${PN}"
-RDEPENDS_${PN}_class-target += "${PN}-utils"
+RDEPENDS_${PN}_class-target += "${PN}-utils ${PN}-config"
 
 do_install_append_class-target() {
 	sed -i -e "s|${STAGING_DIR_HOST}||" \
