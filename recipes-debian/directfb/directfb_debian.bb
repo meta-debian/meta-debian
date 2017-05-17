@@ -32,7 +32,7 @@ EXTRA_OECONF_class-native = " \
 "
 
 PACKAGECONFIG ??= "freetype jpeg png zlib \
-                   ${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
+                   ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
                    "
 PACKAGECONFIG[freetype] = "--enable-freetype,--disable-freetype,freetype"
 PACKAGECONFIG[jpeg] = "--enable-jpeg,--disable-jpeg,libjpeg-turbo"
