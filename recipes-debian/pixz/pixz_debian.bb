@@ -21,6 +21,7 @@ CFLAGS_append_libc-musl = " -D_GNU_SOURCE"
 CACHED_CONFIGUREVARS += "ac_cv_file_src_pixz_1=no"
 
 inherit debian-package
+PV = "1.0.2"
 
 BBCLASSEXTEND = "native"
 
