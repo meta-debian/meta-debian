@@ -16,6 +16,8 @@ PV = "4.0.18"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
+SRC_URI += "file://0001-Continue-even-if-fs-size-is-not-divisible-by-sectors.patch"
+
 inherit autotools texinfo
 
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11 floppyd', '', d)}"
