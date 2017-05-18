@@ -81,4 +81,4 @@ FILES_${PN}-dbg += "${base_libdir}/security/.debug/*.so"
 DEBIANNAME_${PN} = "${PN}2"
 DEBIANNAME_${PN}-bin = "${PN}2-bin"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
