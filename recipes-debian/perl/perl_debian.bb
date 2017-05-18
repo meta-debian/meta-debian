@@ -33,6 +33,7 @@ file://config.sh-64 \
 file://config.sh-64-le \
 file://config.sh-64-be \
 file://0001-Makefile.SH-fix-do_install-failed.patch \
+file://Fix-race-condition-in-perl-s-ExtUtils-MakeMaker.patch \
 "
 
 # We need gnugrep (for -I)
