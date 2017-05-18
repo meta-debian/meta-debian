@@ -38,6 +38,7 @@ $ git checkout jethro
 $ git clone https://github.com/meta-debian/meta-debian.git
 $ cd meta-debian
 $ git checkout jethro
+$ cd ../../
 ```
 
 Setup build directory.

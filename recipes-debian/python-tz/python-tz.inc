@@ -15,6 +15,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=22b38951eb857cf285a4560a914b7cd6"
 inherit setuptools
 
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS
+
 do_debian_patch_prepend() {
 	# ${S}/.pc is existed by default, so we need to remove it to
 	# avoid error "unknown quilt patches already applied"

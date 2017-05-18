@@ -15,6 +15,13 @@ inherit distutils
 #Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
 DEBIAN_QUILT_PATCHES = ""
 
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS
+
 do_install_append() {
 	rm ${D}${libdir}/python2.7/site-packages/${DPN}/*.pyc
 }
