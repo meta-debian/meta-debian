@@ -115,6 +115,17 @@ do_install() {
 	ln -sf libpython3-dev ${D}${docdir}/libpython3-all-dev
 }
 
+# Don't execute do_qa_staging function:
+# This function find all .la and .pc files and check for stuff that looks wrong,
+# but .pc files are softlinks files, overwrite this function to avoid error:
+# | Exception: FileNotFoundError:[Errno 2] No such file or directory:
+# | /path/to/*.pc
+python __anonymous() {
+    postfuncs = d.getVarFlag("do_populate_sysroot","postfuncs",expand=False)
+    postfuncs = postfuncs.replace("do_qa_staging","")
+    d.setVarFlag("do_populate_sysroot","postfuncs",postfuncs)
+}
+
 PACKAGE_BEFORE_PN = "${PN}-minimal python3-venv python3-examples libpython3-dev \
                      libpython3-stdlib idle3 \
                      python3-all python3-all-dev \
