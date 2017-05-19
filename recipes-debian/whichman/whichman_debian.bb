@@ -10,6 +10,8 @@ DEPENDS = "quilt-native"
 
 SRC_URI += "file://remove_strip.patch"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_compile() {
 	oe_runmake
 }
