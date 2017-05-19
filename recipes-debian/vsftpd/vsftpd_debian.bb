@@ -16,8 +16,10 @@ DEPENDS = "libcap openssl tcp-wrappers libpam"
 
 LIBS="-lwrap -lpam -lcap -lssl -lcrypto"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_compile () {
-	oe_runmake CC="${CC}" CFLAGS="${CFLAGS} -W -Wshadow" LIBS="${LIBS}" LINK=""
+	oe_runmake CFLAGS="${CFLAGS} -W -Wshadow" LIBS="${LIBS}" LINK=""
 }
 
 do_install () {

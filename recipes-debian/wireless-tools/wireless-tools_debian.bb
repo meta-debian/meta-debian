@@ -22,6 +22,7 @@ file://sample_enc.c;beginline=1;endline=4;md5=838372be07874260b566bae2f6ed33b6"
 SRC_URI += " \
 file://remove.ldconfig.call.patch \
 "
+EXTRA_OEMAKE = "-e MAKEFLAGS="
 
 do_compile() {
 	oe_runmake all libiw.a
