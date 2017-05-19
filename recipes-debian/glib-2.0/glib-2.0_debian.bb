@@ -16,7 +16,7 @@ LIC_FILES_CHKSUM = "\
 "
 
 DEPENDS = "glib-2.0-native virtual/libiconv libffi zlib"
-DEPENDS_append_class-target = "${@base_contains('DISTRO_FEATURES', 'ptest', ' dbus', '', d)} libpcre"
+DEPENDS_append_class-target = "${@bb.utils.contains('DISTRO_FEATURES', 'ptest', ' dbus', '', d)} libpcre"
 DEPENDS_class-native = "pkgconfig-native gettext-native libffi-native zlib-native"
 DEPENDS_class-nativesdk = "nativesdk-libtool nativesdk-libffi nativesdk-zlib ${BPN}-native nativesdk-libpcre"
 

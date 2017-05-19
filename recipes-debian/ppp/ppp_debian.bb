@@ -16,7 +16,7 @@ PV = "2.4.6"
 
 DEPENDS = "libpcap"
 # Set depend on pam if pam feature is enabled in DISTOR_FEATURES.
-DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
 LICENSE = "BSD & GPLv2+ & LGPLv2+ & PD"
 LIC_FILES_CHKSUM = "file://pppd/ccp.c;beginline=1;endline=29;md5=e2c43fe6e81ff77d87dc9c290a424dea \
@@ -32,7 +32,7 @@ EXTRA_OEMAKE = "STRIPPROG=${STRIP} MANDIR=${D}${datadir}/man/man8 INCDIR=${D}${i
 
 # By default, USE_PAM value always = y, so need to set this value
 # automatically changed based on DISTRO_FEATURES.
-EXTRA_OEMAKE += "${@base_contains('DISTRO_FEATURES', 'pam', 'USE_PAM=y', 'USE_PAM=', d)}"
+EXTRA_OEMAKE += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'USE_PAM=y', 'USE_PAM=', d)}"
 
 EXTRA_OECONF = "--disable-strip"
 

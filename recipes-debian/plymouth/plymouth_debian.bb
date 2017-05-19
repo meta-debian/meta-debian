@@ -36,7 +36,7 @@ EXTRA_OECONF += "--disable-silent-rules \
                  --libexecdir=${libdir} \
                  --enable-documentation=no \
                  "
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'x11', 'gtk drm', '', d)}"
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'gtk drm', '', d)}"
 PACKAGECONFIG[gtk] = "--enable-gtk --with-log-viewer,--disable-gtk --without-log-viewer,gtk+,"
 PACKAGECONFIG[drm] = "--enable-drm,--disable-drm,libdrm libpciaccess,"
 

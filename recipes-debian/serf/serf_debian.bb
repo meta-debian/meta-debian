@@ -31,6 +31,9 @@ do_compile() {
 do_install() {
 	${STAGING_BINDIR_NATIVE}/scons PREFIX=${D}${prefix} LIBDIR=${D}${libdir} install
 	chrpath -d ${D}${libdir}/*.so.*
+	# Remove the the absolute path to sysroot
+	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
+		${D}${libdir}/pkgconfig/*.pc
 }
 DEBIANNAME_${PN}-dev = "lib${PN}-dev"
 RPROVIDES_${PN}-dev += "lib${PN}-dev"

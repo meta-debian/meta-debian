@@ -41,7 +41,7 @@ EXTRA_OECONF = "--with-db-uniquename=_pam \
 inherit autotools gettext pkgconfig
 
 PACKAGECONFIG ??= " \
-    ${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[audit] = "--enable-audit,--disable-audit,audit,"
 PACKAGECONFIG[selinux] = "--enable-selinux,--disable-selinux,libselinux"

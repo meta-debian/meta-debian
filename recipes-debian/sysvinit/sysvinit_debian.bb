@@ -5,7 +5,7 @@
 
 require sysvinit.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 do_install_append() {
 	mv ${D}${base_bindir}/pidof ${D}${base_bindir}/pidof.${DPN}
@@ -14,24 +14,25 @@ do_install_append() {
 	rm -f ${D}${base_bindir}/mountpoint ${D}${mandir}/man1/mountpoint.1
 }
 
-PACKAGES =+ "sysv-rc bootlogd bootlogd-doc ${PN}-initscripts ${PN}-initscripts-doc \
-             ${PN}-core ${PN}-core-doc ${PN}-utils"
+PACKAGES =+ "sysv-rc bootlogd ${PN}-core  \
+             ${PN}-utils ${PN}-initscripts"
 
 FILES_${PN} += " \
 		${base_libdir}/${PN}/*"
 FILES_${PN}-dbg += " \
 		${base_libdir}/${PN}/.debug"
 FILES_sysv-rc += " \
+		${sbindir}/invoke-rc.d \
+		${sbindir}/update-rc.d \
 		${sysconfdir}/init.d/README \
 		${sysconfdir}/init.d/rc \
-		${sysconfdir}/init.d/rc5 \
+		${sysconfdir}/init.d/rcS \
+		${sysconfdir}/rc*.d \
 		${datadir}/sysv-rc"
 FILES_bootlogd += " \
 		${base_sbindir}/bootlogd \
 		${sysconfdir}/init.d/bootlogd \
 		${sysconfdir}/init.d/stop*"
-FILES_bootlogd-doc += " \
-		${mandir}/man8/bootlogd.8"
 # mountpoint is moved to sysvinit-mountpoint package
 RDEPENDS_${PN}-initscripts += "${PN}-mountpoint"
 FILES_${PN}-initscripts += " \
@@ -44,29 +45,16 @@ FILES_${PN}-initscripts += " \
 		${localstatedir}${base_libdir}/initscripts \
 		${localstatedir}${base_libdir}/urandom \
 		${localstatedir}/log/fsck"
-FILES_${PN}-initscripts-doc += " \
-		${mandir}/man5/halt.5 \
-		${mandir}/man5/rcS.5 \
-		${mandir}/man5/tmpfs.5 \
-		${mandir}/man8/fsck.nfs.8"
 FILES_${PN}-core += " \
-		${base_sbindir}/halt \
-		${base_sbindir}/init \
-		${base_sbindir}/poweroff \
-		${base_sbindir}/reboot \
-		${base_sbindir}/runlevel \
-		${base_sbindir}/shutdown \
-		${base_sbindir}/telinit \
+		${base_sbindir}/halt* \
+		${base_sbindir}/init* \
+		${base_sbindir}/poweroff* \
+		${base_sbindir}/reboot* \
+		${base_sbindir}/runlevel* \
+		${base_sbindir}/shutdown* \
+		${base_sbindir}/telinit* \
+		${datadir}/${DPN} \
 		${includedir}"
-FILES_${PN}-core-doc += " \
-		${datadir}/man/man5/* \
-		${datadir}/man/man8/halt.8 \
-		${datadir}/man/man8/init.8 \
-		${datadir}/man/man8/poweroff.8 \
-		${datadir}/man/man8/reboot.8 \
-		${datadir}/man/man8/runlevel.8 \
-		${datadir}/man/man8/shutdown.8 \
-		${datadir}/man/man8/halt.8"
 FILES_${PN}-utils += " \
 		${base_bindir}/pidof* \
 		${base_libdir}/init/init-d-script \
@@ -77,16 +65,6 @@ FILES_${PN}-utils += " \
 		${bindir}/lastb \
 		${bindir}/mesg \
 		${sbindir}/service"
-FILES_${PN}-utils-doc += " \
-		${datardir}/man/man1/last.1 \
-		${datardir}/man/man1/lastb.1 \
-		${datardir}/man/man1/mesg.1 \
-		${datardir}/man/man5/init-d-script.5 \
-		${datardir}/man/man8/fstab-decode.8 \
-		${datardir}/man/man8/killall5.8 \
-		${datardir}/man/man8/pidof.8 \
-		${datardir}/man/man8/service.8 \
-		${datardir}/man/man8/sulogin.8"
 
 # Add update-alternatives definitions
 inherit update-alternatives

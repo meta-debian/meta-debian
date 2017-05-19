@@ -30,7 +30,7 @@ inherit autotools-brokensep
 
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
 
-PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG_class-target ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 PACKAGECONFIG[x11] = "--with-x, --without-x, libx11 libxmu libxt libxaw"
 
 PACKAGES =+ "${PN}-base"
@@ -76,6 +76,13 @@ do_install_append() {
 }
 
 #shipment files for groff-base package:
+FILES_${PN}-base = " \
+    ${sysconfdir}/groff \
+    ${libdir}/mime/packages/groff-base \
+    ${datadir}/groff/${PV}/eign \
+    ${datadir}/groff/site-tmac \
+    ${datadir}/groff/current \
+"
 bindir_progs = "\
 	geqn gpic gtbl eqn groff grog grops grotty neqn nroff pic preconv \
 	soelim tbl troff"
@@ -86,7 +93,6 @@ datadir_progs_tmac = "\
 	papersize.tmac pic.tmac ps.tmac psatk.tmac psold.tmac pspic.tmac \
 	safer.tmac sv.tmac trans.tmac troffrc troffrc-end tty-char.tmac \
 	tty.tmac unicode.tmac www.tmac"
-
 datadir_progs_font = "devascii devlatin1 devps devutf8"
 python __anonymous() {
     val = str(d.getVar('FILES_groff-base', True))
@@ -96,15 +102,12 @@ python __anonymous() {
     for prog in d.getVar('bindir_progs', True).split():
         val += " " + bindir + "/" + prog
     for prog in d.getVar('datadir_progs_tmac',True).split():
-        val += " " + datadir + "/groff/*/tmac/" + prog
+        val += " " + datadir + "/groff/${PV}/tmac/" + prog
     for prog in d.getVar('datadir_progs_font',True).split():
-        val += " " + datadir + "/groff/*/font/" + prog
+        val += " " + datadir + "/groff/${PV}/font/" + prog
 
-    val += " " + d.getVar('sysconfdir', True) + "/groff"
-    val += " " + d.getVar('libdir', True) + "/mime/packages/groff-base"
-    val += " " + d.getVar('datadir', True) + "/groff/*/eign"
-    val += " " + d.getVar('datadir', True) + "/groff/site-tmac"
     d.setVar('FILES_groff-base', val)
 }
+
 PARALLEL_MAKE = ""
 BBCLASSEXTEND = "native"

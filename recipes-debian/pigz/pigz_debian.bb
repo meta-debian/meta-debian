@@ -14,6 +14,8 @@ HOMEPAGE = "http://zlib.net/pigz/"
 PR = "0"
 DEPENDS = "zlib"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 inherit debian-package
 PV = "2.3.1"
 

@@ -77,7 +77,7 @@ FILES_${PN}-dev += "${libdir}/dbus-1.0/include ${bindir}/dbus-glib-tool"
 
 pkg_postinst_dbus() {
 	# If both systemd and sysvinit are enabled, mask the dbus-1 init script
-        if ${@base_contains('DISTRO_FEATURES','systemd sysvinit','true','false',d)}; then
+        if ${@bb.utils.contains('DISTRO_FEATURES','systemd sysvinit','true','false',d)}; then
 		if [ -n "$D" ]; then
 			OPTS="--root=$D"
 		fi
@@ -103,8 +103,8 @@ EXTRA_OECONF = " \
 # Follow debian/rules, libexecdir is ${prefix}/lib/dbus-1.0
 libexecdir = "${libdir}/dbus-1.0"
 
-PACKAGECONFIG ??= "${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
-                   ${@base_contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
+                   ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
 
@@ -116,12 +116,12 @@ PACKAGECONFIG[x11] = "--with-x --enable-x11-autolaunch,--without-x --disable-x11
 do_install() {
 	autotools_do_install
 
-	if ${@base_contains('DISTRO_FEATURES', 'sysvinit', 'true', 'false', d)}; then
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'sysvinit', 'true', 'false', d)}; then
 		install -d ${D}${sysconfdir}/init.d
 		install -m 0755 ${S}/debian/dbus.init ${D}${sysconfdir}/init.d/dbus
 	fi
 
-	if ${@base_contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
 		for i in dbus.target.wants sockets.target.wants multi-user.target.wants; do \
 			install -d ${D}${systemd_unitdir}/system/$i; done
 		install -m 0644 ${B}/bus/dbus.service ${B}/bus/dbus.socket ${D}${systemd_unitdir}/system/
@@ -131,7 +131,7 @@ do_install() {
 		ln -fs ../dbus.service ${D}${systemd_unitdir}/system/multi-user.target.wants/dbus.service
 	fi
 
-	if ${@base_contains('DISTRO_FEATURES', 'x11', 'true', 'false', d)}; then
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'true', 'false', d)}; then
 		install -m 644 -D ${S}/debian/dbus-Xsession ${D}${sysconfdir}/X11/Xsession.d/75dbus_dbus-launch
 	fi
 

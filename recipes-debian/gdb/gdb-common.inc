@@ -48,7 +48,7 @@ EXTRA_OECONF = "--disable-gdbtk --disable-tui --disable-x --disable-werror \
 	--with-expat --disable-readline --disable-rpath \
 	--without-lzma --without-zlib --without-guile \
 	${GDBPROPREFIX} ${EXPAT} \
-	${@base_contains('DISTRO_FEATURES', 'multiarch', '--enable-64-bit-bfd', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'multiarch', '--enable-64-bit-bfd', '', d)} \
 "
 
 GDBPROPREFIX = "--program-prefix=''"

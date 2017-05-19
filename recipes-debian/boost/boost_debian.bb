@@ -39,7 +39,7 @@ BOOST_LIBS = "\
 # optional boost-python library
 PACKAGECONFIG ??= "python"
 PACKAGECONFIG[python] = ",,python"
-BOOST_LIBS += "${@base_contains('PACKAGECONFIG', 'python', 'python', '', d)}"
+BOOST_LIBS += "${@bb.utils.contains('PACKAGECONFIG', 'python', 'python', '', d)}"
 inherit python-dir
 PYTHON_ROOT = "${STAGING_DIR_HOST}/${prefix}"
 
@@ -163,6 +163,7 @@ do_boostconfig() {
 	sed -i '/^using python/d' project-config.jam
 }
 
+do_boostconfig[dirs] = "${S}"
 addtask do_boostconfig after do_patch before do_configure
 
 do_compile() {

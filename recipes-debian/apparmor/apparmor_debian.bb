@@ -31,7 +31,7 @@ SRC_URI += "\
 "
 
 DEPENDS += " flex-native python bison-native swig-native apache2 \
-	${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 # These are needed for --with-python
 export STAGING_INCDIR
 export STAGING_LIBDIR
@@ -99,7 +99,7 @@ do_install() {
 	${MAKE} "DESTDIR = ${D}" -C ${S}/profiles \
 		EXTRAS_DEST=${D}${docdir}/apparmor-profiles/extras \
 		install 
-	if [ ${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
+	if [ ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} = "pam" ];then
 		${MAKE} "DESTDIR = ${D}" -C ${S}/changehat/pam_apparmor install
 	fi
 

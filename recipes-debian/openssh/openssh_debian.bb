@@ -20,7 +20,7 @@ SRC_URI += " \
     file://run-ptest \
     file://openssh-server.postinst \
     file://sshd_config \
-    ${@base_contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
@@ -46,14 +46,15 @@ EXTRA_OECONF = " \
 	--with-default-path=${DEFAULT_PATH} \
 	--with-superuser-path=${SUPERUSER_PATH} \
 	--with-cflags='${cflags}' \
+	--libexecdir=${libdir}/${BPN} \
 "
 cflags = "${CPPFLAGS} ${CFLAGS} -DLOGIN_PROGRAM=\"${base_bindir}/login\" -DLOGIN_NO_ENDOPT"
 DEFAULT_PATH = "/usr/local/bin:/usr/bin:/bin:/usr/games"
 SUPERUSER_PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 PACKAGECONFIG ??= "tcp-wrappers \
-	${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
-	${@base_contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
 "
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
@@ -78,7 +79,7 @@ do_configure_prepend(){
 }
 
 do_install_append(){
-	if [ "${@base_contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
 		install -d ${D}${sysconfdir}/pam.d
         install -m 0644 ${S}/debian/openssh-server.sshd.pam.in ${D}${sysconfdir}/pam.d/sshd
         FROM="^@IF_KEYINIT@"

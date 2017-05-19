@@ -24,7 +24,7 @@ file://find.pl \
 "
 
 # "${S}/Configure" is written by perl script
-DEPENDS = "perl-native-runtime"
+DEPENDS = "hostperl-runtime-native"
 
 # CFLAG replaces the second parameters (next to gcc:) of the target config
 # in Configure (see do_configure). We simply use the same options as OE-Core
@@ -43,7 +43,7 @@ EXTRA_OECONF_append_x86-64 = "enable-ec_nistp_64_gcc_128"
 
 # without this, ar commands fail in do_compile
 AR_append = " r"
-
+EXTRA_OEMAKE = "-e MAKEFLAGS="
 # Only "test" is removed from the default targets because it includes
 # running tests. Instead, "buildtest" and "runtest" are added by
 # Makefiles-ptest.patch as new targets

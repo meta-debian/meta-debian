@@ -156,7 +156,7 @@ do_install_append() {
 	mv ${D}${sbindir}/kfd ${D}${libdir}/${BPN}-servers
 
 	# install heimdal-servers-x package
-	if [ "${@base_contains('DISTRO_FEATURES', 'x11', '', 'x11', d)}" = "" ] ; then
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'x11', '', 'x11', d)}" = "" ] ; then
 		mv ${D}${sbindir}/kxd ${D}${libdir}/${BPN}-servers
 	fi
 }

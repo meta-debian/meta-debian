@@ -7,7 +7,7 @@ EXTRA_OECONF += "\
         --enable-udev_sync \
 "
 do_install_append(){
-	if ${@base_contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
 		oe_runmake 'DESTDIR=${D}' install_systemd_units
 		ln -sf lvm2-activation.service ${D}${systemd_unitdir}/system/lvm2.service
 	fi

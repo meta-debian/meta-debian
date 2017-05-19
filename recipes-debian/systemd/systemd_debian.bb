@@ -30,7 +30,7 @@ DEPENDS = "intltool-native \
            libgcrypt \
            kmod \
            util-linux \
-           ${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)} \
+           ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)} \
            python3-lxml-native \
           "
 
@@ -38,6 +38,8 @@ DEPENDS = "intltool-native \
 # Other target specific CONFFLAGS in debian/rules are ignored.
 DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
                    --with-rootlibdir=${base_libdir} \
+                   --with-sysvinit-path=${sysconfdir}/init.d \
+                   --with-sysvrcnd-path=${sysconfdir} \
                    --with-firmware-path=/lib/firmware \
                    --with-ntp-servers="" \
                    --with-dns-servers="" \
@@ -57,7 +59,7 @@ DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
 #   avoid compile error "Cannot open src/*/org.freedesktop.*.policy"
 # --disable-selinux: Disable selinux support
 EXTRA_OECONF = "${DEBIAN_CONFOPTS} \
-                ${@base_contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
+                ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '--enable-pam', '--disable-pam', d)} \
                 --disable-manpages \
                 --disable-gtk-doc-html \
                 --disable-selinux \
@@ -218,7 +220,7 @@ do_install_append() {
 #   systemd-sysv: links and manuals for replacing sysvinit
 PACKAGES =+ "libsystemd-dev \
              libsystemd0 \
-             ${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)} \
+             ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)} \
              udev \
              libudev-dev \
              libudev1 \
@@ -245,7 +247,7 @@ FILES_${PN} = "${base_bindir} \
                ${datadir} \
                ${sysconfdir}/dbus-1 \
                ${sysconfdir}/modules-load.d/modules.conf \
-               ${@base_contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/systemd-user', '', d)} \
+               ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${sysconfdir}/pam.d/systemd-user', '', d)} \
                ${sysconfdir}/sysctl.d/99-sysctl.conf \
                ${sysconfdir}/systemd \
                ${sysconfdir}/xdg \
@@ -253,7 +255,7 @@ FILES_${PN} = "${base_bindir} \
 FILES_${PN}-dbg += "${base_libdir}/systemd/.debug \
                     ${base_libdir}/systemd/system-generators/.debug \
                     ${base_libdir}/udev/.debug \
-                    ${@base_contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
+                    ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
                     ${PYTHON_SITEPACKAGES_DIR}/systemd/.debug \
                    "
 FILES_${PN}-dev = ""
@@ -344,13 +346,13 @@ FILES_systemd-sysv = " ${base_sbindir}/init \
                        ${base_sbindir}/shutdown \
                        ${base_sbindir}/telinit \
                      "
-RDEPENDS_${PN} += "systemd-sysv"
+RDEPENDS_${PN} += "systemd-sysv sysv-rc"
 RDEPENDS_libsystemd-daemon-dev  += "libsystemd-dev"
 RDEPENDS_libsystemd-login-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-id128-dev   += "libsystemd-dev"
 RDEPENDS_libsystemd-journal-dev += "libsystemd-dev"
 
-RRECOMMENDS_${PN} += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"
+RRECOMMENDS_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"
 
 # init script requires init-functions, procps's ps, and mountpoint
 RDEPENDS_udev += "lsb-base procps sysvinit-mountpoint"

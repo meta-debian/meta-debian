@@ -10,10 +10,10 @@ LICENSE = "BSD | GPLv2"
 LIC_FILES_CHKSUM = "file://License;md5=3f84fd6f29d453a56514cb7e4ead25f1"
 
 DPN = "libcap2"
-DEPENDS = "attr perl-native-runtime"
-DEPENDS += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+DEPENDS = "attr hostperl-runtime-native"
+DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 # attr and pam are disabled by EXTRA_OEMAKE_class-native
-DEPENDS_class-native = "perl-native-runtime"
+DEPENDS_class-native = "hostperl-runtime-native"
 
 inherit debian-package
 PV = "2.24"
@@ -35,7 +35,7 @@ do_configure() {
 
 EXTRA_OEMAKE = " \
   LIBATTR=yes \
-  PAM_CAP=${@base_contains('DISTRO_FEATURES', 'pam', 'yes', 'no', d)} \
+  PAM_CAP=${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'yes', 'no', d)} \
   INDENT= SYSTEM_HEADERS=${STAGING_INCDIR} RAISE_SETFCAP=no \
   lib=${@os.path.basename('${libdir}')} \
 "
@@ -69,7 +69,7 @@ do_install_append() {
 	rm -rf ${D}${base_libdir}/*.so
 }
 
-PACKAGES += "${@base_contains('DISTRO_FEATURES', 'pam', 'libpam-cap', '', d)}"
+PACKAGES += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-cap', '', d)}"
 
 FILES_${PN}-bin += "${base_sbindir}"
 # pam files

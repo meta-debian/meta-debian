@@ -55,7 +55,7 @@ EXTRA_OECONF_append_class-native = " \
     --with-tcl=${STAGING_LIBDIR_NATIVE}/tcl8.6 \
 "
 
-PACKAGECONFIG_class-target ?= "${@base_contains('DISTRO_FEATURES', 'x11', 'tk gui', '', d)}"
+PACKAGECONFIG_class-target ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'tk gui', '', d)}"
 PACKAGECONFIG[tk] = "--with-tk=${STAGING_BINDIR_CROSS} --with-tkinclude=${STAGING_INCDIR}/tcl8.6, --without-tk, tk8.6"
 PACKAGECONFIG[gui] = "--enable-gui, --disable-gui, gtk+ libglade"
 
