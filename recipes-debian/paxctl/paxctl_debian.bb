@@ -21,6 +21,8 @@ PR = "r0"
 inherit debian-package
 PV = "0.9"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_install() {
 	oe_runmake 'DESTDIR=${D}' install
 }

@@ -21,6 +21,8 @@ DEBIAN_PATCH_TYPE = "nopatch"
 
 RDEPENDS_${PN} = "gdb perl"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_compile() {
 	oe_runmake
 }

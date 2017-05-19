@@ -14,10 +14,7 @@ PR = "r0"
 inherit debian-package
 PV = "2.3.11"
 
-# Compile with cross compiler, instead using gcc
-do_compile() {
-	oe_runmake "CC=${CC}"
-}
+EXTRA_OEMAKE = "-e MAKEFLAGS="
 
 do_install() {
 	install -d ${D}
