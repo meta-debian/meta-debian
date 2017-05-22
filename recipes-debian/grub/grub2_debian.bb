@@ -4,7 +4,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
@@ -28,7 +28,7 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
-DEPENDS = "flex-native bison-native xz-utils"
+DEPENDS = "freetype-native flex-native bison-native xz-utils"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'
 
@@ -45,6 +45,10 @@ EXTRA_OECONF = "--with-platform=${GRUBPLATFORM} \
                 --disable-grub-mkfont \
                 --program-prefix="" \
                "
+
+# "build_freetype_cflags" and "build_freetype_libs" should point to native sysroots
+# because these variables are used with "BUILD_CC" to build native binary file
+CACHED_CONFIGUREVARS = "ac_cv_prog_BUILD_FREETYPE=${STAGING_BINDIR_NATIVE}/freetype-config"
 
 do_configure_prepend() {
 	( cd ${S}

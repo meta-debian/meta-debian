@@ -94,6 +94,7 @@ do_configure_append() {
 	test -d build_py3 || mkdir build_py3
 	cd build_py3
 	../configure --host=${HOST_SYS} \
+		--build=${BUILD_SYS} \
 		--target=${TARGET_SYS} \
 		--with-python \
 		PYTHON=${STAGING_BINDIR_NATIVE}/python3-native/python3 \
@@ -125,6 +126,10 @@ do_install_append() {
 		${D}${datadir}/${PN}/${MAJOR_VER}/extension/
 	install -m 0755 ${S}/build_py3/src/pl/plpython/plpython3.so \
 		${D}${libdir}/${PN}/${MAJOR_VER}/lib
+
+	# Remove the the absolute path to sysroot
+	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
+		${D}${libdir}/pkgconfig/*.pc
 }
 
 PACKAGES =+ "libecpg-compat libecpg-dev libecpg libpgtypes libpq-dev libpq \

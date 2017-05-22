@@ -9,7 +9,7 @@ rexec, rlogin, rlogind, rsh, rshd, syslog, syslogd, talk, \
 talkd, telnet, telnetd, tftp, tftpd, and uucpd."
 HOMEPAGE = "http://www.gnu.org/software/inetutils"
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 PV = "1.9.2.39.3a460"
@@ -23,20 +23,26 @@ SRC_URI += "file://inetutils-1.9-PATH_PROCNET_DEV.patch"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=0c7051aef9219dc7237f206c5c4179a7"
 
-DEPENDS = "ncurses netbase readline"
+DEPENDS = "ncurses netbase readline update-inetd-native"
 
 inherit autotools gettext update-alternatives texinfo
 
-PACKAGECONFIG ??= " ftp ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG ??= "ftp tcp-wrappers \
+                   ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
+                   "
 PACKAGECONFIG[ftp] = "--enable-ftp,--disable-ftp,readline"
 PACKAGECONFIG[uucpd] = "--enable-uucpd,--disable-uucpd,readline"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
+PACKAGECONFIG[shishi] = "--with-shishi,--without-shishi,shishi"
+PACKAGECONFIG[tcp-wrappers] = "--with-wrap,--without-wrap,tcp-wrappers"
 
-EXTRA_OECONF = "--with-shishi --with-wrap --libexecdir=${sbindir} \
+EXTRA_OECONF = "inetutils_cv_path_login=${base_bindir}/login --libexecdir=${sbindir} \
 		--disable-dnsdomainname --disable-hostname --disable-logger \
 		--disable-rcp --disable-rexec --disable-rlogin --disable-rsh \
 		--disable-tftp --disable-whois --disable-rexecd --disable-rshd \
 		--disable-rlogind --disable-tftpd"
+
+EXTRA_OEMAKE_append_task-install = " SUIDMODE="-o root -m 4755""
 
 do_configure_prepend () {
 	export HELP2MAN='true'
@@ -53,6 +59,7 @@ do_install_append () {
 	install -m 0755 -d ${D}${sysconfdir}/logrotate.d
 	install -m 0755 -d ${D}${sysconfdir}/pam.d
 	install -m 0755 -d ${D}${sysconfdir}/syslog.d
+	install -m 0755 -d ${D}${localstatedir}/log/news
 	
 	# Move ping to /bin
 	mv ${D}${bindir}/ping ${D}${base_bindir}/
@@ -109,10 +116,95 @@ FILES_${BPN}-tools = "${bindir}/inetutils-ifconfig"
 FILES_${BPN}-traceroute = "${bindir}/inetutils-traceroute"
 
 ALTERNATIVE_PRIORITY = "100"
-ALTERNATIVE_${PN}-ftp = "ftp"
+ALTERNATIVE_${BPN}-ftp = "ftp"
 ALTERNATIVE_LINK_NAME[ftp] = "${bindir}/ftp"
 ALTERNATIVE_TARGET[ftp] = "${bindir}/inetutils-ftp"
 
-ALTERNATIVE_${PN}-traceroute = "traceroute"
+ALTERNATIVE_${BPN}-traceroute = "traceroute"
 ALTERNATIVE_LINK_NAME[traceroute] = "${bindir}/traceroute"
 ALTERNATIVE_TARGET[traceroute] = "${bindir}/inetutils-traceroute"
+
+ALTERNATIVE_${BPN}-talk = "talk"
+ALTERNATIVE_LINK_NAME[talk] = "${bindir}/talk"
+ALTERNATIVE_TARGET[talk] = "${bindir}/inetutils-talk"
+
+ALTERNATIVE_${BPN}-telnet = "telnet"
+ALTERNATIVE_LINK_NAME[telnet] = "${bindir}/telnet"
+ALTERNATIVE_TARGET[telnet] = "${bindir}/inetutils-telnet"
+
+RDEPENDS_${BPN}-ftp += "netbase"
+RDEPENDS_${BPN}-ftpd += "netbase"
+RDEPENDS_${BPN}-inetd += "tcpd lsb-base"
+RDEPENDS_${BPN}-ping += "netbase"
+RDEPENDS_${BPN}-traceroute += "netbase"
+RDEPENDS_${BPN}-syslogd += "netbase lsb-base"
+RDEPENDS_${BPN}-talk += "netbase"
+RDEPENDS_${BPN}-talkd += "netbase"
+RDEPENDS_${BPN}-telnet += "netbase"
+RDEPENDS_${BPN}-telnetd += "netbase"
+
+# Base on debian/inetutils-inetd.preinst
+pkg_preinst_${BPN}-inetd() {
+    create_inetd_conf() {
+        [ -e $D${sysconfdir}/inetd.conf ] && return 0
+
+        cat <<EOF > $D${sysconfdir}/inetd.conf
+# /etc/inetd.conf:  see inetd(8) for further informations.
+#
+# Internet superserver configuration database
+#
+#
+# Lines starting with "#:LABEL:" or "#<off>#" should not
+# be changed unless you know what you are doing!
+#
+# If you want to disable an entry so it isn't touched during
+# package updates just comment it out with a single '#' character.
+#
+# Packages should modify this file by using update-inetd(8)
+#
+# <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
+#
+#:INTERNAL: Internal services
+#discard                stream  tcp     nowait  root    internal
+#discard                dgram   udp     wait    root    internal
+#daytime                stream  tcp     nowait  root    internal
+#time           stream  tcp     nowait  root    internal
+
+#:STANDARD: These are standard services.
+
+#:BSD: Shell, login, exec and talk are BSD protocols.
+
+#:MAIL: Mail, news and uucp services.
+
+#:INFO: Info services
+
+#:BOOT: TFTP service is provided primarily for booting.  Most sites
+#       run this only on machines acting as "boot servers."
+
+#:RPC: RPC based services
+
+#:HAM-RADIO: amateur-radio services
+
+#:OTHER: Other services
+
+EOF
+
+        chmod 644 $D${sysconfdir}/inetd.conf
+    }
+
+    create_inetd_conf
+}
+
+# Base on debian/inetutils-talkd.postinst
+pkg_postinst_${BPN}-talkd() {
+    # Fix broken talk entry, and replace with correct one
+    update-inetd --group BSD --pattern '.*/talkd' --remove talk --file $D${sysconfdir}/inetd.conf
+    update-inetd --group BSD --file $D${sysconfdir}/inetd.conf \
+      --add "#<off># ntalk\tdgram\tudp4\twait\troot\t/usr/sbin/tcpd\t/usr/sbin/talkd"
+}
+
+# Base on debian/inetutils-telnetd.postinst
+pkg_postinst_${BPN}-telnetd() {
+    update-inetd --group STANDARD --file $D${sysconfdir}/inetd.conf \
+      --add "#<off># telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/tcpd\t/usr/sbin/telnetd"
+}

@@ -65,7 +65,7 @@ do_install() {
 	ln -sf ${rel_lib_prefix}${base_libdir}/libslang.so.2 ${D}${libdir}/libslang.so
 
 	cp libslang_pic.a ${D}${libdir}/
-	chrpath -d ${D}${libexecdir}/v2/modules/*.so
+	chrpath -d ${D}${libdir}/slang/v2/modules/*.so
 	chrpath -d ${D}${bindir}/slsh
 }
 

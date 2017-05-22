@@ -13,3 +13,5 @@ LIC_FILES_CHKSUM = "file://README;beginline=40;md5=c113500dbbf8f5d059394242b4072
 DEBIAN_PATCH_TYPE = "nopatch"
 
 inherit cpan
+
+BBCLASSEXTEND = "native"
