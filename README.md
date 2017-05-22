@@ -12,7 +12,7 @@ The main purpose of meta-debian is to provide reference Linux distribution for e
 
 Currently, the following software versions are supported in meta-debian.
 * Source code: Debian GNU/Linux 8 (jessie)
-* Build system: Yocto Project 2.0 (jethro)
+* Build system: Yocto Project 2.2 (morty)
 
 Quick Start
 ===========
@@ -32,13 +32,10 @@ NOTE: The following three packages have version limitation
 Setup repositories.
 
 ```sh
-$ git clone git://git.yoctoproject.org/poky.git
+$ git clone -b morty git://git.yoctoproject.org/poky.git
 $ cd poky
-$ git checkout jethro
-$ git clone https://github.com/meta-debian/meta-debian.git
-$ cd meta-debian
-$ git checkout jethro
-$ cd ../../
+$ git clone -b morty https://github.com/meta-debian/meta-debian.git
+$ cd ..
 ```
 
 Setup build directory.
