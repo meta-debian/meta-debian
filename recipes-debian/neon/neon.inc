@@ -34,3 +34,7 @@ EXTRA_OECONF = "--enable-shared                 \
 do_compile_append() {
 	oe_runmake -C test
 }
+
+do_install_append() {
+	sed -i -e "s:${STAGING_DIR_TARGET}::g" ${D}${libdir}/pkgconfig/*.pc
+}
