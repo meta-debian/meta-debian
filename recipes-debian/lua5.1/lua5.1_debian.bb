@@ -8,13 +8,11 @@ PR = "r1"
 inherit debian-package
 PV = "5.1.5"
 
-DEPENDS = "readline libtool"
+DEPENDS = "readline"
 
 inherit pkgconfig binconfig
 
 LUA_V = "5.1"
-LUA_FULL_V = "5.1.5"
-SONUM = "0"
 LUA = "lua${LUA_V}"
 
 PKG_DIR = "${libdir}/pkgconfig"
@@ -39,66 +37,54 @@ do_configure_prepend() {
         echo "#endif" >> ${S}/src/${LUA_MULTIARCH}
 }
 
-do_compile_class-target () {
-	# fix patch of libtool in Makefile
-	sed -i -e "s:= libtool:= ${STAGING_DIR_HOST}${bindir_crossscripts}/${HOST_PREFIX}libtool:g" ${S}/Makefile
-	oe_runmake \
-		debian_linux \
-		RPATH=${libdir} \
-		LDFLAGS="${LDFLAGS}"
-}
+EXTRA_OEMAKE += " \
+    LIBTOOL="${HOST_SYS}-libtool --tag=CC" \
+    LIBTOOLPP="${HOST_SYS}-libtool --tag=CXX" \
+"
 
-do_compile_class-native () {
-        # fix patch of libtool in Makefile
-        sed -i -e "s:= libtool:= ${STAGING_BINDIR_NATIVE}/${BUILD_SYS}-libtool:g" ${S}/Makefile
-        oe_runmake \
-                debian_linux \
-		RPATH=${libdir} \
-                LDFLAGS="${LDFLAGS}"
+do_compile() {
+	oe_runmake debian_linux \
+	           RPATH=${libdir} \
+	           LDFLAGS="${LDFLAGS}"
 }
 
 do_install () {
 	oe_runmake \
 		'INSTALL_TOP=${D}${prefix}' \
 		'INSTALL_BIN=${D}${bindir}' \
-		'INSTALL_INC=${D}${includedir}/' \
+		'INSTALL_INC=${D}${includedir}/${LUA}' \
 		'INSTALL_MAN=${D}${mandir}/man1' \
 		debian_install
-	install -m 644 ${S}/src/lua5.1-deb-multiarch.h ${D}${includedir}/lua5.1-deb-multiarch.h
-	install -d ${D}${includedir}/${PN}/
-	mv ${D}${includedir}/*.h* ${D}${includedir}/${PN}/
 	
 	install -d ${D}${PKG_DIR}
-	echo "prefix=/usr" > ${D}${PKG_CONFIG_FILE}
+	echo "prefix=${prefix}" > ${D}${PKG_CONFIG_FILE}
 	echo "major_version=${LUA_V}" >> ${D}${PKG_CONFIG_FILE}
-	echo "version=${LUA_FULL_V}" >> ${D}${PKG_CONFIG_FILE}
+	echo "version=${PV}" >> ${D}${PKG_CONFIG_FILE}
 	echo "lib_name_include=lua${LUA_V}" >> ${D}${PKG_CONFIG_FILE}
 	echo "deb_host_multiarch=${DEB_HOST_MULTIARCH}" >> ${D}${PKG_CONFIG_FILE}
 	cat ${S}/debian/lua.pc.in >> ${D}${PKG_CONFIG_FILE}
 	ln -s $(basename ${D}${PKG_CONFIG_FILE}) ${D}${PKG_CONFIG_FILE_FBSD}
 	ln -s $(basename ${D}${PKG_CONFIG_FILE}) ${D}${PKG_CONFIG_FILE_NODOT}
 
-	echo "prefix=/usr" > ${D}${PKGPP_CONFIG_FILE}
+	echo "prefix=${prefix}" > ${D}${PKGPP_CONFIG_FILE}
 	echo "major_version=${LUA_V}" >> ${D}${PKGPP_CONFIG_FILE}
-	echo "version=${LUA_FULL_V}" >> ${D}${PKGPP_CONFIG_FILE}
+	echo "version=${PV}" >> ${D}${PKGPP_CONFIG_FILE}
 	echo "lib_name_include=lua${LUA_V}" >> ${D}${PKGPP_CONFIG_FILE}
 	echo "deb_host_multiarch=${DEB_HOST_MULTIARCH}" >> ${D}${PKGPP_CONFIG_FILE}
 	cat ${S}/debian/lua-c++.pc.in >> ${D}${PKGPP_CONFIG_FILE}
 	ln -s $(basename ${D}${PKGPP_CONFIG_FILE}) ${D}${PKGPP_CONFIG_FILE_FBSD}
 	ln -s $(basename ${D}${PKGPP_CONFIG_FILE}) ${D}${PKGPP_CONFIG_FILE_NODOT}
+	install -m 0644 ${S}/src/${LUA_MULTIARCH} ${D}${includedir}/
 }
 
-PACKAGES =+ "liblua5.1-0-dev liblua5.1-0"
+PACKAGES =+ "liblua5.1-0"
 
 FILES_liblua5.1-0 = " \
 	${libdir}/liblua5.1.so.0* \
 	${libdir}/liblua5.1-c++.so.0* \
     "
 
-FILES_liblua5.1-0-dev = " \
-	${includedir}/${PN}/* \
-	${libdir}/*.so \
-	${PKG_DIR}/* \
-    "
+PKG_${PN}-dev = "liblua5.1-0-dev"
+RPROVIDES_${PN}-dev += "liblua5.1-0-dev"
 
 BBCLASSEXTEND = "native"

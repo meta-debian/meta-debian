@@ -65,6 +65,10 @@ do_install() {
 	chmod -x ${D}${PYTHON_SITEPACKAGES_DIR}/semanage.py
 }
 
+do_install_append_class-target() {
+	sed -i -e "s|${STAGING_DIR_HOST}||g" ${D}${libdir}/pkgconfig/*.pc
+}
+
 PACKAGES =+ "${PN}-common python-semanage"
 
 FILES_${PN}-common = "${sysconfdir}"

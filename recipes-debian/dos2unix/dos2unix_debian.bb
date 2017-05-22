@@ -27,5 +27,5 @@ do_install() {
 	# Remove files that are not needed.
 	rm ${D}${docdir}/${DPN}/COPYING.txt \
 		${D}${docdir}/${DPN}/INSTALL.txt \
-		${D}${docdir}/${DPN}/ChangeLog.txt \
+		${D}${docdir}/${DPN}/ChangeLog.txt
 }

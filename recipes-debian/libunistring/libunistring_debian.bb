@@ -11,7 +11,11 @@ PR = "r0"
 inherit debian-package
 PV = "0.9.3"
 
-LICENSE = "GPLv3+ & LGPLv3+"
+LICENSE = "GPLv3+ & LGPLv3+ | GFDL-1.2+"
+LICENSE_${PN} = "GPLv3+ & LGPLv3+"
+LICENSE_${PN}-dev = "GPLv3+ & LGPLv3+"
+LICENSE_${PN}-staticdev = "GPLv3+ & LGPLv3+"
+LICENSE_${PN}-dbg = "GPLv3+ & LGPLv3+"
 LICENSE_${PN}-doc = "GPLv3+ | GFDL-1.2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
                     file://COPYING.LIB;md5=6a6a8e020838b23406c81b19c1d46df6 \
