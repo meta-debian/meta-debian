@@ -17,6 +17,8 @@ VIRTUAL-RUNTIME_init_manager ?= "busybox"
 #
 # minimal package set for root filesystem
 #
+# kernel-modules
+#   In general, modules must be installed in any minimal system
 # ${VIRTUAL-RUNTIME_init_manager}
 #   provides init program (busybox or systemd)
 # base-files:
@@ -26,7 +28,8 @@ VIRTUAL-RUNTIME_init_manager ?= "busybox"
 # update-alternatives:
 #   essential for packages that require update-alternatives.bbclass
 #
-RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_init_manager} \
+RDEPENDS_${PN} = "kernel-modules \
+                  ${VIRTUAL-RUNTIME_init_manager} \
                   base-files \
                   base-passwd \
                   update-alternatives \
