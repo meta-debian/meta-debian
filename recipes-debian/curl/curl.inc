@@ -30,7 +30,7 @@ SRC_URI += " \
 	file://correct-path-to-krb5-config_debian.patch \
 "
 
-inherit autotools pkgconfig binconfig multilib_header
+inherit autotools pkgconfig multilib_header
 DEPENDS_class-target += "krb5"
 EXTRA_OECONF = " \
 	--without-libidn \
