@@ -29,12 +29,15 @@ LIC_FILES_CHKSUM = "\
 #	We will generate perl Makefile with our configuration.
 # fix-build-with-python_debian.patch:
 #	Replace '(LINK)' by '(LINK_LIB)' to generate .so* files
+# correct-apr-version_debian.patch:
+# 	User apr version 1.x, this patch base on debian/apr-api
 SRC_URI += "\
 	file://svn-xcompile-configure.patch \
 	file://remove-use-host-library_debian.patch \
 	file://remove-undef-bool_debian.patch \
 	file://fix-generate-perl-makefile_debian.patch \
 	file://fix-build-with-python_debian.patch \
+	file://correct-apr-version_debian.patch \
 	"
 # Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
@@ -58,7 +61,7 @@ EXTRA_OECONF += "\
 # disable checking for ruby path to prevent using ruby from host system
 CACHED_CONFIGUREVARS += "ac_cv_path_RUBY=no"
 
-PACKAGECONFIG ??= "apache2"
+PACKAGECONFIG ??= "apache2 serf"
 PACKAGECONFIG[serf] = "--with-serf=${STAGING_DIR_HOST}${prefix}, --without-serf, serf,"
 PACKAGECONFIG[gnome-keyring] = "--with-gnome-keyring, --without-gnome-keyring,libgnome-keyring,"
 PACKAGECONFIG[kwallet] = "--with-kwallet, --without-kwallet, dbus kde4libs,"
