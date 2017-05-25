@@ -25,6 +25,13 @@ DISTUTILS_INSTALL_ARGS += " \
 	--install-lib='${libdir}/${PYTHON_DIR}/dist-packages' \
 	--install-data='${datadir}'"
 
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS
+
 do_install_append() {
 	# Remove unwanted files and folders
 	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;

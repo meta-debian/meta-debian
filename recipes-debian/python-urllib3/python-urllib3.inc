@@ -18,3 +18,10 @@ PV = "1.9.1"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=3be3707c5f24a69709682265e29566fe"
+
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS

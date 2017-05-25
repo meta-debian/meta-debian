@@ -33,6 +33,7 @@ file://config.sh-64 \
 file://config.sh-64-le \
 file://config.sh-64-be \
 file://0001-Makefile.SH-fix-do_install-failed.patch \
+file://Fix-race-condition-in-perl-s-ExtUtils-MakeMaker.patch \
 "
 
 # We need gnugrep (for -I)
@@ -330,7 +331,7 @@ python populate_packages_prepend () {
     # modules. Don't attempt to use the result of do_split_packages() as some
     # modules are manually split (eg. perl-module-unicore).
     packages = filter(lambda p: 'perl-module-' in p, d.getVar('PACKAGES', True).split())
-    d.setVar("RRECOMMENDS_${PN}-modules", ' '.join(packages))
+    d.setVar(d.expand("RRECOMMENDS_${PN}-modules"), ' '.join(packages))
 }
 
 PACKAGES_DYNAMIC += "^perl-module-.*"

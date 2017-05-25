@@ -14,6 +14,8 @@ PR = "r0"
 inherit debian-package
 PV = "2.3.11"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 do_install() {
 	install -d ${D}
 	install -d ${D}${sbindir}

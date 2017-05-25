@@ -105,7 +105,14 @@ do_install_append() {
 	sed -i "s:${WORKDIR}/image::" ${D}${libdir}/perl5/*/auto/Prelude/.packlist
 	sed -i "s:${WORKDIR}/image::" ${D}${libdir}/perl5/*/auto/PreludeEasy/.packlist
 	chrpath -d ${D}${bindir}/prelude-admin
+
+	# Remove the the absolute path to sysroot
+	sed -i -e "s|${STAGING_DIR_HOST}||" \
+		${D}${libdir}/pkgconfig/libprelude.pc
+
 }
+
+PARALLEL_MAKEINST = ""
 
 CONFFILES_${PN} = "${sysconfdir}/prelude/default/client.conf \
                    ${sysconfdir}/prelude/default/global.conf \

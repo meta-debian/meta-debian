@@ -24,6 +24,8 @@ DEBIAN_PATCH_TYPE = "nopatch"
 #Position-independent code
 CFLAGS += " -fPIC"
 
+EXTRA_OEMAKE = "-e MAKEFLAGS="
+
 #Install file follow Debian jessies
 do_install() {
 	#Create new folders

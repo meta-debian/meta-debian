@@ -246,6 +246,8 @@ do_install_append() {
 		-perm /u+x,g+x,o+x -type f \
 		-regex '.*\.\(app\|conf\|cpp\|h\|js\|php\|png\|pro\|xml\|xsl\)$' \
 		-exec chmod a-x {} \;
+
+	sed -i -e "s:${STAGING_DIR_TARGET}::g" ${D}${libdir}/pkgconfig/*.pc
 }
 
 # libpnp_basictools.a is used as example, but not a development file

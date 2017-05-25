@@ -20,11 +20,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
                     file://COPYING.LESSER;md5=4fbd65380cdd255951079008b364516c"
 # Disable-failing-virnetsockettest_debian.patch
 #	Disable failing virnetsockettest: remove some function are defined but not used
-# Fix-trailing-curly-brace-from-upstream-patch_debian.patch
-#	Remove trailing curly brace in patch without matching closing brace
 SRC_URI += "\
 	file://Disable-failing-virnetsockettest_debian.patch \
-	file://Fix-trailing-curly-brace-from-upstream-patch_debian.patch \
 	"
 
 inherit autotools gettext pkgconfig useradd

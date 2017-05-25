@@ -8,7 +8,7 @@ HOMEPAGE = "http://www.llvm.org/"
 
 inherit debian-package
 PV = "3.5"
-PR = "r1"
+PR = "r2"
 
 # 3-clause BSD-like
 # University of Illinois/NCSA Open Source License
@@ -294,6 +294,9 @@ do_install_append() {
 	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${LLVM_VERSION_FULL}.so.1
 	ln -sf ../../../libLLVM-${LLVM_VERSION_FULL}.so.1 \
 	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${PV}.so.1
+
+	# Correct files permission
+	chmod 0644 ${D}${libdir}/llvm-${PV}/lib/*.a
 }
 
 SYSROOT_PREPROCESS_FUNCS += "llvm_sysroot_preprocess"
@@ -301,8 +304,6 @@ llvm_sysroot_preprocess() {
 	install -d ${SYSROOT_DESTDIR}${bindir_crossscripts}
 	mv ${WORKDIR}/llvm-config-host ${SYSROOT_DESTDIR}${bindir_crossscripts}/llvm-config${PV}
 }
-
-INHIBIT_PACKAGE_STRIP = "1"
 
 # we name and ship packages as Debian,
 # so we need pass QA errors with dev-so and dev-deps
@@ -429,7 +430,6 @@ FILES_liblldb-${PV}-dev = " \
 
 FILES_${PN}-dbg += " \
     ${libdir}/llvm-${PV}/*/.debug \
-    ${libdir}/llvm-${PV}/*/*/*/.debug \
 "
 FILES_${PN}-doc += " \
     ${libdir}/llvm-${PV}/share/man \

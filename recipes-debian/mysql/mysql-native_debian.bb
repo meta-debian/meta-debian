@@ -8,7 +8,7 @@ ease of use \
 HOMEPAGE = "http://dev.mysql.com/"
 
 inherit debian-package native
-PV = "5.5.54"
+PV = "5.5.55"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "\

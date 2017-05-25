@@ -27,3 +27,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a6f89e2100d9b6cdffcea4f398e37343"
 
 # Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
 DEBIAN_QUILT_PATCHES = ""
+
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS

@@ -10,7 +10,7 @@ tunefs, fsck, debugfs, and the utilities to control the O2CB clustering stack \
 "
 HOMEPAGE = "http://oss.oracle.com/projects/ocfs2-tools/"
 
-PR = "r0"
+PR = "r1"
 inherit debian-package
 PV = "1.6.4"
 
@@ -18,6 +18,8 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 inherit autotools-brokensep pkgconfig pythonnative
+
+SRC_URI += "file://0001-add-option-to-disable-pacemaker.patch"
 
 #follow debian/rules
 EXTRA_OECONF += "--disable-debug --enable-dynamic-ctl --enable-dynamic-fsck"

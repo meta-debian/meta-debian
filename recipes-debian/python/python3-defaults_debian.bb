@@ -26,9 +26,7 @@ inherit python3native
 do_install() {
 	oe_runmake install 'DESTDIR=${D}' 'PREFIX=${prefix}'
 
-	changelog_values=$(dpkg-parsechangelog | awk '/^(Version|Source):/ {print $2}')
-	PKGVERSION=$(echo $changelog_values | cut -d' ' -f2)
-	VER=$(echo $PKGVERSION | sed -rne 's,(.{3}).*,\1,p')
+	VER=${PYTHON_BASEVERSION}
 
 	# provide the idle and idle.1 defaults
 	install -m 755 ${S}/debian/idle.py ${D}${bindir}/idle3
@@ -80,11 +78,6 @@ do_install() {
 	ln -sf python${VER}-config.1.gz \
 	        ${D}${mandir}/man1/python3-config.1.gz
 
-	# provide pkgconfig defaults
-	install -d ${D}${libdir}/pkgconfig
-	ln -sf python-${VER}.pc ${D}${libdir}/pkgconfig/python3.pc
-	ln -sf python-${VER}-dbg.pc ${D}${libdir}/pkgconfig/python3-dbg.pc
-
 	# provide the python-dbg and python-dbg.1 defaults
 	ln -sf python${VER}dm ${D}${bindir}/python3dm
 	ln -sf python${VER}dm-config ${D}${bindir}/python3dm-config
@@ -115,6 +108,15 @@ do_install() {
 	ln -sf libpython3-dev ${D}${docdir}/libpython3-all-dev
 }
 
+# provide pkgconfig defaults
+pkg_postinst_${PN}-dev() {
+	mkdir -p $D${libdir}/pkgconfig
+	ln -sf python-${PYTHON_BASEVERSION}.pc $D${libdir}/pkgconfig/python3.pc
+}
+pkg_postinst_${PN}-dbg() {
+	mkdir -p $D${libdir}/pkgconfig
+	ln -sf python-${PYTHON_BASEVERSION}-dbg.pc $D${libdir}/pkgconfig/python3-dbg.pc
+}
 PACKAGE_BEFORE_PN = "${PN}-minimal python3-venv python3-examples libpython3-dev \
                      libpython3-stdlib idle3 \
                      python3-all python3-all-dev \

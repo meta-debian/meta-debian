@@ -18,6 +18,13 @@ LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=b61841e2bf5f07884148e2a6f1bcab0c"
 inherit setuptools
 
+# need to export these variables for python runtime
+# fix error:
+#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+#       TypeError: Can't convert 'NoneType' object to str implicitly
+export BUILD_SYS
+export HOST_SYS
+
 do_install_append() {
 	# remove unwanted files
 	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
