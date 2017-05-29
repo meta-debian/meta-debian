@@ -25,7 +25,7 @@ LIC_FILES_CHKSUM = "\
 B = "${WORKDIR}/gcc-${PV}/build.${HOST_SYS}.${TARGET_SYS}"
 
 # Language Overrides
-FORTRAN = ""
+#FORTRAN = ""
 JAVA = ""
 
 LTO = "--enable-lto"
