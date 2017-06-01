@@ -45,8 +45,9 @@ do_install_append () {
 	install -m 0644 ${S}/debian/sudo.service \
 	${D}${systemd_system_unitdir}
 
-	chmod 4555 ${D}${bindir}/sudo
-	chmod 0644 ${D}${sysconfdir}/sudoers
+	chmod 4755 ${D}${bindir}/sudo
+	chmod 0440 ${D}${sysconfdir}/sudoers
+	chmod 0755 ${D}${sysconfdir}/sudoers.d
 }
 FILES_${PN} += "\
 	${libdir}/sudo/sesh \
