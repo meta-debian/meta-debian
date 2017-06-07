@@ -58,7 +58,7 @@ do_install() {
 	install -d ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/kernel/ \
 		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/include/ \
 		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/patches/ \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/debian 
+		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/debian
 
 	# Copy only the driver source to the proper location
 	cp ${S}/kernel/*.c ${S}/kernel/*.h ${S}/kernel/Makefile \
