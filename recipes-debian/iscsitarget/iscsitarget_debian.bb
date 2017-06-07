@@ -51,7 +51,7 @@ do_install() {
 	install -m 0644 ${S}/etc/targets.allow ${D}${sysconfdir}/iet/targets.allow
 	install -D -m 0644 ${S}/debian/iscsitarget.default \
 		${D}${sysconfdir}/default/iscsitarget
-	install -D -m 0644 ${S}/debian/iscsitarget.init \
+	install -D -m 0755 ${S}/debian/iscsitarget.init \
 		${D}${sysconfdir}/init.d/iscsitarget
 
 	DEB_UPSTREAM_VERSION=`dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p'`
