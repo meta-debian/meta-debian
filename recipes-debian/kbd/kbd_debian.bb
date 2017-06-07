@@ -86,5 +86,5 @@ BBCLASSEXTEND = "native"
 
 # Strange file name in kbd needed to be removed
 do_debian_fix_timestamp_prepend() {
-	git rm ${S}/doc/utf/??????
+	git rm -rf ${S}/doc/utf
 }
