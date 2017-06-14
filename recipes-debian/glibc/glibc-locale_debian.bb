@@ -15,6 +15,7 @@ do_debian_patch[noexec] = "1"
 # the glibc source tree instead so that summary.bbclass can find changelog.
 DEBIAN_UNPACK_DIR = "${@d.getVar("WORKDIR", True).replace("/glibc-locale/", "/glibc/")}/git"
 
+
 LOCALEBASEPN = "${MLPREFIX}glibc"
 
 # glibc-collateral.inc inhibits all default deps, but do_package needs objcopy
@@ -48,7 +49,6 @@ PACKAGES = "localedef ${PN}-dbg"
 PACKAGES_DYNAMIC = "^locale-base-.* \
                     ^glibc-locale-.* \
                     ^glibc-gconv-.* ^glibc-charmap-.* ^glibc-localedata-.* ^glibc-binary-localedata-.* \
-                    ^glibc-gconv-.*  ^glibc-charmap-.*  ^glibc-localedata-.*  ^glibc-binary-localedata-.* \
                     ^${MLPREFIX}glibc-gconv$"
 
 # Create a glibc-binaries package
@@ -82,13 +82,12 @@ DESCRIPTION_localedef = "glibc: compile locale definition files"
 # FILES_glibc-gconv will not be automatically extended in multilib.
 # Explicitly add ${MLPREFIX} for FILES_glibc-gconv.
 FILES_${MLPREFIX}glibc-gconv = "${libdir}/gconv/*"
-FILES_${PN}-dbg += "${libdir}/gconv/.debug/*"
 FILES_localedef = "${bindir}/localedef"
 
 LOCALETREESRC = "${STAGING_INCDIR}/glibc-locale-internal-${MULTIMACH_TARGET_SYS}"
 
 do_install () {
-	mkdir -p ${D}${bindir} ${D}${datadir} ${D}${libdir}
+	mkdir -p ${D}${bindir} ${D}${datadir}
 	if [ -n "$(ls ${LOCALETREESRC}${bindir})" ]; then
 		cp -fpPR ${LOCALETREESRC}${bindir}/* ${D}${bindir}
 	fi
@@ -96,25 +95,43 @@ do_install () {
 		mkdir -p ${D}${localedir}
 		cp -fpPR ${LOCALETREESRC}${localedir}/* ${D}${localedir}
 	fi
-	if [ -e ${LOCALETREESRC}${libdir}/gconv ]; then
+
+	# Only install /usr/lib/gconv and /usr/share/i18n if charset/locales/locale-code is enabled
+	# if not, there will be QA Issue "Files/directories were installed but not shipped"
+	if [ -e ${LOCALETREESRC}${libdir}/gconv ] && [ ${PACKAGE_NO_GCONV} = 0 ]; then
+		mkdir -p ${D}${libdir}
 		cp -fpPR ${LOCALETREESRC}${libdir}/gconv ${D}${libdir}
 	fi
-	if [ -e ${LOCALETREESRC}${datadir}/i18n ]; then
+	if [ -e ${LOCALETREESRC}${datadir}/i18n ] && [ ${PACKAGE_NO_GCONV} = 0 ]; then
 		cp -fpPR ${LOCALETREESRC}${datadir}/i18n ${D}${datadir}
 	fi
+
 	if [ -e ${LOCALETREESRC}${datadir}/locale ]; then
 		cp -fpPR ${LOCALETREESRC}${datadir}/locale ${D}${datadir}
 	fi
 	chown root.root -R ${D}
 	cp -fpPR ${LOCALETREESRC}/SUPPORTED ${WORKDIR}
+
+	# According to debhelper.in/locales.install
+	install -d ${D}${sysconfdir} ${D}${sbindir}
+	install -m 0644 ${D}${datadir}/locale/locale.alias ${D}${sysconfdir}/
+	install -m 0755 ${S}/debian/local/usr_sbin/locale-gen ${D}${sbindir}/
+	install -m 0755 ${S}/debian/local/usr_sbin/update-locale ${D}${sbindir}/
+	install -m 0755 ${S}/debian/local/usr_sbin/validlocale ${D}${sbindir}/
 }
 
 inherit libc-package
 
 BBCLASSEXTEND = "nativesdk"
 
-PACKAGES += "locales ${MLPREFIX}glibc-gconv"
-FILES_locales += " \
-    ${datadir}/i18n/locales/* \
-    ${datadir}/i18n/charmaps/* \
+PACKAGES += "locales"
+RRECOMMENDS_locales += " \
+    ${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-locale-") != -1])} \
+    ${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-localedata-") != -1])} \
+    ${@" ".join([p for p in d.getVar('PACKAGES', True).split() if p.find("glibc-charmap-") != -1])} \
+"
+FILES_locales = " \
+    ${sysconfdir}/locale.alias \
+    ${sbindir}/* \
+    ${datadir}/locale/locale.alias \
 "
