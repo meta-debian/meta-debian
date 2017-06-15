@@ -47,3 +47,5 @@ libbsd_sysroot_preprocess () {
 	sed -i -e "s|^Cflags:.*|Cflags: -I\$\{includedir\}/bsd -DLIBBSD_OVERLAY|" \
 	          ${SYSROOT_DESTDIR}${libdir}/pkgconfig/libbsd-overlay.pc
 }
+
+BBCLASSEXTEND = "native"
