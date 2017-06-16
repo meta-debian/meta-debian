@@ -135,3 +135,4 @@ FILES_locales = " \
     ${sbindir}/* \
     ${datadir}/locale/locale.alias \
 "
+FILES_${PN}-dbg += "${libdir}/gconv/.debug"
