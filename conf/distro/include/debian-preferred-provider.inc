@@ -25,3 +25,8 @@ PREFERRED_PROVIDER_nativesdk-xz = "nativesdk-xz-utils"
 # Use six recipes in meta-debian to provide python-six,
 # instead of using python-six from poky
 PREFERRED_PROVIDER_python-six = "six"
+
+# using recipes libsndfile in meta-debian, 
+# instead of libsndfile1 from poky
+PREFERRED_PROVIDER_libsndfile1-dev = "libsndfile"
+PREFERRED_PROVIDER_libsndfile1 = "libsndfile"
