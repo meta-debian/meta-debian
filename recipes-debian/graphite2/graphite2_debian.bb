@@ -19,7 +19,7 @@ grcompiler."
 PR = "r1"
 
 inherit debian-package
-PV = "1.3.6"
+PV = "1.3.10"
 
 LICENSE = "LGPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=acba2ba259d936c324b90ab679e6b901"
