@@ -93,11 +93,10 @@ Please set LINUX_DEFCONFIG or add .config files into SRC_URI"
 # ARCH and CROSS_COMPILE are already exported, so no need to define them.
 KERNEL_CONFIG_COMMAND = "oe_runmake_call O=${B} -C ${S} oldnoconfig"
 
-# only vmlinux lies in the top of the build directory
-KERNEL_OUTPUT = "${@base_conditional('KERNEL_IMAGETYPE', 'vmlinux', \
-	'${KERNEL_IMAGETYPE}', 'arch/${ARCH}/boot/${KERNEL_IMAGETYPE}', d)}"
-
 # Always use a static integer as KERNEL_PRIORITY, which is automatically
 # calcurated from PV by default (see kernel.bbclass).
 # This means that only one kernel package version is available in our system.
 KERNEL_PRIORITY = "1"
+
+# extra tasks
+addtask kernel_link_images after do_compile before do_strip
