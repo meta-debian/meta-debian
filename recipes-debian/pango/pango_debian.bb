@@ -46,9 +46,6 @@ EXTRA_OECONF = "--disable-introspection \
 
 GNOME_COMPRESS_TYPE="xz"
 
-# seems to go wrong with default cflags
-FULL_OPTIMIZATION_arm = "-O2"
-
 LEAD_SONAME = "libpango-1.0*"
 LIBV = "1.8.0"
 
