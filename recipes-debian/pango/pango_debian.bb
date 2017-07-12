@@ -15,11 +15,11 @@ core of text and font handling for GTK+-2.x."
 HOMEPAGE = "http://www.pango.org/"
 BUGTRACKER = "http://bugzilla.gnome.org"
 
-PR = "r1"
+PR = "r2"
 DPN = "pango1.0"
 
 X11DEPENDS = "virtual/libx11 libxft"
-DEPENDS = "glib-2.0 fontconfig freetype zlib virtual/libiconv cairo harfbuzz qemu-native"
+DEPENDS = "glib-2.0 fontconfig freetype cairo harfbuzz qemu-native"
 
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 PACKAGECONFIG[x11] = "--with-xft,--without-xft,${X11DEPENDS}"
@@ -30,21 +30,18 @@ DEPENDS_class-native = "glib-2.0-native cairo-native harfbuzz-native"
 inherit gnomebase gtk-doc qemu debian-package
 PV = "1.36.8"
 
-# Remove dependency on gnome
-DEPENDS_remove = "gnome-common-native"
-
 LICENSE = "LGPLv2.0+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3bf50002aefd002f49e7bb854063f7e7"
 
 EXTRA_AUTORECONF = ""
 
-#Remove unrecognised options: --with-mlprefix
-EXTRA_OECONF = "--disable-introspection \
-		--enable-explicit-deps=no \
-	        --disable-debug \
+EXTRA_OECONF = " \
+    --htmldir=${docdir}/libpango1.0-doc \
+    --with-included-modules \
 "
 
-GNOME_COMPRESS_TYPE="xz"
+# Don't let explicit-deps auto or other packages will fail when cross-build using libpango*
+EXTRA_OECONF += "--enable-explicit-deps=no"
 
 LEAD_SONAME = "libpango-1.0*"
 LIBV = "1.8.0"
@@ -69,16 +66,42 @@ fi
 
 #Remove doc when build
 do_configure_prepend() {
-        sed -i -e "s/docs//" ${S}/Makefile.am
-        sed -i -e "/docs\/Makefile/d" ${S}/configure.ac
-        sed -i -e "/docs\/version.xml/d" ${S}/configure.ac
-        sed -i -e "/GTK_DOC_CHECK/d" ${S}/configure.ac
+	sed -i -e "s/docs//" ${S}/Makefile.am
+	sed -i -e "/docs\/Makefile/d" ${S}/configure.ac
+	sed -i -e "/docs\/version.xml/d" ${S}/configure.ac
+	sed -i -e "/GTK_DOC_CHECK/d" ${S}/configure.ac
+}
+
+do_configure_append() {
+	mkdir -p ${WORKDIR}/build-static
+	cd ${WORKDIR}/build-static
+	oe_runconf --disable-shared --enable-static
+	cd -
+}
+
+do_compile_append() {
+	oe_runmake -C ${WORKDIR}/build-static
 }
 
 do_install_append () {
+	# Install static libs
+	oe_runmake -C ${WORKDIR}/build-static install \
+		DESTDIR="${WORKDIR}/image-static"
+	cp ${WORKDIR}/image-static/${libdir}/*.a ${D}${libdir}/
+
 	if [ "${MLPREFIX}" != "" ]; then
 		mv ${D}/${bindir}/pango-querymodules ${D}/${bindir}/${MLPREFIX}pango-querymodules 
 	fi
+
+	install -d ${D}${docdir}/libpango1.0-doc/pango \
+	           ${D}${datadir}/gtk-doc/html
+	# According to debian/libpango1.0-doc.install.in
+	install -m 0644 ${S}/docs/html/* ${D}${docdir}/libpango1.0-doc/pango/
+
+	# According to debian/libpango1.0-doc.links.in
+	ln -sf ../libglib2.0-doc/glib ${D}${docdir}/libpango1.0-doc/glib
+	ln -sf ../libglib2.0-doc/gobject ${D}${docdir}/libpango1.0-doc/gobject
+	ln -sf ../../doc/libpango1.0-doc/pango ${D}${datadir}/gtk-doc/html/pango
 }
 
 
