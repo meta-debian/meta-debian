@@ -38,6 +38,8 @@ do_install_append() {
 	find ${D} -name '*.la' -print0 | xargs -0 rm -f
 }
 
-RDEPENDS_${PN} = "python-io python-logging python-stringold python-threading python-xml"
+RDEPENDS_${PN}_class-target = "python-io python-logging python-stringold python-threading python-xml"
 
 FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/dist-packages/.debug"
+
+BBCLASSEXTEND = "native"
