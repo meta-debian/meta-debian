@@ -40,6 +40,11 @@ EXTRA_OECONF += "--enable-ft-thread \
                  --includedir=${INCDIR} \
                  --program-prefix="" \
                  "
+
+# Adding the path to search headers and library of libibverbs
+# Prevent use headers and library on host machine.
+EXTRA_OECONF += "--with-openib=${STAGING_DIR_HOST}${prefix}"
+
 DEPENDS += "hwloc blcr libtool libgfortran libibverbs chrpath-native"
 EXTRA_OEMAKE += "'LIBTOOL=${HOST_SYS}-libtool'"
 
