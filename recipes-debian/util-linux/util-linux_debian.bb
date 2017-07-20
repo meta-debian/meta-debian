@@ -126,7 +126,12 @@ PACKAGES =+ " \
 	uuid-runtime ${DPN}-locales"
 
 FILES_bsdutils = "${bindir}/wall ${bindir}/logger ${bindir}/renice \
-		  ${bindir}/script ${bindir}/scriptreplay"
+                  ${bindir}/script ${bindir}/scriptreplay \
+                  ${datadir}/bash-completion/completions/logger \
+                  ${datadir}/bash-completion/completions/script \
+                  ${datadir}/bash-completion/completions/scriptreplay \
+                  ${datadir}/bash-completion/completions/wall \
+                  "
 
 FILES_libblkid-dev = " \
 		${includedir}/blkid/* \
@@ -153,7 +158,11 @@ FILES_libuuid1 = "${base_libdir}/libuuid.so.*"
 
 FILES_mount = "${base_bindir}/umount ${base_sbindir}/swapon \
 	       ${base_sbindir}/swapoff ${base_bindir}/mount* \
-	       ${base_sbindir}/losetup ${base_bindir}/findmnt"
+               ${base_sbindir}/losetup ${base_bindir}/findmnt \
+               ${datadir}/bash-completion/completions/findmnt \
+               ${datadir}/bash-completion/completions/losetup \
+               ${datadir}/bash-completion/completions/swapon \
+               "
 
 FILES_uuid-dev = " \
 		${includedir}/uuid \
@@ -161,7 +170,10 @@ FILES_uuid-dev = " \
 		${libdir}/pkgconfig/uuid.pc"
 
 FILES_uuid-runtime = "${bindir}/uuidgen ${sbindir}/uuidd \
-		      ${sysconfdir}/init.d/uuidd"
+                      ${sysconfdir}/init.d/uuidd \
+                      ${datadir}/bash-completion/completions/uuidd \
+                      ${datadir}/bash-completion/completions/uuidgen \
+"
 
 FILES_${PN} += "${datadir}/bash-completion/ ${exec_prefix}/sbin/*"
 
