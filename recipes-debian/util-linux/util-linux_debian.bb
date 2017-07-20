@@ -90,10 +90,10 @@ do_install_append () {
 		mv ${D}${bindir}/wdctl ${D}${base_bindir}
 	fi
 	#Some files belong to bindir
-	mv ${D}${sbindir}/addpart ${D}${bindir}
-	mv ${D}${sbindir}/resizepart ${D}${bindir}
-	mv ${D}${sbindir}/partx ${D}${bindir}
-	mv ${D}${sbindir}/delpart ${D}${bindir}
+	mv ${D}${exec_prefix}/sbin/addpart ${D}${bindir}
+	mv ${D}${exec_prefix}/sbin/resizepart ${D}${bindir}
+	mv ${D}${exec_prefix}/sbin/partx ${D}${bindir}
+	mv ${D}${exec_prefix}/sbin/delpart ${D}${bindir}
 	
 	# Install init script
 	install -d ${D}${sysconfdir}/init.d
@@ -163,7 +163,7 @@ FILES_uuid-dev = " \
 FILES_uuid-runtime = "${bindir}/uuidgen ${sbindir}/uuidd \
 		      ${sysconfdir}/init.d/uuidd"
 
-FILES_${PN} += "${datadir}/bash-completion/"
+FILES_${PN} += "${datadir}/bash-completion/ ${exec_prefix}/sbin/*"
 
 ALTERNATIVE_PRIORITY="100"
 ALTERNATIVE_${PN} = "dmesg more blkid blockdev fdisk findfs fsck fsck.minix \
