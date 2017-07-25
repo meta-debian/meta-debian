@@ -95,6 +95,12 @@ do_install_append() {
 	rm ${D}${libdir}/libmpi.so
 	find ${D}${libdir} -type f -name "*.la" -exec rm -f {} \;
 	find ${D}${libdir} -type f -name "*.a" -exec rm -f {} \;
+
+	sed -i -e "s|sysroot=${STAGING_DIR_HOST}|sysroot=/|g" \
+	       -e "s|${STAGING_DIR_HOST}||g" \
+		${D}${INCDIR}/openmpi/opal_config.h \
+		${D}${datadir}/openmpi/*.txt \
+		${D}${bindir}/orte_wrapper_script
 }
 
 do_install_append_class-target() {
