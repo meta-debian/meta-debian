@@ -39,11 +39,15 @@ GRUBPLATFORM_arm = "uboot"
 GRUBPLATFORM_aarch64 = "efi"
 GRUBPLATFORM ??= "pc"
 
-# mostly same as options in debian/rules, but mkfont is disabled
-# to exclude non essential font-related functions
+# Mostly same as options in debian/rules, but mkfont is disabled
+# to exclude non essential font-related functions.
+# 'grub_build_mkfont_excuse' has a dummy string
+# to avoid loading unifont-related packages such as
+# xfonts-unifont, ttf-unifont, psf-unifont.
 EXTRA_OECONF = "--with-platform=${GRUBPLATFORM} \
                 --disable-grub-mkfont \
                 --program-prefix="" \
+		grub_build_mkfont_excuse="explicitly disabled" \
                "
 
 # "build_freetype_cflags" and "build_freetype_libs" should point to native sysroots
