@@ -41,11 +41,6 @@ PACKAGECONFIG[udev] = "--enable-hal-compat,--disable-hal-compat,udev"
 PACKAGECONFIG[gconf] = "--enable-gconf,--disable-gconf,gconf"
 PACKAGECONFIG[manpages] = "--enable-manpages, --disable-manpages, "
 
-#########hihihehe
-do_debian_patch_prepend() {
-        cp ${S}/src/.gitignore-rename ${S}/src/.gitignore
-}
-
 do_install_append() {
 	# Follow debian/pulseaudio-esound-compat.links
 	ln -sf esdcompat ${D}${bindir}/esd
@@ -145,7 +140,7 @@ INSANE_SKIP_pulseaudio-module-zeroconf += "dev-deps"
 
 DEBIANNAME_libpulse = "libpulse0"
 RPROVIDES_libpulse += "libpulse0"
-RDEPENDS_${PN} += "adduser lsb-base udev libpulse pulseaudio-utils"
+RDEPENDS_${PN} += "lsb-base udev libpulse pulseaudio-utils"
 RDEPENDS_pulseaudio-utils += "libpulsedsp"
 RPROVIDES_pulseaudio-esound-compat += "esound"
 RDEPENDS_pulseaudio-module-bluetooth += "bluez"
