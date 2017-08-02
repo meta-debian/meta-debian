@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r0"
+PR = "r1"
 
 inherit debian-package
 PV = "1.0.28"
@@ -38,26 +38,31 @@ inherit autotools pkgconfig
 EXTRA_OECONF = " \
 	${@get_alsa_fpu_setting(bb, d)} \
 	--disable-static --disable-python \
+	--with-plugindir=${libdir}/${DPN} \
 "
 
 EXTRA_OECONF_append_libc-uclibc = " --with-versioned=no "
 
-PACKAGES =+ "alsa-server libasound alsa-conf-base alsa-conf alsa-doc alsa-dev"
-FILES_${PN} += "${libdir}/${BPN}/smixer/*.so"
-FILES_${PN}-dbg += "${libdir}/${BPN}/smixer/.debug"
-FILES_${PN}-dev += "${libdir}/${BPN}/smixer/*.la"
-FILES_libasound = "${libdir}/libasound.so.*"
-FILES_alsa-server = "${bindir}/*"
-FILES_alsa-conf = "${datadir}/alsa/"
-FILES_alsa-dev += "${libdir}/pkgconfig/ ${includedir}/alsa ${datadir}/aclocal/*"
-FILES_alsa-conf-base = "\
-${datadir}/alsa/alsa.conf \
-${datadir}/alsa/cards/aliases.conf \
-${datadir}/alsa/pcm/default.conf \
-${datadir}/alsa/pcm/dmix.conf \
-${datadir}/alsa/pcm/dsnoop.conf"
+do_install_append() {
+	# Remove unneeded files
+	find ${D} -type f -name "*.la" -exec rm -f {} \;
+	rm -f ${D}${bindir}/aserver
+	rmdir --ignore-fail-on-non-empty ${D}${bindir}
+}
 
-RDEPENDS_libasound = "alsa-conf-base"
+PACKAGES =+ "libasound2-data"
+FILES_libasound2-data = "${datadir}/alsa"
+
+RDEPENDS_${PN}_class-target += "libasound2-data"
+
+RPROVIDES_${PN} += "libasound2"
+RPROVIDES_${PN}-dbg += "libasound2-dbg"
+RPROVIDES_${PN}-dev += "libasound2-dev"
+RPROVIDES_${PN}-doc += "libasound2-doc"
+PKG_${PN} = "libasound2"
+PKG_${PN}-dbg = "libasound2-dbg"
+PKG_${PN}-dev = "libasound2-dev"
+PKG_${PN}-doc = "libasound2-doc"
 
 def get_alsa_fpu_setting(bb, d):
     if d.getVar('TARGET_FPU', True) in [ 'soft' ]:
