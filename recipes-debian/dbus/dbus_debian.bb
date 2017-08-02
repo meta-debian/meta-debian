@@ -146,11 +146,17 @@ do_install() {
 		ln -s ../../lib/${LINKLIB} ${D}${libdir}/libdbus-1.so
 	fi
 
-	install -d ${D}${sysconfdir}/default/volatiles
+	install -d ${D}${sysconfdir}/default
 	install -m 0644 ${S}/debian/dbus.default ${D}${sysconfdir}/default/dbus
-	echo "d messagebus messagebus 0755 ${localstatedir}/run/dbus none" \
-	     > ${D}${sysconfdir}/default/volatiles/99_dbus
-
+	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
+		install -d ${D}${sysconfdir}/tmpfiles.d
+		echo "d ${localstatedir}/run/dbus 0755 messagebus messagebus - none" \
+		     > ${D}${sysconfdir}/tmpfiles.d/99_dbus.conf
+	else
+		install -d ${D}${sysconfdir}/default/volatiles
+		echo "d messagebus messagebus 0755 ${localstatedir}/run/dbus none" \
+		     > ${D}${sysconfdir}/default/volatiles/99_dbus
+	fi
 
 	mkdir -p ${D}${localstatedir}/lib/dbus
 
