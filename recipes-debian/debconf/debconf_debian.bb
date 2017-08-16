@@ -27,6 +27,10 @@ do_install() {
 	prefix="${D}" oe_runmake install-rest
 }
 
+do_install_class-native () {
+	prefix="${D}${STAGING_DIR_NATIVE}" oe_runmake install
+}
+
 PACKAGES =+ "${PN}-utils"
 FILES_${PN}-utils = " \
 ${bindir}/debconf-get-selections \
