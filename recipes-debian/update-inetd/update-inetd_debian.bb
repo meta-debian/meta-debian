@@ -12,14 +12,19 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://update-inetd;beginline=5;endline=20;md5=3eac2c882cb20eab9f16557a10bbe19e"
 
 # runtime dependencies for update-inetd-native
-DEPENDS_class-native = "perl-native libfile-copy-recursive-perl-native debconf-native"
+DEPENDS_class-native = "libfile-copy-recursive-perl-native debconf-native"
 
-inherit cpan-base
+inherit cpan-base perlnative
 
 do_install() {
 	install -d ${D}${datadir}/perl5 ${D}${sbindir}
 	install -m 0644 ${S}/DebianNet.pm ${D}${datadir}/perl5/
 	install -m 0755 ${S}/update-inetd ${D}${sbindir}/
+}
+
+do_install_append_class-native() {
+	# Use perl-native to run update-inetd
+	sed -i -e "s@/usr/bin/perl@/usr/bin/env nativeperl@g" ${D}${sbindir}/update-inetd
 }
 
 FILES_${PN} += "${datadir}/perl5/*"
