@@ -24,10 +24,10 @@ SRC_URI += "\
 	file://cups_serverbin.patch \
 "
 
-PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'zeroconf', 'avahi', '', d)} \
+PACKAGECONFIG ??= "avahi \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
 
-PACKAGECONFIG[avahi] = "--enable-avahi,--disable-avahi,avahi"
+PACKAGECONFIG[avahi] = "--enable-avahi --enable-dnssd,--disable-avahi --disable-dnssd,avahi"
 PACKAGECONFIG[acl] = "--enable-acl,--disable-acl,acl"
 PACKAGECONFIG[pam] = "--enable-pam, --disable-pam, libpam"
 
@@ -105,6 +105,7 @@ do_install_append() {
 	mv ${D}${libdir}/cups/backend/socket ${D}${libdir}/cups/backend-available/
 	mv ${D}${libdir}/cups/backend/usb ${D}${libdir}/cups/backend-available/
 	mv ${D}${libdir}/cups/backend/snmp ${D}${libdir}/cups/backend-available/
+	mv ${D}${libdir}/cups/backend/dnssd ${D}${libdir}/cups/backend-available/
 
 	install -D -m 644 ${S}/debian/local/apparmor-profile ${D}${sysconfdir}/apparmor.d/usr.sbin.cupsd
 	install -D -m 644 ${S}/debian/local/cups.ufw.profile ${D}${sysconfdir}/ufw/applications.d/cups
@@ -129,6 +130,7 @@ PACKAGES = "${PN} libcups2 ${PN}-dev ${PN}-staticdev ${PN}-dbg ${PN}-libimage \
 	libcupsppdc1 libcupsppdc-dev"
 
 FILES_${PN} = " \
+	${libdir}/cups/backend-available/dnssd \
 	${libdir}/cups/backend-available/lpd \
 	${libdir}/cups/backend-available/snmp \
 	${libdir}/cups/backend-available/socket \
@@ -340,5 +342,8 @@ SYSROOT_PREPROCESS_FUNCS += "cups_sysroot_preprocess"
 cups_sysroot_preprocess () {
 	sed -i ${SYSROOT_DESTDIR}${bindir_crossscripts}/cups-config -e 's:cups_datadir=.*:cups_datadir=${datadir}/cups:' -e 's:cups_serverbin=.*:cups_serverbin=${libdir}/cups:'
 }
+
+# Base on debian/control
+RDEPENDS_libcup2 += "libavahi-client libavahi-common zlib"
 
 PARALLEL_MAKE = ""

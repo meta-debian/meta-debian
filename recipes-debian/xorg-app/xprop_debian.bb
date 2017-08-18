@@ -25,4 +25,6 @@ DPN = "x11-utils"
 # Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
-S = "${DEBIAN_UNPACK_DIR}/${PN}"
+S = "${DEBIAN_UNPACK_DIR}/${BPN}"
+
+BBCLASSEXTEND = "native"

@@ -1,21 +1,6 @@
-SUMMARY = "MySQL database"
-DESCRIPTION = "\
-MySQL is a fast, stable and true multi-user, multi-threaded SQL database \
-server. SQL (Structured Query Language) is the most popular database query \
-language in the world. The main goals of MySQL are speed, robustness and \
-ease of use \
-"
-HOMEPAGE = "http://dev.mysql.com/"
+include mysql.inc
 
-inherit debian-package native
-PV = "5.5.55"
-
-LICENSE = "GPLv3+"
-LIC_FILES_CHKSUM = "\
-	file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
-inherit cmake
-
-DPN = "mysql-5.5"
+inherit native
 
 EXTRA_OECMAKE += "-DSTACK_DIRECTION=-1 -DCAT_EXECUTABLE=`which cat` -DAWK_EXECUTABLE=`which awk`"
 DEPENDS += "libaio libbsd"

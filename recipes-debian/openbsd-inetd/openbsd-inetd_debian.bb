@@ -16,6 +16,25 @@ LIC_FILES_CHKSUM = "file://inetd.c;beginline=3;endline=30;md5=ccb4076c1b1c0fd44e
 
 DEPENDS = "libbsd tcp-wrappers"
 
+# Overwrite base_do_configure
+do_configure() {
+	# Original Makefile does not have target "clean" and is unusable,
+	# use Makefile.debian instead
+	if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
+		if [ "`cat ${CONFIGURESTAMPFILE}`" != "${BB_TASKHASH}" ]; then
+			cd ${B}
+			if [ "${CLEANBROKEN}" != "1" ]; then
+				oe_runmake -f ${S}/Makefile.debian clean
+			fi
+			find ${B} -ignore_readdir_race -name \*.la -delete
+		fi
+	fi
+	if [ -n "${CONFIGURESTAMPFILE}" ]; then
+		mkdir -p `dirname ${CONFIGURESTAMPFILE}`
+		echo ${BB_TASKHASH} > ${CONFIGURESTAMPFILE}
+	fi
+}
+
 do_compile() {
 	oe_runmake -f ${S}/Makefile.debian
 }
