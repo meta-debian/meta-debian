@@ -28,7 +28,6 @@ inherit autotools
 
 EXTRA_OECONF += "--without-lispdir \
                  --disable-csharp \
-                 --disable-libasprintf \
                  --disable-java \
                  --disable-native-java \
                  --disable-openmp \
@@ -46,65 +45,59 @@ acpaths = '-I ${S}/gettext-runtime/m4 \
            -I ${S}/gettext-tools/m4'
 
 
-# these lack the .x behind the .so, but shouldn't be in the -dev package
-# Otherwise you get the following results:
-# 7.4M    glibc/images/ep93xx/Angstrom-console-image-glibc-ipk-2008.1-test-20080104-ep93xx.rootfs.tar.gz
-# 25M     uclibc/images/ep93xx/Angstrom-console-image-uclibc-ipk-2008.1-test-20080104-ep93xx.rootfs.tar.gz
-# because gettext depends on gettext-dev, which pulls in more -dev packages:
-# 15228   KiB /ep93xx/libstdc++-dev_4.2.2-r2_ep93xx.ipk
-# 1300    KiB /ep93xx/uclibc-dev_0.9.29-r8_ep93xx.ipk
-# 140     KiB /armv4t/gettext-dev_0.14.1-r6_armv4t.ipk
-# 4       KiB /ep93xx/libgcc-s-dev_4.2.2-r2_ep93xx.ipk
-
-PACKAGES =+ "libgettextlib libgettextsrc"
-FILES_libgettextlib = "${libdir}/libgettextlib-*.so*"
-FILES_libgettextsrc = "${libdir}/libgettextsrc-*.so*"
-
-PACKAGES =+ "gettext-runtime gettext-runtime-dev gettext-runtime-doc"
-
-FILES_${PN} += "${libdir}/${BPN}/*"
-
-FILES_gettext-runtime = "${bindir}/gettext \
-                         ${bindir}/ngettext \
-                         ${bindir}/envsubst \
-                         ${bindir}/gettext.sh \
-                         ${libdir}/libasprintf.so* \
-                         ${libdir}/GNU.Gettext.dll \
-                        "
-FILES_gettext-runtime_append_libc-uclibc = " ${libdir}/libintl.so.* \
-                                             ${libdir}/charset.alias \
-                                           "
-FILES_gettext-runtime-dev += "${libdir}/libasprintf.a \
-                      ${includedir}/autosprintf.h \
-                     "
-FILES_gettext-runtime-dev_append_libc-uclibc = " ${libdir}/libintl.so \
-                                                 ${includedir}/libintl.h \
-                                               "
-FILES_gettext-runtime-doc = "${mandir}/man1/gettext.* \
-                             ${mandir}/man1/ngettext.* \
-                             ${mandir}/man1/envsubst.* \
-                             ${mandir}/man1/.* \
-                             ${mandir}/man3/* \
-                             ${docdir}/gettext/gettext.* \
-                             ${docdir}/gettext/ngettext.* \
-                             ${docdir}/gettext/envsubst.* \
-                             ${docdir}/gettext/*.3.html \
-                             ${datadir}/gettext/ABOUT-NLS \
-                             ${docdir}/gettext/csharpdoc/* \
-                             ${docdir}/libasprintf/autosprintf.html \
-                             ${infodir}/autosprintf.info \
-                            "
-
 do_install_append() {
-    rm -f ${D}${libdir}/preloadable_libintl.so
+	mv ${D}${docdir}/gettext ${D}${docdir}/gettext-doc
+
+	rm -f ${D}${libdir}/libgettextlib.so
+	rm -f ${D}${libdir}/libgettextsrc.so
+	find ${D} -type f -name *.la -exec rm -f {} \;
 }
 
 do_install_append_class-native () {
-        rm ${D}${datadir}/aclocal/*
-        rm ${D}${datadir}/gettext/config.rpath
-        rm ${D}${datadir}/gettext/po/Makefile.in.in
-        rm ${D}${datadir}/gettext/po/remove-potcdate.sin
+	rm -f ${D}${datadir}/aclocal/*
+	rm -f ${D}${datadir}/gettext/config.rpath
+	rm -f ${D}${datadir}/gettext/po/Makefile.in.in
+	rm -f ${D}${datadir}/gettext/po/remove-potcdate.sin
 }
+
+PACKAGES =+ "autopoint ${PN}-base libgettextpo0 libasprintf0c2 libgettextpo-dev libasprintf-dev"
+
+FILES_${PN}-dev = ""
+FILES_${PN} += " \
+    ${libdir}/libgettextlib-${PV}.so \
+    ${libdir}/libgettextsrc-${PV}.so \
+    ${libdir}/preloadable_libintl.so \
+    ${datadir}/aclocal \
+"
+FILES_autopoint = " \
+    ${bindir}/autopoint \
+    ${datadir}/gettext/archive.dir.tar.xz \
+"
+FILES_${PN}-base = " \
+    ${bindir}/envsubst \
+    ${bindir}/gettext \
+    ${bindir}/gettext.sh \
+    ${bindir}/ngettext \
+"
+FILES_libgettextpo0 = "${libdir}/libgettextpo${SOLIBS}"
+FILES_libasprintf0c2 = "${libdir}/libasprintf${SOLIBS}"
+FILES_libgettextpo-dev = " \
+    ${includedir}/gettext-po.h \
+    ${libdir}/libgettextpo${SOLIBSDEV} \
+"
+FILES_libasprintf-dev = " \
+    ${includedir}/autosprintf.h \
+    ${libdir}/libasprintf${SOLIBSDEV} \
+"
+
+DEBIAN_NOAUTONAME_libasprintf0c2 = "1"
+
+RDEPENDS_${PN}-base = "libasprintf0c2"
+RDEPENDS_${PN} = "${PN}-base"
+RDEPENDS_autopoint = "xz-utils"
+
+RDEPENDS_${PN}-base_class-native = ""
+RDEPENDS_${PN}_class-native = ""
 
 BBCLASSEXTEND = "native nativesdk"
 
