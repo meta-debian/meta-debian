@@ -82,18 +82,17 @@ ALTERNATIVE_LINK_NAME[pidof] = "${base_bindir}/pidof"
 ALTERNATIVE_LINK_NAME[killall5] = "${base_sbindir}/killall5"
 ALTERNATIVE_LINK_NAME[sulogin] = "${base_sbindir}/sulogin"
 
+inherit insserv
+INITSCRIPT_PACKAGES = "bootlogd ${PN}-initscripts"
+INITSCRIPT_NAMES_bootlogd = "bootlogd stop-bootlogd-single stop-bootlogd"
+INITSCRIPT_NAMES_${PN}-initscripts = " \
+    mountkernfs.sh hostname.sh mountdevsubfs.sh \
+    checkroot.sh checkroot-bootclean.sh checkfs.sh \
+    mountall.sh mountall-bootclean.sh bootmisc.sh urandom \
+"
+
 pkg_postinst_bootlogd() {
 set -e
-if [ -x $D${sysconfdir}/init.d/bootlogd ]; then
-	update-rc.d bootlogd             defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/stop-bootlogd-single ]; then
-	update-rc.d stop-bootlogd-single defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/stop-bootlogd ]; then
-	update-rc.d stop-bootlogd        defaults >/dev/null || exit $?
-fi
-
 #
 # Create initial log file
 #
@@ -118,54 +117,6 @@ case "$1" in
 	# Remove log files
 	#
 	rm -f $D${localstatedir}/log/boot
-	
-	# Remove rc symlinks in the reverse dependency order they were
-	# inserted
-	update-rc.d stop-bootlogd        remove >/dev/null || exit $?
-	update-rc.d stop-bootlogd-single remove >/dev/null || exit $?
-	update-rc.d bootlogd             remove >/dev/null || exit $?
 	;;
 esac
-}
-
-pkg_postinst_${PN}-initscripts() {
-#
-# Links in runlevel S
-#
-if [ -x $D${sysconfdir}/init.d/mountkernfs.sh ]; then
-update-rc.d mountkernfs.sh         defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/hostname.sh ]; then
-update-rc.d hostname.sh            defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountdevsubfs.sh ]; then
-update-rc.d mountdevsubfs.sh       defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/checkroot.sh ]; then
-update-rc.d checkroot.sh           defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/checkroot-bootclean.sh ]; then
-update-rc.d checkroot-bootclean.sh defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/checkfs.sh ]; then
-update-rc.d checkfs.sh             defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountall.sh ]; then
-update-rc.d mountall.sh            defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}init.d/mountall-bootclean.sh ]; then
-update-rc.d mountall-bootclean.sh  defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountnfs.sh ]; then
-update-rc.d mountnfs.sh            defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/mountnfs-bootclean.sh ]; then
-update-rc.d mountnfs-bootclean.sh  defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/bootmisc.sh ]; then
-update-rc.d bootmisc.sh            defaults >/dev/null || exit $?
-fi
-if [ -x $D${sysconfdir}/init.d/urandom ]; then
-update-rc.d urandom                defaults >/dev/null || exit $?
-fi
 }
