@@ -22,8 +22,11 @@ PV = "1.14.0"
 #is depends on __USE_GNU and __USE_GNU depends on _GNU_SOURCE
 CFLAGS += " -D_GNU_SOURCE"
 
+INSTDIR = "${D}"
+INSTDIR_class-native = "${D}${STAGING_DIR_NATIVE}"
 do_install () {
-	oe_runmake 'DESTDIR=${D}' install
+	oe_runmake 'DESTDIR=${INSTDIR}' install
+
 	install -m0644 ${S}/insserv.conf ${D}${sysconfdir}/insserv.conf
 	
 	#Create /etc/bash_completion.d folder
@@ -34,3 +37,5 @@ do_install () {
 	install -m 0644 ${S}/debian/insserv.bash-completion \
 			${D}${sysconfdir}/bash_completion.d/insserv
 }
+
+BBCLASSEXTEND = "native"
