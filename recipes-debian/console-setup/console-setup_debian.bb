@@ -84,6 +84,10 @@ RDEPENDS_keyboard-configuration += "liblocale-gettext-perl"
 RDEPENDS_${PN} += "${PN}-linux xkb-data keyboard-configuration"
 RDEPENDS_${PN}-linux += "kbd keyboard-configuration"
 
+inherit insserv
+INITSCRIPT_PACKAGES = "keyboard-configuration"
+INITSCRIPT_NAMES_keyboard-configuration = "keyboard-setup console-setup"
+
 # Base on debian/console-setup.postinst
 # Debian postinst can get parameters from user,
 # we cannot do the same, but we can define them from recipe,
