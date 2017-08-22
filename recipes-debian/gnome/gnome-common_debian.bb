@@ -25,4 +25,10 @@ DEBIAN_QUILT_PATCHES = ""
 EXTRA_AUTORECONF = ""
 DEPENDS = ""
 
-BBCLASSEXTEND = "native"
+FILES_${PN} += "${datadir}/aclocal"
+FILES_${PN}-dev = ""
+
+RDEPENDS_${PN} += "autoconf automake libtool pkg-config gettext intltool autopoint"
+RDEPENDS_${PN}_class-native = ""
+
+BBCLASSEXTEND = "native nativesdk"
