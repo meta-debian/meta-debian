@@ -4,7 +4,7 @@
 # base commit: a6866222ef6feaa2112618f1442a8960840e394a
 #
 
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 
 require perl.inc
 
@@ -58,6 +58,7 @@ do_configure () {
 		-Dvendorarch=${STAGING_LIBDIR}/perl/${PERL_PV} \
 		-Dsitelib=${STAGING_LIBDIR}/perl/${PERL_PV} \
 		-Dsitearch=${STAGING_LIBDIR}/perl/${PERL_PV} \
+		-Dotherlibdirs=${STAGING_DATADIR}/perl5 \
 		\
 		-Duseshrplib \
 		-Dusethreads \
