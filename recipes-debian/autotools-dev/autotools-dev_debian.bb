@@ -34,6 +34,6 @@ do_install() {
 	install debian/autotools_dev.pm ${D}${datadir}/perl5/Debian/Debhelper/Sequence
 }
 
-FILES_${PN} += "/usr/share"
+FILES_${PN} += "${datadir}"
 
 BBCLASSEXTEND = "native nativesdk"
