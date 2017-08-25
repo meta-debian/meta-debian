@@ -44,12 +44,20 @@ do_compile_prepend () {
         ./config.status                                                         
 } 
 
-PACKAGES =+ "libltdl libltdl-dev libltdl-dbg libltdl-staticdev"                 
-FILES_${PN} += "${datadir}/aclocal"                                             
-FILES_${PN}-dev = "${includedir} ${FILES_SOLIBSDEV} ${libdir}/*.la \            
-                ${libdir}/*.o ${libdir}/pkgconfig ${datadir}/pkgconfig \        
-                ${base_libdir}/*.o ${libdir}/${BPN}/*.la ${base_libdir}/*.la"   
-                                                                                
-FILES_libltdl = "${libdir}/libltdl${SOLIBS}"                                    
-FILES_libltdl-dev = "${libdir}/libltdl${SOLIBSDEV} ${includedir}"               
-FILES_libltdl-staticdev = "${libdir}/libltdl.a"                                 
+PACKAGES =+ "libltdl libltdl-dev ${PN}-bin"
+FILES_libltdl = "${libdir}/libltdl${SOLIBS}"
+FILES_libltdl-dev = " \
+    ${libdir}/libltdl${SOLIBSDEV} \
+    ${libdir}/libltdl.la \
+    ${includedir} \
+    ${datadir}/aclocal/ltdl.m4 \
+    ${datadir}/libtool/libltdl \
+"
+FILES_${PN}-bin = "${bindir}/libtool"
+FILES_${PN} += "${datadir}/aclocal"
+FILES_${PN}-dev = ""
+
+RDEPENDS_${PN}-bin += "${PN}"
+RDEPENDS_${PN}_class-target += "gcc cpp libc6-dev file autotools-dev"
+
+INSANE_SKIP_${PN} += "dev-deps"
