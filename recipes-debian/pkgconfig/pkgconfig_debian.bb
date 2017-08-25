@@ -43,12 +43,13 @@ acpaths = "-I ."
 # the pkg.m4 macros, pkgconfig does not deliver any other -dev
 # files.
 FILES_${PN}-dev = ""
-FILES_${PN} += "${datadir}/aclocal/pkg.m4"
+FILES_${PN} += "${datadir}/aclocal/pkg.m4 \
+                ${datadir}/pkg-config-crosswrapper \
+                "
 
-# When using the RPM generated automatic package dependencies, some packages
-# will end up requiring 'pkgconfig(pkg-config)'.  Allow this behavior by
-# specifying an appropriate provide.
-RPROVIDES_${PN} += "pkgconfig(pkg-config) (= ${PV})"
+do_install_append() {
+	install -m 0755 ${S}/debian/pkg-config-crosswrapper ${D}${datadir}/
+}
 
 # Install a pkg-config-native wrapper that will use the native sysroot instead
 # of the MACHINE sysroot, for using pkg-config when building native tools.
@@ -58,6 +59,9 @@ do_install_append_class-native () {
 		< ${WORKDIR}/pkg-config-native.in > ${B}/pkg-config-native
 	install -m755 ${B}/pkg-config-native ${D}${bindir}/pkg-config-native
 }
+
+RPROVIDES_${PN} += "pkg-config"
+PKG_${PN} = "pkg-config"
 
 BBCLASSEXTEND = "native nativesdk"
 
