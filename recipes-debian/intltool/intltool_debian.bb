@@ -41,4 +41,4 @@ inherit autotools pkgconfig perlnative
 export PERL = "${bindir}/env perl"
 PERL_class-native = "/usr/bin/env nativeperl"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"

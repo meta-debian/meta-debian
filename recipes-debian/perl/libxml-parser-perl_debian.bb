@@ -45,4 +45,4 @@ do_compile_append(){
 
 FILES_${PN}-dbg += "${libdir}/perl/vendor_perl/*/auto/XML/Parser/Expat/.debug/"
 
-BBCLASSEXTEND="native"
+BBCLASSEXTEND="native nativesdk"
