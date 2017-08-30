@@ -19,10 +19,11 @@ DEPENDS += "libaio lvm2 readline"
 
 #follow debian/rules
 export DISABLE_SYSTEMD = "1"
+EXTRA_OEMAKE = "OPTFLAGS="-pipe -Wall -Wunused -Wstrict-prototypes" LIB=lib"
 
 #install follow Debian jessie
 do_install() {
-	oe_runmake install LIB=${base_libdir} DESTDIR=${D}
+	oe_runmake install LIB=lib DESTDIR=${D}
 	
 	install -m 0755 ${S}/debian/multipath-tools.init \
 		${D}${sysconfdir}/init.d/multipath-tools
