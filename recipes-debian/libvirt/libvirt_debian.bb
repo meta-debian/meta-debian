@@ -212,7 +212,7 @@ FILES_${PN}-dev += "\
 # Follow debian/control
 RDEPENDS_${PN}-bin += "${PN}-daemon-system ${PN}-clients"
 RDEPENDS_${PN}-daemon-system += "\
-	adduser ${PN}-clients ${PN}-daemon logrotate gettext-runtime"
+	adduser ${PN}-clients ${PN}-daemon logrotate gettext-base"
 RRECOMMENDS_${PN}-daemon += "libxml2-utils qemu"
 RRECOMMENDS_${PN}-daemon-system += "dmidecode dnsmasq-base iproute2 iptables parted ebtables"
 RRECOMMENDS_${PN} += "lvm2"
