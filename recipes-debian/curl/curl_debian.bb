@@ -32,20 +32,25 @@ do_install_append() {
 	oe_multilib_header curl/curlbuild.h
 }
 
-PACKAGES =+ "lib${DPN} lib${DPN}-dev lib${DPN}-staticdev lib${DPN}-doc"
+PACKAGES =+ "lib${DPN} lib${DPN}-openssl-dev lib${DPN}-staticdev lib${DPN}-doc"
 
 FILES_lib${DPN} = "${libdir}/lib*.so.*"
 RRECOMMENDS_lib${DPN} += "ca-certificates"
-FILES_lib${DPN}-dev = "${includedir} \
-                      ${libdir}/lib*.so \
+FILES_lib${DPN}-openssl-dev = "${libdir}/lib*.so \
                       ${libdir}/lib*.la \
-                      ${libdir}/pkgconfig \
-                      ${datadir}/aclocal \
-                      ${bindir}/*-config"
+                      ${datadir}/aclocal"
 FILES_lib${DPN}-staticdev = "${libdir}/lib*.a"
 FILES_lib${DPN}-doc = "${mandir}/man3 \
                       ${mandir}/man1/curl-config.1"
+FILES_${PN}-dev += "${bindir}/*-config"
+
+RDEPENDS_lib${DPN}-openssl-dev += "${PN}-dev"
+
+DEBIANNAME_lib${DPN}-openssl-dev = "lib${DPN}4-openssl-dev"
+RPROVIDES_lib${DPN}-openssl-dev = "lib${DPN}4-openssl-dev"
+RCONFLICTS_lib${DPN}-openssl-dev = "libcurl4-nss-dev libcurl4-gnutls-dev"
 
 DEBIANNAME_lib${DPN} = "libcurl3"
+RPROVIDES_lib${DPN} += "libcurl3"
 
 BBCLASSEXTEND = "native nativesdk"

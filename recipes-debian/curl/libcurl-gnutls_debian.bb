@@ -22,3 +22,8 @@ do_install_append(){
 }
 
 DEBIANNAME_${PN} = "libcurl3-gnutls"
+RPROVIDES_${PN} = "libcurl3-gnutls"
+DEBIANNAME_${PN}-dev = "libcurl4-gnutls-dev"
+RPROVIDES_${PN}-dev = "libcurl4-gnutls-dev"
+RCONFLICTS_${PN}-dev = "libcurl4-openssl-dev libcurl4-nss-dev"
+RDEPENDS_${PN}-dev += "curl-dev"
