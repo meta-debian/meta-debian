@@ -23,6 +23,6 @@ do_install(){
 
 	install -d ${D}${sysconfdir}/cron.daily
 	install -m 0644 ${S}/debian/logrotate.conf ${D}${sysconfdir}
-	install -m 0644 ${S}/debian/cron.daily ${D}${sysconfdir}/cron.daily/logrotate
+	install -m 0755 ${S}/debian/cron.daily ${D}${sysconfdir}/cron.daily/logrotate
 	install -d ${D}${localstatedir}/lib/logrotate
 }
