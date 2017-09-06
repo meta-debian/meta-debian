@@ -68,7 +68,7 @@ do_install_append() {
 	           ${D}${sysconfdir}/${DPN}/sites-enabled
 
 	cp ${S}/debian/bash_completion/apache2 ${D}${sysconfdir}/bash_completion.d/
-	cp ${S}/debian/apache2.cron.daily      ${D}${sysconfdir}/cron.daily/apache2
+	install -m 0755 ${S}/debian/apache2.cron.daily      ${D}${sysconfdir}/cron.daily/apache2
 	cp -r ${S}/debian/config-dir/*         ${D}${sysconfdir}/${DPN}/
 	sed -e "s#__SERVER_VERSION__#$SERVER_VERSION#" \
 	    -e "s#__MODULE_DIR__#$MODULE_DIR#" \
