@@ -36,7 +36,7 @@ do_install() {
 		${D}${sysconfdir}/${DPN}/apt.conf.d/01autoremove
 	install -D -m 0755 ${S}/debian/apt.auto-removal.sh \
 		${D}${sysconfdir}/kernel/postinst.d/apt-auto-removal
-	install -D -m 0644 ${S}/debian/apt.cron.daily \
+	install -D -m 0755 ${S}/debian/apt.cron.daily \
 		${D}${sysconfdir}/cron.daily/apt
 	install -D -m 0644 ${S}/debian/apt.logrotate \
 		${D}${sysconfdir}/logrotate.d/apt
