@@ -15,8 +15,10 @@ PV = "11.0.1"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"
 
+# --disable-yesterday:
+# sa2 fails to use "-d yesterday", which is not supported by busybox date
 EXTRA_OECONF += " \
-		--enable-yesterday \
+		--disable-yesterday \
 		--disable-man-group \
 		--disable-compress-manpg \
 		--enable-copy-only \
