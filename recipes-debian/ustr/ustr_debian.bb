@@ -2,6 +2,7 @@
 # base branch: danny
  
 SUMMARY = "Micro String API - for C"
+HOMEPAGE = "http://www.and.org/ustr/"
 DESCRIPTION = "Micro string library, very low overhead from plain strdup() (Ave. 44% for \
 0-20B strings). Very easy to use in existing C code. At it's simplest you can \
 just include a single header file into your .c and start using it."
