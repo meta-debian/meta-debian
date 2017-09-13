@@ -26,7 +26,6 @@ SRC_URI += " \
 	file://remove-tar-no-timestamp.patch \
 	file://fix-abs-redefine.patch \
 	file://arch_pm.patch \
-	file://dpkg-configure.service \
 	file://glibc2.5-sync_file_range.patch \
 "
 

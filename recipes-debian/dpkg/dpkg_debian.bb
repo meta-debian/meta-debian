@@ -5,9 +5,7 @@
 
 require dpkg.inc
 
-PR = "${INC_PR}.4"
-
-inherit systemd
+PR = "${INC_PR}.5"
 
 DEPENDS = "zlib bzip2 perl ncurses xz-utils"
 DEPENDS_class-native = "bzip2-replacement-native \
@@ -22,12 +20,6 @@ RDEPENDS_${PN}_class-native = "xz-utils-native"
 PARALLEL_MAKE = ""
 
 inherit autotools gettext perlnative pkgconfig
-
-python () {
-    if not bb.utils.contains('DISTRO_FEATURES', 'sysvinit', True, False, d):
-        pn = d.getVar('PN', True)
-        d.setVar('SYSTEMD_SERVICE_%s' % (pn), 'dpkg-configure.service')
-}
 
 export PERL = "${bindir}/perl"
 PERL_class-native = "${STAGING_BINDIR_NATIVE}/perl-native/perl"
@@ -58,16 +50,6 @@ do_install_append () {
 		sed -i -e 's|^#!.*${bindir}/perl-native.*/perl|#!/usr/bin/env nativeperl|' ${D}${bindir}/dpkg-*
 	else
 		sed -i -e 's|^#!.*${bindir}/perl-native.*/perl|#!/usr/bin/env perl|' ${D}${bindir}/dpkg-*
-	fi
-
-	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','false','true',d)};then
-		install -d ${D}${systemd_unitdir}/system
-		install -m 0644 ${WORKDIR}/dpkg-configure.service ${D}${systemd_unitdir}/system/
-		sed -i -e 's,@BASE_BINDIR@,${base_bindir},g' \
-			-e 's,@SYSCONFDIR@,${sysconfdir},g' \
-			-e 's,@BINDIR@,${bindir},g' \
-			-e 's,@SYSTEMD_UNITDIR@,${systemd_unitdir},g' \
-			${D}${systemd_unitdir}/system/dpkg-configure.service
 	fi
 
 	# Install configuration files and links follow Debian
