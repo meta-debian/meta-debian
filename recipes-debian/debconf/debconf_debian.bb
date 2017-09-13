@@ -14,6 +14,8 @@ LIC_FILES_CHKSUM = "file://debian/copyright;md5=1aa3b78d3182195ba56c01cb7227ead3
 
 DEBIAN_PATCH_TYPE = "nopatch"
 
+inherit perlnative
+
 do_configure() {
 	:
 }
@@ -29,6 +31,11 @@ do_install() {
 
 do_install_class-native () {
 	prefix="${D}${STAGING_DIR_NATIVE}" oe_runmake install
+
+	# Use /usr/bin/env nativeperl for the perl script.
+	for f in `grep -rIl '#! */usr/bin/perl' ${D}`; do
+		sed -i -e 's|/usr/bin/perl.*|/usr/bin/env nativeperl|' $f
+	done
 }
 
 PACKAGES =+ "${PN}-utils"
