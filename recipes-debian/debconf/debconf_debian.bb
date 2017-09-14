@@ -1,4 +1,4 @@
-PR = "r0"
+PR = "r1"
 
 inherit debian-package allarch
 PV = "1.5.56+deb8u1"
@@ -36,6 +36,12 @@ do_install_class-native () {
 	for f in `grep -rIl '#! */usr/bin/perl' ${D}`; do
 		sed -i -e 's|/usr/bin/perl.*|/usr/bin/env nativeperl|' $f
 	done
+
+	# Replace host path
+	find ${D} -type f -exec sed -i -e "s|/usr/share|${datadir}|g" \
+		-e "s|/usr/lib|${libdir}|g" \
+		-e "s|/etc|${sysconfdir}|g" \
+		-e "s|/var|${STAGING_DIR_HOST}${localstatedir}|g" {} \;
 }
 
 PACKAGES =+ "${PN}-utils"
