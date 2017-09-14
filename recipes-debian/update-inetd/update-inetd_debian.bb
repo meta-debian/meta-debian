@@ -11,6 +11,9 @@ PV = "4.43"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://update-inetd;beginline=5;endline=20;md5=3eac2c882cb20eab9f16557a10bbe19e"
 
+# send SIGHUP signal to reset inetd service is useless when we bitbake
+SRC_URI_append_class-native = " file://dont-wakeup-inetd.patch"
+
 # runtime dependencies for update-inetd-native
 DEPENDS_class-native = "libfile-copy-recursive-perl-native debconf-native"
 
