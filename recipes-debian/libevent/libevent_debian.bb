@@ -30,3 +30,6 @@ FILES_${PN}-pthreads = "${libdir}/libevent_pthreads-*"
 RDEPENDS_${PN}-extra = "${PN}-core"
 RDEPENDS_${PN}-openssl = "${PN}-core"
 RDEPENDS_${PN}-pthreads = "${PN}-core"
+
+DEBIANNAME_${PN}-dev = "${PN}-dev"
+DEBIAN_NOAUTONAME_${PN}-dev = "1"
