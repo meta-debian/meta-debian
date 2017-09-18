@@ -28,6 +28,7 @@ EXTRA_OECONF += "--enable-all-clocks --enable-parse-clocks --enable-SHM \
                 --disable-local-libopts \
                 --enable-ntp-signd \
                 --disable-dependency-tracking \
+                lo_cv_test_autoopts=no \
 "
 
 PACKAGECONFIG ??= "openssl cap"
