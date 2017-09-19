@@ -97,7 +97,7 @@ set -e
 # Create initial log file
 #
 
-for F in $D${localstatedir}${base_libdir}/boot
+for F in $D${localstatedir}/log/boot
 do
 	if [ ! -f "$F" ] && touch "$F" >/dev/null 2>&1
 	then
