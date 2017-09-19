@@ -161,7 +161,7 @@ FILES_libavahi-ui = "${libdir}/libavahi-ui${SOLIBS}"
 FILES_python-${PN} = "${libdir}/python*"
 
 DEBIANNAME_libavahi-compat-libdnssd = "libavahi-compat-libdnssd1"
-DEBIAN_NOAUTONAME_libavahi-compat-libdnssd-dev = "libavahi-compat-libdnssd-dev"
+DEBIAN_NOAUTONAME_libavahi-compat-libdnssd-dev = "1"
 RPROVIDES_libavahi-client += "libavahi-client3"
 RPROVIDES_libavahi-common += "libavahi-common3"
 RPROVIDES_libavahi-compat-libdnssd += "libavahi-compat-libdnssd1"
