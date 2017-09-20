@@ -3,7 +3,7 @@
 # base branch: daisy
 #
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 PV = "1.2.8"
@@ -16,8 +16,8 @@ LIC_FILES_CHKSUM = "\
 "
 
 # util-linux for libblkid
-DEPENDS = "libcap libnfsidmap libevent util-linux sqlite3"
-RDEPENDS_nfs-common = "rpcbind bash lsb-base"
+DEPENDS = "libcap libnfsidmap libevent util-linux sqlite3 keyutils"
+RDEPENDS_nfs-common = "rpcbind bash lsb-base libkeyutils"
 RDEPENDS_${PN} = "nfs-common bash lsb-base"
 RRECOMMENDS_${PN} = "kernel-module-nfsd"
 
