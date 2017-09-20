@@ -1,0 +1,44 @@
+Three of the translator makefiles in glusterfs add unnecessary
+-L$(xlatordir) link options.  This option causes the linker to check
+the host's $(xlatordir) directory, resulting in contamination that gets
+flagged by Yocto's QA rules.
+
+Upstream-Status: Pending
+Signed-off-by: Donn Seeley <donn.seeley@windriver.com>
+---
+ xlators/mgmt/glusterd/src/Makefile.am    |    2 --
+ xlators/nfs/server/src/Makefile.am       |    2 --
+ xlators/system/posix-acl/src/Makefile.am |    2 --
+ 3 files changed, 6 deletions(-)
+
+--- a/xlators/mgmt/glusterd/src/Makefile.am
++++ b/xlators/mgmt/glusterd/src/Makefile.am
+@@ -33,8 +33,6 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) -I$(top_src
+ 
+ AM_CFLAGS = -Wall $(GF_CFLAGS)
+ 
+-AM_LDFLAGS = -L$(xlatordir)
+-
+ CLEANFILES =
+ 
+ install-data-hook:
+--- a/xlators/nfs/server/src/Makefile.am
++++ b/xlators/nfs/server/src/Makefile.am
+@@ -19,6 +19,4 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) \
+ 
+ AM_CFLAGS = -Wall $(GF_CFLAGS)
+ 
+-AM_LDFLAGS = -L$(xlatordir)
+-
+ CLEANFILES =
+--- a/xlators/system/posix-acl/src/Makefile.am
++++ b/xlators/system/posix-acl/src/Makefile.am
+@@ -10,8 +10,6 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) -I$(top_src
+ 
+ AM_CFLAGS = -Wall $(GF_CFLAGS)
+ 
+-AM_LDFLAGS = -L$(xlatordir)
+-
+ CLEANFILES =
+ 
+ access-control-compat:

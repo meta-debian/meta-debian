@@ -13,7 +13,7 @@ DPN = "libcap2"
 DEPENDS = "attr hostperl-runtime-native"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 # attr and pam are disabled by EXTRA_OEMAKE_class-native
-DEPENDS_class-native = "hostperl-runtime-native"
+DEPENDS_class-native = "hostperl-runtime-native attr-native"
 
 inherit debian-package
 PV = "2.24"
@@ -40,9 +40,10 @@ EXTRA_OEMAKE = " \
   lib=${@os.path.basename('${libdir}')} \
 "
 EXTRA_OEMAKE_class-native = " \
-  LIBATTR=no \
+  LIBATTR=yes \
   PAM_CAP=no \
   INDENT= \
+  RAISE_SETFCAP=no \
   lib=${@os.path.basename('${libdir}')} \
 "
 
