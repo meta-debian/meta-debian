@@ -40,4 +40,4 @@ FILES_libedac-dev = "${libdir}/libedac.so \
                      ${includedir}/edac.h"
 
 RDEPENDS_${PN} += "lsb-base"
-PROVIDES_libedac += "libedac1"
+RPROVIDES_libedac += "libedac1"
