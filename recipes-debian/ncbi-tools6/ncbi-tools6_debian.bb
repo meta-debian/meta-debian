@@ -52,6 +52,10 @@ do_compile() {
 
 	ln -sf ../make/*.unx .
 	sed -i -e "s|!/bin/csh|!${STAGING_DIR_NATIVE}${base_bindir_native}/csh|" ${S}/make/ln-if-absent
+	local shebang_length=$(head -n 1 ${S}/make/ln-if-absent | wc -m)
+	if [ ${shebang_length} -gt 127 ]; then
+		sed -i -e "s|!${STAGING_DIR_NATIVE}${base_bindir_native}/csh -f|!/usr/bin/env csh|" ${S}/make/ln-if-absent
+	fi
 	ln -sf ../make/ln-if-absent build
 	mv makeall.unx makefile
 	chmod +x ${S}/debian/makemenu
