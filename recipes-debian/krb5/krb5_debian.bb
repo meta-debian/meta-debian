@@ -18,7 +18,7 @@ DESCRIPTION = "Kerberos is a system for authenticating users and services on a n
 HOMEPAGE = "http://web.mit.edu/Kerberos/"
 SECTION = "console/network"
 
-PR = "r4"
+PR = "r5"
 
 inherit debian-package
 PV = "1.12.1+dfsg"
@@ -26,7 +26,7 @@ PV = "1.12.1+dfsg"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://../NOTICE;md5=450c80c6258ce03387bd09df37638ebc"
 
-DEPENDS = "ncurses util-linux e2fsprogs e2fsprogs-native"
+DEPENDS = "ncurses util-linux e2fsprogs e2fsprogs-native keyutils"
 
 inherit autotools-brokensep binconfig perlnative systemd
 
@@ -351,6 +351,8 @@ RDEPENDS_${PN}-pkinit += "libkrb5"
 RDEPENDS_${PN}-otp += "libkrad"
 RDEPENDS_libkrb5 += "libkrb5support"
 RDEPENDS_libgssapi-krb5 += "libkrb5"
+RDEPENDS_libkrad += "libkrb5"
+RDEPENDS_libkrb5support += "libkeyutils"
 
 # lsb-base is required for init scripts
 RDEPENDS_${PN}-admin-server += "lsb-base"
