@@ -38,7 +38,7 @@ inherit autotools-brokensep
 DEPENDS += "cdrkit-native"
 
 do_compile() {
-	oe_runmake memtest.bin memtest CC="${CC} " LD="${LD} -z max-page-size=0x1000 --hash-style=gnu"
+	oe_runmake memtest.bin memtest CC="${CC} " LD="${LD} -z max-page-size=0x1000 --hash-style=gnu" AS="${AS} -32"
 	./makeiso.sh
 }
 
@@ -68,3 +68,5 @@ INSANE_SKIP_${PN} = "arch"
 #	|                       asm __volatile__ (
 #	|                        ^
 INSANE_SKIP_${PN} += "textrel"
+
+PARALLEL_MAKE = ""
