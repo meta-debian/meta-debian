@@ -29,7 +29,7 @@ DEBIAN_PATCH_TYPE = "nopatch"
 inherit autotools-brokensep
 
 do_compile() {
-	oe_runmake CC="${CC}" LD="${LD}"
+	oe_runmake CC="${CC}" LD="${LD}" AS="${AS} -32"
 }
 
 # Base on debian/rules
@@ -50,3 +50,5 @@ FILES_${PN} += "/boot ${datadir}/lintian/overrides"
 # memtest86.elf is ELF 32-bit LSB executable \
 # add an INSANE_SKIP bypass check "arch" to avoid the QA error.
 INSANE_SKIP_${PN} = "arch"
+
+PARALLEL_MAKE = ""
