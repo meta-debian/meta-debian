@@ -12,6 +12,8 @@ LIC_FILES_CHKSUM = "file://LICENCE.GPL;md5=5f6e72824f5da505c1f4a7197f004b45 \
 inherit debian-package
 PV = "1.5.9"
 
+SRC_URI += "file://0001-create-relative-symbolic-link.patch"
+
 CFLAGS += "-fPIE"
 
 do_install_append() {
