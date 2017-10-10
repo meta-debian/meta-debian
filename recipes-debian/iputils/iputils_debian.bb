@@ -47,7 +47,7 @@ PACKAGES =+ "${PN}-ping ${PN}-tracepath ${PN}-clockdiff ${PN}-arping"
 FILES_${PN}-ping = "${base_bindir}/ping*"
 FILES_${PN}-tracepath = "${bindir}/trace*"
 FILES_${PN}-clockdiff = "${bindir}/clockdiff"
-FILES_${PN}-arping = "${bindir}/arping"
+FILES_${PN}-arping = "${bindir}/arping*"
 
 # Add update-alternatives definitions
 inherit update-alternatives
@@ -57,3 +57,10 @@ ALTERNATIVE_PRIORITY = "100"
 ALTERNATIVE_${PN}-ping = "ping ping6"
 ALTERNATIVE_LINK_NAME[ping] = "${base_bindir}/ping"
 ALTERNATIVE_LINK_NAME[ping6] = "${base_bindir}/ping6"
+
+ALTERNATIVE_${PN}-arping = "arping"
+ALTERNATIVE_LINK_NAME[arping] = "${bindir}/arping"
+
+ALTERNATIVE_${PN}-tracepath = "traceroute6"
+ALTERNATIVE_LINK_NAME[traceroute6] = "${bindir}/traceroute6"
+ALTERNATIVE_TARGET[traceroute6] = "${bindir}/traceroute6.iputils"
