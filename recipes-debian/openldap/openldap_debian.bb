@@ -205,6 +205,7 @@ do_install_append() {
 	rm ${D}${libdir}/libslapi.la ${D}${libdir}/libslapi.a ${D}${libdir}/libslapi.so
 	rm ${D}${sysconfdir}/ldap/DB_CONFIG.example
 	rm ${D}${libdir}/libldap_r.la ${D}${libdir}/liblber.la ${D}${libdir}/libldap.la
+	rm ${D}${libdir}/liblber.a
 	
 	install -m 0644 ${S}/debian/schema/*.schema ${D}${sysconfdir}/ldap/schema/
 	install -m 0644 ${S}/debian/schema/*.ldif ${D}${sysconfdir}/ldap/schema/
