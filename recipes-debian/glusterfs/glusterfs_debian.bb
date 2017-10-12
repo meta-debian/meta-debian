@@ -17,6 +17,7 @@ LIC_FILES_CHKSUM = "file://COPYING-GPLV2;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
                     file://contrib/fuse-util/COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
 SRC_URI += "file://xlator-host-contamination.patch"
+SRC_URI_append_class-target = " file://0001-avoid-using-python-native-by-default.patch"
 
 inherit autotools pythonnative
 
