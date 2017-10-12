@@ -24,6 +24,9 @@ EXTRA_OECONF = "--disable-rpath \
                 --enable-bash --disable-selinux --disable-python --with-distro=debian \
                 --with-init-script=sysvinit,systemd \
                 "
+PACKAGECONFIG ??= ""
+# According to debian/control, lxc requires lua5.2 but not lua5.1
+PACKAGECONFIG[lua] = "--enable-lua,--disable-lua,lua5.2"
 
 do_install() {
         oe_runmake 'DESTDIR="${D}"' 'SYSTEMD_UNIT_DIR="${systemd_system_unitdir}"' install
