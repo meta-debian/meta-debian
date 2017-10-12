@@ -107,7 +107,9 @@ FILES_${BPN}-syslogd = "${sysconfdir}/default/inetutils-syslogd \
 			${sysconfdir}/logrotate.d/inetutils-syslogd \
 			${sysconfdir}/syslog.conf \
 			${sbindir}/syslogd \
-			${sysconfdir}/syslog.d"
+			${sysconfdir}/syslog.d \
+			${localstatedir}/log/news \
+                        "
 FILES_${BPN}-talk = "${bindir}/inetutils-talk"
 FILES_${BPN}-talkd = "${sbindir}/talkd"
 FILES_${BPN}-telnet = "${bindir}/inetutils-telnet"
