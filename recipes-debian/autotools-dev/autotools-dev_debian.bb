@@ -25,6 +25,9 @@ PV = "20140911.1"
 
 inherit allarch
 
+# Makefile doesn't have target clean
+CLEANBROKEN = "1"
+
 do_install() {
 	install -d ${D}${datadir}/misc
 	install config.guess config.sub ${D}${datadir}/misc
