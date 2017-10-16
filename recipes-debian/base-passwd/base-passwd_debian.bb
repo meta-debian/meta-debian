@@ -99,12 +99,7 @@ fi
 
 addtask do_package after do_populate_sysroot
 
-ALLOW_EMPTY_${PN} = "1"
-
-PACKAGES =+ "${PN}-update"
-FILES_${PN}-update = "${sbindir}/* ${datadir}/${PN}"
-
-pkg_postinst_${PN}-update () {
+pkg_postinst_${PN} () {
 #!/bin/sh
 if [ -n "$D" ]; then
 	exit 0

@@ -16,7 +16,7 @@ PV = "1.0.6"
 # starting udhcpc service by default on start is useless so disable it from busybox template
 SRC_URI += "file://lxc-disable-udhcp-from-busybox-template.patch"
 
-inherit autotools pkgconfig
+inherit autotools-brokensep pkgconfig
 
 EXTRA_OECONF = "--disable-rpath \
                 --enable-capabilities \
