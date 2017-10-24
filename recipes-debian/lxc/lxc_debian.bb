@@ -67,10 +67,3 @@ RDEPENDS_${PN} = "bash \
                   perl-module-overload \
                   perl-module-exporter-heavy \
                   "
-
-pkg_postinst_${PN}() {
-        if [ -z "$D" ] && [ -e ${sysconfdir}/init.d/populate-volatile.sh ] ; then
-                ${sysconfdir}/init.d/populate-volatile.sh update
-        fi
-}
-
