@@ -13,7 +13,7 @@ TLS, PKCS 5, PKCS 7, PKCS 11, PKCS 12, S/MIME, X.509 \
 v3 certificates, and other security standards."
 HOMEPAGE = "http://www.mozilla.org/projects/security/pki/nss/"
 
-PR = "r1"
+PR = "r2"
 DEPENDS = "sqlite3 nspr zlib nss-native"
 DEPENDS_class-native = "sqlite3-native nspr-native zlib-native"
 RDEPENDS_${PN} = "perl"
@@ -36,6 +36,8 @@ SRC_URI += "\
 SRC_URI_append_class-target = "\
     file://nss.pc.in \
     file://signlibs.sh \
+    file://nss-regen-chk.service \
+    file://nss-regen-chk.init \
 "
 
 TD = "${S}/tentative-dist"
@@ -195,23 +197,26 @@ do_install_append_class-target() {
 	certutil -N -d ${D}/etc/pki/nssdb/ -f ./empty_password
 	chmod 644 ${D}/etc/pki/nssdb/*.db
 	rm ./empty_password
+
+	install -d ${D}${systemd_system_unitdir} \
+	           ${D}${sysconfdir}/init.d/
+	install -m 0644 ${WORKDIR}/nss-regen-chk.service ${D}${systemd_system_unitdir}/
+	install -m 0755 ${WORKDIR}/nss-regen-chk.init ${D}${sysconfdir}/init.d/nss-regen-chk
+	sed -i -e 's,@BASE_BINDIR@,${base_bindir},g' \
+	       -e 's,@BASE_SBINDIR@,${base_sbindir},g' \
+	       -e 's,@BINDIR@,${bindir},g' \
+	       -e 's,@SBINDIR@,${sbindir},g' \
+	        ${D}${systemd_system_unitdir}/nss-regen-chk.service \
+	        ${D}${sysconfdir}/init.d/nss-regen-chk
 }
 
-pkg_postinst_${PN} () {
-    if [ -n "$D" ]; then
-        for I in $D/${libdir}/lib*.chk; do
-            DN=`dirname $I`
-            BN=`basename $I .chk`
-            FN=$DN/$BN.so
-            shlibsign -i $FN
-            if [ $? -ne 0 ]; then
-               exit 1
-            fi
-        done
-        exit 0
-    fi
-    signlibs.sh
-}
+inherit insserv
+INITSCRIPT_PACKAGES = "lib${PN}"
+INITSCRIPT_NAMES_lib${PN} = "nss-regen-chk"
+
+inherit systemd
+SYSTEMD_PACKAGES = "lib${PN}"
+SYSTEMD_SERVICE_lib${PN} = "nss-regen-chk.service"
 
 # Add more packages according to list of packages in Debian
 PACKAGES = "lib${PN} lib${PN}-dbg lib${PN}-dev lib${PN}-tools lib${PN}-1d"
@@ -229,6 +234,7 @@ FILES_lib${PN} = "\
 	${sysconfdir} \
 	${libdir}/lib*.chk \
 	${libdir}/lib*.so \
+	${systemd_system_unitdir}/nss-regen-chk.service \
 	"
 
 FILES_lib${PN}-dev = "\
@@ -242,6 +248,10 @@ FILES_lib${PN}-dbg = "\
 	${libdir}/.debug/* \
 	/usr/src/debug \
 	"
+
+# libnss requires shlibsign from libnss-tools
+# to regenerate .chk file on first boot
+RRECOMMENDS_lib${PN} += "lib${PN}-tools"
 
 PKG_lib${PN} = "lib${PN}3"
 PKG_lib${PN}-dbg = "lib${PN}3-dbg"

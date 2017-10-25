@@ -1,0 +1,18 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:		nss-regen-chk
+# Required-Start:	$remote_fs
+# Required-Stop:
+# Default-Start:	S
+# Default-Stop:
+### END INIT INFO
+
+@BINDIR@/signlibs.sh
+
+if [ -f @SBINDIR@/update-rc.d ]; then
+	@SBINDIR@/update-rc.d -f nss-regen-chk remove
+elif [ -f @BASE_SBINDIR@/insserv ]; then
+	@BASE_SBINDIR@/insserv -f -r nss-regen-chk
+else
+	find /etc/rc*.d -name "*nss-regen-chk" -exec rm -f {} \;
+fi
