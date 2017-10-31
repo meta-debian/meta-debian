@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = " \
 	file://doc/coreutils.info;beginline=7;endline=14;md5=f469e5a24d5c598b086a4f3532834660 \
 "
 
-DEPENDS = "gmp libcap libselinux"
+DEPENDS = "gmp libcap"
 DEPENDS_class-native = ""
 
 DEBIAN_PATCH_TYPE = "dpatch"
@@ -31,14 +31,15 @@ SRC_URI += " \
 EXTRA_OECONF_class-native = "--without-gmp"
 EXTRA_OECONF_class-target = "--enable-install-program=arch --libexecdir=${libdir}"
 
-# acl is not a default feature
-#
-PACKAGECONFIG_class-target ??= "${@bb.utils.contains('DISTRO_FEATURES', 'acl', 'acl', '', d)}"
+PACKAGECONFIG_class-target ??= " acl \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'selinux', '', d)} \
+"
 PACKAGECONFIG_class-native ??= ""
 
 # with, without, depends, rdepends
 #
 PACKAGECONFIG[acl] = "--enable-acl,--disable-acl,acl,"
+PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 
 BIN_PROGS = "cat chgrp chmod chown cp date dd df dir echo false ln ls mkdir \
         mknod mv pwd readlink rm rmdir vdir sleep stty sync touch true uname \
