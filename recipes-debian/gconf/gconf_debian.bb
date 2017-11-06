@@ -14,6 +14,11 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=55ca817ccb7d5b5b66355690e9abc605"
 
 SRC_URI += "file://disable_HAVE_INTROSPECTION_and_disable_build_doc.patch"
 
+# Add option to change root path for running postinst at do_rootfs
+SRC_URI_append_class-native = " \
+    file://add_option_change_root_path.patch \
+"
+
 inherit autotools-brokensep pkgconfig gettext
 
 DEPENDS_class-target += "intltool-native glib-2.0 libxml2 dbus dbus-glib libldap \
@@ -75,10 +80,22 @@ pkg_postinst_${PN}() {
 
 	# Upon installation/upgrade, regenerate all databases, because in this case 
 	# there will be no trigger run
-	gconf-schemas --register-all --no-signal
-	update-gconf-defaults --no-signal
-	update-gconf-defaults --no-signal --mandatory
-	kill -s HUP `pidof gconfd-2` >/dev/null 2>&1 || true
+
+	# When run do_rootfs, root path need to be changed.
+	# Options --root are only available in gconf-native.
+	change_root=""
+	if [ -n $D ]; then
+		change_root="--root $D"
+	fi
+
+	gconf-schemas --register-all --no-signal $change_root
+	update-gconf-defaults --no-signal $change_root
+	update-gconf-defaults --no-signal --mandatory $change_root
+
+	if [ -z $D ]; then
+		# Tell all running daemons to reload their databases
+		kill -s HUP `pidof gconfd-2` >/dev/null 2>&1 || true
+	fi
 }
 
 PACKAGES =+ "${PN}-gsettings-backend ${PN}-service ${PN}-common lib${PN}"

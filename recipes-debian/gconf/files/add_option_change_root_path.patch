@@ -1,0 +1,63 @@
+diff --git a/debian/gconf-schemas b/debian/gconf-schemas
+old mode 100644
+new mode 100755
+index dc16c0a..544f554
+--- a/debian/gconf-schemas
++++ b/debian/gconf-schemas
+@@ -20,6 +20,7 @@ parser.add_option("--register-all", action="store_true", dest="register_all",
+                    default=False)
+ parser.add_option("--no-signal", action="store_false", default=True, dest="signal",
+                   help="do not send SIGHUP the running gconfd-2 processes")
++parser.add_option("--root", dest="root", default="")
+ (options, args) = parser.parse_args()
+ 
+ if options.register==None and not options.register_all:
+@@ -30,8 +31,8 @@ if 'DPKG_RUNNING_VERSION' in os.environ and not options.register_all:
+     # Do nothing, it will be done in the trigger
+     sys.exit(0)
+ 
+-schema_location="/usr/share/gconf/schemas"
+-defaults_dest="/var/lib/gconf/defaults"
++schema_location = options.root + "/usr/share/gconf/schemas"
++defaults_dest = options.root + "/var/lib/gconf/defaults"
+ 
+ schemas = [ ]
+ if options.register_all:
+@@ -47,9 +48,6 @@ else:
+     else:
+       sys.stderr.write('Warning: %s could not be found.\n'%schema)
+ 
+-if os.geteuid():
+-  parser.error("You must be root to launch this program.")
+-
+ if options.register_all:
+   options.register=True
+   for f in os.listdir(defaults_dest):
+diff --git a/debian/update-gconf-defaults b/debian/update-gconf-defaults
+index 022c527..1a366b1 100644
+--- a/debian/update-gconf-defaults
++++ b/debian/update-gconf-defaults
+@@ -20,6 +20,7 @@ parser.add_option("--no-signal", action="store_false", default=True, dest="signa
+                   help="do not send SIGHUP the running gconfd-2 processes")
+ parser.add_option("--only-if-changed", action="store_true", default=False, dest="ifchanged",
+                   help="only regenerate configuration if needed")
++parser.add_option("--root", dest="root", default="")
+ 
+ (options, args) = parser.parse_args()
+ 
+@@ -28,9 +29,13 @@ if 'DPKG_RUNNING_VERSION' in os.environ and options.signal:
+     # Do nothing, it will be done in the trigger
+     sys.exit(0)
+ 
++
++options.source_dir = options.root + options.source_dir
++options.dest_dir = options.root + options.dest_dir
++
+ if options.mandatory:
+-    options.source_dir="/usr/share/gconf/mandatory"
+-    options.dest_dir="/var/lib/gconf/debian.mandatory"
++    options.source_dir = options.root + "/usr/share/gconf/mandatory"
++    options.dest_dir = options.root + "/var/lib/gconf/debian.mandatory"
+ 
+ if not os.path.isdir(options.source_dir):
+     parser.error("Source directory does not exist.")

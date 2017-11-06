@@ -83,10 +83,6 @@ pkg_postinst_dbus() {
 		fi
 		systemctl $OPTS mask dbus-1.service
 	fi
-
-	if [ -z "$D" ] && [ -e /etc/init.d/populate-volatile.sh ] ; then
-		/etc/init.d/populate-volatile.sh update
-	fi
 }
 
 # --disable-selinux: Don't use selinux support

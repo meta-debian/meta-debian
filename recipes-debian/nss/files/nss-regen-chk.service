@@ -1,0 +1,15 @@
+[Unit]
+Description=Generate nss checksum files
+DefaultDependencies=no
+After=systemd-remount-fs.service systemd-tmpfiles-setup.service tmp.mount
+Before=sysinit.target
+
+[Service]
+Type=oneshot
+ExecStart=@BINDIR@/signlibs.sh
+ExecStartPost=@BASE_BINDIR@/systemctl disable nss-regen-chk.service
+RemainAfterExit=No
+
+[Install]
+WantedBy=basic.target
+WantedBy=sysinit.target
