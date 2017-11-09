@@ -31,6 +31,8 @@ export cross_signum = "64"
 DEPENDS += "chrpath-native"
 inherit autotools perlnative module
 
+addtask make_scripts after do_patch before do_configure
+
 EXTRA_OECONF += "--with-linux=${STAGING_KERNEL_BUILDDIR} \
                  --with-linux-src=${STAGING_KERNEL_DIR}"
 
