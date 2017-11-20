@@ -1,91 +1,10 @@
-#
-# base recipe: meta/recipes-core/eglibc/eglibc_2.19.bb
-# base branch: daisy
-#
-
 require glibc.inc
 
-PR = "r1"
-
-LICENSE = "GPLv2 & LGPLv2.1 & ISC"
-LIC_FILES_CHKSUM = " \
-file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
-file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
-file://LICENSES;md5=e9a558e243b36d3209f380deb394b213 \
-"
+PR = "r2"
 
 DEPENDS += "gperf-native"
 
-# Exclude patch that apply for old version:
-# mips-rld-map-check.patch
-# initgroups_keys.patch
-# eglibc_fix_findidx_parameters.patch
-# fileops-without-wchar-io.patch
-# fix-tibetian-locales.patch
-# CVE-2014-5119.patch
-#
-# Exclude GLRO_dl_debug_mask.patch because debian source code (2.19-10) 
-# does not support RTLD debug
-#
-# Exclude 0001-eglibc-menuconfig-support.patch
-#         0002-eglibc-menuconfig-hex-string-options_debian.patch
-#         0003-eglibc-menuconfig-build-instructions.patch
-# because Debian distro does not support kconfig-frontend
-# correct-valencia-locale-supported_debian.patch:
-# 	This patch is fix "QA Issue: locale-base-ca-es is listed in PACKAGES multiple times"
-SRC_URI += " \
-	file://eglibc-svn-arm-lowlevellock-include-tls.patch \
-	file://IO-acquire-lock-fix.patch \
-	file://etc/ld.so.conf \
-	file://generate-supported.mk \
-	file://glibc.fix_sqrt2.patch \
-	file://multilib_readlib.patch \
-	file://ppc-sqrt_finite.patch \
-	file://ppc_slow_ieee754_sqrt.patch \
-	file://add_resource_h_to_wait_h.patch \
-	file://0001-R_ARM_TLS_DTPOFF32.patch \
-	file://0001-eglibc-run-libm-err-tab.pl-with-specific-dirs-in-S.patch \
-	file://ppce6500-32b_slow_ieee754_sqrt.patch \
-	file://grok_gold.patch \
-	file://0013-sysdeps-gnu-configure.ac-handle-correctly-libc_cv_ro.patch \
-	file://correct-valencia-locale-supported_debian.patch \
-"
-
-B = "${WORKDIR}/build-${TARGET_SYS}"
-
-do_debian_patch_append() {
-	# Set empty because kconfig-frontend is not supported
-	echo "config:" >> ${S}/Makeconfig
-
-	# No documentation
-	sed -i -e "s:manual::" ${S}/Makeconfig
-}
-
-PACKAGES_DYNAMIC = ""
-
-# the -isystem in bitbake.conf screws up glibc do_stage
-BUILD_CPPFLAGS = "-I${STAGING_INCDIR_NATIVE}"
-TARGET_CPPFLAGS = "-I${STAGING_DIR_TARGET}${includedir}"
-
 GLIBC_BROKEN_LOCALES = " _ER _ET so_ET yn_ER sid_ET tr_TR mn_MN gez_ET gez_ER bn_BD te_IN es_CR.ISO-8859-1"
-
-FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/glibc-${PV}', '${FILE_DIRNAME}/glibc', '${FILE_DIRNAME}/files', '${FILE_DIRNAME}' ], d)}"
-
-#
-# For now, we will skip building of a gcc package if it is a uclibc one
-# and our build is not a uclibc one, and we skip a glibc one if our build
-# is a uclibc build.
-#
-# See the note in gcc/gcc_3.4.0.oe
-#
-
-python __anonymous () {
-    import re
-    uc_os = (re.match('.*uclibc$', d.getVar('TARGET_OS', True)) != None)
-    if uc_os:
-        raise bb.parse.SkipPackage("incompatible with target %s" %
-                                   d.getVar('TARGET_OS', True))
-}
 
 EXTRA_OECONF = "--enable-kernel=${OLDEST_KERNEL} \
                 --without-cvs --disable-profile \
@@ -96,37 +15,19 @@ EXTRA_OECONF = "--enable-kernel=${OLDEST_KERNEL} \
                 --without-selinux \
                 --enable-obsolete-rpc \
                 --with-kconfig=${STAGING_BINDIR_NATIVE} \
-		--disable-profile \
-		--without-gd \
-		--without-cvs \
-		--enable-add-ons=${GLIBC_ADDONS} \
+                --disable-profile \
+                --without-gd \
+                --without-cvs \
+                --enable-add-ons=${GLIBC_ADDONS} \
                 ${GLIBC_EXTRA_OECONF}"
 
 EXTRA_OECONF += "${@get_libc_fpu_setting(bb, d)}"
 
-do_patch_append() {
-    bb.build.exec_func('do_fix_readlib_c', d)
-}
-
-# for mips glibc now builds syscall tables for all abi's
-# so we make sure that we choose right march option which is
-# compatible with o32,n32 and n64 abi's
-# e.g. -march=mips32 is not compatible with n32 and n64 therefore
-# we filter it out in such case -march=from-abi which will be
-# mips1 when using o32 and mips3 when using n32/n64
-
-TUNE_CCARGS_mips := "${@oe_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
-TUNE_CCARGS_mipsel := "${@oe_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
-
-do_fix_readlib_c () {
-	sed -i -e 's#OECORE_KNOWN_INTERPRETER_NAMES#${EGLIBC_KNOWN_INTERPRETER_NAMES}#' ${S}/elf/readlib.c
-}
-
 do_configure () {
-# override this function to avoid the autoconf/automake/aclocal/autoheader
-# calls for now
-# don't pass CPPFLAGS into configure, since it upsets the kernel-headers
-# version check and doesn't really help with anything
+	# override this function to avoid the autoconf/automake/aclocal/autoheader
+	# calls for now
+	# don't pass CPPFLAGS into configure, since it upsets the kernel-headers
+	# version check and doesn't really help with anything
 	(cd ${S} && gnu-configize) || die "failure in running gnu-configize"
 	find ${S} -name "configure" | xargs touch
 	CPPFLAGS="" oe_runconf
@@ -147,7 +48,7 @@ do_compile () {
 			rm -f $h
 			${B}/sunrpc/cross-rpcgen -h $r -o $h || bbwarn "${PN}: unable to generate header for $r"
 		done
-        )
+	)
 	echo "Adjust ldd script"
 	if [ -n "${RTLDLIST}" ]
 	then
@@ -161,5 +62,40 @@ do_compile () {
 
 require glibc-package.inc
 
-BBCLASSEXTEND = "nativesdk"
+do_install() {
+	# Re-write do_install from libc-common.bbclass
+	# to prevent install empty ld.so.conf from ${WORKDIR}
+	oe_runmake install_root=${D} install
+	for r in ${rpcsvc}; do
+		h=`echo $r|sed -e's,\.x$,.h,'`
+		install -m 0644 ${S}/sunrpc/rpcsvc/$h ${D}/${includedir}/rpcsvc/
+	done
+	install -d ${D}${localedir}
+	make -f ${WORKDIR}/generate-supported.mk IN="${S}/localedata/SUPPORTED" OUT="${WORKDIR}/SUPPORTED"
+	# get rid of some broken files...
+	for i in ${GLIBC_BROKEN_LOCALES}; do
+		sed -i "/$i/d" ${WORKDIR}/SUPPORTED
+	done
+	rm -f ${D}${sysconfdir}/rpc
+	rm -rf ${D}${datadir}/zoneinfo
+	rm -rf ${D}${libexecdir}/getconf
+
+	# Install /etc/ld.so.conf.d and /etc/ld.so.conf as Debian
+	mkdir -p ${D}${sysconfdir}/ld.so.conf.d
+	conffile="${D}${sysconfdir}/ld.so.conf.d/${DEB_HOST_MULTIARCH}.conf"
+	echo "# Multiarch support" > $conffile
+	echo "${base_libdir}" >> $conffile
+	echo "${libdir}" >> $conffile
+
+	install -m 0644 ${S}/debian/local/etc/ld.so.conf ${D}${sysconfdir}/
+}
+
+SYSROOT_PREPROCESS_FUNCS += "glibc_sysroot_preprocess"
+glibc_sysroot_preprocess() {
+	mkdir -p ${SYSROOT_DESTDIR}${sysconfdir}
+	cp -r ${D}${sysconfdir}/ld.so.conf.d ${SYSROOT_DESTDIR}${sysconfdir}/
+	sed -e "s@\(^include\s*\)/etc/@\1${STAGING_DIR_TARGET}${sysconfdir}/@g" \
+	    ${D}${sysconfdir}/ld.so.conf > ${SYSROOT_DESTDIR}${sysconfdir}/ld.so.conf
+}
+
 FILES_${PN}-doc += "${datadir}"
