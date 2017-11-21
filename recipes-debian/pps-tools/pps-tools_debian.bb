@@ -1,6 +1,3 @@
-#
-# skerlet
-#
 SUMMARY = "PPS tools"
 DESCRIPTION = "User-space tools for LinuxPPS"
 HOMEPAGE = "https://github.com/ago/pps-tools"
