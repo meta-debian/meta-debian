@@ -27,14 +27,13 @@ LIC_FILES_CHKSUM = "\
 
 inherit waf-samba perlnative pkgconfig useradd
 
-DEPENDS = "readline zlib ntdb ldb libaio heimdal libarchive libpam libldap lsb tevent"
+DEPENDS = "readline zlib ntdb ldb libaio heimdal libarchive cups libpam libldap lsb tevent"
 SRC_URI += " \
 	file://20-do-not-import-target-module-while-cross-compile.patch \
 	file://0006-avoid-using-colon-in-the-checking-msg.patch \
 	file://libreplace-disable-libbsd-support.patch \
 "
 EXTRA_OECONF += "\
-	--disable-cups \
 	--enable-fhs \
 	--with-privatedir=${localstatedir}/lib/samba/private \
 	--with-smbpasswd-file=${sysconfdir}/samba/smbpasswd \
@@ -191,6 +190,10 @@ do_install_append() {
 	install -D -m 0644 ${S}/debian/samba-common.samba.pam \
 			${D}${sysconfdir}/pam.d/samba
 
+	# Base on debian/smbclient.links
+	mkdir -p ${D}${libdir}/cups/backend
+	ln -s ${bindir}/smbspool ${D}${libdir}/cups/backend/smb
+
 	# Remove unused files
 	rm -rf ${D}${base_libdir}/samba \
 	       ${D}${libdir}/samba/share \
@@ -258,7 +261,8 @@ FILES_smbclient = "\
 	${bindir}/smbspool \
 	${bindir}/smbspool_krb5_wrapper \
 	${bindir}/smbtar \
-	${bindir}/smbtree"
+	${bindir}/smbtree \
+	${libdir}/cups/backend/smb"
 FILES_ctdb = "\
 	${sysconfdir}/ctdb \
 	${sysconfdir}/default/ctdb \
