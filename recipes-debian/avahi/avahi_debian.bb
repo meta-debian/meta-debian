@@ -39,7 +39,9 @@ export HOST_SYS
 
 DEPENDS += "intltool-native glib-2.0-native libdaemon gdbm expat libcap python-dbus-native"
 
-PACKAGECONFIG ??= "dbus gtk python"
+PACKAGECONFIG ??= "dbus python \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'directfb', 'gtk', '', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'gtk', '', d)}"
 PACKAGECONFIG[dbus] = "--enable-dbus,--disable-dbus,dbus"
 PACKAGECONFIG[gtk] = "--enable-gtk,--disable-gtk,gtk+"
 PACKAGECONFIG[gtk3] = "--enable-gtk3,--disable-gtk3,gtk+3"
@@ -193,8 +195,9 @@ RDEPENDS_libavahi-gobject-dev += "glib-2.0-dev libavahi-client-dev libavahi-glib
 RDEPENDS_libavahi-compat-libdnssd += "libavahi-common libavahi-client"
 RDEPENDS_libavahi-compat-libdnssd-dev += "libavahi-client-dev"
 RDEPENDS_libavahi-ui += "libavahi-common libavahi-client libavahi-glib gdbm \
-                         glib-2.0 gtk+"
-RDEPENDS_libavahi-ui-dev += "libavahi-client-dev libavahi-glib-dev gtk+-dev"
+                         glib-2.0 ${@bb.utils.contains('PACKAGECONFIG', 'gtk', 'gtk+', '', d)}"
+RDEPENDS_libavahi-ui-dev += "libavahi-client-dev libavahi-glib-dev \
+                             ${@bb.utils.contains('PACKAGECONFIG', 'gtk', 'gtk+-dev', '', d)}"
 RDEPENDS_${PN}-ui-utils += "libavahi-common libavahi-client"
 RDEPENDS_python-${PN} += "python-gdbm python-dbus libavahi-common-data"
 

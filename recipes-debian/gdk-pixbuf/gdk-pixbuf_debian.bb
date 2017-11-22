@@ -42,10 +42,11 @@ inherit autotools pkgconfig gettext pixbufcache ptest-gnome
 
 LIBV = "2.10.0"
 
-GDK_PIXBUF_LOADERS ?= "jpeg2000 x11 png jpeg tiff"
+GDK_PIXBUF_LOADERS ?= "jpeg2000 png jpeg tiff \
+                       ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 
 PACKAGECONFIG ??= "${GDK_PIXBUF_LOADERS}"
-PACKAGECONFIG_linuxstdbase = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} ${GDK_PIXBUF_LOADERS}"
+PACKAGECONFIG_linuxstdbase = "${GDK_PIXBUF_LOADERS}"
 PACKAGECONFIG_class-native = "${GDK_PIXBUF_LOADERS}"
 
 PACKAGECONFIG[png] = "--with-libpng,--without-libpng,libpng"
