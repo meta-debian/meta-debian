@@ -72,8 +72,9 @@ do_install_append() {
 	fi
 	
 	# Follow debian/libopenmpi1.6.links amd debian/libopenmpi-dev.links
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	for f in ${D}${LIBDIR}/*.so.*.*.*; do
-		ln -sf ../..${LIBDIR}/`basename $f` ${D}${libdir}/`basename $f`
+		ln -sf ${rel_lib_prefix}${LIBDIR}/`basename $f` ${D}${libdir}/`basename $f`
 		rm -rf ${f%.*.*}
 	done
 	for f in ${D}${libdir}/*.so.*.*.*; do

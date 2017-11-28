@@ -139,7 +139,8 @@ do_install() {
 		mv ${D}${libdir}/lib*.so.* ${D}${base_libdir}
 		LINKLIB=$(basename $(readlink ${D}${libdir}/libdbus-1.so))
 		rm ${D}${libdir}/libdbus-1.so
-		ln -s ../../lib/${LINKLIB} ${D}${libdir}/libdbus-1.so
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		ln -sf ${rel_lib_prefix}${base_libdir}/${LINKLIB} ${D}${libdir}/libdbus-1.so
 	fi
 
 	install -d ${D}${sysconfdir}/default

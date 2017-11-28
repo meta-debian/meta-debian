@@ -53,8 +53,9 @@ do_install_append () {
 	
 	#Correct the softlink: libjson-c.so -> /lib/libjson-c.so.2.0.0
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libjson-c.so))
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	rm ${D}${libdir}/libjson-c.so
-	ln -s ../../lib/${LINKLIB} ${D}${libdir}/libjson-c.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/${LINKLIB} ${D}${libdir}/libjson-c.so
 	
 	#Correct the softlink json.pc -> json-c.pc
 	rm ${D}${libdir}/pkgconfig/json.pc

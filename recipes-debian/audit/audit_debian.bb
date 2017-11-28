@@ -83,13 +83,14 @@ do_install_append() {
 	chmod 640 ${D}${sysconfdir}/audit/auditd.conf \
 		${D}${sysconfdir}/audit/rules.d/audit.rules
 
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libaudit.so))
 	rm ${D}${base_libdir}/libaudit.so
-	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libaudit.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libaudit.so
 
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libauparse.so))
         rm ${D}${base_libdir}/libauparse.so
-        ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libauparse.so
+        ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libauparse.so
 	mv ${D}${base_libdir}/*.a ${D}${libdir}/
 	rm ${D}${base_libdir}/*.la
 

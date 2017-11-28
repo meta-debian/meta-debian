@@ -53,13 +53,14 @@ do_install_append() {
 	mv ${D}${libdir}/libfuse.so.* ${D}${base_libdir}/
 	mv ${D}${libdir}/libulockmgr.so.* ${D}${base_libdir}/
 
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libfuse.so))
 	rm ${D}${libdir}/libfuse.so
-	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libfuse.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libfuse.so
 
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libulockmgr.so))
 	rm ${D}${libdir}/libulockmgr.so
-	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libulockmgr.so	
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libulockmgr.so
 }
 
 PACKAGES =+ "lib${PN}"

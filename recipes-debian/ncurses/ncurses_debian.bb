@@ -227,7 +227,7 @@ do_install() {
 	if [ ! -d "${D}${base_libdir}" ]; then
 		# Setting base_libdir to libdir as is done in the -native
 		# case will skip this code
-		mkdir ${D}${base_libdir}
+		mkdir -p ${D}${base_libdir}
 		mv ${D}${libdir}/libncurses.so.* ${D}${base_libdir}
 		! ${ENABLE_WIDEC} || \
 			mv ${D}${libdir}/libncursesw.so.* ${D}${base_libdir}
@@ -296,18 +296,19 @@ do_install_append() {
 	# In case libdir is not the same as base_libdir
 	# needed to create symlink to /lib instead of /usr/lib
 	if [ "${base_libdir}" != "${libdir}" ]; then
-		ln -sf ../../lib/libtinfo.so.5 ${D}${libdir}/libtinfo.so
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		ln -sf ${rel_lib_prefix}${base_libdir}/libtinfo.so.5 ${D}${libdir}/libtinfo.so
 	else
 		ln -sf libtinfo.so.5 ${D}${libdir}/libtinfo.so
 	fi
 
 	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a
-	ln -sf ../../../../lib/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
-	ln -sf ../../../../lib/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
-	ln -sf ../../../../lib/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
-	ln -sf ../../../../lib/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
-	ln -sf ../../../../lib/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
-	ln -sf ../../../../lib/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
+	ln -sf ${base_libdir}/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
+	ln -sf ${base_libdir}/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
+	ln -sf ${base_libdir}/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
+	ln -sf ${base_libdir}/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
+	ln -sf ${base_libdir}/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
+	ln -sf ${base_libdir}/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
 }
 
 ALTERNATIVE_PRIORITY = "100"

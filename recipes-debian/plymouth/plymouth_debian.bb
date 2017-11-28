@@ -44,9 +44,10 @@ do_install_append(){
 	# Base on debian/rules
 	# Moving /usr/lib to /lib
 	mv ${D}${libdir}/*${SOLIBS} ${D}${base_libdir}
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	for f in ${D}${libdir}/*.so; do
 		LINKLIB=$(basename $(readlink $f))
-		ln -sf ../../lib/$LINKLIB $f
+		ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB $f
 	done
 	# Adding initramfs-tools integration
 	install -D -m 0755 ${S}/debian/local/plymouth.hook \

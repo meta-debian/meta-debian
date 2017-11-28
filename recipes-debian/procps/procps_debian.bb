@@ -52,7 +52,8 @@ do_install_append () {
 		install -d ${D}${base_libdir}
 		mv ${D}${libdir}/libprocps${SOLIBS} ${D}${base_libdir}/
 		rm ${D}${libdir}/libprocps${SOLIBSDEV}
-		ln -s ../../${base_libdir}/libprocps.so.3 ${D}${libdir}/libprocps${SOLIBSDEV}
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		ln -sf ${rel_lib_prefix}${base_libdir}/libprocps.so.3 ${D}${libdir}/libprocps${SOLIBSDEV}
 	fi
 }
 

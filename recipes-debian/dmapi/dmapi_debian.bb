@@ -38,10 +38,12 @@ do_install () {
 	oe_runmake install install-dev PKG_DEVLIB_DIR=${libdir}
 	
 	install -d ${D}${base_libdir}
-	ln -s ..${libdir}/libdm.a ${D}${base_libdir}/libdm.a
-	ln -s ..${libdir}/libdm.la ${D}${base_libdir}/libdm.la
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	rel_baselib_prefix=`echo ${base_libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_baselib_prefix}${libdir}/libdm.a ${D}${base_libdir}/libdm.a
+	ln -sf ${rel_baselib_prefix}${libdir}/libdm.la ${D}${base_libdir}/libdm.la
 	rm ${D}${libdir}/libdm.so 
-	ln -s ..${libdir}/libdm.so.0 ${D}${base_libdir}/libdm.so
-	ln -s ../..${base_libdir}/libdm.so ${D}${libdir}/libdm.so
+	ln -sf ${rel_baselib_prefix}${libdir}/libdm.so.0 ${D}${base_libdir}/libdm.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/libdm.so ${D}${libdir}/libdm.so
 }
 
