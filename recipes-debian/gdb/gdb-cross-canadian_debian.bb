@@ -23,11 +23,14 @@ EXTRA_OECONF_append = "--with-python=${WORKDIR}/python"
 SSTATE_DUPWHITELIST += "${STAGING_DATADIR}/gdb"
 
 do_configure_prepend() {
+	# on cross-canadian, TARGET_ARCH is not same as SDK_ARCH
+	# libpython2.7.so cannot be found
+	PYTHON_DEB_HOST_MULTIARCH="${@arch_to_multiarch(d.getVar('SDK_ARCH', True))}-${TARGET_OS}${GNU_SUFFIX}"
 cat > ${WORKDIR}/python << EOF
 #! /bin/sh
 case "\$2" in
         --includes) echo "-I${STAGING_INCDIR}/${PYTHON_DIR}/" ;;
-        --ldflags) echo "-Wl,-rpath-link,${STAGING_LIBDIR}/.. -Wl,-rpath,${libdir}/.. -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}" ;;
+        --ldflags) echo "-L${STAGING_LIBDIR}/../${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath-link,${STAGING_LIBDIR}/../${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath,${libdir}/../${PYTHON_DEB_HOST_MULTIARCH} -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}" ;;
         --exec-prefix) echo "${exec_prefix}" ;;
         *) exit 1 ;;
 esac

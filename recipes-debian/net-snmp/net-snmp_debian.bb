@@ -108,6 +108,7 @@ DISTUTILS_INSTALL_ARGS = " \
 export LDSHARED="${CCLD} -shared"
 export HOST_SYS
 export BUILD_SYS
+export DEB_HOST_MULTIARCH
 
 do_compile_append() {
 	olddir=`pwd`

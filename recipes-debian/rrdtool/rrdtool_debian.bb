@@ -29,6 +29,7 @@ export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 export LDSHARED="${CCLD} -shared"
 
 #correct-path-to-library_debian.patch:

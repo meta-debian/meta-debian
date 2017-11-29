@@ -23,6 +23,7 @@ DISTUTILS_INSTALL_ARGS += "--no-version-script --standalone-lib --no-install-man
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files

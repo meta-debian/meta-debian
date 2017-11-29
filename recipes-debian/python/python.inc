@@ -14,6 +14,7 @@ LICENSE = "PSFv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=dff3d00f049545862992d2d097831a13"
 
 DEBIAN_PATCH_TYPE = "quilt"
+DEBIAN_MULTILIB_MANUAL = "1"
 
 PYTHON_MAJMIN = "2.7"
 
@@ -42,11 +43,4 @@ PACKAGECONFIG[system-expat] = "--with-system-expat,,expat"
 # to Debian rules
 do_debian_patch_prepend() {
 	cpp -E -o - ${S}/debian/patches/series.in | egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
-}
-
-# debian/patches/multiarch.diff set LIBPC to $(LIBDIR)/$(MULTIARCH)/pkgconfig,
-# this make pkgconfig cannot get information about python,
-# so change it back to original.
-do_configure_prepend() {
-	sed -i -e 's#^LIBPC=.*#LIBPC= $(LIBDIR)/pkgconfig#g' ${S}/Makefile.pre.in
 }

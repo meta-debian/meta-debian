@@ -46,6 +46,7 @@ export HOST_SYS
 export BUILD_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 
 do_configure_prepend(){
 	# Base on debian/rules

@@ -21,6 +21,10 @@ EXTRA_OECONF = "--with-python --libdir=${libdir}"
 
 inherit autotools gettext pythonnative python-dir
 
+export BUILD_SYS
+export HOST_SYS
+export DEB_HOST_MULTIARCH
+
 do_install_append_class-target() {
 	create-cracklib-dict -o ${D}${datadir}/cracklib/pw_dict \
 				${D}${datadir}/cracklib/cracklib-small
@@ -46,14 +50,14 @@ BBCLASSEXTEND = "native nativesdk"
 
 PACKAGE_BEFORE_PN = "${PN}-runtime python-${DPN}"
 
-FILES_python-${DPN} = "${libdir}/${PYTHON_DIR}/*"
-FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/site-packages/.debug"
+FILES_python-${DPN} = "${nonarch_libdir}/${PYTHON_DIR}/*"
+FILES_${PN}-dbg += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/.debug"
 FILES_${PN}-runtime = " \
     ${sysconfdir}/* \
     ${sbindir}/* \
     ${datadir} \
 "
-FILES_${PN}-staticdev += "${libdir}/${PYTHON_DIR}/*-packages/*.a"
+FILES_${PN}-staticdev += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/*.a"
 
 RDEPENDS_${PN}-runtime += "${PN}"
 RDEPENDS_python-${DPN} += "${PN}-runtime"

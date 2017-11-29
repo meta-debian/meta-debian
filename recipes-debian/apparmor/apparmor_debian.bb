@@ -37,6 +37,7 @@ export STAGING_INCDIR
 export STAGING_LIBDIR
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 # These are needed for --with-perl
 # Env var which tells perl if it should use host (no) or target (yes) settings
