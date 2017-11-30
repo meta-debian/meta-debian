@@ -27,7 +27,8 @@ LIC_FILES_CHKSUM = "\
 
 inherit waf-samba perlnative pkgconfig useradd
 
-DEPENDS = "readline zlib ntdb ldb libaio heimdal libarchive cups libpam libldap lsb tevent"
+DEPENDS = "readline zlib ntdb ldb libaio heimdal libarchive libldap lsb tevent \
+           ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 SRC_URI += " \
 	file://20-do-not-import-target-module-while-cross-compile.patch \
 	file://0006-avoid-using-colon-in-the-checking-msg.patch \
@@ -38,12 +39,9 @@ EXTRA_OECONF += "\
 	--with-privatedir=${localstatedir}/lib/samba/private \
 	--with-smbpasswd-file=${sysconfdir}/samba/smbpasswd \
 	--with-piddir=${localstatedir}/run/samba \
-	--with-pammodulesdir=${base_libdir}/security \
-	--with-pam \
 	--with-syslog \
 	--with-automount \
 	--with-utmp \
-	--with-pam_smbpass \
 	--with-winbind \
 	--with-shared-modules=idmap_rid,idmap_ad,idmap_adex,idmap_hash,idmap_ldap,idmap_tdb2,vfs_dfs_samba4,auth_samba4 \
 	--with-ldap \
@@ -64,6 +62,8 @@ EXTRA_OECONF += "\
 	--with-logdir=${localstatedir}/log/ctdb \
 	--with-libiconv=${STAGING_DIR_HOST}${prefix} \
 "
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG[pam] = "--with-pammodulesdir=${base_libdir}/security --with-pam --with-pam_smbpass, --without-pam --without-pam_smbpass, libpam"
 
 do_configure_prepend() {
 	# Get minimum-library-version follow debian/rules
@@ -86,11 +86,13 @@ do_install_append() {
 	ln -s ../../../samba/ldb ${D}${libdir}/ldb/modules/ldb/samba
 
 	# pam stuff
-	mkdir -p ${D}/${datadir}/pam-configs
-	install -m 0644 debian/libpam-smbpass.pam-config \
-		${D}/${datadir}/pam-configs/smbpasswd-migrate
-	install -m 0644 debian/winbind.pam-config \
-		${D}/${datadir}/pam-configs/winbind
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+		mkdir -p ${D}/${datadir}/pam-configs
+		install -m 0644 debian/libpam-smbpass.pam-config \
+			${D}/${datadir}/pam-configs/smbpasswd-migrate
+		install -m 0644 debian/winbind.pam-config \
+			${D}/${datadir}/pam-configs/winbind
+	fi
 	mv ${D}/${libdir}/libnss_* ${D}/${base_libdir}
 
 	# we don't ship the symlinks
@@ -146,9 +148,11 @@ do_install_append() {
 		${D}${sysconfdir}/logrotate.d/winbind
 
 	# Install logcheck ignore server
-	install -d ${D}${sysconfdir}/logcheck/ignore.d.server
-	install -m 0644 ${S}/debian/libpam-smbpass.logcheck.ignore.server \
-			${D}/${sysconfdir}/logcheck/ignore.d.server/libpam-smbpass
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+		install -d ${D}${sysconfdir}/logcheck/ignore.d.server
+		install -m 0644 ${S}/debian/libpam-smbpass.logcheck.ignore.server \
+		                ${D}/${sysconfdir}/logcheck/ignore.d.server/libpam-smbpass
+	fi
 
 	# Install systemd files
 	install -d ${D}${systemd_system_unitdir}
@@ -186,9 +190,10 @@ do_install_append() {
 
 	install -D -m 0755 ${S}/debian/samba.cron.daily \
 			${D}${sysconfdir}/cron.daily/samba
-
-	install -D -m 0644 ${S}/debian/samba-common.samba.pam \
-			${D}${sysconfdir}/pam.d/samba
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+		install -D -m 0644 ${S}/debian/samba-common.samba.pam \
+		                   ${D}${sysconfdir}/pam.d/samba
+	fi
 
 	# Base on debian/smbclient.links
 	mkdir -p ${D}${libdir}/cups/backend
@@ -420,14 +425,15 @@ DEBIAN_NOAUTONAME_libsmbclient = "1"
 DEBIANNAME_libwbclient = "libwbclient0"
 RPROVIDES_libwbclient += "libwbclient0"
 
-RDEPENDS_${PN} += "libpam-modules procps python python-ntdb python-samba lsb-base \
-                   ${PN}-common ${PN}-common-bin ${PN}-dsdb-modules tdb-tools"
+RDEPENDS_${PN} += "procps python python-ntdb python-samba lsb-base \
+                   ${PN}-common ${PN}-common-bin ${PN}-dsdb-modules tdb-tools \
+                   ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-modules', '', d)}"
 RDEPENDS_python-samba += "python-tdb python-ntdb python-ldb"
 RDEPENDS_${PN}-common-bin += "${PN}-common python-samba"
 RDEPENDS_smbclient += "${PN}-common"
 RPROVIDES_smbclient += "samba-client"
 RDEPENDS_${PN}-testsuite += "${PN}-common-bin"
-RDEPENDS_libpam-smbpass += "${PN}-common libpam-runtime"
+RDEPENDS_libpam-smbpass += "${PN}-common ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-runtime', '', d)}"
 RDEPENDS_winbind += "${PN}"
-RDEPENDS_libpam-winbind += "libpam-runtime ${PN}-common winbind"
+RDEPENDS_libpam-winbind += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-runtime', '', d)} ${PN}-common winbind"
 RDEPENDS_libnss-winbind += "${PN}-common winbind"

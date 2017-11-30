@@ -29,12 +29,14 @@ export BUILD_SYS
 # using UWSGI_INCLUDES environment variable to detect include paths:
 export UWSGI_INCLUDES = "${STAGING_INCDIR}"
 
-DEPENDS += "zeromq3 apache2 libpam openssl libyaml curl geoip tcp-wrappers \
-            lua5.1 libmatheval jansson postgresql"
+DEPENDS += "zeromq3 apache2 openssl libyaml curl geoip tcp-wrappers \
+            lua5.1 libmatheval jansson postgresql \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 UWSGI_SRCPLUGINS_CORE="\
+ ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)} \
  cache carbon cgi cheaper_backlog2 cheaper_busyness clock_monotonic clock_realtime \
  corerouter echo emperor_amqp emperor_zeromq fastrouter http logfile logsocket \
- nagios notfound pam ping rawrouter redislog router_basicauth router_cache \
+ nagios notfound ping rawrouter redislog router_basicauth router_cache \
  router_http router_memcached router_redirect router_rewrite router_static \
  router_uwsgi rpc rrdtool rsyslog signal spooler ssi sslrouter stats_pusher_statsd \
  symcall syslog transformation_gzip transformation_tofile transformation_toupper \

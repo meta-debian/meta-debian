@@ -6,7 +6,6 @@ PR = "${INC_PR}.1"
 # --without-selinux: Don't use selinux support
 EXTRA_OECONF += "\
 	--prefix=${prefix} -v 						\
-	--with-pam 							\
 	--with-all-insults 						\
 	--with-fqdn 							\
 	--with-logging=syslog 						\
@@ -31,15 +30,18 @@ RREPLACES_${PN} = "sudo-ldap"
 do_install_append () {
 	# Create /etc/init.d, pam.d folders
 	install -d ${D}${sysconfdir}/init.d
-	install -d ${D}${sysconfdir}/pam.d
+	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}" = "pam" ]; then
+		install -d ${D}${sysconfdir}/pam.d
+		# install etc/pam.d/sudo
+		install -m 0644 ${S}/debian/sudo.pam ${D}${sysconfdir}/pam.d/sudo
+	fi
 
 	#Create /lib/systemd/system folder
 	install -d ${D}${systemd_system_unitdir}
 
-	#install etc/init.d/sudo; etc/pam.d/sudo
+	#install etc/init.d/sudo
 	install -m 0755 ${S}/debian/sudo.sudo.init \
 			${D}${sysconfdir}/init.d/sudo
-	install -m 0644 ${S}/debian/sudo.pam ${D}${sysconfdir}/pam.d/sudo
 
 	#install lib/systemd/system/sudo.service
 	install -m 0644 ${S}/debian/sudo.service \

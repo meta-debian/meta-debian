@@ -13,7 +13,8 @@ PV = "0.8.2+20140711"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://src/libipsec/pfkey.c;beginline=6;endline=31;md5=bc9b7ff40beff19fe6bc6aef26bd2b24"
 
-DEPENDS = "virtual/kernel openssl readline flex bison-native libldap krb5 libpam"
+DEPENDS = "virtual/kernel openssl readline flex bison-native libldap krb5 \
+           ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
 # fix bug undefined reference to 'yylex'
 SRC_URI += "file://0001-Don-t-link-against-libfl.patch"
@@ -36,11 +37,12 @@ EXTRA_OECONF = " \
 	--enable-dpd \
 	--enable-adminport \
 	--with-kernel-headers=${STAGING_INCDIR} \
-	--with-libpam \
 	--without-readline \
 	--disable-security-context \
 	--enable-natt \
     "
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG[pam] = "--with-libpam, --without-libpam, libpam"
 
 # install file follow Debian's package
 do_install_append() {

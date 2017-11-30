@@ -24,7 +24,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=393a5ca445f6965873eca0259a17f833"
 
 DEPENDS = "libcap libselinux libsemanage libsepol dbus-glib"
-DEPENDS_append_class-target += " audit libpam setools"
+DEPENDS_append_class-target += " audit setools ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 
 inherit pythonnative systemd
 

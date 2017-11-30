@@ -17,9 +17,11 @@ SRC_URI += "file://disable-gtk-doc-and-introspection_debian.patch"
 EXTRA_OECONF += "--disable-examples \
                  --libexecdir=${libdir}/${DPN} \
                  --with-os-type=debian \
+                 ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '--with-authfw=pam', '--with-authfw=shadow', d)} \
                  ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--enable-systemd', '--disable-systemd', d)}"
 
-DEPENDS += "glib-2.0 intltool-native expat libpam dbus libxslt libselinux \
+DEPENDS += "glib-2.0 intltool-native expat dbus libxslt libselinux \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)} \
             ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)}"
 
 do_install_append() {
@@ -53,4 +55,4 @@ FILES_${PN} += "${datadir}/dbus-1/* \
                 ${libdir}/polkit-1/extensions/libnullbackend.so \
                 ${systemd_system_unitdir}/*"
 
-RDEPENDS_${PN} += "dbus libpam-systemd"
+RDEPENDS_${PN} += "dbus ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-systemd', '', d)}"

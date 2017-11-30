@@ -1,7 +1,8 @@
 require nginx.inc
 PR = "${INC_PR}.0"
 
-DEPENDS += "libxslt libxml2 geoip gzip expat libpam"
+DEPENDS += "libxslt libxml2 geoip gzip expat \
+            ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 do_configure() {
 	./configure \
 		${common_configure_flags} \
@@ -14,7 +15,7 @@ do_configure() {
 		--with-http_xslt_module \
 		--with-mail \
 		--with-mail_ssl_module \
-		--add-module=${S}/debian/modules/nginx-auth-pam \
+		${@bb.utils.contains('DISTRO_FEATURES', 'pam', '--add-module=${S}/debian/modules/nginx-auth-pam', '', d)} \
 		--add-module=${S}/debian/modules/nginx-dav-ext-module \
 		--add-module=${S}/debian/modules/nginx-echo \
 		--add-module=${S}/debian/modules/nginx-upstream-fair \

@@ -21,7 +21,11 @@ inherit debian-package
 PV = "1.8.10p3"
 DPN = "sudo"
 
-DEPENDS += "libpam audit"
+DEPENDS += "audit ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+
+PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
+PACKAGECONFIG[pam] = "--with-pam, --without-pam, libpam"
+
 inherit autotools
 
 # Explicitly create ${localstatedir}/lib before do_install to ensure
@@ -33,7 +37,7 @@ do_install_prepend (){
         mkdir -p ${D}/${localstatedir}/lib
 }
 #follow debian/control
-RDEPENDS_${PN} += "libpam-modules"
+RDEPENDS_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-modules', '', d)}"
 
 # Avoid a parallel build problem
 PARALLEL_MAKE = ""
