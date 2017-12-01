@@ -19,7 +19,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 # 	| error: cannot open < doc/ref/guile-2.0.texi
 SRC_URI += "file://Disable-build-doc_debian.patch"
 inherit autotools pkgconfig gettext
-DEPENDS_class-native += "libgc libunistring gmp libffi readline libtool"
+DEPENDS_class-native += "libgc libunistring gmp libffi readline libtool flex"
 DEPENDS_class-target += "${PN}-native libgc libunistring gmp libffi readline libtool"
 
 CACHED_CONFIGUREVARS += "ac_cv_path_GUILE_FOR_BUILD=${STAGING_BINDIR_NATIVE}/${DPN}"
