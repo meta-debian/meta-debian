@@ -21,7 +21,7 @@ LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=44fee82a1d2ed0676cf35478283e0aa0"
 
 inherit autotools-brokensep pkgconfig gettext
-DEPENDS += "libxml2 glib-2.0 pango tcl lua5.1-native lua5.1 perl libpng"
+DEPENDS += "libxml2 glib-2.0 pango tcl lua5.1-native lua5.1 perl libpng groff"
 DEBIAN_PATCH_TYPE = "quilt"
 
 #export some variable from poky, to use for python command
