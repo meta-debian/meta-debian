@@ -17,6 +17,8 @@ LIC_FILES_CHKSUM = "\
 
 inherit cmake perlnative
 
+SRC_URI += "file://Depend-on-headers-to-fix-parallel-build.patch"
+
 PKG_${PN} = "${PN}1a"
 RDEPENDS_${PN}-dev += "${PN}"
 RDEPENDS_${PN} += "tzdata"
