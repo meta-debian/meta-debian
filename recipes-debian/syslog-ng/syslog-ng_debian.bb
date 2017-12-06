@@ -70,7 +70,7 @@ PACKAGECONFIG ??= "\
 	"
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
 PACKAGECONFIG[systemd] = "\
-	--enable-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/,\
+	--enable-systemd --with-systemdsystemunitdir=${systemd_system_unitdir}/,\
 	--disable-systemd --without-systemdsystemunitdir, systemd, libsystemd-daemon-dev"
 PACKAGECONFIG[linux-caps] = "--enable-linux-caps,--disable-linux-caps,libcap,"
 PACKAGECONFIG[pcre] = "--enable-pcre,--disable-pcre,libpcre,"
@@ -152,7 +152,7 @@ FILES_${PN}-dev += "\
 "
 FILES_${PN}-core = "\
 	${sysconfdir}/* 				\
-	${base_libdir}/systemd/system/syslog-ng.service \
+	${systemd_system_unitdir}/syslog-ng.service \
 	${bindir}/* 					\
 	${sbindir}/* 					\
 	${libdir}/${DPN}/*/*.so 			\

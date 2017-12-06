@@ -87,8 +87,8 @@ do_install_append() {
 	
 	# Install systemd service if systemd feature is enabled
 	if [ ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} = "systemd" ];then
-		install -d ${D}${base_libdir}/systemd/system
-		install -m 644 ${S}/debian/cron.service ${D}${base_libdir}/systemd/system
+		install -d ${D}${systemd_system_unitdir}
+		install -m 644 ${S}/debian/cron.service ${D}${systemd_system_unitdir}/
 	fi
 
 	install -d ${D}${localstatedir}/spool/cron/crontabs

@@ -112,10 +112,10 @@ do_install_append(){
 	# Install systemd service
 	# NOTE: "inherit systemd" will remove ${systemd_unitdir} if DISTRO_FEATURES doesn't include systemd,
 	# and remove ${sysconfdir}/init.d if DISTRO_FEATURES includes systemd but not sysvinit.
-	install -d ${D}${systemd_unitdir}/system
+	install -d ${D}${systemd_system_unitdir}
 	install -d ${D}${libdir}/tmpfiles.d
-	install -m 0644 ${S}/debian/systemd/*.service ${D}${systemd_unitdir}/system/
-	install -m 0644 ${S}/debian/systemd/*.socket ${D}${systemd_unitdir}/system/
+	install -m 0644 ${S}/debian/systemd/*.service ${D}${systemd_system_unitdir}/
+	install -m 0644 ${S}/debian/systemd/*.socket ${D}${systemd_system_unitdir}/
 	install -m 0644 ${S}/debian/systemd/sshd.conf ${D}${libdir}/tmpfiles.d/
 
 	# Install init script
@@ -150,7 +150,7 @@ FILES_${PN} += " \
     ${sysconfdir}/ssh/sshd_config \
     ${libdir}/tmpfiles.d \
     /run \
-    ${base_libdir}/systemd/system \
+    ${systemd_system_unitdir} \
 "
 
 RPROVIDES_${PN} = "${PN}-server"

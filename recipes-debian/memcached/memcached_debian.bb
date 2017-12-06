@@ -27,13 +27,13 @@ RDEPENDS_${PN} += "perl lsb-base"
 do_install_append() {
 	install -d ${D}${sysconfdir}/default
 	install -d ${D}${sysconfdir}/init.d
-	install -d ${D}${base_libdir}/systemd/system
+	install -d ${D}${systemd_system_unitdir}
 	install -d ${D}${datadir}/memcached
 
 	install -m 0644 ${S}/debian/memcached.default ${D}${sysconfdir}/default/memcached
 	install -m 0644 ${S}/scripts/memcached-init ${D}${sysconfdir}/init.d/memcached
 	install -m 0644 ${S}/debian/memcached.service \
-		${D}${base_libdir}/systemd/system/memcached.service
+		${D}${systemd_system_unitdir}/memcached.service
 	install -m 0644 ${S}/debian/memcached.conf \
 		${D}${datadir}/memcached/memcached.conf.default
 

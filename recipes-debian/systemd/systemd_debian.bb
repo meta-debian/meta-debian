@@ -78,7 +78,7 @@ do_configure_prepend() {
 # append debian extra files and remove unneeded files
 do_install_append() {
 	# systemd package: setup base_bindir
-	ln -s ${base_libdir}/systemd/systemd ${D}${base_bindir}
+	ln -s ${systemd_unitdir}/systemd ${D}${base_bindir}
 	# systemd package: setup sysconfdir
 	ln -s ../modules ${D}${sysconfdir}/modules-load.d/modules.conf
 	ln -s ../sysctl.conf ${D}${sysconfdir}/sysctl.d/99-sysctl.conf
@@ -95,10 +95,10 @@ do_install_append() {
 		${D}${base_libdir}/lsb/init-functions.d
 	for script in debian-fixup systemd-logind-launch; do
 		install -m 0755 ${S}/debian/${script} \
-			${D}${base_libdir}/systemd
+			${D}${systemd_unitdir}/
 	done
 	for name in system-shutdown system-sleep systemd-update-done; do
-		rm -r ${D}${base_libdir}/systemd/${name}
+		rm -r ${D}${systemd_unitdir}/${name}
 	done
 	# systemd package: setup bindir
 	rm ${D}${bindir}/kernel-install
@@ -119,8 +119,8 @@ do_install_append() {
 	rm ${D}${datadir}/zsh/vendor-completions/_kernel-install
 	# systemd package: remove localstatedir
 	rm -r ${D}${localstatedir}
-	# systemd package: setup ${base_libdir}/systemd/system
-	SYSTEMDIR=${D}${base_libdir}/systemd/system
+	# systemd package: setup /lib/systemd/system
+	SYSTEMDIR=${D}${systemd_system_unitdir}
 	for service in bootlogd bootlogs bootmisc checkfs checkroot-bootclean \
 	               checkroot cryptdisks-early cryptdisks fuse halt \
 	               hostname hwclock hwclockfirst killprocs motd \
@@ -168,13 +168,13 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/modprobe.d
 	install -m 0644 ${S}/debian/extra/fbdev-blacklist.conf \
 		${D}${sysconfdir}/modprobe.d/fbdev-blacklist.conf
-	install -d ${D}${base_libdir}/systemd/system/sysinit.target.wants
+	install -d ${D}${systemd_system_unitdir}/sysinit.target.wants
 	install -m 0644 ${S}/debian/extra/udev-finish.service \
-		${D}${base_libdir}/systemd/system
+		${D}${systemd_system_unitdir}/
 	ln -s ../udev-finish.service \
-		${D}${base_libdir}/systemd/system/sysinit.target.wants
+		${D}${systemd_system_unitdir}/sysinit.target.wants
 	ln -s systemd-udevd.service \
-		${D}${base_libdir}/systemd/system/udev.service
+		${D}${systemd_system_unitdir}/udev.service
 	for script in dsl-modem.agent logger.agent net.agent \
 	              udev-finish write_net_rules; do
 		install -m 0755 ${S}/debian/extra/${script} \
@@ -186,11 +186,11 @@ do_install_append() {
 	done
 	for rules in 73-idrac 75-persistent-net-generator 80-networking; do
 		install -m 0644 ${S}/debian/extra/rules/${rules}.rules \
-			${D}${base_libdir}/udev/rules.d
+			${D}${base_libdir}/udev/rules.d/
 	done
 	install -d ${D}${base_sbindir}
 	ln -s ${base_bindir}/udevadm ${D}${base_sbindir}
-	ln -s ${base_libdir}/systemd/systemd-udevd ${D}${base_sbindir}/udevd
+	ln -s ${systemd_unitdir}/systemd-udevd ${D}${base_sbindir}/udevd
 
 	# systemd-sysv
 	ln -s /bin/systemd   ${D}${base_sbindir}/init
@@ -251,9 +251,10 @@ FILES_${PN} = "${base_bindir} \
                ${sysconfdir}/sysctl.d/99-sysctl.conf \
                ${sysconfdir}/systemd \
                ${sysconfdir}/xdg \
+               ${systemd_unitdir} \
               "
-FILES_${PN}-dbg += "${base_libdir}/systemd/.debug \
-                    ${base_libdir}/systemd/system-generators/.debug \
+FILES_${PN}-dbg += "${systemd_unitdir}/.debug \
+                    ${systemd_unitdir}/system-generators/.debug \
                     ${base_libdir}/udev/.debug \
                     ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
                     ${PYTHON_SITEPACKAGES_DIR}/systemd/.debug \
@@ -278,19 +279,19 @@ FILES_libpam-systemd = "${base_libdir}/security/pam_systemd.so \
 FILES_udev = "${base_bindir}/udevadm \
               ${base_sbindir}/udevadm \
               ${base_sbindir}/udevd \
-              ${base_libdir}/systemd/system/sockets.target.wants/systemd-udevd-control.socket \
-              ${base_libdir}/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket \
-              ${base_libdir}/systemd/system/sysinit.target.wants/systemd-udev-trigger.service \
-              ${base_libdir}/systemd/system/sysinit.target.wants/systemd-udevd.service \
-              ${base_libdir}/systemd/system/sysinit.target.wants/udev-finish.service \
-              ${base_libdir}/systemd/system/systemd-udev-settle.service \
-              ${base_libdir}/systemd/system/systemd-udev-trigger.service \
-              ${base_libdir}/systemd/system/systemd-udevd-control.socket \
-              ${base_libdir}/systemd/system/systemd-udevd-kernel.socket \
-              ${base_libdir}/systemd/system/systemd-udevd.service \
-              ${base_libdir}/systemd/system/udev-finish.service \
-              ${base_libdir}/systemd/system/udev.service \
-              ${base_libdir}/systemd/systemd-udevd \
+              ${systemd_system_unitdir}/sockets.target.wants/systemd-udevd-control.socket \
+              ${systemd_system_unitdir}/sockets.target.wants/systemd-udevd-kernel.socket \
+              ${systemd_system_unitdir}/sysinit.target.wants/systemd-udev-trigger.service \
+              ${systemd_system_unitdir}/sysinit.target.wants/systemd-udevd.service \
+              ${systemd_system_unitdir}/sysinit.target.wants/udev-finish.service \
+              ${systemd_system_unitdir}/systemd-udev-settle.service \
+              ${systemd_system_unitdir}/systemd-udev-trigger.service \
+              ${systemd_system_unitdir}/systemd-udevd-control.socket \
+              ${systemd_system_unitdir}/systemd-udevd-kernel.socket \
+              ${systemd_system_unitdir}/systemd-udevd.service \
+              ${systemd_system_unitdir}/udev-finish.service \
+              ${systemd_system_unitdir}/udev.service \
+              ${systemd_unitdir}/systemd-udevd \
               ${base_libdir}/udev/accelerometer \
               ${base_libdir}/udev/ata_id \
               ${base_libdir}/udev/cdrom_id \

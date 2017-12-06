@@ -34,7 +34,7 @@ do_install () {
 	install -d ${D}${mandir}
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/logrotate.d
-	install -d ${D}${base_libdir}/systemd/system
+	install -d ${D}${systemd_system_unitdir}
 	install -m 0755 vsftpd ${D}${sbindir}/vsftpd
 	install -m 0644 ${S}/vsftpd.conf ${D}${sysconfdir}
 	install -m 0644 ${S}/debian/local/ftpusers ${D}${sysconfdir}
@@ -43,7 +43,7 @@ do_install () {
 	install -m 0755 ${S}/debian/vsftpd.logrotate  \
 			${D}${sysconfdir}/logrotate.d/vsftpd
 	install -m 0644 ${S}/debian/vsftpd.service \
-			${D}${base_libdir}/systemd/system
+			${D}${systemd_system_unitdir}/
 
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'true', 'false', d)}; then
 		install -d ${D}${sysconfdir}/pam.d
