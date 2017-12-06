@@ -59,9 +59,9 @@ do_install_append () {
 
 CONFFILES_${PN} = "${sysconfdir}/sysctl.conf"
 
-PACKAGES =+ " lib${PN}"
-FILES_lib${PN} = "${base_libdir}/*"
-DEBIANNAME_lib${PN} = "lib${PN}3"
+PACKAGES =+ " lib${DPN}"
+FILES_lib${DPN} = "${base_libdir}/*"
+DEBIANNAME_lib${DPN} = "lib${DPN}3"
 
 ALTERNATIVE_${PN} = "w"
 ALTERNATIVE_PRIORITY[w] = "50"

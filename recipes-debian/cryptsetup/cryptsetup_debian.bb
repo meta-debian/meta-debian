@@ -115,14 +115,14 @@ do_install_append() {
 	chrpath -d ${D}${base_sbindir}/cryptsetup
 	chrpath -d ${D}${base_sbindir}/cryptsetup-reencrypt
 }
-PACKAGES =+ "lib${PN}"
-PKG_${PN}-dev = "lib${PN}-dev"
+PACKAGES =+ "lib${DPN}"
+PKG_${PN}-dev = "lib${DPN}-dev"
 
 FILES_${PN}-bin = "\
 	${base_sbindir}/cryptsetup ${base_sbindir}/cryptsetup-reencrypt 	\
 	${base_sbindir}/veritysetup ${sbindir}/luksformat ${datadir}/locale/*	\
 	"
-FILES_lib${PN} = "${base_libdir}/libcryptsetup.so.*"
+FILES_lib${DPN} = "${base_libdir}/libcryptsetup.so.*"
 
 FILES_${PN}-dbg += "\
 	${base_libdir}/cryptsetup/scripts/.debug/* 				\
@@ -135,5 +135,5 @@ FILES_${PN} += "${datadir}/bug ${datadir}/initramfs-tools 			\
 RDEPENDS_${PN} += "dmsetup cryptsetup-bin"
 RREPLACES_${PN} += "hashalot"
 RREPLACES_${PN}-bin += "${PN}"
-RDEPENDS_lib${PN} += "libgpg-error libgcrypt"
-RDEPENDS_lib${PN}-dev += "lib${PN}4"
+RDEPENDS_lib${DPN} += "libgpg-error libgcrypt"
+RDEPENDS_lib${DPN}-dev += "lib${DPN}4"

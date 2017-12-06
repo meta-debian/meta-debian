@@ -40,7 +40,7 @@ SRC_URI += " \
 # Debian does not provide fontconfig-utils,
 # but fontconfig-utils is required by fontcache.bbclass,
 # so we need provide it too.
-PACKAGES =+ "${PN}-utils ${PN}-config lib${PN}"
+PACKAGES =+ "${PN}-utils ${PN}-config lib${DPN}"
 RDEPENDS_${PN}_class-target += "${PN}-utils ${PN}-config"
 
 do_install_append_class-target() {
@@ -53,15 +53,15 @@ FILES_${PN}-config = " \
     ${datadir}/fontconfig/conf.avail \
     ${datadir}/xml/fontconfig/fonts.dtd \
 "
-FILES_lib${PN} = "${libdir}/libfontconfig${SOLIBS}"
+FILES_lib${DPN} = "${libdir}/libfontconfig${SOLIBS}"
 
 # Work around past breakage in debian.bbclass
-RPROVIDES_${PN}-utils = "lib${PN}-utils"
-RREPLACES_${PN}-utils = "lib${PN}-utils"
-RCONFLICTS_${PN}-utils = "lib${PN}-utils"
+RPROVIDES_${PN}-utils = "lib${DPN}-utils"
+RREPLACES_${PN}-utils = "lib${DPN}-utils"
+RCONFLICTS_${PN}-utils = "lib${DPN}-utils"
 DEBIAN_NOAUTONAME_${PN}-utils = "1"
 
-DEBIANNAME_${PN}-dev = "lib${PN}1-dev"
-DEBIANNAME_${PN}-dbg = "lib${PN}1-dbg"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
-RPROVIDES_${PN}-dbg += "lib${PN}-dbg"
+DEBIANNAME_${PN}-dev = "lib${DPN}1-dev"
+DEBIANNAME_${PN}-dbg = "lib${DPN}1-dbg"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
+RPROVIDES_${PN}-dbg += "lib${DPN}-dbg"

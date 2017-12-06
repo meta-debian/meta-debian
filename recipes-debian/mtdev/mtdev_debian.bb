@@ -20,8 +20,8 @@ PACKAGES =+ "${PN}-tools"
 FILES_${PN}-tools = "${bindir}/*"
 
 # Provide packages as Debian
-RPROVIDES_${PN} += "lib${PN}"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN} += "lib${DPN}"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 # Prevent mtdev-tools auto name to libmtdev-tools
 DEBIAN_NOAUTONAME_${PN}-tools = "1"

@@ -211,39 +211,39 @@ do_install_append_class-target() {
 }
 
 inherit insserv
-INITSCRIPT_PACKAGES = "lib${PN}"
-INITSCRIPT_NAMES_lib${PN} = "nss-regen-chk"
+INITSCRIPT_PACKAGES = "lib${DPN}"
+INITSCRIPT_NAMES_lib${DPN} = "nss-regen-chk"
 
 inherit systemd
-SYSTEMD_PACKAGES = "lib${PN}"
-SYSTEMD_SERVICE_lib${PN} = "nss-regen-chk.service"
+SYSTEMD_PACKAGES = "lib${DPN}"
+SYSTEMD_SERVICE_lib${DPN} = "nss-regen-chk.service"
 
 # Add more packages according to list of packages in Debian
-PACKAGES = "lib${PN} lib${PN}-dbg lib${PN}-dev lib${PN}-tools lib${PN}-1d"
+PACKAGES = "lib${DPN} lib${DPN}-dbg lib${DPN}-dev lib${DPN}-tools lib${DPN}-1d"
 
 # Set correct files to new package
-FILES_lib${PN}-1d = " \
+FILES_lib${DPN}-1d = " \
 	${libdir}/lib*.so.1d \
 	"
 
-FILES_lib${PN}-tools = " \
+FILES_lib${DPN}-tools = " \
 	${bindir} \
 	"
 
-FILES_lib${PN} = "\
+FILES_lib${DPN} = "\
 	${sysconfdir} \
 	${libdir}/lib*.chk \
 	${libdir}/lib*.so \
 	${systemd_system_unitdir}/nss-regen-chk.service \
 	"
 
-FILES_lib${PN}-dev = "\
+FILES_lib${DPN}-dev = "\
 	${libdir}/nss \
 	${libdir}/pkgconfig/* \
 	${includedir}/* \
 	"
 
-FILES_lib${PN}-dbg = "\
+FILES_lib${DPN}-dbg = "\
 	${bindir}/.debug/* \
 	${libdir}/.debug/* \
 	/usr/src/debug \
@@ -251,12 +251,12 @@ FILES_lib${PN}-dbg = "\
 
 # libnss requires shlibsign from libnss-tools
 # to regenerate .chk file on first boot
-RRECOMMENDS_lib${PN} += "lib${PN}-tools"
+RRECOMMENDS_lib${DPN} += "lib${DPN}-tools"
 
-PKG_lib${PN} = "lib${PN}3"
-PKG_lib${PN}-dbg = "lib${PN}3-dbg"
-PKG_lib${PN}-dev = "lib${PN}3-dev"
-PKG_lib${PN}-tools = "lib${PN}3-tools"
-PKG_lib${PN}-1d = "lib${PN}3-1d"
+PKG_lib${DPN} = "lib${DPN}3"
+PKG_lib${DPN}-dbg = "lib${DPN}3-dbg"
+PKG_lib${DPN}-dev = "lib${DPN}3-dev"
+PKG_lib${DPN}-tools = "lib${DPN}3-tools"
+PKG_lib${DPN}-1d = "lib${DPN}3-1d"
 
 BBCLASSEXTEND = "native nativesdk"

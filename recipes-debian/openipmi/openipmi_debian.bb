@@ -30,11 +30,11 @@ EXTRA_OECONF = "--without-openssl \
 "
 PARALLEL_MAKEINST = ""
 
-PACKAGES =+ "lib${PN}"
-FILES_lib${PN} = "${libdir}/*${SOLIBS}"
+PACKAGES =+ "lib${DPN}"
+FILES_lib${DPN} = "${libdir}/*${SOLIBS}"
 
 LEAD_SONAME = "libOpenIPMI.so"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 
 # Follow debian/control
 RDEPENDS_${PN}-dev += "libgdbm-dev"

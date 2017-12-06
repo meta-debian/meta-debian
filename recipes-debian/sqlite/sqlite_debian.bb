@@ -47,9 +47,9 @@ do_install_append() {
 		${D}${libdir}/${DPN}/libtclsqlite.so \ 
 		${D}${libdir}/${DPN}/libtclsqlite.la
 }
-PACKAGES =+ "lib${PN}-tcl lib${PN}"
+PACKAGES =+ "lib${DPN}-tcl lib${DPN}"
 
-FILES_lib${PN}-tcl = "${libdir}/${DPN}/*"
-FILES_lib${PN} = "${libdir}/libsqlite.so.*"
+FILES_lib${DPN}-tcl = "${libdir}/${DPN}/*"
+FILES_lib${DPN} = "${libdir}/libsqlite.so.*"
 FILES_${PN}-dbg += "${libdir}/${DPN}/.debug"
-PKG_${PN}-dev = "lib${PN}0-dev"
+PKG_${PN}-dev = "lib${DPN}0-dev"

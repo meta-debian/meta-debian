@@ -19,10 +19,10 @@ SRC_URI += "file://Correct-destdir-to-install_debian.patch"
 inherit autotools-brokensep
 PARALLEL_MAKE = ""
 
-PACKAGES =+ "lib${PN}"
+PACKAGES =+ "lib${DPN}"
 
-FILES_lib${PN} = "\
+FILES_lib${DPN} = "\
 	${libdir}/libcdda_interface.so.* ${libdir}/libcdda_paranoia.so.*"
 
-PKG_lib${PN} = "lib${PN}0"
-PKG_${PN}-dev = "lib${PN}-dev"
+PKG_lib${DPN} = "lib${DPN}0"
+PKG_${PN}-dev = "lib${DPN}-dev"

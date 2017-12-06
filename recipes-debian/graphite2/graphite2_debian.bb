@@ -39,6 +39,6 @@ do_install_append() {
 	rm ${D}${datadir}/${DPN}/*.cmake
 }
 
-DEBIANNAME_${PN}-dbg = "lib${PN}-3-dbg"
+DEBIANNAME_${PN}-dbg = "lib${DPN}-3-dbg"
 
 BBCLASSEXTEND = "native"

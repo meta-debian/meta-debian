@@ -179,7 +179,7 @@ CONFFILES_${PN} = " \
 "
 
 PACKAGES =+ "${DPN}-host ${DPN}utils dnsutils \
-             lib${PN}-export-dev lib${DPN} libdns-export libdns \
+             lib${DPN}-export-dev lib${DPN} libdns-export libdns \
              libirs-export libisc-export libisc libisccc \
              libisccfg-export libisccfg liblwres lwresd \
              "
@@ -208,7 +208,7 @@ FILES_dnsutils = " \
 	${bindir}/nsupdate \
 "
 
-FILES_lib${PN}-export-dev = "${libdir}/lib*-export${SOLIBSDEV}"
+FILES_lib${DPN}-export-dev = "${libdir}/lib*-export${SOLIBSDEV}"
 FILES_lib${DPN} = "${libdir}/libbind9${SOLIBS}"
 FILES_libdns-export = "${base_libdir}/libdns-export${SOLIBS}"
 FILES_libdns = "${libdir}/libdns${SOLIBS}"
@@ -239,9 +239,9 @@ FILES_${PN}-dev += " \
 
 # Package "bind" and "bind-dev" on Poky are equal to "bind9" and "libbind-dev" on Debian
 DEBIANNAME_${PN} = "${DPN}"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 RPROVIDES_${PN} += "${DPN}"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 # Package "host" is provided by "bind9-host" according to debian/control
 RPROVIDES_${DPN}-host += "host"
@@ -256,4 +256,4 @@ RDEPENDS_libisccc += "libisc"
 RDEPENDS_libisccfg += "libdns libisccc libisc"
 RDEPENDS_dnsutils += "libdns libisccfg libisc liblwres lib${DPN}"
 RDEPENDS_lwresd += "libdns libisccfg libisccc libisc liblwres lib${DPN}"
-RDEPENDS_lib${PN}-export-dev += "${DPN}-host libdns-export libisccfg-export libisc-export libirs-export"
+RDEPENDS_lib${DPN}-export-dev += "${DPN}-host libdns-export libisccfg-export libisc-export libirs-export"

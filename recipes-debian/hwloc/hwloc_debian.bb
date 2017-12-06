@@ -38,23 +38,23 @@ do_install_append() {
 PACKAGECONFIG ??= ""
 PACKAGECONFIG[opencl] = "--enable-opencl,--disable-opencl,ocl-icd khronos-opencl-headers"
 
-PACKAGES =+ "lib${PN}-common lib${PN}-plugins lib${PN} libhwloc-dev"
-FILES_lib${PN}-common = "${datadir}/${PN}/hwloc-valgrind.supp \
+PACKAGES =+ "lib${DPN}-common lib${DPN}-plugins lib${DPN}"
+FILES_lib${DPN}-common = "${datadir}/${PN}/hwloc-valgrind.supp \
                          ${datadir}/${PN}/hwloc.dtd"
-FILES_lib${PN}-plugins = "${libdir}/${PN}/hwloc_opencl.so \
+FILES_lib${DPN}-plugins = "${libdir}/${PN}/hwloc_opencl.so \
                           ${libdir}/${PN}/hwloc_pci.so \
                           ${libdir}/${PN}/hwloc_xml_libxml.so"
-FILES_lib${PN} = "${libdir}/libhwloc${SOLIBS}"
+FILES_lib${DPN} = "${libdir}/libhwloc${SOLIBS}"
 FILES_${PN} += "${datadir}/menu/*"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
-DEBIANNAME_${PN}-doc = "lib${PN}-doc"
-RPROVIDES_${PN}-dev = "lib${PN}-dev"
-RPROVIDES_${PN}-doc = "lib${PN}-doc"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
+DEBIANNAME_${PN}-doc = "lib${DPN}-doc"
+RPROVIDES_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-doc = "lib${DPN}-doc"
 
 # Base on debian control
-RDEPENDS_${PN}-dev += "lib${PN} libltdl-dev"
-RRECOMMENDS_lib${PN} += "lib${PN}-plugins"
-RPROVIDES_lib${PN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
-RREPLACES_lib${PN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
-RCONFLICTS_lib${PN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
-RDEPENDS_lib${PN}-plugins += "lib${PN}"
+RDEPENDS_${PN}-dev += "lib${DPN} libltdl-dev"
+RRECOMMENDS_lib${DPN} += "lib${DPN}-plugins"
+RPROVIDES_lib${DPN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
+RREPLACES_lib${DPN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
+RCONFLICTS_lib${DPN} += "libhwloc0 libhwloc1 libhwloc2 libhwloc3 libhwloc4"
+RDEPENDS_lib${DPN}-plugins += "lib${DPN}"

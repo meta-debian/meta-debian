@@ -15,13 +15,13 @@ do_compile_prepend_class-target() {
 }
 
 # Add more package follow deian
-PACKAGES =+ "libpam-${PN} libpasswdqc"
+PACKAGES =+ "libpam-${DPN} libpasswdqc"
 
 # Install files follow debian
 FILES_libpasswdqc += "${base_libdir}/*.so.*"
-FILES_libpam-${PN} += "${base_libdir}/security/*"
+FILES_libpam-${DPN} += "${base_libdir}/security/*"
 FILES_${PN}-dbg += "${base_libdir}/security/.debug"
 
 # Rename package name follow debian
-PKG_${PN}-dev = "lib${PN}-dev"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+PKG_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"

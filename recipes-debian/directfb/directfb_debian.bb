@@ -53,7 +53,7 @@ do_install_append(){
 	done
 }
 
-PACKAGES =+ "lib${PN}-extra"
+PACKAGES =+ "lib${DPN}-extra"
 
 FILES_${PN} += " \
     ${libdir}/directfb-*/*/*.so \
@@ -72,18 +72,18 @@ FILES_${PN}-dbg += " \
     ${libdir}/*/*/.debug \
     ${libdir}/*/*/*/.debug \
 "
-FILES_lib${PN}-extra = " \
+FILES_lib${DPN}-extra = " \
     ${libdir}/directfb-*/interfaces/IDirectFBFont/libidirectfbfont_ft2.so \
     ${libdir}/directfb-*/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_jpeg.so \
     ${libdir}/directfb-*/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_png.so \
     ${libdir}/directfb-*/systems/libdirectfb_x11.so \
 "
 
-PKG_${PN} = "lib${PN}-1.2-9"
-PKG_${PN}-bin = "lib${PN}-bin"
-PKG_${PN}-dev = "lib${PN}-dev"
-RPROVIDES_${PN} += "lib${PN}-1.2-9"
-RPROVIDES_${PN}-bin += "lib${PN}-bin"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+PKG_${PN} = "lib${DPN}-1.2-9"
+PKG_${PN}-bin = "lib${DPN}-bin"
+PKG_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN} += "lib${DPN}-1.2-9"
+RPROVIDES_${PN}-bin += "lib${DPN}-bin"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 BBCLASSEXTEND = "native"

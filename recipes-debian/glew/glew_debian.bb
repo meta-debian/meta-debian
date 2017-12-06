@@ -52,17 +52,17 @@ do_install() {
 		BINDIR=${D}${bindir}
 }
 
-PACKAGES =+ "${PN}-utils lib${PN}mx lib${PN}mx-dev"
+PACKAGES =+ "${PN}-utils lib${DPN}mx lib${DPN}mx-dev"
 
 FILES_${PN}-utils = "${bindir}/*"
-FILES_lib${PN}mx = "${libdir}/libGLEWmx${SOLIBS}"
-FILES_lib${PN}mx-dev = "${libdir}/libGLEWmx${SOLIBSDEV} \
+FILES_lib${DPN}mx = "${libdir}/libGLEWmx${SOLIBS}"
+FILES_lib${DPN}mx-dev = "${libdir}/libGLEWmx${SOLIBSDEV} \
                         ${libdir}/pkgconfig/glewmx.pc \
                         "
 
 DEBIAN_NOAUTONAME_${PN}-utils = "1"
-DEBIAN_NOAUTONAME_lib${PN}mx-dev = "1"
+DEBIAN_NOAUTONAME_lib${DPN}mx-dev = "1"
 
-RPROVIDES_${PN} += "lib${PN}"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
-RPROVIDES_${PN}-dbg += "lib${PN}-dbg"
+RPROVIDES_${PN} += "lib${DPN}"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
+RPROVIDES_${PN}-dbg += "lib${DPN}-dbg"

@@ -35,6 +35,6 @@ do_install() {
 	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
 		${D}${libdir}/pkgconfig/*.pc
 }
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
-RPROVIDES_${PN} += "lib${PN}-1-1"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
+RPROVIDES_${PN} += "lib${DPN}-1-1"

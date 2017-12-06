@@ -30,12 +30,12 @@ do_install_append() {
 	#remove the unwanted files
 	rm ${D}${libdir}/*.la
 }
-PACKAGES =+ "lib${PN}-client lib${PN}-cursor lib${PN}-server"
+PACKAGES =+ "lib${DPN}-client lib${DPN}-cursor lib${DPN}-server"
 
-FILES_lib${PN}-cursor += "${libdir}/libwayland-cursor.so.*"
-FILES_lib${PN}-server += "${libdir}/libwayland-server.so.*"
-FILES_lib${PN}-client += "${libdir}/libwayland-client.so.*"
+FILES_lib${DPN}-cursor += "${libdir}/libwayland-cursor.so.*"
+FILES_lib${DPN}-server += "${libdir}/libwayland-server.so.*"
+FILES_lib${DPN}-client += "${libdir}/libwayland-client.so.*"
 FILES_${PN}-dev += "${datadir}/${PN} ${bindir}"
-PKG_${PN}-dev = "lib${PN}-dev"
+PKG_${PN}-dev = "lib${DPN}-dev"
 
 BBCLASSEXTEND = "native"

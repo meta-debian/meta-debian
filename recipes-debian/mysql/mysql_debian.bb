@@ -94,7 +94,7 @@ FILES_${PN}-dbg += "\
 	${libdir}/mysql/plugin/.debug \
 "
 FILES_${PN}-dev += "${bindir}/mysql_config"
-PKG_${PN}-dev = "lib${PN}client-dev"
+PKG_${PN}-dev = "libmysqlclient-dev"
 PKG_${PN} = "mysql-client-${VER}"
 PKG_mysql-server = "mysql-server-${VER}"
 PKG_mysql-server-core = "mysql-server-core-${VER}"

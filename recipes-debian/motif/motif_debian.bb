@@ -73,5 +73,5 @@ FILES_libxm = "${libdir}/libXm${SOLIBS}"
 # package motif is empty, so don't let motif-dev depend on it
 RDEPENDS_${PN}-dev = "libmrm libxm"
 
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
-RPROVIDES_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-dev = "lib${DPN}-dev"

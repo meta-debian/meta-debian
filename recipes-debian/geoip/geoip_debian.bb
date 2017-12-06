@@ -47,8 +47,8 @@ do_install_append() {
 }
 #Correct the package name
 DEBIANNAME_${PN} = "${PN}-bin"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 RPROVIDES_${PN} += "${PN}-bin"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 FILES_libgeoip = "${libdir}/libGeoIP.so.*"

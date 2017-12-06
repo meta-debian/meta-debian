@@ -78,14 +78,14 @@ USERADD_PARAM_${PN} = " \
 	-s /sbin/nologin -c \"heartbeat user\" hacluster \
 "
 
-PACKAGES =+ "lib${PN} lib${PN}-dev"
+PACKAGES =+ "lib${DPN} lib${DPN}-dev"
 
-FILES_lib${PN} += "${libdir}/libapphb${SOLIBS} \
+FILES_lib${DPN} += "${libdir}/libapphb${SOLIBS} \
 	${libdir}/libccmclient${SOLIBS} \
 	${libdir}/libclm${SOLIBS} \
 	${libdir}/libhbclient${SOLIBS}"
 
-FILES_lib${PN}-dev += "${includedir} ${libdir}/*.so ${libdir}/*.la"
+FILES_lib${DPN}-dev += "${includedir} ${libdir}/*.so ${libdir}/*.la"
 
 FILES_${PN}-staticdev += "${libdir}/heartbeat/plugins/quorum/*.a \
 	${libdir}/heartbeat/plugins/tiebreaker/*.a \
@@ -106,5 +106,5 @@ FILES_${PN} += " \
 	run/heartbeat/dopd \
 "
 
-PKG_lib${PN} = "lib${PN}2"
-PKG_lib${PN}-dev = "lib${PN}2-dev"
+PKG_lib${DPN} = "lib${DPN}2"
+PKG_lib${DPN}-dev = "lib${DPN}2-dev"

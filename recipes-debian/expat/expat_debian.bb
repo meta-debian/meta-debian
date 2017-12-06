@@ -24,13 +24,13 @@ do_configure_prepend () {
         rm -f ${S}/conftools/libtool.m4
 }
 
-PACKAGES =+ "lib${PN}"
+PACKAGES =+ "lib${DPN}"
 
-FILES_lib${PN} = "${libdir}/lib*${SOLIBS}"
+FILES_lib${DPN} = "${libdir}/lib*${SOLIBS}"
 
-DEBIANNAME_${PN}-dev = "lib${PN}1-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}1-dev"
 
 # expat-dev is equal to libexpat-dev
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 BBCLASSEXTEND = "native nativesdk"

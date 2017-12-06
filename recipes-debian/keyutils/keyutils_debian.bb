@@ -21,6 +21,6 @@ do_install_append() {
 		LIBDIR=${base_libdir} USRLIBDIR=${libdir}
 }
 
-PACKAGES =+ "lib${PN} lib${PN}-dev"
-FILES_lib${PN} = "${base_libdir}"
-FILES_lib${PN}-dev = "${includedir} ${libdir}/libkeyutils.so"
+PACKAGES =+ "lib${DPN} lib${DPN}-dev"
+FILES_lib${DPN} = "${base_libdir}"
+FILES_lib${DPN}-dev = "${includedir} ${libdir}/libkeyutils.so"

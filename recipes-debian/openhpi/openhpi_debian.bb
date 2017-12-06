@@ -42,7 +42,7 @@ PACKAGES =+ " \
     ${PN}-plugin-ilo2-ribcl ${PN}-plugin-ipmi \
     ${PN}-plugin-ipmidirect ${PN}-plugin-oa-soap \
     ${PN}-plugin-snmp-bc ${PN}-plugin-sysfs \
-    ${PN}-plugin-watchdog lib${PN} ${PN}d ${PN}-clients \
+    ${PN}-plugin-watchdog lib${DPN} ${PN}d ${PN}-clients \
 "
 
 FILES_${PN}-plugin-ilo2-ribcl = "${libdir}/openhpi/libilo2_ribcl${SOLIBS}"
@@ -55,7 +55,7 @@ FILES_${PN}-plugin-snmp-bc = " \
 "
 FILES_${PN}-plugin-sysfs = "${libdir}/openhpi/libsysfs*${SOLIBS}"
 FILES_${PN}-plugin-watchdog = "${libdir}/openhpi/libwatchdog${SOLIBS}"
-FILES_lib${PN} = " \
+FILES_lib${DPN} = " \
     ${sysconfdir}/openhpi \
     ${localstatedir}/lib/openhpi \
     ${libdir}/*${SOLIBS} \
@@ -81,9 +81,9 @@ RDEPENDS_${PN} += " \
     ${PN}-plugin-ipmi ${PN}-plugin-ipmidirect \
     ${PN}-plugin-oa-soap ${PN}-plugin-snmp-bc \
 "
-RDEPENDS_${PN}-dev = "lib${PN} libopenipmi openipmi"
-RDEPENDS_${PN}d += "lib${PN} lsb-base"
-RDEPENDS_${PN}-clients += "lib${PN}"
+RDEPENDS_${PN}-dev = "lib${DPN} libopenipmi openipmi"
+RDEPENDS_${PN}d += "lib${DPN} lsb-base"
+RDEPENDS_${PN}-clients += "lib${DPN}"
 RDEPENDS_${PN}-plugin-ipmi += "libopenipmi openipmi"
 
 # All openhpi-plugin-* depend on libopenhpi
@@ -100,6 +100,6 @@ python populate_packages_prepend(){
             d.appendVar("RDEPENDS_" + package, " lib" + pn)
 }
 
-DEBIANNAME_lib${PN} = "lib${PN}2"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_lib${DPN} = "lib${DPN}2"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 DEBIAN_NOAUTONAME_${PN}-plugin-snmp-bc = "1"
