@@ -63,8 +63,8 @@ EXTRA_OECONF = " \
     --with-defaults \
 "
 PACKAGECONFIG ?= "openssl libwrap mysql"
-PACKAGECONFIG[libwrap] = "--with-libwrap=${STAGING_LIBDIR}/..,--without-libwrap,tcp-wrappers"
-PACKAGECONFIG[openssl] = "--with-openssl=${STAGING_LIBDIR}/..,--without-openssl,openssl"
+PACKAGECONFIG[libwrap] = "--with-libwrap=${STAGING_EXECPREFIXDIR},--without-libwrap,tcp-wrappers"
+PACKAGECONFIG[openssl] = "--with-openssl=${STAGING_EXECPREFIXDIR},--without-openssl,openssl"
 PACKAGECONFIG[mysql] = "--with-mysql,--without-mysql,mysql"
 
 # Env var which tells perl if it should use host (no) or target (yes) settings

@@ -32,7 +32,7 @@ EXTRA_OECONF = " \
 	--disable-static \
 	--enable-frag \
 	--enable-hybrid \
-	--with-libldap=${STAGING_LIBDIR}/.. \
+	--with-libldap=${STAGING_EXECPREFIXDIR} \
 	--enable-gssapi \
 	--enable-dpd \
 	--enable-adminport \

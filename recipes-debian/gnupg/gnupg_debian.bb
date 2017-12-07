@@ -23,10 +23,10 @@ EXTRA_OECONF = "--libexecdir=${libdir} \
                 --enable-mailto \
                 --with-mailprog=${sbindir}sendmail \
                 --enable-large-secmem \
-                --with-zlib=${STAGING_LIBDIR}/.. \
-                --with-bzip2=${STAGING_LIBDIR}/.. \
+                --with-zlib=${STAGING_EXECPREFIXDIR} \
+                --with-bzip2=${STAGING_EXECPREFIXDIR} \
                 --disable-selinux-support \
-                --with-readline=${STAGING_LIBDIR}/.. \
+                --with-readline=${STAGING_EXECPREFIXDIR} \
                 ac_cv_sys_symbol_underscore=no"
 
 # Force gcc's traditional handling of inline to avoid issues with gcc 5

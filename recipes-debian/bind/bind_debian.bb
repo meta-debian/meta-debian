@@ -21,8 +21,8 @@ EXTRA_OECONF = " \
 	--with-libtool \
 	--enable-shared \
 	--enable-static \
-	--with-openssl=${STAGING_LIBDIR}/.. \
-	--with-gssapi=${STAGING_LIBDIR}/../ \
+	--with-openssl=${STAGING_EXECPREFIXDIR} \
+	--with-gssapi=${STAGING_EXECPREFIXDIR} \
 	--with-gnu-ld \
 	--with-dlz-postgres=no \
 	--with-dlz-mysql=no \
@@ -37,7 +37,7 @@ EXTRA_OECONF = " \
 	--with-gost=no \
 	--with-randomdev=/dev/random \
 	--with-dlz-odbc=no \
-	--with-dlz-ldap=${STAGING_LIBDIR}/../ \
+	--with-dlz-ldap=${STAGING_EXECPREFIXDIR} \
 "
 
 # Split building exportable library base on debian/rules

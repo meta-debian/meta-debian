@@ -47,8 +47,8 @@ EXTRA_OECONF = "--enable-swig-python --enable-swig-tcl --disable-bwidget-check \
 "
 
 # Change path of sepol and selinux to sysroot
-EXTRA_OECONF += "--with-sepol-devel=${STAGING_LIBDIR}/.. \
-                 --with-selinux-devel=${STAGING_LIBDIR}/.."
+EXTRA_OECONF += "--with-sepol-devel=${STAGING_EXECPREFIXDIR} \
+                 --with-selinux-devel=${STAGING_EXECPREFIXDIR}"
 
 EXTRA_OECONF_append_class-native = " \
     --disable-gui \

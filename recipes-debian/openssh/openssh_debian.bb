@@ -59,7 +59,7 @@ PACKAGECONFIG ??= "tcp-wrappers \
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
-PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_LIBDIR}/..,--without-kerberos5,krb5"
+PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_EXECPREFIXDIR},--without-kerberos5,krb5"
 PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 
 # passwd path is hardcoded in sshd

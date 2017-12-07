@@ -20,7 +20,7 @@ PROVIDES = "virtual/libintl virtual/gettext"
 PROVIDES_class-native = "virtual/gettext-native"
 RCONFLICTS_${PN} = "proxy-libintl"
 
-PACKAGECONFIG[msgcat-curses] = "--with-libncurses-prefix=${STAGING_LIBDIR}/..,--disable-curses,ncurses,"
+PACKAGECONFIG[msgcat-curses] = "--with-libncurses-prefix=${STAGING_EXECPREFIXDIR},--disable-curses,ncurses,"
 
 LDFLAGS_prepend_libc-uclibc = " -lrt -lpthread "
 
