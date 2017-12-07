@@ -10,6 +10,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=1b4af6f3d4ee079a38107366e93b334d"
 
 DEPENDS += "libpam"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 do_compile_prepend_class-target() {
 	sed -i -e "s/^CC = gcc/CC = ${TARGET_SYS}-gcc/" ${S}/Makefile
 }

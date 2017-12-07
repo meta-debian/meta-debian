@@ -16,6 +16,8 @@ inherit debian-package
 PV = "215"
 PR = "r2"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit pkgconfig autotools useradd python3native
 
 SRC_URI += "file://0001-Add-include-macro.h-to-mtd_probe.h.patch"

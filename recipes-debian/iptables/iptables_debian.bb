@@ -14,6 +14,8 @@ LIC_FILES_CHKSUM = " \
 	file://iptables/iptables.c;beginline=13;endline=25;md5=c5cffd09974558cf27d0f763df2a12dc \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 RRECOMMENDS_${PN} = " \
 	kernel-module-x-tables \
 	kernel-module-ip-tables \

@@ -16,6 +16,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=c46082167a314d785d012a244748d803 \
                     file://include/valgrind.h;beginline=1;endline=56;md5=92df8a1bde56fe2af70931ff55f6622f \
                     file://COPYING.DOCS;md5=8fdeb5abdb235a08e76835f8f3260215"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 X11DEPENDS = "virtual/libx11"
 DEPENDS = "gdb ${@bb.utils.contains('DISTRO_FEATURES', 'x11', '${X11DEPENDS}', '', d)}"
 

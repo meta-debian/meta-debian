@@ -26,6 +26,8 @@ file://remove-doc.patch \
 file://run-ptest \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools gettext update-alternatives
 
 EXTRA_OECONF += "--disable-rpath --libexecdir=${libdir}"

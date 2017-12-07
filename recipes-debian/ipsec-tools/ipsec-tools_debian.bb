@@ -19,6 +19,8 @@ DEPENDS = "virtual/kernel openssl readline flex bison-native libldap krb5 \
 # fix bug undefined reference to 'yylex'
 SRC_URI += "file://0001-Don-t-link-against-libfl.patch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools
 
 # Configure follow debian/rules

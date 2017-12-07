@@ -19,6 +19,8 @@ inherit autotools gettext pkgconfig
 # There is no debian/source or debian/patches
 DEBIAN_PATCH_TYPE = "nopatch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # Follow debian/rules.
 # Remove unrecognised options:
 # --enable-snmp_client --enable-remote_client

@@ -10,6 +10,8 @@ PV = "1.8.14"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=9aa91e13d644326bf281924212862184"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools
 
 do_install_append() {

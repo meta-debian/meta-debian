@@ -19,6 +19,7 @@ DEPENDS = "gmp libcap"
 DEPENDS_class-native = ""
 
 DEBIAN_PATCH_TYPE = "dpatch"
+DEBIAN_MULTILIB_MANUAL = "1"
 
 inherit autotools gettext
 
