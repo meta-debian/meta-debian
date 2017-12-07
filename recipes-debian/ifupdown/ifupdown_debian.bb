@@ -32,7 +32,7 @@ do_install() {
 	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install -d ${D}${sysconfdir}/network/if-up.d
 	install -d ${D}${sysconfdir}/network/interfaces.d
-	install -d ${D}${base_libdir}/${PN}
+	install -d ${D}${base_libdir}/${DPN}
 	install -d ${D}${base_sbindir}
 	install -d ${D}${mandir}/man8
 	install -d ${D}${mandir}/man5
@@ -55,7 +55,7 @@ do_install() {
 			${D}${sysconfdir}/network/if-down.d/upstart
 	install -m 0755 ${S}/debian/ifupdown.upstart.if-up \
 			${D}${sysconfdir}/network/if-up.d
-	install -m 0755 ${S}/settle-dad.sh ${D}${base_libdir}/${PN}
+	install -m 0755 ${S}/settle-dad.sh ${D}${base_libdir}/${DPN}/
 	install -m 0755 ${S}/ifup ${D}${base_sbindir}
 	ln -sf ifup ${D}${base_sbindir}/ifdown 	
 	ln -sf ifup ${D}${base_sbindir}/ifquery

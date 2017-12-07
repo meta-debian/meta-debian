@@ -33,5 +33,5 @@ PV = "0.7.2"
 do_install() {
 	oe_runmake install DESTDIR=${D}
 	# Temporary fix for #558047
-	rm ${D}${datadir}/${PN}/dstat_mysql5_conn.py
+	rm ${D}${datadir}/dstat/dstat_mysql5_conn.py
 }

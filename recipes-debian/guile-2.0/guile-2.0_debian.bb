@@ -56,7 +56,7 @@ FILES_${PN}-dev += "\
 	${datadir}/guile/*/scripts* \
 	${datadir}/gdb/auto-load* \
 "
-FILES_${PN}-dbg += "${libdir}/${PN}${base_bindir}/.debug"
+FILES_${PN}-dbg += "${libdir}/${DPN}${base_bindir}/.debug"
 BBCLASSEXTEND = "native"
 # skip libdir QA check for /usr/share/gdb/auto-load/libguile-2.0.so.22.7.2-gdb.scm
 # Avoid QA Issue: 

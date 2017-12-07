@@ -85,7 +85,7 @@ FILES_racoon = " \
 	${sbindir}/racoon \
 	${systemd_system_unitdir}/* \
 	${includedir}/ \
-	${libdir}/${PN}/libracoon.so* \	
+	${libdir}/ipsec-tools/libracoon.so* \
     "
 
-FILES_${PN}-dbg += "${libdir}/${PN}/.debug"
+FILES_${PN}-dbg += "${libdir}/*/.debug"

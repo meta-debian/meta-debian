@@ -43,7 +43,7 @@ do_install_append() {
 	        -d ${D}${sysconfdir}/insserv.conf.d \
 	        -d ${D}${sysconfdir}/dbus-1/system.d \
 	        -d ${D}${bindir} \
-	        -d ${D}${datadir}/${PN}-base
+	        -d ${D}${datadir}/${DPN}-base
 
 	install -m 755 ${S}/debian/init \
 	               ${D}${sysconfdir}/init.d/dnsmasq
@@ -62,7 +62,7 @@ do_install_append() {
 	install -m 644 ${S}/debian/insserv \
 	               ${D}${sysconfdir}/insserv.conf.d/dnsmasq
 	install -m 644 ${S}/trust-anchors.conf \
-	               ${D}${datadir}/${PN}-base/
+	               ${D}${datadir}/${DPN}-base/
 	install -m 644 ${S}/debian/dbus.conf \
 	               ${D}${sysconfdir}/dbus-1/system.d/dnsmasq.conf
 	install -m 755 ${S}/contrib/wrt/dhcp_release \
@@ -91,7 +91,7 @@ PACKAGES =+ "${PN}-base ${PN}-utils"
 FILES_${PN}-base = "\
 	${sysconfdir}/dbus-1/system.d/dnsmasq.conf \
 	${sbindir}/dnsmasq \
-	${datadir}/${PN}-base/trust-anchors.conf \
+	${datadir}/${DPN}-base/trust-anchors.conf \
 	"
 FILES_${PN}-utils = "${bindir}/*"
 FILES_${PN} += "${libdir}/* ${systemd_system_unitdir}"

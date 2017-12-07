@@ -33,11 +33,11 @@ EXTRA_OECONF = "--libexecdir=${libdir} \
 CFLAGS += "-fgnu89-inline"
 
 do_install_append () {
-	install -d ${D}${docdir}/${PN}
+	install -d ${D}${docdir}/${DPN}
 	install -d ${D}${base_libdir}/udev/rules.d
 
-	mv ${D}${datadir}/${PN}/* ${D}/${docdir}/${PN}/ || :
-	mv ${D}${prefix}/doc/* ${D}/${docdir}/${PN}/ || :
+	mv ${D}${datadir}/${DPN}/* ${D}/${docdir}/${DPN}/ || :
+	mv ${D}${prefix}/doc/* ${D}/${docdir}/${DPN}/ || :
 	install -m 0755 ${S}/tools/lspgpot ${D}${bindir}
 	install -m 0644 ${S}/debian/gnupg.udev \
 		${D}/${base_libdir}/udev/rules.d/60-gnupg.rules

@@ -75,7 +75,7 @@ do_install_append() {
 PACKAGES += "mysql-testsuite"
 FILES_libmysqlclient = "${libdir}/libmysqlclient.so.* ${libdir}/libmysqlclient_r.so.*"
 FILES_libmysqld-pic = "${bindir}/mysql_config_pic"
-FILES_mysql-common = "${sysconfdir}/${PN}/my.cnf"
+FILES_mysql-common = "${sysconfdir}/mysql/my.cnf"
 FILES_mysql-server = "\
 	${sysconfdir}/* ${bindir}/msql2mysql ${bindir}/myisamchk \
 	${bindir}/myisamlog ${bindir}/myisampack \

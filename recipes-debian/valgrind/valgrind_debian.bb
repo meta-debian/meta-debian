@@ -40,10 +40,10 @@ do_install_append () {
 	mv -f ${D}${bindir}/valgrind.sh ${D}${bindir}/valgrind
 
 	# remove unnecessary files	
-	rm ${D}${includedir}/${PN}/pub*
-	rm ${D}${includedir}/${PN}/lib*
-	rm ${D}${includedir}/${PN}/config.h
-	rm -rf ${D}${includedir}/${PN}/vki	
+	rm ${D}${includedir}/valgrind/pub*
+	rm ${D}${includedir}/valgrind/lib*
+	rm ${D}${includedir}/valgrind/config.h
+	rm -rf ${D}${includedir}/valgrind/vki
 }
 
 # valgrind requires debug files from glibc to run

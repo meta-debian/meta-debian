@@ -181,13 +181,13 @@ FILES_${PN}-system-mips += "${bindir}/qemu-system-mips*"
 FILES_${PN}-system-ppc += "${bindir}/qemu-system-ppc*"
 FILES_${PN}-system-x86 += "${bindir}/qemu-system-x86_64 \
 			${bindir}/qemu-system-i386 \
-			${sysconfdir}/${PN}/target-x86_64.conf \
+			${sysconfdir}/qemu/target-x86_64.conf \
 			${sysconfdir}/init.d/qemu-system-x86"
 FILES_${PN}-utils += " \
-			${bindir}/${PN}-io \
-			${bindir}/${PN}-img \
-			${bindir}/${PN}-ndb"
-FILES_${PN}-user += "${bindir}/${PN}-*"
+			${bindir}/qemu-io \
+			${bindir}/qemu-img \
+			${bindir}/qemu-ndb"
+FILES_${PN}-user += "${bindir}/qemu-*"
 
 # END of qemu-mips workaround
 

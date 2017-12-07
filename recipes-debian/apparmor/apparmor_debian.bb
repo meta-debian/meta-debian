@@ -128,7 +128,7 @@ do_install() {
 	install -m 0644 ${S}/debian/apparmor.upstart \
 		${D}${sysconfdir}/init/apparmor.conf
 	install -m 0644 ${S}/debian/lib/apparmor/functions \
-		${D}${base_libdir}/${PN}/
+		${D}${base_libdir}/apparmor/
 	install -m 0644 ${S}/debian/notify/apparmor-notify.desktop \
 		${D}${sysconfdir}/xdg/autostart/
 	mv ${D}${sbindir}/aa-notify ${D}${bindir}/
@@ -142,16 +142,16 @@ PACKAGES =+ "\
 	${PN}-utils libapparmor-dev libapparmor-perl libapparmor \
 	libpam-apparmor python-apparmor python-libapparmor "
 
-FILES_${PN} =+ " ${base_libdir}/${PN}/* "
+FILES_${PN} =+ " ${base_libdir}/apparmor/* "
 
 FILES_${PN}-easyprof = " \
-	${sysconfdir}/${PN}/easyprof.conf \
+	${sysconfdir}/apparmor/easyprof.conf \
 	${bindir}/aa-easyprof \
-	${datadir}/${PN}/easyprof/ \
+	${datadir}/apparmor/easyprof/ \
 "
 
 FILES_${PN}-notify = " \
-	${sysconfdir}/${PN}/notify.conf \
+	${sysconfdir}/apparmor/notify.conf \
 	${sysconfdir}/xdg/autostart/apparmor-notify.desktop \
 	${bindir}/aa-notify \
 "
@@ -166,8 +166,8 @@ FILES_${PN}-profiles = " ${sysconfdir}/apparmor.d/apache2.d/* \
 "
 
 FILES_${PN}-utils = " \
-	${sysconfdir}/${PN}/logprof.conf \
-	${sysconfdir}/${PN}/severity.db \
+	${sysconfdir}/apparmor/logprof.conf \
+	${sysconfdir}/apparmor/severity.db \
 	${sbindir}/aa-audit \
 	${sbindir}/aa-autodep \
 	${sbindir}/aa-cleanprof \

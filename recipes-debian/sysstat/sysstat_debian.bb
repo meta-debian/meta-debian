@@ -22,9 +22,9 @@ EXTRA_OECONF += " \
 		--disable-man-group \
 		--disable-compress-manpg \
 		--enable-copy-only \
-		sa_lib_dir=${libdir}/${PN} \
-		sa_di=${localstatedir}/log/${PN} \
-		conf_dir=${sysconfdir}/${PN}"
+		sa_lib_dir=${libdir}/${DPN} \
+		sa_di=${localstatedir}/log/${DPN} \
+		conf_dir=${sysconfdir}/${DPN}"
 
 # Install files follow deian/rules
 do_install_append() {

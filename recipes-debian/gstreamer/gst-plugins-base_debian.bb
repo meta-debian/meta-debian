@@ -50,7 +50,7 @@ PACKAGES =+ "\
 
 FILES_gstreamer${VER}-alsa = "${libdir}/gstreamer-${VER}/libgstalsa.so"
 FILES_libgstreamer-plugins-base${VER} = "${libdir}/*.so.* \
-	${datadir}/${PN}/license-translations.dict"
+	${datadir}/gst-plugins-base/license-translations.dict"
 FILES_gstreamer${VER}-plugins-base-apps = "${bindir}/*"
 FILES_gstreamer${VER}-x = "\
 	${libdir}/gstreamer-${VER}/libgstpango.so \

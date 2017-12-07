@@ -15,7 +15,7 @@ LICENSE = "LGPLv2.1+"
 LIC_FILES_CHKSUM = "file://COPYING.LIB;md5=e3eda01d9815f8d24aae2dbd89b68b06"
 
 DEPENDS = "cracklib-native zlib python"
-RDEPENDS_python-${PN} += "python"
+RDEPENDS_python-${DPN} += "python"
 
 EXTRA_OECONF = "--with-python --libdir=${libdir}"
 
@@ -32,8 +32,8 @@ do_install_append() {
 	
 	ln -sf libcrack.so.2 ${D}${libdir}/libcrack.so
 
-	install -d -m 0755 ${D}${sysconfdir}/${PN}/
-	cp ${S}/debian/cracklib.conf ${D}${sysconfdir}/${PN}/
+	install -d -m 0755 ${D}${sysconfdir}/${DPN}/
+	cp ${S}/debian/cracklib.conf ${D}${sysconfdir}/${DPN}/
 	
 	install -d ${D}${sysconfdir}/cron.daily/
 	install -m 0755 ${S}/debian/cracklib-runtime.cron.daily \
@@ -44,9 +44,9 @@ do_install_append() {
 
 BBCLASSEXTEND = "native nativesdk"
 
-PACKAGE_BEFORE_PN = "${PN}-runtime python-${PN}"
+PACKAGE_BEFORE_PN = "${PN}-runtime python-${DPN}"
 
-FILES_python-${PN} = "${libdir}/${PYTHON_DIR}/*"
+FILES_python-${DPN} = "${libdir}/${PYTHON_DIR}/*"
 FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/site-packages/.debug"
 FILES_${PN}-runtime = " \
     ${sysconfdir}/* \
@@ -56,7 +56,7 @@ FILES_${PN}-runtime = " \
 FILES_${PN}-staticdev += "${libdir}/${PYTHON_DIR}/*-packages/*.a"
 
 RDEPENDS_${PN}-runtime += "${PN}"
-RDEPENDS_python-${PN} += "${PN}-runtime"
+RDEPENDS_python-${DPN} += "${PN}-runtime"
 
 DEBIANNAME_${PN}-dev = "libcrack2-dev"
 DEBIAN_NOAUTONAME_${PN}-runtime = "1"

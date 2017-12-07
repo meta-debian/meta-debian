@@ -39,11 +39,11 @@ PACKAGECONFIG ??= ""
 PACKAGECONFIG[opencl] = "--enable-opencl,--disable-opencl,ocl-icd khronos-opencl-headers"
 
 PACKAGES =+ "lib${DPN}-common lib${DPN}-plugins lib${DPN}"
-FILES_lib${DPN}-common = "${datadir}/${PN}/hwloc-valgrind.supp \
-                         ${datadir}/${PN}/hwloc.dtd"
-FILES_lib${DPN}-plugins = "${libdir}/${PN}/hwloc_opencl.so \
-                          ${libdir}/${PN}/hwloc_pci.so \
-                          ${libdir}/${PN}/hwloc_xml_libxml.so"
+FILES_lib${DPN}-common = "${datadir}/hwloc/hwloc-valgrind.supp \
+                         ${datadir}/hwloc/hwloc.dtd"
+FILES_lib${DPN}-plugins = "${libdir}/hwloc/hwloc_opencl.so \
+                          ${libdir}/hwloc/hwloc_pci.so \
+                          ${libdir}/hwloc/hwloc_xml_libxml.so"
 FILES_lib${DPN} = "${libdir}/libhwloc${SOLIBS}"
 FILES_${PN} += "${datadir}/menu/*"
 DEBIANNAME_${PN}-dev = "lib${DPN}-dev"

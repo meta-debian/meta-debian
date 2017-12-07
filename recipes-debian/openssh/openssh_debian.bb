@@ -133,7 +133,7 @@ do_install_append(){
 }
 
 do_install_ptest () {
-	sed -i -e "s|^SFTPSERVER=.*|SFTPSERVER=${libdir}/${PN}/sftp-server|" regress/test-exec.sh
+	sed -i -e "s|^SFTPSERVER=.*|SFTPSERVER=${libdir}/${DPN}/sftp-server|" regress/test-exec.sh
 	cp -r regress ${D}${PTEST_PATH}
 }
 

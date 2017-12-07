@@ -35,7 +35,7 @@ PACKAGES =+ "lib${DPN}-client lib${DPN}-cursor lib${DPN}-server"
 FILES_lib${DPN}-cursor += "${libdir}/libwayland-cursor.so.*"
 FILES_lib${DPN}-server += "${libdir}/libwayland-server.so.*"
 FILES_lib${DPN}-client += "${libdir}/libwayland-client.so.*"
-FILES_${PN}-dev += "${datadir}/${PN} ${bindir}"
+FILES_${PN}-dev += "${datadir}/wayland ${bindir}"
 PKG_${PN}-dev = "lib${DPN}-dev"
 
 BBCLASSEXTEND = "native"
