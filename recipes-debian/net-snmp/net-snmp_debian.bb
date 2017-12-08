@@ -179,7 +179,7 @@ net_snmp_sysroot_preprocess () {
 
 PACKAGES = "${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc \
             libsnmp libsnmp-base libsnmp-perl python-netsnmp \
-            snmpd snmptrapd tkmib ${PN}"
+            snmpd snmptrapd tkmib snmp ${PN}"
 
 FILES_libsnmp = "${libdir}/lib*${SOLIBS}"
 FILES_libsnmp-base = "${datadir}/snmp/mib2c-data \
@@ -202,7 +202,12 @@ FILES_snmptrapd = "${sysconfdir}/default/snmptrapd \
                    ${datadir}/snmp/snmpconf-data/snmptrapd-data \
                    "
 FILES_tkmib = "${bindir}/tkmib"
-FILES_${PN} += "${datadir}/snmp/snmpconf-data/snmp-data"
+FILES_snmp = "${sysconfdir}/snmp/snmp.conf \
+              ${bindir}/encode_keychange \
+              ${bindir}/fixproc \
+              ${bindir}/snmp* \
+              ${datadir}/snmp/snmpconf-data/snmp-data \
+              "
 FILES_${PN}-dev += "${bindir}/mib2c* \
                     ${bindir}/net-snmp-config \
                     ${bindir}/net-snmp-create-v3-user \
@@ -211,8 +216,6 @@ FILES_${PN}-dev += "${bindir}/mib2c* \
 
 PKG_libsnmp = "libsnmp30"
 
-PKG_${PN} = "snmp"
-RPROVIDES_${PN} += "snmp"
 PKG_${PN}-dev = "libsnmp-dev"
 RPROVIDES_${PN}-dev += "libsnmp-dev"
 
