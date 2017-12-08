@@ -14,7 +14,7 @@ do_install_append() {
 	install -d ${D}${datadir}/perl5
 	mv ${D}${libdir}/perl/vendor_perl/5.20.2/Text \
 			 ${D}${datadir}/perl5
-	rm -rf ${D}${libdir}
+	rm -rf ${D}${nonarch_libdir}
 }
 
 FILES_${PN} = "${datadir}"
