@@ -204,7 +204,7 @@ RRECOMMENDS_libpython${PYTHON_MAJMIN}-stdlib += "\
 	${PN}-logging ${PN}-mailbox ${PN}-math ${PN}-mime ${PN}-misc ${PN}-multiprocessing \
 	${PN}-netclient ${PN}-netserver ${PN}-numbers ${PN}-pickle ${PN}-pprint ${PN}-profile \
 	${PN}-pydoc ${PN}-readline ${PN}-robotparser ${PN}-shell ${PN}-smtpd ${PN}-sqlite3 \
-	${PN}-sqlite3-tests ${PN}-stringold ${PN}-terminal ${PN}-tests ${PN}-textutils \
+	${PN}-stringold ${PN}-terminal ${PN}-textutils \
 	${PN}-threading ${PN}-tkinter ${PN}-unittest ${PN}-unixadmin ${PN}-xml ${PN}-xmlrpc \
 "
 RRECOMMENDS_libpython${PYTHON_MAJMIN}-minimal += "\
@@ -212,8 +212,8 @@ RRECOMMENDS_libpython${PYTHON_MAJMIN}-minimal += "\
 	${PN}-core ${PN}-crypt ${PN}-ctypes ${PN}-curses ${PN}-datetime ${PN}-distutils \
 	${PN}-email ${PN}-hotshot ${PN}-idle ${PN}-importlib ${PN}-io ${PN}-json ${PN}-lang \
 	${PN}-logging ${PN}-math ${PN}-misc ${PN}-multiprocessing ${PN}-netclient ${PN}-pickle \
-	${PN}-pkgutil ${PN}-pydoc ${PN}-re ${PN}-shell ${PN}-sqlite3 ${PN}-sqlite3-tests \
-	${PN}-stringold ${PN}-subprocess ${PN}-tests ${PN}-textutils ${PN}-tkinter \
+	${PN}-pkgutil ${PN}-pydoc ${PN}-re ${PN}-shell ${PN}-sqlite3 \
+	${PN}-stringold ${PN}-subprocess ${PN}-textutils ${PN}-tkinter \
 	${PN}-unittest ${PN}-xml \
 "
 RDEPENDS_libpython${PYTHON_MAJMIN}-stdlib += "libpython${PYTHON_MAJMIN}-minimal mime-support"
