@@ -133,6 +133,8 @@ do_install() {
 			${D}${sysconfdir}/${DPN}/syslog-ng.conf
 	install -m 0644 ${S}/debian/tty10.linux.conf \
 			${D}${datadir}/${DPN}/include/scl/system/tty10.conf
+
+	sed -i -e "s@${STAGING_DIR_HOST}@@g" ${D}${libdir}/pkgconfig/syslog-ng.pc
 }
 
 FILES_${PN}-mod-amqp = "${libdir}/${DPN}/*/libafamqp.so"
