@@ -31,6 +31,8 @@ SRC_URI += "file://dont-build-tests-examples.patch"
 
 inherit cmake lib_package
 
+EXTRA_OECMAKE_class-target += "-DLIB_SUFFIX=/${DEB_HOST_MULTIARCH}"
+
 do_install_append() {
 	# Follow debian/libgraphite2-3.links
 	ln -s libgraphite2.so.3 ${D}${libdir}/libgraphite2.so.2.0.0
