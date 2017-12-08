@@ -38,6 +38,7 @@ PACKAGECONFIG[des] = "--with-des,--without-des,,"
 PACKAGECONFIG[ntlm] = "--with-ntlm,--without-ntlm,,"
 
 CFLAGS += "-fPIC"
+EXTRA_OEMAKE += "sasldir=${libdir}/sasl2"
 do_compile_prepend () {
 	cd include
 	${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS} makemd5.c -o makemd5
