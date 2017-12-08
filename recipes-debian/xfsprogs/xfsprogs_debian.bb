@@ -55,6 +55,9 @@ do_install () {
 	libname=`readlink ${D}${libdir}/libhandle.so | xargs basename`
 	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	ln -sf ${rel_lib_prefix}${base_libdir}/${libname} ${D}${libdir}/libhandle.so
+
+	# Remove useless rpath
+	chrpath -d ${D}${sbindir}/xfs_fsr
 }
 
 PACKAGES =+ "xfslibs-dev"
