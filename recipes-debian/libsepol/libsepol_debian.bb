@@ -14,7 +14,13 @@ do_compile(){
 	oe_runmake
 }
 do_install_class-target(){
-	oe_runmake install DESTDIR=${D}
+	oe_runmake install DESTDIR=${D} \
+	                   LIBDIR=${D}${libdir} \
+	                   SHLIBDIR=${D}${base_libdir} \
+	                   LIBBASE="${baselib}"
+	rm -f ${D}${libdir}/libsepol.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libsepol.so.1 ${D}${libdir}/libsepol.so
 }
 
 do_install_class-native(){
