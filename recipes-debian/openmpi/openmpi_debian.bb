@@ -145,7 +145,7 @@ RPROVIDES_${PN}-dev = "lib${PN}-dev"
 RPROVIDES_${PN} = "${PN}-bin"
 RDEPENDS_${PN} += "${PN}-common"
 RSUGGESTS_${PN} += "${PN}-checkpoint"
-RDEPEMDS_${PN}-dev += "${PN}-common libibverbs-dev libhwloc-dev"
+RDEPENDS_${PN}-dev += "${PN}-common libibverbs-dev libhwloc-dev"
 RDEPENDS_${PN}-checkpoint += "${PN} blcr-util lib${PN}"
 
 # Follow debian/openmpi-bin.postinst
