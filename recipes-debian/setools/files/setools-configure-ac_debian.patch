@@ -33,9 +33,9 @@
  selinux_devel_incdir="${selinux_devel}/include"
 -sepol_devel_libdir=`eval echo ${libdir}`
 -selinux_devel_libdir=`eval echo ${libdir}`
-+dnl We pass in sepol_devel of usr/lib{32/64}/.., dirname strips the ..
-+sepol_devel_libdir=`dirname ${sepol_devel}`
-+selinux_devel_libdir=`dirname ${selinux_devel}`
++dnl We pass in sepol_devel of .../sysroot/.../usr
++sepol_devel_libdir=`eval echo ${sepol_devel}/..${libdir}`
++selinux_devel_libdir=`eval echo ${selinux_devel}/..${libdir}`
  AC_MSG_CHECKING([for sepol/sepol.h])
  selinux_save_CFLAGS="${CFLAGS}"
  selinux_save_CPPFLAGS="${CPPFLAGS}"
