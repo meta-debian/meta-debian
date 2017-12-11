@@ -39,7 +39,7 @@ DEPENDS = "intltool-native \
 # These options are almost same as CONFFLAGS in debian/rules.
 # Other target specific CONFFLAGS in debian/rules are ignored.
 DEBIAN_CONFOPTS = "--with-rootprefix=${base_prefix} \
-                   --with-rootlibdir=${base_libdir} \
+                   --with-rootlibdir=${base_libdir}/${DEB_HOST_MULTIARCH} \
                    --with-sysvinit-path=${sysconfdir}/init.d \
                    --with-sysvrcnd-path=${sysconfdir} \
                    --with-firmware-path=/lib/firmware \
