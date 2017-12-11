@@ -22,12 +22,6 @@ PV = "0.11.0"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d84d659a35c666d23233e54503aaea51"
 
-#correct-path-prefix-Makefile_debian.patch:
-#	this patch is corrected the PREFIX variable in Makefile is '/usr'
-#	instead of '${D}/usr' and CMAKE_MODULES_PATH=share/cmake-2.8/Modules
-#	same as debian/rules
-SRC_URI+= "file://correct-prefix-and-cmake-path-Makefile_debian.patch"
-
 inherit autotools-brokensep
 
 do_compile() {
@@ -39,7 +33,10 @@ do_install() {
 	install -d ${D}${libdir}/pkgconfig
 	install -d ${D}${datadir}/cmake-2.8/Modules
 	install -d ${D}${datadir}/cmake-3.0/Modules
-	oe_runmake install DESTDIR=${D}	
+	oe_runmake install DESTDIR=${D}	\
+	                   LIBRARY_PATH="${baselib}" \
+	                   CMAKE_MODULES_PATH="share/cmake-2.8/Modules" \
+	                   PREFIX=${prefix}
 	ln -s ../../cmake-2.8/Modules/FindHiredis.cmake \
 		${D}${datadir}/cmake-3.0/Modules/FindHiredis.cmake
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libhiredis.so))
