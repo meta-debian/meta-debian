@@ -41,6 +41,10 @@ do_configure_prepend() {
         done
 }
 
+do_install_append() {
+	find ${D} -name *.la -delete
+}
+
 PACKAGECONFIG ??= "zlib"
 PACKAGECONFIG[tpm] = "--with-tpm, --without-tpm, trousers"
 PACKAGECONFIG[zlib] = "--with-zlib, --without-zlib, zlib"
