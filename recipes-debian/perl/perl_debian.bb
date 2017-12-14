@@ -256,7 +256,7 @@ perl_package_preprocess () {
             ${PKGD}${libdir}/perl/config.sh
 }
 
-PACKAGES = "${PN}-dbg ${PN}-base ${PN} ${PN}-dev ${PN}-pod ${PN}-doc ${PN}-lib \
+PACKAGES = "${PN}-dbg ${PN}-base ${PN} ${PN}-dev ${PN}-pod ${PN}-doc libperl \
             ${PN}-module-cpan ${PN}-module-cpanplus ${PN}-module-unicore"
 FILES_${PN}-base = "${bindir}/perl ${bindir}/perl${PERL_PV} \
                ${libdir}/perl/${PERL_PV}/Config.pm \
@@ -269,7 +269,7 @@ FILES_${PN}_append_class-nativesdk = " ${bindir}/perl.real"
 RPROVIDES_${PN} += "${PN}-module-strict ${PN}-module-vars ${PN}-module-config \
                     ${PN}-module-warnings ${PN}-module-warnings-register ${PN}-misc"
 FILES_${PN}-dev = "${libdir}/perl/${PERL_PV}/CORE"
-FILES_${PN}-lib = "${libdir}/libperl.so* \
+FILES_libperl = "${libdir}/libperl.so* \
                    ${libdir}/perl5 \
                    ${libdir}/perl/config.sh \
                    ${libdir}/perl/${PERL_PV}/Config_heavy.pl \
@@ -368,6 +368,9 @@ RPROVIDES_${PN} += " \
     libthreads-perl libthreads-shared-perl libtime-piece-perl libencode-perl \
 "
 
+DEBIANNAME_libperl = "libperl5.20"
+RPROVIDES_libperl = "libperl5.20 perl-lib"
+RDEPENDS_libperl = "${PN}-base"
 RDEPENDS_${PN}-modules += "${PN}-base"
 RDEPENDS_${PN} += "${PN}-base ${PN}-modules"
 

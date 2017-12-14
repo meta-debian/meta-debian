@@ -10,7 +10,7 @@
 # we need set RDEPENDS for perl and perl-base.
 #
 RDEPENDS_${PN}-base += " \
-    ${PN}-lib \
+    libperl \
     ${PN}-module-attributes \
     ${PN}-module-autoloader \
     ${PN}-module-base \
