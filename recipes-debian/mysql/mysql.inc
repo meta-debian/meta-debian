@@ -8,7 +8,7 @@ ease of use \
 HOMEPAGE = "http://dev.mysql.com/"
 
 inherit debian-package
-PV = "5.5.57"
+PV = "5.5.58"
 VER = "5.5"
 DPN = "mysql-${VER}"
 

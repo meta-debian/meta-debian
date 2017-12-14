@@ -1,7 +1,7 @@
 PR = "r0"
 
 inherit debian-package
-PV = "8+deb8u9"
+PV = "8+deb8u10"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright.in;md5=5463e5abae4528d959d7f7a2e91d6176"
