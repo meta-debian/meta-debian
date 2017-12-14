@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = " \
     file://COPYING;md5=1d364fa6e8a1b6d7e3f1594f36c18cc9 \
 "
 
-DEPENDS = "lm-sensors python-distribute-native"
+DEPENDS = "lm-sensors python-distribute-native pciutils"
 
 # man-makefile-parallel.diff:
 # 	Fix dependencies for auto-generated man pages.
@@ -165,7 +165,10 @@ do_install_append() {
 	chmod -x ${D}${sysconfdir}/snmp/*.conf
 	install -m 0600 ${S}/EXAMPLE.conf ${D}${sysconfdir}/snmp/snmpd.conf
 
-	rm -f ${D}${datadir}/snmp/mib2c.*
+	rm -f ${D}${datadir}/snmp/mib2c.* \
+	      ${D}${bindir}/net-snmp-cert \
+	      ${D}${bindir}/agentxtrap \
+	      ${D}${bindir}/ipf-mod.pl
 }
 
 SYSROOT_PREPROCESS_FUNCS += "net_snmp_sysroot_preprocess"
@@ -179,11 +182,12 @@ net_snmp_sysroot_preprocess () {
 
 PACKAGES = "${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc \
             libsnmp libsnmp-base libsnmp-perl python-netsnmp \
-            snmpd snmptrapd tkmib snmp ${PN}"
+            snmpd snmptrapd tkmib snmp"
 
 FILES_libsnmp = "${libdir}/lib*${SOLIBS}"
 FILES_libsnmp-base = "${datadir}/snmp/mib2c-data \
                       ${datadir}/snmp/mibs \
+                      ${localstatedir}/lib/snmp \
                       "
 FILES_libsnmp-perl = "${PERLLIBDIRS}/*"
 FILES_python-netsnmp = "${PYTHON_SITEPACKAGES_DIR}/netsnmp*/*"
@@ -219,8 +223,11 @@ PKG_libsnmp = "libsnmp30"
 PKG_${PN}-dev = "libsnmp-dev"
 RPROVIDES_${PN}-dev += "libsnmp-dev"
 
-RDEPENDS_libsnmp += "libsnmp-base"
+RDEPENDS_libsnmp += "libsnmp-base libperl5.20"
+RDEPENDS_${PN}-dev = "libsnmp libpci-dev lm-sensors-dev openssl-dev libwrap-dev procps"
+RDEPENDS_libsnmp-perl += "perl perl-base"
+RDEPENDS_python-netsnmp += "python-core"
+RDEPENDS_snmp += "libsnmp-base"
 RDEPENDS_snmpd += "lsb-base libsnmp-base"
 RDEPENDS_snmptrapd += "snmpd"
 RDEPENDS_tkmib += "libsnmp-perl"
-RDEPENDS_${PN} += "libsnmp-base"
