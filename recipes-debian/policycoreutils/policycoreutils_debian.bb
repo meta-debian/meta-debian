@@ -90,9 +90,9 @@ do_install() {
 		INCLUDEDIR="${D}${includedir}" \
 		SHLIBDIR="${D}${base_libdir}"
 
-	install -d ${D}${libdir}/tmpfiles.d
+	install -d ${D}${nonarch_libdir}/tmpfiles.d
 	cp ${S}/debian/policycoreutils.mcstrans.tmpfile \
-	   ${D}${libdir}/tmpfiles.d/mcstrans.conf
+	   ${D}${nonarch_libdir}/tmpfiles.d/mcstrans.conf
 
 	# Fix symlink
 	rm -f ${D}${sbindir}/load_policy
@@ -169,7 +169,7 @@ PACKAGE_BEFORE_PN += "python-sepolicy"
 FILES_python-sepolicy = "${libdir}/${PYTHON_DIR}/*-packages/sepolicy*"
 FILES_${PN} += " \
     ${libdir}/${PYTHON_DIR}/*-packages/seobject.py \
-    ${libdir}/tmpfiles.d \
+    ${nonarch_libdir}/tmpfiles.d \
     ${systemd_unitdir} \
     ${datadir} \
 "

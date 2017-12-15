@@ -123,8 +123,8 @@ do_install_append () {
 	install ${S}/debian/ip-down.d ${D}${sysconfdir}/network/if-down.d/bind9
 	install -m644 ${S}/debian/bind9.ufw.profile ${D}${sysconfdir}/ufw/applications.d/bind9
 
-	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${libdir}/tmpfiles.d/bind9.conf
-	install -D -m 644 ${S}/debian/lwresd.tmpfile ${D}${libdir}/tmpfiles.d/lwresd.conf
+	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${nonarch_libdir}/tmpfiles.d/bind9.conf
+	install -D -m 644 ${S}/debian/lwresd.tmpfile ${D}${nonarch_libdir}/tmpfiles.d/lwresd.conf
 
 	# Base on debian/libbind-dev.install
 	install -m 0644 ${S}/lib/dns/include/dns/dlz_dlopen.h ${D}${includedir}/dns/
@@ -223,13 +223,13 @@ FILES_liblwres = "${libdir}/liblwres${SOLIBS}"
 FILES_lwresd = " \
 	${sysconfdir}/init.d/lwresd \
 	${systemd_system_unitdir}/lwresd.service \
-	${libdir}/tmpfiles.d/lwresd.conf \
+	${nonarch_libdir}/tmpfiles.d/lwresd.conf \
 	${sbindir}/lwresd \
 "
 
 FILES_${PN} += " \
 	/run \
-	${libdir}/tmpfiles.d/bind9.conf \
+	${nonarch_libdir}/tmpfiles.d/bind9.conf \
 	${datadir}/${DPN} \
 	${localstatedir} \
 "
