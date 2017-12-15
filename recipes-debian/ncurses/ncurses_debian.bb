@@ -278,7 +278,7 @@ do_install_append() {
 
 	set -e; \
 	for f in ${LIBTERMINFOFILES}; do \
-		dir=${D}${base_libdir}/terminfo/$(dirname $f); \
+		dir=${D}${nonarch_base_libdir}/terminfo/$(dirname $f); \
 		mkdir -p $dir; \
 		mv ${D}${datadir}/terminfo/$f $dir; \
 	done
@@ -287,8 +287,8 @@ do_install_append() {
 	install --mode 644 \
 		${S}/debian/README.etc ${D}${sysconfdir}/terminfo/README
 
-	install -d ${D}${libdir}/valgrind
-	install -m 0644 ${S}/misc/ncurses.supp ${D}${libdir}/valgrind/
+	install -d ${D}${nonarch_libdir}/valgrind
+	install -m 0644 ${S}/misc/ncurses.supp ${D}${nonarch_libdir}/valgrind/
 
 	# Create link according to Debian package files
 	ln -sf libncurses.so ${D}${libdir}/libcurses.so
@@ -303,12 +303,12 @@ do_install_append() {
 	fi
 
 	ln -sf libtinfo.a ${D}${libdir}/libtermcap.a
-	ln -sf ${base_libdir}/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
-	ln -sf ${base_libdir}/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
-	ln -sf ${base_libdir}/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
-	ln -sf ${base_libdir}/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
-	ln -sf ${base_libdir}/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
-	ln -sf ${base_libdir}/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
+	ln -sf ${nonarch_base_libdir}/terminfo/c/cons25 ${D}${datadir}/terminfo/c/cons25
+	ln -sf ${nonarch_base_libdir}/terminfo/s/sun ${D}${datadir}/terminfo/s/sun
+	ln -sf ${nonarch_base_libdir}/terminfo/v/vt100 ${D}${datadir}/terminfo/v/vt100
+	ln -sf ${nonarch_base_libdir}/terminfo/v/vt220 ${D}${datadir}/terminfo/v/vt220
+	ln -sf ${nonarch_base_libdir}/terminfo/x/xterm-color ${D}${datadir}/terminfo/x/xterm-color
+	ln -sf ${nonarch_base_libdir}/terminfo/x/xterm-r6 ${D}${datadir}/terminfo/x/xterm-r6
 }
 
 ALTERNATIVE_PRIORITY = "100"
@@ -395,7 +395,7 @@ FILES_libncursesw5-staticdev = " \
 "
 
 FILES_libtinfo-dev = " \
-  ${libdir}/valgrind/ \
+  ${nonarch_libdir}/valgrind/ \
   ${libdir}/libtermcap.so \
   ${libdir}/libtic.so \
   ${libdir}/libtinfo.so \
@@ -416,7 +416,7 @@ FILES_libtinfo5 = " \
 
 FILES_ncurses-base = " \
   ${sysconfdir}/terminfo \
-  ${base_libdir}/terminfo \
+  ${nonarch_base_libdir}/terminfo \
   ${datadir}/tabset \
 "
 
