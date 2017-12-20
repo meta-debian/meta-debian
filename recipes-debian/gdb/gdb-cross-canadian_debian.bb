@@ -30,7 +30,7 @@ cat > ${WORKDIR}/python << EOF
 #! /bin/sh
 case "\$2" in
         --includes) echo "-I${STAGING_INCDIR}/${PYTHON_DIR}/" ;;
-        --ldflags) echo "-L${STAGING_LIBDIR}/../${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath-link,${STAGING_LIBDIR}/../${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath,${libdir}/../${PYTHON_DEB_HOST_MULTIARCH} -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}" ;;
+        --ldflags) echo "-L${STAGING_EXECPREFIXDIR}/lib/${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath-link,${STAGING_EXECPREFIXDIR}/lib/${PYTHON_DEB_HOST_MULTIARCH} -Wl,-rpath,${exec_prefix}/lib/${PYTHON_DEB_HOST_MULTIARCH} -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}" ;;
         --exec-prefix) echo "${exec_prefix}" ;;
         *) exit 1 ;;
 esac
