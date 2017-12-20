@@ -92,6 +92,9 @@ do_install_append () {
 
 	rm -rf ${D}${libexecdir}
 	rm -rf ${D}${base_sbindir}
+
+	# Remove useless rpath
+	chrpath -d ${D}${bindir}/inetutils-ftp
 }
 
 PACKAGES =+ "${BPN}-ftp ${BPN}-ftpd ${BPN}-inetd ${BPN}-ping ${BPN}-syslogd ${BPN}-talk \
