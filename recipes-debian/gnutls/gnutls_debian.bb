@@ -47,7 +47,8 @@ do_install_append() {
 
 PACKAGECONFIG ??= "zlib"
 PACKAGECONFIG[tpm] = "--with-tpm, --without-tpm, trousers"
-PACKAGECONFIG[zlib] = "--with-zlib, --without-zlib, zlib"
+PACKAGECONFIG[zlib] = "--with-zlib --with-libz-prefix=${STAGING_DIR_HOST}${prefix}, \
+                       --without-zlib, zlib"
 
 PACKAGES =+ "${PN}-openssl ${PN}-xx"
 
