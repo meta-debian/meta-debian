@@ -10,7 +10,7 @@ PR = "r0"
 
 inherit crosssdk
 
-PN = "binutils-crosssdk-${TARGET_ARCH}"
+PN = "binutils-crosssdk-${SDK_SYS}"
 
 PROVIDES = "virtual/${TARGET_PREFIX}binutils-crosssdk"
 

@@ -61,7 +61,7 @@ EXTRA_OECONF += " \
 	--with-printcap=/var/run/cups/printcap \
 	--with-log-file-perm=0640 \
 	--with-local_protocols='dnssd' \
-	--with-systemdsystemunitdir=/lib/systemd/system \
+	--with-systemdsystemunitdir=${systemd_system_unitdir} \
 	"
 
 do_configure() {
@@ -203,7 +203,7 @@ FILES_${PN}-daemon = " \
 	${sysconfdir}/pam.d/cups \
 	${sysconfdir}/ufw \
 	${sysconfdir}/cups/ssl \
-	${base_libdir}/systemd/system \
+	${systemd_system_unitdir} \
 	${libdir}/cups/backend/http* \
 	${libdir}/cups/backend/ipp* \
 	${libdir}/cups/backend/https \

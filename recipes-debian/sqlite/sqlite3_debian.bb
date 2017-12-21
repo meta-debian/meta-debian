@@ -101,7 +101,7 @@ SRC_URI_DEBIAN_TEST = "\
 DEBIAN_NATIVE_TESTS = "run_native_test_sqlite3"
 TEST_DIR = "${B}/native-test"
 
-PACKAGES = "lib${DPN} lib${DPN}-dev lib${DPN}-doc ${PN}-dbg lib${DPN}-staticdev lib${PN}-tcl ${PN}"
+PACKAGES = "lib${DPN} lib${DPN}-dev lib${DPN}-doc ${PN}-dbg lib${DPN}-staticdev lib${DPN}-tcl ${PN}"
 
 FILES_${PN} = "${bindir}/*"
 FILES_lib${DPN} = "${libdir}/*.so.*"
@@ -109,7 +109,7 @@ FILES_lib${DPN}-dev = "${libdir}/*.la ${libdir}/*.so \
 			${libdir}/pkgconfig ${includedir}"
 FILES_lib${DPN}-doc = "${docdir} ${mandir} ${infodir}"
 FILES_lib${DPN}-staticdev = "${libdir}/lib*.a"
-FILES_lib${PN}-tcl = "${libdir}/tcltk/sqlite3/*"
+FILES_lib${DPN}-tcl = "${libdir}/tcltk/sqlite3/*"
 FILES_${PN}-dbg += "${libdir}/tcltk/sqlite3/.debug"
 
 AUTO_LIBNAME_PKGS = "${MLPREFIX}lib${DPN}"

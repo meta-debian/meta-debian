@@ -178,36 +178,36 @@ ALLOW_EMPTY_${PN}-bin = "1"
 PACKAGES =+ "${PN}-bin ${PN}-clients ${PN}-daemon-system ${PN}-daemon"
 FILES_${PN}-bin = ""
 FILES_${PN}-clients = "\
-	${sysconfdir}/${PN}/libvirt.conf \
-	${sysconfdir}/${PN}/virt-login-shell.conf \
+	${sysconfdir}/libvirt/libvirt.conf \
+	${sysconfdir}/libvirt/virt-login-shell.conf \
 	${bindir}/*"
 FILES_${PN}-daemon = "\
-	${libdir}/${PN}/connection-driver/*.so \
-	${libdir}/${PN}/libvirt-guests.sh \
-	${libdir}/${PN}/libvirt_iohelper \
-	${libdir}/${PN}/libvirt_leaseshelper \
-	${libdir}/${PN}/libvirt_lxc \
-	${libdir}/${PN}/libvirt_parthelper \
-	${libdir}/${PN}/libvirt_sanlock_helper \
-	${libdir}/${PN}/lock-driver/*.so \
+	${libdir}/libvirt/connection-driver/*.so \
+	${libdir}/libvirt/libvirt-guests.sh \
+	${libdir}/libvirt/libvirt_iohelper \
+	${libdir}/libvirt/libvirt_leaseshelper \
+	${libdir}/libvirt/libvirt_lxc \
+	${libdir}/libvirt/libvirt_parthelper \
+	${libdir}/libvirt/libvirt_sanlock_helper \
+	${libdir}/libvirt/lock-driver/*.so \
 	${sbindir}/libvirtd* \
 	${sbindir}/virtlockd \
 	${datadir}/augeas \
-	${datadir}/${PN}/schemas/* \
-	${datadir}/${PN}/libvirtLogo.png \
-	${datadir}/${PN}/cpu_map.xml"
+	${datadir}/libvirt/schemas/* \
+	${datadir}/libvirt/libvirtLogo.png \
+	${datadir}/libvirt/cpu_map.xml"
 FILES_${PN}-daemon-system = "\
 	${sysconfdir}/* \
 	${systemd_system_unitdir} \
-	${libdir}/${PN}/virt-aa-helper \
+	${libdir}/libvirt/virt-aa-helper \
 	${datadir}/polkit-1/* \
 	${localstatedir}/lib/*"
 FILES_${PN}-dbg += "\
-	${libdir}/${PN}/connection-driver/.debug \
-	${libdir}/${PN}/lock-driver/.debug"
+	${libdir}/libvirt/connection-driver/.debug \
+	${libdir}/libvirt/lock-driver/.debug"
 FILES_${PN}-dev += "\
-	${libdir}/${PN}/*/*.la \
-	${datadir}/${PN}/api/* \
+	${libdir}/libvirt/*/*.la \
+	${datadir}/libvirt/api/* \
 	"
 # Follow debian/control
 RDEPENDS_${PN}-bin += "${PN}-daemon-system ${PN}-clients"

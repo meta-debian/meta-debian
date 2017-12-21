@@ -30,7 +30,7 @@ do_install_append() {
 }
 
 PKG_${PN} = "libmm14"
-PKG_${PN}-dev = "lib${PN}-dev"
-PKG_${PN}-dbg = "lib${PN}-dbg"
+PKG_${PN}-dev = "lib${DPN}-dev"
+PKG_${PN}-dbg = "lib${DPN}-dbg"
 
 FILES_${PN}-dev += "${bindir}/mm-config"

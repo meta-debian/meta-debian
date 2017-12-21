@@ -4,6 +4,8 @@
 #
 require apt.inc
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # Skip build test because it depend on gtest package,
 # and gtest haven't been available in meta-debian,yet.
 SRC_URI += " \
@@ -22,6 +24,7 @@ do_install() {
 	install -d ${D}${bindir} ${D}${includedir} ${D}${datadir}
 	install -d ${D}${libdir}/${DPN}
 	install -d ${D}${libdir}/dpkg/methods/${DPN}
+	install -d ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 	bin_file="apt apt-cache apt-cdrom apt-config apt-extracttemplates \
 		apt-ftparchive apt-get apt-key apt-mark apt-sortpkgs"
 	for file in $bin_file; do
@@ -30,7 +33,7 @@ do_install() {
 	cp -r ${B}/bin/methods ${D}${libdir}/${DPN}
 	install -m 0755 ${B}/bin/apt-helper ${D}${libdir}/${DPN}
 	cp ${B}/scripts/dselect/* ${D}${libdir}/dpkg/methods/${DPN}
-	cp -R ${B}/bin/*.so* ${D}${libdir}/
+	cp -R ${B}/bin/*.so* ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 	cp -r ${B}/include/apt-pkg ${D}${includedir}
 	install -D -m 0644 ${S}/debian/apt.conf.autoremove \
 		${D}${sysconfdir}/${DPN}/apt.conf.d/01autoremove
@@ -92,9 +95,11 @@ FILES_${DPN}-utils = "\
 	${bindir}/apt-sortpkgs ${libdir}/${DPN}/solvers/* \
 	${datadir}/locale/*/*/apt-utils*"
 FILES_lib${DPN}-inst = "\
-	${libdir}/libapt-inst.so.* ${datadir}/locale/*/*/libapt-inst*"
+	${libdir}/${DEB_HOST_MULTIARCH}/libapt-inst.so.* ${datadir}/locale/*/*/libapt-inst*"
 FILES_libapt-pkg = "\
-	${libdir}/libapt-pkg.so.* ${datadir}/locale/*/*/libapt-pkg*"
+	${libdir}/${DEB_HOST_MULTIARCH}/libapt-pkg.so.* ${datadir}/locale/*/*/libapt-pkg*"
 FILES_${PN} += "\
+	${libdir}/${DEB_HOST_MULTIARCH}/libapt-private.so.* \
 	${datadir}/bug/${DPN}/script ${libdir}/dpkg/methods/* ${datadir}/locale"
 FILES_${PN}-dbg += "${libdir}/${DPN}/solvers/.debug/*"
+FILES_${PN}-dev += "${libdir}/${DEB_HOST_MULTIARCH}/libapt*.so"

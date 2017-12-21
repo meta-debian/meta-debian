@@ -52,7 +52,8 @@ do_install_append() {
 
 	# Move libpcre to /lib folder according to Debian rules
 	mv ${D}${libdir}/libpcre.so.* ${D}${base_libdir}
-	ln -sf ../../lib/libpcre.so.3 ${D}${libdir}/libpcre.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libpcre.so.3 ${D}${libdir}/libpcre.so
 
 	# Install zpcregrep according to Debian package
 	install -m 0755 ${S}/debian/zpcregrep ${D}${bindir}/

@@ -55,8 +55,9 @@ do_install_append () {
 	install -d ${D}${base_libdir}
 	#follow debian/rules
 	mv ${D}${libdir}/liblzma.so.* ${D}${base_libdir}/
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	dso=$(basename $(readlink ${D}${libdir}/liblzma.so))
-	ln -s -f ../../lib/$dso ${D}${libdir}/liblzma.so
+	ln -s -f ${rel_lib_prefix}${base_libdir}/$dso ${D}${libdir}/liblzma.so
 
 	#remove the unwanted files
 	for file in lzcat lzcmp lzdiff lzegrep lzfgrep lzgrep lzless lzma lzmore unlzma; do

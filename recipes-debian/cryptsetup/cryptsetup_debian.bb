@@ -19,6 +19,9 @@ LICENSE = "GPLv2+ & LGPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=32107dd283b1dfeb66c9b3e6be312326\
 	file://COPYING.LGPL;md5=1960515788100ce5f9c98ea78a65dc52"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep pkgconfig gettext binconfig lib_package
 
 #inherit autotools-brokensep
@@ -97,9 +100,14 @@ do_install_append() {
 		${D}${sysconfdir}/init.d/cryptdisks-early
 	rm ${D}${base_libdir}/libcryptsetup.la
 
+	mkdir -p ${D}${base_libdir}/${DEB_HOST_MULTIARCH} \
+	         ${D}${libdir}/${DEB_HOST_MULTIARCH}
+	mv ${D}${base_libdir}/libcryptsetup.so.* ${D}${base_libdir}/${DEB_HOST_MULTIARCH}/
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libcryptsetup.so))
+	rel_lib_prefix=`echo ${libdir}/${DEB_HOST_MULTIARCH} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	rm ${D}${base_libdir}/libcryptsetup.so
-	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libcryptsetup.so
+	ln -s ${rel_lib_prefix}${base_libdir}/$LINKLIB \
+		${D}${libdir}/${DEB_HOST_MULTIARCH}/libcryptsetup.so
 	rm -r ${D}${base_libdir}/pkgconfig
 	cp -a ${S}/lib/libcryptsetup.pc ${D}${libdir}/pkgconfig/
 
@@ -115,14 +123,16 @@ do_install_append() {
 	chrpath -d ${D}${base_sbindir}/cryptsetup
 	chrpath -d ${D}${base_sbindir}/cryptsetup-reencrypt
 }
-PACKAGES =+ "lib${PN}"
-PKG_${PN}-dev = "lib${PN}-dev"
+PACKAGES =+ "lib${DPN}"
+PKG_${PN}-dev = "lib${DPN}-dev"
 
 FILES_${PN}-bin = "\
 	${base_sbindir}/cryptsetup ${base_sbindir}/cryptsetup-reencrypt 	\
 	${base_sbindir}/veritysetup ${sbindir}/luksformat ${datadir}/locale/*	\
 	"
-FILES_lib${PN} = "${base_libdir}/libcryptsetup.so.*"
+FILES_lib${DPN} = "${base_libdir}/${DEB_HOST_MULTIARCH}/libcryptsetup.so.*"
+
+FILES_${PN}-dev += "${libdir}/${DEB_HOST_MULTIARCH}/libcryptsetup${SOLIBSDEV}"
 
 FILES_${PN}-dbg += "\
 	${base_libdir}/cryptsetup/scripts/.debug/* 				\
@@ -135,5 +145,5 @@ FILES_${PN} += "${datadir}/bug ${datadir}/initramfs-tools 			\
 RDEPENDS_${PN} += "dmsetup cryptsetup-bin"
 RREPLACES_${PN} += "hashalot"
 RREPLACES_${PN}-bin += "${PN}"
-RDEPENDS_lib${PN} += "libgpg-error libgcrypt"
-RDEPENDS_lib${PN}-dev += "lib${PN}4"
+RDEPENDS_lib${DPN} += "libgpg-error libgcrypt"
+RDEPENDS_lib${DPN}-dev += "lib${DPN}4"

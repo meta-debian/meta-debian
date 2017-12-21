@@ -20,7 +20,7 @@ do_install_append() {
 	rm -f ${D}${includedir}/GL/*P.h
 }
 
-DEBIANNAME_${PN} = "lib${PN}1-mesa"
-DEBIANNAME_${PN}-dev = "lib${PN}1-mesa-dev"
-RPROVIDES_${PN} += "lib${PN}-mesa"
-RPROVIDES_${PN}-dev += "lib${PN}-mesa-dev"
+DEBIANNAME_${PN} = "lib${DPN}1-mesa"
+DEBIANNAME_${PN}-dev = "lib${DPN}1-mesa-dev"
+RPROVIDES_${PN} += "lib${DPN}-mesa"
+RPROVIDES_${PN}-dev += "lib${DPN}-mesa-dev"

@@ -40,6 +40,6 @@ PACKAGES =+ "${PN}-gobject ${PN}-icu"
 FILES_${PN}-gobject = "${libdir}/libharfbuzz-gobject${SOLIBS}"
 FILES_${PN}-icu = "${libdir}/libharfbuzz-icu${SOLIBS}"
 
-DEBIANNAME_${PN} = "lib${PN}0b"
+DEBIANNAME_${PN} = "lib${DPN}0b"
 
 BBCLASSEXTEND = "native"

@@ -52,15 +52,16 @@ do_install_append () {
 		install -d ${D}${base_libdir}
 		mv ${D}${libdir}/libprocps${SOLIBS} ${D}${base_libdir}/
 		rm ${D}${libdir}/libprocps${SOLIBSDEV}
-		ln -s ../../${base_libdir}/libprocps.so.3 ${D}${libdir}/libprocps${SOLIBSDEV}
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		ln -sf ${rel_lib_prefix}${base_libdir}/libprocps.so.3 ${D}${libdir}/libprocps${SOLIBSDEV}
 	fi
 }
 
 CONFFILES_${PN} = "${sysconfdir}/sysctl.conf"
 
-PACKAGES =+ " lib${PN}"
-FILES_lib${PN} = "${base_libdir}/*"
-DEBIANNAME_lib${PN} = "lib${PN}3"
+PACKAGES =+ " lib${DPN}"
+FILES_lib${DPN} = "${base_libdir}/*"
+DEBIANNAME_lib${DPN} = "lib${DPN}3"
 
 ALTERNATIVE_${PN} = "w"
 ALTERNATIVE_PRIORITY[w] = "50"

@@ -23,21 +23,21 @@ EXTRA_OECONF = "--libexecdir=${libdir} \
                 --enable-mailto \
                 --with-mailprog=${sbindir}sendmail \
                 --enable-large-secmem \
-                --with-zlib=${STAGING_LIBDIR}/.. \
-                --with-bzip2=${STAGING_LIBDIR}/.. \
+                --with-zlib=${STAGING_EXECPREFIXDIR} \
+                --with-bzip2=${STAGING_EXECPREFIXDIR} \
                 --disable-selinux-support \
-                --with-readline=${STAGING_LIBDIR}/.. \
+                --with-readline=${STAGING_EXECPREFIXDIR} \
                 ac_cv_sys_symbol_underscore=no"
 
 # Force gcc's traditional handling of inline to avoid issues with gcc 5
 CFLAGS += "-fgnu89-inline"
 
 do_install_append () {
-	install -d ${D}${docdir}/${PN}
+	install -d ${D}${docdir}/${DPN}
 	install -d ${D}${base_libdir}/udev/rules.d
 
-	mv ${D}${datadir}/${PN}/* ${D}/${docdir}/${PN}/ || :
-	mv ${D}${prefix}/doc/* ${D}/${docdir}/${PN}/ || :
+	mv ${D}${datadir}/${DPN}/* ${D}/${docdir}/${DPN}/ || :
+	mv ${D}${prefix}/doc/* ${D}/${docdir}/${DPN}/ || :
 	install -m 0755 ${S}/tools/lspgpot ${D}${bindir}
 	install -m 0644 ${S}/debian/gnupg.udev \
 		${D}/${base_libdir}/udev/rules.d/60-gnupg.rules

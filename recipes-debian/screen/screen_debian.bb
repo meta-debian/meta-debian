@@ -40,6 +40,8 @@ SRC_URI += " \
     file://0001-fix-for-multijob-build.patch \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep texinfo
 
 # Configure follow debian/rules

@@ -13,7 +13,7 @@ DEPENDS = "virtual/libx11 openssl libgssglue alsa-lib"
 inherit autotools-brokensep pkgconfig
 
 # Currently, we have no recipe for pcsclite, so temporary disable smartcard.
-EXTRA_OECONF = "--with-openssl=${STAGING_LIBDIR}/.. \
+EXTRA_OECONF = "--with-openssl=${STAGING_EXECPREFIXDIR} \
 	--with-ipv6 --with-sound=alsa \
 	--disable-smartcard \
 "

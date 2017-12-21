@@ -23,6 +23,8 @@ DEPENDS = "dbus dbus-glib"
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit distutils-base autotools pkgconfig
 
 PACKAGECONFIG ??= ""
@@ -31,6 +33,7 @@ PACKAGECONFIG[api-docs] = "--enable-api-docs,--disable-api-docs,python-docutils-
 
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# Follow debian/rules

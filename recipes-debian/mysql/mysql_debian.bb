@@ -14,7 +14,7 @@ EXTRA_OECMAKE += " \
         -DWITH_SSL=bundled \
         -DWITH_ZLIB=system \
         -DINSTALL_LAYOUT=RPM \
-        -DINSTALL_LIBDIR=lib \
+        -DINSTALL_LIBDIR=${baselib} \
         -DINSTALL_PLUGINDIR=lib/mysql/plugin \
         -DWITH_EMBEDDED_SERVER=ON \
         -DHAVE_EMBEDDED_PRIVILEGE_CONTROL=ON \
@@ -75,7 +75,7 @@ do_install_append() {
 PACKAGES += "mysql-testsuite"
 FILES_libmysqlclient = "${libdir}/libmysqlclient.so.* ${libdir}/libmysqlclient_r.so.*"
 FILES_libmysqld-pic = "${bindir}/mysql_config_pic"
-FILES_mysql-common = "${sysconfdir}/${PN}/my.cnf"
+FILES_mysql-common = "${sysconfdir}/mysql/my.cnf"
 FILES_mysql-server = "\
 	${sysconfdir}/* ${bindir}/msql2mysql ${bindir}/myisamchk \
 	${bindir}/myisamlog ${bindir}/myisampack \
@@ -84,17 +84,17 @@ FILES_mysql-server = "\
 	${bindir}/mysql_tzinfo_to_sql ${bindir}/mysql_zap ${bindir}/mysqlbinlog \
 	${bindir}/mysqld_* ${bindir}/mysqlhotcopy ${bindir}/mysqltest \
 	${bindir}/perror ${bindir}/replace ${bindir}/resolve_stack_dump \
-	${libdir}/mysql/plugin/*"
+	${prefix}/lib/mysql/plugin/*"
 FILES_mysql-server-core = "\
 	${bindir}/my_print_defaults ${bindir}/mysql_install_db \
 	${bindir}/mysql_upgrade ${sbindir}/mysqld ${datadir}/mysql/*"
 FILES_mysql-testsuite = "${libdir}/mysql-testsuite/*"
 FILES_${PN}-dbg += "\
 	${libdir}/mysql-testsuite/lib/My/SafeProcess/.debug \
-	${libdir}/mysql/plugin/.debug \
+	${prefix}/lib/mysql/plugin/.debug \
 "
 FILES_${PN}-dev += "${bindir}/mysql_config"
-PKG_${PN}-dev = "lib${PN}client-dev"
+PKG_${PN}-dev = "libmysqlclient-dev"
 PKG_${PN} = "mysql-client-${VER}"
 PKG_mysql-server = "mysql-server-${VER}"
 PKG_mysql-server-core = "mysql-server-core-${VER}"

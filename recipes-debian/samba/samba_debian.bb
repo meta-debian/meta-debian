@@ -107,8 +107,8 @@ do_install_append() {
 
 	install -m 0755 debian/setoption.py ${D}/${datadir}/samba
 	install -m 0755 debian/addshare.py ${D}/${datadir}/samba
-	mkdir -p ${D}/${libdir}/tmpfiles.d
-	echo "d /run/samba 0755 root root -" > ${D}/${libdir}/tmpfiles.d/samba.conf
+	mkdir -p ${D}${nonarch_libdir}/tmpfiles.d
+	echo "d /run/samba 0755 root root -" > ${D}${nonarch_libdir}/tmpfiles.d/samba.conf
 	cp debian/smb.conf* ${D}/${datadir}/samba
 	install -m755 debian/panic-action ${D}/${datadir}/samba/panic-action
 	cp debian/gdbcommands ${D}/${sysconfdir}/samba/
@@ -320,7 +320,7 @@ FILES_${PN}-common-bin = "\
 	${bindir}/samba-tool \
 	${bindir}/smbpasswd \
 	${bindir}/testparm \
-	${libdir}/tmpfiles.d/samba.conf \
+	${nonarch_libdir}/tmpfiles.d/samba.conf \
 	${sbindir}/samba_kcc \
 	${datadir}/samba/addshare.py \
 	${datadir}/samba/setoption.py \

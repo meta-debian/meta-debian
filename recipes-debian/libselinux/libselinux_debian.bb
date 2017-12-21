@@ -60,7 +60,8 @@ do_install() {
 	    PYLIBDIR="${D}/${libdir}/${PYTHON_DIR}"
 	# Fix up the broken library symlink
 	rm -f ${D}${libdir}/libselinux.so
-	ln -s ../../lib/libselinux.so.1 ${D}${libdir}/libselinux.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libselinux.so.1 ${D}${libdir}/libselinux.so
 
 	# Remove unneeded directory to prevent QA warnings about install ${base_sbindir}
 	if [ -d ${D}${base_sbindir} ]; then

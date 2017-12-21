@@ -48,4 +48,4 @@ EXTRA_OECONF += " \
 	--enable-threaded-resolver \
 	--with-lber-lib=lber \
 "
-EXTRA_OECONF_class-target += "--with-gssapi=${STAGING_LIBDIR}/../"
+EXTRA_OECONF_class-target += "--with-gssapi=${STAGING_EXECPREFIXDIR}"

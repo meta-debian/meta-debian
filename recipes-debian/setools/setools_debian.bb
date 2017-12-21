@@ -47,8 +47,8 @@ EXTRA_OECONF = "--enable-swig-python --enable-swig-tcl --disable-bwidget-check \
 "
 
 # Change path of sepol and selinux to sysroot
-EXTRA_OECONF += "--with-sepol-devel=${STAGING_LIBDIR}/.. \
-                 --with-selinux-devel=${STAGING_LIBDIR}/.."
+EXTRA_OECONF += "--with-sepol-devel=${STAGING_EXECPREFIXDIR} \
+                 --with-selinux-devel=${STAGING_EXECPREFIXDIR}"
 
 EXTRA_OECONF_append_class-native = " \
     --disable-gui \
@@ -64,6 +64,7 @@ export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 
 CFLAGS_append = " -fPIC"
 CXXFLAGS_append = " -fPIC"
@@ -74,7 +75,7 @@ do_configure_prepend() {
 	export PYLIBVER='python${PYTHON_BASEVERSION}'
 	export PYTHON_CPPFLAGS="-I${STAGING_INCDIR}/${PYLIBVER}"
 	export PYTHON_LDFLAGS="${STAGING_LIBDIR}/lib${PYLIBVER}.so"
-	export PYTHON_SITE_PKG="${libdir}/${PYLIBVER}/site-packages"
+	export PYTHON_SITE_PKG="${nonarch_libdir}/${PYLIBVER}/site-packages"
 	export REAL_TCL_BIN_DIR=${STAGING_BINDIR_NATIVE}
 }
 
@@ -100,9 +101,9 @@ do_install_append() {
 	    cp ${S}/debian/setools-gui.menu ${D}${datadir}/menu/setools-gui
 
 	# Remove unnecessary files
-	find ${D}${libdir} -name '*.pyc' -delete
-	find ${D}${libdir} -name '*.pyo' -delete
-	find ${D}${libdir} -name 'setools-1.0.egg-info' -delete
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name '*.pyc' -delete
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name '*.pyo' -delete
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name 'setools-1.0.egg-info' -delete
 
 	# Fix permission follow debian/rules
 	find ${D}${libdir}/setools/ -type f -name '*.tcl' -exec chmod -x {} \;
@@ -132,7 +133,7 @@ FILES_libsetools-tcl = "${libdir}/setools/apol/* \
                         ${libdir}/setools/seaudit/* \
                         ${libdir}/setools/sefs/* \
                         "
-FILES_python-${PN} = "${libdir}/python*/*-packages/setools/*"
+FILES_python-${PN} = "${nonarch_libdir}/python*/*-packages/*"
 FILES_setools-gui = "${sysconfdir}/* \
                      ${bindir}/apol ${bindir}/seaudit-report ${bindir}/sediffx \
                      ${sbindir}/* \
@@ -147,7 +148,7 @@ FILES_setools-gui = "${sysconfdir}/* \
                      ${datadir}/setools/*/types_relation_help.txt \
                      ${datadir}/menu/setools-gui \
                      "
-FILES_${PN}-dbg += "${libdir}/python*/*-packages/setools/.debug \
+FILES_${PN}-dbg += "${nonarch_libdir}/python*/*-packages/setools/.debug \
                     ${libdir}/setools/*/.debug \
                     "
 

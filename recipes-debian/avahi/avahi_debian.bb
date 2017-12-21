@@ -36,6 +36,7 @@ CACHED_CONFIGUREVARS += "py_cv_mod_gdbm_=yes"
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 DEPENDS += "intltool-native glib-2.0-native libdaemon gdbm expat libcap python-dbus-native"
 
@@ -160,7 +161,7 @@ FILES_libavahi-ui-dev = "${includedir}/avahi-ui/*.h \
                          ${libdir}/libavahi-ui.so \
                          ${libdir}/pkgconfig/avahi-ui.pc"
 FILES_libavahi-ui = "${libdir}/libavahi-ui${SOLIBS}"
-FILES_python-${PN} = "${libdir}/python*"
+FILES_python-${PN} = "${nonarch_libdir}/python*"
 
 DEBIANNAME_libavahi-compat-libdnssd = "libavahi-compat-libdnssd1"
 DEBIAN_NOAUTONAME_libavahi-compat-libdnssd-dev = "1"

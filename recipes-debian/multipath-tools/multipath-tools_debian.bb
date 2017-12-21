@@ -14,6 +14,9 @@ LICENSE = "LGPLv2+ & GPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=7be2873b6270e45abacc503abbe2aa3d \
 	file://libmultipath/parser.c;beginline=1;endline=18;md5=4207fa3fb9902e3dd287cd489545c80b"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep
 DEPENDS += "libaio lvm2 readline"
 

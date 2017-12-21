@@ -39,10 +39,14 @@ DEBIAN_PATCH_TYPE = "nopatch"
 
 inherit autotools pkgconfig pythonnative
 
+export BUILD_SYS
+export HOST_SYS
+export DEB_HOST_MULTIARCH
+
 PACKAGES += "python-xcbgen"
 
 FILES_${PN}-dev += "${datadir}/xcb/*.xml ${datadir}/xcb/*.xsd"
-FILES_python-xcbgen = "${libdir}/python*"
+FILES_python-xcbgen = "${nonarch_libdir}/python*"
 
 RDEPENDS_${PN}-dev = ""
 RRECOMMENDS_${PN}-dbg = "${PN}-dev (= ${EXTENDPKGV})"

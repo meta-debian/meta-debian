@@ -19,6 +19,8 @@ DEPENDS = "virtual/kernel openssl readline flex bison-native libldap krb5 \
 # fix bug undefined reference to 'yylex'
 SRC_URI += "file://0001-Don-t-link-against-libfl.patch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools
 
 # Configure follow debian/rules
@@ -32,7 +34,7 @@ EXTRA_OECONF = " \
 	--disable-static \
 	--enable-frag \
 	--enable-hybrid \
-	--with-libldap=${STAGING_LIBDIR}/.. \
+	--with-libldap=${STAGING_EXECPREFIXDIR} \
 	--enable-gssapi \
 	--enable-dpd \
 	--enable-adminport \
@@ -49,7 +51,7 @@ do_install_append() {
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/default
 	install -d ${D}${sysconfdir}/racoon
-	install -d ${D}${base_libdir}/systemd/system
+	install -d ${D}${systemd_system_unitdir}
 	install -m 755 ${S}/debian/ipsec-tools.setkey.default ${D}${sysconfdir}/default/setkey
 	install -m 755 ${S}/debian/ipsec-tools.setkey.init ${D}${sysconfdir}/init.d/setkey
 	install -m 755 ${S}/debian/ipsec-tools.conf ${D}${sysconfdir}/
@@ -59,7 +61,7 @@ do_install_append() {
 	install -m 755 ${S}/src/racoon/samples/psk.txt.sample ${D}${sysconfdir}/racoon/psk.txt
 	install -m 755 ${S}/debian/racoon.conf ${D}${sysconfdir}/racoon/racoon.conf
 	install -m 755 ${S}/debian/racoon-tool.conf ${D}${sysconfdir}/racoon/racoon-tool.conf
-	install -m 755 ${S}/debian/racoon.service ${D}${base_libdir}/systemd/system/
+	install -m 755 ${S}/debian/racoon.service ${D}${systemd_system_unitdir}/
 	install -m 755 ${S}/debian/racoon-tool.pl ${D}${sbindir}/racoon-tool
 	rm -rf ${D}${libdir}/ipsec-tools/*.so  
 }
@@ -83,9 +85,9 @@ FILES_racoon = " \
 	${sbindir}/racoonctl \
 	${sbindir}/racoon-tool \
 	${sbindir}/racoon \
-	${base_libdir}/systemd/system/* \
+	${systemd_system_unitdir}/* \
 	${includedir}/ \
-	${libdir}/${PN}/libracoon.so* \	
+	${libdir}/ipsec-tools/libracoon.so* \
     "
 
-FILES_${PN}-dbg += "${libdir}/${PN}/.debug"
+FILES_${PN}-dbg += "${libdir}/*/.debug"

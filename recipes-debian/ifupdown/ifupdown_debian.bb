@@ -17,6 +17,8 @@ PV = "0.7.53.1"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 do_compile() {
 	chmod a+rx *.pl *.sh
 	oe_runmake 'CC=${CC}' "CFLAGS=${CFLAGS} -Wall -W -D'IFUPDOWN_VERSION=\"${PV}\"'"
@@ -32,7 +34,7 @@ do_install() {
 	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install -d ${D}${sysconfdir}/network/if-up.d
 	install -d ${D}${sysconfdir}/network/interfaces.d
-	install -d ${D}${base_libdir}/${PN}
+	install -d ${D}${base_libdir}/${DPN}
 	install -d ${D}${base_sbindir}
 	install -d ${D}${mandir}/man8
 	install -d ${D}${mandir}/man5
@@ -55,7 +57,7 @@ do_install() {
 			${D}${sysconfdir}/network/if-down.d/upstart
 	install -m 0755 ${S}/debian/ifupdown.upstart.if-up \
 			${D}${sysconfdir}/network/if-up.d
-	install -m 0755 ${S}/settle-dad.sh ${D}${base_libdir}/${PN}
+	install -m 0755 ${S}/settle-dad.sh ${D}${base_libdir}/${DPN}/
 	install -m 0755 ${S}/ifup ${D}${base_sbindir}
 	ln -sf ifup ${D}${base_sbindir}/ifdown 	
 	ln -sf ifup ${D}${base_sbindir}/ifquery

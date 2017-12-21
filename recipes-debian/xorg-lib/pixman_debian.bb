@@ -42,7 +42,7 @@ REQUIRED_DISTRO_FEATURES = ""
 #Apply debian patch by quilt
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEBIANNAME_${PN}-dbg = "lib${PN}-1-0-dbg"
+DEBIANNAME_${PN}-dbg = "libpixman-1-0-dbg"
 
 RPROVIDES_${PN} += "libpixman"
 RPROVIDES_${PN}-dev += "libpixman-dev"

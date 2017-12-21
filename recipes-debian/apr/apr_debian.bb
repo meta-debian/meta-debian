@@ -112,9 +112,9 @@ apr_sysroot_preprocess () {
 	sed -i "s,cd /usr/share,cd ${STAGING_DATADIR},g" ${SYSROOT_DESTDIR}${bindir_crossscripts}/apr-1-config
 }
 
-DEBIANNAME_${PN} = "lib${PN}1"
-DEBIANNAME_${PN}-dev = "lib${PN}1-dev"
-DEBIANNAME_${PN}-dbg = "lib${PN}1-dbg"
+DEBIANNAME_${PN} = "lib${DPN}1"
+DEBIANNAME_${PN}-dev = "lib${DPN}1-dev"
+DEBIANNAME_${PN}-dbg = "lib${DPN}1-dbg"
 
 do_compile_ptest() {
 	cd ${S}/test

@@ -34,6 +34,8 @@ SRC_URI += "file://disable-build-doc_debian.patch"
 
 DEPENDS = "flex glib-2.0 util-linux"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep systemd pkgconfig update-alternatives
 
 # Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
@@ -70,7 +72,7 @@ PACKAGECONFIG ??= "\
 	"
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
 PACKAGECONFIG[systemd] = "\
-	--enable-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/,\
+	--enable-systemd --with-systemdsystemunitdir=${systemd_system_unitdir}/,\
 	--disable-systemd --without-systemdsystemunitdir, systemd, libsystemd-daemon-dev"
 PACKAGECONFIG[linux-caps] = "--enable-linux-caps,--disable-linux-caps,libcap,"
 PACKAGECONFIG[pcre] = "--enable-pcre,--disable-pcre,libpcre,"
@@ -133,6 +135,8 @@ do_install() {
 			${D}${sysconfdir}/${DPN}/syslog-ng.conf
 	install -m 0644 ${S}/debian/tty10.linux.conf \
 			${D}${datadir}/${DPN}/include/scl/system/tty10.conf
+
+	sed -i -e "s@${STAGING_DIR_HOST}@@g" ${D}${libdir}/pkgconfig/syslog-ng.pc
 }
 
 FILES_${PN}-mod-amqp = "${libdir}/${DPN}/*/libafamqp.so"
@@ -150,7 +154,7 @@ FILES_${PN}-dev += "\
 "
 FILES_${PN}-core = "\
 	${sysconfdir}/* 				\
-	${base_libdir}/systemd/system/syslog-ng.service \
+	${systemd_system_unitdir}/syslog-ng.service \
 	${bindir}/* 					\
 	${sbindir}/* 					\
 	${libdir}/${DPN}/*/*.so 			\

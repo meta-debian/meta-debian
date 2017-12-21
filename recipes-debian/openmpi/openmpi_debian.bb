@@ -72,8 +72,9 @@ do_install_append() {
 	fi
 	
 	# Follow debian/libopenmpi1.6.links amd debian/libopenmpi-dev.links
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	for f in ${D}${LIBDIR}/*.so.*.*.*; do
-		ln -sf ../..${LIBDIR}/`basename $f` ${D}${libdir}/`basename $f`
+		ln -sf ${rel_lib_prefix}${LIBDIR}/`basename $f` ${D}${libdir}/`basename $f`
 		rm -rf ${f%.*.*}
 	done
 	for f in ${D}${libdir}/*.so.*.*.*; do
@@ -108,9 +109,9 @@ do_install_append_class-target() {
 		${D}${libdir}/openmpi/lib/pkgconfig/*.pc
 }
 
-PACKAGES =+ "lib${PN} ${PN}-checkpoint ${PN}-common"
+PACKAGES =+ "lib${DPN} ${PN}-checkpoint ${PN}-common"
 
-FILES_lib${PN} = "${libdir}/*${SOLIBS} \
+FILES_lib${DPN} = "${libdir}/*${SOLIBS} \
                   ${LIBDIR}/*${SOLIBS} \\
                   ${LIBDIR}/openmpi/* \
                   ${LIBDIR}/mpi.mod"
@@ -135,18 +136,18 @@ FILES_${PN}-dev += "${LIBDIR}/*.so \
                     ${INCDIR}/* \
                     ${libdir}/openmpi/lib/pkgconfig/*"
 
-PKG_lib${PN} = "lib${PN}1.6"
-PKG_${PN}-dev = "lib${PN}-dev"
+PKG_lib${DPN} = "lib${DPN}1.6"
+PKG_${PN}-dev = "lib${DPN}-dev"
 PKG_${PN} = "${PN}-bin"
-PKG_${PN}-dbg = "lib${PN}1.6-dbg"
+PKG_${PN}-dbg = "lib${DPN}1.6-dbg"
 
-RPROVIDES_lib${PN} = "lib${PN}1.6"
-RPROVIDES_${PN}-dev = "lib${PN}-dev"
+RPROVIDES_lib${DPN} = "lib${DPN}1.6"
+RPROVIDES_${PN}-dev = "lib${DPN}-dev"
 RPROVIDES_${PN} = "${PN}-bin"
 RDEPENDS_${PN} += "${PN}-common"
 RSUGGESTS_${PN} += "${PN}-checkpoint"
-RDEPEMDS_${PN}-dev += "${PN}-common libibverbs-dev libhwloc-dev"
-RDEPENDS_${PN}-checkpoint += "${PN} blcr-util lib${PN}"
+RDEPENDS_${PN}-dev += "${PN}-common libibverbs-dev libhwloc-dev"
+RDEPENDS_${PN}-checkpoint += "${PN} blcr-util lib${DPN}"
 
 # Follow debian/openmpi-bin.postinst
 ALTERNATIVE_${PN} = "mpirun mpiexec"

@@ -76,6 +76,7 @@ export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 
 # Env var which tells perl where the perl include files are
 export PERL_INC = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}/CORE"

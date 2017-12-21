@@ -57,6 +57,7 @@ export HOST_SYS
 export BUILD_SYS
 export STAGING_LIBDIR
 export STAGING_INCDIR
+export DEB_HOST_MULTIARCH
 
 export LDFLAGS += "-ldl"
 

@@ -12,6 +12,9 @@ PV = "2.11+dfsg"
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=f27defe1e96c2e1ecd4e0c9be8967949"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep gettext
 EXTRA_OECONF += "CPIO_MT_PROG=mt --bindir=${base_bindir}"
 

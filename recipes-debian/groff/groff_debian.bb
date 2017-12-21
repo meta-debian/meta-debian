@@ -33,7 +33,7 @@ EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
 PACKAGECONFIG_class-target ?= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
 PACKAGECONFIG[x11] = "--with-x, --without-x, libx11 libxmu libxt libxaw"
 
-PACKAGES =+ "${PN}-base"
+PACKAGES =+ "${DPN}-base"
 
 do_configure_append() {
     # generate gnulib configure script
@@ -76,7 +76,7 @@ do_install_append() {
 }
 
 #shipment files for groff-base package:
-FILES_${PN}-base = " \
+FILES_${DPN}-base = " \
     ${sysconfdir}/groff \
     ${libdir}/mime/packages/groff-base \
     ${datadir}/groff/${PV}/eign \

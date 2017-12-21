@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=53b4a999993871a28ab1488fdbd2e73e"
 inherit autotools-brokensep
 CFLAGS += "-fstack-protector-all"
 EXTRA_OEMAKE = " \
-	'LIBDIR=${base_libdir}/${PN}' \
+	'LIBDIR=${base_libdir}/${DPN}' \
 	'BINDIR=${base_sbindir}' \
 	'CC=${CC}' \
 	'CFLAGS=${CFLAGS}' \
@@ -32,5 +32,5 @@ do_install_append() {
 RRECOMMENDS_${PN} += "iptables kmod"
 # Avoid a parallel build problem
 PARALLEL_MAKE = ""
-FILES_${PN} += "${base_libdir}/${PN}/*"
-FILES_${PN}-dbg += "${base_libdir}/${PN}/.debug"
+FILES_${PN} += "${base_libdir}/${DPN}/*"
+FILES_${PN}-dbg += "${base_libdir}/${DPN}/.debug"

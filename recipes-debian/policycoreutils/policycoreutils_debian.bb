@@ -34,6 +34,7 @@ export STAGING_INCDIR
 export STAGING_LIBDIR
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 # EXTRA_OEMAKE is typically: -e MAKEFLAGS=
 # "MAKEFLAGS= " causes problems as ENV variables will not pass to subdirs, so
@@ -52,7 +53,7 @@ PCU_NATIVE_CMDS = "setfiles semodule_package semodule semodule_link semodule_exp
 
 # Follow debian/rules
 export LIBDIR="${D}${libdir}"
-export PYTHONLIBDIR="${D}${libdir}/${PYTHON_DIR}"
+export PYTHONLIBDIR="${D}${nonarch_libdir}/${PYTHON_DIR}"
 export INITDIR="${D}${sysconfdir}/init.d"
 export SYSCONFDIR="${D}${sysconfdir}/default"
 export SYSTEMDDIR="${D}${systemd_unitdir}"
@@ -90,9 +91,9 @@ do_install() {
 		INCLUDEDIR="${D}${includedir}" \
 		SHLIBDIR="${D}${base_libdir}"
 
-	install -d ${D}${libdir}/tmpfiles.d
+	install -d ${D}${nonarch_libdir}/tmpfiles.d
 	cp ${S}/debian/policycoreutils.mcstrans.tmpfile \
-	   ${D}${libdir}/tmpfiles.d/mcstrans.conf
+	   ${D}${nonarch_libdir}/tmpfiles.d/mcstrans.conf
 
 	# Fix symlink
 	rm -f ${D}${sbindir}/load_policy
@@ -129,7 +130,7 @@ do_install() {
 	ln -sf setsebool ${D}${datadir}/bash-completion/completions/getsebool
 
 	# Remove unwanted files
-	find ${D}${libdir}/${PYTHON_DIR} -name "*.pyc" -exec rm -f {} \;
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name "*.pyc" -exec rm -f {} \;
 }
 
 do_install_class-native() {
@@ -166,14 +167,14 @@ EOF
 
 PACKAGE_BEFORE_PN += "python-sepolicy"
 
-FILES_python-sepolicy = "${libdir}/${PYTHON_DIR}/*-packages/sepolicy*"
+FILES_python-sepolicy = "${nonarch_libdir}/${PYTHON_DIR}/*-packages/sepolicy*"
 FILES_${PN} += " \
-    ${libdir}/${PYTHON_DIR}/*-packages/seobject.py \
-    ${libdir}/tmpfiles.d \
+    ${nonarch_libdir}/${PYTHON_DIR}/*-packages/seobject.py \
+    ${nonarch_libdir}/tmpfiles.d \
     ${systemd_unitdir} \
     ${datadir} \
 "
-FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/*-packages/sepolicy/.debug"
+FILES_${PN}-dbg += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/sepolicy/.debug"
 
 RPROVIDES_${PN} += "mcstrans"
 RDEPENDS_${PN}_class-target += "python-sepolicy"

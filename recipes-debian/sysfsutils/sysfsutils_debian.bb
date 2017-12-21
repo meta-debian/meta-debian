@@ -25,7 +25,8 @@ do_install_append() {
 	# Follow debian/rules
 	mkdir -p ${D}${libdir}
 	rm ${D}${base_libdir}/libsysfs.so
-	ln -s ../..${base_libdir}/libsysfs.so.2 ${D}${libdir}/libsysfs.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libsysfs.so.2 ${D}${libdir}/libsysfs.so
 	mv ${D}${base_libdir}/libsysfs.a ${D}${libdir}
 
 	chrpath -d ${D}${bindir}/*

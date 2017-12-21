@@ -36,12 +36,12 @@ EXTRA_OECONF += " \
 "
 
 PACKAGECONFIG ??= "expat lua pcre ssl xml zlib"
-PACKAGECONFIG[expat] = "--with-expat=${STAGING_LIBDIR}/..,--without-expat,expat"
-PACKAGECONFIG[lua] = "--with-lua=${STAGING_LIBDIR}/..,--without-lua,lua5.1"
+PACKAGECONFIG[expat] = "--with-expat=${STAGING_EXECPREFIXDIR},--without-expat,expat"
+PACKAGECONFIG[lua] = "--with-lua=${STAGING_EXECPREFIXDIR},--without-lua,lua5.1"
 PACKAGECONFIG[pcre] = "--with-pcre=${STAGING_BINDIR_CROSS}/pcre-config,--without-pcre,libpcre"
-PACKAGECONFIG[ssl] = "--enable-ssl --with-ssl=${STAGING_LIBDIR}/..,--disable-ssl,openssl"
-PACKAGECONFIG[xml] = "--with-libxml2=${STAGING_LIBDIR}/..,--without-libxml2,libxml2"
-PACKAGECONFIG[zlib] = "--with-z=${STAGING_LIBDIR}/..,--without-z,zlib"
+PACKAGECONFIG[ssl] = "--enable-ssl --with-ssl=${STAGING_EXECPREFIXDIR},--disable-ssl,openssl"
+PACKAGECONFIG[xml] = "--with-libxml2=${STAGING_EXECPREFIXDIR},--without-libxml2,libxml2"
+PACKAGECONFIG[zlib] = "--with-z=${STAGING_EXECPREFIXDIR},--without-z,zlib"
 
 do_debian_patch_append() {
 	# Apply patch for suexec

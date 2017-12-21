@@ -21,8 +21,8 @@ EXTRA_OECONF = " \
 	--with-libtool \
 	--enable-shared \
 	--enable-static \
-	--with-openssl=${STAGING_LIBDIR}/.. \
-	--with-gssapi=${STAGING_LIBDIR}/../ \
+	--with-openssl=${STAGING_EXECPREFIXDIR} \
+	--with-gssapi=${STAGING_EXECPREFIXDIR} \
 	--with-gnu-ld \
 	--with-dlz-postgres=no \
 	--with-dlz-mysql=no \
@@ -37,7 +37,7 @@ EXTRA_OECONF = " \
 	--with-gost=no \
 	--with-randomdev=/dev/random \
 	--with-dlz-odbc=no \
-	--with-dlz-ldap=${STAGING_LIBDIR}/../ \
+	--with-dlz-ldap=${STAGING_EXECPREFIXDIR} \
 "
 
 # Split building exportable library base on debian/rules
@@ -123,8 +123,8 @@ do_install_append () {
 	install ${S}/debian/ip-down.d ${D}${sysconfdir}/network/if-down.d/bind9
 	install -m644 ${S}/debian/bind9.ufw.profile ${D}${sysconfdir}/ufw/applications.d/bind9
 
-	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${libdir}/tmpfiles.d/bind9.conf
-	install -D -m 644 ${S}/debian/lwresd.tmpfile ${D}${libdir}/tmpfiles.d/lwresd.conf
+	install -D -m 644 ${S}/debian/bind9.tmpfile ${D}${nonarch_libdir}/tmpfiles.d/bind9.conf
+	install -D -m 644 ${S}/debian/lwresd.tmpfile ${D}${nonarch_libdir}/tmpfiles.d/lwresd.conf
 
 	# Base on debian/libbind-dev.install
 	install -m 0644 ${S}/lib/dns/include/dns/dlz_dlopen.h ${D}${includedir}/dns/
@@ -179,7 +179,7 @@ CONFFILES_${PN} = " \
 "
 
 PACKAGES =+ "${DPN}-host ${DPN}utils dnsutils \
-             lib${PN}-export-dev lib${DPN} libdns-export libdns \
+             lib${DPN}-export-dev lib${DPN} libdns-export libdns \
              libirs-export libisc-export libisc libisccc \
              libisccfg-export libisccfg liblwres lwresd \
              "
@@ -208,7 +208,7 @@ FILES_dnsutils = " \
 	${bindir}/nsupdate \
 "
 
-FILES_lib${PN}-export-dev = "${libdir}/lib*-export${SOLIBSDEV}"
+FILES_lib${DPN}-export-dev = "${libdir}/lib*-export${SOLIBSDEV}"
 FILES_lib${DPN} = "${libdir}/libbind9${SOLIBS}"
 FILES_libdns-export = "${base_libdir}/libdns-export${SOLIBS}"
 FILES_libdns = "${libdir}/libdns${SOLIBS}"
@@ -223,13 +223,13 @@ FILES_liblwres = "${libdir}/liblwres${SOLIBS}"
 FILES_lwresd = " \
 	${sysconfdir}/init.d/lwresd \
 	${systemd_system_unitdir}/lwresd.service \
-	${libdir}/tmpfiles.d/lwresd.conf \
+	${nonarch_libdir}/tmpfiles.d/lwresd.conf \
 	${sbindir}/lwresd \
 "
 
 FILES_${PN} += " \
 	/run \
-	${libdir}/tmpfiles.d/bind9.conf \
+	${nonarch_libdir}/tmpfiles.d/bind9.conf \
 	${datadir}/${DPN} \
 	${localstatedir} \
 "
@@ -239,9 +239,9 @@ FILES_${PN}-dev += " \
 
 # Package "bind" and "bind-dev" on Poky are equal to "bind9" and "libbind-dev" on Debian
 DEBIANNAME_${PN} = "${DPN}"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 RPROVIDES_${PN} += "${DPN}"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 # Package "host" is provided by "bind9-host" according to debian/control
 RPROVIDES_${DPN}-host += "host"
@@ -256,4 +256,4 @@ RDEPENDS_libisccc += "libisc"
 RDEPENDS_libisccfg += "libdns libisccc libisc"
 RDEPENDS_dnsutils += "libdns libisccfg libisc liblwres lib${DPN}"
 RDEPENDS_lwresd += "libdns libisccfg libisccc libisc liblwres lib${DPN}"
-RDEPENDS_lib${PN}-export-dev += "${DPN}-host libdns-export libisccfg-export libisc-export libirs-export"
+RDEPENDS_lib${DPN}-export-dev += "${DPN}-host libdns-export libisccfg-export libisc-export libirs-export"

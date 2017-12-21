@@ -29,8 +29,8 @@ do_install_append() {
 	rm ${D}${libdir}/*.la
 }
 
-PKG_${PN}-dev = "lib${PN}0-dev"
+PKG_${PN}-dev = "lib${DPN}0-dev"
 RDEPENDS_${PN}-dev += "libxcb-dev"
 
-RPROVIDES_${PN} += "lib${PN}"
-RPROVIDES_${PN}-dev += "lib${PN}-dev"
+RPROVIDES_${PN} += "lib${DPN}"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"

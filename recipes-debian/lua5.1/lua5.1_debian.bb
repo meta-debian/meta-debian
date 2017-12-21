@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=59bdd99bb82238f238cf5c65c21604fd"
 HOMEPAGE = "http://www.lua.org/"
 
-PR = "r1"
+PR = "r2"
 inherit debian-package
 PV = "5.1.5"
 
@@ -32,7 +32,7 @@ export LUA_MULTIARCH= "lua5.1-deb-multiarch.h"
 do_configure_prepend() {
 	echo "#ifndef _LUA_DEB_MULTIARCH_" > ${S}/src/${LUA_MULTIARCH}
         echo "#define _LUA_DEB_MULTIARCH_" >> ${S}/src/${LUA_MULTIARCH}
-        echo "#define DEB_HOST_MULTIARCH \"${HOST_SYS}\"" >> \
+        echo "#define DEB_HOST_MULTIARCH \"${DEB_HOST_MULTIARCH}\"" >> \
                ${S}/src/${LUA_MULTIARCH}
         echo "#endif" >> ${S}/src/${LUA_MULTIARCH}
 }
@@ -54,6 +54,7 @@ do_install () {
 		'INSTALL_BIN=${D}${bindir}' \
 		'INSTALL_INC=${D}${includedir}/${LUA}' \
 		'INSTALL_MAN=${D}${mandir}/man1' \
+		'DEB_HOST_MULTIARCH=${DEB_HOST_MULTIARCH}' \
 		debian_install
 	
 	install -d ${D}${PKG_DIR}
@@ -74,7 +75,8 @@ do_install () {
 	cat ${S}/debian/lua-c++.pc.in >> ${D}${PKGPP_CONFIG_FILE}
 	ln -s $(basename ${D}${PKGPP_CONFIG_FILE}) ${D}${PKGPP_CONFIG_FILE_FBSD}
 	ln -s $(basename ${D}${PKGPP_CONFIG_FILE}) ${D}${PKGPP_CONFIG_FILE_NODOT}
-	install -m 0644 ${S}/src/${LUA_MULTIARCH} ${D}${includedir}/
+	install -d ${D}${includedir}/${DEB_HOST_MULTIARCH}/
+	install -m 0644 ${S}/src/${LUA_MULTIARCH} ${D}${includedir}/${DEB_HOST_MULTIARCH}/
 }
 
 PACKAGES =+ "liblua5.1-0"

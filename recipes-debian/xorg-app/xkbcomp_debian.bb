@@ -34,4 +34,4 @@ do_debian_patch_prepend() {
 	fi
 }
 
-S = "${DEBIAN_UNPACK_DIR}/${PN}"
+S = "${DEBIAN_UNPACK_DIR}/xkbcomp"

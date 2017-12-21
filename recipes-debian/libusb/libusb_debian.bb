@@ -16,12 +16,12 @@ EXTRA_OECONF = "--disable-build-docs"
 do_install_append() {
 	install -d ${D}${base_libdir}
 	mv ${D}${libdir}/libusb-0.1.so.* ${D}${base_libdir}/
-	
-	ln -sf ../../lib/libusb-0.1.so.4 \
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libusb-0.1.so.4 \
 		${D}${libdir}/libusb-0.1.so.4
 
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libusb.so))
-	ln -sf ../../lib/$LINKLIB ${D}${libdir}/libusb.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libusb.so
 
 	rm ${D}${libdir}/*.la
 }

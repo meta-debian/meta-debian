@@ -16,7 +16,7 @@ PACKAGECONFIG_class-nativesdk = "ipv6 ssl zlib"
 PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,"
 PACKAGECONFIG[ssl] = "--with-ssl --with-random=/dev/urandom,--without-ssl,openssl"
 PACKAGECONFIG[gnutls] = "--with-gnutls,--without-gnutls,gnutls"
-PACKAGECONFIG[zlib] = "--with-zlib=${STAGING_LIBDIR}/../,--without-zlib,zlib"
+PACKAGECONFIG[zlib] = "--with-zlib=${STAGING_EXECPREFIXDIR}/,--without-zlib,zlib"
 PACKAGECONFIG[rtmpdump] = "--with-librtmp,--without-librtmp,rtmpdump"
 PACKAGECONFIG[libssh2] = "--with-libssh2,--without-libssh2,libssh2"
 

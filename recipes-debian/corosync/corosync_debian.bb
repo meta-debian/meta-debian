@@ -75,43 +75,43 @@ PACKAGES =+ "libcfg libcfg-dev libconfdb libconfdb-dev \
              libvotequorum libvotequorum-dev"
 
 FILES_libcfg = "${libdir}/libcfg${SOLIBS}"
-FILES_libcfg-dev = "${includedir}/${PN}/cfg.h \
+FILES_libcfg-dev = "${includedir}/corosync/cfg.h \
                     ${libdir}/libcfg.so \
                     ${libdir}/pkgconfig/libcfg.pc"
 RDEPENDS_libcfg-dev = "libcfg"
 FILES_libcfg-staticdev = "${libdir}/libcfg.a"
 FILES_libconfdb = "${libdir}/libconfdb${SOLIBS}"
-FILES_libconfdb-dev = "${includedir}/${PN}/confdb.h \
+FILES_libconfdb-dev = "${includedir}/corosync/confdb.h \
                        ${libdir}/libconfdb.so \
                        ${libdir}/pkgconfig/libconfdb.pc"
 RDEPENDS_libconfdb-dev = "libconfdb"
 FILES_libconfdb-staticdev = "${libdir}/libconfdb.a"
 FILES_libcoroipcc = "${libdir}/libcoroipcc${SOLIBS}"
-FILES_libcoroipcc-dev = "${includedir}/${PN}/coroipcc.h \
+FILES_libcoroipcc-dev = "${includedir}/corosync/coroipcc.h \
                          ${libdir}/libcoroipcc.so \
                          ${libdir}/pkgconfig/libcoroipcc.pc"
 RDEPENDS_libcoroipcc-dev = "libcoroipcc"
 FILES_libcoroipcc-staticdev = "${libdir}/libcoroipcc.a"
 FILES_libcoroipcs = "${libdir}/libcoroipcs${SOLIBS}"
-FILES_libcoroipcs-dev = "${includedir}/${PN}/coroipcs.h \
+FILES_libcoroipcs-dev = "${includedir}/corosync/coroipcs.h \
                          ${libdir}/libcoroipcs.so \
                          ${libdir}/pkgconfig/libcoroipcs.pc"
 RDEPENDS_libcoroipcs-dev = "libcoroipcs"
 FILES_libcoroipcs-staticdev = "${libdir}/libcoroipcs.a"
 FILES_libcpg = "${libdir}/libcpg${SOLIBS}"
-FILES_libcpg-dev = "${includedir}/${PN}/cpg.h \
+FILES_libcpg-dev = "${includedir}/corosync/cpg.h \
                     ${libdir}/libcpg.so \
                     ${libdir}/pkgconfig/libcpg.pc"
 RDEPENDS_libcpg-dev = "libcpg"
 FILES_libcpg-staticdev = "${libdir}/libcpg.a"
 FILES_libevs = "${libdir}/libevs${SOLIBS}"
-FILES_libevs-dev = "${includedir}/${PN}/evs.h \
+FILES_libevs-dev = "${includedir}/corosync/evs.h \
                     ${libdir}/libevs.so \
                     ${libdir}/pkgconfig/libevs.pc"
 RDEPENDS_libevs-dev = "libevs"
 FILES_libevs-staticdev = "${libdir}/libevs.a"
 FILES_liblogsys = "${libdir}/liblogsys${SOLIBS}"
-FILES_liblogsys-dev = "${includedir}/${PN}/engine/logsys.h \
+FILES_liblogsys-dev = "${includedir}/corosync/engine/logsys.h \
                        ${libdir}/liblogsys.so \
                        ${libdir}/pkgconfig/liblogsys.pc"
 RDEPENDS_liblogsys-dev = "liblogsys"
@@ -122,28 +122,28 @@ FILES_libpload-dev = "${libdir}/libpload.so \
 RDEPENDS_libpload-dev = "libpload"
 FILES_libpload-staticdev = "${libdir}/libpload.a"
 FILES_libquorum = "${libdir}/libquorum${SOLIBS}"
-FILES_libquorum-dev = "${includedir}/${PN}/quorum.h \
+FILES_libquorum-dev = "${includedir}/corosync/quorum.h \
                        ${libdir}/libquorum.so \
                        ${libdir}/pkgconfig/libquorum.pc"
 RDEPENDS_libquorum-dev = "libquorum"
 FILES_libquorum-staticdev = "${libdir}/libquorum.a"
 FILES_libsam = "${libdir}/libsam${SOLIBS}"
-FILES_libsam-dev = "${includedir}/${PN}/sam.h \
+FILES_libsam-dev = "${includedir}/corosync/sam.h \
                     ${libdir}/libsam.so \
                     ${libdir}/pkgconfig/libsam.pc"
 RDEPENDS_libsam-dev = "libsam"
 FILES_libsam-staticdev = "${libdir}/libsam.a"
 FILES_libtotem-pg = "${libdir}/libtotem_pg${SOLIBS}"
-FILES_libtotem-pg-dev = "${includedir}/${PN}/totem/coropoll.h \
-                         ${includedir}/${PN}/totem/totem.h \
-                         ${includedir}/${PN}/totem/totemip.h \
-                         ${includedir}/${PN}/totem/totempg.h \
+FILES_libtotem-pg-dev = "${includedir}/corosync/totem/coropoll.h \
+                         ${includedir}/corosync/totem/totem.h \
+                         ${includedir}/corosync/totem/totemip.h \
+                         ${includedir}/corosync/totem/totempg.h \
                          ${libdir}/libtotem_pg.so \
                          ${libdir}/pkgconfig/libtotem_pg.pc"
 RDEPENDS_libtotem-pg-dev = "libtotem-pg"
 FILES_libtotem-pg-staticdev = "${libdir}/libtotem_pg.a"
 FILES_libvotequorum = "${libdir}/libvotequorum${SOLIBS}"
-FILES_libvotequorum-dev = "${includedir}/${PN}/votequorum.h \
+FILES_libvotequorum-dev = "${includedir}/corosync/votequorum.h \
                            ${libdir}/libvotequorum.so \
                            ${libdir}/pkgconfig/libvotequorum.pc"
 RDEPENDS_libvotequorum-dev = "libvotequorum"

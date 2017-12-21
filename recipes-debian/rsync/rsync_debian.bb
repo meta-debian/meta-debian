@@ -63,9 +63,7 @@ do_install_append() {
 	install -d ${D}${sysconfdir}
 	install -d ${D}${sysconfdir}/default
 	install -d ${D}${sysconfdir}/init.d
-	install -d ${D}${base_libdir}
-	install -d ${D}${base_libdir}/systemd
-	install -d ${D}${base_libdir}/systemd/system
+	install -d ${D}${systemd_system_unitdir}
 	
 	#Install /etc/default/rsync	
 	install -m 0644 ${S}/debian/default ${D}${sysconfdir}/default/rsync
@@ -75,7 +73,7 @@ do_install_append() {
 
 	#Install /lib/systemd/system/rsync.service
 	install -m 0644 ${S}/packaging/systemd/rsync.service \
-			${D}${base_libdir}/systemd/system
+			${D}${systemd_system_unitdir}/
 }
 
-FILES_${PN} += " ${base_libdir}/systemd/system/rsync.service"
+FILES_${PN} += " ${systemd_system_unitdir}/rsync.service"

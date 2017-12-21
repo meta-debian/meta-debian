@@ -16,6 +16,7 @@ LICENSE = "IPL-1.0"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=64375f37431336ea1b1b3005fe3fa354"
 DEBIAN_PATCH_TYPE = "nopatch"
+DEBIAN_MULTILIB_MANUAL = "1"
 
 # Correct-cross-compiler_debian.patch:
 #       using cross_compile $(CC), instead of 'gcc' in Makefiles
