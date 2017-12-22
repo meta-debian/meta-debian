@@ -31,22 +31,20 @@ EXTRA_OECONF = "--with-configfile=${sysconfdir}/watchdog.conf"
 RRECOMMENDS_${PN} = "kernel-module-softdog"
 
 #ship packages
-FILES_${PN} += "${base_libdir}/systemd/system/* ${sysconfdir}/init.d/*"
+FILES_${PN} += "${systemd_system_unitdir}/* ${sysconfdir}/init.d/*"
 
 #install follow Debian jessies
 do_install_append() {
 	#Create lib/sytemd/system folder
-	install -d ${D}${base_libdir}
-	install -d ${D}${base_libdir}/systemd
-	install -d ${D}${base_libdir}/systemd/system
-	chmod 755 ${D}${base_libdir}/systemd/system
+	install -d ${D}${systemd_system_unitdir}
+	chmod 755 ${D}${systemd_system_unitdir}
 	
 	#Create /etc/init.d folder
 	install -d ${D}${sysconfdir}/init.d
 
 	#Install lib/systemd/sytem/watchdog.service and wd_keepalive.service
-	install -m 0644 ${S}/debian/watchdog.service ${D}${base_libdir}/systemd/system/
-	install -m 0644 ${S}/debian/wd_keepalive.service ${D}${base_libdir}/systemd/system/
+	install -m 0644 ${S}/debian/watchdog.service ${D}${systemd_system_unitdir}/
+	install -m 0644 ${S}/debian/wd_keepalive.service ${D}${systemd_system_unitdir}/
 	
 	#Install /etc/init.d/watchdog and wd_keepalive
 	install -m 0755 ${S}/debian/init ${D}${sysconfdir}/init.d/watchdog

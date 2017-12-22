@@ -29,6 +29,7 @@ export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 export LDSHARED="${CCLD} -shared"
 
 #correct-path-to-library_debian.patch:
@@ -42,6 +43,9 @@ EXTRA_OECONF += "\
 	--with-perl-options='INSTALLDIRS="vendor" INSTALL_BASE=' \
 	--disable-ruby \
 "
+
+# Looking for 'lua5.1-deb-multiarch.h'
+CFLAGS += "-I${STAGING_INCDIR}/${DEB_HOST_MULTIARCH}"
 
 do_configure_prepend() {
 	sed -i -e "s:##STAGING_DIR_HOST##:${STAGING_DIR_HOST}:g" \
@@ -95,13 +99,13 @@ do_install_append() {
 		${D}${libdir}/perl5/"$(echo ${PERLVERSION} | cut -d . -f 1,2)"
 	mv ${D}${libdir}/perl/*/*/RRDp.pm ${D}${datadir}/perl5/
 	rm -r ${D}${libdir}/perl
-	rm ${D}${libdir}/lua/*/rrd.la
+	rm ${D}${nonarch_libdir}/lua/*/rrd.la
 }
 PACKAGES += "liblua5.1-rrd liblua5.1-rrd-dev librrd-dev librrd librrdp-perl \
 		librrds-perl python-${PN} rrdcached ${PN}-tcl"
-FILES_liblua5.1-rrd = "${libdir}/lua/*/rrd.so.*"
+FILES_liblua5.1-rrd = "${nonarch_libdir}/lua/*/rrd.so.*"
 FILES_liblua5.1-rrd-dev = "\
-	${includedir}/lua5.1/lua-rrd.h ${libdir}/lua/*/rrd.so"
+	${includedir}/lua5.1/lua-rrd.h ${nonarch_libdir}/lua/*/rrd.so"
 FILES_librrd-dev = "\
 	${includedir} ${libdir}/librrd.so \
 	${libdir}/librrd_th.so ${libdir}/pkgconfig"
@@ -113,13 +117,13 @@ FILES_librrdp-perl = "${datadir}/perl5"
 FILES_librrds-perl = "\
 	${libdir}/perl5/*/RRDs.pm ${libdir}/perl5/*/auto/RRDs/RRDs.so"
 
-FILES_python-${PN} = "${libdir}/${PYTHON_DIR}/site-packages/*"
+FILES_python-${PN} = "${nonarch_libdir}/${PYTHON_DIR}/site-packages/*"
 
 FILES_rrdcached = "${sysconfdir}/* ${bindir}/rrdcached"
 
 FILES_${PN}-tcl = "${libdir}/tcltk/*"
 FILES_${PN}-dbg += "\
-	${libdir}/${PYTHON_DIR}/site-packages/.debug \
+	${nonarch_libdir}/${PYTHON_DIR}/site-packages/.debug \
 	${libdir}/perl5/*/auto/RRDs/.debug ${libdir}/tcltk/rrdtool-tcl/.debug \
-	${libdir}/lua/*/.debug"
-FILES_${PN}-staticdev += "${libdir}/lua/*/rrd.a"
+	${nonarch_libdir}/lua/*/.debug"
+FILES_${PN}-staticdev += "${nonarch_libdir}/lua/*/rrd.a"

@@ -15,6 +15,8 @@ PR = "r1"
 
 inherit distutils pkgconfig
 
+export DEB_HOST_MULTIARCH
+
 do_install_append () {
 	mv ${D}${datadir}/lib/* ${D}${libdir}
 	mv ${D}${datadir}/include ${D}${prefix}

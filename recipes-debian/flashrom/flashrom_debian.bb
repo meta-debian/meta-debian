@@ -21,6 +21,9 @@ PV = "0.9.7+r1782"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep
 DEPENDS += "pciutils"
 EXTRA_OEMAKE += "PREFIX=${prefix}"

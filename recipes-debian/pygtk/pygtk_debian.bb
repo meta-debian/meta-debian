@@ -35,6 +35,7 @@ ANY_OF_DISTRO_FEATURES = "${GTK2DISTROFEATURES}"
 
 export HOST_SYS
 export BUILD_SYS
+export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {
 	sed -i -e s:'`$PKG_CONFIG --variable defsdir pygobject-2.0`':\"${STAGING_DATADIR}/pygobject/2.0/defs\":g \

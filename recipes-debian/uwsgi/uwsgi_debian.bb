@@ -69,9 +69,9 @@ do_compile_append() {
 		lua51
 }
 do_install_append() {
-	install -d ${D}${libdir}/${PN}/plugins
+	install -d ${D}${libdir}/${DPN}/plugins
 	install -m 0755 ${S}/*.so \
-		${D}${libdir}/${PN}/plugins
+		${D}${libdir}/${DPN}/plugins
 
 	install -m 0755 ${S}/uwsgi-core ${D}${bindir}
 	# remove unwanted file
@@ -81,11 +81,11 @@ do_install_append() {
 	
 	# follow debian/uwsgi.dirs and debian/uwsgi.install
 	install -d ${D}${sysconfdir} \
-	           ${D}${datadir}/${PN} \
-	           ${D}${localstatedir}/log/${PN}/app
+	           ${D}${datadir}/${DPN} \
+	           ${D}${localstatedir}/log/${DPN}/app
 	cp -r ${S}/debian/uwsgi-files/etc/* ${D}${sysconfdir}
-	cp -r ${S}/debian/uwsgi-files/conf ${D}${datadir}/${PN}
-	cp -r ${S}/debian/uwsgi-files/init ${D}${datadir}/${PN}
+	cp -r ${S}/debian/uwsgi-files/conf ${D}${datadir}/${DPN}
+	cp -r ${S}/debian/uwsgi-files/init ${D}${datadir}/${DPN}
 
 	# fllow debian/uwsgi-emperor.install
 	cp -r ${S}/debian/uwsgi-emperor-files/etc/* ${D}${sysconfdir}
@@ -116,46 +116,46 @@ PACKAGES =+ "\
  ${PN}-plugin-router-access ${PN}-plugin-sqlite3 ${PN}-plugin-xslt \
  ${PN}-emperor ${PN}-plugin-python ${PN}-core python-uwsgidecorators \
  "
-FILES_${PN}-plugin-alarm-curl    = "${libdir}/${PN}/plugins/alarm_curl_plugin.so \
+FILES_${PN}-plugin-alarm-curl    = "${libdir}/${DPN}/plugins/alarm_curl_plugin.so \
                                     ${bindir}/uwsgi_alarm_curl \
                                    "
-FILES_${PN}-plugin-curl-cron     = "${libdir}/${PN}/plugins/curl_cron_plugin.so \
+FILES_${PN}-plugin-curl-cron     = "${libdir}/${DPN}/plugins/curl_cron_plugin.so \
                                     ${bindir}/uwsgi_curl_cron \
                                    "
-FILES_${PN}-plugin-lua5.1         = "${libdir}/${PN}/plugins/lua51_plugin.so \
+FILES_${PN}-plugin-lua5.1         = "${libdir}/${DPN}/plugins/lua51_plugin.so \
                                    ${bindir}/uwsgi_lua51 \
                                    "
-FILES_${PN}-plugin-geoip         = "${libdir}/${PN}/plugins/geoip_plugin.so \
+FILES_${PN}-plugin-geoip         = "${libdir}/${DPN}/plugins/geoip_plugin.so \
                                     ${bindir}/uwsgi_geoip \
                                    "
-FILES_${PN}-plugin-graylog2      = "${libdir}/${PN}/plugins/graylog2_plugin.so \
+FILES_${PN}-plugin-graylog2      = "${libdir}/${DPN}/plugins/graylog2_plugin.so \
                                     ${bindir}/uwsgi_graylog2 \
                                    "
-FILES_${PN}-plugin-ldap          = "${libdir}/${PN}/plugins/ldap_plugin.so \
+FILES_${PN}-plugin-ldap          = "${libdir}/${DPN}/plugins/ldap_plugin.so \
                                     ${bindir}/uwsgi_ldap \
                                    "
-FILES_${PN}-plugin-router-access = "${libdir}/${PN}/plugins/router_access_plugin.so \
+FILES_${PN}-plugin-router-access = "${libdir}/${DPN}/plugins/router_access_plugin.so \
                                     ${bindir}/uwsgi_router_access \
                                    "
-FILES_${PN}-plugin-sqlite3       = "${libdir}/${PN}/plugins/sqlite3_plugin.so \
+FILES_${PN}-plugin-sqlite3       = "${libdir}/${DPN}/plugins/sqlite3_plugin.so \
                                     ${bindir}/uwsgi_sqlite3 \
                                    "
-FILES_${PN}-plugin-xslt          = "${libdir}/${PN}/plugins/xslt_plugin.so \
+FILES_${PN}-plugin-xslt          = "${libdir}/${DPN}/plugins/xslt_plugin.so \
                                     ${bindir}/uwsgi_xslt \
                                    "
 FILES_${PN}-core                 = "${bindir}/uwsgi-core \
-                                    ${libdir}/${PN}/plugins/*.so \
+                                    ${libdir}/${DPN}/plugins/*.so \
                                    "
 FILES_${PN}-emperor              = "${sysconfdir}/default/uwsgi-emperor \
                                     ${sysconfdir}/init.d/uwsgi-emperor \
                                     ${sysconfdir}/logrotate.d/uwsgi-emperor \
                                     ${sysconfdir}/uwsgi-emperor/* \
                                    "
-FILES_${PN}-plugin-python       = "${libdir}/${PN}/plugins/python*.so \
+FILES_${PN}-plugin-python       = "${libdir}/${DPN}/plugins/python*.so \
                                     ${bindir}/uwsgi_python* \
                                    "
 FILES_python-uwsgidecorators    = "${PYTHON_SITEPACKAGES_DIR}"
-FILES_${PN}-dbg                 += "${libdir}/${PN}/plugins/.debug/*"
+FILES_${PN}-dbg                 += "${libdir}/${DPN}/plugins/.debug/*"
 
 # follow debian/control
 RDEPENDS_${PN}                      += "${PN}-core lsb-base sysvinit-initscripts"

@@ -15,6 +15,8 @@ DPN = "pycparser"
 
 inherit allarch distutils
 
+export DEB_HOST_MULTIARCH
+
 RDEPENDS_${PN} += "python-ply"
 
 BBCLASSEXTEND = "native"

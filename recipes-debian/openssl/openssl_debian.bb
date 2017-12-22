@@ -36,7 +36,7 @@ CFLAG_mtx-2 := "${@'${CFLAG}'.replace('-O2', '')}"
 
 # comes from "CONFARGS" in debian/rules
 EXTRA_OECONF = " \
---openssldir=${libdir}/ssl \
+--openssldir=${nonarch_libdir}/ssl \
 no-idea no-mdc2 no-rc5 no-zlib enable-tlsext no-ssl2 no-ssl3 \
 "
 EXTRA_OECONF_append_x86-64 = "enable-ec_nistp_64_gcc_128"
@@ -157,7 +157,7 @@ do_configure () {
 	# $useprefix and $target are set by the above commands
 	# The path "prefix" must be excluded from "libdir"
 	perl ./Configure ${EXTRA_OECONF} shared --prefix=$useprefix \
-		--libdir=$(basename ${libdir}) $target
+		--libdir=${baselib} $target
 }
 
 do_compile() {
@@ -174,14 +174,14 @@ do_install() {
 	# comes from "binary-arch" in debian/rules
 	install -d ${D}${sysconfdir}/ssl
 	for f in certs openssl.cnf private; do
-		mv ${D}${libdir}/ssl/${f} ${D}${sysconfdir}/ssl
-		ln -s ${sysconfdir}/ssl/${f} ${D}${libdir}/ssl/${f}
+		mv ${D}${nonarch_libdir}/ssl/${f} ${D}${sysconfdir}/ssl
+		ln -s ${sysconfdir}/ssl/${f} ${D}${nonarch_libdir}/ssl/${f}
 	done
 }
 
 PACKAGES =+ "libssl1.0.0"
 
-FILES_${PN} += "${libdir}/ssl"
+FILES_${PN} += "${nonarch_libdir}/ssl"
 FILES_${PN}-dbg += "${libdir}/openssl-1.0.0/engines/.debug"
 FILES_libssl1.0.0 = " \
 ${libdir}/libssl.so.* \

@@ -11,8 +11,8 @@ PR = "${INC_PR}.0"
 
 # Follow debian/rules
 do_install_append () {
-	mkdir ${D}${base_libdir}/modprobe.d/
-	cp ${S}/extra/aliases.conf ${D}${base_libdir}/modprobe.d/
+	mkdir ${D}${nonarch_base_libdir}/modprobe.d/
+	cp ${S}/extra/aliases.conf ${D}${nonarch_base_libdir}/modprobe.d/
 
 	mkdir -p ${D}${datadir}/initramfs-tools/hooks
         install -m 0755 ${S}/debian/kmod.initramfs-hook \
@@ -48,7 +48,7 @@ RREPLACES_${PN} += "module-init-tools"
 
 FILES_libkmod = "${base_libdir}/libkmod*${SOLIBS} ${libdir}/libkmod*${SOLIBS}"
 FILES_${PN} += " \
-	${base_libdir}/modprobe.d \
+	${nonarch_base_libdir}/modprobe.d \
 	${datadir}/bash-completion \
 	${datadir}/initramfs-tools \
 "

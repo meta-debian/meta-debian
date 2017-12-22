@@ -15,4 +15,7 @@ do_install () {
 	libname=`readlink ${D}${libdir}/libaio.so | xargs basename`
 	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	ln -sf ${rel_lib_prefix}${base_libdir}/${libname} ${D}${libdir}/libaio.so
+
+	rlib=$(basename $(readlink ${D}${base_libdir}/libaio.so.1))
+	ln -sf $rlib ${D}${base_libdir}/libaio.so.1
 }

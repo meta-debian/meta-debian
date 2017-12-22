@@ -24,12 +24,13 @@ inherit autotools-brokensep pythonnative systemd
 
 DEPENDS += " \
 	python libldap libcap-ng tcp-wrappers \
-	linux-libc-headers (>= 2.6.30) libprelude ${PN}-native"
+	linux-libc-headers (>= 2.6.30) libprelude ${DPN}-native"
 
 export BUILD_SYS
 export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 
 PARALLEL_MAKE = ""
 EXTRA_OECONF += "--with-prelude \
@@ -83,13 +84,14 @@ do_install_append() {
 	chmod 640 ${D}${sysconfdir}/audit/auditd.conf \
 		${D}${sysconfdir}/audit/rules.d/audit.rules
 
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libaudit.so))
 	rm ${D}${base_libdir}/libaudit.so
-	ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libaudit.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libaudit.so
 
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libauparse.so))
         rm ${D}${base_libdir}/libauparse.so
-        ln -s ../..${base_libdir}/$LINKLIB ${D}${libdir}/libauparse.so
+        ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libauparse.so
 	mv ${D}${base_libdir}/*.a ${D}${libdir}/
 	rm ${D}${base_libdir}/*.la
 
@@ -109,28 +111,28 @@ pkg_postinst_${PN}() {
 }
 
 PACKAGES =+ "\
-	audispd-plugins lib${PN}-common lib${PN} \
-	libauparse-dev libauparse python-${PN}"
+	audispd-plugins lib${DPN}-common lib${DPN} \
+	libauparse-dev libauparse python-${DPN}"
 
 FILES_audispd-plugins = "\
 	${sysconfdir}/audisp/audisp-* ${sysconfdir}/audisp/zos-remote.conf \
 	${base_sbindir}/audisp-* ${base_sbindir}/audispd-zos-remote\
 	${sysconfdir}/audisp/plugins.d/au-* \
 	${sysconfdir}/audisp/plugins.d/audispd-zos-remote.conf"
-FILES_lib${PN}-common = "${sysconfdir}/libaudit.conf"
-FILES_lib${PN} = "${base_libdir}/libaudit.so.*"
+FILES_lib${DPN}-common = "${sysconfdir}/libaudit.conf"
+FILES_lib${DPN} = "${base_libdir}/libaudit.so.*"
 FILES_libauparse-dev = "${includedir}/auparse* ${libdir}/libauparse.so"
 FILES_libauparse = "${base_libdir}/libauparse.so.*"
-FILES_python-${PN} = "${libdir}/python*/dist-packages/*"
+FILES_python-${DPN} = "${libdir}/python*/dist-packages/*"
 FILES_${PN}-dbg += "${libdir}/python*/dist-packages/.debug"
 FILES_${PN} += "${systemd_unitdir}"
 
-DEBIANNAME_${PN} = "${PN}d"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
+DEBIANNAME_${PN} = "${DPN}d"
+DEBIANNAME_${PN}-dev = "lib${DPN}-dev"
 
 #follow debian/control
 RDEPENDS_${PN} += "lsb-base"
 RDEPENDS_libauparse-dev += "libauparse"
-RDEPENDS_lib${PN} += "lib${PN}-common"
-RDEPENDS_${PN}-dev += "lib${PN}"
+RDEPENDS_lib${DPN} += "lib${DPN}-common"
+RDEPENDS_${PN}-dev += "lib${DPN}"
 RDEPENDS_audispd-plugins += "${PN}"

@@ -41,7 +41,8 @@ do_install_append (){
 
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libatm.so))
 	rm ${D}${base_libdir}/libatm.so
-	ln -s ../../lib/${LINKLIB} ${D}${libdir}/libatm.so
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/${LINKLIB} ${D}${libdir}/libatm.so
 }
 
 

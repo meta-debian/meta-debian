@@ -34,10 +34,11 @@ do_install() {
 do_install_append_class-target() {
 	if [ ${base_libdir} != ${libdir} ]
 	then
-		mkdir -p ${D}/${base_libdir}
-		mv ${D}/${libdir}/libz.so.* ${D}/${base_libdir}
-		tmp=`readlink ${D}/${libdir}/libz.so`
-		ln -sf ../../${base_libdir}/$tmp ${D}/${libdir}/libz.so
+		mkdir -p ${D}${base_libdir}
+		mv ${D}${libdir}/libz.so.* ${D}${base_libdir}/
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		libname=`readlink ${D}/${libdir}/libz.so | xargs basename`
+		ln -sf ${rel_lib_prefix}${base_libdir}/${libname} ${D}/${libdir}/libz.so
 	fi
 }
 

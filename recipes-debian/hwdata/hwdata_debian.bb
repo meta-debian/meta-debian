@@ -15,10 +15,11 @@ LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=1556547711e8246992b999edd9445a57"
 inherit autotools-brokensep
 DEBIAN_PATCH_TYPE = "nopatch"
+DEBIAN_MULTILIB_MANUAL = "1"
 
 do_install_append() {
 	#remove unwanted files
-	rm ${D}${datadir}/${PN}/*.txt
+	rm ${D}${datadir}/hwdata/*.txt
 	rm -r ${D}${libdir}
 }
 RDEPENDS_${PN} += "usbutils pciutils"

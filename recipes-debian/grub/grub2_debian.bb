@@ -28,6 +28,8 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS = "freetype-native flex-native bison-native xz-utils"
 
 COMPATIBLE_HOST = '(x86_64.*|i.86.*|arm.*|aarch64.*)-(linux.*|freebsd.*)'

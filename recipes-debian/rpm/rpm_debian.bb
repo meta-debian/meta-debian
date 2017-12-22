@@ -113,6 +113,7 @@ do_configure () {
         export HOST_SYS=${HOST_SYS}
         export STAGING_INCDIR=${STAGING_INCDIR}
         export STAGING_LIBDIR=${STAGING_LIBDIR}
+	export DEB_HOST_MULTIARCH=${DEB_HOST_MULTIARCH}
         oe_runconf
 }
 

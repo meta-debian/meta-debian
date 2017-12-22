@@ -27,4 +27,4 @@ do_configure_prepend() {
 }
 
 # provide libgdbm-dev packages
-RPROVIDES_${PN}-dev = "lib${PN}-dev"
+RPROVIDES_${PN}-dev = "lib${DPN}-dev"

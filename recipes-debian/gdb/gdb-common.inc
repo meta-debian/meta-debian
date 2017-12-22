@@ -17,6 +17,8 @@ LIC_FILES_CHKSUM = " \
 	file://libiberty/bsearch.c;endline=29;md5=d61ed055b57f318f2809fb19e2e45e02 \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS = "expat ncurses readline ${LTTNGUST}"
 
 LTTNGUST = "lttng-ust"

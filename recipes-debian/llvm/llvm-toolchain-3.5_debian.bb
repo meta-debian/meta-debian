@@ -17,6 +17,8 @@ LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=47e311aa9caedd1b3abf098bd7814d1d"
 
 DEPENDS = "isl libffi libxml2-native zlib binutils python libedit swig-native dpkg-native"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit perlnative pythonnative autotools
 
 LLVM_VERSION_FULL = "${PV}.0"
@@ -32,7 +34,7 @@ EXTRA_OECONF = " \
     --with-optimize-option=' ${opt_flags}' \
     --enable-pic \
     --enable-libffi \
-    --libdir=\${prefix}/lib \
+    --libdir=\${prefix}/lib/${DEB_HOST_MULTIARCH} \
     --with-binutils-include=${STAGING_INCDIR} \
     CLANG_VENDOR=Debian"
 EXTRA_OECONF += " \
@@ -46,6 +48,7 @@ export HOST_SYS
 export BUILD_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
+export DEB_HOST_MULTIARCH
 
 do_configure_prepend(){
 	# Base on debian/rules
@@ -188,14 +191,16 @@ do_install_append() {
 	cp -r ${B}/tools/clang/runtime/compiler-rt/clang_linux/ \
 	          ${D}${libdir}/llvm-${PV}/lib/clang/${PV}/lib/
 
+	install -d ${D}${libdir}/${DEB_HOST_MULTIARCH}
+
 	# According to debian/libclang1-X.Y.install.in
-	mv ${D}${libdir}/llvm-${PV}/lib/libclang-${PV}.so.1 ${D}${libdir}/
+	mv ${D}${libdir}/llvm-${PV}/lib/libclang-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 
 	# According to debian/liblldb-X.Y.install.in
-	mv ${D}${libdir}/llvm-${PV}/lib/liblldb-${PV}.so.1  ${D}${libdir}/
+	mv ${D}${libdir}/llvm-${PV}/lib/liblldb-${PV}.so.1  ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 
 	# According to debian/libllvmX.Y.install.in
-	mv ${D}${libdir}/llvm-${PV}/lib/libLLVM-${PV}.so.1  ${D}${libdir}/
+	mv ${D}${libdir}/llvm-${PV}/lib/libLLVM-${PV}.so.1  ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 
 	# According to debian/llvm-X.Y-dev.install.in
 	install -d ${D}${datadir}/llvm-${PV}/cmake \
@@ -242,8 +247,9 @@ do_install_append() {
 	ln -sf ${datadir}/clang/scan-view-${PV}/scan-view    ${D}${bindir}/scan-view-${PV}
 
 	# According to debian/libclang-X.Y-dev.links.in
-	ln -sf libclang-${PV}.so.1       ${D}${libdir}/libclang-${PV}.so
-	ln -sf ../../libclang-${PV}.so.1 ${D}${libdir}/llvm-${PV}/lib/libclang.so
+	ln -sf libclang-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libclang-${PV}.so
+	ln -sf ../../${DEB_HOST_MULTIARCH}/libclang-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/libclang.so
 
 	# According to debian/libclang-common-X.Y-dev.links.in
 	install -d ${D}${includedir}/clang/${PV} \
@@ -264,23 +270,30 @@ do_install_append() {
 
 	# According to debian/libclang1-X.Y.links.in
 	# as upstream
-	ln -sf ../../libclang-${PV}.so.1 ${D}${libdir}/llvm-${PV}/lib/libclang-${PV}.so.1
+	ln -sf ../../${DEB_HOST_MULTIARCH}/libclang-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/libclang-${PV}.so.1
 	# Compatibility for the ABI breakage (See #762959)
-	ln -sf libclang-${PV}.so.1 ${D}${libdir}/libclang.so.1
+	ln -sf libclang-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libclang.so.1
 
 	# According to debian/liblldb-X.Y.links.in
 	install -d ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb-${PV}
-	ln -sf liblldb-${PV}.so.1        ${D}${libdir}/liblldb-${PV}.so
-	ln -sf ../../../liblldb-${PV}.so ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb-${PV}/_lldb.so
-	ln -sf ../../liblldb-${PV}.so.1  ${D}${libdir}/llvm-${PV}/lib/liblldb.so.1
+	ln -sf liblldb-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/liblldb-${PV}.so
+	ln -sf ../../../${DEB_HOST_MULTIARCH}/liblldb-${PV}.so \
+	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb-${PV}/_lldb.so
+	ln -sf ../../${DEB_HOST_MULTIARCH}/liblldb-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/liblldb.so.1
 
 	# According to debian/llvm-X.Y-dev.links.in
 	install -d ${D}${libdir}/llvm-${PV}/build \
 	           ${D}${libdir}/${PYTHON_DIR}/dist-packages
-	ln -sf ../../libLLVM-${PV}.so.1 ${D}${libdir}/llvm-${PV}/lib/libLLVM-${PV}.so
-	ln -sf ../../libLLVM-${PV}.so.1 ${D}${libdir}/llvm-${PV}/lib/libLLVM-${LLVM_VERSION_FULL}.so.1
-	ln -sf ../../libLLVM-${PV}.so.1 ${D}${libdir}/llvm-${PV}/lib/libLLVM-${LLVM_VERSION_FULL}.so
-	ln -sf libLLVM-${PV}.so.1 ${D}${libdir}/libLLVM-${LLVM_VERSION_FULL}.so.1
+	ln -sf ../../${DEB_HOST_MULTIARCH}/libLLVM-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/libLLVM-${PV}.so
+	ln -sf ../../${DEB_HOST_MULTIARCH}/libLLVM-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/libLLVM-${LLVM_VERSION_FULL}.so.1
+	ln -sf ../../${DEB_HOST_MULTIARCH}/libLLVM-${PV}.so.1 \
+	        ${D}${libdir}/llvm-${PV}/lib/libLLVM-${LLVM_VERSION_FULL}.so
+	ln -sf libLLVM-${PV}.so.1 \
+	        ${D}${libdir}/${DEB_HOST_MULTIARCH}/libLLVM-${LLVM_VERSION_FULL}.so.1
 	ln -sf ../../../include/llvm-c-${PV}/llvm-c ${D}${libdir}/llvm-${PV}/include/llvm-c
 	ln -sf ../../../include/llvm-${PV}/llvm     ${D}${libdir}/llvm-${PV}/include/llvm
 	ln -sf ../include/       ${D}${libdir}/llvm-${PV}/build/include
@@ -290,9 +303,9 @@ do_install_append() {
 	# According to debian/python-lldb-X.Y.links.in
 	ln -sf ../../llvm-${PV}/lib/${PYTHON_DIR}/site-packages/lldb/ \
 	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb
-	ln -sf ../../../libLLVM-${LLVM_VERSION_FULL}.so.1 \
+	ln -sf ../../../${DEB_HOST_MULTIARCH}/libLLVM-${LLVM_VERSION_FULL}.so.1 \
 	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${LLVM_VERSION_FULL}.so.1
-	ln -sf ../../../libLLVM-${LLVM_VERSION_FULL}.so.1 \
+	ln -sf ../../../${DEB_HOST_MULTIARCH}/libLLVM-${LLVM_VERSION_FULL}.so.1 \
 	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${PV}.so.1
 
 	# Correct files permission
@@ -342,11 +355,11 @@ FILES_clang-modernize-${PV} = " \
     ${libdir}/llvm-${PV}/bin/clang-modernize \
 "
 FILES_libclang-${PV} = " \
-    ${libdir}/libclang*${SOLIBS} \
+    ${libdir}/${DEB_HOST_MULTIARCH}/libclang*${SOLIBS} \
     ${libdir}/llvm-${PV}/lib/libclang*${SOLIBS} \
 "
 FILES_libclang-${PV}-dev = " \
-    ${libdir}/libclang-${PV}${SOLIBSDEV} \
+    ${libdir}/${DEB_HOST_MULTIARCH}/libclang-${PV}${SOLIBSDEV} \
     ${libdir}/llvm-${PV}/include/clang* \
     ${libdir}/llvm-${PV}/lib/libclang*${SOLIBSDEV} \
 "
@@ -369,7 +382,7 @@ FILES_clang-${PV} = " \
     ${libdir}/llvm-${PV}/bin/pp-trace \
     ${datadir}/clang \
 "
-FILES_libllvm${PV} = "${libdir}/libLLVM*${SOLIBS}"
+FILES_libllvm${PV} = "${libdir}/${DEB_HOST_MULTIARCH}/libLLVM*${SOLIBS}"
 FILES_llvm-${PV} = " \
     ${bindir}/bugpoint-${PV} \
     ${bindir}/llc-${PV} \
@@ -405,7 +418,7 @@ FILES_llvm-${PV}-dev = " \
     ${libdir}/llvm-${PV}/lib/libLTO${SOLIBSDEV} \
     ${libdir}/llvm-${PV}/lib/BugpointPasses${SOLIBSDEV} \
     ${libdir}/llvm-${PV}/lib/libLLVM*.so* \
-    ${libdir}/libLLVM*.so* \
+    ${libdir}/${DEB_HOST_MULTIARCH}/libLLVM*.so* \
     ${datadir}/emacs/site-lisp/llvm-${PV} \
     ${datadir}/llvm-${PV}/cmake \
     ${datadir}/vim/addons/syntax/ \
@@ -415,7 +428,7 @@ FILES_lldb-${PV} = " \
     ${libdir}/llvm-${PV}/bin/lldb* \
 "
 FILES_liblldb-${PV} = " \
-    ${libdir}/liblldb-${PV}.so* \
+    ${libdir}/${DEB_HOST_MULTIARCH}/liblldb-${PV}.so* \
     ${libdir}/llvm-${PV}/lib/liblldb${SOLIBS} \
     ${libdir}/llvm-${PV}/lib/${PYTHON_DIR}/*-packages/readline.so \
     ${libdir}/${PYTHON_DIR}/*-packages/lldb-${PV} \

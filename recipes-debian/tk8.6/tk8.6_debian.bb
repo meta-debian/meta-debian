@@ -74,14 +74,14 @@ do_install_append() {
 # Fix the path in sstate
 SSTATE_SCAN_FILES += "*Config.sh"
 
-PACKAGES =+ "lib${PN}"
+PACKAGES =+ "lib${DPN}"
 
-FILES_lib${PN} = "\
+FILES_lib${DPN} = "\
 	${libdir}/tcltk/tk${TCL_VER}/pkgIndex.tcl ${libdir}/libtk${TCL_VER}.so* \
 	${datadir}/tcltk/tk${TCL_VER}/*"
 FILES_${PN} += "${datadir}/menu"
 FILES_${PN}-dev += "${libdir}/tk${TCL_VER}/tkConfig.sh"
 
-PKG_${PN}-dbg = "lib${PN}-dbg"
+PKG_${PN}-dbg = "lib${DPN}-dbg"
 
 BBCLASSEXTEND = "native"

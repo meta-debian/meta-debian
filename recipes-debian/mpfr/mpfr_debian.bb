@@ -23,10 +23,10 @@ SRC_URI += " \
 file://long-long-thumb.patch \
 "
 
-# In Debian, binary package name of mpfr is "lib${PN}"
+# In Debian, binary package name of mpfr is "libmpfr"
 DEBIANNAME_${PN}-dbg = "lib${DPN}-dbg"
-DEBIANNAME_${PN}-dev = "lib${PN}-dev"
-DEBIANNAME_${PN}-doc = "lib${PN}-doc"
+DEBIANNAME_${PN}-dev = "libmpfr-dev"
+DEBIANNAME_${PN}-doc = "libmpfr-doc"
 DEBIANNAME_${PN} = "lib${DPN}"
 
 BBCLASSEXTEND = "native nativesdk"

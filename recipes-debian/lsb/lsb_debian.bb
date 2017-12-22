@@ -9,6 +9,9 @@ LIC_FILES_CHKSUM = " \
 	file://init-functions;beginline=3;endline=28;md5=253d9c2ede4edede28a861d7e77e33c5 \
 "
 
+# We don't want baselib to be changed to lib/${DEB_HOST_MULTIARCH}
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit python-dir
 
 # Follow Debian:

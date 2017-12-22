@@ -37,7 +37,7 @@ EXTRA_OEMAKE = " \
   LIBATTR=yes \
   PAM_CAP=${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'yes', 'no', d)} \
   INDENT= SYSTEM_HEADERS=${STAGING_INCDIR} RAISE_SETFCAP=no \
-  lib=${@os.path.basename('${libdir}')} \
+  lib=${baselib} \
 "
 EXTRA_OEMAKE_class-native = " \
   LIBATTR=yes \

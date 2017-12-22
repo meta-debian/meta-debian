@@ -22,11 +22,12 @@ do_install_append() {
 	mv ${D}${libdir}/libnih${SOLIBS} ${D}${base_libdir}
 	mv ${D}${libdir}/libnih-dbus${SOLIBS} ${D}${base_libdir}
 
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libnih.so))
-	ln -sf ../../lib/$LINKLIB ${D}${libdir}/libnih.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libnih.so
 
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libnih-dbus.so))
-	ln -sf ../../lib/$LINKLIB ${D}${libdir}/libnih-dbus.so
+	ln -sf ${rel_lib_prefix}${base_libdir}/$LINKLIB ${D}${libdir}/libnih-dbus.so
 }
 
 PACKAGES =+ "${PN}-dbus nih-dbus-tool ${PN}-dbus-dev"

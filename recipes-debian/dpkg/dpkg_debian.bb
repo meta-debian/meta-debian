@@ -121,10 +121,10 @@ pkg_postinst_${PN} () {
 	remove_info_symlink
 }
 
-PACKAGES =+ "dselect lib${PN}-perl lib${PN}-dev"
+PACKAGES =+ "dselect lib${DPN}-perl lib${DPN}-dev"
 
 RDEPENDS_${PN} += "update-alternatives start-stop-daemon"
-RDEPENDS_lib${PN}-perl += "libtimedate-perl"
+RDEPENDS_lib${DPN}-perl += "libtimedate-perl"
 FILES_dselect = " \
     ${bindir}/dselect \
     ${sysconfdir}/${DPN}/dselect.cfg* \
@@ -132,11 +132,11 @@ FILES_dselect = " \
     ${libdir}/perl/Dselect \
     ${localstatedir}/lib/${DPN}/methods \
 "
-FILES_lib${PN}-perl = " \
+FILES_lib${DPN}-perl = " \
     ${libdir}/perl \
     ${libdir}/${DPN}/parsechangelog \
 "
-FILES_lib${PN}-dev = " \
+FILES_lib${DPN}-dev = " \
     ${includedir}/${DPN}/*.h \
     ${libdir}/pkgconfig \
 "

@@ -67,7 +67,7 @@ PACKAGES =+ " \
 
 FILES_${PN}-admin-server = " \
 	${sysconfdir}/init.d/krb5-admin-server \
-	${base_libdir}/systemd/system/krb5-admin-server.service \
+	${systemd_system_unitdir}/krb5-admin-server.service \
 	${sbindir}/kadmin.local \
 	${sbindir}/kadmind \
 	${sbindir}/kprop \
@@ -163,9 +163,9 @@ do_configure() {
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/init.d/
-	install -d ${D}${base_libdir}/systemd/system/
+	install -d ${D}${systemd_system_unitdir}
 	install -m 0755 ${S}/../debian/krb5-admin-server.init ${D}${sysconfdir}/init.d/krb5-admin-server
-	install -m 0644 ${S}/../debian/krb5-admin-server.service ${D}${base_libdir}/systemd/system/
+	install -m 0644 ${S}/../debian/krb5-admin-server.service ${D}${systemd_system_unitdir}/
 	install -m 0755 ${S}/../debian/krb5_newrealm ${D}${sbindir}/
 
 	mv ${D}${sbindir}/gss-server ${D}${bindir}/gss-server

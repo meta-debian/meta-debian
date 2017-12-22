@@ -98,7 +98,7 @@ pkg_postinst_${PN}() {
 	fi
 }
 
-PACKAGES =+ "${PN}-gsettings-backend ${PN}-service ${PN}-common lib${PN}"
+PACKAGES =+ "${PN}-gsettings-backend ${PN}-service ${PN}-common lib${DPN}"
 
 FILES_${PN}-gsettings-backend = "${libdir}/gio/modules/libgsettingsgconfbackend.so"
 FILES_${PN}-service = "${libdir}/gconf/*/* \
@@ -107,7 +107,7 @@ FILES_${PN}-common = "${sysconfdir}/gconf/2/evoldap.conf \
                       ${sysconfdir}/gconf/2/path \
                       ${datadir}/gconf/default.path \
                       ${datadir}/sgml/*"
-FILES_lib${PN} = "${libdir}/libgconf-2${SOLIBS}"
+FILES_lib${DPN} = "${libdir}/libgconf-2${SOLIBS}"
 FILES_${PN}-dbg += "${libdir}/gio/modules/.debug"
 FILES_${PN}-dbg += "${libdir}/gconf/*/.debug"
 
@@ -117,14 +117,14 @@ DEBIANNAME_${PN} = "${PN}2"
 RPROVIDES_${PN} = "${PN}2"
 DEBIANNAME_${PN}-common = "${PN}2-common"
 RPROVIDES_${PN}-common = "${PN}2-common"
-RPROVIDES_lib${PN} = "lib${PN}-2-4 lib${PN}2-4"
+RPROVIDES_lib${DPN} = "lib${DPN}-2-4 lib${DPN}2-4"
 
 # Base on debian/control
-RDEPENDS_${PN}_class-target += "${PN}-service psmisc lib${PN} libxml2 python glib-2.0"
-RDEPENDS_${PN}-service += "${PN}-common libldap libxml2 glib-2.0 lib${PN}"
+RDEPENDS_${PN}_class-target += "${PN}-service psmisc lib${DPN} libxml2 python glib-2.0"
+RDEPENDS_${PN}-service += "${PN}-common libldap libxml2 glib-2.0 lib${DPN}"
 RDEPENDS_${PN}-common += "ucf"
-RDEPENDS_lib${PN} += "${PN}-common glib-2.0 ${PN}-service"
-RDEPENDS_${PN}-dev += "lib${PN} glib-2.0-dev dbus-dev"
-RDEPENDS_${PN}-gsettings-backend += "lib${PN} ${PN}-service glib-2.0"
+RDEPENDS_lib${DPN} += "${PN}-common glib-2.0 ${PN}-service"
+RDEPENDS_${PN}-dev += "lib${DPN} glib-2.0-dev dbus-dev"
+RDEPENDS_${PN}-gsettings-backend += "lib${DPN} ${PN}-service glib-2.0"
 
 BBCLASSEXTEND = "native"

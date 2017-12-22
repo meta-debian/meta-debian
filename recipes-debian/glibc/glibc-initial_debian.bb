@@ -3,9 +3,9 @@
 # base branch: daisy
 #
 
-require glibc_${PV}.bb
+require glibc.inc
 
-PR = "0"
+PR = "1"
 
 # main glibc recipes muck with TARGET_CPPFLAGS to point into
 # final target sysroot but we
@@ -18,10 +18,9 @@ DEPENDS = "linux-libc-headers virtual/${TARGET_PREFIX}gcc-initial libgcc-initial
 PROVIDES = "virtual/${TARGET_PREFIX}libc-initial"
 
 PACKAGES = ""
-PACKAGES_DYNAMIC = ""
 
 STAGINGCC = "gcc-cross-initial-${TARGET_ARCH}"
-STAGINGCC_class-nativesdk = "gcc-crosssdk-initial-${TARGET_ARCH}"
+STAGINGCC_class-nativesdk = "gcc-crosssdk-initial-${SDK_SYS}"
 TOOLCHAIN_OPTIONS = " --sysroot=${STAGING_DIR_TCBOOTSTRAP}"
 
 # Specify add-ons for glibc: nptl, libidn, ports

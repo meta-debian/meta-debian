@@ -32,9 +32,10 @@ do_install_append() {
 			rm ${D}${libdir}/${i}
 		fi
 	done
-	ln -sf ../../lib/libpng12.so.0 ${D}${libdir}/libpng12.so.0
+	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_lib_prefix}${base_libdir}/libpng12.so.0 ${D}${libdir}/libpng12.so.0
 	ln -sf libpng12.so.0 ${D}${libdir}/libpng12.so
-	ln -sn ../../lib/libpng12.so.0 ${D}${libdir}/libpng.so.3
+	ln -sf ${rel_lib_prefix}${base_libdir}/libpng12.so.0 ${D}${libdir}/libpng.so.3
 	ln -sf libpng12 ${D}${includedir}/${BPN}
 }
 

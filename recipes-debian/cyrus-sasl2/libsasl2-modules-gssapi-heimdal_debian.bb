@@ -34,6 +34,7 @@ EXTRA_OECONF += "--with-dblib=berkeley 			\
 
 CFLAGS += "-fPIC"
 PARALLEL_MAKEINST = ""
+EXTRA_OEMAKE += "sasldir=${libdir}/sasl2"
 
 #runtime depends follow debian/control
 RDEPENDS_${PN} += "libsasl2-modules"

@@ -75,35 +75,35 @@ do_install() {
 		${D}${sysconfdir}/init.d/iscsitarget
 
 	DEB_UPSTREAM_VERSION=`dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p'`
-	install -d ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/kernel/ \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/include/ \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/patches/ \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/debian
+	install -d ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/kernel/ \
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/include/ \
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/patches/ \
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/debian
 
 	# Copy only the driver source to the proper location
 	cp ${S}/kernel/*.c ${S}/kernel/*.h ${S}/kernel/Makefile \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/kernel/
-	cp ${S}/include/* ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/include/
-	cp ${S}/patches/* ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/patches/
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/kernel/
+	cp ${S}/include/* ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/include/
+	cp ${S}/patches/* ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/patches/
 
 	cp ${S}/debian/control.modules.in \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/debian/control.in
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/debian/control.in
 
 	# install debian/ files
 	cd ${S}/debian
 	cp changelog control compat *.modules.in rules copyright \
-		*-module-* ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/debian
+		*-module-* ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/debian
 
 	# create toplevel module Makefile
-	echo "obj-m = kernel/" > ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/Makefile
+	echo "obj-m = kernel/" > ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/Makefile
 
 	# Prepare dkms.conf from the dkms.conf.in template
 	sed "s/__VERSION__/$DEB_UPSTREAM_VERSION/g" ${S}/debian/dkms.conf.in > \
-		${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/dkms.conf
+		${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/dkms.conf
 
-	grep ^PATCH ${S}/dkms.conf >> ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/dkms.conf
+	grep ^PATCH ${S}/dkms.conf >> ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/dkms.conf
 
-	rm ${D}${prefix}/src/${PN}-$DEB_UPSTREAM_VERSION/kernel/iscsi_trgt.mod.c
+	rm ${D}${prefix}/src/${DPN}-$DEB_UPSTREAM_VERSION/kernel/iscsi_trgt.mod.c
 }
 PACKAGES =+ "${PN}-dkms"
 FILES_${PN}-dkms = "${prefix}/src/*"

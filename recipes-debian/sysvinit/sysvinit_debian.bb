@@ -18,9 +18,9 @@ PACKAGES =+ "sysv-rc bootlogd ${PN}-core  \
              ${PN}-utils ${PN}-initscripts"
 
 FILES_${PN} += " \
-		${base_libdir}/${PN}/*"
+		${base_libdir}/sysvinit/*"
 FILES_${PN}-dbg += " \
-		${base_libdir}/${PN}/.debug"
+		${base_libdir}/sysvinit/.debug"
 FILES_sysv-rc += " \
 		${sbindir}/invoke-rc.d \
 		${sbindir}/update-rc.d \

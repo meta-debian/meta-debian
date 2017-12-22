@@ -31,8 +31,8 @@ CLEANBROKEN = "1"
 PARALLEL_MAKE = ""
 
 EXTRA_OECONF = " \
-    --with-pcre=${STAGING_LIBDIR}/.. --with-png=${STAGING_LIBDIR}/.. \
-    --with-z=${STAGING_LIBDIR}/.. --with-onig=${STAGING_LIBDIR}/.. \
+    --with-pcre=${STAGING_EXECPREFIXDIR} --with-png=${STAGING_EXECPREFIXDIR} \
+    --with-z=${STAGING_EXECPREFIXDIR} --with-onig=${STAGING_EXECPREFIXDIR} \
     --x-includes=${STAGING_INCDIR} --x-libraries=${STAGING_LIBDIR}"
 
 do_configure_prepend() {

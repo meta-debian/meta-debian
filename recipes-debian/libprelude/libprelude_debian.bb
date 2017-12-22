@@ -57,6 +57,7 @@ export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version
 
 export HOST_SYS
 export BUILD_SYS
+export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {
 	perl_version=${PERLVERSION}
@@ -99,7 +100,8 @@ do_install_append() {
 	for i in bindings/python bindings/low-level/python; do
 		oe_runmake -C $i ${PYFLAGS} DESTDIR=${D} install
 	done
-	find ${D}${PYTHON_SITEPACKAGES_DIR} -name "*.pyc" -delete
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name "*.pyc" -delete
+	find ${D}${libdir} -name "*.la" -delete
 
 	# Remove build path
 	sed -i "s:${WORKDIR}/image::" ${D}${libdir}/perl5/*/auto/Prelude/.packlist
@@ -124,7 +126,7 @@ PACKAGES = "${PN}-dbg ${PN}-staticdev ${PN}-dev ${PN}-doc \
             ${PN}-perl python-prelude ${PN}"
 
 FILES_${PN}-perl = "${libdir}/perl5"
-FILES_python-prelude = "${PYTHON_SITEPACKAGES_DIR}"
+FILES_python-prelude = "${nonarch_libdir}/${PYTHON_DIR}/*-packages"
 FILES_${PN}-dbg += "${libdir}/perl5/*/auto/*/.debug"
 
 PKG_${PN} = "${PN}2"

@@ -20,17 +20,17 @@ do_install_append() {
 	rm -rf ${D}${bindir}/fadot \
 	       ${D}${libdir}/*.la
 }
-PACKAGES =+ "${PN}-lenses ${PN}-tools lib${PN}-dev lib${PN}"
+PACKAGES =+ "${PN}-lenses ${PN}-tools lib${DPN}-dev lib${DPN}"
 
 FILES_${PN}-lenses = "${datadir}/augeas/*"
 FILES_${PN}-tools = "${bindir}/*"
-FILES_lib${PN}-dev = "${includedir}/* ${libdir}/*.so ${libdir}/pkgconfig/*"
-FILES_lib${PN} = "${libdir}/*${SOLIBS}"
+FILES_lib${DPN}-dev = "${includedir}/* ${libdir}/*.so ${libdir}/pkgconfig/*"
+FILES_lib${DPN} = "${libdir}/*${SOLIBS}"
 FILES_${PN}-doc += "${datadir}/vim/*"
 
-PKG_lib${PN} = "lib${PN}0"
-RPROVIDES_${PN} += "lib${PN}0"
+PKG_lib${DPN} = "lib${DPN}0"
+RPROVIDES_${PN} += "lib${DPN}0"
 
-RDEPENDS_lib${PN} += "${PN}-lenses"
+RDEPENDS_lib${DPN} += "${PN}-lenses"
 
 BBCLASSEXTEND = "native"

@@ -5,7 +5,7 @@
 
 require python.inc
 DEPENDS = "python-native libffi bzip2 db gdbm openssl readline sqlite3 zlib"
-PR = "${INC_PR}.1"
+PR = "${INC_PR}.2"
 
 DISTRO_SRC_URI_linuxstdbase = ""
 SRC_URI += "\
@@ -31,6 +31,8 @@ SRC_URI += "\
 
 inherit autotools multilib_header python-dir pythonnative
 
+export DEB_HOST_MULTIARCH
+
 CONFIGUREOPTS += " --with-system-ffi "
 
 # The 3 lines below are copied from the libffi recipe, ctypes ships its own copy of the libffi sources
@@ -44,12 +46,7 @@ EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'largefile', 'ac_cv_siz
 do_configure_prepend() {
 	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
 	# result of this command will be empty when gcc don't support multiarch.
-	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
-		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
-	else
-		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
-	fi
-	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${DEB_HOST_MULTIARCH}|g" ${S}/configure.ac
 }
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
@@ -57,9 +54,6 @@ do_configure_append() {
 }
 
 do_compile() {
-	# Set config folder for debug package to config only, not config-${MULTIARCH}
-	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${B}/Makefile
-
         # regenerate platform specific files, because they depend on system headers
         cd ${S}/Lib/plat-linux2
         include=${STAGING_INCDIR} ${STAGING_BINDIR_NATIVE}/python-native/python \
@@ -132,13 +126,18 @@ do_install() {
 		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		DESTDIR=${D} LIBDIR=${libdir} install
 
-	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
+	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config-${DEB_HOST_MULTIARCH}/Makefile
 
 	if [ -e ${WORKDIR}/sitecustomize.py ]; then
 		install -m 0644 ${WORKDIR}/sitecustomize.py ${D}/${libdir}/python${PYTHON_MAJMIN}
 	fi
 
 	oe_multilib_header python${PYTHON_MAJMIN}/pyconfig.h
+
+	install -d ${D}${libdir}/${DEB_HOST_MULTIARCH}
+	mv ${D}${libdir}/*.so* ${D}${libdir}/${DEB_HOST_MULTIARCH}/
+	ln -sf libpython${PYTHON_MAJMIN}.so.1.0 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libpython${PYTHON_MAJMIN}.so.1
+	ln -sf libpython${PYTHON_MAJMIN}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libpython${PYTHON_MAJMIN}.so
 }
 
 do_install_append_class-nativesdk () {
@@ -150,10 +149,10 @@ PACKAGE_PREPROCESS_FUNCS += "py_package_preprocess"
 
 py_package_preprocess () {
 	# copy back the old Makefile to fix target package
-	install -m 0644 ${B}/Makefile.orig ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
+	install -m 0644 ${B}/Makefile.orig ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config-${DEB_HOST_MULTIARCH}/Makefile
 
 	# Remove references to buildmachine paths in target Makefile
-	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
+	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config-${DEB_HOST_MULTIARCH}/Makefile
 }
 
 require python-${PYTHON_MAJMIN}-manifest.inc
@@ -166,7 +165,7 @@ RRECOMMENDS_${PN}-crypt = "openssl"
 
 # package libpython2
 PACKAGES =+ "lib${BPN}2"
-FILES_lib${BPN}2 = "${libdir}/libpython*.so.*"
+FILES_lib${BPN}2 = "${libdir}/${DEB_HOST_MULTIARCH}/libpython*.so.*"
 
 # catch debug extensions (isn't that already in python-core-dbg?)
 FILES_${PN}-dbg += "${libdir}/python${PYTHON_MAJMIN}/lib-dynload/.debug"

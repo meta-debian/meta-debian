@@ -31,12 +31,12 @@ do_install_append() {
 	fi
 }
 
-PACKAGES =+ "lib${PN}-ctl"
+PACKAGES =+ "liblttng-ust-ctl"
 
-FILES_lib${PN}-ctl = "${libdir}/lib${PN}-ctl.so.*"
+FILES_liblttng-ust-ctl = "${libdir}/liblttng-ust-ctl.so.*"
 FILES_${PN}-dev += "${bindir}/*"
 
 LEAD_SONAME = "liblttng-ust.so.*"
 
 # Correct the package name
-DEBIANNAME_lib${PN}-ctl = "lib${PN}-ctl2"
+DEBIANNAME_liblttng-ust-ctl = "liblttng-ust-ctl2"

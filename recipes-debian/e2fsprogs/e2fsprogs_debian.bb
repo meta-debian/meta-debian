@@ -93,13 +93,14 @@ do_install_class-target () {
 		# Refine softlink in class-target to avoid finding libraries in host system
 		# while building other packages which use e2fsprogs's libraries.
 		rm ${D}${base_libdir}/libe2p.so
-		ln -sf ../../${base_libdir}/libe2p.so.2 ${D}${libdir}/libe2p.so
+		rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+		ln -sf ${rel_lib_prefix}${base_libdir}/libe2p.so.2 ${D}${libdir}/libe2p.so
 		rm ${D}${base_libdir}/libcom_err.so
-		ln -sf ../../${base_libdir}/libcom_err.so.2 ${D}${libdir}/libcom_err.so
+		ln -sf ${rel_lib_prefix}${base_libdir}/libcom_err.so.2 ${D}${libdir}/libcom_err.so
 		rm ${D}${base_libdir}/libext2fs.so
-		ln -sf ../../${base_libdir}/libext2fs.so.2 ${D}${libdir}/libext2fs.so
+		ln -sf ${rel_lib_prefix}${base_libdir}/libext2fs.so.2 ${D}${libdir}/libext2fs.so
 		rm ${D}${base_libdir}/libss.so
-		ln -sf ../../${base_libdir}/libss.so.2 ${D}${libdir}/libss.so
+		ln -sf ${rel_lib_prefix}${base_libdir}/libss.so.2 ${D}${libdir}/libss.so
 		mv ${D}${base_libdir}/*.a ${D}${libdir}
 	fi
 	#Some files belong to sbindir

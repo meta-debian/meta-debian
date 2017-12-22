@@ -43,11 +43,11 @@ do_install_append () {
 }	
 inherit autotools
 
-# In Debian, binary package name of readline is "lib${PN}6"
-PKG_${PN} = "lib${PN}6"
-PKG_${PN}-dbg = "lib${PN}6-dbg"
-PKG_${PN}-dev = "lib${PN}6-dev"
-PKG_${PN}-doc = "lib${PN}6-doc"
-PKG_${PN}-staticdev = "lib${PN}6-staticdev"
+# In Debian, binary package name of readline is "libreadline6"
+PKG_${PN} = "lib${DPN}"
+PKG_${PN}-dbg = "lib${DPN}-dbg"
+PKG_${PN}-dev = "lib${DPN}-dev"
+PKG_${PN}-doc = "lib${DPN}-doc"
+PKG_${PN}-staticdev = "lib${DPN}-staticdev"
 
 BBCLASSEXTEND = "native nativesdk"

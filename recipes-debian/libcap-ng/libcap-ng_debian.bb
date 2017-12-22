@@ -25,6 +25,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f \
 
 inherit lib_package autotools pythonnative
 
+export BUILD_SYS
+export HOST_SYS
+export DEB_HOST_MULTIARCH
+
 DEPENDS += "swig-native python"
 
 # Prevent using python headers from host system
@@ -37,13 +41,13 @@ do_configure_prepend() {
 
 do_install_append() {
 	# Follow debian/rules
-	find ${D}${PYTHON_SITEPACKAGES_DIR} -name "*.la" -delete
+	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name "*.la" -delete
 }
 
 PACKAGES =+ "python-cap-ng"
 
-FILES_python-cap-ng = "${PYTHON_SITEPACKAGES_DIR}/*"
-FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
+FILES_python-cap-ng = "${nonarch_libdir}/${PYTHON_DIR}/*-packages/*"
+FILES_${PN}-dbg += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/.debug"
 
 # Keep compatible with meta layer
 RPROVIDES_python-cap-ng = "${PN}-python"

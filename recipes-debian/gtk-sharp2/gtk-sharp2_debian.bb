@@ -36,15 +36,15 @@ do_install() {
 		GACUTIL_FLAGS="/package gtk-sharp-$VERSION /gacdir ${D}${libdir}"
 
 	#follow debian/*.install
-	install -d ${D}${datadir}/${PN}-examples/GtkDemo
-	install -m 0644 ${S}/sample/*.cs ${D}${datadir}/${PN}-examples/
-	install -m 0644 ${S}/sample/*.exe ${D}${datadir}/${PN}-examples/
+	install -d ${D}${datadir}/${DPN}-examples/GtkDemo
+	install -m 0644 ${S}/sample/*.cs ${D}${datadir}/${DPN}-examples/
+	install -m 0644 ${S}/sample/*.exe ${D}${datadir}/${DPN}-examples/
 	install -m 0644 ${S}/sample/GtkDemo/*.cs \
-		${D}${datadir}/${PN}-examples/GtkDemo
+		${D}${datadir}/${DPN}-examples/GtkDemo
 	install -m 0644 ${S}/sample/GtkDemo/*.exe \
-		${D}${datadir}/${PN}-examples/GtkDemo
-	install -m 0644 ${S}/sample/Makefile ${D}${datadir}/${PN}-examples/
-	cp -r ${S}/sample/pixmaps ${D}${datadir}/${PN}-examples/
+		${D}${datadir}/${DPN}-examples/GtkDemo
+	install -m 0644 ${S}/sample/Makefile ${D}${datadir}/${DPN}-examples/
+	cp -r ${S}/sample/pixmaps ${D}${datadir}/${DPN}-examples/
 
 	for file in atk gdk glib gtk pango glade; do
 		install -d ${D}${libdir}/cli/$file-sharp-$VERSION
@@ -99,7 +99,7 @@ PACKAGES =+ "\
 	libglib-cil-dev libgtk-cil monodoc-gtk-manual"
 
 FILES_${PN}-examples = "\
-	${bindir}/${PN}-examples-list ${datadir}/${PN}-examples/*"
+	${bindir}/gtk-sharp2-examples-list ${datadir}/${DPN}-examples/*"
 
 FILES_${PN}-gapi = "\
 	${bindir}/gapi2* ${libdir}/gtk-sharp-*/gapi* \

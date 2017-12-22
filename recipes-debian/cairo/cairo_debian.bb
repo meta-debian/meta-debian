@@ -41,4 +41,4 @@ DEBIANNAME_cairo-perf-utils = "cairo-perf-utils"
 
 # Skip the QA check for symbolic link .so files in cairo-perf-utils.
 # In debian, libcairo-trace.so is shipped to cairo-perf-utils.
-INSANE_SKIP_cairo-perf-utils = "dev-so"
+INSANE_SKIP_${MLPREFIX}cairo-perf-utils = "dev-so"

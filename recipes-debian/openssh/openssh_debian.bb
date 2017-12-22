@@ -23,6 +23,8 @@ SRC_URI += " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep update-alternatives useradd systemd ptest
 
 USERADD_PACKAGES = "${PN}"
@@ -59,7 +61,7 @@ PACKAGECONFIG ??= "tcp-wrappers \
 PACKAGECONFIG[tcp-wrappers] = "--with-tcp-wrappers,--without-tcp-wrappers,tcp-wrappers"
 PACKAGECONFIG[pam] = "--with-pam,--without-pam,libpam"
 PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
-PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_LIBDIR}/..,--without-kerberos5,krb5"
+PACKAGECONFIG[krb5] = "--with-kerberos5=${STAGING_EXECPREFIXDIR},--without-kerberos5,krb5"
 PACKAGECONFIG[selinux] = "--with-selinux,--without-selinux,libselinux"
 
 # passwd path is hardcoded in sshd
@@ -112,10 +114,10 @@ do_install_append(){
 	# Install systemd service
 	# NOTE: "inherit systemd" will remove ${systemd_unitdir} if DISTRO_FEATURES doesn't include systemd,
 	# and remove ${sysconfdir}/init.d if DISTRO_FEATURES includes systemd but not sysvinit.
-	install -d ${D}${systemd_unitdir}/system
+	install -d ${D}${systemd_system_unitdir}
 	install -d ${D}${libdir}/tmpfiles.d
-	install -m 0644 ${S}/debian/systemd/*.service ${D}${systemd_unitdir}/system/
-	install -m 0644 ${S}/debian/systemd/*.socket ${D}${systemd_unitdir}/system/
+	install -m 0644 ${S}/debian/systemd/*.service ${D}${systemd_system_unitdir}/
+	install -m 0644 ${S}/debian/systemd/*.socket ${D}${systemd_system_unitdir}/
 	install -m 0644 ${S}/debian/systemd/sshd.conf ${D}${libdir}/tmpfiles.d/
 
 	# Install init script
@@ -133,7 +135,7 @@ do_install_append(){
 }
 
 do_install_ptest () {
-	sed -i -e "s|^SFTPSERVER=.*|SFTPSERVER=${libdir}/${PN}/sftp-server|" regress/test-exec.sh
+	sed -i -e "s|^SFTPSERVER=.*|SFTPSERVER=${libdir}/${DPN}/sftp-server|" regress/test-exec.sh
 	cp -r regress ${D}${PTEST_PATH}
 }
 
@@ -150,7 +152,7 @@ FILES_${PN} += " \
     ${sysconfdir}/ssh/sshd_config \
     ${libdir}/tmpfiles.d \
     /run \
-    ${base_libdir}/systemd/system \
+    ${systemd_system_unitdir} \
 "
 
 RPROVIDES_${PN} = "${PN}-server"
