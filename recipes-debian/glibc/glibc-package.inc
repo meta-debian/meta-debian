@@ -156,7 +156,8 @@ glibc_package_preprocess () {
 	done
 	rm -rf ${PKGD}/${localedir}
 	if [ "${libdir}" != "${exec_prefix}/lib" ]; then
-		# This dir only exists to hold locales
-		rm -rf ${PKGD}${exec_prefix}/lib
+		# ${libdir} could be /usr/lib/${DEB_HOST_MULTIARCH},
+		# ${exec_prefix}/lib cannot be removed or ${libdir} will also be removed.
+		rmdir --ignore-fail-on-non-empty ${PKGD}${exec_prefix}/lib
 	fi
 }
