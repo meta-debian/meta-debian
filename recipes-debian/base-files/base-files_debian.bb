@@ -6,6 +6,9 @@ PV = "8+deb8u10"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright.in;md5=5463e5abae4528d959d7f7a2e91d6176"
 
+# we want to keep ${baselib} as lib
+DEBIAN_MULTILIB_MANUAL = "1"
+
 INHIBIT_DEFAULT_DEPS = "1"
 ROOT_HOME = "/root"
 
@@ -51,7 +54,7 @@ do_install() {
 	sed -e "s&#OSNAME#&${OSNAME}&g" ${S}/etc/os-release \
 		> ${D}${sysconfdir}/os-release
 
-	mv ${D}${sysconfdir}/os-release ${D}${libdir}
+	mv ${D}${sysconfdir}/os-release ${D}${libdir}/
 	ln -s ..${libdir}/os-release ${D}${sysconfdir}/os-release
 	gzip -9 ${D}${docdir}/changelog
 
