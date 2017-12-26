@@ -88,13 +88,14 @@ do_install() {
 	echo "${libdir}" >> $conffile
 
 	install -m 0644 ${S}/debian/local/etc/ld.so.conf ${D}${sysconfdir}/
+	sed -i -e "s@\(^include\s*\)/etc/@\1${sysconfdir}/@g" ${D}${sysconfdir}/ld.so.conf
 }
 
 SYSROOT_PREPROCESS_FUNCS += "glibc_sysroot_preprocess"
 glibc_sysroot_preprocess() {
 	mkdir -p ${SYSROOT_DESTDIR}${sysconfdir}
 	cp -r ${D}${sysconfdir}/ld.so.conf.d ${SYSROOT_DESTDIR}${sysconfdir}/
-	sed -e "s@\(^include\s*\)/etc/@\1${STAGING_DIR_TARGET}${sysconfdir}/@g" \
+	sed -e "s@\(^include\s*\)${sysconfdir}/@\1${STAGING_DIR_TARGET}${sysconfdir}/@g" \
 	    ${D}${sysconfdir}/ld.so.conf > ${SYSROOT_DESTDIR}${sysconfdir}/ld.so.conf
 }
 
