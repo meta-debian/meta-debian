@@ -84,7 +84,7 @@ ncurses_configure() {
 		--enable-xmc-glitch \
 		--enable-colorfgbg \
 		--with-default-terminfo-dir='${sysconfdir}/terminfo' \
-		--with-terminfo-dirs='${sysconfdir}/terminfo:${base_libdir}/terminfo${EX_TERMINFO}' \
+		--with-terminfo-dirs='${sysconfdir}/terminfo:${nonarch_base_libdir}/terminfo${EX_TERMINFO}' \
 		--with-termpath='${sysconfdir}/termcap:${datadir}/misc/termcap${EX_TERMCAP}' \
 		--with-shared \
 		--disable-big-core \
