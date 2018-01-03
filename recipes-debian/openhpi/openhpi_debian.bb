@@ -93,13 +93,16 @@ python populate_packages_prepend(){
     import re
 
     pn = d.getVar("PN", True)
+    dpn = d.getVar("DPN", True)
     packages = d.getVar("PACKAGES", True)
 
     patern_plugin_package = pn + '-plugin-.*'
 
+    mlprefix = d.getVar('MLPREFIX', True)
     for package in packages.split():
         if re.match(patern_plugin_package,package):
-            d.appendVar("RDEPENDS_" + package, " lib" + pn)
+            d.appendVar("RDEPENDS_" + package, " " + mlprefix + "lib" + dpn)
+
 }
 
 DEBIANNAME_lib${DPN} = "lib${DPN}2"

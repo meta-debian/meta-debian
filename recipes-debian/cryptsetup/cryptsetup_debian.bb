@@ -106,7 +106,7 @@ do_install_append() {
 	LINKLIB=$(basename $(readlink ${D}${base_libdir}/libcryptsetup.so))
 	rel_lib_prefix=`echo ${libdir}/${DEB_HOST_MULTIARCH} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
 	rm ${D}${base_libdir}/libcryptsetup.so
-	ln -s ${rel_lib_prefix}${base_libdir}/$LINKLIB \
+	ln -s ${rel_lib_prefix}${base_libdir}/${DEB_HOST_MULTIARCH}/$LINKLIB \
 		${D}${libdir}/${DEB_HOST_MULTIARCH}/libcryptsetup.so
 	rm -r ${D}${base_libdir}/pkgconfig
 	cp -a ${S}/lib/libcryptsetup.pc ${D}${libdir}/pkgconfig/
