@@ -22,6 +22,8 @@ inherit autotools
 do_install_append() {
 	install -d ${D}${libdir}/xapian-examples/examples
 	mv ${D}${bindir}/simple* ${D}${libdir}/xapian-examples/examples/
+
+	find ${D} -executable -type f -exec chrpath -d {} \;
 }
 PACKAGES =+ "libxapian xapian-examples"
 
