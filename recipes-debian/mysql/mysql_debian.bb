@@ -1,5 +1,11 @@
 include mysql.inc
 
+# We don't want libdir auto be changed to /usr/lib/${DEB_HOST_MULTIARCH},
+# keep it as /usr/lib and handle installing libraries into multiarch libdir in recipes.
+# This will avoid warning complains about plugin is installed not in libdir:
+#   | mysql-server: found library in wrong location: /usr/lib/mysql/plugin/libdaemon_example.so
+DEBIAN_MULTILIB_MANUAL = "1"
+
 EXTRA_OECMAKE += " \
         -DSTACK_DIRECTION=-1 -DCAT_EXECUTABLE=`which cat` -DAWK_EXECUTABLE=`which awk` \
         -DCMAKE_INSTALL_PREFIX=${prefix} \
@@ -14,7 +20,7 @@ EXTRA_OECMAKE += " \
         -DWITH_SSL=bundled \
         -DWITH_ZLIB=system \
         -DINSTALL_LAYOUT=RPM \
-        -DINSTALL_LIBDIR=${baselib} \
+        -DINSTALL_LIBDIR=lib/${DEB_HOST_MULTIARCH} \
         -DINSTALL_PLUGINDIR=lib/mysql/plugin \
         -DWITH_EMBEDDED_SERVER=ON \
         -DHAVE_EMBEDDED_PRIVILEGE_CONTROL=ON \
@@ -73,7 +79,10 @@ do_install_append() {
 }
 
 PACKAGES += "mysql-testsuite"
-FILES_libmysqlclient = "${libdir}/libmysqlclient.so.* ${libdir}/libmysqlclient_r.so.*"
+FILES_libmysqlclient = " \
+	${libdir}/${DEB_HOST_MULTIARCH}/libmysqlclient.so.* \
+	${libdir}/${DEB_HOST_MULTIARCH}/libmysqlclient_r.so.* \
+"
 FILES_libmysqld-pic = "${bindir}/mysql_config_pic"
 FILES_mysql-common = "${sysconfdir}/mysql/my.cnf"
 FILES_mysql-server = "\
@@ -93,7 +102,12 @@ FILES_${PN}-dbg += "\
 	${libdir}/mysql-testsuite/lib/My/SafeProcess/.debug \
 	${prefix}/lib/mysql/plugin/.debug \
 "
-FILES_${PN}-dev += "${bindir}/mysql_config"
+FILES_${PN}-dev += " \
+	${bindir}/mysql_config \
+	${libdir}/${DEB_HOST_MULTIARCH}/*${SOLIBSDEV} \
+"
+FILES_${PN}-staticdev += "${libdir}/${DEB_HOST_MULTIARCH}/*.a"
+
 PKG_${PN}-dev = "libmysqlclient-dev"
 PKG_${PN} = "mysql-client-${VER}"
 PKG_mysql-server = "mysql-server-${VER}"
