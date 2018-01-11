@@ -14,7 +14,7 @@ inherit autotools gettext
 RRECOMMENDS_${PN} += "ca-certificates"
 
 # Follow debian/rules
-EXTRA_OECONF = "--enable-ipv6 --with-ssl --with-libidn=${STAGING_EXECPREFIXDIR}/ \
-                --disable-rpath"
+EXTRA_OECONF = "--enable-ipv6 --with-ssl=gnutls --with-libidn=${STAGING_EXECPREFIXDIR}/ \
+                --disable-rpath --without-libgnutls-prefix"
 
 BBCLASSEXTEND += "nativesdk"
