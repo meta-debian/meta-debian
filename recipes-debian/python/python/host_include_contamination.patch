@@ -12,17 +12,23 @@ so we add a check here.
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
 Upstream-Status: Pending
 
+###############################################################################
+# Modified to work with meta-debian
+# Checking CROSS_COMPILE should be at the begin of function
+# to prevent all cases of adding native include/lib to compiler flag
+###############################################################################
+
 
 diff --git a/setup.py b/setup.py
 index ba2d242..bf859be 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -393,6 +393,8 @@ class PyBuildExt(build_ext):
+@@ -391,6 +391,8 @@ class PyBuildExt(build_ext):
+              self.failed.append(ext.name)
  
-         if not find_executable('dpkg-architecture'):
-             return
+     def add_multiarch_paths(self):
 +        if os.environ.get('CROSS_COMPILE') is not None:
 +            return
-         opt = ''
-         if cross_compiling:
-             opt = '-t' + sysconfig.get_config_var('HOST_GNU_TYPE')
+         # Debian/Ubuntu multiarch support.
+         # https://wiki.ubuntu.com/MultiarchSpec
+         cc = sysconfig.get_config_var('CC')
