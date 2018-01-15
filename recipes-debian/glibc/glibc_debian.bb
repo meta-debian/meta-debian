@@ -62,6 +62,9 @@ do_compile () {
 
 require glibc-package.inc
 
+RTLDDIR = "/lib"
+RTLDDIR_x86-64 = "/lib64"
+
 do_install() {
 	# Re-write do_install from libc-common.bbclass
 	# to prevent install empty ld.so.conf from ${WORKDIR}
@@ -89,6 +92,13 @@ do_install() {
 
 	install -m 0644 ${S}/debian/local/etc/ld.so.conf ${D}${sysconfdir}/
 	sed -i -e "s@\(^include\s*\)/etc/@\1${sysconfdir}/@g" ${D}${sysconfdir}/ld.so.conf
+
+	install -d ${D}${RTLDDIR}
+	rtld_so="$(LANG=C LC_ALL=C readelf -l ${D}${bindir}/iconv | grep 'interpreter' | sed -e 's/.*interpreter: \(.*\)]/\1/g')"
+	rtld_so="$(basename $rtld_so)"
+	if [ "${base_libdir}" != "${RTLDDIR}" ]; then
+		ln -sf ${@oe.path.relative("${RTLDDIR}","${base_libdir}")}/$rtld_so ${D}${RTLDDIR}/$rtld_so
+	fi
 }
 
 SYSROOT_PREPROCESS_FUNCS += "glibc_sysroot_preprocess"
@@ -100,3 +110,4 @@ glibc_sysroot_preprocess() {
 }
 
 FILES_${PN}-doc += "${datadir}"
+FILES_${PN} += "${RTLDDIR}"

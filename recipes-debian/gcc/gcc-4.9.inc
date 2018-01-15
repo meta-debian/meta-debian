@@ -104,7 +104,6 @@ SRC_URI += "\
     file://0026-libgcc-sjlj-check.patch \
     file://0027-cpp-honor-sysroot.patch \
     file://0028-MIPS64-Default-to-N64-ABI.patch \
-    file://0029-Define-GLIBC_DYNAMIC_LINKER-and-UCLIBC_DYNAMIC_LINKE.patch \
     file://0030-gcc-Fix-argument-list-too-long-error.patch \
     file://0031-Disable-sdt.patch \
     file://0032-libtool.patch \
