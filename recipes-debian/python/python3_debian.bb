@@ -74,15 +74,7 @@ PYTHONLSBOPTS = ""
 do_configure_prepend() {
 	# Correct MULTIARCH variable, not use "$CC --print-multiarch" command,
 	# result of this command will be empty when gcc don't support multiarch.
-	if [ "${TARGET_ARCH}" = "arm" -o "${TARGET_ARCH}" = "armeb" ]; then
-		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}"
-	else
-		_MULTIARCH="${TARGET_ARCH}-${TARGET_OS}-gnu"
-	fi
-	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${_MULTIARCH}|g" ${S}/configure.ac
-
-	# Correct path to install pkgconfig files
-	sed -i -e "s|^LIBPC=.*|LIBPC=\$(LIBDIR)/pkgconfig|" ${S}/Makefile.pre.in
+	sed -i -e "s|^MULTIARCH=.*|MULTIARCH=${DEB_HOST_MULTIARCH}|g" ${S}/configure.ac
 }
 do_configure_append() {
 	rm -f ${S}/Makefile.orig
@@ -177,14 +169,7 @@ do_install() {
 	mv ${D}${bindir}/idle3.4 ${D}${bindir}/idle-python3.4
 	rm -rf ${D}${bindir}/idle3
 
-	# install file follow file list of package libpython3.4	and libpython3.4-dev
-	LINKLIB=$(basename $(readlink ${D}${libdir}/libpython3.4m.so))
-	cd ${D}${libdir}/python3.4/config-${PYTHON_BINABI}*
-	ln -s ../../${LINKLIB} libpython3.4m.so
-	ln -s ../../${LINKLIB} libpython3.4.so
-	cd -
-	ln -s ${LINKLIB} ${D}${libdir}/libpython3.4m.so.1
-
+	# install file follow file list of package libpython3.4-dev
 	ln -s python3.4m ${D}${includedir}/python3.4
 
 	# Install sitecustomize.py
@@ -243,7 +228,7 @@ do_install() {
 	for i in 2to3 idle3 pydoc3 pysetup3 python3 python3-config; do
 		rm -f ${D}${bindir}/$i
 	done
-	rm -f ${D}${libdir}/pkgconfig/python3.pc
+	rm -f ${D}${libdir}/pkgconfig/*/python3.pc
 
 	cp ${S}/Tools/i18n/pygettext.py ${D}${bindir}/pygettext${VER}
 	cp ${S}/debian/pygettext.1 ${D}${mandir}/man1/pygettext${VER}.1
@@ -269,6 +254,17 @@ do_install() {
 	rm -f ${D}${libdir}/python${VER}/idlelib/idle.bat
 	cp ${S}/debian/idle-${PVER}.1 ${D}${mandir}/man1/
 
+	mv ${D}${libdir}/libpython*.so* ${D}${libdir}/${DEB_HOST_MULTIARCH}/
+	ln -sf libpython${VER}m.so.1.0 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libpython${VER}m.so.1
+
+	rel_config_prefix=`echo ${scriptdir}/config-${VER}m-${DEB_HOST_MULTIARCH} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
+	ln -sf ${rel_config_prefix}${libdir}/${DEB_HOST_MULTIARCH}/libpython${VER}m.so.1 \
+	       ${D}${scriptdir}/config-${VER}m-${DEB_HOST_MULTIARCH}/libpython${VER}m.so
+	ln -sf ${rel_config_prefix}${libdir}/${DEB_HOST_MULTIARCH}/libpython${VER}m.so.1 \
+	       ${D}${scriptdir}/config-${VER}m-${DEB_HOST_MULTIARCH}/libpython${VER}.so
+	ln -sf libpython${VER}m.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libpython${VER}m.so
+
+	rm -f ${D}${libdir}/${DEB_HOST_MULTIARCH}/python3.so
 	rm -f ${D}${bindir}/python
 	rm -f ${D}${bindir}/pyvenv
 }
@@ -287,10 +283,10 @@ py_package_preprocess () {
 		${PKGD}/${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py
 }
 
-SYSROOT_PREPROCESS_FUNCS += "postgresql_sysroot_preprocess"
-postgresql_sysroot_preprocess () {
+SYSROOT_PREPROCESS_FUNCS += "py_sysroot_preprocess"
+py_sysroot_preprocess () {
 	install -D -m 0644 ${B}/Makefile.sysroot \
-		${SYSROOT_DESTDIR}${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}-${HOST_SYS}/Makefile
+		${SYSROOT_DESTDIR}${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}-${DEB_HOST_MULTIARCH}/Makefile
 }
 require python-${PYTHON_MAJMIN}-manifest.inc
 
@@ -310,7 +306,7 @@ FILES_${PN}-pyvenv += "${bindir}/pyvenv-${PYTHON_MAJMIN} \
 
 # package libpython3
 PACKAGES =+ "libpython3 libpython3-staticdev"
-FILES_libpython3 = "${libdir}/libpython*.so.*"
+FILES_libpython3 = "${libdir}/${DEB_HOST_MULTIARCH}/libpython*.so.*"
 FILES_libpython3-staticdev += "${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}*/libpython${PYTHON_BINABI}.a"
 
 # catch debug extensions (isn't that already in python-core-dbg?)
@@ -422,7 +418,8 @@ FILES_${PN}-core = "${bindir}/*"
 FILES_${PN}-dev += " \
     ${libdir}/python${PYTHON_MAJMIN}/*.so \
     ${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}* \
-    ${libdir}/*/pkgconfig \
+    ${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig \
+    ${libdir}/${DEB_HOST_MULTIARCH}/libpython*.so \
 "
 FILES_${DPN}-examples = " \
     ${libdir}/python${PYTHON_MAJMIN}/turtledemo \

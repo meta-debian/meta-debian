@@ -19,6 +19,8 @@ PYTHON_MAJMIN = "3.4"
 
 SRC_URI += "file://add_site-packages_to_getsitepackages.patch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools
 
 PYTHONLSBOPTS_linuxstdbase = ""
