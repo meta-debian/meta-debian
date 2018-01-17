@@ -5,7 +5,7 @@
 
 require python.inc
 DEPENDS = "python-native libffi bzip2 db gdbm openssl readline sqlite3 zlib"
-PR = "${INC_PR}.2"
+PR = "${INC_PR}.3"
 
 DISTRO_SRC_URI_linuxstdbase = ""
 SRC_URI += "\
@@ -29,7 +29,7 @@ SRC_URI += "\
 	file://add_site-packages_to_getsitepackages.patch \
 "
 
-inherit autotools multilib_header python-dir pythonnative
+inherit autotools python-dir pythonnative
 
 export DEB_HOST_MULTIARCH
 
@@ -132,7 +132,11 @@ do_install() {
 		install -m 0644 ${WORKDIR}/sitecustomize.py ${D}/${libdir}/python${PYTHON_MAJMIN}
 	fi
 
-	oe_multilib_header python${PYTHON_MAJMIN}/pyconfig.h
+	install -d ${D}${includedir}/${DEB_HOST_MULTIARCH}/python${PYTHON_MAJMIN}
+	mv ${D}${includedir}/python${PYTHON_MAJMIN}/pyconfig.h \
+	   ${D}${includedir}/${DEB_HOST_MULTIARCH}/python${PYTHON_MAJMIN}/
+	sed 's/@subdir@/python${PYTHON_MAJMIN}/;s/@header@/pyconfig.h/' \
+	    ${S}/debian/multiarch.h.in > ${D}${includedir}/python${PYTHON_MAJMIN}/pyconfig.h
 
 	install -d ${D}${libdir}/${DEB_HOST_MULTIARCH}
 	mv ${D}${libdir}/*.so* ${D}${libdir}/${DEB_HOST_MULTIARCH}/
@@ -153,6 +157,13 @@ py_package_preprocess () {
 
 	# Remove references to buildmachine paths in target Makefile
 	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config-${DEB_HOST_MULTIARCH}/Makefile
+}
+
+SYSROOT_PREPROCESS_FUNCS += "py_sysroot_preprocess"
+py_sysroot_preprocess() {
+	rm -f ${SYSROOT_DESTDIR}${includedir}/python${PYTHON_MAJMIN}/pyconfig.h
+	ln -sf ../${DEB_HOST_MULTIARCH}/python${PYTHON_MAJMIN}/pyconfig.h \
+	       ${SYSROOT_DESTDIR}${includedir}/python${PYTHON_MAJMIN}/pyconfig.h
 }
 
 require python-${PYTHON_MAJMIN}-manifest.inc

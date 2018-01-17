@@ -6,7 +6,7 @@
 require python3.inc
 
 DEPENDS = "python3-native libffi bzip2 db gdbm openssl readline sqlite3 zlib virtual/libintl xz-utils expat mpdecimal"
-PR = "${INC_PR}.3"
+PR = "${INC_PR}.4"
 
 PYTHON_BINABI= "${PYTHON_MAJMIN}m"
 # now-avoid-pgen.patch
@@ -39,7 +39,7 @@ SRC_URI += " \
 
 DEBIAN_PATCH_TYPE = "quilt"
 
-inherit multilib_header python3native pkgconfig
+inherit python3native pkgconfig
 
 CONFIGUREOPTS += " --with-system-ffi "
 
@@ -163,8 +163,6 @@ do_install() {
 	# avoid conflict with 2to3 from Python 2
 	rm -f ${D}/${bindir}/2to3
 
-	oe_multilib_header python${PYTHON_BINABI}/pyconfig.h
-
 	# install file follow file list of package idle-python3.4
 	mv ${D}${bindir}/idle3.4 ${D}${bindir}/idle-python3.4
 	rm -rf ${D}${bindir}/idle3
@@ -186,6 +184,12 @@ do_install() {
 	PVER=python${VER}
 	PRIORITY=$(echo ${VER} | tr -d '.')0
 	scriptdir=${libdir}/python${VER}
+
+	install -d ${D}${includedir}/${DEB_HOST_MULTIARCH}/${PVER}m
+	mv ${D}${includedir}/${PVER}m/pyconfig.h \
+	   ${D}${includedir}/${DEB_HOST_MULTIARCH}/${PVER}m/
+	sed 's/@subdir@/${PVER}m/;s/@header@/pyconfig.h/' \
+	    ${S}/debian/multiarch.h.in > ${D}${includedir}/${PVER}m/pyconfig.h
 
 	for f in ${S}/debian/*.in; do
 		f2=`echo $f | sed "s,PVER,${PVER},g;s/@VER@/${VER}/g;s,\.in$,,"`;
@@ -287,6 +291,10 @@ SYSROOT_PREPROCESS_FUNCS += "py_sysroot_preprocess"
 py_sysroot_preprocess () {
 	install -D -m 0644 ${B}/Makefile.sysroot \
 		${SYSROOT_DESTDIR}${libdir}/python${PYTHON_MAJMIN}/config-${PYTHON_BINABI}-${DEB_HOST_MULTIARCH}/Makefile
+
+	rm -f ${SYSROOT_DESTDIR}${includedir}/python${PYTHON_MAJMIN}m/pyconfig.h
+	ln -sf ../${DEB_HOST_MULTIARCH}/python${PYTHON_MAJMIN}m/pyconfig.h \
+	       ${SYSROOT_DESTDIR}${includedir}/python${PYTHON_MAJMIN}m/pyconfig.h
 }
 require python-${PYTHON_MAJMIN}-manifest.inc
 
