@@ -16,6 +16,8 @@ inherit setuptools
 # Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
 DEBIAN_QUILT_PATCHES = ""
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # need to export these variables for python runtime
 # fix error:
 #       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )

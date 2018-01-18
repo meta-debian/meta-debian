@@ -27,6 +27,8 @@ DPN = "requests"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c7869e52c8275537186de35e3cd5f9ec"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # need to export these variables for python runtime
 # fix error:
 #       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )

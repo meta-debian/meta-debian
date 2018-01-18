@@ -15,6 +15,8 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=22b38951eb857cf285a4560a914b7cd6"
 inherit setuptools
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # need to export these variables for python runtime
 # fix error:
 #       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
