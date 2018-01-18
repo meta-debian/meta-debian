@@ -23,3 +23,4 @@ DEBIAN_QUILT_PATCHES = ""
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH

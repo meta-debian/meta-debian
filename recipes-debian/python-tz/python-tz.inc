@@ -21,6 +21,7 @@ inherit setuptools
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_debian_patch_prepend() {
 	# ${S}/.pc is existed by default, so we need to remove it to

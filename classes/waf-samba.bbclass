@@ -76,6 +76,7 @@ do_configure() {
     export STAGING_LIBDIR=${STAGING_LIBDIR}
     export STAGING_INCDIR=${STAGING_INCDIR}
     export PYTHONPATH="${STAGING_DIR_HOST}${libdir}/${PYTHON_DIR}/dist-packages"
+    export DEB_HOST_MULTIARCH="${DEB_HOST_MULTIARCH}"
 
     CONFIG_CMD="./configure ${CONFIGUREOPTS} ${EXTRA_OECONF} --cross-compile"
     if [ "${CROSS_METHOD}" = "answer" ]; then
