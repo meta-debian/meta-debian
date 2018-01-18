@@ -8,13 +8,10 @@ inherit setuptools python3native
 
 DEPENDS += "python3-setuptools-native python3-native"
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_PN}/dist-packages"
-
 do_install_append() {
 	# Remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	rm -rf ${D}${libdir}/${PYTHON_PN}/dist-packages/wheel-0.24.0-py3.4.egg-info/SOURCES.txt
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	rm -rf ${D}${PYTHON_SITEPACKAGES_DIR}/wheel-0.24.0-py3.4.egg-info/SOURCES.txt
 }
 
 BBCLASSEXTEND = "native"

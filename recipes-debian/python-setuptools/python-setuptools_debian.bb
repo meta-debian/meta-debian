@@ -5,7 +5,7 @@ PROVIDES = "python-distribute"
 
 PACKAGES =+ "python-pkg-resources"
 
-FILES_python-pkg-resources = "${libdir}/${PYTHON_DIR}/*-packages/pkg_resources.py"
+FILES_python-pkg-resources = "${PYTHON_SITEPACKAGES_DIR}/pkg_resources.py"
 
 RDEPENDS_${PN}_class-target += "python-pkg-resources"
 

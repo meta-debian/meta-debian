@@ -120,7 +120,7 @@ do_install() {
 	   ${D}${sysconfdir}/apparmor.d/usr.sbin.ntpd  \
 	   ${D}${sysconfdir}/apparmor.d/usr.sbin.winbindd \
 	   ${D}${base_libdir}/apparmor/rc.apparmor.functions \
-	   ${D}${libdir}/${PYTHON_DIR}/*/apparmor/*.pyc
+	   ${D}${PYTHON_SITEPACKAGES_DIR}/apparmor/*.pyc
 
 	install -m 0644 ${S}/profiles/apparmor.d/local/usr.sbin.apache2 \
 		${D}${sysconfdir}/apparmor.d/local/
@@ -202,9 +202,9 @@ FILES_libapparmor = " ${libdir}/*${SOLIBS} "
 
 FILES_libpam-apparmor = " ${base_libdir}/security/ "
 
-FILES_python-apparmor = " ${libdir}/${PYTHON_DIR}/*/apparmor* "
+FILES_python-apparmor = " ${PYTHON_SITEPACKAGES_DIR}/apparmor* "
 
-FILES_python-libapparmor = " ${libdir}/${PYTHON_DIR}/*/* "
+FILES_python-libapparmor = " ${PYTHON_SITEPACKAGES_DIR}/* "
 
 DEBIANNAME_libapparmor = "libapparmor1"
 RPROVIDES_libapparmor += " libapparmor1"

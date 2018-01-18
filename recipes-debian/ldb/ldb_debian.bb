@@ -42,8 +42,8 @@ do_configure_prepend() {
 
 do_install_append() {
 	# base on debian/rules
-	rm -rf ${D}${libdir}/${PYTHON_DIR}/*-packages/*tevent.* \
-	       ${D}${libdir}/${PYTHON_DIR}/*-packages/tdb.so \
+	rm -rf ${D}${PYTHON_SITEPACKAGES_DIR}/*tevent.* \
+	       ${D}${PYTHON_SITEPACKAGES_DIR}/tdb.so \
 	       ${D}${bindir}/tdb*
 }
 PACKAGES =+ "libldb ldb-tools python-ldb python-ldb-dev libldb-dev"
@@ -51,7 +51,7 @@ PACKAGES =+ "libldb ldb-tools python-ldb python-ldb-dev libldb-dev"
 FILES_libldb = "${libdir}/ldb/modules/ldb/*.so ${libdir}/libldb${SOLIBS}"
 FILES_ldb-tools = "${bindir}/ldb* ${libdir}/ldb/libldb-cmdline.so"
 FILES_python-ldb = "${libdir}/libpyldb-util${SOLIBS} \
-                    ${libdir}/${PYTHON_DIR}/dist-packages/*"
+                    ${PYTHON_SITEPACKAGES_DIR}/*"
 FILES_python-ldb-dev = "${includedir}/pyldb.h ${libdir}/libpyldb-util.so \
                         ${libdir}/pkgconfig/pyldb-util.pc"
 FILES_libldb-dev = "${includedir}/* ${libdir}/libldb.so \

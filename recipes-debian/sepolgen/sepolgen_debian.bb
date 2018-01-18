@@ -34,7 +34,7 @@ do_install() {
 	           install
 }
 
-FILES_${PN} += "${libdir}/${PYTHON_DIR}/*-packages/sepolgen/*"
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/sepolgen/*"
 
 PKG_${PN} = "python-${PN}"
 

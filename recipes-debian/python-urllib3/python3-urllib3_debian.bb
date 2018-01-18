@@ -14,13 +14,10 @@ RDEPENDS_${PN}_class_target += "\
 	${PYTHON_PN}-netclient \
 	${PYTHON_PN}-threading "
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_PN}/dist-packages"
-
 do_install_append() {
 	# Remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	rm -rf ${D}${libdir}/${PYTHON_PN}/dist-packages/urllib3-1.9.1-py3.4.egg-info/SOURCES.txt
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	rm -rf ${D}${PYTHON_SITEPACKAGES_DIR}/urllib3-1.9.1-py3.4.egg-info/SOURCES.txt
 }
 
 BBCLASSEXTEND = "native"

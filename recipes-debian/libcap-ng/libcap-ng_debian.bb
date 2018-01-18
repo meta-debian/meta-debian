@@ -46,8 +46,8 @@ do_install_append() {
 
 PACKAGES =+ "python-cap-ng"
 
-FILES_python-cap-ng = "${nonarch_libdir}/${PYTHON_DIR}/*-packages/*"
-FILES_${PN}-dbg += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/.debug"
+FILES_python-cap-ng = "${PYTHON_SITEPACKAGES_DIR}/*"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 
 # Keep compatible with meta layer
 RPROVIDES_python-cap-ng = "${PN}-python"

@@ -18,7 +18,7 @@ DISTUTILS_INSTALL_ARGS += " \
     --root='${D}' \
     --install-layout=deb \
     --prefix='${prefix}' \
-    --install-lib='${libdir}/${PYTHON_DIR}/dist-packages' \
+    --install-lib='${PYTHON_SITEPACKAGES_DIR}' \
     --install-data='${datadir}' \
 "
 # need to export these variables for python runtime
@@ -31,14 +31,14 @@ export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# Remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
 
 	# Install setuptools.pth
 	SETUPTOOLSVER=$(head -n 1 debian/changelog \
 	              | sed 's|.*(\([^()]*\)).*|\1|' \
 	              | sed 's|-.*||')
 	echo "setuptools-${SETUPTOOLSVER}.egg-info" \
-	     > ${D}${libdir}/${PYTHON_DIR}/dist-packages/setuptools.pth
+	     > ${D}${PYTHON_SITEPACKAGES_DIR}/setuptools.pth
 }
 
 BBCLASSEXTEND = "native nativesdk"

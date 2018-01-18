@@ -13,9 +13,6 @@ require pycurl.inc
 
 inherit distutils python3native
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_PN}/dist-packages"
-
 # Ensure the docstrings are generated as make clean will remove them
 do_compile_prepend() {
 	${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py docstrings
@@ -23,5 +20,5 @@ do_compile_prepend() {
 
 do_install_append() {
 	rm -rf ${D}${datadir}/share
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
 }

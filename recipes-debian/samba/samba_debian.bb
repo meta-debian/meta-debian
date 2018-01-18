@@ -75,11 +75,11 @@ do_install_append() {
 	rm -rf ${D}/${libdir}/mit_samba.so
 
 	# Included in python-tevent
-	rm ${D}/${libdir}/${PYTHON_DIR}/*-packages/_tevent.so
-	rm ${D}/${libdir}/${PYTHON_DIR}/*-packages/tevent.py
+	rm ${D}/${PYTHON_SITEPACKAGES_DIR}/_tevent.so
+	rm ${D}/${PYTHON_SITEPACKAGES_DIR}/tevent.py
 
 	#Already included in various system packages
-	rm -rf ${D}/${libdir}/${PYTHON_DIR}/*-packages/samba/external
+	rm -rf ${D}/${PYTHON_SITEPACKAGES_DIR}/samba/external
 
 	# System ldb loads its modules from a different path
 	mkdir -p ${D}${libdir}/ldb/modules/ldb
@@ -338,7 +338,7 @@ FILES_${PN}-common = "\
 	${localstatedir}/run \
 	/run"
 FILES_python-samba = "\
-	${libdir}/${PYTHON_DIR}/*"
+	${PYTHON_SITEPACKAGES_DIR}/*"
 FILES_winbind = "\
 	${bindir}/ntlm_auth \
 	${bindir}/wbinfo \
@@ -419,7 +419,7 @@ FILES_${PN}-libs = "\
 	${libdir}/samba/process_model/*.so"
 FILES_${PN} += "\
 	${systemd_system_unitdir}/samba.service \
-	${libdir}/${PYTHON_DIR}/*-packages/samba/dckeytab.so"
+	${PYTHON_SITEPACKAGES_DIR}/samba/dckeytab.so"
 
 DEBIAN_NOAUTONAME_libsmbclient = "1"
 DEBIANNAME_libwbclient = "libwbclient0"

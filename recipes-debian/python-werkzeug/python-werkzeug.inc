@@ -32,6 +32,6 @@ export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	rm -rf `find ${D}${PYTHON_SITEPACKAGES_DIR} -type d -name "__pycache__"`
 }

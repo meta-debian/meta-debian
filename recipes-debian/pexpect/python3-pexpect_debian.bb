@@ -13,11 +13,8 @@ require pexpect.inc
 
 inherit distutils python3native
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_PN}/dist-packages"
-
 do_install_append() {
 	# Remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
 }
 

@@ -13,12 +13,9 @@ require pycurl.inc
 
 inherit distutils
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_DIR}/dist-packages"
-
 do_install_append() {
 	rm -rf ${D}${datadir}/share
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
 }
 
 BBCLASSEXTEND = "native"

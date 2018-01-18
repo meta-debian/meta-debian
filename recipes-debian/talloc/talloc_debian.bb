@@ -30,7 +30,7 @@ FILES_python-talloc-dev = "\
 	${libdir}/pkgconfig/pytalloc-util.pc \
 	${libdir}/libpytalloc-util.so"
 FILES_python-talloc = "\
-	${libdir}/${PYTHON_DIR}/dist-packages/talloc.so \
+	${PYTHON_SITEPACKAGES_DIR}/talloc.so \
 	${libdir}/libpytalloc-util${SOLIBS}"
 
 DEBIAN_NOAUTONAME_python-talloc-dev = "1"

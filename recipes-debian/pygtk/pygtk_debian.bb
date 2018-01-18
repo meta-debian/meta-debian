@@ -81,8 +81,8 @@ FILES_${PN}-doc += " \
     ${datadir}/pygtk/2.0/pygtk-demo.py \
 "
 FILES_${PN}-dbg += " \
-    ${libdir}/${PYTHON_DIR}/dist-packages/*/.debug \
-    ${libdir}/${PYTHON_DIR}/dist-packages/*/*/.debug \
+    ${PYTHON_SITEPACKAGES_DIR}/*/.debug \
+    ${PYTHON_SITEPACKAGES_DIR}/*/*/.debug \
 "
 
 PKG_${PN} = "python-gtk2"

@@ -20,20 +20,17 @@ RDEPENDS_${PN}_class-target = "\
 	python-resource \
 	python-fcntl"
 
-# Change install directory from "site-packages" to "dist-packages"
-PYTHON_SITEPACKAGES_DIR = "${libdir}/${PYTHON_DIR}/dist-packages"
-
 do_install_append() {
 	install -d ${D}/${datadir}/pyshared/
 	install -m 644 ${S}/*.py ${D}/${datadir}/pyshared/
 
 	cp -r ${S}/pexpect/ ${D}/${datadir}/pyshared/
-	cp -r ${D}/${libdir}/${PYTHON_DIR}/dist-packages/*.egg-info ${D}/${datadir}/pyshared/
+	cp -r ${D}/${PYTHON_SITEPACKAGES_DIR}/*.egg-info ${D}/${datadir}/pyshared/
 
 	# Remove unwanted files
 	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
 }
 
-FILES_${PN} = "${datadir}/* ${libdir}/${PYTHON_DIR}/*"
+FILES_${PN} = "${datadir}/* ${PYTHON_SITEPACKAGES_DIR}/*"
 
 BBCLASSEXTEND = "native"
