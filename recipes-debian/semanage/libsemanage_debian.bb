@@ -59,7 +59,10 @@ do_install() {
 	oe_runmake install-pywrap \
 		DESTDIR=${D} \
 		PYLIBVER='python${PYTHON_BASEVERSION}' \
-		PYLIBDIR='${D}/${libdir}/$(PYLIBVER)'
+		PYLIBDIR='${D}/${nonarch_libdir}/$(PYLIBVER)'
+
+	# "site-packages" is hardcoded in src/Makefile
+	mv ${D}${nonarch_libdir}/python${PYTHON_BASEVERSION}/site-packages ${D}${PYTHON_SITEPACKAGES_DIR}
 
 	# Fix permission as debian/rules
 	chmod -x ${D}${PYTHON_SITEPACKAGES_DIR}/semanage.py
