@@ -105,15 +105,15 @@ do_install_append() {
 		${D}${sysconfdir}/${DPN}/conf-available/
 	mv ${D}${datadir}/${DPN}/default-site/htdocs/manual \
 		${D}${docdir}/${DPN}-doc
-	mv ${D}${libdir}/cgi-bin/printenv \
+	mv ${D}${nonarch_libdir}/cgi-bin/printenv \
 		${D}${docdir}/${DPN}-doc/cgi-examples/
-	mv ${D}${libdir}/cgi-bin/test-cgi \
+	mv ${D}${nonarch_libdir}/cgi-bin/test-cgi \
 		${D}${docdir}/${DPN}-doc/cgi-examples/
 	mv ${D}${sysconfdir}/${DPN}/extra \
 		${D}${docdir}/${DPN}-doc/examples/${DPN}/
 	mv ${D}${sysconfdir}/${DPN}/original \
 		${D}${docdir}/${DPN}-doc/examples/${DPN}/
-	rm -rf ${D}${libdir}/cgi-bin
+	rm -rf ${D}${nonarch_libdir}/cgi-bin
 	rm -rf ${D}${datadir}/${DPN}/default-site/htdocs
 
 	# Install extra files for apache2-suexec-custom
