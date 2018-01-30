@@ -57,7 +57,7 @@ do_install_append() {
 	mv ${D}${base_libdir}/*.a ${D}${libdir}/
 	mv ${D}${base_libdir}/*.la ${D}${libdir}/
 	#correct the path of libdir to match from libgrypt.so installed.
-	sed -i -e "s:^libdir='/lib':libdir='/usr/lib':g" ${D}${libdir}/libgcrypt.la
+	sed -i -e "s:^libdir='/lib:libdir='/usr/lib:g" ${D}${libdir}/libgcrypt.la
 }
 
 # Specifies the lead (or primary) compiled library file (.so) 
