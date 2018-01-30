@@ -38,6 +38,7 @@ PARALLEL_MAKE = ""
 
 # Follow debian/rules
 EXTRA_OECONF = " \
+	--libexecdir=${nonarch_libdir} \
 	--enable-static \
 	--enable-tools \
 	--enable-cups \
@@ -47,13 +48,11 @@ EXTRA_OECONF = " \
 	--enable-monitor \
 	--enable-udev \
 	--enable-client \
-	${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--with-systemdunitdir=${systemd_unitdir}/system/', '--disable-systemd', d)} \
+	${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--with-systemdsystemunitdir=${systemd_unitdir}/system/', '--disable-systemd', d)} \
 	--enable-threads \
 	--enable-sixaxis \
 	--enable-experimental \
 "
-
-libexecdir = "${libdir}"
 
 do_install_append() {
 	# In Debian, hciconfig is installed to /bin
@@ -81,9 +80,12 @@ do_install_append() {
 	install -d ${D}${sbindir}
 	install -m 0644 ${S}/debian/bluez.bluetooth.default ${D}${sysconfdir}/default/bluetooth
 	install -m 0755 ${S}/debian/bluez.bluetooth.init ${D}${sysconfdir}/init.d/bluetooth
-	install -m 0644 ${S}/debian/50-bluetooth-hci-auto-poweron.rules ${D}${base_libdir}/udev/rules.d/
+	install -m 0644 ${S}/debian/50-bluetooth-hci-auto-poweron.rules ${D}${nonarch_base_libdir}/udev/rules.d/
 
 	ln -s ../lib/bluetooth/bluetoothd ${D}${sbindir}/bluetoothd
+
+	# Base on debian/bluez-cups.install
+	mv ${D}${libdir}/cups ${D}${nonarch_libdir}/
 }
 
 ALLOW_EMPTY_libasound-module-bluez = "1"
@@ -95,7 +97,7 @@ PACKAGES =+ " \
 	libbluetooth \
 "
 
-FILES_${PN}-cups = "${libdir}/cups/backend/bluetooth"
+FILES_${PN}-cups = "${nonarch_libdir}/cups/backend/bluetooth"
 FILES_${PN}-hcidump = "${bindir}/hcidump"
 FILES_libbluetooth = "${libdir}/libbluetooth.so.* ${libdir}/bluetooth/plugins/*.so"
 
@@ -104,10 +106,10 @@ FILES_${PN} += " \
 	${base_bindir}/hciconfig \
 	${sbindir}/bluetoothd \
 	${libdir}/bluetooth/plugins/*.so \
-	${base_libdir}/udev/ \
 	${nonarch_base_libdir}/udev/ \
 	${systemd_unitdir}/ \
 	${datadir}/dbus-1 \
+	${nonarch_libdir}/bluetooth/bluetoothd \
 "
 FILES_${PN}-dev += "\
 	${libdir}/bluetooth/plugins/*.la \
@@ -117,8 +119,8 @@ FILES_${PN}-dev += "\
 FILES_${PN}-staticdev += "${libdir}/bluetooth/plugins/*.a"
 
 FILES_${PN}-obex = " \
-	${libdir}/bluetooth/obexd \
-	${libdir}/systemd/user/obex.service \
+	${nonarch_libdir}/bluetooth/obexd \
+	${nonarch_libdir}/systemd/user/obex.service \
 	${datadir}/dbus-1/services/org.bluez.obex.service \
 "
 SYSTEMD_SERVICE_${PN}-obex = "obex.service"
