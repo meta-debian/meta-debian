@@ -16,5 +16,11 @@ PV = "0.24.0"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=9d66b41bc2a080e7174acc5dffecd752"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # Set do patch is no execute because folder debian patches empty
 do_debian_patch[noexec] = "1"
+
+export HOST_SYS
+export BUILD_SYS
+export DEB_HOST_MULTIARCH

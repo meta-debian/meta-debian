@@ -111,3 +111,7 @@ glibc_sysroot_preprocess() {
 
 FILES_${PN}-doc += "${datadir}"
 FILES_${PN} += "${RTLDDIR}"
+
+# glibc installs linker in /lib and /lib64 to satisfy gcc hardcoded path.
+# Disable warning about found library in wrong location: /lib64/ld-linux-x86-64.so.2 [libdir]
+INSANE_SKIP_${PN} += "libdir"

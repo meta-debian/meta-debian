@@ -239,8 +239,8 @@ do_install_append() {
 	cp -r ${S}/utils/lit/*              ${D}${libdir}/llvm-${PV}/build/utils/lit/
 
 	# According to debian/python-clang-X.Y.install.in
-	install -d ${D}${libdir}/${PYTHON_DIR}/dist-packages
-	cp -r ${S}/tools/clang/bindings/python/clang/ ${D}${libdir}/${PYTHON_DIR}/dist-packages/
+	install -d ${D}${PYTHON_SITEPACKAGES_DIR}
+	cp -r ${S}/tools/clang/bindings/python/clang/ ${D}${PYTHON_SITEPACKAGES_DIR}/
 
 	# According to debian/clang-X.Y.links.in
 	ln -sf ${datadir}/clang/scan-build-${PV}/scan-build  ${D}${bindir}/scan-build-${PV}
@@ -276,16 +276,15 @@ do_install_append() {
 	ln -sf libclang-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libclang.so.1
 
 	# According to debian/liblldb-X.Y.links.in
-	install -d ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb-${PV}
+	install -d ${D}${PYTHON_SITEPACKAGES_DIR}/lldb-${PV}
 	ln -sf liblldb-${PV}.so.1 ${D}${libdir}/${DEB_HOST_MULTIARCH}/liblldb-${PV}.so
 	ln -sf ../../../${DEB_HOST_MULTIARCH}/liblldb-${PV}.so \
-	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb-${PV}/_lldb.so
+	        ${D}${PYTHON_SITEPACKAGES_DIR}/lldb-${PV}/_lldb.so
 	ln -sf ../../${DEB_HOST_MULTIARCH}/liblldb-${PV}.so.1 \
 	        ${D}${libdir}/llvm-${PV}/lib/liblldb.so.1
 
 	# According to debian/llvm-X.Y-dev.links.in
-	install -d ${D}${libdir}/llvm-${PV}/build \
-	           ${D}${libdir}/${PYTHON_DIR}/dist-packages
+	install -d ${D}${libdir}/llvm-${PV}/build
 	ln -sf ../../${DEB_HOST_MULTIARCH}/libLLVM-${PV}.so.1 \
 	        ${D}${libdir}/llvm-${PV}/lib/libLLVM-${PV}.so
 	ln -sf ../../${DEB_HOST_MULTIARCH}/libLLVM-${PV}.so.1 \
@@ -302,11 +301,11 @@ do_install_append() {
 
 	# According to debian/python-lldb-X.Y.links.in
 	ln -sf ../../llvm-${PV}/lib/${PYTHON_DIR}/site-packages/lldb/ \
-	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb
+	        ${D}${PYTHON_SITEPACKAGES_DIR}/lldb
 	ln -sf ../../../${DEB_HOST_MULTIARCH}/libLLVM-${LLVM_VERSION_FULL}.so.1 \
-	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${LLVM_VERSION_FULL}.so.1
+	        ${D}${PYTHON_SITEPACKAGES_DIR}/lldb/libLLVM-${LLVM_VERSION_FULL}.so.1
 	ln -sf ../../../${DEB_HOST_MULTIARCH}/libLLVM-${LLVM_VERSION_FULL}.so.1 \
-	        ${D}${libdir}/${PYTHON_DIR}/dist-packages/lldb/libLLVM-${PV}.so.1
+	        ${D}${PYTHON_SITEPACKAGES_DIR}/lldb/libLLVM-${PV}.so.1
 
 	# Correct files permission
 	chmod 0644 ${D}${libdir}/llvm-${PV}/lib/*.a
@@ -369,7 +368,7 @@ FILES_libclang-common-${PV}-dev = " \
     ${libdir}/llvm-${PV}/lib/clang \
 "
 FILES_python-clang-${PV} = " \
-    ${libdir}/${PYTHON_DIR}/*-packages/clang \
+    ${PYTHON_SITEPACKAGES_DIR}/clang \
 "
 FILES_clang-${PV} = " \
     ${bindir}/asan_symbolize-${PV} \
@@ -431,11 +430,11 @@ FILES_liblldb-${PV} = " \
     ${libdir}/${DEB_HOST_MULTIARCH}/liblldb-${PV}.so* \
     ${libdir}/llvm-${PV}/lib/liblldb${SOLIBS} \
     ${libdir}/llvm-${PV}/lib/${PYTHON_DIR}/*-packages/readline.so \
-    ${libdir}/${PYTHON_DIR}/*-packages/lldb-${PV} \
+    ${PYTHON_SITEPACKAGES_DIR}/lldb-${PV} \
 "
 FILES_python-lldb-${PV} = " \
     ${libdir}/llvm-${PV}/lib/${PYTHON_DIR}/*-packages/lldb \
-    ${libdir}/${PYTHON_DIR}/*-packages/lldb \
+    ${PYTHON_SITEPACKAGES_DIR}/lldb \
 "
 FILES_liblldb-${PV}-dev = " \
     ${libdir}/llvm-${PV}/include/lldb \

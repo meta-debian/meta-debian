@@ -19,10 +19,12 @@ inherit debian-package
 inherit distutils
 PV = "0.4.1"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DISTUTILS_INSTALL_ARGS += " \
 	--root='${D}' \
 	--prefix='${prefix}' \
-	--install-lib='${libdir}/${PYTHON_DIR}/dist-packages' \
+	--install-lib='${PYTHON_SITEPACKAGES_DIR}' \
 	--install-data='${datadir}'"
 
 # need to export these variables for python runtime
@@ -35,10 +37,9 @@ export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# Remove unwanted files and folders
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	find ${D}${libdir} -type f -name "*.pyo" -exec rm -f {} \;
-	find ${D}${libdir} -type f -name "SOURCES.txt" -exec rm -f {} \;
-	rm -r ${D}${libdir}/${PYTHON_DIR}/site-packages
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyo" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "SOURCES.txt" -exec rm -f {} \;
 }
 
 BBCLASSEXTEND = "native"

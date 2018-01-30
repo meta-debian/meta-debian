@@ -43,6 +43,6 @@ do_install_append() {
 
 RDEPENDS_${PN}_class-target = "python-io python-logging python-stringold python-threading python-xml"
 
-FILES_${PN}-dbg += "${libdir}/${PYTHON_DIR}/dist-packages/.debug"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 
 BBCLASSEXTEND = "native"

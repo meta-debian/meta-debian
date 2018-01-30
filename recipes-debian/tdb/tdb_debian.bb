@@ -30,7 +30,7 @@ PACKAGES =+ "libtdb tdb-tools python-tdb"
 
 FILES_libtdb = "${libdir}/*${SOLIBS}"
 FILES_tdb-tools = "${bindir}/*"
-FILES_python-tdb = "${libdir}/${PYTHON_DIR}/dist-packages/*"
+FILES_python-tdb = "${PYTHON_SITEPACKAGES_DIR}/*"
 
 DEBIANNAME_${PN}-dev = "libtdb-dev"
 RPROVIDES_${PN}-dev += "libtdb-dev"

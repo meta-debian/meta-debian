@@ -6,7 +6,7 @@ inherit python3native
 
 PACKAGES =+ "python3-pkg-resources"
 
-FILES_python3-pkg-resources = "${libdir}/${PYTHON_DIR}/*-packages/pkg_resources.py"
+FILES_python3-pkg-resources = "${PYTHON_SITEPACKAGES_DIR}/pkg_resources.py"
 
 RDEPENDS_${PN}_class-target += "python3-pkg-resources"
 

@@ -3,7 +3,7 @@
 # base recipe: daisy
 #
 
-PR = "r1"
+PR = "r2"
 
 inherit debian-package
 PV = "1.0.6"
@@ -12,8 +12,7 @@ LICENSE = "bzip2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ddeb76cd34e791893c0f539fdab879bb"
 
 SRC_URI += " \
-file://configure.ac \
-file://Makefile.am \
+file://Makefile-ptest.patch \
 file://run-ptest \
 "
 
@@ -21,23 +20,54 @@ PACKAGES =+ "libbz2 libbz2-dev libbz2-staticdev"
 
 CFLAGS_append = " -fPIC -fpic -Winline -fno-strength-reduce -D_FILE_OFFSET_BITS=64"
 
-inherit autotools ptest
+inherit ptest
 
-EXTRA_OECONF = "--bindir=${base_bindir}"
+EXTRA_OEMAKE = "CC='${CC}' AR='${AR}' RANLIB='${RANLIB}' \
+                CFLAGS='${CFLAGS}' LDFLAGS='${LDFLAGS}' \
+                "
 
-#install binaries to bzip2-native under sysroot for replacement-native
-EXTRA_OECONF_append_class-native = " --bindir=${STAGING_BINDIR_NATIVE}/${PN}"
-do_extraunpack () {
-	cp ${WORKDIR}/configure.ac ${S}/
-	cp ${WORKDIR}/Makefile.am ${S}/
+do_compile() {
+	oe_runmake
 }
 
-addtask extraunpack after do_unpack before do_patch
+do_install() {
+	oe_runmake 'PREFIX=${D}' install
 
-do_install_append_class-target() {
-	# Install bzexe
-	install -m 755 ${S}/bzexe ${D}${base_bindir}/
-	cp ${S}/bzexe.1 ${D}${mandir}/man1
+	# According to debian/rules
+	if [ "${base_libdir}" != "/lib" ]; then
+		install -d ${D}${libdir} ${D}${base_libdir}
+		rm -f ${D}/lib/libbz2.so
+		mv ${D}/lib/libbz2.so.* ${D}${base_libdir}/
+		ln -sf ${@oe.path.relative("${libdir}","${base_libdir}")}/libbz2.so.1.0 ${D}${libdir}/libbz2.so
+	fi
+
+	ln -sf bzdiff ${D}/bin/bzcmp
+	ln -sf bzgrep ${D}/bin/bzegrep
+	ln -sf bzgrep ${D}/bin/bzfgrep
+	ln -sf bzmore ${D}/bin/bzless
+
+	# Fix path for nativesdk
+	if [ "${base_bindir}" != "/bin" ]; then
+		install -d ${D}${base_bindir}
+		mv ${D}/bin/* ${D}${base_bindir}/
+		rm -rf ${D}/bin
+	fi
+
+	install -d ${D}${datadir}
+	mv ${D}/man ${D}${datadir}
+
+	# According to debian/libbz2-dev.install
+	mv ${D}/include ${D}${prefix}/
+	mv ${D}/lib/libbz2.a ${D}${libdir}/
+
+	# Remove empty folder
+	rmdir --ignore-fail-on-non-empty ${D}/lib
+}
+
+do_install_append_class-native() {
+	#install binaries to bzip2-native under sysroot for replacement-native
+	install -d ${D}${STAGING_BINDIR_NATIVE}
+	mv ${D}/${base_bindir} ${D}${STAGING_BINDIR_NATIVE}/${PN}/
 }
 
 do_install_ptest () {

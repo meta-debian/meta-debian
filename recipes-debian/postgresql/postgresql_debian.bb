@@ -35,6 +35,9 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=81b69ddb31a8be66baafd14a90146ee2"
 #fix error looked at host include and/or library paths: remove -L/usr/local/lib
 SRC_URI += "file://fix-using-host-library_debian.patch"
 
+# keep libdir as /usr/lib to avoid libdir QA test warning
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS_class-target = "\
 	zlib readline krb5 tcl libxml2 libxslt python3 python perl"
 DEPENDS_class-native = "\
@@ -58,7 +61,7 @@ COMMON_CONFIGURE_FLAGS = " \
 	--datarootdir=${datadir} \
 	--datadir=${datadir}/${NONARCH_PN}/${MAJOR_VER} \
 	--bindir=${libdir}/${NONARCH_PN}/${MAJOR_VER}/${base_bindir} \
-	--libdir=${libdir} \
+	--libdir=${libdir}/${DEB_HOST_MULTIARCH} \
 	--libexecdir=${libdir}/${NONARCH_PN}/ \
 	--includedir=${includedir}/${NONARCH_PN} \
 	--enable-nls \
@@ -131,7 +134,7 @@ do_install_append() {
 
 	# Remove the the absolute path to sysroot
 	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
-		${D}${libdir}/pkgconfig/*.pc
+		${D}${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/*.pc
 }
 
 PACKAGES =+ "libecpg-compat libecpg-dev libecpg libpgtypes libpq-dev libpq \
@@ -141,12 +144,13 @@ PACKAGES =+ "libecpg-compat libecpg-dev libecpg libpgtypes libpq-dev libpq \
              ${PN}-server-dev-${MAJOR_VER} ${PN}-contrib-${MAJOR_VER}"
 
 FILES_libecpg-compat += " \
-                ${libdir}/libecpg_compat.so.*"
+                ${libdir}/${DEB_HOST_MULTIARCH}/libecpg_compat.so.*"
 FILES_libecpg-dev += " \
-                ${bindir}/ecpg ${libdir}/libecpg*.so \
-                ${libdir}/libpgtypes.so \
-                ${libdir}/pkgconfig/libpgtypes.pc \
-                ${libdir}/pkgconfig/libecpg*.pc \
+                ${bindir}/ecpg \
+                ${libdir}/${DEB_HOST_MULTIARCH}/libecpg*.so \
+                ${libdir}/${DEB_HOST_MULTIARCH}/libpgtypes.so \
+                ${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/libpgtypes.pc \
+                ${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/libecpg*.pc \
                 ${includedir}/${NONARCH_PN}/sqlda*.h \
                 ${includedir}/${NONARCH_PN}/sql3types.h \
                 ${includedir}/${NONARCH_PN}/pgtypes*.h \
@@ -154,18 +158,18 @@ FILES_libecpg-dev += " \
                 ${includedir}/${NONARCH_PN}/sqlca.h \
                 ${includedir}/${NONARCH_PN}/informix \
                 "
-FILES_libecpg += "${libdir}/libecpg.so.*"
-FILES_libpgtypes += "${libdir}/libpgtypes.so.*"
+FILES_libecpg += "${libdir}/${DEB_HOST_MULTIARCH}/libecpg.so.*"
+FILES_libpgtypes += "${libdir}/${DEB_HOST_MULTIARCH}/libpgtypes.so.*"
 FILES_libpq-dev += " \
                 ${bindir}/pg_config \
-                ${libdir}/pkgconfig/libpq.pc \
+                ${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/libpq.pc \
                 ${includedir}/${NONARCH_PN}/pg_config*.h \
                 ${includedir}/${NONARCH_PN}/postgres_ext.h \
                 ${includedir}/${NONARCH_PN}/libpq/* \
                 ${includedir}/${NONARCH_PN}/libpq-* \
                 ${includedir}/${NONARCH_PN}/internal/* \
-                ${libdir}/libpq.so"
-FILES_libpq += "${libdir}/libpq.so.*"
+                ${libdir}/${DEB_HOST_MULTIARCH}/libpq.so"
+FILES_libpq += "${libdir}/${DEB_HOST_MULTIARCH}/libpq.so.*"
 FILES_${PN}-client-${MAJOR_VER} += " \
                 ${libdir}/${NONARCH_PN}/${MAJOR_VER}/bin/clusterdb \
                 ${libdir}/${NONARCH_PN}/${MAJOR_VER}/bin/pg_dumpall \
@@ -227,6 +231,7 @@ FILES_${PN}-server-dev-${MAJOR_VER} += " \
                 ${includedir}/* \
                 "
 
+FILES_${PN}-staticdev += "${libdir}/${DEB_HOST_MULTIARCH}/*.a"
 FILES_${PN}-dbg += "${libdir}/${NONARCH_PN}/${MAJOR_VER}/bin/.debug/* \
                 ${libdir}/${NONARCH_PN}/${MAJOR_VER}/lib/.debug/* \
                 ${libdir}/${NONARCH_PN}/${MAJOR_VER}/lib/pgxs/src/test/regress/.debug/*"

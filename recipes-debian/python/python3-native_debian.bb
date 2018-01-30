@@ -52,7 +52,7 @@ PYTHONLSBOPTS = ""
 #Overwrite MULTIARCH variable by HOST_SYS to avoid MULTIARCH is empty
 #"${CC} --print-multiarch" is empty in some target-host
 do_configure_prepend() {
-	sed -i -e "s:@MULTIARCH@:${HOST_SYS}:g" ${S}/Makefile.pre.in
+	sed -i -e "s:@MULTIARCH@:${DEB_HOST_MULTIARCH}:g" ${S}/Makefile.pre.in
 }
 do_configure_append() {
 	autoreconf --verbose --install --force --exclude=autopoint ${S}/Modules/_ctypes/libffi

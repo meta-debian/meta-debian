@@ -25,6 +25,7 @@ inherit setuptools pkgconfig update-alternatives
 # Required by python command
 export HOST_SYS
 export BUILD_SYS
+export DEB_HOST_MULTIARCH
 # prevent host contamination and add ${STAGING_INCDIR} \
 # using UWSGI_INCLUDES environment variable to detect include paths:
 export UWSGI_INCLUDES = "${STAGING_INCDIR}"

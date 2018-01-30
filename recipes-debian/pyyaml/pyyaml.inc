@@ -10,6 +10,8 @@ DEBIAN_PATCH_TYPE = "quilt"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=6015f088759b10e0bc2bf64898d4ae17"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit distutils
 
 DEPENDS += "libyaml"

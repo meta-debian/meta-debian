@@ -20,6 +20,9 @@ PV = "0.10.1"
 
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=79aa8b7bc4f781210d6b5c06d6424cb0"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit setuptools
 
 # need to export these variables for python runtime
@@ -28,6 +31,7 @@ inherit setuptools
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files

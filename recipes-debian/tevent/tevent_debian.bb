@@ -36,7 +36,7 @@ do_configure_prepend () {
 
 do_install_append() {
 	# No python for now
-	rm -rf ${D}${libdir}/${PYTHON_DIR}
+	rm -rf ${D}${nonarch_libdir}/${PYTHON_DIR}
 }
 
 RPROVIDES_${PN} += "libtevent0"

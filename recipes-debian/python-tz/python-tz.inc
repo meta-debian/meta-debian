@@ -15,12 +15,15 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=22b38951eb857cf285a4560a914b7cd6"
 inherit setuptools
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 # need to export these variables for python runtime
 # fix error:
 #       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_debian_patch_prepend() {
 	# ${S}/.pc is existed by default, so we need to remove it to
@@ -29,7 +32,7 @@ do_debian_patch_prepend() {
 }
 do_install_append() {
 	# remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	rm -rf `find ${D}${PYTHON_SITEPACKAGES_DIR} -type d -name "__pycache__"`
 }
 RDEPENDS_${PN} += "tzdata"

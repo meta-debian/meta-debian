@@ -31,7 +31,7 @@ do_install_append_class-target() {
 }
 
 do_install_append() {
-	src_dir="${D}${libdir}/${PYTHON_DIR}/site-packages"
+	src_dir="${D}${PYTHON_SITEPACKAGES_DIR}"
 	rm -f $src_dir/*.pyo
 	
 	ln -sf libcrack.so.2 ${D}${libdir}/libcrack.so
@@ -50,14 +50,14 @@ BBCLASSEXTEND = "native nativesdk"
 
 PACKAGE_BEFORE_PN = "${PN}-runtime python-${DPN}"
 
-FILES_python-${DPN} = "${nonarch_libdir}/${PYTHON_DIR}/*"
-FILES_${PN}-dbg += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/.debug"
+FILES_python-${DPN} = "${PYTHON_SITEPACKAGES_DIR}/*"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 FILES_${PN}-runtime = " \
     ${sysconfdir}/* \
     ${sbindir}/* \
     ${datadir} \
 "
-FILES_${PN}-staticdev += "${nonarch_libdir}/${PYTHON_DIR}/*-packages/*.a"
+FILES_${PN}-staticdev += "${PYTHON_SITEPACKAGES_DIR}/*.a"
 
 RDEPENDS_${PN}-runtime += "${PN}"
 RDEPENDS_python-${DPN} += "${PN}-runtime"

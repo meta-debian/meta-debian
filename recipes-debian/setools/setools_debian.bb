@@ -101,9 +101,9 @@ do_install_append() {
 	    cp ${S}/debian/setools-gui.menu ${D}${datadir}/menu/setools-gui
 
 	# Remove unnecessary files
-	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name '*.pyc' -delete
-	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name '*.pyo' -delete
-	find ${D}${nonarch_libdir}/${PYTHON_DIR} -name 'setools-1.0.egg-info' -delete
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -name '*.pyc' -delete
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -name '*.pyo' -delete
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -name 'setools-1.0.egg-info' -delete
 
 	# Fix permission follow debian/rules
 	find ${D}${libdir}/setools/ -type f -name '*.tcl' -exec chmod -x {} \;

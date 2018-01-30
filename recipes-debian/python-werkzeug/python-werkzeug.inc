@@ -17,6 +17,9 @@ LICENSE = "BSD-3-Clause & (MIT | GPLv2)"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=ad2e600a437b1b03d25b02df8c23ad1c \
 	file://werkzeug/debug/shared/jquery.js;beginline=5;endline=7;md5=473704caa6d04787eee46e7afdcb7edc"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit setuptools
 
 # need to export these variables for python runtime
@@ -25,9 +28,10 @@ inherit setuptools
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
-	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
+	rm -rf `find ${D}${PYTHON_SITEPACKAGES_DIR} -type d -name "__pycache__"`
 }

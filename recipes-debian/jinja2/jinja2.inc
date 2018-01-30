@@ -13,6 +13,9 @@ LICENSE = "BSD-3-Clause & GPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=20c831f91dd3bd486020f672ba2be386 \
 	file://ext/jinja.el;beginline=15;endline=28;md5=5e97d42b23b4b7512d52c9e4912bc278"
+
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit setuptools
 
 # need to export these variables for python runtime
@@ -21,6 +24,7 @@ inherit setuptools
 #       TypeError: Can't convert 'NoneType' object to str implicitly
 export BUILD_SYS
 export HOST_SYS
+export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files

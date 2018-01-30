@@ -1,0 +1,38 @@
+diff --git a/Makefile b/Makefile
+index 9754ddf..ce66b48 100644
+--- a/Makefile
++++ b/Makefile
+@@ -215,3 +224,33 @@ manual.pdf: $(MANUAL_SRCS)
+ 
+ manual.html: $(MANUAL_SRCS)
+ 	./xmlproc.sh -html manual.xml
++
++runtest:
++	./bzip2 -1  < sample1.ref > sample1.rb2
++	./bzip2 -2  < sample2.ref > sample2.rb2
++	./bzip2 -3  < sample3.ref > sample3.rb2
++	./bzip2 -d  < sample1.bz2 > sample1.tst
++	./bzip2 -d  < sample2.bz2 > sample2.tst
++	./bzip2 -ds < sample3.bz2 > sample3.tst
++	@if cmp sample1.bz2 sample1.rb2; then echo "PASS: sample1 compress";\
++	else echo "FAIL: sample1 compress"; fi
++	@if cmp sample2.bz2 sample2.rb2; then echo "PASS: sample2 compress";\
++	else echo "FAIL: sample2 compress"; fi
++	@if cmp sample3.bz2 sample3.rb2; then echo "PASS: sample3 compress";\
++	else echo "FAIL: sample3 compress"; fi
++	@if cmp sample1.tst sample1.ref; then echo "PASS: sample1 decompress";\
++	else echo "FAIL: sample1 decompress"; fi
++	@if cmp sample2.tst sample2.ref; then echo "PASS: sample2 decompress";\
++	else echo "FAIL: sample2 decompress"; fi
++	@if cmp sample3.tst sample3.ref; then echo "PASS: sample3 decompress";\
++	else echo "FAIL: sample3 decompress"; fi
++
++install-ptest:
++	cp Makefile	$(DESTDIR)/
++	cp sample1.ref	$(DESTDIR)/
++	cp sample2.ref	$(DESTDIR)/
++	cp sample3.ref	$(DESTDIR)/
++	cp sample1.bz2	$(DESTDIR)/
++	cp sample2.bz2	$(DESTDIR)/
++	cp sample3.bz2	$(DESTDIR)/
++	ln -s /bin/bzip2	$(DESTDIR)/bzip2
