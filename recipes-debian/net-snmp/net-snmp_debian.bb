@@ -71,6 +71,7 @@ PACKAGECONFIG[mysql] = "--with-mysql,--without-mysql,mysql"
 export PERLCONFIGTARGET = "${@is_target(d)}"
 
 # Env var which tells perl where the perl include files are
+PERL_OWN_DIR_class-target = "/${@os.path.relpath(nonarch_libdir, libdir)}"
 export PERL_INC = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}/CORE"
 export PERL_LIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
@@ -190,7 +191,7 @@ FILES_libsnmp-base = "${datadir}/snmp/mib2c-data \
                       ${datadir}/snmp/mibs \
                       ${localstatedir}/lib/snmp \
                       "
-FILES_libsnmp-perl = "${PERLLIBDIRS}/*"
+FILES_libsnmp-perl = "${nonarch_libdir}/perl"
 FILES_python-netsnmp = "${PYTHON_SITEPACKAGES_DIR}/netsnmp*/*"
 FILES_snmpd = "${sysconfdir}/default/snmpd \
                ${sysconfdir}/init.d/snmpd \
