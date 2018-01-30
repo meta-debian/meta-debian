@@ -15,3 +15,5 @@ LIC_FILES_CHKSUM = "file://README;beginline=43;endline=44;md5=62e24a93342fede722
 inherit cpan_build
 # Souce format is 3.0 but there is no debian patch files
 DEBIAN_QUILT_PATCHES = ""
+
+DEBIAN_MULTILIB_MANUAL = "1"

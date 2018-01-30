@@ -18,6 +18,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=385c55653886acac3821999a3ccd17b3"
 #cpan is perl modules that use Makefile.PL to build system
 inherit cpan
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS += "openssl"
 
 FILES_${PN} = "${libdir}/*"

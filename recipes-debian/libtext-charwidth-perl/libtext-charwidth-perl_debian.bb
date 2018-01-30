@@ -13,3 +13,5 @@ DEBIAN_QUILT_PATCHES = ""
 
 DEPENDS = "perl"
 inherit cpan
+
+DEBIAN_MULTILIB_MANUAL = "1"

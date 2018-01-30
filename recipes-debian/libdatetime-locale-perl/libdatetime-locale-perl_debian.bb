@@ -14,4 +14,6 @@ LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=a89fc6431f978476bd49e3f7a26a1a1e"
 inherit cpan_build
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 RDEPENDS_${PN} += "libparams-validate-perl"

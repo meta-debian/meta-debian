@@ -10,6 +10,8 @@ LIC_FILES_CHKSUM = "file://README;beginline=44;md5=e66988112aaf864a328fad61627fe
 
 DEBIAN_PATCH_TYPE = "quilt"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 do_install_append() {
 	install -d ${D}${datadir}/perl5
 	mv ${D}${libdir}/perl/vendor_perl/5.20.2/Text \

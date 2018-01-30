@@ -15,3 +15,5 @@ LICENSE = "Artistic-1.0 | GPL-1+"
 LIC_FILES_CHKSUM = "file://README;beginline=11;endline=16;md5=9582589df57b78314e5f393adf890785"
 
 inherit cpan
+
+DEBIAN_MULTILIB_MANUAL = "1"

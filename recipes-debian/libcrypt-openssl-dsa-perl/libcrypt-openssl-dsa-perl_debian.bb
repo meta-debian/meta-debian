@@ -19,6 +19,8 @@ LIC_FILES_CHKSUM = "file://debian/copyright;md5=0be6b49036a2378b24d9a7debd822b90
 #cpan is perl modules that use Makefile.PL to build system
 inherit cpan
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS += "openssl"
 
 FILES_${PN} = "${libdir}/*"

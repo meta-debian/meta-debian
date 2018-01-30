@@ -22,3 +22,5 @@ LIC_FILES_CHKSUM = "file://README;beginline=263;endline=267;md5=5633dc8e7615fa72
 inherit cpan
 # There is no debian/patches
 DEBIAN_PATCH_TYPE = "nopatch"
+
+DEBIAN_MULTILIB_MANUAL = "1"

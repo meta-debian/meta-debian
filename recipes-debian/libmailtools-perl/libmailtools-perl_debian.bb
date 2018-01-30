@@ -18,6 +18,8 @@ LIC_FILES_CHKSUM = " \
 	file://debian/copyright;md5=01bd72ab113f3f60f175fa1821e6462c \
 "
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEPENDS = " \
 	libtimedate-perl-native \
 	"
