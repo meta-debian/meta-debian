@@ -19,6 +19,8 @@ inherit cmake perlnative
 
 SRC_URI += "file://Depend-on-headers-to-fix-parallel-build.patch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 PKG_${PN} = "${PN}1a"
 RDEPENDS_${PN}-dev += "${PN}"
 RDEPENDS_${PN} += "tzdata"

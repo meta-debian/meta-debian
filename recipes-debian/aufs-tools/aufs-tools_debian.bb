@@ -29,6 +29,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=892f569a555ba9c07a568a7c0c4fa63a"
 SRC_URI += "file://aufs_type.h \
             file://aufs-tools-don-t-strip-executables_debian.patch"
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 inherit autotools-brokensep
 do_configure_append () {
 	install -d ${S}/include/linux/

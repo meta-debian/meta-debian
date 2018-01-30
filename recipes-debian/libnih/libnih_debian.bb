@@ -15,6 +15,8 @@ PR = "r0"
 
 inherit autotools gettext
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 DEBIAN_PATCH_TYPE = "nopatch"
 BBCLASSEXTEND = "native"
 do_install_append() {

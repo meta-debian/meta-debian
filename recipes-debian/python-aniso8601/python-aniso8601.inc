@@ -28,6 +28,8 @@ export BUILD_SYS
 export HOST_SYS
 export DEB_HOST_MULTIARCH
 
+DEBIAN_MULTILIB_MANUAL = "1"
+
 do_install_append() {
 	# remove unwanted files
 	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
