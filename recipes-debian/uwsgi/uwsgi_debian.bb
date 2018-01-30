@@ -30,6 +30,9 @@ export DEB_HOST_MULTIARCH
 # using UWSGI_INCLUDES environment variable to detect include paths:
 export UWSGI_INCLUDES = "${STAGING_INCDIR}"
 
+# Looking for 'lua5.1-deb-multiarch.h'
+CFLAGS += "-I${STAGING_INCDIR}/${DEB_HOST_MULTIARCH}"
+
 DEPENDS += "zeromq3 apache2 openssl libyaml curl geoip tcp-wrappers \
             lua5.1 libmatheval jansson postgresql \
             ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
