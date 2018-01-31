@@ -178,7 +178,7 @@ do_install_append_class-target() {
 	oe_runmake -C ${S}/contrib/slapd-modules/smbk5pwd install DESTDIR=${D}
 	oe_runmake -C ${S}/contrib/slapd-modules/autogroup install DESTDIR=${D}
 	oe_runmake -C ${S}/contrib/slapd-modules/passwd/sha2 install DESTDIR=${D}
-	rm ${D}${libdir}/ldap/*.a
+	rm ${D}${nonarch_libdir}/ldap/*.a
 }
 
 do_install_append_class-native() {
@@ -186,11 +186,11 @@ do_install_append_class-native() {
 	oe_runmake -C ${S}/contrib/slapd-modules/smbk5pwd install DESTDIR=${D}${STAGING_DIR_NATIVE}
 	oe_runmake -C ${S}/contrib/slapd-modules/autogroup install DESTDIR=${D}${STAGING_DIR_NATIVE}
 	oe_runmake -C ${S}/contrib/slapd-modules/passwd/sha2 install DESTDIR=${D}${STAGING_DIR_NATIVE}
-	rm ${D}${libdir}/ldap/*.a
+	rm ${D}${nonarch_libdir}/ldap/*.a
 }
 #install follow debian jessie
 do_install_append() {
-	install -d ${D}${libdir}/ldap
+	install -d ${D}${nonarch_libdir}/ldap
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/default
 	install -d ${D}${datadir}/slapd
@@ -226,14 +226,14 @@ do_install_append() {
 	for i in ${SLAPTOOLS}; do ln -sf slapd $i; done
 	
 	rmdir "${D}${localstatedir}/run"
-	mv ${D}${libdir}/openldap/openldap/* ${D}${libdir}/ldap
+	mv ${D}${libdir}/openldap/openldap/* ${D}${nonarch_libdir}/ldap
 	rm -rf ${D}${libdir}/openldap
 	
 	#Correct the permission of files follow Debian jessie
-	chmod 0644 ${D}${libdir}/ldap/*.la
-	for f in ${D}${libdir}/ldap/*.so; do
+	chmod 0644 ${D}${nonarch_libdir}/ldap/*.la
+	for f in ${D}${nonarch_libdir}/ldap/*.so; do
 		LINKLIB=$(basename $(readlink $f))
-		chmod 0644 ${D}${libdir}/ldap/${LINKLIB}
+		chmod 0644 ${D}${nonarch_libdir}/ldap/${LINKLIB}
 	done
 }
 
@@ -254,8 +254,8 @@ FILES_slapd = "\
 	${sysconfdir}/init.d ${libexecdir}/slapd ${sbindir}/* \
 	${sysconfdir}/ldap/schema \
 	${systemd_unitdir}/system/* \
-	${libdir}/ldap/*.so.* \
-	${libdir}/ldap/*.la \
+	${nonarch_libdir}/ldap/*.so.* \
+	${nonarch_libdir}/ldap/*.la \
 	${libdir}/libslapi-2.4.so.* \
 	${datadir}/slapd/* \
 	${sysconfdir}/default \
@@ -267,13 +267,13 @@ PKG_${PN} = "ldap-utils"
 #FILES_ldap-utils = "${bindir}"
 
 FILES_${PN}-dev = "\
-	${libdir}/lib*.so                               \
-	${libdir}/*.la          ${libdir}/*.a           \
+	${nonarch_libdir}/lib*.so                               \
 	${libexecdir}/ldap/*.a  ${libexecdir}/ldap/*.la \
-	${libexecdir}/ldap/*.so ${libdir}/ldap/*.so     \
+	${libexecdir}/ldap/*.so ${nonarch_libdir}/ldap/*.so     \
         "
-FILES_slapd-smbk5pwd = "${libdir}/ldap/smbk5pwd.so.* ${libdir}/ldap/smbk5pwd.la"
 
-FILES_${PN}-dbg += "${libdir}/ldap/.debug/* ${sbindir}/.debug/*"
+FILES_slapd-smbk5pwd = "${nonarch_libdir}/ldap/smbk5pwd.so.* ${nonarch_libdir}/ldap/smbk5pwd.la"
+
+FILES_${PN}-dbg += "${nonarch_libdir}/ldap/.debug/* ${sbindir}/.debug/*"
 
 BBCLASSEXTEND = "native"
