@@ -17,7 +17,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=47e311aa9caedd1b3abf098bd7814d1d"
 
 DEPENDS = "isl libffi libxml2-native zlib binutils python libedit swig-native dpkg-native"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit perlnative pythonnative autotools
 

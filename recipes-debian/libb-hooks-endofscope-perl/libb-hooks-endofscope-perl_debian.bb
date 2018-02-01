@@ -16,7 +16,7 @@ inherit cpan
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 RDEPENDS_${PN} += "libmodule-implementation-perl libmodule-runtime-perl \
                    libsub-exporter-progressive-perl libvariable-magic-perl"

@@ -26,7 +26,7 @@ SRC_URI += " \
 "
 DEPENDS = "cluster-glue corosync gnutls"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep pkgconfig useradd
 

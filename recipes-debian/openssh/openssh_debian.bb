@@ -23,7 +23,7 @@ SRC_URI += " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', '', 'file://pam_sshd-Remove-selinux-rule.patch', d)} \
 "
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep update-alternatives useradd systemd ptest
 

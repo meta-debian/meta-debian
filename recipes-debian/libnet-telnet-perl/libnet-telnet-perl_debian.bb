@@ -19,4 +19,4 @@ LIC_FILES_CHKSUM = "\
 	file://lib/Net/Telnet.pm;beginline=3;endline=5;md5=595feda9e8536d0a35f71ad7c693e4f2"
 inherit cpan
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"

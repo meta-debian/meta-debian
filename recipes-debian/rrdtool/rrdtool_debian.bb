@@ -32,7 +32,7 @@ export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH
 export LDSHARED="${CCLD} -shared"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 #correct-path-to-library_debian.patch:
 #	using the library in sysroot instead of host system

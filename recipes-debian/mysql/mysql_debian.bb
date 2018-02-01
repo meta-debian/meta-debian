@@ -4,7 +4,7 @@ include mysql.inc
 # keep it as /usr/lib and handle installing libraries into multiarch libdir in recipes.
 # This will avoid warning complains about plugin is installed not in libdir:
 #   | mysql-server: found library in wrong location: /usr/lib/mysql/plugin/libdaemon_example.so
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 EXTRA_OECMAKE += " \
         -DSTACK_DIRECTION=-1 -DCAT_EXECUTABLE=`which cat` -DAWK_EXECUTABLE=`which awk` \

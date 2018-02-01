@@ -40,7 +40,7 @@ SRC_URI += " \
     file://0001-fix-for-multijob-build.patch \
 "
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep texinfo
 

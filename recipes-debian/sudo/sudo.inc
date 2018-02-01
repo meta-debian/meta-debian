@@ -21,7 +21,7 @@ inherit debian-package
 PV = "1.8.10p3"
 DPN = "sudo"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DEPENDS += "audit ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
 

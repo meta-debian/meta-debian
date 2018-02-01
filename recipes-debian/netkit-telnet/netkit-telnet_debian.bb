@@ -22,7 +22,7 @@ SRC_URI += "file://configure-disable-run-testcode.patch"
 DEPENDS = "ncurses update-inetd-native"
 
 DEBIAN_PATCH_TYPE = "nopatch"
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit useradd
 

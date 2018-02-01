@@ -34,7 +34,7 @@ SRC_URI += "file://disable-build-doc_debian.patch"
 
 DEPENDS = "flex glib-2.0 util-linux"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep systemd pkgconfig update-alternatives
 

@@ -15,7 +15,7 @@ PR = "r0"
 
 inherit autotools gettext
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DEBIAN_PATCH_TYPE = "nopatch"
 BBCLASSEXTEND = "native"

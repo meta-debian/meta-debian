@@ -16,4 +16,4 @@ inherit cpan_build
 # Souce format is 3.0 but there is no debian patch files
 DEBIAN_QUILT_PATCHES = ""
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"

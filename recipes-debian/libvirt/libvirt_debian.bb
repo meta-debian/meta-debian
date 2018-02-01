@@ -60,7 +60,7 @@ ac_cv_path_DMSETUP=${base_sbindir}/dmsetup \
 ac_cv_path_IP_PATH=${base_sbindir}/ip \
 "
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DEPENDS += "libnl libxml2 libxslt-native apparmor audit dnsmasq qemu"
 PACKAGECONFIG ??= "box udev audit libcap-ng macvtap qemu storage-lvm storage-disk"

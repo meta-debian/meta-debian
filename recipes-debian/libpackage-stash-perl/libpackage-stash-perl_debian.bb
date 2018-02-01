@@ -12,6 +12,6 @@ LICENSE = "Artistic-1.0 | GPL-1.0+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=1c982bf619f6e6c6c2ccd554ff3b34e2"
 inherit cpan
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 RDEPENDS_${PN} += "libmodule-implementation-perl"

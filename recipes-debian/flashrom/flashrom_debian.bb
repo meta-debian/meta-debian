@@ -22,7 +22,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep
 DEPENDS += "pciutils"

@@ -21,6 +21,6 @@ LIC_FILES_CHKSUM = "\
 inherit cpan_build
 DEBIAN_QUILT_PATCHES = ""
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 FILES_${PN} += "${libdir}/*"

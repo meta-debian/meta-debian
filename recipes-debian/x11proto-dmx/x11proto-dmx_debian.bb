@@ -18,7 +18,7 @@ DEPENDS += "util-macros"
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 #follow debian/x11proto-dmx-dev.install
 do_install_append() {

@@ -28,7 +28,7 @@ LIC_FILES_CHKSUM = "file://config.c;endline=9;md5=13c7c577f8c287d9457519739aea18
 DEBIAN_PATCH_TYPE = "nopatch"
 inherit autotools-brokensep
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 do_compile() {
 	oe_runmake CC="${CC}" LD="${LD}" AS="${AS} -32"

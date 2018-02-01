@@ -7,7 +7,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright.in;md5=5463e5abae4528d959d7f7a2e91d6176"
 
 # we want to keep ${baselib} as lib
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 INHIBIT_DEFAULT_DEPS = "1"
 ROOT_HOME = "/root"

@@ -16,4 +16,4 @@ LIC_FILES_CHKSUM = "file://README;beginline=11;endline=16;md5=9582589df57b78314e
 
 inherit cpan
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"

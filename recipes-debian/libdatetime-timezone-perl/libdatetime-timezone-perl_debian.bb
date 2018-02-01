@@ -18,7 +18,7 @@ LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=8cb5990fa1f243cd63c97cfd08571fe7"
 inherit cpan
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 do_install_append() {
 	rm ${D}${PERLLIBDIRS}/vendor_perl/*/DateTime/TimeZone/Local/Win32.pm

@@ -19,7 +19,7 @@ inherit autotools gettext pkgconfig
 # There is no debian/source or debian/patches
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 # Follow debian/rules.
 # Remove unrecognised options:

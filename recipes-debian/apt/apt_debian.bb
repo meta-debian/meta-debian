@@ -4,7 +4,7 @@
 #
 require apt.inc
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 # Skip build test because it depend on gtest package,
 # and gtest haven't been available in meta-debian,yet.

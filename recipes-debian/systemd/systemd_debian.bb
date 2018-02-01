@@ -16,7 +16,7 @@ inherit debian-package
 PV = "215"
 PR = "r2"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit pkgconfig autotools useradd python3native
 

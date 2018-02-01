@@ -19,7 +19,7 @@ inherit debian-package
 inherit distutils
 PV = "0.4.1"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DISTUTILS_INSTALL_ARGS += " \
 	--root='${D}' \

@@ -12,7 +12,7 @@ DEBIAN_QUILT_PATCHES = ""
 
 inherit cpan
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 FILES_${PN} += "${datadir}"
 
