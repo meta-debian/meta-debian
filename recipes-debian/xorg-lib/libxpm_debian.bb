@@ -10,7 +10,7 @@ an extension of the monochrome XBM bitmap specificied in the X \
 protocol."
 
 require xorg-lib-common.inc
-PV = "3.5.11"
+PV = "3.5.12"
 
 PR = "${INC_PR}.0"
 
