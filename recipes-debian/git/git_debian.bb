@@ -62,15 +62,12 @@ EXTRA_OEMAKE += " \
     'PERL_PATH=/usr/bin/env perl' \
 "
 
-# git store patch files in debian/diff not debian/patches
-DEBIAN_QUILT_PATCHES = "${DEBIAN_UNPACK_DIR}/debian/diff"
-do_debian_patch_prepend () {
-	# Generate file series
-	cd ${DEBIAN_QUILT_PATCHES}
-	for i in $(ls *.diff *.patch); do
-		echo $i >> ${DEBIAN_QUILT_PATCHES}/series
+do_debian_patch_append () {
+	# Base on debian/rules
+	for i in `ls -1 debian/diff/*.diff debian/diff/*.patch 2> /dev/null || :`; do
+		patch -p1 -N -r- <$i
 	done
-	cd -
+	chmod 775 t/*.sh
 }
 
 do_install () {
