@@ -81,3 +81,11 @@ FILES_${PN} = "${libdir}/lib*${SOLIBS}"
 DEBIANNAME_${PN}-python = "python-libxml2"
 
 BBCLASSEXTEND = "native nativesdk"
+
+# The current 'libdir' is /usr/lib/<triplet> where libxml2.so.* are installed
+# but python module is installed in /usr/lib/python*/ which is not in 'libdir'.
+# That's not an issue. The QA warning can be ignore:
+#     | libxml2-python: found library in wrong location: /usr/lib/python2.7/dist-packages/libxml2mod.so
+#     | libxml2-dbg: found library in wrong location: /usr/lib/python2.7/dist-packages/.debug/libxml2mod.so [libdir]
+INSANE_SKIP_${PN}-python += "libdir"
+INSANE_SKIP_${PN}-dbg += "libdir"
