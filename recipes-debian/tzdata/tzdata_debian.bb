@@ -9,7 +9,7 @@ HOMEPAGE = "ftp://elsie.nci.nih.gov/pub/"
 PR = "r0"
 
 inherit debian-package
-PV = "2017b"
+PV = "2017c"
 
 LICENSE = "PD & BSD & BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ef1a352b901ee7b75a75df8171d6aca7"
