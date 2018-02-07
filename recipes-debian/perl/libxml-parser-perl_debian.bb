@@ -13,6 +13,8 @@ PR = "r0"
 inherit debian-package
 PV = "2.41"
 
+KEEP_NONARCH_BASELIB = "1"
+
 EXTRA_CPANFLAGS = "EXPATLIBPATH=${STAGING_LIBDIR} EXPATINCPATH=${STAGING_INCDIR} CC=${CC} LD=${LD} FULL_AR=${AR}"
 
 inherit cpan
