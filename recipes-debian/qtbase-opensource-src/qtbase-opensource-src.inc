@@ -22,6 +22,11 @@ SRC_URI += "\
     file://0010-Revert-Use-the-gcc-feature-in-simd.prf.patch \
 "
 
+# Temporary keep install qt5 in /usr/lib
+# to make a stable point of meta-debian
+# where qt5 just works on core-image-minimal and SDK.
+KEEP_NONARCH_BASELIB = "1"
+
 inherit qmake5_base
 
 # we don't want conflicts with qt4
