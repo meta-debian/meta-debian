@@ -15,6 +15,8 @@ LICENSE = "MIT-X"
 
 DEPENDS = "virtual/xserver xproto randrproto util-macros"
 
+KEEP_NONARCH_BASELIB = "1"
+
 FILES_${PN} += " ${libdir}/xorg/modules/drivers/*.so"
 FILES_${PN}-dbg += " ${libdir}/xorg/modules/drivers/.debug"
 

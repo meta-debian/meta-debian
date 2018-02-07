@@ -21,6 +21,7 @@ PROVIDES = "virtual/xserver-xf86"
 PROVIDES += "virtual/xserver"
 
 DEBIAN_PATCH_TYPE = "quilt"
+KEEP_NONARCH_BASELIB = "1"
 
 # macro_tweak.patch:
 #   correct a include directory path for sysroot
