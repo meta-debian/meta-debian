@@ -21,3 +21,11 @@ export CROSS_CURSES_LIB="-lncurses -ltinfo"
 export CROSS_CURSES_INC='-DCURSES_LOC="<curses.h>"'
 EOF
 }
+
+# Update include path to SDK sysroot for /etc/ld.so.conf
+SDK_POST_INSTALL_COMMAND = "${ld_so_conf_postinst}"
+ld_so_conf_postinst() {
+	$SUDO_EXEC sed -i \
+	    -e "s@\(^include\s*\)${sysconfdir}@\1$target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${sysconfdir}@g" \
+	    $target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${sysconfdir}/ld.so.conf
+}
