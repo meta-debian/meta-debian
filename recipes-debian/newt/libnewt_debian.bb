@@ -81,11 +81,16 @@ do_install_append() {
 	install -m 0644 ${S}/debian/palette.original ${D}${sysconfdir}/newt/
 	install -m 0644 ${S}/debian/bash_completion.d/* ${D}${sysconfdir}/bash_completion.d/
 	mv ${D}${libdir}/whiptcl.so ${D}${libdir}/whiptcl/
+
+	install -d ${D}${PYTHON_SITEPACKAGES_DIR}
+	mv ${D}${libdir}/${PYTHON_DIR}/site-packages/* ${D}${PYTHON_SITEPACKAGES_DIR}/
+	rm -rf ${D}${libdir}/${PYTHON_DIR}/site-packages
+	rmdir --ignore-fail-on-non-empty ${D}${libdir}/${PYTHON_DIR}
 }
 
 PACKAGE_BEFORE_PN = "python-${DPN} ${DPN}-tcl ${PN}-pic whiptail"
 
-FILES_python-${DPN} = "${libdir}/${PYTHON_DIR}/*-packages/*"
+FILES_python-${DPN} = "${PYTHON_SITEPACKAGES_DIR}"
 FILES_${DPN}-tcl = "${libdir}/whiptcl/whiptcl.so"
 FILES_${PN}-pic = "${libdir}/libnewt_pic.map"
 FILES_whiptail = " \
