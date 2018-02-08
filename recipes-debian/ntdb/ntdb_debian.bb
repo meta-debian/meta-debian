@@ -43,7 +43,7 @@ PACKAGES =+ "libntdb ntdb-tools python-ntdb"
 
 FILES_libntdb = "${libdir}/*${SOLIBS}"
 FILES_ntdb-tools = "${bindir}/*"
-FILES_python-ntdb = "${libdir}/python${PYTHON_BASEVERSION}/dist-packages/*"
+FILES_python-ntdb = "${PYTHON_SITEPACKAGES_DIR}"
 
 DEBIANNAME_${PN}-dev = "libntdb-dev"
 RPROVIDES_${PN}-dev = "libntdb-dev"
