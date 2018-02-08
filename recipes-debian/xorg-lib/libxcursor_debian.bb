@@ -22,7 +22,6 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=8902e6643f7bcd7793b23dcd5d8031a4"
 DEPENDS += "libxrender libxfixes"
 BBCLASSEXTEND = "native"
 
-# There is no debian patch
-DEBIAN_PATCH_TYPE = "nopatch"
+DEBIAN_PATCH_TYPE = "quilt"
 
 DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
