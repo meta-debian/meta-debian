@@ -49,7 +49,7 @@ EXTRA_OECONF += "\
 	--with-dnsupdate \
 	--with-modulesdir=${libdir}/samba \
 	--with-lockdir=${localstatedir}/run/samba \
-	--with-statedir=${localsatedir}/lib/samba \
+	--with-statedir=${localstatedir}/lib/samba \
 	--with-cachedir=${localstatedir}/cache/samba \
 	--disable-avahi \
 	--disable-rpath \
