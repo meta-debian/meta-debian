@@ -24,6 +24,12 @@ PKG_CONFIG_PATH_APPEND_class-nativesdk = ":${STAGING_LIBDIR}/${DEB_HOST_MULTIARC
 PKG_CONFIG_PATH_APPEND_class-crosssdk = ":${STAGING_LIBDIR}/${DEB_HOST_MULTIARCH}/pkgconfig"
 PKG_CONFIG_PATH .= "${PKG_CONFIG_PATH_APPEND}"
 
+# in case libdir is /usr/lib/<triplet>, python and perl modules
+# will be missing in sysroot destdir
+SYSROOT_DIRS += " \
+    ${nonarch_libdir}/python* \
+    ${nonarch_libdir}/perl \
+"
 
 def arch_to_multiarch(arch):
     import re
