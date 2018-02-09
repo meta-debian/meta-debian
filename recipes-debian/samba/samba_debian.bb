@@ -93,6 +93,8 @@ do_install_append() {
 		install -m 0644 debian/winbind.pam-config \
 			${D}/${datadir}/pam-configs/winbind
 	fi
+
+	install -d ${D}${base_libdir}
 	mv ${D}/${libdir}/libnss_* ${D}/${base_libdir}
 
 	# we don't ship the symlinks
