@@ -20,7 +20,7 @@ LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=32107dd283b1dfeb66c9b3e6be312326\
 	file://COPYING.LGPL;md5=1960515788100ce5f9c98ea78a65dc52"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep pkgconfig gettext binconfig lib_package
 

@@ -57,6 +57,6 @@ do_install() {
 
 PACKAGES += "python-smbus"
 
-FILES_${PN}-dbg += "${libdir}/python2.7/dist-packages/.debug/*"
-FILES_python-smbus = "${libdir}/python2.7/*"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug/*"
+FILES_python-smbus = "${PYTHON_SITEPACKAGES_DIR}/*"
 PKG_${PN}-dev = "libi2c-dev"

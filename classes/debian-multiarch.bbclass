@@ -9,13 +9,13 @@ DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TAR
 # Set this variable to 1 in recipe if you want to handle libdir by yourself.
 #   1: baselib = lib
 #   0: baselib = lib/${DEB_HOST_MULTIARCH}
-DEBIAN_MULTILIB_MANUAL ?= "0"
+KEEP_NONARCH_BASELIB ?= "0"
 
 # NOTE: native, nativesdk and crosssdk define baselib to 'lib' in their class
 #       where we can't overwrite.
-baselib = "${@base_conditional('DEBIAN_MULTILIB_MANUAL','0','lib/${DEB_HOST_MULTIARCH}','lib',d)}"
+baselib = "${@base_conditional('KEEP_NONARCH_BASELIB','0','lib/${DEB_HOST_MULTIARCH}','lib',d)}"
 
-PKG_CONFIG_PATH_APPEND = "${@base_conditional('DEBIAN_MULTILIB_MANUAL','0',\
+PKG_CONFIG_PATH_APPEND = "${@base_conditional('KEEP_NONARCH_BASELIB','0',\
 ':${STAGING_EXECPREFIXDIR}/lib/pkgconfig',\
 ':${STAGING_LIBDIR}/${DEB_HOST_MULTIARCH}/pkgconfig',\
 d)}"
@@ -24,6 +24,12 @@ PKG_CONFIG_PATH_APPEND_class-nativesdk = ":${STAGING_LIBDIR}/${DEB_HOST_MULTIARC
 PKG_CONFIG_PATH_APPEND_class-crosssdk = ":${STAGING_LIBDIR}/${DEB_HOST_MULTIARCH}/pkgconfig"
 PKG_CONFIG_PATH .= "${PKG_CONFIG_PATH_APPEND}"
 
+# in case libdir is /usr/lib/<triplet>, python and perl modules
+# will be missing in sysroot destdir
+SYSROOT_DIRS += " \
+    ${nonarch_libdir}/python* \
+    ${nonarch_libdir}/perl \
+"
 
 def arch_to_multiarch(arch):
     import re

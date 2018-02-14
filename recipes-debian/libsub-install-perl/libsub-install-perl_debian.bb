@@ -15,3 +15,5 @@ LIC_FILES_CHKSUM = "file://README;beginline=8;endline=11;md5=01b2efefd8a3e18fe55
 inherit cpan
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
+
+KEEP_NONARCH_BASELIB = "1"

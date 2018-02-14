@@ -19,6 +19,11 @@ RDEPENDS_python-${DPN} += "python"
 
 EXTRA_OECONF = "--with-python --libdir=${libdir}"
 
+# These variables use to set pythondir and pyexecdir to ${PYTHON_SITEPACKAGES_DIR}
+# Prevent python modules install wrong path when build nativesdk
+CACHED_CONFIGUREVARS += "am_cv_python_pythondir=${PYTHON_SITEPACKAGES_DIR} \
+                         am_cv_python_pyexecdir=${PYTHON_SITEPACKAGES_DIR}"
+
 inherit autotools gettext pythonnative python-dir
 
 export BUILD_SYS

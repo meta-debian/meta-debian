@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = " \
 "
 
 # We don't want baselib to be changed to lib/${DEB_HOST_MULTIARCH}
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit python-dir
 

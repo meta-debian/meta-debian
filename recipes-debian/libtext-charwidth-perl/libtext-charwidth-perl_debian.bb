@@ -13,3 +13,5 @@ DEBIAN_QUILT_PATCHES = ""
 
 DEPENDS = "perl"
 inherit cpan
+
+KEEP_NONARCH_BASELIB = "1"

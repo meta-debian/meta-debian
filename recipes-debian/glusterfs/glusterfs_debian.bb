@@ -91,8 +91,8 @@ FILES_${PN}-client = "${base_sbindir}/mount.glusterfs \
 FILES_${PN}-common = "${sysconfdir}/logrotate.d/glusterfs-common \
                       ${includedir}/glusterfs/* \
                       ${libdir}/glusterfs/gsync-sync-gfid \
-                      ${libdir}/ocf/resource.d/* \
-                      ${libdir}/python* \
+                      ${nonarch_libdir}/ocf/resource.d/* \
+                      ${PYTHON_SITEPACKAGES_DIR}/* \
                       ${libdir}/glusterfs/${PV}/*/*.so \
                       ${libdir}/glusterfs/${PV}/*/*/*.so \
                       ${libdir}/glusterfs/${PV}/*/*/*/*.so \

@@ -24,3 +24,5 @@ LIC_FILES_CHKSUM = "file://ppport.h;beginline=361;endline=370;md5=08031c92992f15
 inherit cpan
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
+
+KEEP_NONARCH_BASELIB = "1"

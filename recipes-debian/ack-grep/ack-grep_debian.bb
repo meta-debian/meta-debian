@@ -12,6 +12,8 @@ PR = "r0"
 inherit debian-package cpan
 PV = "2.14"
 
+KEEP_NONARCH_BASELIB = "1"
+
 LICENSE = "Artistic-2.0 & GPL-2+ & (Artistic-1.0 | GPL-1+)"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE.md;md5=f19ee102af436a61316db71e613ded2c \

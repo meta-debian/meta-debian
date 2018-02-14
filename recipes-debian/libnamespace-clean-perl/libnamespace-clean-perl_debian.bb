@@ -19,5 +19,7 @@ inherit cpan
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
+KEEP_NONARCH_BASELIB = "1"
+
 RDEPENDS_${PN} += "libpackage-stash-perl libb-hooks-endofscope-perl libsub-identify-perl \
                    libsub-name-perl"

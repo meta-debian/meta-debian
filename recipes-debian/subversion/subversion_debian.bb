@@ -79,6 +79,7 @@ export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH
 
 # Env var which tells perl where the perl include files are
+PERL_OWN_DIR_class-target = "/${@os.path.relpath(nonarch_libdir, libdir)}"
 export PERL_INC = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}/CORE"
 export PERL_LIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
@@ -88,9 +89,9 @@ export LIBTOOL="${STAGING_BINDIR}/crossscripts/${HOST_SYS}-libtool"
 EXTRA_OEMAKE += " 'LIBTOOL=${LIBTOOL}'"
 
 do_configure() {
-	perl_version=${PERLVERSION}
+	perl_version=${@get_perl_version(d)}
 	short_perl_version=`echo ${perl_version%.*}`
-	. ${STAGING_LIBDIR}/perl/config.sh
+	. ${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/config.sh
 	sed -i -e "s:##EXTRA_CPANFLAGS##:${EXTRA_CPANFLAGS}:g" \
 	       -e "s:##CC##:${cc}:g" \
 	       -e "s:##LD##:${ld}:g" \
@@ -221,3 +222,10 @@ FILES_${PN}-dbg += "\
 DEBIAN_NOAUTONAME_libsvn-perl = "1"
 DEBIANNAME_${PN}-dev = "libsvn-dev"
 DEBIANNAME_libsvn = "libsvn1"
+
+# The current 'libdir' is /usr/lib/<triplet>
+# but python module is installed in /usr/lib/python*/ which is not in 'libdir'
+# That's not an issue. The QA warning can be ignore:
+# 	| QA Issue: python-subversion: found library in wrong location: /usr/lib/python2.7/dist-packages/libsvn/*.so
+INSANE_SKIP_python-subversion += "libdir"
+INSANE_SKIP_${PN}-dbg += "libdir"

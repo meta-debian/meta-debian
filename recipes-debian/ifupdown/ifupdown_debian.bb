@@ -17,7 +17,7 @@ PV = "0.7.53.1"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 do_compile() {
 	chmod a+rx *.pl *.sh

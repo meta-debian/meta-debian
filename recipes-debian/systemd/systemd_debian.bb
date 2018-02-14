@@ -16,7 +16,7 @@ inherit debian-package
 PV = "215"
 PR = "r2"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit pkgconfig autotools useradd python3native
 
@@ -208,10 +208,10 @@ do_install_append() {
 	rm -f ${D}${libdir}/libsystemd-login.*
 	rm -f ${D}${libdir}/libsystemd-id128.*
 	rm -f ${D}${libdir}/libsystemd-journal.*
-	rm -f ${D}${base_libdir}/libsystemd-daemon.*
-	rm -f ${D}${base_libdir}/libsystemd-login.*
-	rm -f ${D}${base_libdir}/libsystemd-id128.*
-	rm -f ${D}${base_libdir}/libsystemd-journal.*
+	rm -f ${D}${base_libdir}/${DEB_HOST_MULTIARCH}/libsystemd-daemon.*
+	rm -f ${D}${base_libdir}/${DEB_HOST_MULTIARCH}/libsystemd-login.*
+	rm -f ${D}${base_libdir}/${DEB_HOST_MULTIARCH}/libsystemd-id128.*
+	rm -f ${D}${base_libdir}/${DEB_HOST_MULTIARCH}/libsystemd-journal.*
 
 	# remove unwanted files
 	rm -rf `find ${D}${libdir} -type d -name "__pycache__"`
@@ -264,14 +264,14 @@ FILES_${PN}-dbg += "${systemd_unitdir}/.debug \
 FILES_${PN}-dev = ""
 ALLOW_EMPTY_${PN}-dev = "1"
 
-FILES_libsystemd0 = "${base_libdir}/libsystemd.so.*"
+FILES_libsystemd0 = "${base_libdir}/${DEB_HOST_MULTIARCH}/libsystemd.so.*"
 FILES_libsystemd-dev = "${libdir}/libsystemd.so \
                         ${libdir}/libsystemd.la \
                         ${libdir}/pkgconfig/libsystemd.pc \
                         ${includedir}/systemd \
                        "
 
-FILES_libpam-systemd = "${base_libdir}/security/pam_systemd.so \
+FILES_libpam-systemd = "${base_libdir}/${DEB_HOST_MULTIARCH}/security/pam_systemd.so \
                         ${datadir}/pam-configs/systemd \
                        "
 

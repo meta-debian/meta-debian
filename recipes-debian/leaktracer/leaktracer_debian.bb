@@ -18,7 +18,7 @@ LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://README;beginline=192;endline=195;md5=534c638c0d1a099bb244718ec9eb2f1b"
 
 DEBIAN_PATCH_TYPE = "nopatch"
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 RDEPENDS_${PN} = "gdb perl"
 

@@ -16,5 +16,7 @@ DEBIAN_PATCH_TYPE = "quilt"
 
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
+
 BBCLASSEXTEND = "native"
 PACKAGE_ARCH = "all"

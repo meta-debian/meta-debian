@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "\
 	file://src/md5.c;beginline=15;endline=30;md5=c7cae0a182bef159173da0711ab3e7b5"
 inherit autotools
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 # Correct the name and path to libtool: ${B}/${HOST_SYS}-libtool
 SRC_URI += "file://fix-hardcode-libtool.patch"

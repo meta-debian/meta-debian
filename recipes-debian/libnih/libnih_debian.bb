@@ -15,6 +15,8 @@ PR = "r0"
 
 inherit autotools gettext
 
+KEEP_NONARCH_BASELIB = "1"
+
 DEBIAN_PATCH_TYPE = "nopatch"
 BBCLASSEXTEND = "native"
 do_install_append() {

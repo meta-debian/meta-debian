@@ -28,20 +28,20 @@ do_install_append () {
 	rm -rf ${D}${sysconfdir}/ldap/schema
 	rm ${D}${sysconfdir}/ldap/ldap.conf.* ${D}${sysconfdir}/ldap/slapd.* \
 		${D}${sysconfdir}/ldap/DB_CONFIG.example ${D}${includedir}/slapi-plugin.h
-	rm -r ${D}${libdir}/*.a ${D}${libdir}/*.la 
-	rm -r ${D}${libdir}/libldap
+	rm -rf ${D}${libdir}/*.a ${D}${libdir}/*.la
+	rm -rf ${D}${nonarch_libdir}/libldap
 
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libldap-2.4.so.2))
 
 	rm ${D}${libdir}/$LINKLIB ${D}${libdir}/libldap-2.4.so.2
 	ln -s libldap_r-2.4.so.2 ${D}${libdir}/libldap-2.4.so.2
-	rm ${D}${libdir}/libldap.so
+	rm -rf ${D}${libdir}/libldap.so
 	ln -s libldap_r.so ${D}${libdir}/libldap.so
-	rm -r ${D}${bindir}
-	rm -r ${D}${sbindir}
+	rm -rf ${D}${bindir}
+	rm -rf ${D}${sbindir}
 	
-	rm -r ${D}${datadir}
-	rm -r ${D}${localstatedir}
+	rm -rf ${D}${datadir}
+	rm -rf ${D}${localstatedir}
 }
 
 PKG_${PN} = "${PN}-2.4-2"

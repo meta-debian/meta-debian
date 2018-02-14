@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=1556547711e8246992b999edd9445a57"
 inherit autotools-brokensep
 DEBIAN_PATCH_TYPE = "nopatch"
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 do_install_append() {
 	#remove unwanted files

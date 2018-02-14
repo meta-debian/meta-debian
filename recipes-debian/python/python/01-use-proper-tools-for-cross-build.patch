@@ -89,7 +89,7 @@ Index: Python-2.7.9/setup.py
  
          # XXX Omitted modules: gl, pure, dl, SGI-specific modules
  
-+        lib_dirs = [ os.getenv("STAGING_LIBDIR"),  os.getenv("STAGING_BASELIBDIR") ]
++        lib_dirs = [ os.getenv("STAGING_LIBDIR"), os.path.join(os.getenv("STAGING_LIBDIR"), os.getenv("DEB_HOST_MULTIARCH")),  os.getenv("STAGING_BASELIBDIR") ]
 +        inc_dirs = [ os.getenv("STAGING_INCDIR") ]
 +
          #

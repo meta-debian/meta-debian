@@ -15,7 +15,7 @@ PV = "11.0.1"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 # --disable-yesterday:
 # sa2 fails to use "-d yesterday", which is not supported by busybox date

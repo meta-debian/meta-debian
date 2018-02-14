@@ -18,3 +18,5 @@ LICENSE = "Artistic-1.0 | GPL-1+"
 LIC_FILES_CHKSUM = "\
 	file://lib/Net/Telnet.pm;beginline=3;endline=5;md5=595feda9e8536d0a35f71ad7c693e4f2"
 inherit cpan
+
+KEEP_NONARCH_BASELIB = "1"

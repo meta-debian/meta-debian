@@ -15,7 +15,7 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=4cb00dd52a063edbece6ae248a2ba663"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep pkgconfig
 DEPENDS += "corosync groff"

@@ -21,6 +21,7 @@ SRC_URI += "file://Makefile-correct-INC_debian.patch"
 #cpan is perl modules that use Makefile.PL to build system
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
 
 # Source package has no patch.
 DEBIAN_QUILT_PATCHES = ""

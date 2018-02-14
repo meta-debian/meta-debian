@@ -47,7 +47,7 @@ EXTRA_OECONF_append_arm = " --with-arm=yes"
 
 EXTRA_OEMAKE += "PYLIBVER='python${PYTHON_BASEVERSION}' \
 	PYINC='${STAGING_INCDIR}/$(PYLIBVER)' \
-	pyexecdir=${libdir}/python${PYTHON_BASEVERSION}/dist-packages \
+	pyexecdir=${PYTHON_SITEPACKAGES_DIR} \
 	STDINC='${STAGING_INCDIR}' \
 	"
 SYSTEMD_SERVICE_${PN}d = "auditd.service"
@@ -62,9 +62,11 @@ do_compile_append() {
 		PYTHON_INCLUDES="-I${STAGING_INCDIR}/python${PYTHON_BASEVERSION}"
 }
 do_install_append() {
-	rm -f ${D}${libdir}/python${PYTHON_BASEVERSION}/dist-packages/*.a
-	rm -f ${D}${libdir}/python${PYTHON_BASEVERSION}/dist-packages/*.la
-	rm -f ${D}${libdir}/python${PYTHON_BASEVERSION}/dist-packages/audit.pyo
+	install -d ${D}${libdir}
+
+	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/*.a
+	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/*.la
+	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/audit.pyo
 	rm -r ${D}${base_libdir}/pkgconfig
 	rm -f ${D}${sysconfdir}/audit/audit.rules
 
@@ -96,7 +98,7 @@ do_install_append() {
 	rm ${D}${base_libdir}/*.la
 
 	oe_runmake -C ${S}/bindings/python install DESTDIR=${D}
-	rm ${D}${libdir}/*/dist-packages/auparse.a
+	rm ${D}${PYTHON_SITEPACKAGES_DIR}/auparse.a
 
 	# Follow debian/auditd.dirs
 	install -d ${D}${localstatedir}/log/audit
@@ -123,8 +125,8 @@ FILES_lib${DPN}-common = "${sysconfdir}/libaudit.conf"
 FILES_lib${DPN} = "${base_libdir}/libaudit.so.*"
 FILES_libauparse-dev = "${includedir}/auparse* ${libdir}/libauparse.so"
 FILES_libauparse = "${base_libdir}/libauparse.so.*"
-FILES_python-${DPN} = "${libdir}/python*/dist-packages/*"
-FILES_${PN}-dbg += "${libdir}/python*/dist-packages/.debug"
+FILES_python-${DPN} = "${PYTHON_SITEPACKAGES_DIR}/*"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 FILES_${PN} += "${systemd_unitdir}"
 
 DEBIANNAME_${PN} = "${DPN}d"

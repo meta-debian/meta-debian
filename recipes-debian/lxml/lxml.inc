@@ -39,3 +39,5 @@ DEPENDS += "libxml2 libxslt zlib"
 export BUILD_SYS
 export HOST_SYS
 export DEB_HOST_MULTIARCH
+
+KEEP_NONARCH_BASELIB = "1"

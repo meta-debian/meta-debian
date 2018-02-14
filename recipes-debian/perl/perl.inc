@@ -14,6 +14,8 @@ file://Artistic;md5=2e6fd2475335af892494fe1f7327baf3 \
 
 EXTRA_OEMAKE = "-e MAKEFLAGS="
 
+KEEP_NONARCH_BASELIB = "1"
+
 # Base on debian/rules, create file patchlevel-debian.h
 # which is required by perl when build with option -DDEBIAN.
 do_compile_prepend(){

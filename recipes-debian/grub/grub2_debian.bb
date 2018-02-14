@@ -28,7 +28,7 @@ SRC_URI += " \
 	file://grub-2.00-fpmath-sse-387-fix.patch \
 "
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DEPENDS = "freetype-native flex-native bison-native xz-utils"
 

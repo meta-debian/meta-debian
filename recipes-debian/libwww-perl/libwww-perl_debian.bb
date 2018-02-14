@@ -30,6 +30,8 @@ RDEPENDS_${PN} = " \
 
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
+
 do_install_append() {
 	# Follow debian/libwww-perl.links
 	ln -s lwp-request ${D}${bindir}/GET

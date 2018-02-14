@@ -28,5 +28,7 @@ RDEPENDS_${PN} += "\
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
+KEEP_NONARCH_BASELIB = "1"
+
 FILES_${PN} += "${libdir}/*"
 FILES_${PN}-dbg += "${libdir}/perl5/*/auto/DateTime/.debug"

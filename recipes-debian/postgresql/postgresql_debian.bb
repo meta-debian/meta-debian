@@ -36,7 +36,7 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=81b69ddb31a8be66baafd14a90146ee2"
 SRC_URI += "file://fix-using-host-library_debian.patch"
 
 # keep libdir as /usr/lib to avoid libdir QA test warning
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 DEPENDS_class-target = "\
 	zlib readline krb5 tcl libxml2 libxslt python3 python perl"

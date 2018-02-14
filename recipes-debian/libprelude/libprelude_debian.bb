@@ -52,6 +52,7 @@ EXTRA_OECONF = "--with-perl-installdirs=vendor --without-lua"
 # disable checking for ruby path to prevent using ruby from host system
 CACHED_CONFIGUREVARS += "ac_cv_path_RUBY=no"
 
+PERL_OWN_DIR_class-target = "/${@os.path.relpath(nonarch_libdir, libdir)}"
 export PERL_LIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 
@@ -60,9 +61,9 @@ export BUILD_SYS
 export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {
-	perl_version=${PERLVERSION}
+	perl_version=${@get_perl_version(d)}
 	short_perl_version=`echo ${perl_version%.*}`
-	. ${STAGING_LIBDIR}/perl/config.sh
+	. ${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/config.sh
 	sed -i -e "s:##EXTRA_CPANFLAGS##:${EXTRA_CPANFLAGS}:" \
 	       -e "s:##CC##:${cc}:" \
 	       -e "s:##LD##:${ld}:" \

@@ -28,6 +28,9 @@ EXTRA_OECONF = " \
     ap_cv_void_ptr_lt_long=no \
 "
 
+# Looking for 'lua5.1-deb-multiarch.h'
+CFLAGS += "-I${STAGING_INCDIR}/${DEB_HOST_MULTIARCH}"
+
 do_debian_patch_append() {
 	# Apply patch for suexec
 	cp ${S}/support/suexec.c ${S}/support/suexec-custom.c

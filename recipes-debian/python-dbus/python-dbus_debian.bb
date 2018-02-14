@@ -23,7 +23,7 @@ DEPENDS = "dbus dbus-glib"
 # source format is 3.0 (quilt) but there is no debian patch
 DEBIAN_QUILT_PATCHES = ""
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit distutils-base autotools pkgconfig
 

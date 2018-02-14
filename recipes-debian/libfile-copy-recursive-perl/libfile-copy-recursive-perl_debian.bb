@@ -14,4 +14,6 @@ DEBIAN_PATCH_TYPE = "nopatch"
 
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
+
 BBCLASSEXTEND = "native"

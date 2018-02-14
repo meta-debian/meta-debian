@@ -12,6 +12,8 @@ DEBIAN_QUILT_PATCHES = ""
 
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
+
 FILES_${PN} += "${datadir}"
 
 BBCLASSEXTEND = "native nativesdk"

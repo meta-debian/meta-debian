@@ -31,7 +31,7 @@ LICENSE = "GPL-2+ & ISC"
 LIC_FILES_CHKSUM = " \
 file://debian/copyright;md5=3de9a1b9c8691191a6bb88b6e4388c62"
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 inherit autotools-brokensep useradd
 

@@ -18,6 +18,8 @@ LIC_FILES_CHKSUM = " \
     file://README;beginline=34;endline=40;md5=f7249a750bc692d1048b2626752aa415 \
 "
 
+KEEP_NONARCH_BASELIB = "1"
+
 DEPENDS = "nasm-native util-linux e2fsprogs"
 
 COMPATIBLE_HOST = '(x86_64|i.86).*-(linux|freebsd.*)'

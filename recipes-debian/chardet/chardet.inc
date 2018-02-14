@@ -28,7 +28,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a6f89e2100d9b6cdffcea4f398e37343"
 # Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
 DEBIAN_QUILT_PATCHES = ""
 
-DEBIAN_MULTILIB_MANUAL = "1"
+KEEP_NONARCH_BASELIB = "1"
 
 # need to export these variables for python runtime
 # fix error:

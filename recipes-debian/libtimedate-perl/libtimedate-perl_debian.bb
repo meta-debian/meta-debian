@@ -13,6 +13,8 @@ LIC_FILES_CHKSUM = "file://README;beginline=21;md5=576b7cb41e5e821501a01ed66f0f9
 
 inherit cpan
 
+KEEP_NONARCH_BASELIB = "1"
+
 RDEPENDS_${PN}_class-native = ""
 RDEPENDS_${PN} += "perl-module-carp perl-module-exporter perl-module-strict perl-module-time-local"
 
