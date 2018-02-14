@@ -62,12 +62,13 @@ EXTRA_OEMAKE += " \
     'PERL_PATH=/usr/bin/env perl' \
 "
 
+# git store patch files not only in debian/patches but in debian/diff
 do_debian_patch_append () {
-	# Base on debian/rules
-	for i in `ls -1 debian/diff/*.diff debian/diff/*.patch 2> /dev/null || :`; do
-		patch -p1 -N -r- <$i
+	for i in $(ls -1 ${DEBIAN_UNPACK_DIR}/debian/diff/*.diff ${DEBIAN_UNPACK_DIR}/debian/diff/*.patch \
+	    2>/dev/null || :); do \
+		patch -p1 -N -r- <$i || test $? = 1 || exit 1; \
 	done
-	chmod 775 t/*.sh
+	chmod 775 ${DEBIAN_UNPACK_DIR}/t/*.sh
 }
 
 do_install () {
