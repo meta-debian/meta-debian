@@ -44,7 +44,9 @@ do_install_append(){
 	# Remove unneeded files
 	find ${D} -type f -name "*.la" -exec rm -f {} \;
 	find ${D} -type f -name "*.o" -exec rm -f {} \;
+}
 
+do_install_append_class-target() {
 	# Remove useless rpaths
 	# ERROR: QA Issue: directfb: ... contains probably-redundant RPATH /usr/lib [useless-rpaths]
 	# ERROR: QA run found fatal errors. Please consider fixing them.
