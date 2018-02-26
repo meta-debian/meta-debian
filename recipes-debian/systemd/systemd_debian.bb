@@ -326,7 +326,7 @@ FILES_udev = "${base_bindir}/udevadm \
               ${datadir}/pkgconfig/udev.pc \
              "
 
-FILES_libudev1 = "${base_libdir}/libudev.so.*"
+FILES_libudev1 = "${base_libdir}/${DEB_HOST_MULTIARCH}/libudev.so.*"
 FILES_libudev-dev = "${includedir}/libudev.h \
                      ${libdir}/libudev.so \
                      ${libdir}/libudev.la \

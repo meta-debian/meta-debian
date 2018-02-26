@@ -21,11 +21,13 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=49cab1cfd397b014807c5b2bcc63e04f \
                     file://Fonts/copyright;md5=2e638bf77a44d03d791520a1c96fbb95 \
                     file://GPL-2;md5=4325afd396febcb659c36b49533135d4"
 
-DEPENDS = "liblocale-gettext-perl libxml-parser-perl bdfresize-native sysvinit-native"
+DEPENDS = "xkeyboard-config liblocale-gettext-perl \
+           libxml-parser-perl bdfresize-native sysvinit-native \
+           "
 
 inherit perlnative
 
-xkbdir = "${datadir}/X11/xkb"
+xkbdir = "${STAGING_DIR_HOST}/${datadir}/X11/xkb"
 
 do_compile() {
 	rm ${S}/Keyboard/KeyboardNames.pl

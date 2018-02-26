@@ -439,3 +439,10 @@ RDEPENDS_libpam-smbpass += "${PN}-common ${@bb.utils.contains('DISTRO_FEATURES',
 RDEPENDS_winbind += "${PN}"
 RDEPENDS_libpam-winbind += "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-runtime', '', d)} ${PN}-common winbind"
 RDEPENDS_libnss-winbind += "${PN}-common winbind"
+
+# Python module is installed in /usr/lib/python while 'libdir' is /usr/lib/<triplet>.
+# This is not issue. The QA Warning can be ignore:
+#   | python-samba: found library in wrong location: /usr/lib/python2.7/dist-packages/samba/samba3/libsmb_samba_internal.so
+#   | samba-dbg: found library in wrong location: /usr/lib/python2.7/dist-packages/samba/samba3/.debug/libsmb_samba_internal.so [libdir]
+INSANE_SKIP_python-samba += "libdir"
+INSANE_SKIP_${PN}-dbg += "libdir"
