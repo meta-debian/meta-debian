@@ -5,6 +5,17 @@
 GNU_SUFFIX = "${@get_gnu_suffix(d.getVar('TARGET_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
 DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TARGET_OS}${GNU_SUFFIX}"
 
+# Additional flags to help native recipes/commands be able to build/run with native libraries.
+BUILD_LDFLAGS_MULTIARCH = " \
+    -L${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -L${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath-link,${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath-link,${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath,${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath,${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+"
+BUILD_LDFLAGS .= "${BUILD_LDFLAGS_MULTIARCH}"
+
 # libdir will be change automatically to multiarch libdir.
 # Set this variable to 1 in recipe if you want to handle libdir by yourself.
 #   1: baselib = lib
