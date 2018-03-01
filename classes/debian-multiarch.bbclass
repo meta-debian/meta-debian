@@ -5,6 +5,11 @@
 GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TARGET_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
 DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TARGET_OS}${GNU_HOST_SUFFIX}"
 
+# Help target recipe be able to get location of multiarch libdir in sdk's sysroot.
+GNU_SDK_SUFFIX = "${@get_gnu_suffix(d.getVar('SDK_ARCH', True), '')}"
+DEB_SDK_MULTIARCH = "${@arch_to_multiarch(d.getVar('SDK_ARCH', True))}-${SDK_OS}${GNU_SDK_SUFFIX}"
+DEB_HOST_MULTIARCH_class-nativesdk = "${DEB_SDK_MULTIARCH}"
+
 # Provide an alternative DEB_HOST_MULTIARCH for native environment,
 # so target recipe can get native multiarch 'libdir'.
 GNU_BUILD_SUFFIX = "${@get_gnu_suffix(d.getVar('BUILD_ARCH', True), '')}"
