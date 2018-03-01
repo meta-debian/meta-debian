@@ -69,6 +69,17 @@ export DEB_HOST_MULTIARCH
 CFLAGS_append = " -fPIC"
 CXXFLAGS_append = " -fPIC"
 
+# libqpol/swig/python make install in parallel can fail because
+# install-wrappedpyDATA and install-pkgpythonPYTHON install same __init__.py in same directory
+# Fix error:
+#  | /bin/mkdir -p '.../setools/3.3.8-r3/image/usr/lib/python2.7/dist-packages/setools'
+#  | /usr/bin/install -c -m 644 qpol.py __init__.py '../setools/3.3.8-r3/image/usr/lib/python2.7/dist-packages/setools'
+#  | /usr/bin/install -c -m 644 __init__.py '.../setools/3.3.8-r3/image/usr/lib/python2.7/dist-packages/setools'
+#  | /usr/bin/install -c -m 644 _qpol.so '.../setools/3.3.8-r3/image/usr/lib/python2.7/dist-packages/setools'
+#  | /usr/bin/install: cannot change permissions of ‘.../setools/3.3.8-r3/image/usr/lib/python2.7/dist-packages/setools/__init__.py’: No such file or directory
+#  | Makefile:484: recipe for target 'install-wrappedpyDATA' failed
+PARALLEL_MAKEINST = ""
+
 do_configure_prepend() {
 	export ac_cv_policydb_version_max=26
 	export PYTHON=python

@@ -68,6 +68,7 @@ $ bitbake core-image-minimal
 
 Run the built Linux on QEMU.
 Please replace `${MACHINE}` by the target machine you selected in the above step.
+NOTE: Confirm that the tun module, which runqemu depends on, is correctly loaded in your system.
 
 ```sh
 $ runqemu ${MACHINE} nographic
