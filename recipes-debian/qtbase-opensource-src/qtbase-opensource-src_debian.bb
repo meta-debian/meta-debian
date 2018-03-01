@@ -144,7 +144,7 @@ EOF
 QMAKE_MKSPEC_PATH = "${B}"
 
 # we need to run bin/qmake, because EffectivePaths are relative to qmake location
-OE_QMAKE_QMAKE_ORIG = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_BINS}/qmake"
+OE_QMAKE_QMAKE_ORIG = "${STAGING_DIR_NATIVE}${OE_QMAKE_PATH_BINS_NATIVE}/qmake"
 OE_QMAKE_QMAKE = "bin/qmake"
 
 # Base on debian/rules
@@ -204,7 +204,7 @@ do_configure() {
 
 do_install_append() {
 	# Remove native qmake
-	rm -f ${D}/${libdir}/${QT_DIR_NAME}/bin/qmake
+	rm -f ${D}${OE_QMAKE_PATH_BINS}/qmake
 
 	if [ "${DPKG_ARCH}" = "i386" ]; then
 		# Rebuild the necessary libs with SSE2 support.
@@ -247,7 +247,7 @@ do_install_append() {
 		-regex '.*\.\(app\|conf\|cpp\|h\|js\|php\|png\|pro\|xml\|xsl\)$' \
 		-exec chmod a-x {} \;
 
-	sed -i -e "s:${STAGING_DIR_TARGET}::g" ${D}${libdir}/pkgconfig/*.pc
+	sed -i -e "s:${STAGING_DIR_TARGET}::g" ${D}${OE_QMAKE_PATH_LIBS}/pkgconfig/*.pc
 }
 
 # libpnp_basictools.a is used as example, but not a development file

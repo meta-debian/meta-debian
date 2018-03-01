@@ -22,6 +22,7 @@ inherit nativesdk
 PACKAGE_DEBUG_SPLIT_STYLE = "debug-without-src"
 
 FILES_${PN}-dev += " \
+    ${OE_QMAKE_PATH_LIBS}/lib*${SOLIBSDEV} \
     ${OE_QMAKE_PATH_ARCHDATA}/mkspecs \
 "
 
@@ -31,8 +32,13 @@ FILES_${PN}-dbg += " \
 
 FILES_${PN} += " \
     ${OE_QMAKE_PATH_BINS}/* \
+    ${OE_QMAKE_PATH_LIBS}/lib*${SOLIBS} \
     ${SDKPATHNATIVE}/environment-setup.d \
     ${datadir}/cmake \
+"
+
+FILES_${PN}-staticdev += " \
+    ${OE_QMAKE_PATH_LIBS}/lib*.a \
 "
 
 QT_CONFIG_FLAGS += " \
@@ -45,8 +51,8 @@ QT_CONFIG_FLAGS += " \
 "
 
 # qtbase is exception, as these are used as install path for sysroots
-OE_QMAKE_PATH_HOST_DATA = "${libdir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_HOST_LIBS = "${libdir}"
+OE_QMAKE_PATH_HOST_DATA = "${libdir}/${DEB_HOST_MULTIARCH}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_HOST_LIBS = "${libdir}/${DEB_HOST_MULTIARCH}"
 
 do_generate_qt_config_file() {
     cat > ${QT_CONF_PATH} <<EOF
@@ -87,7 +93,7 @@ EOF
 QMAKE_MKSPEC_PATH = "${B}"
 
 # we need to run bin/qmake, because EffectivePaths are relative to qmake location
-OE_QMAKE_QMAKE_ORIG = "${STAGING_LIBDIR_NATIVE}/${QT_DIR_NAME}/bin/qmake"
+OE_QMAKE_QMAKE_ORIG = "${STAGING_LIBDIR_NATIVE}/${DEB_BUILD_MULTIARCH}/${QT_DIR_NAME}/bin/qmake"
 OE_QMAKE_QMAKE = "bin/qmake"
 
 do_configure() {
@@ -178,10 +184,10 @@ do_install() {
     # remove things unused in nativesdk, we need the headers, Qt5Core
     # and Qt5Bootstrap.
     rm -rf ${D}${datadir} \
-           ${D}/${OE_QMAKE_PATH_PLUGINS} \
-           ${D}${libdir}/cmake \
-           ${D}${libdir}/pkgconfig
-    find ${D}${libdir} -maxdepth 1 -name 'lib*' -and \
+           ${D}${OE_QMAKE_PATH_PLUGINS} \
+           ${D}${OE_QMAKE_PATH_LIBS}/cmake \
+           ${D}${OE_QMAKE_PATH_LIBS}/pkgconfig
+    find ${D}${OE_QMAKE_PATH_LIBS} -maxdepth 1 -name 'lib*' -and \
                                    -not -name 'libQt5Core.so*' -and \
                                    ${QTLIBSPRESERVE} \
                                    -not -name 'libQt5Bootstrap.a' \
