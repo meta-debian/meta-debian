@@ -22,11 +22,6 @@ SRC_URI += "\
     file://0010-Revert-Use-the-gcc-feature-in-simd.prf.patch \
 "
 
-# Temporary keep install qt5 in /usr/lib
-# to make a stable point of meta-debian
-# where qt5 just works on core-image-minimal and SDK.
-KEEP_NONARCH_BASELIB = "1"
-
 inherit qmake5_base
 
 # we don't want conflicts with qt4
@@ -39,6 +34,8 @@ OE_QMAKE_PATH_DOCS = "${OE_QMAKE_PATH_QT_DOCS}"
 OE_QMAKE_PATH_SETTINGS = "${OE_QMAKE_PATH_QT_SETTINGS}"
 OE_QMAKE_PATH_EXAMPLES = "${OE_QMAKE_PATH_QT_EXAMPLES}"
 OE_QMAKE_PATH_TESTS = "${OE_QMAKE_PATH_QT_TESTS}"
+
+OE_QMAKE_PATH_BINS_NATIVE = "${OE_QMAKE_PATH_QT_BINS_NATIVE}"
 
 # qtbase is exception, configure script is using our get(X)QEvalMakeConf and setBootstrapEvalVariable functions to read it from shell
 export OE_QMAKE_COMPILER

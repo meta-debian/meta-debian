@@ -2,8 +2,30 @@
 # debian-multiarch.bbclass
 #
 
-GNU_SUFFIX = "${@get_gnu_suffix(d.getVar('TARGET_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
-DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TARGET_OS}${GNU_SUFFIX}"
+GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TARGET_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
+DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TARGET_OS}${GNU_HOST_SUFFIX}"
+
+# Help target recipe be able to get location of multiarch libdir in sdk's sysroot.
+GNU_SDK_SUFFIX = "${@get_gnu_suffix(d.getVar('SDK_ARCH', True), '')}"
+DEB_SDK_MULTIARCH = "${@arch_to_multiarch(d.getVar('SDK_ARCH', True))}-${SDK_OS}${GNU_SDK_SUFFIX}"
+DEB_HOST_MULTIARCH_class-nativesdk = "${DEB_SDK_MULTIARCH}"
+
+# Provide an alternative DEB_HOST_MULTIARCH for native environment,
+# so target recipe can get native multiarch 'libdir'.
+GNU_BUILD_SUFFIX = "${@get_gnu_suffix(d.getVar('BUILD_ARCH', True), '')}"
+DEB_BUILD_MULTIARCH = "${@arch_to_multiarch(d.getVar('BUILD_ARCH', True))}-${BUILD_OS}${GNU_BUILD_SUFFIX}"
+DEB_HOST_MULTIARCH_class-native = "${DEB_BUILD_MULTIARCH}"
+
+# Additional flags to help native recipes/commands be able to build/run with native libraries.
+BUILD_LDFLAGS_MULTIARCH = " \
+    -L${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -L${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath-link,${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath-link,${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath,${STAGING_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+    -Wl,-rpath,${STAGING_BASE_LIBDIR_NATIVE}/${DEB_HOST_MULTIARCH} \
+"
+BUILD_LDFLAGS .= "${BUILD_LDFLAGS_MULTIARCH}"
 
 # libdir will be change automatically to multiarch libdir.
 # Set this variable to 1 in recipe if you want to handle libdir by yourself.

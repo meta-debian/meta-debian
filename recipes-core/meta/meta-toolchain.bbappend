@@ -15,8 +15,8 @@ create_sdk_files_append() {
 # http://git.yoctoproject.org/cgit/cgit.cgi/linux-yocto-4.4/commit?id=26e282c0686e56cfc1c7eb4cc4c63275e49aad6e
 # http://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/?id=da6a4f6c2b2f108e52fcb546d68c8e16ec546b6c
 
-export HOST_EXTRACFLAGS="-isystem${SDKPATHNATIVE}${includedir} -L${SDKPATHNATIVE}${libdir} -L${SDKPATHNATIVE}${base_libdir}"
-export HOSTLDFLAGS="-L${SDKPATHNATIVE}${libdir} -L${SDKPATHNATIVE}${base_libdir}"
+export HOST_EXTRACFLAGS="-isystem${SDKPATHNATIVE}${includedir} -L${SDKPATHNATIVE}${libdir_nativesdk} -L${SDKPATHNATIVE}${base_libdir_nativesdk}"
+export HOSTLDFLAGS="-L${SDKPATHNATIVE}${libdir_nativesdk} -L${SDKPATHNATIVE}${base_libdir_nativesdk}"
 export CROSS_CURSES_LIB="-lncurses -ltinfo"
 export CROSS_CURSES_INC='-DCURSES_LOC="<curses.h>"'
 EOF
