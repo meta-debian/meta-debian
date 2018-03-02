@@ -1,28 +1,37 @@
-make -j was failing sometimesa like this
-| ccache i586-poky-linux-gcc -march=i586 --sysroot=/home/nitin/build/build0/tmp/sysroots/i586-poky-linux -I. -fexpensive-optimizations -fomit-frame-pointer -frename-registers -O2 -ggdb -feliminate-unused-debug-types -o atd atd.o daemon.o  -lfl  -lpam -Wl,-O1 -Wl,--as-needed
-| parsetime.l:5:19: fatal error: y.tab.h: No such file or directory
-| compilation terminated.
-| make: *** [lex.yy.o] Error 1
-| make: *** Waiting for unfinished jobs....
+# "at" parallel build fails.
+# Bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=559886
 
-Fixed the issue by adding a dependency in the makefile.
-Nitin <nitin.a.kamble@intel.com>
-2010/09/02
-
-Upstream-Status: Pending
-
-Signed-off-by: Scott Garman <scott.a.garman@intel.com>
-
-Index: at-3.1.12/Makefile.in
-===================================================================
---- at-3.1.12.orig/Makefile.in
-+++ at-3.1.12/Makefile.in
-@@ -83,6 +83,8 @@ y.tab.c y.tab.h: parsetime.y
+diff --git a/Makefile.in b/Makefile.in
+index 5dd2767..4dc2d32 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -75,8 +75,10 @@ at: $(ATOBJECTS)
+ atd: $(RUNOBJECTS)
+ 	$(CC) $(LDFLAGS) -o atd $(RUNOBJECTS) $(LIBS) $(PAMLIB)
+ 
+-y.tab.c y.tab.h: parsetime.y
++y.tab.c y.tab.h: stamp-yacc
++stamp-yacc: parsetime.y
+ 	$(YACC) -d parsetime.y
++	touch $@
+ 
  lex.yy.c: parsetime.l
  	$(LEX) -i parsetime.l
+@@ -84,6 +86,8 @@ lex.yy.c: parsetime.l
+ atd.service: atd.service.in
+ 	sed -e 's![@]sbindir[@]!$(sbindir)!g' < $< > $@
  
 +parsetime.l: y.tab.h
 +
  atrun: atrun.in
  	configure
  
+@@ -139,7 +143,7 @@ pre: checkin $(DIST) $(LIST)
+ 
+ clean:
+ 	rm -f subs.sed *.o *.s at atd core a.out *~ $(CLONES) *.bak stamp-built
+-	rm -f parsetest parsetime.c lex.yy.c y.tab.c y.tab.h
++	rm -f parsetest parsetime.c lex.yy.c y.tab.c y.tab.h stamp-yacc
+ 
+ distclean: clean
+ 	rm -rf at.1 atd.8 atrun.8 config.cache atrun batch config.h \
