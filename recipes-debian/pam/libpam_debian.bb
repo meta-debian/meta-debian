@@ -133,6 +133,8 @@ FILES_${PN}0g-dev += "\
     	${base_libdir}/*.la \
     	${base_libdir}/lib*${SOLIBSDEV}"
 
+MULTI_ARCH_${PN} = "foreign"
+
 # Split libpam module into subpackages
 # Using python function to add RDEPENDS
 
