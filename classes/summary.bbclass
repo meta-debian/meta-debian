@@ -87,6 +87,11 @@ python do_package_deb_prepend() {
         metadata = metadata + "License: " + license + "\n"
         if add_licfiles:
             metadata = metadata + "LicenseFiles: " + licfiles + "\n"
+
+        ex_metadata = d.getVar("PACKAGE_ADD_METADATA_DEB_" + pkg, True)
+        if ex_metadata:
+            metadata = ex_metadata.rstrip('\r\n') + "\n" + metadata
+
         d.setVar("PACKAGE_ADD_METADATA_DEB_" + pkg, metadata)
 }
 

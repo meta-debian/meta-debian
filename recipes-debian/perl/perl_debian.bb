@@ -334,6 +334,12 @@ python populate_packages_prepend () {
     d.setVar(d.expand("RRECOMMENDS_${PN}-modules"), ' '.join(packages))
 }
 
+python do_package_deb_prepend() {
+    pkgs = list(filter(lambda p: 'perl-module-' in p, d.getVar('PACKAGES', True).split()))
+    for pkg in pkgs:
+        d.setVar("MULTI_ARCH_%s" % pkg, "foreign")
+}
+
 PACKAGES_DYNAMIC += "^perl-module-.*"
 PACKAGES_DYNAMIC_class-nativesdk += "^nativesdk-perl-module-.*"
 
