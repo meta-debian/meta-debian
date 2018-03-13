@@ -1,0 +1,13 @@
+diff --git a/src/Makefile b/src/Makefile
+index d5bd885..e1632ee 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -40,7 +40,7 @@ makeguids.o : makeguids.c
+ makeguids : makeguids.o fakeguid.o
+ 
+ efivar-guids.h : makeguids guids.txt
+-	./makeguids guids.txt guids.bin names.bin guid-symbols.S efivar-guids.h
++	makeguids guids.txt guids.bin names.bin guid-symbols.S efivar-guids.h
+ 
+ guidlist.o : efivar-guids.h
+ 	$(CC) $(cflags) -c -o guidlist.o guids.S

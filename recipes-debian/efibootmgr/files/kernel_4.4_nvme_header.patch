@@ -1,0 +1,19 @@
+diff --git a/src/lib/scsi_ioctls.c b/src/lib/scsi_ioctls.c
+index 3aaa933..fe21360 100644
+--- a/src/lib/scsi_ioctls.c
++++ b/src/lib/scsi_ioctls.c
+@@ -24,7 +24,14 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <sys/ioctl.h>
++
++#include <linux/version.h>
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4,4,0)
+ #include <linux/nvme.h>
++#else
++#include <linux/nvme_ioctl.h>
++#endif
++
+ #include "scsi_ioctls.h"
+ 
+ int
