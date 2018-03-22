@@ -243,7 +243,7 @@ do_install() {
 		for gettyargs in $(echo "${BUSYBOX_INITTAB_GETTYS}" | tr ";" ":"); do
 			baudrate=$(echo "${gettyargs}" | cut -d ":" -f 1)
 			tty=$(echo "${gettyargs}" | cut -d ":" -f 2)
-			echo "${tty}::respawn:${base_sbindir}/getty ${baudrate} ${tty}" \
+			echo "${tty}::respawn:${base_sbindir}/getty -L ${baudrate} ${tty}" \
 				>> ${D}${sysconfdir}/inittab
 		done
 
