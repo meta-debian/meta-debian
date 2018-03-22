@@ -71,7 +71,7 @@ PACKAGECONFIG ??= "\
 PACKAGECONFIG[openssl] = "--enable-ssl,--disable-ssl,openssl,"
 PACKAGECONFIG[systemd] = "\
 	--enable-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/,\
-	--disable-systemd --without-systemdsystemunitdir, systemd, libsystemd-daemon-dev"
+	--disable-systemd --without-systemdsystemunitdir, systemd"
 PACKAGECONFIG[linux-caps] = "--enable-linux-caps,--disable-linux-caps,libcap,"
 PACKAGECONFIG[pcre] = "--enable-pcre,--disable-pcre,libpcre,"
 PACKAGECONFIG[dbi] = "--enable-sql,--disable-sql,libdbi,"
@@ -161,8 +161,6 @@ FILES_${PN} += "${datadir}/*"
 FILES_${PN}-dbg += "${libdir}/${DPN}/*/.debug/*"
 FILES_${PN}-staticdev += "${libdir}/${DPN}/syslog-ng/libtest/*.a"
 INSANE_SKIP_${PN}-core = "dev-so"
-# ignore to check dev-so because syslog-ng has dependency to libsystemd-daemon-dev
-INSANE_SKIP_${PN} += "dev-deps"
 
 #runtime depend, follow debian/control
 RDEPENDS_${PN} += "${PN}-core"
