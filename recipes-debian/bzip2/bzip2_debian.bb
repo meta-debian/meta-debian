@@ -83,7 +83,7 @@ ALTERNATIVE_LINK_NAME[bunzip2] = "${base_bindir}/bunzip2"
 ALTERNATIVE_LINK_NAME[bzcat] = "${base_bindir}/bzcat"
 ALTERNATIVE_LINK_NAME[bzip2] = "${base_bindir}/bzip2"
 
-FILES_libbz2 = "${libdir}/lib*${SOLIBS}"
+FILES_libbz2 = "${base_libdir}/lib*${SOLIBS}"
 
 FILES_libbz2-dev = "${includedir} ${libdir}/lib*${SOLIBSDEV}"
 SECTION_libbz2-dev = "devel"
