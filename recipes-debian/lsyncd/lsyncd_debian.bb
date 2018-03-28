@@ -21,6 +21,9 @@ inherit autotools-brokensep pkgconfig
 CACHED_CONFIGUREVARS += "ac_cv_path_LUA51=${STAGING_BINDIR_NATIVE}/lua5.1"
 DEPENDS += "lua5.1 lua5.1-native"
 
+# Looking for 'lua5.1-deb-multiarch.h'
+CFLAGS += " -I${STAGING_INCDIR}/${DEB_HOST_MULTIARCH}"
+
 do_install_append() {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0755 ${S}/debian/lsyncd.init \
