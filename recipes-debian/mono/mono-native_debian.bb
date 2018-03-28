@@ -34,6 +34,7 @@ do_fix_libtool_name() {
 	libtoolize --force --copy
 }
 
+do_fix_libtool_name[dirs] = "${S}"
 addtask fix_libtool_name after do_patch before do_configure
 
 do_install_append() {
