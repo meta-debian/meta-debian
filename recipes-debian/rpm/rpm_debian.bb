@@ -64,21 +64,7 @@ inherit pythonnative
 inherit pkgconfig
 inherit gettext
 # --without-selinux: Don't use selinux support
-EXTRA_OECONF += "--host=${HOST_SYS} \
-		--program-prefix= \
-		--prefix=${prefix} \
-		--exec-prefix=${prefix} \
-		--bindir=${prefix}/bin \
-		--sbindir=${prefix}/sbin \
-		--sysconfdir=${sysconfdir} \
-		--datadir=${prefix}/share \
-		--includedir=${prefix}/include \
-		--libdir=${prefix}/lib \
-		--libexecdir=${prefix}/libexec \
-		--localstatedir=${localstatedir} \
-		--sharedstatedir=${prefix}/com \
-		--mandir=${mandir} \
-		--infodir=${infodir} \
+EXTRA_OECONF += "--program-prefix= \
 		--disable-dependency-tracking \
 		--with-acl \
 		--without-lua \
