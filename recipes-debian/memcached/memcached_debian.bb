@@ -44,5 +44,5 @@ do_install_append() {
 	rm ${D}${datadir}/memcached/scripts/memcached.sysv
 	rm ${D}${datadir}/memcached/scripts/memcached.service
 }
-FILES_${PN} += "${base_libdir}/*"
+FILES_${PN} += "${systemd_system_unitdir}"
 PARALLEL_MAKE = ""
