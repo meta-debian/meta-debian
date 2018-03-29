@@ -126,8 +126,8 @@ do_install_append_class-native() {
 
 	rm -f ${D}${prefix}/lib/*.la
 	rm -f ${D}${prefix}/lib/rpm-plugins/*.la
-	rm -f ${D}/${libdir}/python%{with_python_version}/site-packages/*.{a,la}
-	rm -f ${D}/${libdir}/python%{with_python_version}/site-packages/rpm/*.{a,la}
+	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/*.{a,la}
+	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/rpm/*.{a,la}
 	rm -fr ${D}/var
 	install -d ${D}${prefix}/lib/rpm/bin
 	ln -s ../debugedit ${D}${prefix}/lib/rpm/bin/debugedit
@@ -171,9 +171,9 @@ FILES_rpm-common = "${libdir}/rpm-plugins/* \
                     ${libdir}/rpm/macro* \
                     ${libdir}/rpm/rpmrc"
 FILES_rpm2cpio = "${bindir}/rpm2cpio"
-FILES_python-rpm = "${libdir}/python${PYTHON_BASEVERSION}/*/rpm/*"
+FILES_python-rpm = "${PYTHON_SITEPACKAGES_DIR}/rpm/*"
 FILES_${PN}-dbg += "${libdir}/rpm-plugins/.debug \
-                    ${libdir}/python${PYTHON_BASEVERSION}/*/rpm/.debug"
+                    ${PYTHON_SITEPACKAGES_DIR}/rpm/.debug"
 
 DEBIANNAME_${PN}-dev = "librpm-dev"
 DEBIANNAME_${PN}-dbg = "librpm-dbg"

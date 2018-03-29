@@ -27,11 +27,14 @@ export DEB_HOST_MULTIARCH
 
 do_install_append() {
 	# remove unwanted files
-	find ${D}${libdir} -type f -name "*.pyc" -exec rm -f {} \;
+	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
 	rm -rf ${D}${datadir}
 	
 }
 do_install_append_class-native() {
 	create_wrapper ${D}${bindir}/scons SCONS_LIB_DIR='${STAGING_DIR_HOST}/${PYTHON_SITEPACKAGES_DIR}'
 }
+
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}"
+
 BBCLASSEXTEND = "native"
