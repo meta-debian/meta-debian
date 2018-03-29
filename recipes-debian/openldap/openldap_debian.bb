@@ -226,8 +226,8 @@ do_install_append() {
 	for i in ${SLAPTOOLS}; do ln -sf slapd $i; done
 	
 	rmdir "${D}${localstatedir}/run"
-	mv ${D}${libdir}/openldap/openldap/* ${D}${nonarch_libdir}/ldap
-	rm -rf ${D}${libdir}/openldap
+	mv ${D}${libexecdir}/openldap/* ${D}${nonarch_libdir}/ldap
+	rm -rf ${D}${libexecdir}
 	
 	#Correct the permission of files follow Debian jessie
 	chmod 0644 ${D}${nonarch_libdir}/ldap/*.la
