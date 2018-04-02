@@ -16,6 +16,8 @@ DEPENDS += "libhx pkgconfig libpam cryptsetup libxml2"
 LICENSE = "GPL-3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ff88ed2ef97e3905a92cd1c331bbe42"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit autotools
 
 PV = "2.14"
@@ -36,9 +38,13 @@ do_install_append(){
 
 FILES_${PN}-dbg += "${base_libdir}/security/.debug/*"
 FILES_${PN}-dev += "${base_libdir}/pkgconfig/libcryptmount.pc"
+
+# PAM_MODDIR = ${slibdir}/security
+# slibdir is "/lib" by default and does not depend on ${base_libdir},
+# so do not use ${base_libdir} to ship it.
 FILES_${PN} += "\
 	${datadir}/xml/pam_mount/dtd/pam_mount.conf.xml.dtd \
-	${base_libdir}/security/pam_mount.so \
+	/lib/security/pam_mount.so \
 	${datadir}/lintian/overrides/libpam-mount \
 	${datadir}/pam-configs/libpam-mount \
 	"

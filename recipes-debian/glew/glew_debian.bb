@@ -37,7 +37,7 @@ do_compile() {
 	# Add -fpic to avoid warning
 	# WARNING: QA Issue: ELF binary '.../libGLEW.so.1.10.0' has relocations in .text [textrel]
 	# WARNING: QA Issue: ELF binary '.../libGLEWmx.so.1.10.0' has relocations in .text [textrel]
-	oe_runmake LD='${CC}' CFLAGS.SO='-fpic' \
+	oe_runmake CC="${CC}" LD="${CC}" CFLAGS.SO="-fpic" \
 		GL_LDFLAGS=-lGL \
 		GLU_LDFLAGS=-lGLU \
 		GLUT_LDFLAGS=-lglut \

@@ -39,10 +39,10 @@ do_compile_prepend() {
 
 do_install_append() {
 	#remove these files conflicts with libftdi
-	rm -r ${D}${includedir} ${D}${bindir} ${D}${libdir}/pkgconfig
-	rm ${D}${libdir}/libftdi* 
+	rm -rf ${D}${includedir} ${D}${bindir} ${D}${libdir}/pkgconfig ${D}${libdir}/libftdi*
+	rmdir --ignore-fail-on-non-empty ${D}${libdir}
 }
 
-FILES_${PN}-dbg += "${libdir}/python2.7/dist-packages/.debug/*"
-FILES_${PN} = "${libdir}/python2.7/dist-packages/*"
+FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug/*"
+FILES_${PN} = "${PYTHON_SITEPACKAGES_DIR}/*"
 PKG_${PN} = "python-ftdi"
