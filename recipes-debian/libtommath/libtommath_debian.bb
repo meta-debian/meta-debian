@@ -13,6 +13,8 @@ SRC_URI += "\
         file://replace-group-wheel.patch \
 "
 
+KEEP_NONARCH_BASELIB = "1"
+
 EXTRA_OEMAKE += " LIBTOOL=${HOST_SYS}-libtool GCC=${HOST_SYS}-gcc"
 
 do_compile() {
