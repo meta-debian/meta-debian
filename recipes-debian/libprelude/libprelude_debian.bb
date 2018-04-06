@@ -41,6 +41,7 @@ SRC_URI += " \
     file://libprelude-fix-generate-perl-makefile.patch \
     file://libprelude-perl-build-with-gnu-hash.patch \
     file://libprelude-fix-uid-gid-conflicting-types.patch \
+    file://python-setup_py-install-prefix.patch \
 "
 
 inherit autotools-brokensep gettext cpan-base binconfig pkgconfig perlnative pythonnative distutils-base
