@@ -26,8 +26,7 @@ CACHED_CONFIGUREVARS += "am_cv_python_pythondir=${PYTHON_SITEPACKAGES_DIR} \
 
 inherit autotools gettext pythonnative python-dir
 
-export BUILD_SYS
-export HOST_SYS
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
 do_install_append_class-target() {

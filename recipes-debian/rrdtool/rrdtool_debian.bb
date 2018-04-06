@@ -25,8 +25,6 @@ DEPENDS += "libxml2 glib-2.0 pango tcl lua5.1-native lua5.1 perl libpng groff"
 DEBIAN_PATCH_TYPE = "quilt"
 
 #export some variable from poky, to use for python command
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

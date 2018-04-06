@@ -26,8 +26,6 @@ DEPENDS += " \
 	python libldap libcap-ng tcp-wrappers \
 	linux-libc-headers (>= 2.6.30) libprelude ${DPN}-native"
 
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

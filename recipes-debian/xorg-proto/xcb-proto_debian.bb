@@ -39,8 +39,7 @@ DEBIAN_PATCH_TYPE = "nopatch"
 
 inherit autotools pkgconfig pythonnative
 
-export BUILD_SYS
-export HOST_SYS
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
 PACKAGES += "python-xcbgen"

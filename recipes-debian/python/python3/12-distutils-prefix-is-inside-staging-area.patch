@@ -2,21 +2,6 @@ diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
 index 917d0ce..7e72791 100644
 --- a/Lib/distutils/sysconfig.py
 +++ b/Lib/distutils/sysconfig.py
-@@ -16,10 +16,10 @@ import sys
- from .errors import DistutilsPlatformError
- 
- # These are needed in a couple of spots, so just compute them once.
--PREFIX = os.path.normpath(sys.prefix)
--EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
--BASE_PREFIX = os.path.normpath(sys.base_prefix)
--BASE_EXEC_PREFIX = os.path.normpath(sys.base_exec_prefix)
-+PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
-+EXEC_PREFIX = os.path.normpath(sys.exec_prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
-+BASE_PREFIX = os.path.normpath(sys.base_prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
-+BASE_EXEC_PREFIX= os.path.normpath(sys.base_exec_prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
- 
- # Path to the base directory of the project. On Windows the binary may
- # live in project/PCBuild9.  If we're dealing with an x64 Windows build,
 @@ -93,7 +93,9 @@ def get_python_inc(plat_specific=0, prefix=None):
      If 'prefix' is supplied, use it instead of sys.base_prefix or
      sys.base_exec_prefix -- i.e., ignore 'plat_specific'.
@@ -39,21 +24,9 @@ index 917d0ce..7e72791 100644
          if standard_lib:
              prefix = plat_specific and BASE_EXEC_PREFIX or BASE_PREFIX
          else:
-@@ -263,7 +271,7 @@ def get_config_h_filename():
-     else:
-         inc_dir = get_python_inc(plat_specific=1)
- 
--    return os.path.join(inc_dir, 'pyconfig.h')
-+    return os.path.join(inc_dir, 'pyconfig.h'.replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") ))
- 
- 
- def get_makefile_filename():
-@@ -274,10 +274,10 @@ def get_makefile_filename():
-     """Return full pathname of installed Makefile from the Python build."""
-     if python_build:
+@@ -274,6 +274,6 @@ def get_makefile_filename():
          return os.path.join(_sys_home or project_base, "Makefile")
--    lib_dir = get_python_lib(plat_specific=0, standard_lib=1)
-+    lib_dir = get_python_lib(plat_specific=0, standard_lib=1).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
+     lib_dir = get_python_lib(plat_specific=0, standard_lib=1)
      config_file = 'config-{}{}'.format(get_python_version(), build_flags)
 -    if hasattr(sys.implementation, '_multiarch'):
 -        config_file += '-%s' % sys.implementation._multiarch

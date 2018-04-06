@@ -38,8 +38,6 @@ EXTRA_OECMAKE = " \
 EXTRA_OECMAKE += "-DWITH_WEBKIT=OFF -DWITH_WEBKIT3=OFF -DWITH_KDE4=OFF -DWITH_MOZJS=OFF"
 
 # need to export these variables for python-config to work
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

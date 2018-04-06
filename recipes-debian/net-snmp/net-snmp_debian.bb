@@ -107,8 +107,6 @@ DISTUTILS_INSTALL_ARGS = " \
     --basedir=${S} \
 "
 export LDSHARED="${CCLD} -shared"
-export HOST_SYS
-export BUILD_SYS
 export DEB_HOST_MULTIARCH
 
 do_compile_append() {
@@ -118,7 +116,6 @@ do_compile_append() {
 	cd ${S}/python
 	STAGING_INCDIR=${STAGING_INCDIR} \
 	STAGING_LIBDIR=${STAGING_LIBDIR} \
-	BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 	${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py build ${DISTUTILS_BUILD_ARGS}
 
 	cd $olddir
@@ -133,7 +130,6 @@ do_install_append() {
 	STAGING_INCDIR=${STAGING_INCDIR} \
 		STAGING_LIBDIR=${STAGING_LIBDIR} \
 		PYTHONPATH=${D}${PYTHON_SITEPACKAGES_DIR} \
-		BUILD_SYS=${BUILD_SYS} HOST_SYS=${HOST_SYS} \
 		${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py install ${DISTUTILS_INSTALL_ARGS}
 
 	find ${D} -name *.pyc -delete

@@ -35,8 +35,6 @@ DEPENDS += " flex-native python bison-native swig-native apache2 \
 # These are needed for --with-python
 export STAGING_INCDIR
 export STAGING_LIBDIR
-export BUILD_SYS
-export HOST_SYS
 export DEB_HOST_MULTIARCH
 
 # These are needed for --with-perl

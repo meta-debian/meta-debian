@@ -23,8 +23,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=33ab1ce13e2312dddfad07f97f66321f"
 inherit setuptools pkgconfig update-alternatives
 
 # Required by python command
-export HOST_SYS
-export BUILD_SYS
 export DEB_HOST_MULTIARCH
 # prevent host contamination and add ${STAGING_INCDIR} \
 # using UWSGI_INCLUDES environment variable to detect include paths:

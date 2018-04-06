@@ -95,8 +95,6 @@ do_configure () {
         # configure cannot find sechash.h by default
         export CPPFLAGS="-I${STAGING_INCDIR_NATIVE} -I${STAGING_INCDIR_NATIVE}/nss3"
         # set some variables so python can see Python.h header
-        export BUILD_SYS=${BUILD_SYS}
-        export HOST_SYS=${HOST_SYS}
         export STAGING_INCDIR=${STAGING_INCDIR}
         export STAGING_LIBDIR=${STAGING_LIBDIR}
 	export DEB_HOST_MULTIARCH=${DEB_HOST_MULTIARCH}
