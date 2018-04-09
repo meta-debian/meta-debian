@@ -21,6 +21,8 @@ PV = "0.14"
 DPN = "pyopenssl"
 
 inherit allarch setuptools
+# required by distutils/sysconfig.py to get config dir
+export DEB_HOST_MULTIARCH
 
 RDEPENDS_${PN} += "python-cryptography python-six"
 
