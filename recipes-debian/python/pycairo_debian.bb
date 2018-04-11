@@ -13,15 +13,18 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=f2e071ab72978431b294a0d696327421 \
 DEPENDS = "cairo"
 PR = "r1"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit distutils pkgconfig
 
 export DEB_HOST_MULTIARCH
 
 do_install_append () {
-	mv ${D}${datadir}/lib/* ${D}${libdir}
+	mv ${D}${datadir}/lib/* ${D}${libdir}/
 	mv ${D}${datadir}/include ${D}${prefix}
 	rm -rf ${D}${datadir}
 	sed -i -e 's#prefix=.*#prefix=${prefix}#' ${D}${libdir}/pkgconfig/pycairo.pc
+	chrpath -d ${D}${PYTHON_SITEPACKAGES_DIR}/cairo/_cairo.so
 }
 
 PKG_${PN} = "python-cairo"
