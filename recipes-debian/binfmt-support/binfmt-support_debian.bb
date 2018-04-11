@@ -21,7 +21,7 @@ DEBIAN_QUILT_PATCHES = ""
 inherit autotools pkgconfig
 
 EXTRA_OECONF = " \
-    --libexecdir=${libdir} \
+    --libexecdir=${nonarch_libdir} \
     --with-systemdsystemunitdir=${systemd_system_unitdir} \
 "
 
