@@ -37,7 +37,7 @@ do_install_append() {
 	        -d ${D}${sysconfdir}/init.d \
 	        -d ${D}${sysconfdir}/dnsmasq.d \
 	        -d ${D}${sysconfdir}/resolvconf/update.d \
-	        -d ${D}${libdir}/resolvconf/dpkg-event.d \
+	        -d ${D}${nonarch_libdir}/resolvconf/dpkg-event.d \
 	        -d ${D}${sysconfdir}/default \
 	        -d ${D}${systemd_system_unitdir} \
 	        -d ${D}${sysconfdir}/insserv.conf.d \
@@ -50,7 +50,7 @@ do_install_append() {
 	install -m 755 ${S}/debian/resolvconf \
 	               ${D}${sysconfdir}/resolvconf/update.d/dnsmasq
 	install -m 755 ${S}/debian/resolvconf-package \
-	               ${D}${libdir}/resolvconf/dpkg-event.d/dnsmasq
+	               ${D}${nonarch_libdir}/resolvconf/dpkg-event.d/dnsmasq
 	install -m 644 ${S}/debian/default \
 	               ${D}${sysconfdir}/default/dnsmasq
 	install -m 644 ${S}/dnsmasq.conf.example \
@@ -94,7 +94,7 @@ FILES_${PN}-base = "\
 	${datadir}/${DPN}-base/trust-anchors.conf \
 	"
 FILES_${PN}-utils = "${bindir}/*"
-FILES_${PN} += "${libdir}/* ${systemd_system_unitdir}"
+FILES_${PN} += "${nonarch_libdir}/* ${systemd_system_unitdir}"
 
 RDEPENDS_${PN} += "${PN}-base netbase init-system-helpers"
 RDEPENDS_${PN}-base += "adduser"
