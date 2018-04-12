@@ -125,6 +125,7 @@ do_install_append() {
 }
 PACKAGES =+ "lib${DPN}"
 PKG_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 FILES_${PN}-bin = "\
 	${base_sbindir}/cryptsetup ${base_sbindir}/cryptsetup-reencrypt 	\
@@ -142,8 +143,11 @@ FILES_${PN} += "${datadir}/bug ${datadir}/initramfs-tools 			\
 	${base_libdir}/cryptsetup/*						\
 	"
 #follow debian/control
-RDEPENDS_${PN} += "dmsetup cryptsetup-bin"
+RDEPENDS_${PN} += "dmsetup ${PN}-bin"
 RREPLACES_${PN} += "hashalot"
 RREPLACES_${PN}-bin += "${PN}"
 RDEPENDS_lib${DPN} += "libgpg-error libgcrypt"
 RDEPENDS_lib${DPN}-dev += "lib${DPN}4"
+
+PKG_lib${DPN} = "lib${DPN}4"
+RPROVIDES_lib${DPN} += "lib${DPN}4"
