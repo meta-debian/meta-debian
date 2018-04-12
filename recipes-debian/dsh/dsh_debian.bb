@@ -20,13 +20,13 @@ EXTRA_OECONF += "--sysconfdir=${sysconfdir}/${DPN} --mandir=${mandir}"
 
 #install follow Debian jessie
 do_install_append() {
-	install -d ${D}${libdir}/update-cluster
+	install -d ${D}${nonarch_libdir}/update-cluster
 	install -d ${D}${sysconfdir}/${DPN}/group
 	install -d ${D}${datadir}/locale/ja/LC_MESSAGES/
 
 	install -m 0644 ${S}/debian/machines.list ${D}${sysconfdir}/${DPN}/
 	ln -s ../machines.list ${D}${sysconfdir}/${DPN}/group/all
-	install -m 0755 ${S}/debian/dsh.updatelist ${D}${libdir}/update-cluster/
+	install -m 0755 ${S}/debian/dsh.updatelist ${D}${nonarch_libdir}/update-cluster/
 	install -m 0644 ${S}/po/ja.gmo ${D}${datadir}/locale/ja/LC_MESSAGES/dsh.mo	
 }
-FILES_${PN} += "${libdir}/* ${datadir}/locale/*"
+FILES_${PN} += "${nonarch_libdir}/* ${datadir}/locale/*"
