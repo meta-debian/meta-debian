@@ -13,6 +13,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=3b3c74375e67e92756770b3ee9debc5f \
                     file://lib/readdir.c;endline=47;md5=302a4cfe73766648336760988ae36035"
 DEPENDS = "apr confuse libpcre python rrdtool libtool"
 
+KEEP_NONARCH_BASELIB = "1"
+
 # Follow debian/rules
 EXTRA_OECONF += "--sysconfdir=${sysconfdir}/${DPN} --enable-shared --with-gmetad"
 
