@@ -27,17 +27,18 @@ do_configure() {
 #install follow debian jessie
 do_install_append() {
 	install -d ${D}${base_bindir}
-	install -d ${D}${base_libdir}/udev/rules.d
-	install -d ${D}${base_libdir}/modules-load.d
+	install -d ${D}${base_libdir}
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
+	install -d ${D}${nonarch_base_libdir}/modules-load.d
 	install -d ${D}${datadir}/initramfs-tools/hooks
 	
 	install -m 0755 ${S}/util/fusermount ${D}${base_bindir}
 	install -m 0755 ${S}/util/ulockmgr_server ${D}${base_bindir}
 	
 	install -m 0644 ${S}/debian/fuse.udev \
-		${D}${base_libdir}/udev/rules.d/60-fuse.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-fuse.rules
 	install -m 0644 ${S}/debian/local/fuse.kmod \
-		${D}${base_libdir}/modules-load.d/fuse.conf
+		${D}${nonarch_base_libdir}/modules-load.d/fuse.conf
 	install -m 0644 ${S}/debian/local/fuse.conf ${D}${sysconfdir}/fuse.conf
 	
 	install -m 0644 ${S}/debian/local/fuse.hook \
@@ -71,4 +72,4 @@ PKG_lib${DPN} = "lib${DPN}2"
 FILES_lib${DPN} = "${base_libdir}/*.so.*"
 FILES_${PN} += "\
 		${datadir}/initramfs-tools/hooks/fuse \
-		${base_libdir}/modules-load.d/fuse.conf"
+		${nonarch_base_libdir}/modules-load.d/fuse.conf"
