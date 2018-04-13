@@ -34,13 +34,13 @@ do_compile_append () {
 
 #install follow Debian jessies
 do_install_append() {
-	install -d ${D}${libdir}/geoip
+	install -d ${D}${nonarch_libdir}/geoip
 	install -m 0755 ${S}/debian/src/geoip-generator \
-			${D}${libdir}/geoip/
+			${D}${nonarch_libdir}/geoip/
 	install -m 0755 ${S}/debian/src/geoip-generator-asn \
-                        ${D}${libdir}/geoip/
+                        ${D}${nonarch_libdir}/geoip/
 	install -m 0755 ${S}/debian/src/v4-to-v6-layout.pl \
-			${D}${libdir}/geoip/
+			${D}${nonarch_libdir}/geoip/
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libGeoIP.so))
 	chmod 0644 ${D}${libdir}/${LINKLIB}
 	rm ${D}${libdir}/libGeoIP.la		
