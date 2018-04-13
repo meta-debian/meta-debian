@@ -43,7 +43,7 @@ EXTRA_OECONF_libc-uclibc = "--without-included-regex"
 EXTRA_OECONF += " \
 	--localstatedir='${localstatedir}/cache/locate' \
 	--enable-d_type-optimisation \
-	--libexecdir='${libdir}/locate' \
+	--libexecdir='${nonarch_libdir}/locate' \
 "
 
 do_install_append(){
@@ -62,7 +62,7 @@ PACKAGES =+ "locate"
 FILES_locate = " \
 	${sysconfdir} \
 	${bindir}/*.${DPN} \
-	${libdir}/locate/* \
+	${nonarch_libdir}/locate/* \
 	${localstatedir}/cache/locate \
 "
 FILES_${PN}-dbg += "${libdir}/locate/.debug"
