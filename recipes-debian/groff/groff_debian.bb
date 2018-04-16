@@ -26,6 +26,8 @@ LIC_FILES_CHKSUM = "\
 	file://src/devices/xditview/README;md5=b5638dfaf6c432022c8a2fbca76eb41d \
 	file://tmac/doc.tmac;beginline=1;endline=28;md5=6ea1a309490948cb2b294971734b30b1"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit autotools-brokensep
 
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
