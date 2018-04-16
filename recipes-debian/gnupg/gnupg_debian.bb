@@ -19,7 +19,7 @@ inherit autotools gettext
 
 DEPENDS = "zlib bzip2 readline"
 
-EXTRA_OECONF = "--libexecdir=${libdir} \
+EXTRA_OECONF = "--libexecdir=${nonarch_libdir} \
                 --enable-mailto \
                 --with-mailprog=${sbindir}sendmail \
                 --enable-large-secmem \
