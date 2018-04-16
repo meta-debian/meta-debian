@@ -19,8 +19,8 @@ inherit autotools
 PACKAGE_ARCH = "all"
 
 do_install_append() {
-	install -d ${D}${libdir}/mime/packages
-	install -m 0644 ${S}/debian/mime ${D}${libdir}/mime/packages/sensible-utils
+	install -d ${D}${nonarch_libdir}/mime/packages
+	install -m 0644 ${S}/debian/mime ${D}${nonarch_libdir}/mime/packages/sensible-utils
 }
 
-FILES_${PN} += "${libdir}/mime"
+FILES_${PN} += "${nonarch_libdir}/mime"

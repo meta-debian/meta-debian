@@ -181,9 +181,9 @@ do_install() {
 	ln -s entrez2 ${D}${bindir}/entrez
 	ln -s Psequin ${D}${bindir}/sequin
 
-	install -d ${D}${libdir}/mime/packages
+	install -d ${D}${nonarch_libdir}/mime/packages
 	install -m 0644 ${S}/debian/ncbi-tools-x11.mime \
-		${D}${libdir}/mime/packages/ncbi-tools-x11
+		${D}${nonarch_libdir}/mime/packages/ncbi-tools-x11
 	
 }
 
@@ -224,7 +224,7 @@ FILES_ncbi-tools-x11 = "${bindir}/Cn3D-3.0 \
                         ${bindir}/sbtedit \
                         ${bindir}/udv \
                         ${bindir}/sequin \
-                        ${libdir}/mime \
+                        ${nonarch_libdir}/mime \
                         ${datadir}/applications"
 
 PKG_${PN} = "ncbi-tools-bin"

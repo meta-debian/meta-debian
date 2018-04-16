@@ -33,7 +33,7 @@ do_install_append() {
 	install -D debian/conf/50cyrtexinfo.cnf ${D}/${sysconfdir}/texmf/fmt.d/50cyrtexinfo.cnf
 	ln -sf install-info ${D}${bindir}/ginstall-info
 	install -m 0755 ${S}/util/txixml2texi ${D}/${bindir}/txixml2texi
-	install -D ${S}/debian/info.mime ${D}/${libdir}/mime/packages/info
+	install -D ${S}/debian/info.mime ${D}${nonarch_libdir}/mime/packages/info
 	install -D -m 0755 ${S}/debian/update-info-dir ${D}/${sbindir}/update-info-dir
 	install -D ${S}/debian/info.menu ${D}/${datadir}/menu/info
 	mkdir -p ${D}/${datadir}/texmf/tex/texinfo
@@ -46,6 +46,6 @@ PACKAGES =+ "info install-info"
 
 FILES_install-info += "${sbindir} ${bindir}/install-info ${bindir}/ginstall-info"
 
-FILES_info += "${bindir}/info ${bindir}/infokey ${libdir}/mime ${datadir}/menu"
+FILES_info += "${bindir}/info ${bindir}/infokey ${nonarch_libdir}/mime ${datadir}/menu"
 
 FILES_${PN} += "${datadir}/texmf ${datadir}/texinfo ${datadir}/doc ${datadir}/locale"
