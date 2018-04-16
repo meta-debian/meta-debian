@@ -42,9 +42,9 @@ do_install_append() {
 	install -m 0755 ${S}/vendor/common/ocfs2.init \
 		${D}${sysconfdir}/init.d/ocfs2
 
-	install -d ${D}${base_libdir}/udev/rules.d
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
 	install -m 0644 ${S}/vendor/common/51-ocfs2.rules \
-		${D}${base_libdir}/udev/rules.d
+		${D}${nonarch_base_libdir}/udev/rules.d
 
 	install -d ${D}${datadir}/pyshared/ocfs2interface
 	install -m 0644 ${S}/ocfs2console/ocfs2interface/*.py \

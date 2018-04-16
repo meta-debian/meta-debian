@@ -180,15 +180,15 @@ do_install_append() {
 	for script in dsl-modem.agent logger.agent net.agent \
 	              udev-finish write_net_rules; do
 		install -m 0755 ${S}/debian/extra/${script} \
-			${D}${base_libdir}/udev
+			${D}${nonarch_base_libdir}/udev
 	done
 	for funcs in hotplug rule_generator; do
 		install -m 0644 ${S}/debian/extra/${funcs}.functions \
-			${D}${base_libdir}/udev
+			${D}${nonarch_base_libdir}/udev
 	done
 	for rules in 73-idrac 75-persistent-net-generator 80-networking; do
 		install -m 0644 ${S}/debian/extra/rules/${rules}.rules \
-			${D}${base_libdir}/udev/rules.d/
+			${D}${nonarch_base_libdir}/udev/rules.d/
 	done
 	install -d ${D}${base_sbindir}
 	ln -s ${base_bindir}/udevadm ${D}${base_sbindir}
@@ -257,7 +257,7 @@ FILES_${PN} = "${base_bindir} \
               "
 FILES_${PN}-dbg += "${systemd_unitdir}/.debug \
                     ${systemd_unitdir}/system-generators/.debug \
-                    ${base_libdir}/udev/.debug \
+                    ${nonarch_base_libdir}/udev/.debug \
                     ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '${base_libdir}/security/.debug/pam_systemd.so', '', d)} \
                     ${PYTHON_SITEPACKAGES_DIR}/systemd/.debug \
                    "
@@ -294,32 +294,32 @@ FILES_udev = "${base_bindir}/udevadm \
               ${systemd_system_unitdir}/udev-finish.service \
               ${systemd_system_unitdir}/udev.service \
               ${systemd_unitdir}/systemd-udevd \
-              ${base_libdir}/udev/accelerometer \
-              ${base_libdir}/udev/ata_id \
-              ${base_libdir}/udev/cdrom_id \
-              ${base_libdir}/udev/collect \
-              ${base_libdir}/udev/dsl-modem.agent \
-              ${base_libdir}/udev/hotplug.functions \
-              ${base_libdir}/udev/hwdb.d \
-              ${base_libdir}/udev/logger.agent \
-              ${base_libdir}/udev/mtd_probe \
-              ${base_libdir}/udev/net.agent \
-              ${base_libdir}/udev/rule_generator.functions \
-              ${base_libdir}/udev/rules.d/42-usb-hid-pm.rules \
-              ${base_libdir}/udev/rules.d/50-* \
-              ${base_libdir}/udev/rules.d/60-* \
-              ${base_libdir}/udev/rules.d/61-accelerometer.rules \
-              ${base_libdir}/udev/rules.d/64-btrfs.rules \
-              ${base_libdir}/udev/rules.d/70-power-switch.rules \
-              ${base_libdir}/udev/rules.d/73-idrac.rules \
-              ${base_libdir}/udev/rules.d/75-* \
-              ${base_libdir}/udev/rules.d/78-sound-card.rules \
-              ${base_libdir}/udev/rules.d/80-* \
-              ${base_libdir}/udev/rules.d/95-udev-late.rules \
-              ${base_libdir}/udev/scsi_id \
-              ${base_libdir}/udev/udev-finish \
-              ${base_libdir}/udev/v4l_id \
-              ${base_libdir}/udev/write_net_rules \
+              ${nonarch_base_libdir}/udev/accelerometer \
+              ${nonarch_base_libdir}/udev/ata_id \
+              ${nonarch_base_libdir}/udev/cdrom_id \
+              ${nonarch_base_libdir}/udev/collect \
+              ${nonarch_base_libdir}/udev/dsl-modem.agent \
+              ${nonarch_base_libdir}/udev/hotplug.functions \
+              ${nonarch_base_libdir}/udev/hwdb.d \
+              ${nonarch_base_libdir}/udev/logger.agent \
+              ${nonarch_base_libdir}/udev/mtd_probe \
+              ${nonarch_base_libdir}/udev/net.agent \
+              ${nonarch_base_libdir}/udev/rule_generator.functions \
+              ${nonarch_base_libdir}/udev/rules.d/42-usb-hid-pm.rules \
+              ${nonarch_base_libdir}/udev/rules.d/50-* \
+              ${nonarch_base_libdir}/udev/rules.d/60-* \
+              ${nonarch_base_libdir}/udev/rules.d/61-accelerometer.rules \
+              ${nonarch_base_libdir}/udev/rules.d/64-btrfs.rules \
+              ${nonarch_base_libdir}/udev/rules.d/70-power-switch.rules \
+              ${nonarch_base_libdir}/udev/rules.d/73-idrac.rules \
+              ${nonarch_base_libdir}/udev/rules.d/75-* \
+              ${nonarch_base_libdir}/udev/rules.d/78-sound-card.rules \
+              ${nonarch_base_libdir}/udev/rules.d/80-* \
+              ${nonarch_base_libdir}/udev/rules.d/95-udev-late.rules \
+              ${nonarch_base_libdir}/udev/scsi_id \
+              ${nonarch_base_libdir}/udev/udev-finish \
+              ${nonarch_base_libdir}/udev/v4l_id \
+              ${nonarch_base_libdir}/udev/write_net_rules \
               ${sysconfdir}/init.d \
               ${sysconfdir}/modprobe.d \
               ${sysconfdir}/udev/udev.conf \

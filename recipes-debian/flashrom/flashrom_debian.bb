@@ -28,8 +28,8 @@ inherit autotools-brokensep
 DEPENDS += "pciutils"
 EXTRA_OEMAKE += "PREFIX=${prefix}"
 do_install_append() {
-	install -d ${D}${base_libdir}/udev/rules.d
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
 	install -m 0644 ${S}/util/z60_flashrom.rules \
-		${D}${base_libdir}/udev/rules.d/60-flashrom.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-flashrom.rules
 }
 PARALLEL_MAKE = ""

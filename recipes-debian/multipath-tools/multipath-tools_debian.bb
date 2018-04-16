@@ -32,11 +32,11 @@ do_install() {
 		${D}${sysconfdir}/init.d/multipath-tools
 	install -m 0755 ${S}/debian/multipath-tools.multipath-tools-boot.init \
 		${D}${sysconfdir}/init.d/multipath-tools-boot
-	install -m 0755 ${S}/debian/dmsetup_env ${D}${base_libdir}/udev/
+	install -m 0755 ${S}/debian/dmsetup_env ${D}${nonarch_base_libdir}/udev/
 	install -D -m 0644 ${S}/kpartx/kpartx.rules \
-		${D}${base_libdir}/udev/rules.d/60-kpartx.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-kpartx.rules
 	install -m 0644 ${S}/debian/multipath.udev \
-		${D}${base_libdir}/udev/rules.d/60-multipath.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-multipath.rules
 	
 	# initramfs stuff:
 	install -D -m 755 ${S}/debian/initramfs/hooks \
@@ -60,9 +60,9 @@ do_install() {
 PACKAGES =+ "kpartx ${PN}-boot"
 
 FILES_kpartx = "\
-	${base_libdir}/udev/kpartx ${base_libdir}/udev/kpartx_id \
-	${base_libdir}/udev/rules.d/60-kpartx.rules ${base_sbindir}/kpartx \
-	${base_libdir}/udev/dmsetup_env \
+	${nonarch_base_libdir}/udev/kpartx ${nonarch_base_libdir}/udev/kpartx_id \
+	${nonarch_base_libdir}/udev/rules.d/60-kpartx.rules ${base_sbindir}/kpartx \
+	${nonarch_base_libdir}/udev/dmsetup_env \
 "
 FILES_${PN} += "\
 	${datadir}/bug/multipath-tools ${base_libdir}/multipath \

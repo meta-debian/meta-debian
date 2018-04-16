@@ -31,12 +31,12 @@ do_compile() {
 # Follow debian/rules
 do_install() {
 	oe_runmake install install-static PREFIX=${D}
-	install -d ${D}${libdir}
-	install -d ${D}${base_libdir}/udev
+	install -d ${D}${libdir} ${D}${base_libdir}
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/network/if-pre-up.d
 	install -d ${D}${sysconfdir}/network/if-post-down.d
-	install -m 0755 19-udev-ifrename.rules ${D}${base_libdir}/udev/19-ifrename.rules
+	install -m 0755 19-udev-ifrename.rules ${D}${nonarch_base_libdir}/udev/rules.d/19-ifrename.rules
 	mv ${D}/lib/libiw.so.30 ${D}${base_libdir}/
 	mv ${D}/lib/libiw.a ${D}${libdir}/
 	unlink ${D}/lib/libiw.so
@@ -50,6 +50,6 @@ do_install() {
 #Ship paackges follow Debian
 PACKAGES =+ "ifrename libiw-dev libiw"
 
-FILES_ifrename = "${sysconfdir}/init.d ${base_libdir}/udev ${base_sbin}/ifrename"
+FILES_ifrename = "${sysconfdir}/init.d ${nonarch_base_libdir}/udev ${base_sbin}/ifrename"
 FILES_libiw-dev = "${includedir} ${libdir}/*.so"
 FILES_libiw = "${base_libdir}/libiw.so.30"
