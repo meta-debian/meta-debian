@@ -57,7 +57,7 @@ do_install() {
 	oe_runmake install-pywrap \
 	    DESTDIR="${D}" \
 	    PYLIBVER="python${PYTHON_BASEVERSION}" \
-	    PYLIBDIR="${D}/${libdir}/${PYTHON_DIR}"
+	    PYLIBDIR="${D}/${nonarch_libdir}/${PYTHON_DIR}"
 	# Fix up the broken library symlink
 	rm -f ${D}${libdir}/libselinux.so
 	rel_lib_prefix=`echo ${libdir} | sed 's,\(^/\|\)[^/][^/]*,..,g'`
@@ -67,6 +67,11 @@ do_install() {
 	if [ -d ${D}${base_sbindir} ]; then
 		rmdir ${D}${base_sbindir}
 	fi
+
+	# According to debian/python.mk
+	# Fix the python library directory path
+	mv ${D}${nonarch_libdir}/${PYTHON_DIR}/site-packages \
+	   ${D}${PYTHON_SITEPACKAGES_DIR}
 }
 
 # Add package follow debian
