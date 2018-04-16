@@ -28,10 +28,10 @@ do_compile() {
 
 do_install() {
 	install -d ${D}${sysconfdir}/apache2/mods-available \
-	           ${D}${libdir}/apache2/modules
-	cp ${S}/.libs/mod_authnz_external.so ${D}${libdir}/apache2/modules/
+	           ${D}${nonarch_libdir}/apache2/modules
+	cp ${S}/.libs/mod_authnz_external.so ${D}${nonarch_libdir}/apache2/modules/
 	cp ${S}/debian/authnz_external.load ${D}${sysconfdir}/apache2/mods-available/
 }
 
-FILES_${PN} += "${libdir}/apache2/modules/*"
-FILES_${PN}-dbg += "${libdir}/apache2/modules/.debug"
+FILES_${PN} += "${nonarch_libdir}/apache2/modules/*"
+FILES_${PN}-dbg += "${nonarch_libdir}/apache2/modules/.debug"
