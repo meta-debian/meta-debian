@@ -52,7 +52,7 @@ do_install_append(){
 	# Adding initramfs-tools integration
 	install -D -m 0755 ${S}/debian/local/plymouth.hook \
 	                   ${D}${datadir}/initramfs-tools/hooks/plymouth
-	sed -i -e 's|@DEB_HOST_MULTIARCH@||g' ${D}${datadir}/initramfs-tools/hooks/plymouth
+	sed -i -e 's|@DEB_HOST_MULTIARCH@|${DEB_HOST_MULTIARCH}|g' ${D}${datadir}/initramfs-tools/hooks/plymouth
 	install -D -m 0755 ${S}/debian/local/plymouth.init-premount \
 	                   ${D}${datadir}/initramfs-tools/scripts/init-premount/plymouth
 	install -D -m 0755 ${S}/debian/local/plymouth.init-bottom \
@@ -64,7 +64,7 @@ do_install_append(){
 	install -D -m 0755 ${S}/debian/local/plymouth-update-initrd \
 	                   ${D}${libdir}/plymouth/plymouth-update-initrd
 	install -D -m 0644 ${S}/debian/local/plymouth.lsb \
-	                   ${D}${base_libdir}/lsb/init-functions.d/99-plymouth
+	                   ${D}${nonarch_base_libdir}/lsb/init-functions.d/99-plymouth
 
 	install -D -m 0755 ${S}/debian/plymouth.init \
 	                   ${D}${sysconfdir}/init.d/plymouth
@@ -104,7 +104,7 @@ FILES_${PN}-staticdev += "${libdir}/plymouth/renderers/*.a"
 FILES_${PN} += "\
 	${systemd_system_unitdir}/* \
 	${datadir}/initramfs-tools/* \
-	${base_libdir}/lsb/* \
+	${nonarch_base_libdir}/lsb/* \
 	${datadir}/plymouth/themes/details/* \
 	${datadir}/plymouth/themes/text/* \
 	${datadir}/plymouth/themes/tribar/* \
