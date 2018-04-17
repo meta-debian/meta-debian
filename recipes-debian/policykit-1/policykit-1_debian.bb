@@ -15,7 +15,6 @@ inherit autotools pkgconfig
 SRC_URI += "file://disable-gtk-doc-and-introspection_debian.patch"
 
 EXTRA_OECONF += "--disable-examples \
-                 --libexecdir=${libdir}/${DPN} \
                  --with-os-type=debian \
                  ${@bb.utils.contains('DISTRO_FEATURES', 'pam', '--with-authfw=pam', '--with-authfw=shadow', d)} \
                  ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--enable-systemd', '--disable-systemd', d)}"
