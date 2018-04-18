@@ -18,6 +18,8 @@ LIC_FILES_CHKSUM = "\
 	file://COPYING;md5=4325afd396febcb659c36b49533135d4"
 inherit autotools
 
+KEEP_NONARCH_BASELIB = "1"
+
 #install follow Debian jessie
 do_install_append() {
 	install -d ${D}${libdir}/xapian-examples/examples
