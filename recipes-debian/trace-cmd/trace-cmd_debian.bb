@@ -20,6 +20,7 @@ EXTRA_OEMAKE = "\
 	'prefix=${prefix}' \
 	'bindir=${bindir}' \
 	'man_dir=${mandir}' \
+	'plugin_dir=${nonarch_libdir}/trace-cmd/plugins' \
 	'html_install=${datadir}/kernelshark/html' \
 	'img_install=${datadir}/kernelshark/html/images' \
 	\
@@ -29,7 +30,7 @@ EXTRA_OEMAKE = "\
 	NO_PYTHON=1 \
 "
 
-FILES_${PN}-dbg += "${libdir}/trace-cmd/plugins/.debug"
+FILES_${PN}-dbg += "${nonarch_libdir}/trace-cmd/plugins/.debug"
 
 do_install() {
 	oe_runmake DESTDIR="${D}" install
