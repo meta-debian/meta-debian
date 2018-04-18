@@ -21,6 +21,15 @@ USE_NLS = "yes"
 
 DEPENDS += "intltool-native libsndfile json-c openssl libasyncns"
 
+KEEP_NONARCH_BASELIB = "1"
+# According to debian/rules
+# Libs should be in the multi-arch path, but the modules should be in the
+# normal directory as pulseaudio is foreign
+EXTRA_OECONF = " \
+    --libdir=${libdir}/${DEB_HOST_MULTIARCH} \
+    --with-module-dir=${libdir}/pulse-${PV}/modules \
+"
+
 PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)} \
                    bluez5 bluez4 gconf avahi \
                    "
@@ -73,53 +82,53 @@ PACKAGES =+ "\
 	pulseaudio-module-zeroconf pulseaudio-utils"
 
 FILES_libpulse = "${sysconfdir}/pulse/client.conf \
-                  ${libdir}/libpulse-simple${SOLIBS} \
-                  ${libdir}/libpulse${SOLIBS} \
-                  ${libdir}/pulseaudio/libpulsecommon-5.0.so \
+                  ${libdir}/${DEB_HOST_MULTIARCH}/libpulse-simple${SOLIBS} \
+                  ${libdir}/${DEB_HOST_MULTIARCH}/libpulse${SOLIBS} \
+                  ${libdir}/${DEB_HOST_MULTIARCH}/pulseaudio/libpulsecommon-5.0.so \
                   "
 FILES_libpulse-dev = "${includedir}/pulse/* \
-                      ${libdir}/cmake/PulseAudio/*.cmake \
-                      ${libdir}/*.so \
-                      ${libdir}/pkgconfig \
+                      ${libdir}/${DEB_HOST_MULTIARCH}/cmake/PulseAudio/*.cmake \
+                      ${libdir}/${DEB_HOST_MULTIARCH}/*.so \
+                      ${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig \
                       ${datadir}/vala/* \
                       "
-FILES_libpulse-mainloop-glib = "${libdir}/libpulse-mainloop-glib${SOLIBS} \
+FILES_libpulse-mainloop-glib = "${libdir}/${DEB_HOST_MULTIARCH}/libpulse-mainloop-glib${SOLIBS} \
                                 "
-FILES_libpulsedsp = "${libdir}/pulseaudio/libpulsedsp.so \
+FILES_libpulsedsp = "${libdir}/${DEB_HOST_MULTIARCH}/pulseaudio/libpulsedsp.so \
                      "
 FILES_pulseaudio-esound-compat = "${bindir}/esd \
                                   ${bindir}/esdcompat \
-                                  ${libdir}/pulse-5.0/modules/libprotocol-esound.so \
-                                  ${libdir}/pulse-5.0/modules/module-esound-compat* \
-                                  ${libdir}/pulse-5.0/modules/module-esound-protocol* \
+                                  ${libdir}/pulse-${PV}/modules/libprotocol-esound.so \
+                                  ${libdir}/pulse-${PV}/modules/module-esound-compat* \
+                                  ${libdir}/pulse-${PV}/modules/module-esound-protocol* \
                                   "
-FILES_pulseaudio-module-bluetooth = "${libdir}/pulse-5.0/modules/libbluez4-util.so \
-                                     ${libdir}/pulse-5.0/modules/libbluez5-util.so \
-                                     ${libdir}/pulse-5.0/modules/module-blue* \
+FILES_pulseaudio-module-bluetooth = "${libdir}/pulse-${PV}/modules/libbluez4-util.so \
+                                     ${libdir}/pulse-${PV}/modules/libbluez5-util.so \
+                                     ${libdir}/pulse-${PV}/modules/module-blue* \
                                      "
-FILES_pulseaudio-module-gconf = "${libdir}/pulse-5.0/modules/module-gconf.so \
+FILES_pulseaudio-module-gconf = "${libdir}/pulse-${PV}/modules/module-gconf.so \
                                  ${libdir}/pulseaudio/pulse/gconf-helper \
                                  "
-FILES_pulseaudio-module-jack = "${libdir}/pulse-5.0/modules/module-jack* \
+FILES_pulseaudio-module-jack = "${libdir}/pulse-${PV}/modules/module-jack* \
                                 "
-FILES_pulseaudio-module-lirc = "${libdir}/pulse-5.0/modules/module-lirc.so \
+FILES_pulseaudio-module-lirc = "${libdir}/pulse-${PV}/modules/module-lirc.so \
                                 "
-FILES_pulseaudio-module-raop = "${libdir}/pulse-5.0/modules/libraop.so \
-                                ${libdir}/pulse-5.0/modules/module-raop* \
+FILES_pulseaudio-module-raop = "${libdir}/pulse-${PV}/modules/libraop.so \
+                                ${libdir}/pulse-${PV}/modules/module-raop* \
                                 "
-FILES_pulseaudio-module-x11 = "${libdir}/pulse-5.0/modules/module-x11* \
+FILES_pulseaudio-module-x11 = "${libdir}/pulse-${PV}/modules/module-x11* \
                                "
-FILES_pulseaudio-module-zeroconf = "${libdir}/pulse-5.0/modules/module-zeroconf* \
-                                    ${libdir}/pulse-5.0/modules/libavahi-wrap.so \
+FILES_pulseaudio-module-zeroconf = "${libdir}/pulse-${PV}/modules/module-zeroconf* \
+                                    ${libdir}/pulse-${PV}/modules/libavahi-wrap.so \
                                     "
 FILES_pulseaudio-utils = "${bindir}/pa* \
                           "
-FILES_${PN} += "${libdir}/pulse-5.0/modules/* \
-                ${libdir}/pulse-5.0/modules/module-esound-sink.so \
+FILES_${PN} += "${libdir}/pulse-${PV}/modules/* \
+                ${libdir}/pulse-${PV}/modules/module-esound-sink.so \
                 ${datadir}/alsa/* \
                 ${datadir}/apport/* \
                 ${datadir}/zsh/*"
-FILES_${PN}-dbg += "${libdir}/pulse-5.0/modules/.debug \
+FILES_${PN}-dbg += "${libdir}/pulse-${PV}/modules/.debug \
                     ${libdir}/pulseaudio/pulse/.debug"
 # Avoid QA issues:
 # 	do_package_qa: QA Issue: pulseaudio-esound-compat rdepends on libpulse-dev [dev-deps]
@@ -138,7 +147,8 @@ INSANE_SKIP_pulseaudio-module-bluetooth += "dev-deps"
 INSANE_SKIP_pulseaudio-module-gconf += "dev-deps"
 INSANE_SKIP_pulseaudio-module-zeroconf += "dev-deps"
 
-DEBIANNAME_libpulse = "libpulse0"
+PKG_libpulse = "libpulse0"
+PKG_libpulse-mainloop-glib = "libpulse-mainloop-glib0"
 RPROVIDES_libpulse += "libpulse0"
 RDEPENDS_${PN} += "lsb-base udev libpulse pulseaudio-utils"
 RDEPENDS_pulseaudio-utils += "libpulsedsp"
