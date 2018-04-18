@@ -14,6 +14,8 @@ LIC_FILES_CHKSUM = "\
     file://COPYING.GPLv3;md5=d32239bcb673463ab874e80d47fae504 \
     file://heartbeat/ocf-shellfuncs.in;beginline=6;endline=22;md5=59f0463ffb03c4e5a331f0a03106e440"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit autotools-brokensep pkgconfig
 DEPENDS += "cluster-glue glib-2.0 libnet libxslt"
 
