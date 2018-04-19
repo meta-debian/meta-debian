@@ -111,8 +111,8 @@ do_install_append() {
 	# manual craft
 	install -d -m 0755 ${D}${sysconfdir}/cluster
 
-	install -d -m 0755 ${D}${base_libdir}/udev/rules.d
-	mv ${D}${base_libdir}/udev/rules.d/51-dlm.rules ${D}${base_libdir}/udev/rules.d/45-dlm.rules
+	install -d -m 0755 ${D}${nonarch_base_libdir}/udev/rules.d
+	mv ${D}${nonarch_base_libdir}/udev/rules.d/51-dlm.rules ${D}${nonarch_base_libdir}/udev/rules.d/45-dlm.rules
 
 	# follow debian/*.default
 	install -d ${D}${sysconfdir}/default
@@ -228,7 +228,7 @@ RDEPENDS_libdlm-dev = "libdlm"
 FILES_libdlm-staticdev = "${libdir}/libdlm.a \
 ${libdir}/libdlm_lt.a"
 
-FILES_libdlm = "/lib/udev/rules.d/45-dlm.rules \
+FILES_libdlm = "${nonarch_base_libdir}/udev/rules.d/45-dlm.rules \
 ${libdir}/libdlm.so.3 \
 ${libdir}/libdlm.so.3.0"
 RDEPENDS_libdlm = "libdlm_lt libldap libxml2"

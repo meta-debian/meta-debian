@@ -25,6 +25,10 @@ inherit debian-package
 PV = "0.6.1"
 
 inherit setuptools
+# required by distutils/sysconfig.py to get config dir
+export DEB_HOST_MULTIARCH
+
+FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/*"
 
 RDEPENDS_${PN} += "libssl1.0.0 python-cffi python-six"
 

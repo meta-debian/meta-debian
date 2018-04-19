@@ -41,6 +41,7 @@ SRC_URI += " \
     file://libprelude-fix-generate-perl-makefile.patch \
     file://libprelude-perl-build-with-gnu-hash.patch \
     file://libprelude-fix-uid-gid-conflicting-types.patch \
+    file://python-setup_py-install-prefix.patch \
 "
 
 inherit autotools-brokensep gettext cpan-base binconfig pkgconfig perlnative pythonnative distutils-base
@@ -56,8 +57,7 @@ PERL_OWN_DIR_class-target = "/${@os.path.relpath(nonarch_libdir, libdir)}"
 export PERL_LIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 export PERL_ARCHLIB = "${STAGING_LIBDIR}${PERL_OWN_DIR}/perl/${@get_perl_version(d)}"
 
-export HOST_SYS
-export BUILD_SYS
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {

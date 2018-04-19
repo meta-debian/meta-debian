@@ -2,8 +2,10 @@
 # debian-multiarch.bbclass
 #
 
-GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TARGET_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
-DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TARGET_ARCH', True))}-${TARGET_OS}${GNU_HOST_SUFFIX}"
+# Use TUNE_ARCH instead of TARGET_ARCH because if recipe inherits "allarch"
+# TARGET_ARCH will be set to "allarch", so we can't get what DEB_HOST_MULTIARCH we want.
+GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TUNE_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
+DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TUNE_ARCH', True))}-${TARGET_OS}${GNU_HOST_SUFFIX}"
 
 # Help target recipe be able to get location of multiarch libdir in sdk's sysroot.
 GNU_SDK_SUFFIX = "${@get_gnu_suffix(d.getVar('SDK_ARCH', True), '')}"

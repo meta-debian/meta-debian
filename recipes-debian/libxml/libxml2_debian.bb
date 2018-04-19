@@ -53,8 +53,6 @@ EXTRA_OECONF_class-nativesdk = "--with-python=${STAGING_BINDIR}/python --without
 EXTRA_OECONF_linuxstdbase = "--without-python --with-debug --with-legacy --with-catalog --with-docbook --with-c14n --without-lzma"
 
 # required for pythong binding
-export HOST_SYS
-export BUILD_SYS
 export STAGING_LIBDIR
 export STAGING_INCDIR
 export DEB_HOST_MULTIARCH

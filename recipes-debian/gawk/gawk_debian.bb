@@ -26,8 +26,6 @@ file://remove-doc.patch \
 file://run-ptest \
 "
 
-KEEP_NONARCH_BASELIB = "1"
-
 inherit autotools gettext update-alternatives
 
 EXTRA_OECONF += "--disable-rpath --libexecdir=${libdir}"

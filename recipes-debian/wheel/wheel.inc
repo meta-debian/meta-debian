@@ -21,6 +21,5 @@ KEEP_NONARCH_BASELIB = "1"
 # Set do patch is no execute because folder debian patches empty
 do_debian_patch[noexec] = "1"
 
-export HOST_SYS
-export BUILD_SYS
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH

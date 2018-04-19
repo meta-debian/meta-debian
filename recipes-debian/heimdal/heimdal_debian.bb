@@ -135,10 +135,10 @@ do_install_append() {
 			${D}${sysconfdir}/logrotate.d/heimdal-kdc
 
 	# install heimdal-kdc package
-	install -d ${D}${libdir}/${BPN}-servers
-	mv ${D}${sbindir}/kadmind ${D}${libdir}/${BPN}-servers
-	mv ${D}${sbindir}/kdc ${D}${libdir}/${BPN}-servers
-	mv ${D}${sbindir}/kpasswdd ${D}${libdir}/${BPN}-servers
+	install -d ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${sbindir}/kadmind ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${sbindir}/kdc ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${sbindir}/kpasswdd ${D}${nonarch_libdir}/${BPN}-servers
 
 	# install heimdal-multidev package
 	mv ${D}${sbindir}/${BPN}/asn1_compile ${D}${bindir}
@@ -150,14 +150,14 @@ do_install_append() {
 	cd -
 
 	# install heimdal-servers package
-	install -d ${D}${libdir}/${BPN}-servers
-	mv ${D}${bindir}/login ${D}${libdir}/${BPN}-servers
-	mv ${D}${sbindir}/ftpd ${D}${libdir}/${BPN}-servers
-	mv ${D}${sbindir}/kfd ${D}${libdir}/${BPN}-servers
+	install -d ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${bindir}/login ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${sbindir}/ftpd ${D}${nonarch_libdir}/${BPN}-servers
+	mv ${D}${sbindir}/kfd ${D}${nonarch_libdir}/${BPN}-servers
 
 	# install heimdal-servers-x package
 	if [ "${@bb.utils.contains('DISTRO_FEATURES', 'x11', '', 'x11', d)}" = "" ] ; then
-		mv ${D}${sbindir}/kxd ${D}${libdir}/${BPN}-servers
+		mv ${D}${sbindir}/kxd ${D}${nonarch_libdir}/${BPN}-servers
 	fi
 }
 
@@ -178,8 +178,8 @@ FILES_${BPN}-kdc += "\
 	${sbindir}/digest-service ${sbindir}/hprop \
 	${sbindir}/hpropd ${sbindir}/iprop-log \
 	${sbindir}/ipropd-master ${sbindir}/ipropd-slave \
-	${sbindir}/kstash ${libdir}/${BPN}-servers/kadmind \
-	${libdir}/${BPN}-servers/kdc ${libdir}/kpasswdd \
+	${sbindir}/kstash ${nonarch_libdir}/${BPN}-servers/kadmind \
+	${nonarch_libdir}/${BPN}-servers/kdc ${libdir}/kpasswdd \
 	${sysconfdir}/ldap/schema/hdb.schema \
 	${sysconfdir}/init.d/* ${sysconfdir}/default/* \
 	${sysconfdir}/logrotate.d "
@@ -195,11 +195,11 @@ FILES_${BPN}-multidev += " \
 	${libdir}/pkgconfig/kafs.pc \
 	${libdir}/${BPN}/pkgconfig/*"
 FILES_${BPN}-servers += " \
-	${libdir}/${BPN}-servers/*"
+	${nonarch_libdir}/${BPN}-servers/*"
 FILES_${BPN}-servers-x += " \
-	${libdir}/${BPN}-servers/kxd"
+	${nonarch_libdir}/${BPN}-servers/kxd"
 FILES_${PN}-dbg += "${sbindir}/heimdal/.debug \
-	${libdir}/${BPN}-servers/.debug"
+	${nonarch_libdir}/${BPN}-servers/.debug"
 
 BBCLASSEXTEND = "native nativesdk"
 PARALLEL_MAKE = ""

@@ -17,6 +17,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=0698c5222dfec3357c9f26938c5eea69 \
 SRC_URI += "file://Fortran-config_debian.conf"
 inherit autotools-brokensep update-alternatives
 
+KEEP_NONARCH_BASELIB = "1"
+
 LIBDIR = "${libdir}/openmpi/lib"
 INCDIR = "${libdir}/openmpi/include"
 
@@ -24,7 +26,7 @@ INCDIR = "${libdir}/openmpi/include"
 EXTRA_OECONF += "--enable-ft-thread \
                  --with-ft=cr \
                  --with-blcr=${STAGING_DIR_HOST}${prefix} \
-                 --with-blcr-libdir=${STAGING_LIBDIR} \
+                 --with-blcr-libdir=${STAGING_LIBDIR}/${DEB_HOST_MULTIARCH} \
                  --without-tm \
                  --with-threads=posix --enable-opal-multi-threads \
                  --disable-silent-rules \
@@ -134,7 +136,7 @@ FILES_${PN}-dev += "${LIBDIR}/*.so \
                     ${bindir}/ortec++ \
                     ${bindir}/ortecc \
                     ${INCDIR}/* \
-                    ${libdir}/openmpi/lib/pkgconfig/*"
+                    ${LIBDIR}/pkgconfig/*"
 
 PKG_lib${DPN} = "lib${DPN}1.6"
 PKG_${PN}-dev = "lib${DPN}-dev"

@@ -54,7 +54,7 @@ FILES_dmeventd = "${base_sbindir}/dmeventd \
                   ${base_libdir}/device-mapper/* \
                   ${systemd_unitdir}/system/dm-event*"
 FILES_dmsetup = "${base_sbindir}/dmsetup \
-                 ${base_libdir}/udev/rules.d/*-dm*.rules"
+                 ${nonarch_base_libdir}/udev/rules.d/*-dm*.rules"
 FILES_libdevmapper-dev = "${libdir}/libdevmapper*${SOLIBSDEV} \
                           ${libdir}/pkgconfig/devmapper*.pc \
                           ${includedir}/libdevmapper*"

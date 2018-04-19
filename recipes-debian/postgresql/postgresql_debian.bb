@@ -44,8 +44,6 @@ DEPENDS_class-native = "\
 	tcl-native libxml2-native libxslt-native python-native python3-native perl-native"
 inherit autotools-brokensep pkgconfig perlnative pythonnative systemd cpan-base
 
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

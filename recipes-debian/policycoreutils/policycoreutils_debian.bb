@@ -32,8 +32,6 @@ PROVIDES += "mcstrans"
 
 export STAGING_INCDIR
 export STAGING_LIBDIR
-export BUILD_SYS
-export HOST_SYS
 export DEB_HOST_MULTIARCH
 
 # EXTRA_OEMAKE is typically: -e MAKEFLAGS=

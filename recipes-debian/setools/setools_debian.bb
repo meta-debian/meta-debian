@@ -60,8 +60,6 @@ PACKAGECONFIG[tk] = "--with-tk=${STAGING_BINDIR_CROSS} --with-tkinclude=${STAGIN
 PACKAGECONFIG[gui] = "--enable-gui, --disable-gui, gtk+ libglade"
 
 # need to export these variables for python-config to work
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

@@ -19,7 +19,7 @@ inherit autotools gettext
 
 DEPENDS = "zlib bzip2 readline"
 
-EXTRA_OECONF = "--libexecdir=${libdir} \
+EXTRA_OECONF = "--libexecdir=${nonarch_libdir} \
                 --enable-mailto \
                 --with-mailprog=${sbindir}sendmail \
                 --enable-large-secmem \
@@ -34,13 +34,13 @@ CFLAGS += "-fgnu89-inline"
 
 do_install_append () {
 	install -d ${D}${docdir}/${DPN}
-	install -d ${D}${base_libdir}/udev/rules.d
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
 
 	mv ${D}${datadir}/${DPN}/* ${D}/${docdir}/${DPN}/ || :
 	mv ${D}${prefix}/doc/* ${D}/${docdir}/${DPN}/ || :
 	install -m 0755 ${S}/tools/lspgpot ${D}${bindir}
 	install -m 0644 ${S}/debian/gnupg.udev \
-		${D}/${base_libdir}/udev/rules.d/60-gnupg.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-gnupg.rules
 }
 
 # split out gpgv from main package

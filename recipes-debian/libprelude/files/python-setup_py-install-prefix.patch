@@ -1,0 +1,38 @@
+# setup.py will install files to get_python_lib() if this path exist.
+# python-native's get_python_lib() returns sysroot path which is unwanted install path.
+# Set prefix to /usr to prevent it.
+
+diff --git a/bindings/low-level/python/Makefile.am b/bindings/low-level/python/Makefile.am
+index 4439918..2b18833 100644
+--- a/bindings/low-level/python/Makefile.am
++++ b/bindings/low-level/python/Makefile.am
+@@ -8,10 +8,10 @@ python-build: _prelude.c
+ 	CC="$(BINDINGS_CC)" $(PYTHON) setup.py build
+ 
+ install-exec-hook:
+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
+ 
+ uninstall-hook: 
+-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
+ 
+ clean-local:
+ 	$(PYTHON) setup.py clean -a
+diff --git a/bindings/python/Makefile.am b/bindings/python/Makefile.am
+index 59977f1..c743d7e 100644
+--- a/bindings/python/Makefile.am
++++ b/bindings/python/Makefile.am
+@@ -9,10 +9,10 @@ python-build: _PreludeEasy.cxx
+ 	CC="$(CXX)" $(PYTHON) setup.py build
+ 
+ install-exec-hook:
+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
+ 
+ uninstall-hook:
+-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)` --prefix=$(prefix)
+ 
+ clean-local:
+ 	$(PYTHON) setup.py clean -a

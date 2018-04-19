@@ -26,6 +26,8 @@ LIC_FILES_CHKSUM = "\
 	file://src/devices/xditview/README;md5=b5638dfaf6c432022c8a2fbca76eb41d \
 	file://tmac/doc.tmac;beginline=1;endline=28;md5=6ea1a309490948cb2b294971734b30b1"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit autotools-brokensep
 
 EXTRA_OECONF += "--with-appresdir=${sysconfdir}/X11/app-defaults"
@@ -59,7 +61,7 @@ do_configure_prepend() {
 
 do_install_append() {
 	install -d ${D}${sysconfdir}/${DPN}
-	install -d ${D}${libdir}/mime/packages
+	install -d ${D}${nonarch_libdir}/mime/packages
 
 	cat ${S}/debian/mandoc.local >> ${D}${sysconfdir}/${DPN}/man.local
 	cat ${S}/debian/mandoc.local >> ${D}${sysconfdir}/${DPN}/mdoc.local
@@ -68,7 +70,7 @@ do_install_append() {
 	ln -s ../../..${sysconfdir}/${DPN} ${D}${datadir}/${DPN}/site-tmac
 
 	install -m 0644 ${S}/debian/groff-base.mime \
-		${D}${libdir}/mime/packages/groff-base
+		${D}${nonarch_libdir}/mime/packages/groff-base
 
 	ln -s eqn ${D}${bindir}/geqn
 	ln -s pic ${D}${bindir}/gpic
@@ -78,7 +80,7 @@ do_install_append() {
 #shipment files for groff-base package:
 FILES_${DPN}-base = " \
     ${sysconfdir}/groff \
-    ${libdir}/mime/packages/groff-base \
+    ${nonarch_libdir}/mime/packages/groff-base \
     ${datadir}/groff/${PV}/eign \
     ${datadir}/groff/site-tmac \
     ${datadir}/groff/current \

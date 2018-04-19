@@ -72,8 +72,6 @@ PACKAGECONFIG[apache2] = "\
 	--without-apache-libexecdir,apache2,"
 
 #export some variable from poky, to use for python command
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH

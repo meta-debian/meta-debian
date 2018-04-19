@@ -59,9 +59,6 @@ CLEANBROKEN = "1"
 
 export STAGING_INCDIR
 export STAGING_LIBDIR
-
-export BUILD_SYS
-export HOST_SYS
 export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {

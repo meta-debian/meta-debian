@@ -30,12 +30,8 @@ EXTRA_OECONF += "-with-distro=debian \
                  "
 
 CACHED_CONFIGUREVARS += "py_cv_mod_gdbm_=yes"
-# need to export these variables for python runtime
-# fix error:
-#       PREFIX = os.path.normpath(sys.prefix).replace( os.getenv("BUILD_SYS"), os.getenv("HOST_SYS") )
-#       TypeError: Can't convert 'NoneType' object to str implicitly
-export BUILD_SYS
-export HOST_SYS
+
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
 DEPENDS += "intltool-native glib-2.0-native libdaemon gdbm expat libcap python-dbus-native"
@@ -69,7 +65,7 @@ do_install_append() {
 	install -D -m 0755 ${S}/debian/avahi-daemon.resolvconf \
 		${D}${sysconfdir}/resolvconf/update-libc.d/avahi-daemon
 	install -D -m 0755 ${S}/debian/avahi-daemon-check-dns.sh \
-		${D}${libdir}/avahi/avahi-daemon-check-dns.sh
+		${D}${nonarch_libdir}/avahi/avahi-daemon-check-dns.sh
 
 	# Follow debian/rules
 	mv ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/avahi-autoipd \
@@ -117,7 +113,7 @@ FILES_${PN}-daemon = "${sysconfdir}/avahi/avahi-daemon.conf \
                       ${sysconfdir}/network/if-up.d/avahi-daemon \
                       ${sysconfdir}/resolvconf/update-libc.d/avahi-daemon \
                       ${systemd_system_unitdir}/avahi-daemon.* \
-                      ${libdir}/avahi/avahi-daemon-check-dns.sh \
+                      ${nonarch_libdir}/avahi/avahi-daemon-check-dns.sh \
                       ${sbindir}/avahi-daemon \
                       ${datadir}/avahi/avahi-service.dtd \
                       ${datadir}/dbus-1/* \

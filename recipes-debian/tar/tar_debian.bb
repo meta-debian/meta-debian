@@ -32,8 +32,8 @@ do_install_append(){
 	mv ${D}${sbindir}/backup ${D}${sbindir}/tar-backup
 	mv ${D}${sbindir}/restore ${D}${sbindir}/tar-restore
 
-	mkdir -p ${D}${libdir}/mime/packages
-	install -m 0644 ${S}/debian/tar.mime ${D}${libdir}/mime/packages/tar
+	mkdir -p ${D}${nonarch_libdir}/mime/packages
+	install -m 0644 ${S}/debian/tar.mime ${D}${nonarch_libdir}/mime/packages/tar
 }
 
 PACKAGES =+ "${PN}-scripts"
@@ -44,7 +44,7 @@ FILES_${PN}-scripts = " \
 	${sbindir}/tar-backup \
 	${sbindir}/tar-restore \
 "
-FILES_${PN} += "${libdir}/mime/packages"
+FILES_${PN} += "${nonarch_libdir}/mime/packages"
 
 # Add update-alternatives definitions
 ALTERNATIVE_PRIORITY="100"

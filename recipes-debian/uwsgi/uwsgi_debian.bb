@@ -23,8 +23,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=33ab1ce13e2312dddfad07f97f66321f"
 inherit setuptools pkgconfig update-alternatives
 
 # Required by python command
-export HOST_SYS
-export BUILD_SYS
 export DEB_HOST_MULTIARCH
 # prevent host contamination and add ${STAGING_INCDIR} \
 # using UWSGI_INCLUDES environment variable to detect include paths:
@@ -73,9 +71,9 @@ do_compile_append() {
 		lua51
 }
 do_install_append() {
-	install -d ${D}${libdir}/${DPN}/plugins
+	install -d ${D}${libexecdir}/plugins
 	install -m 0755 ${S}/*.so \
-		${D}${libdir}/${DPN}/plugins
+		${D}${libexecdir}/plugins
 
 	install -m 0755 ${S}/uwsgi-core ${D}${bindir}
 	# remove unwanted file
@@ -120,46 +118,46 @@ PACKAGES =+ "\
  ${PN}-plugin-router-access ${PN}-plugin-sqlite3 ${PN}-plugin-xslt \
  ${PN}-emperor ${PN}-plugin-python ${PN}-core python-uwsgidecorators \
  "
-FILES_${PN}-plugin-alarm-curl    = "${libdir}/${DPN}/plugins/alarm_curl_plugin.so \
+FILES_${PN}-plugin-alarm-curl    = "${libexecdir}/plugins/alarm_curl_plugin.so \
                                     ${bindir}/uwsgi_alarm_curl \
                                    "
-FILES_${PN}-plugin-curl-cron     = "${libdir}/${DPN}/plugins/curl_cron_plugin.so \
+FILES_${PN}-plugin-curl-cron     = "${libexecdir}/plugins/curl_cron_plugin.so \
                                     ${bindir}/uwsgi_curl_cron \
                                    "
-FILES_${PN}-plugin-lua5.1         = "${libdir}/${DPN}/plugins/lua51_plugin.so \
+FILES_${PN}-plugin-lua5.1         = "${libexecdir}/plugins/lua51_plugin.so \
                                    ${bindir}/uwsgi_lua51 \
                                    "
-FILES_${PN}-plugin-geoip         = "${libdir}/${DPN}/plugins/geoip_plugin.so \
+FILES_${PN}-plugin-geoip         = "${libexecdir}/plugins/geoip_plugin.so \
                                     ${bindir}/uwsgi_geoip \
                                    "
-FILES_${PN}-plugin-graylog2      = "${libdir}/${DPN}/plugins/graylog2_plugin.so \
+FILES_${PN}-plugin-graylog2      = "${libexecdir}/plugins/graylog2_plugin.so \
                                     ${bindir}/uwsgi_graylog2 \
                                    "
-FILES_${PN}-plugin-ldap          = "${libdir}/${DPN}/plugins/ldap_plugin.so \
+FILES_${PN}-plugin-ldap          = "${libexecdir}/plugins/ldap_plugin.so \
                                     ${bindir}/uwsgi_ldap \
                                    "
-FILES_${PN}-plugin-router-access = "${libdir}/${DPN}/plugins/router_access_plugin.so \
+FILES_${PN}-plugin-router-access = "${libexecdir}/plugins/router_access_plugin.so \
                                     ${bindir}/uwsgi_router_access \
                                    "
-FILES_${PN}-plugin-sqlite3       = "${libdir}/${DPN}/plugins/sqlite3_plugin.so \
+FILES_${PN}-plugin-sqlite3       = "${libexecdir}/plugins/sqlite3_plugin.so \
                                     ${bindir}/uwsgi_sqlite3 \
                                    "
-FILES_${PN}-plugin-xslt          = "${libdir}/${DPN}/plugins/xslt_plugin.so \
+FILES_${PN}-plugin-xslt          = "${libexecdir}/plugins/xslt_plugin.so \
                                     ${bindir}/uwsgi_xslt \
                                    "
 FILES_${PN}-core                 = "${bindir}/uwsgi-core \
-                                    ${libdir}/${DPN}/plugins/*.so \
+                                    ${libexecdir}/plugins/*.so \
                                    "
 FILES_${PN}-emperor              = "${sysconfdir}/default/uwsgi-emperor \
                                     ${sysconfdir}/init.d/uwsgi-emperor \
                                     ${sysconfdir}/logrotate.d/uwsgi-emperor \
                                     ${sysconfdir}/uwsgi-emperor/* \
                                    "
-FILES_${PN}-plugin-python       = "${libdir}/${DPN}/plugins/python*.so \
+FILES_${PN}-plugin-python       = "${libexecdir}/plugins/python*.so \
                                     ${bindir}/uwsgi_python* \
                                    "
 FILES_python-uwsgidecorators    = "${PYTHON_SITEPACKAGES_DIR}"
-FILES_${PN}-dbg                 += "${libdir}/${DPN}/plugins/.debug/*"
+FILES_${PN}-dbg                 += "${libexecdir}/plugins/.debug/*"
 
 # follow debian/control
 RDEPENDS_${PN}                      += "${PN}-core lsb-base sysvinit-initscripts"

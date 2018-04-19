@@ -44,11 +44,11 @@ do_install_append() {
 	ln -s ../../bin/lessecho ${D}${bindir}/lessecho
 	ln -s ../../bin/less ${D}${bindir}/less
 
-	mkdir -p ${D}${libdir}/mime/packages
-	install -m 0644 ${S}/debian/mime ${D}${libdir}/mime/packages/less
+	mkdir -p ${D}${nonarch_libdir}/mime/packages
+	install -m 0644 ${S}/debian/mime ${D}${nonarch_libdir}/mime/packages/less
 }
 
-FILES_${PN} += "${libdir}/*"
+FILES_${PN} += "${nonarch_libdir}/*"
 
 # Add update-alternatives definitions to avoid conflict with busybox
 ALTERNATIVE_${PN} = "less"

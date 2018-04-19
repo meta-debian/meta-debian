@@ -33,8 +33,7 @@ inherit autotools pkgconfig distutils-base distro_features_check
 
 ANY_OF_DISTRO_FEATURES = "${GTK2DISTROFEATURES}"
 
-export HOST_SYS
-export BUILD_SYS
+# required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
 do_configure_prepend() {

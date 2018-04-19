@@ -13,7 +13,9 @@ do_debian_patch[noexec] = "1"
 # very rare case; glibc-locale doen't have source tree but
 # generates binary packages. DEBIAN_UNPACK_DIR should point
 # the glibc source tree instead so that summary.bbclass can find changelog.
-DEBIAN_UNPACK_DIR = "${@d.getVar("WORKDIR", True).replace("glibc-locale/", "glibc/")}/git"
+GLIBC_PN = "${@d.getVar('PN', True).replace('-locale', '')}"
+do_debian_verify_version[depends] += "${GLIBC_PN}:do_unpack"
+DEBIAN_UNPACK_DIR = "${@d.getVar('WORKDIR', True).replace(d.getVar('PN', True), d.getVar('GLIBC_PN', True))}/git"
 
 
 LOCALEBASEPN = "${MLPREFIX}glibc"

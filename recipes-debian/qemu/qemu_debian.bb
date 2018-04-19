@@ -151,12 +151,12 @@ do_install_append() {
 
 	# Install files/scripts from debian
 	install -d ${D}${sysconfdir}/init.d
-	install -d ${D}${base_libdir}/udev/rules.d
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
 	install -m 0644 ${S}/debian/qemu-guest-agent.init ${D}${sysconfdir}/init.d/qemu-guest-agent
 	install -m 0755 ${S}/debian/qemu-ifdown ${D}${sysconfdir}/qemu-ifdown
 	install -m 0755 ${S}/debian/qemu-ifup.linux ${D}${sysconfdir}/qemu-ifup
 	install -m 0644 ${S}/debian/qemu-system-common.udev \
-		${D}/${base_libdir}/udev/rules.d/60-qemu-system-common.rules
+		${D}/${nonarch_base_libdir}/udev/rules.d/60-qemu-system-common.rules
 	install -m 0644 ${S}/debian/qemu-system-x86.init \
 		${D}${sysconfdir}/init.d/qemu-system-x86
 	install -m 0755 ${S}/debian/kvm ${D}${bindir}/kvm

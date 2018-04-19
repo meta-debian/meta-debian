@@ -23,6 +23,8 @@ PV = "3.4"
 DPN = "ply"
 
 inherit allarch setuptools
+# required by distutils/sysconfig.py to get config dir
+export DEB_HOST_MULTIARCH
 
 DISTUTILS_INSTALL_ARGS += "--single-version-externally-managed \
 	--install-layout=deb"

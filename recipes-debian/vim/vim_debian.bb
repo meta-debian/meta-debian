@@ -89,8 +89,8 @@ do_install_append () {
 	install -m 0755 ${S}/../debian/helpztags ${D}${bindir}
 	install -d ${D}${sysconfdir}/vim
 	install -m 0644 ${S}/../debian/runtime/vimrc ${D}${sysconfdir}/vim
-	install -d ${D}${libdir}/mime/packages
-	install -m 0644 ${S}/../debian/vim-common.mime ${D}${libdir}/mime/packages/vim-common
+	install -d ${D}${nonarch_libdir}/mime/packages
+	install -m 0644 ${S}/../debian/vim-common.mime ${D}${nonarch_libdir}/mime/packages/vim-common
 	install -d ${D}/var/lib/vim/addons
 	mv ${D}${bindir}/vim ${D}${bindir}/vim.${variant}
 }
@@ -104,7 +104,7 @@ FILES_${PN}-common = " \
 	${sysconfdir}/vim/vimrc \
 	${bindir}/xxd \
 	${bindir}/helpztags \
-	${libdir}/mime/packages/vim-common \
+	${nonarch_libdir}/mime/packages/vim-common \
 	${localstatedir}"
 
 # Recommend that runtime data is installed along with vim

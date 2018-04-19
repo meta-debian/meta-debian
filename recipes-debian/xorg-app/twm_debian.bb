@@ -25,10 +25,10 @@ do_install_append() {
 	install -d ${D}${datadir}/xsessions
 	install -m 644 ${S}/debian/twm.desktop ${D}${datadir}/xsessions/twm.desktop
 	install -d ${D}${sysconfdir}/menu-methods
-	install -m 0644 ${S}/debian/twm.menu-method ${D}${sysconfdir}/menu-methods
-	install -d ${D}${libdir}/X11
-	ln -s ${sysconfdir}/X11/twm ${D}${libdir}/X11/twm
+	install -m 0644 ${S}/debian/twm.menu-method ${D}${sysconfdir}/menu-methods/twm
+	install -d ${D}${nonarch_libdir}/X11
+	ln -s ${sysconfdir}/X11/twm ${D}${nonarch_libdir}/X11/twm
 }
 
-FILES_${PN} = "${sysconfdir} ${bindir} ${libdir}"
+FILES_${PN} = "${sysconfdir} ${bindir} ${nonarch_libdir}"
 FILES_${PN}-doc = "${datadir}"

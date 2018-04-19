@@ -15,6 +15,7 @@ PV = "9.20.1~dfsg.1"
 SRC_URI += "file://do-not-override-compiler.patch"
 
 DEBIAN_PATCH_TYPE = "quilt"
+KEEP_NONARCH_BASELIB = "1"
 
 # all3: to build bin/7za, bin/7z (with its plugins), bin/7zr and bin/7zCon.sfx
 EXTRA_OEMAKE = "all3"

@@ -21,8 +21,6 @@ inherit autotools-brokensep
 DEPENDS += "python"
 
 #export some variable from poky, to use for python command
-export BUILD_SYS
-export HOST_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH
@@ -52,7 +50,7 @@ do_install() {
 
 	cp -a ${S}/py-smbus/build/${STAGING_DIR_NATIVE}/* ${D}/
 	install -D -m 0644 ${S}/debian/i2c-tools.udev \
-		${D}${base_libdir}/udev/rules.d/60-i2c-tools.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/60-i2c-tools.rules
 }
 
 PACKAGES += "python-smbus"

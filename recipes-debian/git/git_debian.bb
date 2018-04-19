@@ -35,7 +35,7 @@ USERADD_PARAM_${PN}-daemon-sysvinit = " \
 inherit autotools-brokensep perlnative
 
 # Follow debian/rules
-libexecdir = "${libdir}/git-core"
+libexecdir = "${nonarch_libdir}/git-core"
 EXTRA_OEMAKE = " \
     NO_OPENSSL=1 \
     prefix=${prefix} \
@@ -87,7 +87,7 @@ do_install () {
 
 	# bash prompt
 	install -m 0644 ${S}/contrib/completion/git-prompt.sh \
-			${D}${libdir}/git-core/git-sh-prompt
+			${D}${libexecdir}/git-sh-prompt
 	install -d -m 0755 ${D}${sysconfdir}/bash_completion.d
 	install -m 0644 ${S}/debian/git-prompt.completion \
 			${D}${sysconfdir}/bash_completion.d/git-prompt

@@ -23,7 +23,7 @@ inherit autotools binconfig
 DEPENDS = "openssl"
 
 #Configure follow debian/rules
-EXTRA_OECONF += "--enable-etrn"
+EXTRA_OECONF += "--with-auth-plugin-dir="${nonarch_libdir}/esmtp" --enable-etrn"
 
 #prepare some header file for compile
 do_compile_prepend (){
@@ -40,18 +40,16 @@ do_install_append () {
 	#Correct the permission of file
 	LINKLIB=$(basename $(readlink ${D}${libdir}/libesmtp.so))
 	chmod 0644 ${D}${libdir}/$LINKLIB
+	chmod 0644 ${D}${nonarch_libdir}/esmtp/*.so
 	
-	#re-name /usr/lib/esmtp-plugins to /usr/lib/esmtp
-	mv ${D}${libdir}/esmtp-plugins ${D}${libdir}/esmtp
-	chmod 0644 ${D}${libdir}/esmtp/*.so	
 	#remove .la files
-	rm ${D}${libdir}/esmtp/*.la
-	rm ${D}${libdir}/*la	
+	rm -f ${D}${nonarch_libdir}/esmtp/*.la
+	rm -f ${D}${libdir}/*.la
 }
 #Correct the package name
 PKG_${PN} = "libesmtp6"
 
 FILES_${PN}-dev += "${bindir}/libesmtp-config"
-FILES_${PN} += "${libdir}/esmtp/*.so"
-FILES_${PN}-staticdev += "${libdir}/esmtp/*.a"
-FILES_${PN}-dbg += "${libdir}/esmtp/.debug/*"
+FILES_${PN} += "${nonarch_libdir}/esmtp/*.so"
+FILES_${PN}-staticdev += "${nonarch_libdir}/esmtp/*.a"
+FILES_${PN}-dbg += "${nonarch_libdir}/esmtp/.debug/*"

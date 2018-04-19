@@ -121,8 +121,8 @@ do_install_append () {
 	install -m 755 ${S}/debian/local/xvfb-run ${D}${bindir}/
 	install ${S}/debian/local/xvfb-run.1 ${D}${mandir}/man1/
 
-	install -d ${D}${base_libdir}/udev/rules.d
-	install -m 644 ${S}/debian/local/64-xorg-xkb.rules ${D}${base_libdir}/udev/rules.d/
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
+	install -m 644 ${S}/debian/local/64-xorg-xkb.rules ${D}${nonarch_base_libdir}/udev/rules.d/
 
 	install -m 755 ${S}/debian/local/dh_xsf_substvars ${D}${bindir}/
 	install -D -m 644 ${S}/debian/local/xsf.pm ${D}${datadir}/perl5/Debian/Debhelper/Sequence/xsf.pm
@@ -169,7 +169,7 @@ FILES_xvfb = "${bindir}/Xvfb \
               ${bindir}/xvfb-run \
               "
 FILES_xwayland = "${bindir}/Xwayland"
-FILES_${PN} += "${base_libdir}/udev/rules.d \
+FILES_${PN} += "${nonarch_base_libdir}/udev/rules.d \
                 ${libdir}/xorg/modules \
                 ${datadir}/X11/xorg.conf.d \
                 "

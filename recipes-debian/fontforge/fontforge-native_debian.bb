@@ -42,8 +42,6 @@ EXTRA_OECONF = "--with-regular-link \
 EXTRA_OECONF_append = " --without-x"
 
 #export some variable from poky, to use for python command
-export HOST_SYS
-export BUILD_SYS
 export STAGING_INCDIR
 export STAGING_LIBDIR
 export DEB_HOST_MULTIARCH
