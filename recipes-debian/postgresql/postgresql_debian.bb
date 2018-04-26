@@ -24,7 +24,7 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.postgresql.com"
 
 inherit debian-package
-PV = "9.4.13"
+PV = "9.4.15"
 
 DPN = "postgresql-9.4"
 NONARCH_PN = "postgresql"

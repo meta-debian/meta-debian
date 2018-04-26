@@ -24,6 +24,10 @@ DEPENDS_class-target += "${PN}-native libgc libunistring gmp libffi readline lib
 
 CACHED_CONFIGUREVARS += "ac_cv_path_GUILE_FOR_BUILD=${STAGING_BINDIR_NATIVE}/${DPN}"
 
+EXTRA_OECONF += "--with-libreadline-prefix=${STAGING_DIR_HOST}/${prefix} \
+                 --with-libgmp-prefix=${STAGING_DIR_HOST}/${prefix} \
+                 --with-libunistring-prefix=${STAGING_DIR_HOST}/${prefix} \
+                 --with-libltdl-prefix=${STAGING_DIR_HOST}/${prefix}"
 do_install_append() {
 	# base on debian/rules
 	install -d ${D}${libdir}/${DPN}${base_bindir} \
