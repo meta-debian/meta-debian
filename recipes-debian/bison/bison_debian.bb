@@ -59,6 +59,10 @@ do_install_append_class-target(){
 	mv ${D}${bindir}/yacc ${D}${bindir}/bison.yacc
 }
 
+do_install_append_class-nativesdk(){
+	mv ${D}${bindir}/yacc ${D}${bindir}/bison.yacc
+}
+
 do_install_append_class-native() {
 	create_wrapper ${D}/${bindir}/bison \
 		BISON_PKGDATADIR=${STAGING_DATADIR_NATIVE}/bison
