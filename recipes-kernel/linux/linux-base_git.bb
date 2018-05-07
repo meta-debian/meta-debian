@@ -9,7 +9,7 @@
 #   Define the target git repository and source tree.
 #   See linux-src.bbclass for more details.
 # LINUX_DEFCONFIG
-#   Define the base kernel configuration. See the below comments.
+#   Define the base kernel configurations. See the below comments.
 # KERNEL_DEVICETREE
 #   Define the target devicetrees. See linux-dtb.inc.
 #
@@ -40,8 +40,12 @@ B = "${WORKDIR}/build"
 # 3.9 or later kernel needs bc to build kernel/timeconst.h
 DEPENDS += "bc-native"
 
-# if this file name is set, ${S}/arch/.../configs/${LINUX_DEFCONFIG}
-# is used as the base configuration file in do_configure
+# space separated file list of defconfig files in ${S}/arch/.../configs
+# Example:
+#   if LINUX_DEFCONFIG = "xxx_defconfig yyy_defconfig" is set,
+#   ${S}/arch/.../configs/xxx_defconfig and
+#   ${S}/arch/.../configs/yyy_defconfig are used as
+#   the base configuration files in do_configure
 LINUX_DEFCONFIG ?= ""
 
 # define the default kernel configuration for QEMU targets
@@ -63,11 +67,16 @@ do_configure_prepend() {
 	fi
 
 	if [ -n "${LINUX_DEFCONFIG}" ]; then
-		DEFCONFIG=${S}/arch/${KERNEL_SRCARCH}/configs/${LINUX_DEFCONFIG}
-		if [ ! -f ${DEFCONFIG} ]; then
-			bbfatal "${DEFCONFIG} not found"
-		fi
-		bbnote "use ${DEFCONFIG} as the base configuration"
+		DEFCONFIG=""
+		bbnote "use the following defconfig in kernel source tree:"
+		for dcfg in ${LINUX_DEFCONFIG}; do
+			bbnote "    ${dcfg}"
+			dcfg_path=${S}/arch/${KERNEL_SRCARCH}/configs/${dcfg}
+			if [ ! -f ${dcfg_path} ]; then
+				bbfatal "${dcfg_path} not found"
+			fi
+			DEFCONFIG="${DEFCONFIG} ${dcfg_path}"
+		done
 	else
 		DEFCONFIG=
 		bbnote "LINUX_DEFCONFIG not set, use only .configs in SRC_URI"

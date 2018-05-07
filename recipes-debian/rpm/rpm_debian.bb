@@ -112,7 +112,7 @@ do_install_append_class-native() {
 	rm -f ${D}${prefix}/lib/rpm-plugins/*.la
 	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/*.{a,la}
 	rm -f ${D}${PYTHON_SITEPACKAGES_DIR}/rpm/*.{a,la}
-	rm -fr ${D}/var
+	rm -fr ${D}${localstatedir}
 	install -d ${D}${prefix}/lib/rpm/bin
 	ln -s ../debugedit ${D}${prefix}/lib/rpm/bin/debugedit
 	ln -s ../rpmdeps ${D}${prefix}/lib/rpm/bin/rpmdeps-oecore
