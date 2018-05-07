@@ -91,7 +91,7 @@ do_install_append () {
 	install -m 0644 ${S}/../debian/runtime/vimrc ${D}${sysconfdir}/vim
 	install -d ${D}${libdir}/mime/packages
 	install -m 0644 ${S}/../debian/vim-common.mime ${D}${libdir}/mime/packages/vim-common
-	install -d ${D}/var/lib/vim/addons
+	install -d ${D}${localstatedir}/lib/vim/addons
 	mv ${D}${bindir}/vim ${D}${bindir}/vim.${variant}
 }
 
