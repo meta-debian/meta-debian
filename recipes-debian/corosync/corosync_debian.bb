@@ -20,6 +20,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=25656171d1e4054c636a9893067f8c30"
 
 DEPENDS = "groff-native nss"
 
+KEEP_NONARCH_BASELIB = "1"
+
 inherit autotools pkgconfig useradd
 
 # Follow debian/corosync.postinst
