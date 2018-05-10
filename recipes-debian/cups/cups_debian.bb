@@ -48,17 +48,17 @@ EXTRA_OECONF = " \
 
 # Add more conf options according to Debian rules
 EXTRA_OECONF += " \
-	--with-docdir=/usr/share/cups/doc-root \
-	--localedir=/usr/share/cups/locale \
+	--with-docdir=${datadir}/cups/doc-root \
+	--localedir=${datadir}/cups/locale \
 	--enable-libpaper \
 	--enable-ssl \
 	--enable-threads \
 	--enable-static \
-	--with-dbusdir=/etc/dbus-1 \
+	--with-dbusdir=${sysconfdir}/dbus-1 \
 	--disable-launchd \
 	--with-cups-group=lp \
 	--with-system-groups=lpadmin \
-	--with-printcap=/var/run/cups/printcap \
+	--with-printcap=${localstatedir}/run/cups/printcap \
 	--with-log-file-perm=0640 \
 	--with-local_protocols='dnssd' \
 	--with-systemdsystemunitdir=${systemd_system_unitdir} \
