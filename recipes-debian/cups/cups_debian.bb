@@ -11,7 +11,7 @@ SECTION = "console/utils"
 inherit debian-package autotools-brokensep binconfig
 PV = "1.7.5"
 
-PR = "r0"
+PR = "r1"
 DEPENDS = "gnutls libpng libjpeg-turbo dbus dbus-glib zlib libusb1"
 
 LICENSE = "GPLv2 & LGPLv2"
@@ -21,7 +21,6 @@ PROVIDES = "cups14"
 
 SRC_URI += "\
 	file://0001-don-t-try-to-run-generated-binaries_debian.patch \
-	file://cups_serverbin.patch \
 "
 
 PACKAGECONFIG ??= "avahi \
@@ -68,7 +67,7 @@ do_configure() {
 	gnu-configize
 	libtoolize --force
 	autoconf
-	DSOFLAGS="${LDFLAGS}" SERVERBIN="${libdir}/cups" oe_runconf
+	DSOFLAGS="${LDFLAGS}" oe_runconf
 }
 
 do_compile () {
@@ -90,22 +89,26 @@ do_compile () {
 		   "-I."
 }
 
+# This variable is set base on default value of CUPS_SERVERBIN
+# in config-scripts/cups-directories.m4.
+# It just helps to maintain do_install and files shipping easier.
+# Change this variable does not make installation path be changed.
+CUPS_SERVERBIN = "${exec_prefix}/lib/cups"
+
 do_install () {
 	oe_runmake "DSTROOT=${D}" install
 
 	# Remove /var/run from package as cupsd will populate it on startup
 	rm -fr ${D}/${localstatedir}/run
-	rmdir ${D}/${libdir}/${BPN}/driver
-}
+	rmdir ${D}/${CUPS_SERVERBIN}/driver
 
-# Correct locations, path according to Debian rules
-do_install_append() {
-	install -d ${D}${libdir}/cups/backend-available
-	mv ${D}${libdir}/cups/backend/lpd ${D}${libdir}/cups/backend-available/
-	mv ${D}${libdir}/cups/backend/socket ${D}${libdir}/cups/backend-available/
-	mv ${D}${libdir}/cups/backend/usb ${D}${libdir}/cups/backend-available/
-	mv ${D}${libdir}/cups/backend/snmp ${D}${libdir}/cups/backend-available/
-	mv ${D}${libdir}/cups/backend/dnssd ${D}${libdir}/cups/backend-available/
+	# Correct locations, path according to Debian rules
+	install -d ${D}${CUPS_SERVERBIN}/backend-available
+	mv ${D}${CUPS_SERVERBIN}/backend/lpd ${D}${CUPS_SERVERBIN}/backend-available/
+	mv ${D}${CUPS_SERVERBIN}/backend/socket ${D}${CUPS_SERVERBIN}/backend-available/
+	mv ${D}${CUPS_SERVERBIN}/backend/usb ${D}${CUPS_SERVERBIN}/backend-available/
+	mv ${D}${CUPS_SERVERBIN}/backend/snmp ${D}${CUPS_SERVERBIN}/backend-available/
+	mv ${D}${CUPS_SERVERBIN}/backend/dnssd ${D}${CUPS_SERVERBIN}/backend-available/
 
 	install -D -m 644 ${S}/debian/local/apparmor-profile ${D}${sysconfdir}/apparmor.d/usr.sbin.cupsd
 	install -D -m 644 ${S}/debian/local/cups.ufw.profile ${D}${sysconfdir}/ufw/applications.d/cups
@@ -113,6 +116,9 @@ do_install_append() {
 
 	# Manual install pam file
 	install -D -m 644 ${S}/debian/cups-daemon.cups.pam ${D}${sysconfdir}/pam.d/cups
+
+	rm -rf ${D}${datadir}/cups/banners ${D}${datadir}/cups/data \
+	       ${D}${datadir}/cups/model ${D}${datadir}/cups/profiles
 }
 
 python do_package_append() {
@@ -130,23 +136,21 @@ PACKAGES = "${PN} libcups2 ${PN}-dev ${PN}-staticdev ${PN}-dbg ${PN}-libimage \
 	libcupsppdc1 libcupsppdc-dev"
 
 FILES_${PN} = " \
-	${libdir}/cups/backend-available/dnssd \
-	${libdir}/cups/backend-available/lpd \
-	${libdir}/cups/backend-available/snmp \
-	${libdir}/cups/backend-available/socket \
-	${libdir}/cups/backend-available/usb \
-	${libdir}/cups/cgi-bin/*.cgi \
-	${libdir}/cups/filter/rastert* \
-	${libdir}/cups/monitor/* \
-	${libdir}/cups/notifier/* \
-	${libdir}/cups/daemon/* \
+	${CUPS_SERVERBIN}/backend-available/dnssd \
+	${CUPS_SERVERBIN}/backend-available/lpd \
+	${CUPS_SERVERBIN}/backend-available/snmp \
+	${CUPS_SERVERBIN}/backend-available/socket \
+	${CUPS_SERVERBIN}/backend-available/usb \
+	${CUPS_SERVERBIN}/cgi-bin/*.cgi \
+	${CUPS_SERVERBIN}/filter/rastert* \
+	${CUPS_SERVERBIN}/monitor/* \
+	${CUPS_SERVERBIN}/daemon/* \
 	${sysconfdir}/cups/snmp.conf \
 	${sysconfdir}/cups/ppd \
 	${sysconfdir}/cups/interfaces \
 	${sbindir}/cupsfilter \
 	${sysconfdir}/cups/cupsd.conf \
 	${datadir}/applications \
-	${datadir}/cups \
 	"
 
 FILES_${PN}-bsd = " \
@@ -178,20 +182,21 @@ FILES_${PN}-client = " \
 	${sbindir}/lpinfo \
 	${sbindir}/lpmove \
 	${sbindir}/reject \
+	${datadir}/cups/ipptool/* \
 	"
 
 FILES_${PN}-common = " \
 	${datadir}/cups/drv/sample.drv \
 	${datadir}/cups/locale \
-	${datadir}/cups/ppdc \
+	${datadir}/cups/ppdc/*.defs \
 	${datadir}/doc/cups-common \
 	${datadir}/lintian/overrides \
 	"
 
 FILES_${PN}-core-drivers = " \
-	${libdir}/cups/filter/commandtops \
-	${libdir}/cups/filter/gziptoany \
-	${libdir}/cups/filter/pstops \
+	${CUPS_SERVERBIN}/filter/commandtops \
+	${CUPS_SERVERBIN}/filter/gziptoany \
+	${CUPS_SERVERBIN}/filter/pstops \
 	"
 
 #Missing cups-daemon file because it requires apparmor_parser command
@@ -204,15 +209,14 @@ FILES_${PN}-daemon = " \
 	${sysconfdir}/ufw \
 	${sysconfdir}/cups/ssl \
 	${systemd_system_unitdir} \
-	${libdir}/cups/backend/http* \
-	${libdir}/cups/backend/ipp* \
-	${libdir}/cups/backend/https \
-	${libdir}/cups/backend/https \
-	${libdir}/cups/notifier/dbus \
-	${libdir}/cups/notifier/mailto \
-	${libdir}/cups/notifier/rss \
+	${CUPS_SERVERBIN}/backend/http* \
+	${CUPS_SERVERBIN}/backend/ipp* \
+	${CUPS_SERVERBIN}/backend/https \
+	${CUPS_SERVERBIN}/backend/https \
+	${CUPS_SERVERBIN}/notifier/* \
 	${sbindir}/cupsd \
 	${datadir}/apport \
+	${datadir}/cups/cupsd.conf.default \
 	"
 
 FILES_${PN}-ppdc = " \
@@ -221,6 +225,8 @@ FILES_${PN}-ppdc = " \
 	${bindir}/ppdi \
 	${bindir}/ppdmerge \
 	${bindir}/ppdpo \
+	${datadir}/cups/examples \
+	${datadir}/cups/ppdc/*.h \
 	"
 
 FILES_${PN}-server-common = " \
@@ -311,13 +317,13 @@ DEBUGFILEDIRECTORY-dbg = "/usr/lib/debug /usr/src/debug"
 FILES_${PN}-dbg = "${@d.getVar(['DOTDEBUG-dbg', 'DEBUGFILEDIRECTORY-dbg'][d.getVar('PACKAGE_DEBUG_SPLIT_STYLE', True) == 'debug-file-directory'], True)}"
 
 FILES_${PN}-dbg += " \
-	${libdir}/cups/backend-available/.debug \
-	${libdir}/cups/backend/.debug \
-	${libdir}/cups/cgi-bin/.debug \
-	${libdir}/cups/filter/.debug \
-	${libdir}/cups/monitor/.debug \
-	${libdir}/cups/notifier/.debug \
-	${libdir}/cups/daemon/.debug \
+	${CUPS_SERVERBIN}/backend-available/.debug \
+	${CUPS_SERVERBIN}/backend/.debug \
+	${CUPS_SERVERBIN}/cgi-bin/.debug \
+	${CUPS_SERVERBIN}/filter/.debug \
+	${CUPS_SERVERBIN}/monitor/.debug \
+	${CUPS_SERVERBIN}/notifier/.debug \
+	${CUPS_SERVERBIN}/daemon/.debug \
 	${localstatedir} \
 	${sysconfdir}/rc* \
 	${sysconfdir}/dbus-1 \
