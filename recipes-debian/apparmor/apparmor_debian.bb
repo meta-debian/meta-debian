@@ -16,7 +16,7 @@ inherit debian-package autotools
 PV = "2.9.0"
 inherit systemd pythonnative cpan-base perlnative
 
-PR = "r0"
+PR = "r1"
 
 # 0001-Fix-autogen.patch: Fix autogen.sh to use libtools under sysroots
 # remove-undef-bool_debian.patch:
@@ -29,6 +29,8 @@ SRC_URI += "\
 	file://remove-undef-bool_debian.patch \
 	file://fix-generate-perl-makefile.patch \
 "
+
+KEEP_NONARCH_BASELIB = "1"
 
 DEPENDS += " flex-native python bison-native swig-native apache2 \
 	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
@@ -73,7 +75,7 @@ do_configure() {
            --host=${HOST_SYS} \
            --target=${TARGET_SYS} \
            --prefix=${prefix} \
-           --libdir=${libdir} \
+           --libdir=${libdir}/${DEB_HOST_MULTIARCH} \
            --mandir=${mandir} \
            --includedir=${includedir} \
            --with-perl --with-python
@@ -142,6 +144,7 @@ PACKAGES =+ "\
 	libpam-apparmor python-apparmor python-libapparmor "
 
 FILES_${PN} =+ " ${base_libdir}/apparmor/* "
+FILES_${PN}-staticdev += "${libdir}/${DEB_HOST_MULTIARCH}/*.a"
 
 FILES_${PN}-easyprof = " \
 	${sysconfdir}/apparmor/easyprof.conf \
@@ -190,13 +193,14 @@ FILES_libapache2-mod-apparmor = " \
 FILES_libapparmor-dev = " \
 	${includedir}/aalogparse/aalogparse.h \
 	${includedir}/sys/apparmor.h \
-	${libdir}/*${SOLIBSDEV} \
-	${libdir}/pkgconfig/* \
+	${libdir}/${DEB_HOST_MULTIARCH}/*${SOLIBSDEV} \
+	${libdir}/${DEB_HOST_MULTIARCH}/*.la \
+	${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/* \
 "
 
 FILES_libapparmor-perl = " ${libdir}/perl5/* "
 
-FILES_libapparmor = " ${libdir}/*${SOLIBS} "
+FILES_libapparmor = " ${libdir}/${DEB_HOST_MULTIARCH}/*${SOLIBS} "
 
 FILES_libpam-apparmor = " ${base_libdir}/security/ "
 
@@ -204,7 +208,7 @@ FILES_python-apparmor = " ${PYTHON_SITEPACKAGES_DIR}/apparmor* "
 
 FILES_python-libapparmor = " ${PYTHON_SITEPACKAGES_DIR}/* "
 
-DEBIANNAME_libapparmor = "libapparmor1"
+PKG_libapparmor = "libapparmor1"
 RPROVIDES_libapparmor += " libapparmor1"
 
 # Avoid generated binaries stripping.
