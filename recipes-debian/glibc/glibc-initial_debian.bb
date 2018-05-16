@@ -92,3 +92,5 @@ do_populate_sysroot[sstate-outputdirs] = "${STAGING_DIR_TCBOOTSTRAP}/"
 do_evacuate_scripts () {
 	:
 }
+
+inherit nopackages
