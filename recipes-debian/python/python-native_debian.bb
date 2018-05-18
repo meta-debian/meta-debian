@@ -22,7 +22,6 @@ SRC_URI += "\
 	file://12-distutils-prefix-is-inside-staging-area_debian.patch \
 	file://unixccompiler.patch \
 	file://nohostlibs_debian.patch \
-	file://multilib_debian.patch \
 	file://add-md5module-support.patch \
 	file://builddir.patch \
 	file://parallel-makeinst-create-bindir.patch \
