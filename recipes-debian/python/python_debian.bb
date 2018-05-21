@@ -12,7 +12,6 @@ SRC_URI += "\
 	file://01-use-proper-tools-for-cross-build.patch \
 	file://03-fix-tkinter-detection.patch \
 	file://06-avoid_usr_lib_termcap_path_in_linking.patch \
-	file://multilib_debian.patch \
 	file://cgi_py.patch \
 	file://setup_py_skip_cross_import_check.patch \
 	file://add-md5module-support.patch \
