@@ -115,8 +115,8 @@ do_patch_append() {
 # we filter it out in such case -march=from-abi which will be
 # mips1 when using o32 and mips3 when using n32/n64
 
-TUNE_CCARGS_mips := "${@oe_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
-TUNE_CCARGS_mipsel := "${@oe_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
+TUNE_CCARGS_mips := "${@oe.utils.str_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
+TUNE_CCARGS_mipsel := "${@oe.utils.str_filter_out('-march=mips32', '${TUNE_CCARGS}', d)}"
 
 do_fix_readlib_c () {
 	sed -i -e 's#OECORE_KNOWN_INTERPRETER_NAMES#${EGLIBC_KNOWN_INTERPRETER_NAMES}#' ${S}/elf/readlib.c

@@ -29,7 +29,7 @@ DEPENDS = "hostperl-runtime-native"
 # CFLAG replaces the second parameters (next to gcc:) of the target config
 # in Configure (see do_configure). We simply use the same options as OE-Core
 # for supporting cross-build with sysroots.
-CFLAG = "${@base_conditional('SITEINFO_ENDIANNESS', 'le', '-DL_ENDIAN', '-DB_ENDIAN', d)} \
+CFLAG = "${@oe.utils.conditional('SITEINFO_ENDIANNESS', 'le', '-DL_ENDIAN', '-DB_ENDIAN', d)} \
 	-DTERMIO ${CFLAGS} -Wall -Wa,--noexecstack"
 CFLAG_mtx-1 := "${@'${CFLAG}'.replace('-O2', '')}"
 CFLAG_mtx-2 := "${@'${CFLAG}'.replace('-O2', '')}"

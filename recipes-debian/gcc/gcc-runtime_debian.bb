@@ -9,7 +9,7 @@ require gcc-4.9.inc
 require gcc-shared-source.inc
 require gcc-configure-common.inc
 
-CXXFLAGS := "${@oe_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
+CXXFLAGS := "${@oe.utils.str_filter_out('-fvisibility-inlines-hidden', '${CXXFLAGS}', d)}"
 
 EXTRA_OECONF_PATHS = " \
     --with-gxx-include-dir=${includedir}/c++/ \

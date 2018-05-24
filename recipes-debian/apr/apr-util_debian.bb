@@ -38,7 +38,7 @@ EXTRA_OECONF = " \
 "
 CACHED_CONFIGUREVARS += "ac_cv_prog_AWK=mawk"
 CACHED_CONFIGUREVARS += " \
-    ${@base_conditional('DPKG_ARCH','i386',\
+    ${@oe.utils.conditional('DPKG_ARCH','i386',\
       'apr_lock_method=USE_PROC_PTHREAD_SERIALIZE',\
       'ac_cv_func_pthread_mutexattr_setpshared=no \
        ac_cv_func_sem_open=no'\

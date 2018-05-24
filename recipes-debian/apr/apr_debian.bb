@@ -61,9 +61,9 @@ CACHED_CONFIGUREVARS_append_class-target = " \
 "
 
 CACHED_CONFIGUREVARS_append_class-target = " \
-    ${@base_conditional('SITEINFO_BITS','32','ac_cv_sizeof_struct_iovec=8','',d)}"
+    ${@oe.utils.conditional('SITEINFO_BITS','32','ac_cv_sizeof_struct_iovec=8','',d)}"
 CACHED_CONFIGUREVARS_append_class-target = " \
-    ${@base_conditional('SITEINFO_BITS','64','ac_cv_sizeof_struct_iovec=16','',d)}"
+    ${@oe.utils.conditional('SITEINFO_BITS','64','ac_cv_sizeof_struct_iovec=16','',d)}"
 
 # Added to fix some issues with cmake. Refer to https://github.com/bmwcarit/meta-ros/issues/68#issuecomment-19896928
 CACHED_CONFIGUREVARS += "apr_cv_mutex_recursive=yes"

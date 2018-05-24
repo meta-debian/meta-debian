@@ -137,9 +137,9 @@ DEBIAN_PATCH_TYPE ?= ""
 
 addtask debian_patch after do_unpack before do_patch
 do_debian_patch[dirs] = "${DEBIAN_UNPACK_DIR}"
-do_debian_patch[depends] += "${@base_conditional(\
+do_debian_patch[depends] += "${@oe.utils.conditional(\
     'PN', 'quilt-native', '', 'quilt-native:do_populate_sysroot', d)}"
-do_debian_patch[depends] += "${@base_conditional(\
+do_debian_patch[depends] += "${@oe.utils.conditional(\
     'DEBIAN_PATCH_TYPE', 'dpatch', 'dpatch-native:do_populate_sysroot', '', d)}"
 do_debian_patch() {
 	if debian_check_source_format; then

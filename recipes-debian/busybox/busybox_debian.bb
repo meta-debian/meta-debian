@@ -25,7 +25,7 @@ BUSYBOX_INIT_CONFIGS ?= "INIT FEATURE_USE_INITTAB"
 # (same format as SERIAL_CONSOLES)
 # respawning gettys for ttys in this list are automatically appended to inittab
 BUSYBOX_INITTAB_GETTYS ?= \
-"${@base_conditional('SERIAL_CONSOLES', None or '', '38400;tty1', '${SERIAL_CONSOLES}', d)}"
+"${@oe.utils.conditional('SERIAL_CONSOLES', None or '', '38400;tty1', '${SERIAL_CONSOLES}', d)}"
 
 #
 # basic definitions

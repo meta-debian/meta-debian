@@ -7,7 +7,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=b83a9a12562a4ee4582a554747a6c49a"
 
 SRC_URI += " \
-    ${@base_conditional('CONFIG_NEW_REALM','1','file://add-new-realm-to-krb5_conf.patch','',d)} \
+    ${@oe.utils.conditional('CONFIG_NEW_REALM','1','file://add-new-realm-to-krb5_conf.patch','',d)} \
 "
 
 CONFIG_NEW_REALM ??= "1"
