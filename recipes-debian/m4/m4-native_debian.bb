@@ -1,7 +1,5 @@
 require m4.inc
 
-PR = "r0"
-
 inherit native
 
 INHIBIT_AUTOTOOLS_DEPS = "1"

@@ -5,7 +5,7 @@
 #
 
 inherit debian-package
-PV = "1.4.17"
+PV = "1.4.18"
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = " \
@@ -14,6 +14,9 @@ LIC_FILES_CHKSUM = " \
 "
 
 inherit autotools
+
+# source format is 3.0 but there is no debian/patches
+DEBIAN_QUILT_PATCHES = ""
 
 SRC_URI += " \
 	file://ac_config_links.patch \
