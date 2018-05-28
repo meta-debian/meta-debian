@@ -22,7 +22,6 @@ EXTRA_OECONF_class-target = "--disable-gcc-warnings --bindir=${base_bindir}"
 EXTRA_OEMAKE_class-target = "GREP=${base_bindir}/grep"
 
 PROVIDES_append_class-native = " gzip-replacement-native"
-NATIVE_PACKAGE_PATH_SUFFIX = "/${PN}"
 
 #Add update-alternatives definitions
 ALTERNATIVE_PRIORITY="100"

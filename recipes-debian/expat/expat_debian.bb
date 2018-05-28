@@ -14,11 +14,12 @@ PV = "2.1.0"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1b71f681713d1256e1c23b0890920874"
 
-inherit autotools gzipnative
+inherit autotools
 
 # This package uses an archive format known to have issue with some
 # versions of gzip
-do_unpack[depends] += "gzip-native:do_populate_sysroot"
+DEPENDS += "pigz-native"
+do_unpack[depends] += "pigz-native:do_populate_sysroot"
 
 do_configure_prepend () {
         rm -f ${S}/conftools/libtool.m4

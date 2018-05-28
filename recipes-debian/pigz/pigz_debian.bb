@@ -45,8 +45,6 @@ ALTERNATIVE_LINK_NAME[gzip] = "${base_bindir}/gzip"
 ALTERNATIVE_LINK_NAME[gunzip] = "${base_bindir}/gunzip"
 ALTERNATIVE_PRIORITY = "80"
 
-NATIVE_PACKAGE_PATH_SUFFIX = "/${PN}"
-
 BBCLASSEXTEND = "native nativesdk"
 
 #
