@@ -44,10 +44,6 @@ debian_patch_quilt() {
 
 do_configure[noexec] = "1"
 
-# make_scripts requires kernel source directory to create
-# kernel scripts
-do_make_scripts[depends] += "virtual/kernel:do_shared_workdir"
-
 do_compile() {
 	oe_runmake KSRC=${STAGING_KERNEL_DIR} LDFLAGS='' V=1 kernel
 	oe_runmake KSRC=${STAGING_KERNEL_DIR} usr
