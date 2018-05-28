@@ -1,0 +1,18 @@
+Patch debian/patches/0004-Use-system-help2man-if-it-is-available.patch
+sets the wrong parameter with redundant quote "".
+This makes configure set ac_cv_path_HELP2MAN=""$PERL \${srcdir}/doc/help2man""
+and fail to detect HELP2MAN in case system "help2man" is not available.
+
+diff --git a/configure.ac b/configure.ac
+index f3ef80045..4ff6defeb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -108,7 +108,7 @@ AC_CHECK_PROGS([YACC], [yacc byacc 'bison -y'], [false])
+ AC_CHECK_PROGS([LEX], [lex flex], [false])
+ 
+ # Use system help2man if its available
+-AC_PATH_PROG([HELP2MAN], [help2man], ["$PERL \${srcdir}/doc/help2man"])
++AC_PATH_PROG([HELP2MAN], [help2man], [$PERL \${srcdir}/doc/help2man])
+ 
+ # Test for Autoconf.  We run Autoconf in a subdirectory to ease
+ # deletion of any files created (such as those added to
