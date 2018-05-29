@@ -1,14 +1,10 @@
 #
-# Base recipe: meta/recipes-devtools/quilt/quilt-native_0.61.bb
-# Base branch: daisy
+# base recipe: meta/recipes-devtools/quilt/quilt-native_0.65.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
 require quilt.inc
-
-PR = "${INC_PR}.0"
-
-LICENSE = "GPLv2"
-LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
 RDEPENDS_${PN} = "diffstat-native patch-native bzip2-native util-linux-native"
 
@@ -29,10 +25,6 @@ do_install_append () {
 	# Dummy quiltrc file for patch.bbclass
 	install -d ${D}${sysconfdir}/
 	touch ${D}${sysconfdir}/quiltrc
-
-	install -m 0755 ${S}/debian/deb3 ${D}${bindir}
-	install -m 0755 ${S}/debian/dh_quilt_patch ${D}${bindir}
-	install -m 0755 ${S}/debian/dh_quilt_unpatch ${D}${bindir}
 }
 
 # quilt-native also depends on native quilt command.

@@ -1,21 +1,19 @@
 #
-# Base recipe: meta/recipes-devtools/quilt/quilt_0.61.inc
-# Base branch: daisy
+# base recipe: meta/recipes-devtools/quilt/quilt.inc
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
-    
+
 SUMMARY = "Tool for working with series of patches"
 HOMEPAGE = "http://savannah.nongnu.org/projects/quilt/"
 
-INC_PR = "r0"
-
 inherit debian-package
-PV = "0.63"
+PV = "0.65"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
 SRC_URI += " \
-        file://install.patch \
         file://run-ptest \
         file://Makefile \
 "
@@ -39,6 +37,11 @@ EXTRA_OE_MAKE_ARGS_darwin ?= ""
 EXTRA_OE_MAKE_ARGS ?= "BUILD_ROOT=${D}"
 
 CACHED_CONFIGUREVARS += "ac_cv_path_BASH=/bin/bash"
+
+# Don't setup symlinks to host utilities, we don't need them
+do_configure_append () {
+	sed -e 's,^COMPAT_SYMLINKS.*:=.*,COMPAT_SYMLINKS        :=,' -i ${S}/Makefile
+}
 
 # quilt ignores DESTDIR
 do_install () {
