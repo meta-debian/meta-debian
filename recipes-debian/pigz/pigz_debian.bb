@@ -25,26 +25,6 @@ file://README;md5=d9835b8537721e63621b30c67e1af3e3 \
 file://pigz.c;beginline=7;endline=21;md5=a21d4075cb00ab4ca17fce5e7534ca95 \
 "
 
-PROVIDES_class-native += "gzip-native"
-
-do_install () {
-        if [ "${CLASSOVERRIDE}" = "class-target" ] ; then
-                # Install files into /bin (FHS), which is typical place for gzip
-                install -d ${D}${base_bindir}
-                install ${B}/pigz ${D}${base_bindir}/gzip
-                install ${B}/unpigz ${D}${base_bindir}/gunzip
-        else
-                install -d ${D}${bindir}
-                install ${B}/pigz ${D}${bindir}/gzip
-                install ${B}/unpigz ${D}${bindir}/gunzip
-        fi
-}
-
-ALTERNATIVE_${PN} = "gzip gunzip"
-ALTERNATIVE_LINK_NAME[gzip] = "${base_bindir}/gzip"
-ALTERNATIVE_LINK_NAME[gunzip] = "${base_bindir}/gunzip"
-ALTERNATIVE_PRIORITY = "80"
-
 BBCLASSEXTEND = "native nativesdk"
 
 #
