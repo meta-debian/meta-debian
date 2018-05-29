@@ -1,6 +1,7 @@
 #
-# base recipe: meta/recipes-devtools/libtool/libtool-2.4.2.inc
-# base branch: daisy
+# base recipe: meta/recipes-devtools/libtool/libtool-2.4.6.inc
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 # 
 
 SUMMARY = "Generic library support script"
@@ -9,10 +10,8 @@ Libtool hides the complexity of generating special library types \
 (such as shared libraries) behind a consistent interface."
 HOMEPAGE = "http://www.gnu.org/software/libtool/libtool.html"
 
-INC_PR = "r1"
-
-inherit  debian-package autotools
-PV = "2.4.2"
+inherit debian-package
+PV = "2.4.6"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\
@@ -25,23 +24,24 @@ file://trailingslash.patch \
 file://rename-with-sysroot.patch \
 file://use-sysroot-in-libpath.patch \
 file://fix-final-rpath.patch \
-file://avoid_absolute_paths_for_general_utils.patch \
 file://fix-rpath.patch \
-file://respect-fstack-protector.patch \
 file://norm-rpath.patch \
-file://dont-depend-on-help2man-edited.patch \
+file://dont-depend-on-help2man.patch \
 file://fix-resolve-lt-sysroot.patch \
+file://nohardcodepaths.patch \
 "
+
+inherit autotools texinfo
 
 EXTRA_AUTORECONF = "--exclude=libtoolize"
 
 DEPENDS = "libtool-native"
 
 do_compile_prepend () {                                                         
-        # Sometimes this file doesn't get rebuilt, force the issue              
-        rm -f ${S}/libltdl/config/ltmain.sh                                     
-        make libltdl/config/ltmain.sh                                           
-        ./config.status                                                         
+        # Sometimes this file doesn't get rebuilt, force the issue
+        rm -f ${S}/build-aux/ltmain.sh
+        make build-aux/ltmain.sh
+        ./config.status
 } 
 
 PACKAGES =+ "libltdl libltdl-dev ${PN}-bin"

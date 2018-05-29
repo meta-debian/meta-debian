@@ -1,11 +1,10 @@
 #
-# Base recipe: meta/recipes-devtools/libtool/libtool-native_2.4.2.bb
-# Base-branch: daisy
+# base recipe: meta/recipes-devtools/libtool/libtool-native_2.4.6.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
 require libtool.inc
-
-PR = "${INC_PR}.1"
 
 inherit native
 
@@ -22,7 +21,6 @@ file://prefix.patch \
 # gettext's libraries although library dependency flag was already added.       
 # As author's comment, shared library on ELF system should already known which  
 # libs it need to link, but the case seem is not true for gettext.                                    
-                                                                                
 do_debian_patch_prepend() {                                                     
 	sed -i -e "/link_all_deplibs/ d" ${S}/debian/patches/series             
 }
