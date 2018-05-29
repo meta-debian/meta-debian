@@ -1,12 +1,11 @@
 #
-# base recipe: meta/recipes-core/gettext/gettext_0.18.3.2.bb
-# base branch: daisy
+# base recipe: meta/recipes-core/gettext/gettext_0.19.8.1.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
-PR = "0"
-
 inherit debian-package
-PV = "0.19.3"
+PV = "0.19.8.1"
 
 SUMMARY = "Utilities and libraries for producing multi-lingual messages"
 DESCRIPTION = "GNU gettext is a set of tools that provides a framework to help other programs produce multi-lingual messages. These tools include a set of conventions about how programs should be written to support message catalogs, a directory and file naming organization for the message catalogs themselves, a runtime library supporting the retrieval of translated messages, and a few stand-alone programs to massage in various ways the sets of translatable and already translated strings."
@@ -14,32 +13,39 @@ DESCRIPTION = "GNU gettext is a set of tools that provides a framework to help o
 LICENSE = "GPLv3+ & LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-DEPENDS = "gettext-native virtual/libiconv expat"
+DEPENDS = "gettext-native virtual/libiconv"
 DEPENDS_class-native = "gettext-minimal-native"
 PROVIDES = "virtual/libintl virtual/gettext"
 PROVIDES_class-native = "virtual/gettext-native"
 RCONFLICTS_${PN} = "proxy-libintl"
 
-PACKAGECONFIG[msgcat-curses] = "--with-libncurses-prefix=${STAGING_LIBDIR}/..,--disable-curses,ncurses,"
-
 LDFLAGS_prepend_libc-uclibc = " -lrt -lpthread "
 
-inherit autotools
+inherit autotools texinfo pkgconfig
 
 EXTRA_OECONF += "--without-lispdir \
                  --disable-csharp \
+                 --disable-libasprintf \
                  --disable-java \
                  --disable-native-java \
                  --disable-openmp \
                  --disable-acl \
-                 --with-included-glib \
                  --without-emacs \
                  --without-cvs \
                  --without-git \
-                 --with-included-libxml \
-                 --with-included-libcroco \
-                 --with-included-libunistring \
                 "
+
+PACKAGECONFIG ??= "croco glib libxml"
+PACKAGECONFIG_class-native = ""
+PACKAGECONFIG_class-nativesdk = ""
+
+PACKAGECONFIG[croco] = "--without-included-libcroco,--with-included-libcroco,libcroco"
+PACKAGECONFIG[glib] = "--without-included-glib,--with-included-glib,glib-2.0"
+PACKAGECONFIG[libxml] = "--without-included-libxml,--with-included-libxml,libxml2"
+# Need paths here to avoid host contamination but this can cause RPATH warnings
+# or problems if $libdir isn't $prefix/lib.
+PACKAGECONFIG[libunistring] = "--with-libunistring-prefix=${STAGING_LIBDIR}/..,--with-included-libunistring,libunistring"
+PACKAGECONFIG[msgcat-curses] = "--with-libncurses-prefix=${STAGING_LIBDIR}/..,--disable-curses,ncurses,"
 
 acpaths = '-I ${S}/gettext-runtime/m4 \
            -I ${S}/gettext-tools/m4'
@@ -60,50 +66,56 @@ do_install_append_class-native () {
 	rm -f ${D}${datadir}/gettext/po/remove-potcdate.sin
 }
 
-PACKAGES =+ "autopoint ${PN}-base libgettextpo0 libasprintf0c2 libgettextpo-dev libasprintf-dev"
+# these lack the .x behind the .so, but shouldn't be in the -dev package
+# Otherwise you get the following results:
+# 7.4M    glibc/images/ep93xx/Angstrom-console-image-glibc-ipk-2008.1-test-20080104-ep93xx.rootfs.tar.gz
+# 25M     uclibc/images/ep93xx/Angstrom-console-image-uclibc-ipk-2008.1-test-20080104-ep93xx.rootfs.tar.gz
+# because gettext depends on gettext-dev, which pulls in more -dev packages:
+# 15228   KiB /ep93xx/libstdc++-dev_4.2.2-r2_ep93xx.ipk
+# 1300    KiB /ep93xx/uclibc-dev_0.9.29-r8_ep93xx.ipk
+# 140     KiB /armv4t/gettext-dev_0.14.1-r6_armv4t.ipk
+# 4       KiB /ep93xx/libgcc-s-dev_4.2.2-r2_ep93xx.ipk
 
-FILES_${PN}-dev = ""
-FILES_${PN} += " \
-    ${libdir}/libgettextlib-${PV}.so \
-    ${libdir}/libgettextsrc-${PV}.so \
-    ${libdir}/preloadable_libintl.so \
-    ${datadir}/aclocal \
-"
-FILES_autopoint = " \
-    ${bindir}/autopoint \
-    ${datadir}/gettext/archive.dir.tar.xz \
-"
-FILES_${PN}-base = " \
-    ${bindir}/envsubst \
-    ${bindir}/gettext \
-    ${bindir}/gettext.sh \
-    ${bindir}/ngettext \
-"
-FILES_libgettextpo0 = "${libdir}/libgettextpo${SOLIBS}"
-FILES_libasprintf0c2 = "${libdir}/libasprintf${SOLIBS}"
-FILES_libgettextpo-dev = " \
-    ${includedir}/gettext-po.h \
-    ${libdir}/libgettextpo${SOLIBSDEV} \
-"
-FILES_libasprintf-dev = " \
-    ${includedir}/autosprintf.h \
-    ${libdir}/libasprintf${SOLIBSDEV} \
-"
+PACKAGES =+ "libgettextlib libgettextsrc"
+FILES_libgettextlib = "${libdir}/libgettextlib-*.so*"
+FILES_libgettextsrc = "${libdir}/libgettextsrc-*.so*"
 
-DEBIAN_NOAUTONAME_libasprintf0c2 = "1"
+PACKAGES =+ "gettext-runtime gettext-runtime-dev gettext-runtime-doc"
 
-RDEPENDS_${PN}-base = "libasprintf0c2"
-RDEPENDS_${PN} = "${PN}-base"
-RDEPENDS_autopoint = "xz-utils"
+FILES_${PN} += "${libdir}/${BPN}/*"
 
-RDEPENDS_${PN}-base_class-native = ""
-RDEPENDS_${PN}_class-native = ""
+# The its/Makefile.am has defined:
+# itsdir = $(pkgdatadir)$(PACKAGE_SUFFIX)/its
+# not itsdir = $(pkgdatadir), so use wildcard to match the version.
+FILES_${PN} += "${datadir}/${BPN}-*/*"
+
+FILES_gettext-runtime = "${bindir}/gettext \
+                         ${bindir}/ngettext \
+                         ${bindir}/envsubst \
+                         ${bindir}/gettext.sh \
+                         ${libdir}/libasprintf.so* \
+                         ${libdir}/GNU.Gettext.dll \
+                        "
+FILES_gettext-runtime-dev += "${libdir}/libasprintf.a \
+                      ${includedir}/autosprintf.h \
+                     "
+FILES_gettext-runtime-doc = "${mandir}/man1/gettext.* \
+                             ${mandir}/man1/ngettext.* \
+                             ${mandir}/man1/envsubst.* \
+                             ${mandir}/man1/.* \
+                             ${mandir}/man3/* \
+                             ${docdir}/gettext/gettext.* \
+                             ${docdir}/gettext/ngettext.* \
+                             ${docdir}/gettext/envsubst.* \
+                             ${docdir}/gettext/*.3.html \
+                             ${datadir}/gettext/ABOUT-NLS \
+                             ${docdir}/gettext/csharpdoc/* \
+                             ${docdir}/libasprintf/autosprintf.html \
+                             ${infodir}/autosprintf.info \
+                            "
 
 BBCLASSEXTEND = "native nativesdk"
 
-# There is no file git-version-gen in released archive, temporarily get 
-# current version from ChangeLog with do-not-use-git-version-gen.patch
 SRC_URI += " \
 file://parallel.patch \
-file://do-not-use-git-version-gen.patch \
 "
