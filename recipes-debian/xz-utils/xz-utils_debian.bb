@@ -1,12 +1,14 @@
 #
-# base recipe: meta/recipes-extended/xz/xz_5.1.3alpha.bb
-# base branch: daisy
+# base recipe: meta/recipes-extended/xz/xz_5.2.3.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
+
 SUMMARY = "Utilities for managing LZMA compressed files"
 HOMEPAGE = "http://tukaani.org/xz/"
 
 inherit debian-package autotools gettext
-PV = "5.1.1alpha+20120614"
+PV = "5.2.2"
 DPN = "xz-utils"
 PROVIDES = "xz"
 
@@ -15,14 +17,13 @@ DEPENDS += "gettext-native"
 # which is GPLv3 is an m4 macro which isn't shipped in any of our packages,
 # and the LGPL bits are under lib/, which appears to be used for libgnu, which
 # appears to be used for DOS builds. So we're left with GPLv2+ and PD.
-LICENSE = "GPLv2+ & GPLv3+ & LGPLv2.1+ & PD"
+LICENSE = "GPLv2+ & GPL-3.0-with-autoconf-exception & LGPLv2.1+ & PD"
 LICENSE_${PN} = "GPLv2+"
 LICENSE_${PN}-dev = "GPLv2+"
 LICENSE_${PN}-staticdev = "GPLv2+"
 LICENSE_${PN}-doc = "GPLv2+"
 LICENSE_${PN}-dbg = "GPLv2+"
 LICENSE_liblzma = "PD"
-LICENSE_xzdec = "GPLv2+"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=c475b6c7dca236740ace4bba553e8e1c \
                     file://COPYING.GPLv2;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
@@ -41,36 +42,13 @@ python package_do_split_locales_append() {
         d.setVar('LICENSE_' + pkg, "GPLv2+")
 }
 
-# generate build-aux/config.rpath so autoreconf can see it
-do_configure_prepend() {
-	cd ${S}
-	./autogen.sh && cd -
-}
+inherit autotools gettext
 
-do_compile_append () {
-	oe_runmake -C ${B}/po all-yes
-}
-
-do_install_append () {
-	install -d ${D}${base_libdir}
-	#follow debian/rules
-	mv ${D}${libdir}/liblzma.so.* ${D}${base_libdir}/
-	dso=$(basename $(readlink ${D}${libdir}/liblzma.so))
-	ln -s -f ../../lib/$dso ${D}${libdir}/liblzma.so
-
-	#remove the unwanted files
-	for file in lzcat lzcmp lzdiff lzegrep lzfgrep lzgrep lzless lzma lzmore unlzma; do
-		rm ${D}${bindir}/$file
-	done
-	rm ${D}${libdir}/liblzma.la
-	oe_runmake -C ${B}/po install-data-yes DESTDIR=${D}
-}
-
-PACKAGES =+ "liblzma xzdec"
+PACKAGES =+ "liblzma"
 
 FILES_liblzma = "${base_libdir}/liblzma*${SOLIBS}"
-FILES_xzdec = "${bindir}/lzmadec ${bindir}/xzdec"
 
-DEBIANNAME_${PN} = "${DPN}"
-DEBIANNAME_${PN}-dev = "liblzma-dev"
-DEBIANNAME_${PN}-doc = "liblzma-doc"
+inherit update-alternatives
+ALTERNATIVE_PRIORITY = "100"
+ALTERNATIVE_${PN} = "xz xzcat unxz \
+                     lzma lzcat unlzma"
