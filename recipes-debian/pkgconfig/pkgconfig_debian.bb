@@ -1,6 +1,7 @@
 #
-# base recipe: meta/recipes-devtools/pkgconfig/pkgconfig_0.28.bb
-# base branch: daisy
+# base recipe: meta/recipes-devtools/pkgconfig/pkgconfig_git.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
 SUMMARY = "manage compile and link flags for libraries"
@@ -8,34 +9,30 @@ DESCRIPTION = "pkg-config is a system for managing library compile and link flag
 works with automake and autoconf."
 HOMEPAGE = "http://pkg-config.freedesktop.org"
 
-PR = "r1"
-
 inherit debian-package
-PV = "0.28"
+PV = "0.29"
 
 DPN = "pkg-config"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
-DEPENDS = "glib-2.0"
-DEPENDS_class-native = ""
-DEPENDS_class-nativesdk = ""
-
 DEBIAN_PATCH_TYPE = "nopatch"
 
 SRC_URI += " \
 	file://pkg-config-native.in \
 	file://fix-glib-configure-libtool-usage.patch \
-	file://obsolete_automake_macros.patch \
-	file://0001-Strip-system-library-directories-reliably.patch \
+	file://gcc-format-nonliteral-1.patch;patchdir=${S}/glib \
+	file://gcc-format-nonliteral-2.patch;patchdir=${S}/glib \
 "
 
 inherit autotools
 
-EXTRA_OECONF = "--without-internal-glib"
-EXTRA_OECONF_class-native = "--with-internal-glib"
-EXTRA_OECONF_class-nativesdk = "--with-internal-glib"
+PACKAGECONFIG ??= "glib"
+PACKAGECONFIG_class-native = ""
+PACKAGECONFIG_class-nativesdk = ""
+
+PACKAGECONFIG[glib] = "--without-internal-glib,--with-internal-glib,glib-2.0 pkgconfig-native"
 
 acpaths = "-I ."
 
@@ -43,13 +40,7 @@ acpaths = "-I ."
 # the pkg.m4 macros, pkgconfig does not deliver any other -dev
 # files.
 FILES_${PN}-dev = ""
-FILES_${PN} += "${datadir}/aclocal/pkg.m4 \
-                ${datadir}/pkg-config-crosswrapper \
-                "
-
-do_install_append() {
-	install -m 0755 ${S}/debian/pkg-config-crosswrapper ${D}${datadir}/
-}
+FILES_${PN} += "${datadir}/aclocal/pkg.m4"
 
 # Install a pkg-config-native wrapper that will use the native sysroot instead
 # of the MACHINE sysroot, for using pkg-config when building native tools.
