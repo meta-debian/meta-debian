@@ -25,8 +25,8 @@ DPN = "automake-1.15"
 LICENSE = "GPLv2+ & GPLv3+ & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
-	file://t/ext3.sh;beginline=2;endline=15;md5=acd264ffa44ba4128333c4a9501d0532 \
-	file://doc/automake.info;beginline=8;endline=15;md5=c865c89fa5e4f14520fe3f480b07b4f1 \
+	file://t/ext3.sh;beginline=2;endline=15;md5=91e9e4681cdb2948e3cc91b4fbe6d096 \
+	file://doc/automake.info;beginline=8;endline=15;md5=5ab793806113a41dbf71ef679a1518a3 \
 "
 
 SRC_URI += " \

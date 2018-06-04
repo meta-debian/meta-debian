@@ -15,8 +15,8 @@ PV = "2.4.6"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\
-file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
-file://libltdl/COPYING.LIB;md5=e3eda01d9815f8d24aae2dbd89b68b06 \
+file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
+file://libltdl/COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
 "
 
 SRC_URI += "\

@@ -12,9 +12,9 @@ PV = "1.14.2"
 
 LICENSE = "GPLv3+ & GPLv2+ & BSD-2-Clause"
 LIC_FILES_CHKSUM = " \
-    file://COPYING;md5=f27defe1e96c2e1ecd4e0c9be8967949 \
-    file://ed.h;endline=20;md5=2b62ce887e37f828a04aa32f1ec23787 \
-    file://main.c;endline=17;md5=002b306d8e804a6fceff144b26554253 \
+    file://COPYING;md5=0c7051aef9219dc7237f206c5c4179a7 \
+    file://ed.h;endline=18;md5=732c441d6778edd95456153ea8c00ea6 \
+    file://main.c;endline=16;md5=0c4723efd750563ae7d6ae847b50cd41 \
     file://carg_parser.h;endline=18;md5=407288513b2b9492418fc61112d342de \
 "
 
