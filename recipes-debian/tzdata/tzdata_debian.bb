@@ -11,8 +11,8 @@ PR = "r0"
 inherit debian-package
 PV = "2017c"
 
-LICENSE = "PD & BSD & BSD-3-Clause"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=ef1a352b901ee7b75a75df8171d6aca7"
+LICENSE = "PD"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=c679c9d6b02bc2757b3eaf8f53c43fba"
 
 DEPENDS = "zic-native"
 
