@@ -133,7 +133,9 @@ do_install() {
 	   ${D}${includedir}/${DEB_HOST_MULTIARCH}/python${PYTHON_MAJMIN}/
 	sed 's/@subdir@/python${PYTHON_MAJMIN}/;s/@header@/pyconfig.h/' \
 	    ${S}/debian/multiarch.h.in > ${D}${includedir}/python${PYTHON_MAJMIN}/pyconfig.h
+}
 
+do_install_append_class-target () {
 	install -d ${D}${libdir}/${DEB_HOST_MULTIARCH}
 	mv ${D}${libdir}/*.so* ${D}${libdir}/${DEB_HOST_MULTIARCH}/
 	ln -sf libpython${PYTHON_MAJMIN}.so.1.0 ${D}${libdir}/${DEB_HOST_MULTIARCH}/libpython${PYTHON_MAJMIN}.so.1
@@ -170,9 +172,14 @@ RRECOMMENDS_${PN}-core = "${PN}-readline"
 RRECOMMENDS_${PN}-core_append_class-nativesdk = " nativesdk-python-modules"
 RRECOMMENDS_${PN}-crypt = "openssl"
 
-# package libpython2
-PACKAGES =+ "lib${BPN}2"
+# package libpython2 python2-dev
+PACKAGES =+ "lib${BPN}2 ${BPN}2-dev"
+
 FILES_lib${BPN}2 = "${libdir}/${DEB_HOST_MULTIARCH}/libpython*.so.*"
+
+FILES_lib${BPN}2_class-nativesdk += "${libdir}/libpython*.so.*"
+
+FILES_${BPN}2-dev_class-nativesdk += "${libdir}/libpython*.so"
 
 # catch debug extensions (isn't that already in python-core-dbg?)
 FILES_${PN}-dbg += "${libdir}/python${PYTHON_MAJMIN}/lib-dynload/.debug"
