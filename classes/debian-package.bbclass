@@ -5,23 +5,8 @@
 # Debian source package name
 DPN ?= "${BPN}"
 
-# default SRC_URI
-DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
-DEBIAN_SRC_URI ?= "\
-${DEBIAN_GIT_URI}/${DEBIAN_GIT_PREFIX}${DPN}.git;\
-protocol=${DEBIAN_GIT_PROTOCOL};\
-branch=${DEBIAN_GIT_BRANCH}\
-"
-
-SRC_URI = "${DEBIAN_SRC_URI}"
-
-# By default, always use latest version of the default branch
-SRCREV = "${AUTOREV}"
-
-DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
-
-# sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
-S = "${DEBIAN_UNPACK_DIR}"
+# Detect and set SRC_URI to Debian apt repository
+inherit debian-source
 
 ###############################################################################
 # do_debian_patch
