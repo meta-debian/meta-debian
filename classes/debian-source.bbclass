@@ -62,6 +62,11 @@ python __anonymous() {
                     md5sum = line.split()[0]
                     debian_src_uri += "%s/%s;name=%s;apply=no " % (src_dir, f, f)
                     d.setVarFlag("SRC_URI", f + ".md5sum", md5sum)
+
+                    # Dependency for unpack
+                    if f.endswith('.xz') or f.endswith('.txz'):
+                        d.appendVarFlag('do_unpack', 'depends', ' xz-native:do_populate_sysroot')
+
                 elif sha256_detected:
                     f = line.split()[2]
                     sha256sum = line.split()[0]
