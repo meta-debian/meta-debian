@@ -11,8 +11,10 @@ HOMEPAGE = "http://pkg-config.freedesktop.org"
 
 inherit debian-package
 PV = "0.29"
+DPR = "-4"
+DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=9701931d34b79f941ee35c67d567a7bc"
 
-DPN = "pkg-config"
+BPN = "pkg-config"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"

@@ -19,11 +19,14 @@ HOMEPAGE = "http://www.gnu.org/software/bison/"
 
 inherit debian-package
 PV = "3.0.4.dfsg"
+DPR = "-1"
+DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=eed71f7e2ddc81f942697bc430b939a2"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 "
+
 
 # FIXME: file doc/bison.texi is missing, temporarily build without document
 # and examples for minimal implementation with

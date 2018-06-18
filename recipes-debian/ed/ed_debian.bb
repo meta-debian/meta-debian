@@ -9,6 +9,8 @@ HOMEPAGE = "http://www.gnu.org/software/ed/"
 
 inherit debian-package
 PV = "1.14.2"
+DPR = "-2"
+DSC_URI = "${DEBIAN_MIRROR}/main/e/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=4463aa49154d025ff00ce32cc88235d8"
 
 LICENSE = "GPLv3+ & GPLv2+ & BSD-2-Clause"
 LIC_FILES_CHKSUM = " \

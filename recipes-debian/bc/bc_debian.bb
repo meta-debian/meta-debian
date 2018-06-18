@@ -12,6 +12,8 @@ HOMEPAGE = "http://ftp.gnu.org/gnu/bc/"
 
 inherit debian-package
 PV = "1.07.1"
+DPR = "-2"
+DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fc30a4f7d7314cb67599e9917bb31c52"
 
 LICENSE = "GPLv3+ & LGPLv3+"
 LIC_FILES_CHKSUM = " \
