@@ -2,9 +2,6 @@
 # debian-package.bbclass
 #
 
-# Debian source package name
-DPN ?= "${BPN}"
-
 # Detect and set SRC_URI to Debian apt repository
 inherit debian-source
 
