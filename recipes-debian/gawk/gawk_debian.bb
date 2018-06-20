@@ -3,36 +3,34 @@
 # base branch: daisy
 #
 
-PR = "r0"
+SUMMARY = "GNU awk text processing utility"
+DESCRIPTION = "The GNU version of awk, a text processing utility. \
+Awk interprets a special-purpose programming language to do \
+quick and easy text pattern matching and reformatting jobs."
+HOMEPAGE = "https://www.gnu.org/software/gawk/"
 
 inherit debian-package
-PV = "4.1.1+dfsg"
+PV = "4.1.4+dfsg"
+DPR = "-1"
+DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f65a7d4ce42f8a2876efe6930039eb6b"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-4.1.4"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS += "readline"
 
-# 
-# remove-doc.patch:
-# Remove "doc" dir from build targets
-# since gawk.texi doesn't existed.
-# See patch file for more detail.
-#
-# run-ptest:
-# Patch file from reused recipes
+# run-ptest: test script for ptest
 SRC_URI += " \
-file://remove-doc.patch \
 file://run-ptest \
 "
 
 inherit autotools gettext update-alternatives
 
-EXTRA_OECONF += "--disable-rpath --libexecdir=${libdir}"
-
-# Touch empty gawk.texi file according to debian/rules.
-do_configure_prepend() {
-	# see debian/rules and comments in remove-doc.patch
+do_configure() {
+	# Debian removed *.texi out of source code.
+	# Touch them to pass compiling.
+	oe_runconf
 	touch --date="Jan 01 2000" \
 		${S}/doc/gawktexi.in ${S}/doc/gawk.texi ${S}/doc/gawkinet.texi \
 		${S}/doc/gawk.info ${S}/doc/gawkinet.info ${S}/doc/sidebar.awk
@@ -46,11 +44,7 @@ do_install_append() {
 	rm -rf ${D}${datadir}/info
 }
 
-FILES_${PN} += " \
-	${datadir}/awk \
-	${libdir}/awk \
-"
-FILES_${PN}-dbg += "${libdir}/awk/.debug"
+FILES_${PN} += "${datadir}/awk"
 
 ALTERNATIVE_${PN} = "awk"
 ALTERNATIVE_TARGET[awk] = "${bindir}/gawk"
@@ -64,3 +58,5 @@ do_install_ptest() {
 		do cp ${S}/test/$i* ${D}${PTEST_PATH}/test; \
 	done
 }
+
+BBCLASSEXTEND = "native nativesdk"
