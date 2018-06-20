@@ -19,7 +19,7 @@ PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}libc-initial = "${TCLIBC}-initial"
 PREFERRED_PROVIDER_virtual/nativesdk-${SDK_PREFIX}libc-initial = "nativesdk-glibc-initial"
 PREFERRED_PROVIDER_virtual/gettext ??= "gettext"
 
-PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}binutils-crosssdk = "binutils-crosssdk-${TARGET_ARCH}"
+PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}binutils-crosssdk = "binutils-crosssdk-${SDK_SYS}"
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}gcc-initial-crosssdk = "gcc-crosssdk-initial-${TARGET_ARCH}"
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}gcc-crosssdk = "gcc-crosssdk-${TARGET_ARCH}"
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}gcc++-crosssdk = "gcc-crosssdk-${TARGET_ARCH}"
