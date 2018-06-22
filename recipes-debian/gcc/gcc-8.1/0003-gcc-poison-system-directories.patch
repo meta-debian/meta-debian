@@ -1,29 +1,35 @@
-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 29 Mar 2013 08:59:00 +0400
-Subject: [PATCH 16/35] gcc: poison-system-directories
+#
+# base patch: meta/recipes-devtools/gcc/gcc-8.1/0003-gcc-poison-system-directories.patch
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
+#
+# Modified to work with Debian source code.
+# gcc/doc/invoke.texi is empty. Nothing to patch.
+#
+# From 48c670d2678e0323d88eb72205e039f393cabe05 Mon Sep 17 00:00:00 2001
+# From: Khem Raj <raj.khem@gmail.com>
+# Date: Fri, 29 Mar 2013 08:59:00 +0400
+# Subject: [PATCH 03/39] gcc: poison-system-directories
+#
+# Signed-off-by: Khem Raj <raj.khem@gmail.com>
+#
+# Upstream-Status: Inappropriate [distribution: codesourcery]
+# ---
+# gcc/common.opt      |  4 ++++
+# gcc/config.in       |  6 ++++++
+# gcc/configure       | 16 ++++++++++++++++
+# gcc/configure.ac    | 10 ++++++++++
+# gcc/gcc.c           |  2 ++
+# gcc/incpath.c       | 19 +++++++++++++++++++
+# 7 files changed, 66 insertions(+)
 
-Signed-off-by: Khem Raj <raj.khem@gmail.com>
-
-Upstream-Status: Inappropriate [distribution: codesourcery]
----
- gcc/Makefile.in     |    2 +-
- gcc/common.opt      |    4 ++++
- gcc/config.in       |    6 ++++++
- gcc/configure       |   20 ++++++++++++++++++--
- gcc/configure.ac    |   10 ++++++++++
- gcc/doc/invoke.texi |    9 +++++++++
- gcc/gcc.c           |    2 ++
- gcc/incpath.c       |   19 +++++++++++++++++++
- 8 files changed, 69 insertions(+), 3 deletions(-)
-
-Index: gcc-4.9-20140316/gcc/common.opt
-===================================================================
---- gcc-4.9-20140316.orig/gcc/common.opt
-+++ gcc-4.9-20140316/gcc/common.opt
-@@ -603,6 +603,10 @@ Wpedantic
- Common Var(pedantic) Warning
- Issue warnings needed for strict compliance to the standard
+diff --git a/gcc/common.opt b/gcc/common.opt
+index d6ef85928f3..7b29efe3882 100644
+--- a/gcc/common.opt
++++ b/gcc/common.opt
+@@ -679,6 +679,10 @@ Wreturn-local-addr
+ Common Var(warn_return_local_addr) Init(1) Warning
+ Warn about returning a pointer/reference to a local or temporary variable.
  
 +Wpoison-system-directories
 +Common Var(flag_poison_system_directories) Init(1) Warning
@@ -31,12 +37,12 @@ Index: gcc-4.9-20140316/gcc/common.opt
 +
  Wshadow
  Common Var(warn_shadow) Warning
- Warn when one local variable shadows another
-Index: gcc-4.9-20140316/gcc/config.in
-===================================================================
---- gcc-4.9-20140316.orig/gcc/config.in
-+++ gcc-4.9-20140316/gcc/config.in
-@@ -138,6 +138,12 @@
+ Warn when one variable shadows another.  Same as -Wshadow=global.
+diff --git a/gcc/config.in b/gcc/config.in
+index 5bccb408016..1c784a8276b 100644
+--- a/gcc/config.in
++++ b/gcc/config.in
+@@ -194,6 +194,12 @@
  #endif
  
  
@@ -49,11 +55,11 @@ Index: gcc-4.9-20140316/gcc/config.in
  /* Define if you want all operations on RTL (the basic data structure of the
     optimizer and back end) to be checked for dynamic type safety at runtime.
     This is quite expensive. */
-Index: gcc-4.9-20140316/gcc/configure
-===================================================================
---- gcc-4.9-20140316.orig/gcc/configure
-+++ gcc-4.9-20140316/gcc/configure
-@@ -928,6 +928,7 @@ with_system_zlib
+diff --git a/gcc/configure b/gcc/configure
+index 5c345ce0fd7..cafd05fd150 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -953,6 +953,7 @@ with_system_zlib
  enable_maintainer_mode
  enable_link_mutex
  enable_version_specific_runtime_libs
@@ -61,7 +67,7 @@ Index: gcc-4.9-20140316/gcc/configure
  enable_plugin
  enable_host_shared
  enable_libquadmath_support
-@@ -1648,6 +1649,8 @@ Optional Features:
+@@ -1696,6 +1697,8 @@ Optional Features:
    --enable-version-specific-runtime-libs
                            specify that runtime libraries should be installed
                            in a compiler-specific directory
@@ -70,7 +76,7 @@ Index: gcc-4.9-20140316/gcc/configure
    --enable-plugin         enable plugin support
    --enable-host-shared    build host code as shared libraries
    --disable-libquadmath-support
-@@ -27702,6 +27705,19 @@ if test "${enable_version_specific_runti
+@@ -29715,6 +29718,19 @@ if test "${enable_version_specific_runtime_libs+set}" = set; then :
  fi
  
  
@@ -90,11 +96,11 @@ Index: gcc-4.9-20140316/gcc/configure
  # Substitute configuration variables
  
  
-Index: gcc-4.9-20140316/gcc/configure.ac
-===================================================================
---- gcc-4.9-20140316.orig/gcc/configure.ac
-+++ gcc-4.9-20140316/gcc/configure.ac
-@@ -5366,6 +5366,16 @@ AC_ARG_ENABLE(version-specific-runtime-l
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index 65dbf1f2f80..dd5b38195ce 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -6341,6 +6341,16 @@ AC_ARG_ENABLE(version-specific-runtime-libs,
                  [specify that runtime libraries should be
                   installed in a compiler-specific directory])])
  
@@ -111,24 +117,24 @@ Index: gcc-4.9-20140316/gcc/configure.ac
  # Substitute configuration variables
  AC_SUBST(subdirs)
  AC_SUBST(srcdir)
-Index: gcc-4.9-20140316/gcc/gcc.c
-===================================================================
---- gcc-4.9-20140316.orig/gcc/gcc.c
-+++ gcc-4.9-20140316/gcc/gcc.c
-@@ -764,6 +764,8 @@ proper position among the other output f
-    "%{fuse-ld=*:-fuse-ld=%*}\
-     %X %{o*} %{e*} %{N} %{n} %{r}\
-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} " VTABLE_VERIFICATION_SPEC " \
-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
-     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
-     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
-     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
-Index: gcc-4.9-20140316/gcc/incpath.c
-===================================================================
---- gcc-4.9-20140316.orig/gcc/incpath.c
-+++ gcc-4.9-20140316/gcc/incpath.c
-@@ -28,6 +28,7 @@
+diff --git a/gcc/gcc.c b/gcc/gcc.c
+index a716f708259..02b3cd39fc2 100644
+--- a/gcc/gcc.c
++++ b/gcc/gcc.c
+@@ -1037,6 +1037,8 @@ proper position among the other output files.  */
+    "%{fuse-ld=*:-fuse-ld=%*} " LINK_COMPRESS_DEBUG_SPEC \
+    "%X %{o*} %{e*} %{N} %{n} %{r}\
+     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} \
++    %{Wno-poison-system-directories:--no-poison-system-directories} \
++    %{Werror=poison-system-directories:--error-poison-system-directories} \
+     %{static|no-pie|static-pie:} %{L*} %(mfwrap) %(link_libgcc) " \
+     VTABLE_VERIFICATION_SPEC " " SANITIZER_EARLY_SPEC " %o " CHKP_SPEC " \
+     %{fopenacc|fopenmp|%:gt(%{ftree-parallelize-loops=*:%*} 1):\
+diff --git a/gcc/incpath.c b/gcc/incpath.c
+index b11c6a57939..e3b7a21966f 100644
+--- a/gcc/incpath.c
++++ b/gcc/incpath.c
+@@ -26,6 +26,7 @@
  #include "intl.h"
  #include "incpath.h"
  #include "cppdefault.h"
@@ -136,7 +142,7 @@ Index: gcc-4.9-20140316/gcc/incpath.c
  
  /* Microsoft Windows does not natively support inodes.
     VMS has non-numeric inodes.  */
-@@ -382,6 +383,24 @@ merge_include_chains (const char *sysroo
+@@ -393,6 +394,24 @@ merge_include_chains (const char *sysroot, cpp_reader *pfile, int verbose)
  	}
        fprintf (stderr, _("End of search list.\n"));
      }
@@ -146,7 +152,7 @@ Index: gcc-4.9-20140316/gcc/incpath.c
 +    {
 +       struct cpp_dir *p;
 +
-+       for (p = heads[QUOTE]; p; p = p->next)
++       for (p = heads[INC_QUOTE]; p; p = p->next)
 +         {
 +          if ((!strncmp (p->name, "/usr/include", 12))
 +              || (!strncmp (p->name, "/usr/local/include", 18))
@@ -161,3 +167,6 @@ Index: gcc-4.9-20140316/gcc/incpath.c
  }
  
  /* Use given -I paths for #include "..." but not #include <...>, and
+-- 
+2.17.0
+
