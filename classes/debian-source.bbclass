@@ -79,7 +79,7 @@ python __anonymous() {
 }
 
 # Make folder "debian" be inside source code folder
-addtask debian_unpack_extra after do_unpack before do_debian_verify_version
+addtask debian_unpack_extra after do_unpack before do_debian_patch
 do_debian_unpack_extra() {
 	if [ -d ${WORKDIR}/debian ]; then
 		mv ${WORKDIR}/debian ${DEBIAN_UNPACK_DIR}/

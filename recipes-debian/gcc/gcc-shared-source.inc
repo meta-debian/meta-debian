@@ -1,6 +1,4 @@
 require recipes-devtools/gcc/gcc-shared-source.inc
 
 deltask do_debian_unpack_extra
-deltask do_debian_verify_version
-deltask do_debian_fix_timestamp
 deltask do_debian_patch
