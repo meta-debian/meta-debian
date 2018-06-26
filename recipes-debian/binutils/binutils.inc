@@ -1,5 +1,5 @@
 #
-# base recipe: recipes-devtools/binutils/binutils-2.30.inc
+# base recipe: meta/recipes-devtools/binutils/binutils-2.30.inc
 # base branch: master
 # base commit: 53dfa673d78216f852a47bdb48392ee213e3e1cd
 #
