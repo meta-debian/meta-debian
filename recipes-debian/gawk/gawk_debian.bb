@@ -1,6 +1,7 @@
 #
-# base recipe: meta/recipes-extended/gawk/gawk_4.0.2.bb
-# base branch: daisy
+# base recipe: meta/recipes-extended/gawk/gawk_4.2.1.bb
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 
 SUMMARY = "GNU awk text processing utility"
@@ -57,6 +58,8 @@ do_install_ptest() {
 	for i in `grep -vE "@|^$|#|Gt-dummy" ${S}/test/Maketests |awk -F: '{print $1}'` Maketests; \
 		do cp ${S}/test/$i* ${D}${PTEST_PATH}/test; \
 	done
+	sed -i -e 's|/usr/local/bin|${bindir}|g' \
+	    -e 's|#!${base_bindir}/awk|#!${bindir}/awk|g' ${D}${PTEST_PATH}/test/*.awk
 }
 
 BBCLASSEXTEND = "native nativesdk"
