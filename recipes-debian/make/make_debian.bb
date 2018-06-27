@@ -1,19 +1,17 @@
 #
-# Base recipe: meta/recipes-devtools/make/make.inc
-# Base branch: daisy
-# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+# base recipe: meta/recipes-devtools/make/make_4.2.1
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 # 
-SUMMARY = "GNU tool that controls the build process"
-DESCRIPTION = "Make is a tool which controls the generation of executables and other non-source files of a \
-program from the program's source files.  Make gets its knowledge of how to build your program from a file \
-called the makefile, which lists each of the non-source files and how to compute it from other files."
-HOMEPAGE = "http://www.gnu.org/software/make/"
 
-PR = "r0"
-DPN = "make-dfsg"
+require recipes-devtools/make/make.inc
 
-inherit autotools gettext pkgconfig debian-package
-PV = "4.0"
+inherit debian-package
+PV = "4.1"
+DPR = "-9.1"
+BPN = "make-dfsg"
+DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=7cdc9a0ed0e40cc38a6b71fb7e4cf4d1"
+DEBIAN_PATCH_TYPE = "nopatch"
 
 LICENSE = "GPLv3 & LGPLv2"
 LIC_FILES_CHKSUM = " \
@@ -22,16 +20,11 @@ file://tests/COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 file://glob/COPYING.LIB;md5=4a770b67e6be0f60da244beb2de0fce4 \
 "
 
-# Install script make-first-existing-target based on
-# list of file make package from Debian
-do_install_append() {
-	install -m 0644 ${S}/debian/make-first-existing-target ${D}${bindir}
-}
-
-# Change location of gnumake.h file from make-dev to make package
-# due to list of file in make package from Debian.
-FILES_${PN}-dev = ""
-FILES_${PN} = "${includedir}/* ${bindir}/*"
+FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-devtools/make/make:"
+SRC_URI += " \
+            file://0001-glob-Do-not-assume-glibc-glob-internals.patch \
+            file://0002-glob-Do-not-assume-glibc-glob-internals.patch \
+            "
 
 EXTRA_OECONF += "--without-guile"
 
