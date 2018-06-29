@@ -1,81 +1,28 @@
 #
-# base recipe: meta/recipes-connectivity/openssl/openssl_1.0.1m.bb
-# base branch: daisy
+# base recipe: meta/recipes-connectivity/openssl/openssl_1.1.0h.bb
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 
-PR = "r1"
+SUMMARY = "Secure Socket Layer"
+DESCRIPTION = "Secure Socket Layer (SSL) binary and related cryptographic tools."
+HOMEPAGE = "http://www.openssl.org/"
 
 inherit debian-package
-PV = "1.0.1t"
+PV = "1.1.0h"
+DPR = "-4"
+DSC_URI = "${DEBIAN_MIRROR}/main/o/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=85d1843378b53636025afd27d68bd12c"
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=27ffa5d74bb5a337056c14b2ef93fbf6"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=d57d511030c9d66ef5f5966bee5a7eff"
 
-# configure-targets.patch: provides targets needed by do_configure
-# shared-libs.patch: for cross-build, use environment variables in Makefiles
-# oe-ldflags.patch: for cross-build, works together with ${OE_}
-# find.sh: wrapper script; perl4 scripts require this, but perl5 doesn't have
-SRC_URI += " \
-file://configure-targets.patch \
-file://shared-libs.patch \
-file://oe-ldflags.patch \
-file://find.pl \
-"
+FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-connectivity/openssl/openssl:"
+SRC_URI += "file://run-ptest"
 
-# "${S}/Configure" is written by perl script
-DEPENDS = "hostperl-runtime-native"
+inherit lib_package multilib_header ptest
 
-# CFLAG replaces the second parameters (next to gcc:) of the target config
-# in Configure (see do_configure). We simply use the same options as OE-Core
-# for supporting cross-build with sysroots.
-CFLAG = "${@oe.utils.conditional('SITEINFO_ENDIANNESS', 'le', '-DL_ENDIAN', '-DB_ENDIAN', d)} \
-	-DTERMIO ${CFLAGS} -Wall -Wa,--noexecstack"
-CFLAG_mtx-1 := "${@'${CFLAG}'.replace('-O2', '')}"
-CFLAG_mtx-2 := "${@'${CFLAG}'.replace('-O2', '')}"
-
-# comes from "CONFARGS" in debian/rules
-EXTRA_OECONF = " \
---openssldir=${libdir}/ssl \
-no-idea no-mdc2 no-rc5 no-zlib enable-tlsext no-ssl2 no-ssl3 \
-"
-EXTRA_OECONF_append_x86-64 = "enable-ec_nistp_64_gcc_128"
-
-# without this, ar commands fail in do_compile
-AR_append = " r"
-EXTRA_OEMAKE = "-e MAKEFLAGS="
-# Only "test" is removed from the default targets because it includes
-# running tests. Instead, "buildtest" and "runtest" are added by
-# Makefiles-ptest.patch as new targets
-export DIRS = "crypto ssl engines apps tools"
-
-# works together with oe-ldflags.patch
-export OE_LDFLAGS="${LDFLAGS}"
-
-# according to OE-core, parallel build and install are not supported
-PARALLEL_MAKE = ""
-PARALLEL_MAKEINST = ""
-
-# Configure only sets MAKEDEPPROG to $cc if $cc is "gcc"
-# but CC in bitbake doesn't match the value Configure assumes,
-# so we need set it here.
-EXTRA_OEMAKE += "'MAKEDEPPROG=${CC}'"
-
-# In "build-stamp" in debian/rules, "Configure" and "make" are called
-# at least more than one time for building "no-shared", "shared", and
-# optional "shared" targets. However, do_configure calls them for
-# building "shared" target only once.
 do_configure () {
-	# perlpath.pl requires this, but not provided by perl5
-	cp ${WORKDIR}/find.pl ${S}/util/find.pl
-
-	# replace the perl path in all scripts by sysroots
-	cd util
-	perl perlpath.pl ${STAGING_BINDIR_NATIVE}
-	cd ..
-
-	# get "target" from ${HOST_OS} and ${HOST_ARCH}
-	# "target" is used as an argument of "Configure"
 	os=${HOST_OS}
 	case $os in
 	linux-uclibc |\
@@ -95,25 +42,25 @@ do_configure () {
 		target=linux-armv4
 		;;
 	linux-armeb)
-		target=linux-elf-armeb
+		target=linux-armv4
 		;;
 	linux-aarch64*)
-		target=linux-generic64
+		target=linux-aarch64
 		;;
 	linux-sh3)
-		target=debian-sh3
+		target=linux-generic32
 		;;
 	linux-sh4)
-		target=debian-sh4
+		target=linux-generic32
 		;;
 	linux-i486)
-		target=debian-i386-i486
+		target=linux-elf
 		;;
 	linux-i586 | linux-viac3)
-		target=debian-i386-i586
+		target=linux-elf
 		;;
 	linux-i686)
-		target=debian-i386-i686/cmov
+		target=linux-elf
 		;;
 	linux-gnux32-x86_64)
 		target=linux-x32
@@ -122,98 +69,91 @@ do_configure () {
 		target=linux-x86_64
 		;;
 	linux-mips)
-		target=debian-mips
+		# specifying TARGET_CC_ARCH prevents openssl from (incorrectly) adding target architecture flags
+		target="linux-mips32 ${TARGET_CC_ARCH}"
 		;;
 	linux-mipsel)
-		target=debian-mipsel
+		target="linux-mips32 ${TARGET_CC_ARCH}"
 		;;
-        linux-*-mips64)
-               target=linux-mips
-                ;;
+	linux-gnun32-mips*)
+	       target=linux-mips64
+		;;
+	linux-*-mips64 | linux-mips64)
+	       target=linux64-mips64
+		;;
+	linux-*-mips64el | linux-mips64el)
+	       target=linux64-mips64
+		;;
+	linux-microblaze*|linux-nios2*)
+		target=linux-generic32
+		;;
 	linux-powerpc)
 		target=linux-ppc
 		;;
 	linux-powerpc64)
 		target=linux-ppc64
 		;;
+	linux-riscv64)
+		target=linux-generic64
+		;;
+	linux-riscv32)
+		target=linux-generic32
+		;;
 	linux-supersparc)
-		target=linux-sparcv8
+		target=linux-sparcv9
 		;;
 	linux-sparc)
-		target=linux-sparcv8
+		target=linux-sparcv9
 		;;
 	darwin-i386)
 		target=darwin-i386-cc
 		;;
 	esac
-	# inject machine-specific flags
-	sed -i -e "s|^\(\"$target\",\s*\"[^:]\+\):\([^:]\+\)|\1:${CFLAG}|g" Configure
 	useprefix=${prefix}
 	if [ "x$useprefix" = "x" ]; then
 		useprefix=/
-	fi        
-
-	# ${EXTRA_OECONF} follows debian/rules
-	# $useprefix and $target are set by the above commands
-	# The path "prefix" must be excluded from "libdir"
-	perl ./Configure ${EXTRA_OECONF} shared --prefix=$useprefix \
-		--libdir=$(basename ${libdir}) $target
+	fi
+	libdirleaf="$(echo ${libdir} | sed s:$useprefix::)"
+	perl ./Configure ${EXTRA_OECONF} --prefix=$useprefix --openssldir=${libdir}/ssl-1.1 --libdir=${libdirleaf} $target
 }
 
-do_compile() {
-	# Directory ${S}/include is empty,
-	# so it is required to run "make depend" for necessary headers.
-	# https://github.com/openssl/openssl/issues/492
-	oe_runmake depend
-	oe_runmake
+#| engines/afalg/e_afalg.c: In function 'eventfd':
+#| engines/afalg/e_afalg.c:110:20: error: '__NR_eventfd' undeclared (first use in this function)
+#|      return syscall(__NR_eventfd, n);
+#|		     ^~~~~~~~~~~~
+EXTRA_OECONF_aarch64 += "no-afalgeng"
+
+#| ./libcrypto.so: undefined reference to `getcontext'
+#| ./libcrypto.so: undefined reference to `setcontext'
+#| ./libcrypto.so: undefined reference to `makecontext'
+EXTRA_OECONF_libc-musl += "-DOPENSSL_NO_ASYNC"
+
+do_install () {
+	oe_runmake DESTDIR="${D}" MANDIR="${mandir}" MANSUFFIX=ssl install
+	oe_multilib_header openssl/opensslconf.h
 }
 
-do_install() {
-	oe_runmake INSTALL_PREFIX="${D}" MANDIR="${mandir}" install
-
-	# comes from "binary-arch" in debian/rules
-	install -d ${D}${sysconfdir}/ssl
-	for f in certs openssl.cnf private; do
-		mv ${D}${libdir}/ssl/${f} ${D}${sysconfdir}/ssl
-		ln -s ${sysconfdir}/ssl/${f} ${D}${libdir}/ssl/${f}
-	done
+do_install_append_class-native () {
+	# Install a custom version of c_rehash that can handle sysroots properly.
+	# This version is used for example when installing ca-certificates during
+	# image creation.
+	install -Dm 0755 ${WORKDIR}/openssl-c_rehash.sh ${D}${bindir}/c_rehash
+	sed -i -e 's,/etc/openssl,${sysconfdir}/ssl,g' ${D}${bindir}/c_rehash
 }
 
-PACKAGES =+ "libssl1.0.0"
+do_install_ptest() {
+	cp -r * ${D}${PTEST_PATH}
 
-FILES_${PN} += "${libdir}/ssl"
-FILES_${PN}-dbg += "${libdir}/openssl-1.0.0/engines/.debug"
-FILES_libssl1.0.0 = " \
-${libdir}/libssl.so.* \
-${libdir}/libcrypto.so.* \
-${libdir}/openssl-1.0.0/engines/*.so \
-"
-
-BBCLASSEXTEND = "native nativesdk"
-
-inherit ptest
-
-SRC_URI += " \
-file://Makefiles-ptest.patch \
-file://ptest-deps.patch \
-file://run-ptest \
-"
-
-do_compile_ptest () {
-	oe_runmake buildtest
+	# Putting .so files in ptest package will mess up the dependencies of the main openssl package
+	# so we rename them to .so.ptest and patch the test accordingly
+	mv ${D}${PTEST_PATH}/libcrypto.so ${D}${PTEST_PATH}/libcrypto.so.ptest
+	mv ${D}${PTEST_PATH}/libssl.so ${D}${PTEST_PATH}/libssl.so.ptest
+	sed -i 's/$target{shared_extension_simple}/".so.ptest"/' ${D}${PTEST_PATH}/test/recipes/90-test_shlibload.t
 }
 
-do_install_ptest () {
-	cp -r Makefile test ${D}${PTEST_PATH}
-	cp -r certs ${D}${PTEST_PATH}
-	mkdir -p ${D}${PTEST_PATH}/apps
-	ln -sf /usr/lib/ssl/misc/CA.sh  ${D}${PTEST_PATH}/apps
-	ln -sf /usr/lib/ssl/openssl.cnf ${D}${PTEST_PATH}/apps
-	ln -sf /usr/bin/openssl         ${D}${PTEST_PATH}/apps
-	cp apps/server2.pem             ${D}${PTEST_PATH}/apps
-	mkdir -p ${D}${PTEST_PATH}/util
-	install util/opensslwrap.sh    ${D}${PTEST_PATH}/util
-	install util/shlib_wrap.sh     ${D}${PTEST_PATH}/util
-}
+RDEPENDS_${PN}-ptest += "perl-module-file-spec-functions bash python"
 
-RDEPENDS_${PN}-ptest += "make perl perl-module-filehandle bc"
+FILES_${PN} =+ " ${libdir}/ssl-1.1/*"
+
+PACKAGES =+ "${PN}-engines"
+FILES_${PN}-engines = "${libdir}/engines-1.1"
