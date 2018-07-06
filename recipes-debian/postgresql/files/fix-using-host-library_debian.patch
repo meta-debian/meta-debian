@@ -3,10 +3,10 @@ index 0b43b04..7814f0b 100644
 --- a/config/perl.m4
 +++ b/config/perl.m4
 @@ -65,6 +65,7 @@ else
- pgac_tmp1=`$PERL -MExtUtils::Embed -e ldopts`
- pgac_tmp2=`$PERL -MConfig -e 'print $Config{ccdlflags}'`
- perl_embed_ldflags=`echo X"$pgac_tmp1" | sed -e "s/^X//" -e "s%$pgac_tmp2%%" -e ["s/ -arch [-a-zA-Z0-9_]*//g"]`
-+perl_embed_ldflags=`echo $perl_embed_ldflags | sed -e "s:-L\/usr\/local\/lib::g"`
+ 	pgac_tmp1=`$PERL -MExtUtils::Embed -e ldopts`
+ 	pgac_tmp2=`$PERL -MConfig -e 'print $Config{ccdlflags}'`
+ 	perl_embed_ldflags=`echo X"$pgac_tmp1" | sed -e "s/^X//" -e "s%$pgac_tmp2%%" -e ["s/ -arch [-a-zA-Z0-9_]*//g"]`
++	perl_embed_ldflags=`echo $perl_embed_ldflags | sed -e "s:-L\/usr\/local\/lib::g"`
  fi
  AC_SUBST(perl_embed_ldflags)dnl
  if test -z "$perl_embed_ldflags" ; then
