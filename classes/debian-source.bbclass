@@ -4,6 +4,7 @@
 # Parse .dsc file to detect and set SRC_URI for source codes
 # which are located in Debian apt repository.
 
+DPR ?= ""
 DEBIAN_SRC_URI ?= ""
 SRC_URI = "${DEBIAN_SRC_URI}"
 
