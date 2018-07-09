@@ -26,7 +26,7 @@ PACKAGES += "${@bb.utils.contains('PTEST_ENABLED', '1', 'dbus-ptest', '', d)}"
 ALLOW_EMPTY_dbus-ptest = "1"
 RDEPENDS_dbus-ptest_class-target = "dbus-test-ptest"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-core/dbus/dbus:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/dbus/dbus"
 SRC_URI += " \
             file://tmpdir.patch \
             file://dbus-1.init \

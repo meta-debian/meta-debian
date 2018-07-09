@@ -20,7 +20,7 @@ file://LICENSES;md5=e9a558e243b36d3209f380deb394b213 \
 
 DEPENDS += "gperf-native"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-core/glibc/glibc:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/glibc/glibc"
 
 # Ignore patches 0018, 0019 and 0020 because Debian already has similar patches.
 SRC_URI += " \

@@ -8,7 +8,7 @@ SRCREV = "${PV}${DPR}"
 
 DEBIAN_UNPACK_DIR = "${WORKDIR}/git"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-devtools/quilt/quilt:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/quilt/quilt"
 SRC_URI += " \
         file://run-ptest \
         file://Makefile \

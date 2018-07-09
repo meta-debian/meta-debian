@@ -4,7 +4,7 @@
 # base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1/backport:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1/backport"
 
 require recipes-devtools/gcc/gcc-8.1.inc
 

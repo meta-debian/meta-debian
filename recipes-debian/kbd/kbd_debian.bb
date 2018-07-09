@@ -16,7 +16,7 @@ DSC_URI = "${DEBIAN_MIRROR}/main/k/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=832294fb
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=a5fcc36121d93e1f69d96a313078c8b5"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-core/kbd/kbd:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/kbd/kbd"
 SRC_URI += "file://run-ptest \
             ${@bb.utils.contains('DISTRO_FEATURES', 'ptest', 'file://set-proper-path-of-resources.patch', '', d)} \
             "

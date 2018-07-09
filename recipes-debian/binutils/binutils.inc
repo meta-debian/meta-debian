@@ -41,4 +41,4 @@ SRC_URI += " \
      file://0013-fix-the-incorrect-assembling-for-ppc-wait-mnemonic.patch \
      file://0015-sync-with-OE-libtool-changes.patch \
 "
-FILESEXTRAPATHS =. "${FILE_DIRNAME}/binutils:${COREBASE}/meta/recipes-devtools/binutils/binutils:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/binutils/binutils"

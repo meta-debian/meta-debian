@@ -21,7 +21,7 @@ LIC_FILES_CHKSUM=" \
 	file://w.c;endline=24;md5=f5eb135dd206abcd8c8a3e49e1397ac6 \
 "
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-extended/procps/procps:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/procps/procps"
 SRC_URI += "file://sysctl.conf"
 
 DEPENDS = "ncurses"

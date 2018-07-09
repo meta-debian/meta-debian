@@ -17,7 +17,7 @@ DSC_URI = "${DEBIAN_MIRROR}/main/o/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=85d18433
 LICENSE = "openssl"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=d57d511030c9d66ef5f5966bee5a7eff"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-connectivity/openssl/openssl:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-connectivity/openssl/openssl"
 SRC_URI += "file://run-ptest"
 
 inherit lib_package multilib_header ptest

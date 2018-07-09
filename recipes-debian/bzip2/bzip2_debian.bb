@@ -18,7 +18,7 @@ DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=7275cc6d
 LICENSE = "bzip2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ddeb76cd34e791893c0f539fdab879bb"
 
-FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-extended/bzip2/bzip2-1.0.6:"
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/bzip2/bzip2-1.0.6"
 SRC_URI += " \
 file://configure.ac;subdir=${S} \
 file://Makefile.am;subdir=${S} \
