@@ -6,10 +6,8 @@
 SUMMARY = "Timezone database"
 HOMEPAGE = "ftp://elsie.nci.nih.gov/pub/"
 
-PR = "r0"
-
 inherit debian-package
-PV = "2017c"
+PV = "2018e"
 
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c679c9d6b02bc2757b3eaf8f53c43fba"
