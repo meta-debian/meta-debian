@@ -1,29 +1,22 @@
 #
-# Base recipe: meta/recipes-support/libmpc/libmpc_1.0.2.bb
-# Base branch: daisy
-# Base commit: 9e4aad97c3b4395edeb9dc44bfad1092cdf30a47
+# Base recipe: meta/recipes-support/libmpc/libmpc_1.1.0.bb
+# Base branch: master
+# Base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
-SUMMARY = "C library for complex number arithmetic with arbitrary precision and correct rounding"
-DESCRIPTION = "Mpc is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result. It is built upon and follows the same principles as Mpfr"
-HOMEPAGE = "http://www.multiprecision.org/"
-LICENSE = "LGPLv3"
-SECTION = "libs"
+require recipes-support/libmpc/libmpc.inc
 
-inherit autotools debian-package pkgconfig
-PV = "1.0.2"
-PR = "r0"
+inherit debian-package
+PV = "1.1.0"
 DEPENDS = "gmp mpfr"
-DPN = "mpclib3"
+BPN = "mpclib3"
+DPR = "-1"
+DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=8bf3b7e7f29bb91839db8edf7c399f45"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/mpc-${PV}"
 
-LICENSE = "LGPLv3"
 LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=e6a600fd5e1d9cbde2d983680233ad02"
 
+# There is no debian patches
 DEBIAN_PATCH_TYPE = "nopatch"
-
-# Remove -Werror when initialize automake 
-SRC_URI += "\
-	file://fix-configure.patch \
-"
 
 BBCLASSEXTEND = "native nativesdk"
