@@ -1,30 +1,21 @@
 #
-# Base recipe: meta/recipes-support/popt/popt_1.16.bb
-# Base branch: daisy
+# base recipe: meta/recipes-support/popt/popt_1.16.bb
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 SUMMARY = "Library for parsing command line options"
 HOMEPAGE = "http://rpm5.org/"
 
-PR = "r0"
-
 inherit debian-package
 PV = "1.16"
+DPR = "-11"
+DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=bc1f4856cd95dcd872e4bbf66b098d14"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=cb0613c30af2a8249b8dcc67d3edb06d"
 
+DEPENDS = "virtual/libiconv"
+
 inherit autotools gettext
-
-# popt_fix_for_automake-1.12.patch: already applied in 1.16-10
-SRC_URI += " \
-file://pkgconfig_fix.patch \
-file://disable_tests.patch \
-"
-
-# Preprocessing directive #elseif should be #elif
-# so change it.
-do_compile_prepend(){
-	sed -i s@"#elseif"@"#elif"@g ${S}/system.h
-}
 
 BBCLASSEXTEND = "native nativesdk"
