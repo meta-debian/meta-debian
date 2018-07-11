@@ -1,0 +1,22 @@
+#
+# This patch is created base on 0057-aarch64-config.patch
+# for target arm64 to solve conflict with debian/patches/gcc-linaro.diff.
+#
+
+Index: gcc-4.9.1/gcc/config/aarch64/t-aarch64-linux
+===================================================================
+--- gcc-4.9.1.orig/gcc/config/aarch64/t-aarch64-linux
++++ gcc-4.9.1/gcc/config/aarch64/t-aarch64-linux
+@@ -21,8 +21,8 @@
+ LIB1ASMSRC   = aarch64/lib1funcs.asm
+ LIB1ASMFUNCS = _aarch64_sync_cache_range
+ 
+-AARCH_BE = $(if $(findstring TARGET_BIG_ENDIAN_DEFAULT=1, $(tm_defines)),_be)
+-MULTILIB_OSDIRNAMES = mabi.lp64=../lib64$(call if_multiarch,:aarch64$(AARCH_BE)-linux-gnu)
+-MULTIARCH_DIRNAME = $(call if_multiarch,aarch64$(AARCH_BE)-linux-gnu)
++#AARCH_BE = $(if $(findstring TARGET_BIG_ENDIAN_DEFAULT=1, $(tm_defines)),_be)
++#MULTILIB_OSDIRNAMES = mabi.lp64=../lib64$(call if_multiarch,:aarch64$(AARCH_BE)-linux-gnu)
++#MULTIARCH_DIRNAME = $(call if_multiarch,aarch64$(AARCH_BE)-linux-gnu)
+ 
+-MULTILIB_OSDIRNAMES += mabi.ilp32=../libilp32
++#MULTILIB_OSDIRNAMES += mabi.ilp32=../libilp32
