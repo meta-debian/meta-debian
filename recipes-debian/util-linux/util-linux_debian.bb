@@ -45,9 +45,9 @@ EXTRA_OECONF = "--enable-line --libdir=${base_libdir} \
 		--disable-kill --disable-eject --disable-chfn-chsh \
 		--enable-raw --enable-partx --enable-tunelp\
 		--sbindir=${base_sbindir} --disable-use-tty-group \
-		--without-selinux"
+		--without-selinux --disable-su"
 PACKAGECONFIG_class-target ??= "${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam', '', d)}"
-PACKAGECONFIG[pam] = "--enable-su --enable-runuser,--disable-su --disable-runuser, libpam,"
+PACKAGECONFIG[pam] = "--enable-runuser,--disable-runuser, libpam,"
 # Respect the systemd feature for uuidd
 PACKAGECONFIG[systemd] = "--with-systemd --with-systemdsystemunitdir=${systemd_unitdir}/system/, \
 			--without-systemd --without-systemdsystemunitdir,systemd"
