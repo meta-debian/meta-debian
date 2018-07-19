@@ -1,7 +1,7 @@
 #
 # base recipe: meta/recipes-support/db/db_5.3.28.bb
 # base branch: master
-# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
+# base commit: b0f2f690a3513e4c9fa30fee1b8d7ac2d7140657
 #
 # Version 5 of the Berkeley DB from Sleepycat
 #
@@ -32,8 +32,7 @@ file://LICENSE;md5=ed1158e31437f4f87cdd4ab2b8613955 \
 VIRTUAL_NAME ?= "virtual/db"
 RCONFLICTS_${PN} = "db3"
 
-SRC_URI += "file://arm-thumb-mutex_db5.patch \
-            file://fix-parallel-build.patch \
+SRC_URI += "file://fix-parallel-build.patch \
             file://0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch \
             file://0001-configure-Add-explicit-tag-options-to-libtool-invoca.patch \
             file://sequence-type.patch \
@@ -50,7 +49,6 @@ inherit lib_package
 PACKAGES =+ "${PN}-cxx"
 FILES_${PN}-cxx = "${libdir}/*cxx*so"
 
-
 # The dev package has the .so link (as in db3) and the .a's -
 # it is therefore incompatible (cannot be installed at the
 # same time) as the db3 package
@@ -62,18 +60,8 @@ FILES_SOLIBSDEV = "${libdir}/libdb.so ${libdir}/libdb_cxx.so"
 # All the --disable-* options replace --enable-smallbuild, which breaks a bunch of stuff (eg. postfix)
 DB5_CONFIG ?= "--enable-o_direct --disable-cryptography --disable-queue --disable-replication --disable-verify --disable-compat185 --disable-sql"
 
-EXTRA_OECONF = "${DB5_CONFIG} --enable-shared --enable-cxx --with-sysroot"
+EXTRA_OECONF = "${DB5_CONFIG} --enable-shared --enable-cxx --with-sysroot STRIP=true"
 
-# Override the MUTEX setting here, the POSIX library is
-# the default - "POSIX/pthreads/library".
-# Don't ignore the nice SWP instruction on the ARM:
-# These enable the ARM assembler mutex code, this won't
-# work with thumb compilation...
-ARM_MUTEX = "--with-mutex=ARM/gcc-assembly"
-MUTEX = ""
-MUTEX_arm = "${ARM_MUTEX}"
-MUTEX_armeb = "${ARM_MUTEX}"
-EXTRA_OECONF += "${MUTEX} STRIP=true"
 EXTRA_OEMAKE += "LIBTOOL='./${HOST_SYS}-libtool'"
 
 EXTRA_AUTORECONF += "--exclude=autoheader  -I ${S}/dist/aclocal -I${S}/dist/aclocal_java"
