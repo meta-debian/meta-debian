@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 5ed9ac4..39bb0d0 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -39,7 +39,7 @@ LIBTOOLFLAGS = --verbose
+ 
+ SUBDIRS = lib examples tests  # lib goes first to build first
+ if WITH_XMLWF
+-SUBDIRS += xmlwf doc
++SUBDIRS += xmlwf
+ endif
+ 
+ pkgconfig_DATA = expat.pc
