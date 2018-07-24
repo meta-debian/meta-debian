@@ -12,6 +12,8 @@ PV = "7.60.0"
 DPR = "-2"
 DSC_URI = "${DEBIAN_MIRROR}/main/c/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=3f172e5edfb6cb289195637c5bff3498"
 
+PR = "r1"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;beginline=8;md5=3a34942f4ae3fbf1a303160714e664ac"
 
@@ -52,6 +54,11 @@ EXTRA_OECONF = " \
     --without-libmetalink \
     --without-libpsl \
 "
+
+do_debian_patch_prepend() {
+	sed -i -e '/^90_gnutls.patch/d' -e '/^99_nss.patch/d' \
+	    ${DEBIAN_QUILT_PATCHES}/series
+}
 
 do_install_append_class-target() {
 	# cleanup buildpaths from curl-config
