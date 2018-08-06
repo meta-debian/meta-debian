@@ -7,9 +7,9 @@
 require recipes-devtools/binutils/binutils.inc
 
 inherit debian-package
-PV = "2.30"
-DPR = "-21"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=6e4473edf603cb9e8070673052b54aba"
+PV = "2.31.1"
+DPR = "-2"
+DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=4338a45cd8bd63a9a49225adffaf3815"
 
 BPN = "binutils"
 

@@ -31,7 +31,7 @@
 
 --- a/ld/genscripts.sh
 +++ b/ld/genscripts.sh
-@@ -287,35 +287,6 @@ esac
+@@ -287,38 +287,6 @@ esac
  lib_path1=
  lib_path2=
  
@@ -49,16 +49,19 @@
 -    # because 64bit libraries may be in both places, depending on
 -    # cross-development setup method (e.g.: /usr/s390x-linux/lib64
 -    # vs. /usr/s390-linux/lib64)
--    case "${NATIVE}:${LIBPATH_SUFFIX}:${TOOL_LIB}" in
--      :* | *::* | *:*:*${LIBPATH_SUFFIX}) ;;
--      *)
--	# FIXME:
--	# For the binutils-multiarch build on x86_64-linux-gnu configured
--        # with --enable-targets=powerpc-linux-gnu, /usr/x86_64-linux-gnu/lib64
--        # is added instead of /usr/powerpc64-linux-gnu/lib64. However this
--	# probably wanted for the "default" emulation. How to detect that?
--	libs="${exec_prefix}/${target_alias}/lib${LIBPATH_SUFFIX}" ;;
--    esac
+-    for libpath_suffix in ${LIBPATH_SUFFIX}; do
+-      case "${NATIVE}:${libpath_suffix}:${TOOL_LIB}" in
+-	:* | *::* | *:*:*${libpath_suffix}) ;;
+-	*) libs="${exec_prefix}/${target_alias}/lib${libpath_suffix}" ;;
+-	*)
+-	  # FIXME:
+-	  # For the binutils-multiarch build on x86_64-linux-gnu configured
+-          # with --enable-targets=powerpc-linux-gnu, /usr/x86_64-linux-gnu/lib64
+-          # is added instead of /usr/powerpc64-linux-gnu/lib64. However this
+-	  # probably wanted for the "default" emulation. How to detect that?
+-	  libs="${exec_prefix}/${target_alias}/lib${libpath_suffix}" ;;
+-      esac
+-    done
 -    libs="${exec_prefix}/${TOOL_LIB}/lib ${libs}"
 -  fi
 -  append_to_lib_path ${libs}
