@@ -1,10 +1,10 @@
 #
-# base recipe: meta/recipes-devtools/gcc/gcc-sanitizers_8.1.bb
+# base recipe: meta/recipes-devtools/gcc/gcc-sanitizers_8.2.bb
 # base branch: master
-# base commit: a5d1288804e517dee113cb9302149541f825d316
+# base commit: da24071e92071ecbefe51314d82bf40f85172485
 #
 
-require gcc-8.1.inc
+require gcc-8.inc
 require recipes-devtools/gcc/gcc-sanitizers.inc
 
 # Building with thumb enabled on armv4t armv5t fails with

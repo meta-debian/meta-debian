@@ -1,4 +1,4 @@
-require gcc-8.1.inc
+require gcc-8.inc
 require recipes-devtools/gcc/gcc-source.inc
 
 EXCLUDE_FROM_WORLD = "1"

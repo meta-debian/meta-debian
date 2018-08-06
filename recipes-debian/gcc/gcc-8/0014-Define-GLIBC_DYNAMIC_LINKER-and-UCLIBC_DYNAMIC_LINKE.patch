@@ -1,7 +1,7 @@
 #
-# base patch: meta/recipes-devtools/gcc/gcc-8.1/0014-Define-GLIBC_DYNAMIC_LINKER-and-UCLIBC_DYNAMIC_LINKE.patch
+# base patch: meta/recipes-devtools/gcc/gcc-8.2/0014-Define-GLIBC_DYNAMIC_LINKER-and-UCLIBC_DYNAMIC_LINKE.patch
 # base branch: master
-# base commit: a5d1288804e517dee113cb9302149541f825d316
+# base commit: da24071e92071ecbefe51314d82bf40f85172485
 #
 # Modified to work with Debian source code
 #

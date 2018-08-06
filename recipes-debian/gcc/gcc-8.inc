@@ -1,21 +1,21 @@
 #
-# base recipe: meta/recipes-devtools/gcc/gcc-8.1.inc
+# base recipe: meta/recipes-devtools/gcc/gcc-8.2.inc
 # base branch: master
-# base commit: a5d1288804e517dee113cb9302149541f825d316
+# base commit: da24071e92071ecbefe51314d82bf40f85172485
 #
 
-FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.1/backport"
+FILESPATH_append = "${FILE_DIRNAME}/gcc-8:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.2:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.2/backport"
 
-require recipes-devtools/gcc/gcc-8.1.inc
+require recipes-devtools/gcc/gcc-8.2.inc
 
 inherit debian-package
-PV = "8.1.0"
-DPR = "-5"
+PV = "8.2.0"
+DPR = "-1"
 
 # Need to use other variable than BPN because libgcc-common.inc set BPN = "libgcc"
 DPN = "gcc-8"
 BPN = "${DPN}"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${DPN}/${DPN}_${PV}${DPR}.dsc;md5sum=95bd048f06da49573f8e0030cc974b98;sha256sum=cc6f4d2927c1ee42412e9e2cfde4656a5cd074ccea2ad3d385ac69d87115c36f"
+DSC_URI = "${DEBIAN_MIRROR}/main/g/${DPN}/${DPN}_${PV}${DPR}.dsc;md5sum=d528985652196a425445e43fa10091d8;sha256sum=b50eec1cbd263159f11b50c27a23a56d4ae932da88d339bb2fffda2640f5ba0d"
 
 DEBIAN_UNPACK_DIR = "${TMPDIR}/work-shared/gcc-${PV}-${PR}/${DPN}-${PV}"
 S = "${DEBIAN_UNPACK_DIR}/src"
