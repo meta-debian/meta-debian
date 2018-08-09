@@ -12,6 +12,8 @@ HOMEPAGE = "http://www.gnu.org/software/libtool/libtool.html"
 
 inherit debian-package
 PV = "2.4.6"
+DPR = "-2.1"
+DSC_URI = "${DEBIAN_MIRROR}/main/libt/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=6df74a41dd4a0104040ecc4b9dbf55e6"
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\
@@ -19,6 +21,7 @@ file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 file://libltdl/COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
 "
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/libtool/libtool"
 SRC_URI += "\
 file://trailingslash.patch \
 file://rename-with-sysroot.patch \
@@ -44,20 +47,9 @@ do_compile_prepend () {
         ./config.status
 } 
 
-PACKAGES =+ "libltdl libltdl-dev ${PN}-bin"
+PACKAGES =+ "libltdl"
 FILES_libltdl = "${libdir}/libltdl${SOLIBS}"
-FILES_libltdl-dev = " \
-    ${libdir}/libltdl${SOLIBSDEV} \
-    ${libdir}/libltdl.la \
-    ${includedir} \
-    ${datadir}/aclocal/ltdl.m4 \
-    ${datadir}/libtool/libltdl \
-"
-FILES_${PN}-bin = "${bindir}/libtool"
 FILES_${PN} += "${datadir}/aclocal"
-FILES_${PN}-dev = ""
+FILES_${PN}-dev_remove = "${datadir}/aclocal"
 
-RDEPENDS_${PN}-bin += "${PN}"
-RDEPENDS_${PN}_class-target += "gcc cpp libc6-dev file autotools-dev"
-
-INSANE_SKIP_${PN} += "dev-deps"
+export CONFIG_SHELL="/bin/bash"

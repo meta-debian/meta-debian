@@ -1,7 +1,12 @@
-#Upstream-Status: Inappropriate
 #
-#Signed-off-by: Marko Lindqvist <cazfi74@gmail.com>
-#Updated by: Robert Yang <liezhi.yang@windriver.com>
+# base patch: meta/recipes-devtools/libtool/libtool/dont-depend-on-help2man.patch
+# base branch: master
+# base commit: dbda297fd91aab2727f7a69d3b7d3a32ad4261d2
+#
+# Upstream-Status: Inappropriate
+#
+# Signed-off-by: Marko Lindqvist <cazfi74@gmail.com>
+# Updated by: Robert Yang <liezhi.yang@windriver.com>
 
 Edited to avoid conflict with debian/patches/man-add-whatis-info.diff 
 

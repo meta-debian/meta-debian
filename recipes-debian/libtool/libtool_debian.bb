@@ -1,19 +1,40 @@
 #
-# base recipe: meta/recipes-devtools/libtool/libtool_2.4.2.bb
-# base branch: daisy
+# base recipe: meta/recipes-devtools/libtool/libtool_2.4.6.bb
+# base branch: master
+# base commit: dbda297fd91aab2727f7a69d3b7d3a32ad4261d2
 #
 
 require libtool.inc
 
-PR = "${INC_PR}.1"
+SRC_URI += "file://multilib.patch"
 
-#                                                                               
+RDEPENDS_${PN} += "bash"
+
+#
 # We want the results of libtool-cross preserved - don't stage anything ourselves.
-#                                                                               
-SYSROOT_PREPROCESS_FUNCS += "libtool_sysroot_preprocess"                        
-                                                                                
-libtool_sysroot_preprocess () {                                                 
-        rm -rf ${SYSROOT_DESTDIR}${bindir}/*                                    
-        rm -rf ${SYSROOT_DESTDIR}${datadir}/aclocal/*                           
-        rm -rf ${SYSROOT_DESTDIR}${datadir}/libtool/config/*                    
-} 
+#
+SYSROOT_DIRS_BLACKLIST += " \
+    ${bindir} \
+    ${datadir}/aclocal \
+    ${datadir}/libtool/build-aux \
+"
+
+ACLOCALEXTRAPATH_class-target = ""
+
+do_install_append () {
+	sed -e 's@--sysroot=${STAGING_DIR_HOST}@@g' \
+	    -e "s@${DEBUG_PREFIX_MAP}@@g" \
+	    -e 's@${STAGING_DIR_HOST}@@g' \
+	    -e 's@${STAGING_DIR_NATIVE}@@g' \
+	    -e 's@^\(sys_lib_search_path_spec="\).*@\1${libdir} ${base_libdir}"@' \
+	    -e 's@^\(compiler_lib_search_dirs="\).*@\1${libdir} ${base_libdir}"@' \
+	    -e 's@^\(compiler_lib_search_path="\).*@\1${libdir} ${base_libdir}"@' \
+	    -e 's@^\(predep_objects="\).*@\1"@' \
+	    -e 's@^\(postdep_objects="\).*@\1"@' \
+	    -e "s@${HOSTTOOLS_DIR}/@@g" \
+	    -i ${D}${bindir}/libtool
+}
+
+inherit multilib_script
+
+MULTILIB_SCRIPTS = "${PN}:${bindir}/libtool"
