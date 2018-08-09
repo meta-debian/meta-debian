@@ -6,6 +6,8 @@
 
 inherit debian-package
 PV = "0.19.8.1"
+DPR = "-6"
+DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5=fe91b5697274b21507469d8b6ab84b3b;sha256sum=4b6441dd278649a818875a2920ff0ef613a3188a2eb3af5e69f04ceb84b5f145"
 
 SUMMARY = "Utilities and libraries for producing multi-lingual messages"
 DESCRIPTION = "GNU gettext is a set of tools that provides a framework to help other programs produce multi-lingual messages. These tools include a set of conventions about how programs should be written to support message catalogs, a directory and file naming organization for the message catalogs themselves, a runtime library supporting the retrieval of translated messages, and a few stand-alone programs to massage in various ways the sets of translatable and already translated strings."
@@ -14,12 +16,13 @@ LICENSE = "GPLv3+ & LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS = "gettext-native virtual/libiconv"
-DEPENDS_class-native = "gettext-minimal-native"
 PROVIDES = "virtual/libintl virtual/gettext"
-PROVIDES_class-native = "virtual/gettext-native"
 RCONFLICTS_${PN} = "proxy-libintl"
 
-LDFLAGS_prepend_libc-uclibc = " -lrt -lpthread "
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/gettext/gettext-0.19.8.1"
+SRC_URI += " \
+    file://parallel.patch \
+"
 
 inherit autotools texinfo pkgconfig
 
@@ -36,7 +39,6 @@ EXTRA_OECONF += "--without-lispdir \
                 "
 
 PACKAGECONFIG ??= "croco glib libxml"
-PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
 
 PACKAGECONFIG[croco] = "--without-included-libcroco,--with-included-libcroco,libcroco"
@@ -52,18 +54,7 @@ acpaths = '-I ${S}/gettext-runtime/m4 \
 
 
 do_install_append() {
-	mv ${D}${docdir}/gettext ${D}${docdir}/gettext-doc
-
-	rm -f ${D}${libdir}/libgettextlib.so
-	rm -f ${D}${libdir}/libgettextsrc.so
-	find ${D} -type f -name *.la -exec rm -f {} \;
-}
-
-do_install_append_class-native () {
-	rm -f ${D}${datadir}/aclocal/*
-	rm -f ${D}${datadir}/gettext/config.rpath
-	rm -f ${D}${datadir}/gettext/po/Makefile.in.in
-	rm -f ${D}${datadir}/gettext/po/remove-potcdate.sin
+	rm -f ${D}${libdir}/preloadable_libintl.so
 }
 
 # these lack the .x behind the .so, but shouldn't be in the -dev package
@@ -114,8 +105,4 @@ FILES_gettext-runtime-doc = "${mandir}/man1/gettext.* \
                              ${infodir}/autosprintf.info \
                             "
 
-BBCLASSEXTEND = "native nativesdk"
-
-SRC_URI += " \
-file://parallel.patch \
-"
+BBCLASSEXTEND = "nativesdk"
