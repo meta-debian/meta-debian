@@ -1,21 +1,18 @@
 #
-# base recipe: meta/recipes-extended/bc/bc_1.06.bb
-# base branch: daisy
+# base recipe: meta/recipes-extended/bc/bc_1.07.1.bb
+# base branch: master
+# base commit: 028a292001f64ad86c6b960a05ba1f6fd72199de
 #
 
-SUMMARY = "GNU bc arbitrary precision calculator language"
-DESCRIPTION = "GNU bc is an interactive algebraic language with arbitrary precision which \
-follows the POSIX 1003.2 draft standard, with several extensions including \
-multi-character variable names, an `else' statement and full Boolean \
-expressions.  GNU bc does not require the separate GNU dc program."
-HOMEPAGE = "http://ftp.gnu.org/gnu/bc/"
+SUMMARY = "Arbitrary precision calculator language"
+HOMEPAGE = "http://www.gnu.org/software/bc/"
 
 inherit debian-package
 PV = "1.07.1"
 DPR = "-2"
 DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fc30a4f7d7314cb67599e9917bb31c52"
 
-LICENSE = "GPLv3+ & LGPLv3+"
+LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 	file://COPYING.LIB;md5=6a6a8e020838b23406c81b19c1d46df6 \
@@ -26,7 +23,21 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "flex-native ed-native"
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/bc/bc"
+SRC_URI += " \
+    file://no-gen-libmath.patch \
+    file://libmath.h \
+"
+
 inherit autotools-brokensep texinfo update-alternatives
+
+PACKAGECONFIG ??= "readline"
+PACKAGECONFIG[readline] = "--with-readline,--without-readline,readline"
+PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
+
+do_compile_prepend() {
+	cp -f ${WORKDIR}/libmath.h ${B}/bc/libmath.h
+}
 
 ALTERNATIVE_${PN} = "dc"
 ALTERNATIVE_PRIORITY = "100"
