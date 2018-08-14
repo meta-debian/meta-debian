@@ -9,9 +9,9 @@ DESCRIPTION = "D-Bus is a message bus system, a simple way for applications to t
 HOMEPAGE = "http://dbus.freedesktop.org"
 
 inherit debian-package
-PV = "1.12.8"
-DPR = "-3"
-DSC_URI = "${DEBIAN_MIRROR}/main/d/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=bcbc87463e8b461895878757bfe2ef60"
+PV = "1.12.10"
+DPR = "-1"
+DSC_URI = "${DEBIAN_MIRROR}/main/d/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=d3503542164bcc3c9dd4595525cf7d14"
 
 LICENSE = "AFL-2.1 | GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=10dded3b58148f3f1fd804b26354af3e \
