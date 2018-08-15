@@ -21,11 +21,6 @@
 # based on OE-Core kernel functions
 inherit kernel
 
-# Use the common functions to generate DTBs.
-# dtb files (e.g. device.dtb) defined in KERNEL_DEVICETREE are
-# automatically generated. Do nothing if KERNEL_DEVICETREE is not set.
-require recipes-kernel/linux/linux-dtb.inc
-
 # use the same kernel source as linux-libc-headers-base_git.bb
 inherit linux-src
 
