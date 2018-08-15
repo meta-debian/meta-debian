@@ -82,13 +82,11 @@ python __anonymous() {
 # Make folder "debian" be inside source code folder
 addtask debian_unpack_extra after do_unpack before do_debian_patch
 do_debian_unpack_extra() {
-	if [ -d ${DEBIAN_UNPACK_DIR}/debian ]; then
-		return
-	fi
-
 	if [ -d ${WORKDIR}/debian ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
 		mv ${WORKDIR}/debian ${DEBIAN_UNPACK_DIR}/
 	elif [ -f ${WORKDIR}/${BPN}_${PV}${DPR}.diff ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
 		cd ${DEBIAN_UNPACK_DIR}
 		patch -p1 < ${WORKDIR}/${BPN}_${PV}${DPR}.diff
 	fi
