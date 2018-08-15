@@ -1,9 +1,7 @@
 #
-# Base recipe: 
-#	meta/recipes-core/libxml/libxml2.inc
-#	meta/recipes-core/libxml/libxml2_2.9.2.bb
-# Base branch: master
-# Base commit: d9411412d2cc3ae13cb72227c6513202935012af
+# base recipe: meta/recipes-core/libxml/libxml2_2.9.8.bb
+# base branch: master
+# base commit: 63a4ff7cf5f7d1671ab85800bc2212dd9cd9748d
 #
 
 SUMMARY = "XML C Parser Library and Toolkit"
@@ -11,11 +9,11 @@ DESCRIPTION = "The XML Parser Library allows for manipulation of XML files.  Lib
 HOMEPAGE = "http://www.xmlsoft.org/"
 BUGTRACKER = "http://bugzilla.gnome.org/buglist.cgi?product=libxml2"
 
-PR = "r1"
-DEPENDS =+ "zlib"
-
-inherit autotools pkgconfig binconfig pythonnative debian-package
-PV = "2.9.1+dfsg1"
+inherit debian-package
+PV = "2.9.4+dfsg1"
+DPR = "-7"
+DSC_URI = "${DEBIAN_MIRROR}/main/libx/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fd9a8cb908221ab6ea95ba1b47e09468"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/libxml2-2.9.4"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \
@@ -25,58 +23,53 @@ LIC_FILES_CHKSUM = " \
 	file://trio.c;beginline=5;endline=14;md5=6c025753c86d958722ec76e94cae932e \
 "
 
+DEPENDS = "zlib virtual/libiconv"
+
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/libxml/libxml2"
 SRC_URI += " \
 	file://restore-python-include-flag.patch \
-	file://ansidecl.patch \
-	file://libxml-64bit.patch \
 	file://python-sitepackages-dir.patch \
+	file://libxml-m4-use-pkgconfig.patch \
 "
 
 BINCONFIG = "${bindir}/xml2-config"
 
-RDEPENDS_${PN}-python += "python-core"
+PACKAGECONFIG ??= "python \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'ipv6', d)} \
+"
+PACKAGECONFIG[python] = "--with-python=${PYTHON},--without-python,python3"
+PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,"
 
-# We don't DEPEND on binutils for ansidecl.h so ensure we don't use the header
-do_configure_prepend () {
-        sed -i -e '/.*ansidecl.h.*/d' ${S}/configure.in
-}
+inherit autotools pkgconfig binconfig-disabled
+
+inherit ${@bb.utils.contains('PACKAGECONFIG', 'python', 'python3native', '', d)}
+
+RDEPENDS_${PN}-python += "${@bb.utils.contains('PACKAGECONFIG', 'python', 'python3-core', '', d)}"
 
 export PYTHON_SITE_PACKAGES="${PYTHON_SITEPACKAGES_DIR}"
 
-PACKAGECONFIG ??= "python"
-
-PACKAGECONFIG[python] = "--with-python=${PYTHON},--without-python,python"
-# WARNING: zlib is require for RPM use
+# WARNING: zlib is required for RPM use
 EXTRA_OECONF = "--without-debug --without-legacy --with-catalog --without-docbook --with-c14n --without-lzma --with-fexceptions"
-EXTRA_OECONF_class-native = "--with-python=${STAGING_BINDIR}/python --without-legacy --with-catalog --without-docbook --with-c14n --without-lzma"
-EXTRA_OECONF_class-nativesdk = "--with-python=${STAGING_BINDIR}/python --without-legacy --with-catalog --without-docbook --with-c14n --without-lzma"
-EXTRA_OECONF_linuxstdbase = "--without-python --with-debug --with-legacy --with-catalog --with-docbook --with-c14n --without-lzma"
-
-# required for pythong binding
-export HOST_SYS
-export BUILD_SYS
-export STAGING_LIBDIR
-export STAGING_INCDIR
-
-export LDFLAGS += "-ldl"
+EXTRA_OECONF_class-native = "--without-legacy --without-docbook --with-c14n --without-lzma --with-zlib"
+EXTRA_OECONF_class-nativesdk = "--without-legacy --without-docbook --with-c14n --without-lzma --with-zlib"
+EXTRA_OECONF_linuxstdbase = "--with-debug --with-legacy --with-docbook --with-c14n --without-lzma --with-zlib"
 
 python populate_packages_prepend () {
     # autonamer would call this libxml2-2, but we don't want that
-    if d.getVar('DEBIAN_NAMES', True):
+    if d.getVar('DEBIAN_NAMES'):
         d.setVar('PKG_libxml2', '${MLPREFIX}libxml2')
 }
 
 PACKAGES += "${PN}-utils ${PN}-python"
 
-FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 FILES_${PN}-staticdev += "${PYTHON_SITEPACKAGES_DIR}/*.a"
-FILES_${PN}-dev += "${libdir}/xml2Conf.sh"
+FILES_${PN}-dev += "${libdir}/xml2Conf.sh ${libdir}/cmake/*"
 FILES_${PN}-utils += "${bindir}/*"
 FILES_${PN}-python += "${PYTHON_SITEPACKAGES_DIR}"
-# Correct list of file in libxml2 package
-FILES_${PN} = "${libdir}/lib*${SOLIBS}"
 
-# Correct .deb file name
-DEBIANNAME_${PN}-python = "python-libxml2"
+do_install_append_class-native () {
+	# Docs are not needed in the native case
+	rm ${D}${datadir}/gtk-doc -rf
+}
 
 BBCLASSEXTEND = "native nativesdk"
