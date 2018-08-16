@@ -14,6 +14,7 @@ RDEPENDS_${PN} = "\
     libatomic-dev \
     libstdc++ \
     libstdc++-dev \
+    linux-libc-headers-base-dev \
     ${LIBC_DEPENDENCIES} \
     "
 
