@@ -20,7 +20,7 @@ do_debian_patch_prepend() {
 	# Remove old series file if existed
 	test -f ${DEBIAN_QUILT_PATCHES}/series && rm -f ${DEBIAN_QUILT_PATCHES}/series
 
-	debian_patches="$debian_patches \
+	debian_patches="svn-updates \
 		gcc-gfdl-build \
 		gcc-textdomain \
 		gcc-driver-extra-langs \
@@ -57,9 +57,18 @@ do_debian_patch_prepend() {
 		gcc-force-cross-layout \
 		gcc-search-prefixed-as-ld \
 		kfreebsd-decimal-float \
-		go-vet-tool \
+		powerpcspe_remove_many \
 		gcc-as-needed-push-pop \
 		ada-arm \
+		gcc-d-lang \
+	"
+
+	if [ "${DPKG_ARCH}" = "powerpcspe" ]; then
+		debian_patches="$debian_patches \
+			powerpcspe_nofprs"
+	fi
+
+	debian_patches="$debian_patches \
 		sys-auxv-header \
 		gcc-ice-dump \
 		gcc-ice-apport \

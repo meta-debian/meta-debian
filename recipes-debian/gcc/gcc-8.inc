@@ -10,12 +10,12 @@ require recipes-devtools/gcc/gcc-8.2.inc
 
 inherit debian-package
 PV = "8.2.0"
-DPR = "-1"
+DPR = "-3"
 
 # Need to use other variable than BPN because libgcc-common.inc set BPN = "libgcc"
 DPN = "gcc-8"
 BPN = "${DPN}"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${DPN}/${DPN}_${PV}${DPR}.dsc;md5sum=d528985652196a425445e43fa10091d8;sha256sum=b50eec1cbd263159f11b50c27a23a56d4ae932da88d339bb2fffda2640f5ba0d"
+DSC_URI = "${DEBIAN_MIRROR}/main/g/${DPN}/${DPN}_${PV}${DPR}.dsc;md5sum=8d0e92d9ba3a000f833b8ad3e9c17d81;sha256sum=2f11658f7125dc02481774bd8b8f3e9a1e328b86f756e2d250b04fb5a896b01c"
 
 DEBIAN_UNPACK_DIR = "${TMPDIR}/work-shared/gcc-${PV}-${PR}/${DPN}-${PV}"
 S = "${DEBIAN_UNPACK_DIR}/src"
