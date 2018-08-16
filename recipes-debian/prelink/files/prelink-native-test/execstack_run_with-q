@@ -1,3 +1,0 @@
-#!/bin/sh
-
-execstack -q libctest.so.1.0

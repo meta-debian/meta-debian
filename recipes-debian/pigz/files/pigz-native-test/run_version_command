@@ -1,5 +1,0 @@
-#!/bin/sh
-
-gzip --version
-
-gunzip --version

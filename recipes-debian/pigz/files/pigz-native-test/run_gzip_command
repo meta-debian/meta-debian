@@ -1,7 +1,0 @@
-#!/bin/sh
-
-touch a_file
-mkdir a_folder
-
-gzip -c a_file > a_file_in_compress.gz
-gzip -r a_folder

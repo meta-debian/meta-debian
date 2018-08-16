@@ -1,8 +1,0 @@
-%{
-/* C code that goes verbatim in output */
-%}
-declarations
-%%
-keywords
-%%
-functions
