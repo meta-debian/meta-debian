@@ -57,20 +57,3 @@ RPROVIDES_${PN} += "pkg-config"
 PKG_${PN} = "pkg-config"
 
 BBCLASSEXTEND = "native nativesdk"
-
-#
-# Debian Native Test
-#
-inherit debian-test
-
-SRC_URI_DEBIAN_TEST = "\
-        file://pkg-config-native-test/run_native_test_pkg-config \
-        file://pkg-config-native-test/run_modversion_command \
-        file://pkg-config-native-test/run_libs_command \
-        file://pkg-config-native-test/run_cflags_command \
-        file://pkg-config-native-test/foo.pc \
-        file://pkg-config-native-test/bar.pc \
-"
-
-DEBIAN_NATIVE_TESTS = "run_native_test_pkg-config"
-TEST_DIR = "${B}/native-test"

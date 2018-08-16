@@ -1,5 +1,0 @@
-#!/bin/sh
-
-pkg-config --cflags bar
-
-pkg-config --cflags foo

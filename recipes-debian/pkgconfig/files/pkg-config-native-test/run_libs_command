@@ -1,7 +1,0 @@
-#!/bin/sh
-
-pkg-config --libs foo
-
-pkg-config --libs bar
-
-pkg-config --libs --static bar
