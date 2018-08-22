@@ -10,10 +10,11 @@ inherit debian-package
 require recipes-debian/sources/glibc.inc
 BPN = "glibc"
 
+LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = " \
 file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
-file://LICENSES;md5=e9a558e243b36d3209f380deb394b213 \
+file://LICENSES;md5=ebc14508894997e6daaad1b8ffd53a15 \
 "
 
 DEPENDS += "gperf-native"
