@@ -17,7 +17,7 @@ file://COPYING.LIB;md5=4fbd65380cdd255951079008b364516c \
 file://LICENSES;md5=ebc14508894997e6daaad1b8ffd53a15 \
 "
 
-DEPENDS += "gperf-native"
+DEPENDS += "gperf-native bison-native"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/glibc/glibc"
 
