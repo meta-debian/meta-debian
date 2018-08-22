@@ -30,7 +30,6 @@ VIRTUAL_NAME ?= "virtual/db"
 RCONFLICTS_${PN} = "db3"
 
 SRC_URI += "file://fix-parallel-build.patch \
-            file://0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch \
             file://0001-configure-Add-explicit-tag-options-to-libtool-invoca.patch \
             file://sequence-type.patch \
            "
