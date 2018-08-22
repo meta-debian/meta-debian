@@ -1,7 +1,5 @@
 inherit debian-package
-PV = "7.12"
-DPR = "-6"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=3bf82ea8d2c5d40b2171e3135abf9637"
+require recipes-debian/sources/gdb.inc
 BPN = "gdb"
 
 LICENSE = "GPLv3+ & LGPLv3 & GPLv2+ & LGPLv2+ & GPL-3.0-with-GCC-exception & BSD-3-Clause & LGPLv2.1+"

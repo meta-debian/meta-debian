@@ -10,9 +10,7 @@ the /proc filesystem. The package includes the programs ps, top, vmstat, w, kill
 HOMEPAGE = "https://gitlab.com/procps-ng/procps"
 
 inherit debian-package
-PV = "3.3.15"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f73b698ef3e19479f0b8530cfa301a7d"
+require recipes-debian/sources/procps.inc
 
 LICENSE = "GPLv2+ & LGPLv2+ & LGPLv2.1+"
 LIC_FILES_CHKSUM=" \

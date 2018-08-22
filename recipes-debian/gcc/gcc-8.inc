@@ -9,15 +9,9 @@ FILESPATH_append = "${FILE_DIRNAME}/gcc-8:${COREBASE}/meta/recipes-devtools/gcc/
 require recipes-devtools/gcc/gcc-8.2.inc
 
 inherit debian-package
-PV = "8.2.0"
-DPR = "-3"
-
-# Need to use other variable than BPN because libgcc-common.inc set BPN = "libgcc"
-DPN = "gcc-8"
-BPN = "${DPN}"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${DPN}/${DPN}_${PV}${DPR}.dsc;md5sum=8d0e92d9ba3a000f833b8ad3e9c17d81;sha256sum=2f11658f7125dc02481774bd8b8f3e9a1e328b86f756e2d250b04fb5a896b01c"
-
-DEBIAN_UNPACK_DIR = "${TMPDIR}/work-shared/gcc-${PV}-${PR}/${DPN}-${PV}"
+require recipes-debian/sources/gcc-8.inc
+BPN = "gcc-8"
+DEBIAN_UNPACK_DIR = "${TMPDIR}/work-shared/gcc-${PV}-${PR}/gcc-8-${PV}"
 S = "${DEBIAN_UNPACK_DIR}/src"
 DEBIAN_PATCH_TYPE = "quilt"
 

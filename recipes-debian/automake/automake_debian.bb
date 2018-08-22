@@ -7,12 +7,9 @@
 require recipes-devtools/automake/automake.inc
 
 inherit debian-package
-PV = "1.16.1"
-DPR = "-1"
+require recipes-debian/sources/automake-1.16.inc
 BPN = "automake-1.16"
-DSC_URI = "${DEBIAN_MIRROR}/main/a/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=95b30e01d980bfa66e71fa707951fc6b"
-
-DEBIAN_UNPACK_DIR = "${WORKDIR}/automake-1.16.1"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/automake-${PV}"
 
 LICENSE = "GPLv2+ & GPLv3+ & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \

@@ -16,10 +16,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=3d06403ea54c7574a9e581c6478cc393 \
                     file://lib/LGPL;md5=b75d069791103ffe1c0d6435deeff72e"
 
 inherit debian-package
-PV = "2.1.0+repack"
-DPR = "-4"
-DSC_URI = "${DEBIAN_MIRROR}/main/s/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=ba8453acabe245284cbb1275130bd902"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/sysfsutils-2.1.0"
+require recipes-debian/sources/sysfsutils.inc
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/sysfsutils/sysfsutils-2.1.0"
 SRC_URI += " \

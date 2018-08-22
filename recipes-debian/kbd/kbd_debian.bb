@@ -8,9 +8,7 @@ SUMMARY = "Keytable files and keyboard utilities"
 HOMEPAGE = "http://www.kbd-project.org/"
 
 inherit debian-package
-PV = "2.0.4"
-DPR = "-3"
-DSC_URI = "${DEBIAN_MIRROR}/main/k/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=832294fbc440af2e0703a32f4769025d"
+require recipes-debian/sources/kbd.inc
 
 # everything minus console-fonts is GPLv2+
 LICENSE = "GPLv2+"

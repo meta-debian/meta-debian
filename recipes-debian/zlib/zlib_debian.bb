@@ -11,9 +11,7 @@ DESCRIPTION = "zlib is a library implementing the deflate compression method fou
 HOMEPAGE = "http://zlib.net/"
 
 inherit debian-package
-PV = "1.2.11.dfsg"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/z/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=a4b769a70954765d487fac008c185a45"
+require recipes-debian/sources/zlib.inc
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \

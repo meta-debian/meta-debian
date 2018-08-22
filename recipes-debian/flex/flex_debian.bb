@@ -9,9 +9,7 @@ lexical patterns in text."
 HOMEPAGE = "http://sourceforge.net/projects/flex/"
 
 inherit debian-package
-PV = "2.6.4"
-DPR = "-6.1"
-DSC_URI = "${DEBIAN_MIRROR}/main/f/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=993f8b947ab40809183d4910d8b3ed1b"
+require recipes-debian/sources/flex.inc
 
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e4742cf92e89040b39486a6219b68067"

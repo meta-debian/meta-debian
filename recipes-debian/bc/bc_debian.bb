@@ -8,9 +8,7 @@ SUMMARY = "Arbitrary precision calculator language"
 HOMEPAGE = "http://www.gnu.org/software/bc/"
 
 inherit debian-package
-PV = "1.07.1"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fc30a4f7d7314cb67599e9917bb31c52"
+require recipes-debian/sources/bc.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

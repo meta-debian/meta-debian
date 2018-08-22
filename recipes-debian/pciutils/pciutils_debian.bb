@@ -14,9 +14,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
 inherit debian-package
-PV = "3.5.2"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f0d9d8bf3e1c885d54d5d828e32ddf8c"
+require recipes-debian/sources/pciutils.inc
 
 SRC_URI += "\
     file://Makefile_remove_udeb.patch \

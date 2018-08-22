@@ -8,9 +8,7 @@ SUMMARY = "Traditional Unix macro processor"
 HOMEPAGE = "https://www.gnu.org/software/m4/m4.html"
 
 inherit debian-package
-PV = "1.4.18"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=c95bf5d0b16110b842a8cb46a9caf407"
+require recipes-debian/sources/m4.inc
 
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = " \

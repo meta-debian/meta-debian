@@ -1,9 +1,7 @@
 require recipes-devtools/perl/perl.inc
 
 inherit debian-package
-PV = "5.26.2"
-DPR = "-6"
-DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=99abfe79c6f0498735dc71dcdaf79714"
+require recipes-debian/sources/perl.inc
 
 do_debian_unpack_extra_append() {
 	if [ -d ${WORKDIR}/metaconfig-debian-${BPN}-5.26.1 ]; then

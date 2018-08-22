@@ -7,9 +7,7 @@
 require recipes-core/glibc/glibc.inc
 
 inherit debian-package
-PV = "2.27"
-DPR = "-3"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=efac0f6c3ef751804b50dbdc474ba2db"
+require recipes-debian/sources/glibc.inc
 BPN = "glibc"
 
 LIC_FILES_CHKSUM = " \

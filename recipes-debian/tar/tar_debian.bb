@@ -11,10 +11,7 @@ HOMEPAGE = "http://www.gnu.org/software/tar/"
 
 
 inherit debian-package
-PV = "1.30+dfsg"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/t/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=4a94b80636f86f414a6a751fc15d6b64"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/tar-1.30"
+require recipes-debian/sources/tar.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

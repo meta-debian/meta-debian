@@ -11,10 +11,7 @@ quick and easy text pattern matching and reformatting jobs."
 HOMEPAGE = "https://www.gnu.org/software/gawk/"
 
 inherit debian-package
-PV = "4.1.4+dfsg"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f65a7d4ce42f8a2876efe6930039eb6b"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-4.1.4"
+require recipes-debian/sources/gawk.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"

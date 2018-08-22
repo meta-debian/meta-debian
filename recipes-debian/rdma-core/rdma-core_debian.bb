@@ -9,10 +9,7 @@ DESCRIPTION = "This is the userspace components for the Linux Kernel's drivers I
 HOMEPAGE = "https://github.com/linux-rdma/rdma-core"
 
 inherit debian-package
-PV = "19.0"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/r/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=1b8e951d8a60cc9ce760088906fc749b"
-
+require recipes-debian/sources/rdma-core.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-19"
 
 LICENSE = "(BSD-2-Clause | GPLv2) & CC0-1.0 & MIT & (GPLv2 | BSD-3-Clause)"

@@ -7,9 +7,7 @@
 require recipes-core/ncurses/ncurses.inc
 
 inherit debian-package
-PV = "6.1+20180210"
-DPR = "-4"
-DSC_URI = "${DEBIAN_MIRROR}/main/n/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=7136695c6d8f985dd8de71dcc77e88a0"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-6.1-20180210"
+require recipes-debian/sources/ncurses.inc
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-${@d.getVar('PV', True).replace('+','-')}"
 
 EXTRA_OECONF += "--with-abi-version=5"

@@ -11,9 +11,7 @@ Libtool hides the complexity of generating special library types \
 HOMEPAGE = "http://www.gnu.org/software/libtool/libtool.html"
 
 inherit debian-package
-PV = "2.4.6"
-DPR = "-2.1"
-DSC_URI = "${DEBIAN_MIRROR}/main/libt/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=6df74a41dd4a0104040ecc4b9dbf55e6"
+require recipes-debian/sources/libtool.inc
 
 LICENSE = "GPLv2 & LGPLv2.1"
 LIC_FILES_CHKSUM = "\

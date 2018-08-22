@@ -7,9 +7,7 @@
 require recipes-devtools/autoconf/autoconf.inc
 
 inherit debian-package
-PV = "2.69"
-DPR = "-11"
-DSC_URI = "${DEBIAN_MIRROR}/main/a/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=46e363752814aeffa3c6e773e12ec00a"
+require recipes-debian/sources/autoconf.inc
 
 LICENSE = "GPLv2+ & GPLv3+ & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \

@@ -7,10 +7,8 @@
 require recipes-devtools/make/make.inc
 
 inherit debian-package
-PV = "4.1"
-DPR = "-9.1"
+require recipes-debian/sources/make-dfsg.inc
 BPN = "make-dfsg"
-DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=7cdc9a0ed0e40cc38a6b71fb7e4cf4d1"
 DEBIAN_PATCH_TYPE = "nopatch"
 
 LICENSE = "GPLv3 & LGPLv2"

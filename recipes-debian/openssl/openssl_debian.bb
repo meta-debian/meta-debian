@@ -9,9 +9,7 @@ DESCRIPTION = "Secure Socket Layer (SSL) binary and related cryptographic tools.
 HOMEPAGE = "http://www.openssl.org/"
 
 inherit debian-package
-PV = "1.1.0h"
-DPR = "-4"
-DSC_URI = "${DEBIAN_MIRROR}/main/o/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=85d1843378b53636025afd27d68bd12c"
+require recipes-debian/sources/openssl.inc
 
 # "openssl | SSLeay" dual license
 LICENSE = "openssl"

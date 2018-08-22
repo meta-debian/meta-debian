@@ -10,10 +10,7 @@ HOMEPAGE = "http://www.xmlsoft.org/"
 BUGTRACKER = "http://bugzilla.gnome.org/buglist.cgi?product=libxml2"
 
 inherit debian-package
-PV = "2.9.4+dfsg1"
-DPR = "-7"
-DSC_URI = "${DEBIAN_MIRROR}/main/libx/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fd9a8cb908221ab6ea95ba1b47e09468"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/libxml2-2.9.4"
+require recipes-debian/sources/libxml2.inc
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = " \

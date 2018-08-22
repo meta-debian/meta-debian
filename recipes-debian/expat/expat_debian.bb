@@ -9,11 +9,8 @@ parser in which an application registers handlers for things the parser might fi
 in the XML document (like start tags)"
 
 inherit debian-package
-PV = "2.2.5"
-DPR = "-3"
-DSC_URI = "${DEBIAN_MIRROR}/main/e/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=afd13bf06215d7858e0ce77cc86a1e55"
-
-DEBIAN_UNPACK_DIR = "${WORKDIR}/libexpat-R_2_2_5"
+require recipes-debian/sources/expat.inc
+DEBIAN_UNPACK_DIR = "${WORKDIR}/libexpat-R_${@d.getVar('PV',True).replace('.','_')}"
 S = "${DEBIAN_UNPACK_DIR}/expat"
 
 LICENSE = "MIT"

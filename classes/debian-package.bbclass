@@ -2,8 +2,36 @@
 # debian-package.bbclass
 #
 
-# Detect and set SRC_URI to Debian apt repository
-inherit debian-source
+# debian-source.bbclass will generate DEBIAN_SRC_URI information
+# in recipes-debian/sources/<source name>.inc
+
+DEBIAN_SRC_URI ?= ""
+SRC_URI = "${DEBIAN_SRC_URI}"
+
+DEBIAN_UNPACK_DIR ?= "${WORKDIR}/${BP}"
+S = "${DEBIAN_UNPACK_DIR}"
+DPV ?= "${PV}"
+
+
+###############################################################################
+# do_debian_unpack_extra
+###############################################################################
+
+# Make "debian" sub folder be inside source code folder
+addtask debian_unpack_extra after do_unpack before do_debian_patch
+do_debian_unpack_extra() {
+	if [ -d ${WORKDIR}/debian ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
+		mv ${WORKDIR}/debian ${DEBIAN_UNPACK_DIR}/
+	elif [ -f ${WORKDIR}/${BPN}_${DPV}.diff ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
+		cd ${DEBIAN_UNPACK_DIR}
+		patch -p1 < ${WORKDIR}/${BPN}_${DPV}.diff
+	fi
+}
+
+EXPORT_FUNCTIONS do_debian_unpack_extra
+
 
 ###############################################################################
 # do_debian_patch

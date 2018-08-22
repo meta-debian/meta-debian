@@ -7,11 +7,9 @@
 require recipes-core/glib-2.0/glib.inc
 
 inherit debian-package
-PV = "2.56.1"
-DPR = "-2"
+require recipes-debian/sources/glib2.0.inc
 BPN = "glib2.0"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f3d172717d2319bb83b4bb5d19adae0b"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/glib-2.56.1"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/glib-${PV}"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/glib-2.0/glib-2.0"
 SRC_URI += " \

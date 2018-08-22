@@ -17,11 +17,8 @@ SUMMARY = "Berkeley Database v5"
 HOMEPAGE = "http://www.oracle.com/technology/products/berkeley-db/db/index.html"
 
 inherit debian-package
-PV = "5.3.28"
+require recipes-debian/sources/db5.3.inc
 BPN = "db5.3"
-
-DPR = "-13.1"
-DSC_URI = "${DEBIAN_MIRROR}/main/d/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=0c44e9b0f9d88e1f78185872aed60169"
 DEBIAN_UNPACK_DIR = "${WORKDIR}/db-${PV}"
 
 LICENSE = "Sleepycat"

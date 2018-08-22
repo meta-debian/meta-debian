@@ -6,9 +6,7 @@ DESCRIPTION = "Remove cpp '#ifdef' lines from files \
 HOMEPAGE = "http://dotat.at/prog/unifdef/"
 
 inherit debian-package
-PV = "2.10"
-DPR = "-1.1"
-DSC_URI = "${DEBIAN_MIRROR}/main/u/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=09957432c20fc52cbf380b7d6d3f6e14"
+require recipes-debian/sources/unifdef.inc
 
 # source format is 3.0 but there is no patch
 DEBIAN_QUILT_PATCHES = ""

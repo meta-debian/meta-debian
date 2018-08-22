@@ -11,9 +11,7 @@ LZ77/LZ78-based compressors, and approaches the performance of the PPM family of
 HOMEPAGE = "http://www.bzip.org/"
 
 inherit debian-package
-PV = "1.0.6"
-DPR = "-8.1"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=7275cc6d76481ef19daa8d2e51e5456b"
+require recipes-debian/sources/bzip2.inc
 
 LICENSE = "bzip2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ddeb76cd34e791893c0f539fdab879bb"

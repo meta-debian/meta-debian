@@ -7,10 +7,7 @@
 require recipes-devtools/binutils/binutils.inc
 
 inherit debian-package
-PV = "2.31.1"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=4338a45cd8bd63a9a49225adffaf3815"
-
+require recipes-debian/sources/binutils.inc
 BPN = "binutils"
 
 LICENSE = "GPLv3"

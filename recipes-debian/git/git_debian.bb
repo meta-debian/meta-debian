@@ -7,9 +7,7 @@
 require recipes-devtools/git/git.inc
 
 inherit debian-package
-PV = "2.18.0"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=6af7b2ca0c1d2343926d710d714a7ec5"
+require recipes-debian/sources/git.inc
 
 # source format is 3.0 (quilt) but there is no debian/patches
 DEBIAN_QUILT_PATCHES = ""

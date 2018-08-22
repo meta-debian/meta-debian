@@ -8,9 +8,7 @@ SUMMARY = "Command line tool and library for client-side URL transfers"
 HOMEPAGE = "http://curl.haxx.se/"
 
 inherit debian-package
-PV = "7.60.0"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/c/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=3f172e5edfb6cb289195637c5bff3498"
+require recipes-debian/sources/curl.inc
 
 PR = "r1"
 

@@ -7,14 +7,13 @@
 require recipes-support/libmpc/libmpc.inc
 
 inherit debian-package
-PV = "1.1.0"
-DEPENDS = "gmp mpfr"
+require recipes-debian/sources/mpclib3.inc
 BPN = "mpclib3"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=8bf3b7e7f29bb91839db8edf7c399f45"
 DEBIAN_UNPACK_DIR = "${WORKDIR}/mpc-${PV}"
 
 LIC_FILES_CHKSUM = "file://COPYING.LESSER;md5=e6a600fd5e1d9cbde2d983680233ad02"
+
+DEPENDS = "gmp mpfr"
 
 # There is no debian patches
 DEBIAN_PATCH_TYPE = "nopatch"

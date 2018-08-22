@@ -11,9 +11,7 @@ along with PaX, such as non-PIC code or executable stack and heap."
 HOMEPAGE = "http://www.gentoo.org/proj/en/hardened/pax-utils.xml"
 
 inherit debian-package
-PV = "1.2.2"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/p/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=fb35e4bb631ea54cc1e2d415b4a3db63"
+require recipes-debian/sources/pax-utils.inc
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"

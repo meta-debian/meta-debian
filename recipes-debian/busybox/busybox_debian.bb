@@ -7,9 +7,7 @@
 require recipes-core/busybox/busybox.inc
 
 inherit debian-package
-PV = "1.27.2"
-DPR = "-2"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=da807dea5c34248cf77409a7dbbc5ac0"
+require recipes-debian/sources/busybox.inc
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/busybox/busybox:${COREBASE}/meta/recipes-core/busybox/files"
 SRC_URI += " \

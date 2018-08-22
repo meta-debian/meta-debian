@@ -6,10 +6,8 @@
 require recipes-support/gmp/gmp.inc
 
 inherit debian-package
-
-PV = "6.1.2+dfsg"
-DPR = "-3"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=0a0e6ba068394cf7cb496974c5a9ad4f"
+require recipes-debian/sources/gmp.inc
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-${REPACK_PV}"
 
 LICENSE = "GPLv2+ | LGPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \

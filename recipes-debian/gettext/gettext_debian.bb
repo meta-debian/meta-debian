@@ -5,9 +5,7 @@
 #
 
 inherit debian-package
-PV = "0.19.8.1"
-DPR = "-6"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5=fe91b5697274b21507469d8b6ab84b3b;sha256sum=4b6441dd278649a818875a2920ff0ef613a3188a2eb3af5e69f04ceb84b5f145"
+require recipes-debian/sources/gettext.inc
 
 SUMMARY = "Utilities and libraries for producing multi-lingual messages"
 DESCRIPTION = "GNU gettext is a set of tools that provides a framework to help other programs produce multi-lingual messages. These tools include a set of conventions about how programs should be written to support message catalogs, a directory and file naming organization for the message catalogs themselves, a runtime library supporting the retrieval of translated messages, and a few stand-alone programs to massage in various ways the sets of translatable and already translated strings."

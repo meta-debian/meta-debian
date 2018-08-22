@@ -7,9 +7,7 @@
 require recipes-core/readline/readline.inc
 
 inherit debian-package
-PV = "7.0"
-DPR = "-5"
-DSC_URI = "${DEBIAN_MIRROR}/main/r/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=aefa3bba83230c609e45e23dc9a63143"
+require recipes-debian/sources/readline.inc
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/readline/files"
 SRC_URI += "file://inputrc"

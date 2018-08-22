@@ -7,14 +7,9 @@ SUMMARY = "C library for multiple-precision floating-point computations with exa
 HOMEPAGE = "http://www.mpfr.org/"
 LICENSE = "GPLv3+ & LGPLv3+"
 
-BPN = "mpfr4"
-PV = "4.0.1"
-
 inherit debian-package
-
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/m/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=f086860d07172ab5909c0bbaac88f0e7"
-
+require recipes-debian/sources/mpfr4.inc
+BPN = "mpfr4"
 DEBIAN_UNPACK_DIR = "${WORKDIR}/mpfr-${PV}"
 
 LIC_FILES_CHKSUM = " \

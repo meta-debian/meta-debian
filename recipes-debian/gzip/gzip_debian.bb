@@ -1,9 +1,7 @@
 require recipes-extended/gzip/gzip.inc
 
 inherit debian-package
-PV = "1.6"
-DPR = "-5"
-DSC_URI = "${DEBIAN_MIRROR}/main/g/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=69c052088bef252c8bee61bad41aef65"
+require recipes-debian/sources/gzip.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

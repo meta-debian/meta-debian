@@ -18,9 +18,7 @@ the program is in the bison-doc package."
 HOMEPAGE = "http://www.gnu.org/software/bison/"
 
 inherit debian-package
-PV = "3.0.4.dfsg"
-DPR = "-1"
-DSC_URI = "${DEBIAN_MIRROR}/main/b/${BPN}/${BPN}_${PV}${DPR}.dsc;md5sum=eed71f7e2ddc81f942697bc430b939a2"
+require recipes-debian/sources/bison.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
