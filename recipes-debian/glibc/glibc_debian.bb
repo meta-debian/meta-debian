@@ -25,6 +25,7 @@ FILESPATH_append = ":${COREBASE}/meta/recipes-core/glibc/glibc"
 SRC_URI += " \
            file://etc/ld.so.conf \
            file://generate-supported.mk \
+           file://makedbs.sh \
            \
            ${NATIVESDKFIXES} \
            file://0005-fsl-e500-e5500-e6500-603e-fsqrt-implementation.patch \
