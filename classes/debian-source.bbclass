@@ -63,7 +63,7 @@ def save_to_file(package, dpv, pv, repack_pv, directory, files, md5sum, sha256su
 
     import os
     corebase = d.getVar('COREBASE', True)
-    filepath = "%s/meta-debian/recipes-debian/sources/%s.inc" % (corebase, package)
+    filepath = '%s/meta-debian/recipes-debian/sources/%s.inc' % (corebase, package)
     if not os.path.isfile(filepath):
         return
 
@@ -152,9 +152,49 @@ def parse_Sources_xz(d):
                     upstream_version = re.sub(r'\+[(dfsg)(ds)(repack)].*', '', repack_version)
 
 
+def get_pkg_dpv_map(d):
+    """
+    Get all the DPV of recipes which has been generated.
+    This function helps eventhandler check if source code version has been updated.
+    """
+    import os
+
+    pkg_dpv_map = {}
+    corebase = d.getVar('COREBASE', True)
+    sources_dir = os.path.join(corebase, 'meta-debian/recipes-debian/sources')
+
+    if not os.path.isdir(sources_dir):
+        return
+
+    for f in os.listdir(sources_dir):
+        filepath = os.path.join(sources_dir, f)
+        if not (f.endswith('.inc') and os.path.isfile(filepath)):
+            continue
+
+        pkg = f.replace('.inc', '')
+        with open(filepath, 'r') as inc_f:
+            for line in inc_f:
+                if line.startswith('DPV ='):
+                    dpv = line.split('=')[1].strip().replace('"', '')
+                    pkg_dpv_map[pkg] = dpv
+                    break
+
+    return pkg_dpv_map
+
 addhandler debian_source_eventhandler
 debian_source_eventhandler[eventmask] = "bb.event.ParseStarted"
 python debian_source_eventhandler() {
     fetch_Sources_xz(d)
+
+    old_pkg_dpv_map = get_pkg_dpv_map(d)
     parse_Sources_xz(d)
+    new_pkg_dpv_map = get_pkg_dpv_map(d)
+
+    # Show a warning if version has been changed
+    for pkg in old_pkg_dpv_map.keys():
+        if pkg not in new_pkg_dpv_map:
+            continue
+        if old_pkg_dpv_map[pkg] != new_pkg_dpv_map[pkg]:
+            bb.warn('Source code for package "%s" has been updated from "%s" to "%s"'
+                    % (pkg, old_pkg_dpv_map[pkg], new_pkg_dpv_map[pkg]))
 }
