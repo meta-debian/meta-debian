@@ -18,12 +18,6 @@ file://tests/COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 file://glob/COPYING.LIB;md5=4a770b67e6be0f60da244beb2de0fce4 \
 "
 
-FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/make/make"
-SRC_URI += " \
-            file://0001-glob-Do-not-assume-glibc-glob-internals.patch \
-            file://0002-glob-Do-not-assume-glibc-glob-internals.patch \
-            "
-
 EXTRA_OECONF += "--without-guile"
 
 BBCLASSEXTEND = "native nativesdk"
