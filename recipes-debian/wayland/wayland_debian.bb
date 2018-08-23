@@ -37,5 +37,7 @@ FILES_lib${DPN}-server += "${libdir}/libwayland-server.so.*"
 FILES_lib${DPN}-client += "${libdir}/libwayland-client.so.*"
 FILES_${PN}-dev += "${datadir}/wayland ${bindir}"
 PKG_${PN}-dev = "lib${DPN}-dev"
+RPROVIDES_${PN}-dev = "lib${DPN}-dev"
+RDEPENDS_${PN}-dev = "lib${DPN}-client lib${DPN}-cursor lib${DPN}-server"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
