@@ -5,7 +5,7 @@
 #
 
 require recipes-devtools/gdb/gdb.inc
-require gdb-7.12.inc
+require gdb-8.1.inc
 
 inherit python3-dir
 

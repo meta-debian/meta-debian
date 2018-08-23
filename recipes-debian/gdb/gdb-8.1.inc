@@ -10,9 +10,10 @@ LIC_FILES_CHKSUM = " \
     file://COPYING.LIB;md5=9f604d8a4f8e74f4f5140845a21b6674 \
     file://libdecnumber/dconfig.h;endline=23;md5=5f846eb921cb68667d3b67a3642aa02d \
     file://libiberty/bsearch.c;endline=29;md5=d61ed055b57f318f2809fb19e2e45e02 \
-    file://libiberty/strverscmp.c;endline=19;md5=f50ab9ef044f00fb22691ec5051c922d \
+    file://libiberty/strverscmp.c;endline=19;md5=753161881764c9bee1aefe5411224b1c \
 "
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/gdb/gdb"
 SRC_URI += " \
     file://gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-g.patch \
 "
