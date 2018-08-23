@@ -164,7 +164,7 @@ def get_pkg_dpv_map(d):
     sources_dir = os.path.join(corebase, 'meta-debian/recipes-debian/sources')
 
     if not os.path.isdir(sources_dir):
-        return
+        return {}
 
     for f in os.listdir(sources_dir):
         filepath = os.path.join(sources_dir, f)
