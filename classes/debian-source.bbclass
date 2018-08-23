@@ -12,6 +12,7 @@ def fetch_Sources_xz(d):
     This file contains information about list tar files, checksum,
     version, directory location on Debian apt repo and many others fields.
     """
+    import os
     import urllib.request
     import re
 
@@ -34,6 +35,16 @@ def fetch_Sources_xz(d):
         if re.match(sources_xz_line, line):
             md5sum_Source_xz = line.split()[0]
 
+    dl_dir = d.getVar('DL_DIR', True)
+    old_Sources_xz = os.path.join(dl_dir,'Sources.xz')
+    if os.path.isfile(old_Sources_xz):
+        old_md5sum_Source_xz = bb.utils.md5_file(old_Sources_xz)
+        if md5sum_Source_xz == old_md5sum_Source_xz:
+            bb.plain('Sources.xz is not changed. Nothing to do.')
+            return False
+        else:
+            os.remove(old_Sources_xz)
+
     # Get Sources.xz file
     sources_xz = '%s/dists/%s/main/source/Sources.xz;md5sum=%s' % (
         debian_mirror_nopool, debian_codename, md5sum_Source_xz)
@@ -44,6 +55,7 @@ def fetch_Sources_xz(d):
     except bb.fetch2.BBFetchException as e:
         raise bb.build.FuncFailed(e)
 
+    return True
 
 def save_to_file(package, dpv, pv, repack_pv, directory, files, md5sum, sha256sum, d):
     """
@@ -184,7 +196,9 @@ def get_pkg_dpv_map(d):
 addhandler debian_source_eventhandler
 debian_source_eventhandler[eventmask] = "bb.event.ParseStarted"
 python debian_source_eventhandler() {
-    fetch_Sources_xz(d)
+    if not fetch_Sources_xz(d):
+        # Nothing to do
+        return
 
     old_pkg_dpv_map = get_pkg_dpv_map(d)
     parse_Sources_xz(d)
