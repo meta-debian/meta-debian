@@ -127,6 +127,15 @@ do_compile () {
 	fi
 }
 
+do_install_append() {
+	# Poky has disable crypt support in glibc and replace it by libxcrypt.
+	# But glibc 2.27 does not have option for disable crypt, so remove crypt files
+	# in do_install, else do_package will fail because libcrypt* are not shipped.
+	rm -f ${D}${base_libdir}/libcrypt* \
+	      ${D}${libdir}/libcrypt* \
+	      ${D}${includedir}/crypt.h
+}
+
 require recipes-core/glibc/glibc-package.inc
 
 do_poststash_install_cleanup_append() {
