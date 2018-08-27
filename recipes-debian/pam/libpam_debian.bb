@@ -36,7 +36,7 @@ EXTRA_OECONF = "--with-db-uniquename=_pam \
 		--disable-nis \
                 --disable-regenerate-docu \
 		--disable-prelude \
-		--disable-selinux"
+		"
 
 inherit autotools gettext pkgconfig
 
@@ -101,10 +101,12 @@ do_install_append() {
 		${D}/${sysconfdir}/pam.d/common-account
 	sed -i -e "s/\$account_additional//g" \
 		${D}/${sysconfdir}/pam.d/common-account
+
+	# Remove unused file
+	rm -f ${D}${sysconfdir}/environment
 }
 
-PACKAGES =+ "${PN}-cracklib ${PN}-modules ${PN}-modules-bin \
-		${PN}-runtime ${PN}-runtime-doc ${PN}0g ${PN}0g-dev"
+PACKAGE_BEFORE_PN =+ "${PN}-cracklib ${PN}-modules ${PN}-modules-bin ${PN}-runtime"
 
 FILES_${PN}-cracklib += "\
 	${base_libdir}/security/pam_cracklib.so \
@@ -112,35 +114,35 @@ FILES_${PN}-cracklib += "\
 FILES_${PN}-modules += "\
 	${sysconfdir}/security/*.conf \
 	${sysconfdir}/security/*.init \
+	${sysconfdir}/security/*.d \
 	${base_libdir}/security/*.so"
 FILES_${PN}-modules-bin += "\
 	${base_sbindir}/* \
-	${sbindir}/* "
+	${sbindir}/pam_timestamp_check "
 FILES_${PN}-runtime += "\
 	${sysconfdir}/pam.conf \
-	${sysconfdir}/pam.d/other \
-	${sbindir}/* "
-FILES_${PN}-runtime-doc += "\
-	${datadir}/pam/* \
-	${datadir}/pam-configs/unix"
-FILES_${PN}0g += "${base_libdir}/*.so.*"
+	${sysconfdir}/pam.d/* \
+	${sbindir}/* \
+	${datadir}/pam-configs/unix \
+	${datadir}/pam/common-* \
+"
+FILES_${PN} = "${base_libdir}/lib*${SOLIBS}"
+FILES_${PN}-dev += "${base_libdir}/security/*.la"
 FILES_${PN}-dbg += "\
 	${base_libdir}/security/.debug \
 	${base_libdir}/security/pam_filter/.debug \
 	${datadir}/Linux-PAM/xtests/.debug"
-FILES_${PN}0g-dev += "\
-	${base_libdir}/security/*.la \
-    	${base_libdir}/*.la \
-    	${base_libdir}/lib*${SOLIBSDEV}"
+FILES_${PN}-doc += "${datadir}/pam/*.md5sums"
 
 MULTI_ARCH_${PN} = "foreign"
 
-# Split libpam module into subpackages
-# Using python function to add RDEPENDS
+PKG_${PN} = "${PN}0g"
+PKG_${PN}-dev = "${PN}0g-dev"
+RPROVIDES_${PN} += "${PN}0g"
+RPROVIDES_${PN}-dev += "${PN}0g-dev"
 
 RDEPENDS_${PN}-modules += "${PN}0g ${PN}-modules-bin"
 RDEPENDS_${PN}-runtime += "${PN}-modules"
-RDEPENDS_${PN}0g-dev += "${PN}0g"
 RDEPENDS_${PN}-cracklib += "${PN}-runtime"
 
 python do_pam_sanity () {
