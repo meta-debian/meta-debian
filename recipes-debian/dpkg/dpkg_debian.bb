@@ -14,7 +14,7 @@ DEPENDS_class-native = "bzip2-replacement-native \
                         perl-native \
                         xz-utils-native \
                         "
-RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_update-alternatives} xz-utils"
+RDEPENDS_${PN} = "${VIRTUAL-RUNTIME_update-alternatives} xz-utils tar"
 RDEPENDS_${PN}_class-native = "xz-utils-native"
 
 PARALLEL_MAKE = ""
