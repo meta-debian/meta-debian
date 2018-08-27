@@ -175,6 +175,7 @@ FILES_passwd = " ${sysconfdir}/default/useradd \
                  ${sbindir}/* \
 "
 RDEPENDS_${PN} += "login uidmap passwd"
+RDEPENDS_login += "${@bb.utils.contains('DISTRO_FEATURES','pam','libpam-runtime','',d)}"
 
 # Add update-alternatives definitions
 ALTERNATIVE_PRIORITY = "100"
