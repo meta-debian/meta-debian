@@ -99,13 +99,13 @@ def get_debian_src_uris (pkgname, pkgver):
     return debfile_uris
 
 def debian_src_uri(d):
-    pn = d.getVar("PN", True)
+    bpn = d.getVar("BPN", True)
 
     pv = d.getVar("DPV", True)
     if pv is None:
         pv = d.getVar("PV", True)
 
-    return get_debian_src_uris (pn, pv)
+    return get_debian_src_uris (bpn, pv)
 
 def debian_src_version(d):
     pv = d.getVar("PV", True)
