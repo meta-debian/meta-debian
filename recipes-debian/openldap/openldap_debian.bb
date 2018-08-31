@@ -23,8 +23,10 @@ SRC_URI_class-native = "\
 		file://install-strip.patch"
 
 DEPENDS += "heimdal libldap unixodbc"
-#correct the patch to libperl.so
-LDFLAGS_prepend = " -L${STAGING_LIBDIR}/perl/${PERLVERSION}/CORE "
+
+# correct the path to libperl.so
+PERL_OWN_DIR_class-target = "/${@os.path.relpath(nonarch_libdir, libdir)}"
+LDFLAGS_prepend = " -L${STAGING_DIR_HOST}/${nonarch_libdir}/perl/${PERLVERSION}/CORE "
 
 inherit perlnative cpan-base
 
