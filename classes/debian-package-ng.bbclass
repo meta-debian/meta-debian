@@ -4,6 +4,7 @@
 # Copyright: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 #            Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
 
+# TODO: cache josndata
 def get_debian_src_uris (pkgname, pkgver):
     import json, os
 
@@ -63,6 +64,7 @@ def get_debian_src_uris (pkgname, pkgver):
         return
 
     debfile_uris = ''
+    dscfile = ''
     for i in range(len(results)):
         filehash = results[i]['hash']
         fileinfo = _fileinfo(filehash)
@@ -79,23 +81,33 @@ def get_debian_src_uris (pkgname, pkgver):
                 d[0]
         # dsc
         if '.dsc' in os.path.splitext(d[0])[1]:
-            u = u + ";name=dsc" + " "
+            dscfile = u + ";name=dsc" + " "
+            u = ''
+            bb.note('URI(dsc): %s' % dscfile)
         # debian specific data
         elif '.debian.tar.' in d[0]:
             u = u + ";name=debian" + " "
+            bb.note('URI(debian): %s' % u)
         # old source format
         elif '.diff.' in d[0]:
             u = u + ";name=patch" + " "
+            bb.note('URI(diff): %s' % u)
         # tar
         else:
             u = u + ";name=tarball" + " "
+            bb.note('URI(tarball): %s' % u)
 
         debfile_uris = debfile_uris + u
+        bb.note('URI update: %s' % debfile_uris)
+
+    debfile_uris = dscfile + debfile_uris
 
     if not debfile_uris:
         bb.bbfatal('Can not get URI of debian source packages.')
         return None
- 
+
+    bb.note('URI(finish): %s' % debfile_uris)
+
     return debfile_uris
 
 def debian_src_uri(d):
@@ -119,9 +131,44 @@ DEB_SRC_VERSION ?= "${@debian_src_version(d)}"
 
 S = "${WORKDIR}/${BPN}-${DEB_SRC_VERSION}"
 
+python do_fetch_prepend () {
+    import re
+
+    src_uri = (d.getVar('SRC_URI', True) or "").split()
+    if len(src_uri) == 0:
+        return
+
+    try:
+        fetcher = bb.fetch2.Fetch([src_uri[0]], d)
+        fetcher.download()
+    except bb.fetch2.BBFetchException as e:
+        raise bb.build.FuncFailed(e)
+        return
+
+    sha256_idx = 1
+    md5_idx = 1
+
+    try:
+        with open(fetcher.localpath(src_uri[0])) as f:
+            data = f.read()
+            for m in re.finditer(r'^ ([0-9a-f]*) ([0-9]*) (.*)$', data, re.MULTILINE):
+                # sha256sum
+                if len(m.group(1)) == 64:
+                    fetcher.ud[src_uri[sha256_idx]].sha256_expected = m.group(1)
+                    sha256_idx += 1
+                # md5sum
+                if len(m.group(1)) == 32:
+                    fetcher.ud[src_uri[md5_idx]].md5_expected = m.group(1)
+                    md5_idx += 1
+
+    except Exception as e:
+        raise bb.build.FuncFailed(e)
+        return
+}
+
 python do_unpack() {
     import os.path, shutil
-
+    
     src_uri = (d.getVar('SRC_URI', True) or "").split()
     if len(src_uri) == 0:
         return
