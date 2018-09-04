@@ -101,22 +101,22 @@ def get_debian_src_uris (d, pkgname, pkgver):
         if '.dsc' in os.path.splitext(info[0])[1]:
             dscfile = u + ";name=dsc" + " "
             u = ''
-            bb.note('URI(dsc): %s' % dscfile)
+            bb.debug(2, 'URI(dsc): %s' % dscfile)
         # debian specific data
         elif '.debian.tar.' in info[0]:
-            u = u + ";name=debian" + " "
-            bb.note('URI(debian): %s' % u)
+            u = u + ";name=debian"
+            bb.debug(2, 'URI(debian): %s' % u)
         # old source format
         elif '.diff.' in info[0]:
-            u = u + ";name=patch" + " "
-            bb.note('URI(diff): %s' % u)
+            u = u + ";name=patch"
+            bb.debug(2, 'URI(diff): %s' % u)
         # tar
         else:
-            u = u + ";name=tarball" + " "
-            bb.note('URI(tarball): %s' % u)
+            u = u + ";name=tarball"
+            bb.debug(2, 'URI(tarball): %s' % u)
 
-        debfile_uris = debfile_uris + u
-        bb.note('URI update: %s' % debfile_uris)
+        debfile_uris = debfile_uris + ' ' + u
+        bb.debug(2, 'URI update: %s' % debfile_uris)
 
     debfile_uris = dscfile + debfile_uris
 
@@ -124,7 +124,7 @@ def get_debian_src_uris (d, pkgname, pkgver):
         bb.bbfatal('Can not get URI of debian source packages.')
         return None
 
-    bb.note('URI(finish): %s' % debfile_uris)
+    bb.debug(2, 'URI(finish): %s' % debfile_uris)
 
     return debfile_uris
 
