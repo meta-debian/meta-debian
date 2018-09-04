@@ -170,6 +170,13 @@ python do_fetch_prepend () {
     sha256_idx = 1
     md5_idx = 1
 
+    # re-initialize fetcher
+    try:
+        fetcher = bb.fetch2.Fetch(src_uri, d)
+    except bb.fetch2.BBFetchException as e:
+        raise bb.build.FuncFailed(e)
+        return
+
     try:
         with open(fetcher.localpath(src_uri[0])) as f:
             data = f.read()
