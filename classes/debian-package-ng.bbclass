@@ -65,6 +65,10 @@ def get_debian_src_uris (d, pkgname, pkgver):
     
     dl_dir = d.getVar('DL_DIR', True)
 
+    # check and create DL_DIR
+    if os.path.exists(dl_dir) is not True:
+        os.makedirs(dl_dir)
+
     srcfiles = _srcfiles(dl_dir, pkgname, pkgver)
     if srcfiles is None:
         return
