@@ -4,8 +4,7 @@
 # Copyright: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 #            Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
 
-# TODO: cache josndata
-def get_debian_src_uris (pkgname, pkgver):
+def get_debian_src_uris (d, pkgname, pkgver):
     import json, os
 
     def _readjsonstr(path):
@@ -20,18 +19,34 @@ def get_debian_src_uris (pkgname, pkgver):
         else:
             return readobj.read()
 
-    def _srcfiles (pkgname, pkgver):
-        p = "/mr/package/" + pkgname + "/" + pkgver + "/srcfiles"
+    def _managejsonfile (api_path, json_path):
+        if os.path.exists(json_path):
+            with open(json_path) as f:
+                return f.read()
+        else:
+            _data = _readjsonstr(api_path)
+            if _data is not None:
+                with open(json_path, mode = 'w') as f:
+                    data = _data.decode('utf-8')
+                    f.write(data)
 
-        return _readjsonstr(p)
+                    return data
 
-    def _fileinfo (filehash):
-        p = "/mr/file/" + filehash + "/info"
+    def _srcfiles (dl_dir, pkgname, pkgver):
+        api_path = os.path.join('/mr/package/', pkgname, pkgver, 'srcfiles')
+        json_path = os.path.join(dl_dir, pkgname + '_' + pkgver + '_srcfiles.json')
 
-        return _readjsonstr(p)
+        return _managejsonfile(api_path, json_path)
+
+    def _fileinfo (dl_dir, filehash, pkgname, pkgver):
+        api_path = os.path.join('/mr/file/', filehash, 'info')
+        json_path = os.path.join(dl_dir, pkgname + '_' + pkgver + '_' + filehash +'_info.json')
+
+        return _managejsonfile(api_path, json_path)
 
     def _createfilepath (pkgname, fileinfo):
-        jsondata = json.loads(fileinfo.decode(encoding='utf-8'))
+        # jsondata = json.loads(fileinfo.decode(encoding='utf-8'))
+        jsondata = json.loads(fileinfo)
 
         # result data check
         results = jsondata['result']
@@ -47,12 +62,15 @@ def get_debian_src_uris (pkgname, pkgver):
                 first_seen = results[i]['first_seen']
 
                 return filename, archive_path, first_seen, archive
+    
+    dl_dir = d.getVar('DL_DIR', True)
 
-    srcfiles = _srcfiles(pkgname, pkgver)
+    srcfiles = _srcfiles(dl_dir, pkgname, pkgver)
     if srcfiles is None:
         return
 
-    jsondata = json.loads(srcfiles.decode(encoding='utf-8'))
+    jsondata = json.loads(srcfiles)
+    # jsondata = json.loads(srcfiles.decode(encoding='utf-8'))
 
     # version check
     if jsondata['version'] not in pkgver:
@@ -67,29 +85,29 @@ def get_debian_src_uris (pkgname, pkgver):
     dscfile = ''
     for i in range(len(results)):
         filehash = results[i]['hash']
-        fileinfo = _fileinfo(filehash)
+        fileinfo = _fileinfo(dl_dir, filehash, pkgname, pkgver)
         if fileinfo is None:
             continue
 
-        d = _createfilepath(pkgname, fileinfo)
-        if d is None:
+        info = _createfilepath(pkgname, fileinfo)
+        if info is None:
             continue
         u = "http://snapshot.debian.org/archive/" + \
-                d[3] + "/" + \
-                d[2] + \
-                d[1] + "/" + \
-                d[0]
+                info[3] + "/" + \
+                info[2] + \
+                info[1] + "/" + \
+                info[0]
         # dsc
-        if '.dsc' in os.path.splitext(d[0])[1]:
+        if '.dsc' in os.path.splitext(info[0])[1]:
             dscfile = u + ";name=dsc" + " "
             u = ''
             bb.note('URI(dsc): %s' % dscfile)
         # debian specific data
-        elif '.debian.tar.' in d[0]:
+        elif '.debian.tar.' in info[0]:
             u = u + ";name=debian" + " "
             bb.note('URI(debian): %s' % u)
         # old source format
-        elif '.diff.' in d[0]:
+        elif '.diff.' in info[0]:
             u = u + ";name=patch" + " "
             bb.note('URI(diff): %s' % u)
         # tar
@@ -117,7 +135,7 @@ def debian_src_uri(d):
     if pv is None:
         pv = d.getVar("PV", True)
 
-    return get_debian_src_uris (bpn, pv)
+    return get_debian_src_uris (d, bpn, pv)
 
 def debian_src_version(d):
     pv = d.getVar("PV", True)
