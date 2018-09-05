@@ -195,29 +195,20 @@ python do_fetch_prepend () {
         return
 }
 
-python do_unpack() {
+python do_unpack_append() {
     import os.path, shutil
     
-    src_uri = (d.getVar('SRC_URI', True) or "").split()
-    if len(src_uri) == 0:
-        return
-
     workdir = d.getVar('WORKDIR', True)
-    srcsubdir = d.getVar('S', True)
+    srcdir = d.getVar('S', True)
+    srcdir_nover = os.path.join(workdir, d.getVar("BPN", True))
+    debiandir = os.path.join(workdir, 'debian')
 
-    try:
-        fetcher = bb.fetch2.Fetch(src_uri, d)
-        fetcher.unpack(workdir)
-    except bb.fetch2.BBFetchException as e:
-        raise bb.build.FuncFailed(e)
+    if os.path.exists(srcdir_nover):
+        shutil.rmtree(srcdir)
+        shutil.move(srcdir_nover, srcdir)
 
-    debian_source_dir = d.getVar("BPN", True) + '-' + \
-            d.getVar("DEB_SRC_VERSION", True) 
-
-    # for quilt
-    if os.path.exists(os.path.join(workdir, debian_source_dir)):
-        shutil.move(os.path.join(workdir, 'debian'),
-            os.path.join(workdir, debian_source_dir, 'debian'))
+    if os.path.exists(debiandir):
+        shutil.move(debiandir, os.path.join(srcdir, 'debian'))
 }
 
 ###############################################################################
