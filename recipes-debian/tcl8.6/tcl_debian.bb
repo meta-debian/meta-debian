@@ -52,8 +52,10 @@ EXTRA_OECONF = " \
 	--enable-man-symlinks \
 	\
 	TCL_LIBRARY="${datadir}/tcltk/${DPN}" \
-	TCL_PACKAGE_PATH="${libdir}/tcltk ${datadir}/tcltk \
-                          ${libdir}/tcltk/${DPN} ${libdir}" \
+	TCL_PACKAGE_PATH=" \
+	    ${nonarch_libdir}/tcltk/${DEB_HOST_MULTIARCH} \
+	    ${nonarch_libdir}/tcltk ${datadir}/tcltk \
+	    ${nonarch_libdir}/tcltk/${DPN} ${nonarch_libdir}" \
 "
 
 do_configure() {
@@ -68,7 +70,7 @@ do_compile_prepend() {
 do_install() {
 	autotools_do_install MAN_INSTALL_DIR=${D}${mandir} \
                         MANN_INSTALL_DIR=${D}${mandir}/man3 \
-                        TCL_MODULE_PATH="${libdir}/tcltk ${datadir}/tcltk" \
+                        TCL_MODULE_PATH="${nonarch_libdir}/tcltk ${datadir}/tcltk" \
 		install
 	sed -i "s:-L${B}:-L${STAGING_LIBDIR}:g" tclConfig.sh
 	sed -i "s:${WORKDIR}:${STAGING_INCDIR}:g" tclConfig.sh

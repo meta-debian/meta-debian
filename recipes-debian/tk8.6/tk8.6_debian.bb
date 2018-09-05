@@ -40,10 +40,10 @@ do_compile() {
 
 do_install_append() {
 	#follow debian/rules:
-	install -d -m 0755 ${D}${libdir}/tcltk/tk${TCL_VER}
+	install -d -m 0755 ${D}${nonarch_libdir}/tcltk/${DEB_HOST_MULTIARCH}/tk${TCL_VER}
 	sed -e 's:\$dir \.\.:${libdir}:' \
 		${D}${libdir}/tk${TCL_VER}/pkgIndex.tcl \
-		>${D}${libdir}/tcltk/tk${TCL_VER}/pkgIndex.tcl
+		>${D}${nonarch_libdir}/tcltk/${DEB_HOST_MULTIARCH}/tk${TCL_VER}/pkgIndex.tcl
 	rm ${D}${libdir}/tk${TCL_VER}/pkgIndex.tcl	
 
 	install -d -m 755 ${D}${docdir}/tk${TCL_VER}-doc
@@ -77,10 +77,11 @@ SSTATE_SCAN_FILES += "*Config.sh"
 PACKAGES =+ "lib${DPN}"
 
 FILES_lib${DPN} = "\
-	${libdir}/tcltk/tk${TCL_VER}/pkgIndex.tcl ${libdir}/libtk${TCL_VER}.so* \
+	${nonarch_libdir}/tcltk/${DEB_HOST_MULTIARCH}/tk${TCL_VER}/pkgIndex.tcl \
+	${libdir}/libtk${TCL_VER}.so* \
 	${datadir}/tcltk/tk${TCL_VER}/*"
 FILES_${PN} += "${datadir}/menu"
-FILES_${PN}-dev += "${libdir}/tk${TCL_VER}/tkConfig.sh"
+FILES_${PN}-dev += "${nonarch_libdir}/tk${TCL_VER}/tkConfig.sh"
 
 PKG_${PN}-dbg = "lib${DPN}-dbg"
 

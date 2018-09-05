@@ -45,7 +45,7 @@ TARGET_CFLAGS += " \
 "
 EXTRA_OECONF = " \
     --enable-shared --enable-threadsafe --enable-load-extension \
-    --with-tcl=${STAGING_BINDIR_CROSS} TCLLIBDIR=${libdir}/tcltk/sqlite3 \
+    --with-tcl=${STAGING_BINDIR_CROSS} TCLLIBDIR=${nonarch_libdir}/tcltk/sqlite3 \
 "
 EXTRA_OECONF_class-native = " \
     --enable-shared --enable-threadsafe --disable-readline \
@@ -109,8 +109,14 @@ FILES_lib${DPN}-dev = "${libdir}/*.la ${libdir}/*.so \
 			${libdir}/pkgconfig ${includedir}"
 FILES_lib${DPN}-doc = "${docdir} ${mandir} ${infodir}"
 FILES_lib${DPN}-staticdev = "${libdir}/lib*.a"
-FILES_lib${DPN}-tcl = "${libdir}/tcltk/sqlite3/*"
-FILES_${PN}-dbg += "${libdir}/tcltk/sqlite3/.debug"
+FILES_lib${DPN}-tcl = "${nonarch_libdir}/tcltk/sqlite3/*"
+FILES_${PN}-dbg += "${nonarch_libdir}/tcltk/sqlite3/.debug"
+
+# tcl modules are installed in /usr/lib/tcltk
+# which is not in libdir (/usr/lib/<triplet arch>/).
+# Skip QA warnings about that.
+INSANE_SKIP_lib${DPN}-tcl += "libdir"
+INSANE_SKIP_${PN}-dbg += "libdir"
 
 AUTO_LIBNAME_PKGS = "${MLPREFIX}lib${DPN}"
 
