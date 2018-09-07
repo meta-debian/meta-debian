@@ -201,6 +201,8 @@ python do_unpack_append() {
     srcdir_nover = os.path.join(workdir, d.getVar("DPN", True))
     debiandir = os.path.join(workdir, 'debian')
 
+    # There are packages with no versions at decompression.
+    # Check here and change to the versioned directory.
     if os.path.exists(srcdir_nover):
         shutil.rmtree(srcdir)
         shutil.move(srcdir_nover, srcdir)
