@@ -91,8 +91,10 @@ python () {
     if results is None:
         return
 
-    debfile_uris = ''
     dscfile = ''
+    ascfile = ''
+    tarfile = ''
+    debianfile = ''
     for i in range(len(results)):
         filehash = results[i]['hash']
         fileinfo = _fileinfo(dl_dir, filehash, pkgname, pkgver)
@@ -109,26 +111,26 @@ python () {
                 info[0]
         # dsc
         if '.dsc' in os.path.splitext(info[0])[1]:
-            dscfile = u + ";name=dsc" + " "
-            u = ''
+            dscfile = u + ";name=dsc "
             bb.debug(2, 'URI(dsc): %s' % dscfile)
         # debian specific data
         elif '.debian.tar.' in info[0]:
-            u = u + ";name=debian"
+            debianfile = u + ";name=debian "
             bb.debug(2, 'URI(debian): %s' % u)
         # old source format
         elif '.diff.' in info[0]:
-            u = u + ";name=patch"
+            debianfile = u + ";name=patch" + " "
             bb.debug(2, 'URI(diff): %s' % u)
+        elif '.asc' in os.path.splitext(info[0])[1]:
+            ascfile = u + ";name=asc "
+            bb.debug(2, 'URI(asc): %s' % ascfile)
         # tar
         else:
-            u = u + ";name=tarball"
+            tarfile = u + ";name=tarball "
             bb.debug(2, 'URI(tarball): %s' % u)
 
-        debfile_uris = debfile_uris + ' ' + u
-        bb.debug(2, 'URI update: %s' % debfile_uris)
-
-    debfile_uris = dscfile + debfile_uris
+    # This order is hash value in dsc.
+    debfile_uris = dscfile + tarfile  + ascfile + debianfile
     bb.debug(2, 'URI(finish): %s' % debfile_uris)
 
     if not debfile_uris:
