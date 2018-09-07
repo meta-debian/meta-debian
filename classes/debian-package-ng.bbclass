@@ -5,7 +5,8 @@
 #            Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
 
 DPN ?= "${BPN}"
-def get_debian_src_uris (d, pkgname, pkgver):
+
+python () {
     import json, os
 
     def _readjsonstr(path):
@@ -64,6 +65,10 @@ def get_debian_src_uris (d, pkgname, pkgver):
 
                 return filename, archive_path, first_seen, archive
     
+    pkgname = d.getVar("DPN", True)
+    pkgver = d.getVar("DPV", True)
+    if pkgver is None:
+        pkgver = d.getVar("PV", True)
     dl_dir = d.getVar('DL_DIR', True)
 
     # check and create DL_DIR
@@ -124,23 +129,15 @@ def get_debian_src_uris (d, pkgname, pkgver):
         bb.debug(2, 'URI update: %s' % debfile_uris)
 
     debfile_uris = dscfile + debfile_uris
+    bb.debug(2, 'URI(finish): %s' % debfile_uris)
 
     if not debfile_uris:
         bb.bbfatal('Can not get URI of debian source packages.')
         return None
 
-    bb.debug(2, 'URI(finish): %s' % debfile_uris)
-
-    return debfile_uris
-
-def debian_src_uri(d):
-    pn = d.getVar("DPN", True)
-
-    pv = d.getVar("DPV", True)
-    if pv is None:
-        pv = d.getVar("PV", True)
-
-    return get_debian_src_uris (d, pn, pv)
+    d.prependVar('SRC_URI', debfile_uris)
+    bb.debug(2, 'SRC_URI : %s' % d.getVar("SRC_URI", True))
+}
 
 def debian_src_version(d):
     pv = d.getVar("PV", True)
@@ -148,8 +145,6 @@ def debian_src_version(d):
     # split version of source and debian
     return pv.split('-')[0]
 
-DEB_SRC_URI ?= "${@debian_src_uri(d)}"
-SRC_URI += "${DEB_SRC_URI}"
 DEB_SRC_VERSION ?= "${@debian_src_version(d)}"
 
 S = "${WORKDIR}/${DPN}-${DEB_SRC_VERSION}"
