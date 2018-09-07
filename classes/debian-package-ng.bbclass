@@ -4,6 +4,7 @@
 # Copyright: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 #            Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
 
+DPN ?= "${BPN}"
 def get_debian_src_uris (d, pkgname, pkgver):
     import json, os
 
@@ -133,13 +134,13 @@ def get_debian_src_uris (d, pkgname, pkgver):
     return debfile_uris
 
 def debian_src_uri(d):
-    bpn = d.getVar("BPN", True)
+    pn = d.getVar("DPN", True)
 
     pv = d.getVar("DPV", True)
     if pv is None:
         pv = d.getVar("PV", True)
 
-    return get_debian_src_uris (d, bpn, pv)
+    return get_debian_src_uris (d, pn, pv)
 
 def debian_src_version(d):
     pv = d.getVar("PV", True)
@@ -151,7 +152,7 @@ DEB_SRC_URI ?= "${@debian_src_uri(d)}"
 SRC_URI += "${DEB_SRC_URI}"
 DEB_SRC_VERSION ?= "${@debian_src_version(d)}"
 
-S = "${WORKDIR}/${BPN}-${DEB_SRC_VERSION}"
+S = "${WORKDIR}/${DPN}-${DEB_SRC_VERSION}"
 
 python do_fetch_prepend () {
     import re
@@ -200,7 +201,7 @@ python do_unpack_append() {
     
     workdir = d.getVar('WORKDIR', True)
     srcdir = d.getVar('S', True)
-    srcdir_nover = os.path.join(workdir, d.getVar("BPN", True))
+    srcdir_nover = os.path.join(workdir, d.getVar("DPN", True))
     debiandir = os.path.join(workdir, 'debian')
 
     if os.path.exists(srcdir_nover):
