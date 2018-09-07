@@ -207,8 +207,13 @@ python do_unpack_append() {
         shutil.rmtree(srcdir)
         shutil.move(srcdir_nover, srcdir)
 
+    # Delete if there is a debian directory in the original source code.
+    srcdebiandir = os.path.join(srcdir, 'debian')
+    if os.path.exists(debiandir) and os.path.exists(srcdebiandir):
+        shutil.rmtree(srcdebiandir)
+
     if os.path.exists(debiandir):
-        shutil.move(debiandir, os.path.join(srcdir, 'debian'))
+        shutil.move(debiandir, srcdebiandir)
 }
 
 ###############################################################################
