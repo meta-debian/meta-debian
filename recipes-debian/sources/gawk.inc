@@ -4,9 +4,9 @@ REPACK_PV = "4.1.4+dfsg"
 PV = "4.1.4"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg-1.dsc;name=gawk_4.1.4+dfsg-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg.orig.tar.xz;name=gawk_4.1.4+dfsg.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg-1.debian.tar.xz;name=gawk_4.1.4+dfsg-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg-1.dsc;name=gawk_4.1.4+dfsg-1.dsc \
+    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg.orig.tar.xz;name=gawk_4.1.4+dfsg.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/gawk/gawk_4.1.4+dfsg-1.debian.tar.xz;name=gawk_4.1.4+dfsg-1.debian.tar.xz \
 "
 
 SRC_URI[gawk_4.1.4+dfsg-1.dsc.md5sum] = "f65a7d4ce42f8a2876efe6930039eb6b"

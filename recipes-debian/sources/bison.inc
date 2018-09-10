@@ -4,9 +4,9 @@ REPACK_PV = "3.0.4.dfsg"
 PV = "3.0.4.dfsg"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg-1.dsc;name=bison_3.0.4.dfsg-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg.orig.tar.xz;name=bison_3.0.4.dfsg.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg-1.debian.tar.xz;name=bison_3.0.4.dfsg-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg-1.dsc;name=bison_3.0.4.dfsg-1.dsc \
+    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg.orig.tar.xz;name=bison_3.0.4.dfsg.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/b/bison/bison_3.0.4.dfsg-1.debian.tar.xz;name=bison_3.0.4.dfsg-1.debian.tar.xz \
 "
 
 SRC_URI[bison_3.0.4.dfsg-1.dsc.md5sum] = "eed71f7e2ddc81f942697bc430b939a2"

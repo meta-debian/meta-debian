@@ -4,8 +4,8 @@ REPACK_PV = "2.6.4"
 PV = "2.6.4"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/f/flex/flex_2.6.4-6.2.dsc;name=flex_2.6.4-6.2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/f/flex/flex_2.6.4.orig.tar.gz;name=flex_2.6.4.orig.tar.gz;apply=no \
+    ${DEBIAN_MIRROR}/main/f/flex/flex_2.6.4-6.2.dsc;name=flex_2.6.4-6.2.dsc \
+    ${DEBIAN_MIRROR}/main/f/flex/flex_2.6.4.orig.tar.gz;name=flex_2.6.4.orig.tar.gz \
     ${DEBIAN_MIRROR}/main/f/flex/flex_2.6.4-6.2.diff.gz;name=flex_2.6.4-6.2.diff.gz;apply=no \
 "
 

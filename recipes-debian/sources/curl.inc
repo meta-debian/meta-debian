@@ -4,9 +4,9 @@ REPACK_PV = "7.61.0"
 PV = "7.61.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0-1.dsc;name=curl_7.61.0-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0.orig.tar.gz;name=curl_7.61.0.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0-1.debian.tar.xz;name=curl_7.61.0-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0-1.dsc;name=curl_7.61.0-1.dsc \
+    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0.orig.tar.gz;name=curl_7.61.0.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/c/curl/curl_7.61.0-1.debian.tar.xz;name=curl_7.61.0-1.debian.tar.xz \
 "
 
 SRC_URI[curl_7.61.0-1.dsc.md5sum] = "806380fc99162f0062c118202d9731dc"

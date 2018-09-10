@@ -4,9 +4,9 @@ REPACK_PV = "19.0"
 PV = "19.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0-1.dsc;name=rdma-core_19.0-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0.orig.tar.gz;name=rdma-core_19.0.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0-1.debian.tar.xz;name=rdma-core_19.0-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0-1.dsc;name=rdma-core_19.0-1.dsc \
+    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0.orig.tar.gz;name=rdma-core_19.0.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/r/rdma-core/rdma-core_19.0-1.debian.tar.xz;name=rdma-core_19.0-1.debian.tar.xz \
 "
 
 SRC_URI[rdma-core_19.0-1.dsc.md5sum] = "1b8e951d8a60cc9ce760088906fc749b"

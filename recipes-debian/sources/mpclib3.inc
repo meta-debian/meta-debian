@@ -4,8 +4,8 @@ REPACK_PV = "1.1.0"
 PV = "1.1.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/m/mpclib3/mpclib3_1.1.0-1.dsc;name=mpclib3_1.1.0-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/m/mpclib3/mpclib3_1.1.0.orig.tar.gz;name=mpclib3_1.1.0.orig.tar.gz;apply=no \
+    ${DEBIAN_MIRROR}/main/m/mpclib3/mpclib3_1.1.0-1.dsc;name=mpclib3_1.1.0-1.dsc \
+    ${DEBIAN_MIRROR}/main/m/mpclib3/mpclib3_1.1.0.orig.tar.gz;name=mpclib3_1.1.0.orig.tar.gz \
     ${DEBIAN_MIRROR}/main/m/mpclib3/mpclib3_1.1.0-1.diff.gz;name=mpclib3_1.1.0-1.diff.gz;apply=no \
 "
 

@@ -4,9 +4,9 @@ REPACK_PV = "1.27.2"
 PV = "1.27.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2-3.dsc;name=busybox_1.27.2-3.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2.orig.tar.bz2;name=busybox_1.27.2.orig.tar.bz2;apply=no \
-    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2-3.debian.tar.xz;name=busybox_1.27.2-3.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2-3.dsc;name=busybox_1.27.2-3.dsc \
+    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2.orig.tar.bz2;name=busybox_1.27.2.orig.tar.bz2 \
+    ${DEBIAN_MIRROR}/main/b/busybox/busybox_1.27.2-3.debian.tar.xz;name=busybox_1.27.2-3.debian.tar.xz \
 "
 
 SRC_URI[busybox_1.27.2-3.dsc.md5sum] = "66b2f2f538d552d261b8f920ac0b8548"

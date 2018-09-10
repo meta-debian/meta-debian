@@ -4,9 +4,9 @@ REPACK_PV = "2.0.4"
 PV = "2.0.4"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4-4.dsc;name=kbd_2.0.4-4.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4.orig.tar.xz;name=kbd_2.0.4.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4-4.debian.tar.xz;name=kbd_2.0.4-4.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4-4.dsc;name=kbd_2.0.4-4.dsc \
+    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4.orig.tar.xz;name=kbd_2.0.4.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/k/kbd/kbd_2.0.4-4.debian.tar.xz;name=kbd_2.0.4-4.debian.tar.xz \
 "
 
 SRC_URI[kbd_2.0.4-4.dsc.md5sum] = "958d849f316af8c8f274cbcf1193e911"

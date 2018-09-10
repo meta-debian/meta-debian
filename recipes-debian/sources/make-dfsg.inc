@@ -4,8 +4,8 @@ REPACK_PV = "4.2.1"
 PV = "4.2.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/m/make-dfsg/make-dfsg_4.2.1-1.2.dsc;name=make-dfsg_4.2.1-1.2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/m/make-dfsg/make-dfsg_4.2.1.orig.tar.gz;name=make-dfsg_4.2.1.orig.tar.gz;apply=no \
+    ${DEBIAN_MIRROR}/main/m/make-dfsg/make-dfsg_4.2.1-1.2.dsc;name=make-dfsg_4.2.1-1.2.dsc \
+    ${DEBIAN_MIRROR}/main/m/make-dfsg/make-dfsg_4.2.1.orig.tar.gz;name=make-dfsg_4.2.1.orig.tar.gz \
     ${DEBIAN_MIRROR}/main/m/make-dfsg/make-dfsg_4.2.1-1.2.diff.gz;name=make-dfsg_4.2.1-1.2.diff.gz;apply=no \
 "
 

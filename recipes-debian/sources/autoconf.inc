@@ -4,9 +4,9 @@ REPACK_PV = "2.69"
 PV = "2.69"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69-11.dsc;name=autoconf_2.69-11.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69.orig.tar.xz;name=autoconf_2.69.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69-11.debian.tar.xz;name=autoconf_2.69-11.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69-11.dsc;name=autoconf_2.69-11.dsc \
+    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69.orig.tar.xz;name=autoconf_2.69.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/a/autoconf/autoconf_2.69-11.debian.tar.xz;name=autoconf_2.69-11.debian.tar.xz \
 "
 
 SRC_URI[autoconf_2.69-11.dsc.md5sum] = "46e363752814aeffa3c6e773e12ec00a"

@@ -4,9 +4,9 @@ REPACK_PV = "1.2.2"
 PV = "1.2.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2-1.dsc;name=pax-utils_1.2.2-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2.orig.tar.xz;name=pax-utils_1.2.2.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2-1.debian.tar.xz;name=pax-utils_1.2.2-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2-1.dsc;name=pax-utils_1.2.2-1.dsc \
+    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2.orig.tar.xz;name=pax-utils_1.2.2.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/p/pax-utils/pax-utils_1.2.2-1.debian.tar.xz;name=pax-utils_1.2.2-1.debian.tar.xz \
 "
 
 SRC_URI[pax-utils_1.2.2-1.dsc.md5sum] = "fb35e4bb631ea54cc1e2d415b4a3db63"

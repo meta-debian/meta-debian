@@ -4,9 +4,9 @@ REPACK_PV = "2.1.0+repack"
 PV = "2.1.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack-4.dsc;name=sysfsutils_2.1.0+repack-4.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack.orig.tar.gz;name=sysfsutils_2.1.0+repack.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack-4.debian.tar.xz;name=sysfsutils_2.1.0+repack-4.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack-4.dsc;name=sysfsutils_2.1.0+repack-4.dsc \
+    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack.orig.tar.gz;name=sysfsutils_2.1.0+repack.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/s/sysfsutils/sysfsutils_2.1.0+repack-4.debian.tar.xz;name=sysfsutils_2.1.0+repack-4.debian.tar.xz \
 "
 
 SRC_URI[sysfsutils_2.1.0+repack-4.dsc.md5sum] = "ba8453acabe245284cbb1275130bd902"

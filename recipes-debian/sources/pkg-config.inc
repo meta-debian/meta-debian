@@ -4,8 +4,8 @@ REPACK_PV = "0.29"
 PV = "0.29"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/pkg-config/pkg-config_0.29-4.dsc;name=pkg-config_0.29-4.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/pkg-config/pkg-config_0.29.orig.tar.gz;name=pkg-config_0.29.orig.tar.gz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/pkg-config/pkg-config_0.29-4.dsc;name=pkg-config_0.29-4.dsc \
+    ${DEBIAN_MIRROR}/main/p/pkg-config/pkg-config_0.29.orig.tar.gz;name=pkg-config_0.29.orig.tar.gz \
     ${DEBIAN_MIRROR}/main/p/pkg-config/pkg-config_0.29-4.diff.gz;name=pkg-config_0.29-4.diff.gz;apply=no \
 "
 

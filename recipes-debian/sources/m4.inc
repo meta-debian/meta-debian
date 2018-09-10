@@ -4,9 +4,9 @@ REPACK_PV = "1.4.18"
 PV = "1.4.18"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18-1.dsc;name=m4_1.4.18-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18.orig.tar.xz;name=m4_1.4.18.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18-1.debian.tar.xz;name=m4_1.4.18-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18-1.dsc;name=m4_1.4.18-1.dsc \
+    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18.orig.tar.xz;name=m4_1.4.18.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/m/m4/m4_1.4.18-1.debian.tar.xz;name=m4_1.4.18-1.debian.tar.xz \
 "
 
 SRC_URI[m4_1.4.18-1.dsc.md5sum] = "c95bf5d0b16110b842a8cb46a9caf407"

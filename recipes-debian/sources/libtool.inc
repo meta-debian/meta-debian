@@ -4,10 +4,10 @@ REPACK_PV = "2.4.6"
 PV = "2.4.6"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6-2.1.dsc;name=libtool_2.4.6-2.1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6.orig.tar.xz;name=libtool_2.4.6.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6.orig.tar.xz.asc;name=libtool_2.4.6.orig.tar.xz.asc;apply=no \
-    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6-2.1.debian.tar.xz;name=libtool_2.4.6-2.1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6-2.1.dsc;name=libtool_2.4.6-2.1.dsc \
+    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6.orig.tar.xz;name=libtool_2.4.6.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6.orig.tar.xz.asc;name=libtool_2.4.6.orig.tar.xz.asc \
+    ${DEBIAN_MIRROR}/main/libt/libtool/libtool_2.4.6-2.1.debian.tar.xz;name=libtool_2.4.6-2.1.debian.tar.xz \
 "
 
 SRC_URI[libtool_2.4.6-2.1.dsc.md5sum] = "6df74a41dd4a0104040ecc4b9dbf55e6"

@@ -4,9 +4,9 @@ REPACK_PV = "1.9"
 PV = "1.9"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9-2.dsc;name=gzip_1.9-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9.orig.tar.gz;name=gzip_1.9.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9-2.debian.tar.xz;name=gzip_1.9-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9-2.dsc;name=gzip_1.9-2.dsc \
+    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9.orig.tar.gz;name=gzip_1.9.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/g/gzip/gzip_1.9-2.debian.tar.xz;name=gzip_1.9-2.debian.tar.xz \
 "
 
 SRC_URI[gzip_1.9-2.dsc.md5sum] = "647ceaa60cad739ee46f8c5dbb143df6"

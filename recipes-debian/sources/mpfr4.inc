@@ -4,9 +4,9 @@ REPACK_PV = "4.0.1"
 PV = "4.0.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1-1.dsc;name=mpfr4_4.0.1-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1.orig.tar.xz;name=mpfr4_4.0.1.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1-1.debian.tar.xz;name=mpfr4_4.0.1-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1-1.dsc;name=mpfr4_4.0.1-1.dsc \
+    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1.orig.tar.xz;name=mpfr4_4.0.1.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/m/mpfr4/mpfr4_4.0.1-1.debian.tar.xz;name=mpfr4_4.0.1-1.debian.tar.xz \
 "
 
 SRC_URI[mpfr4_4.0.1-1.dsc.md5sum] = "f086860d07172ab5909c0bbaac88f0e7"

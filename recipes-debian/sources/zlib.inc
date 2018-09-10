@@ -4,9 +4,9 @@ REPACK_PV = "1.2.11.dfsg"
 PV = "1.2.11.dfsg"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg-1.dsc;name=zlib_1.2.11.dfsg-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg.orig.tar.gz;name=zlib_1.2.11.dfsg.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg-1.debian.tar.xz;name=zlib_1.2.11.dfsg-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg-1.dsc;name=zlib_1.2.11.dfsg-1.dsc \
+    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg.orig.tar.gz;name=zlib_1.2.11.dfsg.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/z/zlib/zlib_1.2.11.dfsg-1.debian.tar.xz;name=zlib_1.2.11.dfsg-1.debian.tar.xz \
 "
 
 SRC_URI[zlib_1.2.11.dfsg-1.dsc.md5sum] = "a4b769a70954765d487fac008c185a45"

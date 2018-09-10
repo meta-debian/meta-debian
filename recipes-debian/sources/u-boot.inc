@@ -4,9 +4,9 @@ REPACK_PV = "2018.05+dfsg"
 PV = "2018.05"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg-1.dsc;name=u-boot_2018.05+dfsg-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg.orig.tar.xz;name=u-boot_2018.05+dfsg.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg-1.debian.tar.xz;name=u-boot_2018.05+dfsg-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg-1.dsc;name=u-boot_2018.05+dfsg-1.dsc \
+    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg.orig.tar.xz;name=u-boot_2018.05+dfsg.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/u/u-boot/u-boot_2018.05+dfsg-1.debian.tar.xz;name=u-boot_2018.05+dfsg-1.debian.tar.xz \
 "
 
 SRC_URI[u-boot_2018.05+dfsg-1.dsc.md5sum] = "c35a26b6d6a21ad37dbe3068277b06c5"

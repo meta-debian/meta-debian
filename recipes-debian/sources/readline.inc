@@ -4,9 +4,9 @@ REPACK_PV = "7.0"
 PV = "7.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0-5.dsc;name=readline_7.0-5.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0.orig.tar.gz;name=readline_7.0.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0-5.debian.tar.xz;name=readline_7.0-5.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0-5.dsc;name=readline_7.0-5.dsc \
+    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0.orig.tar.gz;name=readline_7.0.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/r/readline/readline_7.0-5.debian.tar.xz;name=readline_7.0-5.debian.tar.xz \
 "
 
 SRC_URI[readline_7.0-5.dsc.md5sum] = "aefa3bba83230c609e45e23dc9a63143"

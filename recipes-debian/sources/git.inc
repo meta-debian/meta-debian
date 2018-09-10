@@ -4,9 +4,9 @@ REPACK_PV = "2.18.0"
 PV = "2.18.0"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0-1.dsc;name=git_2.18.0-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0.orig.tar.xz;name=git_2.18.0.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0-1.debian.tar.xz;name=git_2.18.0-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0-1.dsc;name=git_2.18.0-1.dsc \
+    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0.orig.tar.xz;name=git_2.18.0.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/git/git_2.18.0-1.debian.tar.xz;name=git_2.18.0-1.debian.tar.xz \
 "
 
 SRC_URI[git_2.18.0-1.dsc.md5sum] = "6af7b2ca0c1d2343926d710d714a7ec5"

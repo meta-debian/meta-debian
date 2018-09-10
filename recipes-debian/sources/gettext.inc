@@ -4,9 +4,9 @@ REPACK_PV = "0.19.8.1"
 PV = "0.19.8.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1-7.dsc;name=gettext_0.19.8.1-7.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1.orig.tar.xz;name=gettext_0.19.8.1.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1-7.debian.tar.xz;name=gettext_0.19.8.1-7.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1-7.dsc;name=gettext_0.19.8.1-7.dsc \
+    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1.orig.tar.xz;name=gettext_0.19.8.1.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/gettext/gettext_0.19.8.1-7.debian.tar.xz;name=gettext_0.19.8.1-7.debian.tar.xz \
 "
 
 SRC_URI[gettext_0.19.8.1-7.dsc.md5sum] = "5aec7eaee8f8ae94e876e2bd5f05498d"

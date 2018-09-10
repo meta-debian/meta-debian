@@ -4,9 +4,9 @@ REPACK_PV = "1.07.1"
 PV = "1.07.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1-2.dsc;name=bc_1.07.1-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1.orig.tar.gz;name=bc_1.07.1.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1-2.debian.tar.xz;name=bc_1.07.1-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1-2.dsc;name=bc_1.07.1-2.dsc \
+    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1.orig.tar.gz;name=bc_1.07.1.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/b/bc/bc_1.07.1-2.debian.tar.xz;name=bc_1.07.1-2.debian.tar.xz \
 "
 
 SRC_URI[bc_1.07.1-2.dsc.md5sum] = "fc30a4f7d7314cb67599e9917bb31c52"

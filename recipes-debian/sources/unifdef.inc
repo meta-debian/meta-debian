@@ -4,9 +4,9 @@ REPACK_PV = "2.10"
 PV = "2.10"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10-1.1.dsc;name=unifdef_2.10-1.1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10.orig.tar.gz;name=unifdef_2.10.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10-1.1.debian.tar.xz;name=unifdef_2.10-1.1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10-1.1.dsc;name=unifdef_2.10-1.1.dsc \
+    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10.orig.tar.gz;name=unifdef_2.10.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/u/unifdef/unifdef_2.10-1.1.debian.tar.xz;name=unifdef_2.10-1.1.debian.tar.xz \
 "
 
 SRC_URI[unifdef_2.10-1.1.dsc.md5sum] = "09957432c20fc52cbf380b7d6d3f6e14"

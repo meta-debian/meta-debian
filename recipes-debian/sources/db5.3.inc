@@ -4,9 +4,9 @@ REPACK_PV = "5.3.28+dfsg1"
 PV = "5.3.28"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1-0.1.dsc;name=db5.3_5.3.28+dfsg1-0.1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1.orig.tar.xz;name=db5.3_5.3.28+dfsg1.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1-0.1.debian.tar.xz;name=db5.3_5.3.28+dfsg1-0.1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1-0.1.dsc;name=db5.3_5.3.28+dfsg1-0.1.dsc \
+    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1.orig.tar.xz;name=db5.3_5.3.28+dfsg1.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/d/db5.3/db5.3_5.3.28+dfsg1-0.1.debian.tar.xz;name=db5.3_5.3.28+dfsg1-0.1.debian.tar.xz \
 "
 
 SRC_URI[db5.3_5.3.28+dfsg1-0.1.dsc.md5sum] = "cdd268bf671ea0e1dbd69f79569457a6"

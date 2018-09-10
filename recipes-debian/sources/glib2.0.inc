@@ -4,9 +4,9 @@ REPACK_PV = "2.56.1"
 PV = "2.56.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1-2.dsc;name=glib2.0_2.56.1-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1.orig.tar.xz;name=glib2.0_2.56.1.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1-2.debian.tar.xz;name=glib2.0_2.56.1-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1-2.dsc;name=glib2.0_2.56.1-2.dsc \
+    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1.orig.tar.xz;name=glib2.0_2.56.1.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/glib2.0/glib2.0_2.56.1-2.debian.tar.xz;name=glib2.0_2.56.1-2.debian.tar.xz \
 "
 
 SRC_URI[glib2.0_2.56.1-2.dsc.md5sum] = "f3d172717d2319bb83b4bb5d19adae0b"

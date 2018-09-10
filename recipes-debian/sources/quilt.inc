@@ -4,9 +4,9 @@ REPACK_PV = "0.65"
 PV = "0.65"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65-2.dsc;name=quilt_0.65-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65.orig.tar.gz;name=quilt_0.65.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65-2.debian.tar.xz;name=quilt_0.65-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65-2.dsc;name=quilt_0.65-2.dsc \
+    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65.orig.tar.gz;name=quilt_0.65.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/q/quilt/quilt_0.65-2.debian.tar.xz;name=quilt_0.65-2.debian.tar.xz \
 "
 
 SRC_URI[quilt_0.65-2.dsc.md5sum] = "05c18c727f2d35c46632d95e98a2bec1"

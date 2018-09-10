@@ -4,9 +4,9 @@ REPACK_PV = "3.3.15"
 PV = "3.3.15"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15-2.dsc;name=procps_3.3.15-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15.orig.tar.xz;name=procps_3.3.15.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15-2.debian.tar.xz;name=procps_3.3.15-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15-2.dsc;name=procps_3.3.15-2.dsc \
+    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15.orig.tar.xz;name=procps_3.3.15.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/p/procps/procps_3.3.15-2.debian.tar.xz;name=procps_3.3.15-2.debian.tar.xz \
 "
 
 SRC_URI[procps_3.3.15-2.dsc.md5sum] = "f73b698ef3e19479f0b8530cfa301a7d"

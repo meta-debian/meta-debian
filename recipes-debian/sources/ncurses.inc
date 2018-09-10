@@ -4,10 +4,10 @@ REPACK_PV = "6.1+20180714"
 PV = "6.1+20180714"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714-1.dsc;name=ncurses_6.1+20180714-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714.orig.tar.gz;name=ncurses_6.1+20180714.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714.orig.tar.gz.asc;name=ncurses_6.1+20180714.orig.tar.gz.asc;apply=no \
-    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714-1.debian.tar.xz;name=ncurses_6.1+20180714-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714-1.dsc;name=ncurses_6.1+20180714-1.dsc \
+    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714.orig.tar.gz;name=ncurses_6.1+20180714.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714.orig.tar.gz.asc;name=ncurses_6.1+20180714.orig.tar.gz.asc \
+    ${DEBIAN_MIRROR}/main/n/ncurses/ncurses_6.1+20180714-1.debian.tar.xz;name=ncurses_6.1+20180714-1.debian.tar.xz \
 "
 
 SRC_URI[ncurses_6.1+20180714-1.dsc.md5sum] = "eb98e51968af97e59b9be44022ff5bc8"

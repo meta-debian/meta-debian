@@ -4,10 +4,10 @@ REPACK_PV = "5.26.2"
 PV = "5.26.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2-7.dsc;name=perl_5.26.2-7.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2.orig-regen-configure.tar.gz;name=perl_5.26.2.orig-regen-configure.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2.orig.tar.xz;name=perl_5.26.2.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2-7.debian.tar.xz;name=perl_5.26.2-7.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2-7.dsc;name=perl_5.26.2-7.dsc \
+    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2.orig-regen-configure.tar.gz;name=perl_5.26.2.orig-regen-configure.tar.gz \
+    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2.orig.tar.xz;name=perl_5.26.2.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/p/perl/perl_5.26.2-7.debian.tar.xz;name=perl_5.26.2-7.debian.tar.xz \
 "
 
 SRC_URI[perl_5.26.2-7.dsc.md5sum] = "f6b9fd73eafcb7e20498ba4d295cab74"

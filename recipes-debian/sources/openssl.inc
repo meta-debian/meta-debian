@@ -4,10 +4,10 @@ REPACK_PV = "1.1.0h"
 PV = "1.1.0h"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h-4.dsc;name=openssl_1.1.0h-4.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h.orig.tar.gz;name=openssl_1.1.0h.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h.orig.tar.gz.asc;name=openssl_1.1.0h.orig.tar.gz.asc;apply=no \
-    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h-4.debian.tar.xz;name=openssl_1.1.0h-4.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h-4.dsc;name=openssl_1.1.0h-4.dsc \
+    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h.orig.tar.gz;name=openssl_1.1.0h.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h.orig.tar.gz.asc;name=openssl_1.1.0h.orig.tar.gz.asc \
+    ${DEBIAN_MIRROR}/main/o/openssl/openssl_1.1.0h-4.debian.tar.xz;name=openssl_1.1.0h-4.debian.tar.xz \
 "
 
 SRC_URI[openssl_1.1.0h-4.dsc.md5sum] = "85d1843378b53636025afd27d68bd12c"

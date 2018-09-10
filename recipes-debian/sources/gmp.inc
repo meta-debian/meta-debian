@@ -4,9 +4,9 @@ REPACK_PV = "6.1.2+dfsg"
 PV = "6.1.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg-3.dsc;name=gmp_6.1.2+dfsg-3.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg.orig.tar.xz;name=gmp_6.1.2+dfsg.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg-3.debian.tar.xz;name=gmp_6.1.2+dfsg-3.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg-3.dsc;name=gmp_6.1.2+dfsg-3.dsc \
+    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg.orig.tar.xz;name=gmp_6.1.2+dfsg.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/gmp/gmp_6.1.2+dfsg-3.debian.tar.xz;name=gmp_6.1.2+dfsg-3.debian.tar.xz \
 "
 
 SRC_URI[gmp_6.1.2+dfsg-3.dsc.md5sum] = "0a0e6ba068394cf7cb496974c5a9ad4f"

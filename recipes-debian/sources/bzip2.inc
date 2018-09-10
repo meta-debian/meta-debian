@@ -4,9 +4,9 @@ REPACK_PV = "1.0.6"
 PV = "1.0.6"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6-9.dsc;name=bzip2_1.0.6-9.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2;name=bzip2_1.0.6.orig.tar.bz2;apply=no \
-    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6-9.debian.tar.bz2;name=bzip2_1.0.6-9.debian.tar.bz2;apply=no \
+    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6-9.dsc;name=bzip2_1.0.6-9.dsc \
+    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6.orig.tar.bz2;name=bzip2_1.0.6.orig.tar.bz2 \
+    ${DEBIAN_MIRROR}/main/b/bzip2/bzip2_1.0.6-9.debian.tar.bz2;name=bzip2_1.0.6-9.debian.tar.bz2 \
 "
 
 SRC_URI[bzip2_1.0.6-9.dsc.md5sum] = "95bb8342e0d76b7dc702b93372435330"

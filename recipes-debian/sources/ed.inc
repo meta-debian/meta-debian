@@ -4,9 +4,9 @@ REPACK_PV = "1.14.2"
 PV = "1.14.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2-2.dsc;name=ed_1.14.2-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2.orig.tar.gz;name=ed_1.14.2.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2-2.debian.tar.xz;name=ed_1.14.2-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2-2.dsc;name=ed_1.14.2-2.dsc \
+    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2.orig.tar.gz;name=ed_1.14.2.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/e/ed/ed_1.14.2-2.debian.tar.xz;name=ed_1.14.2-2.debian.tar.xz \
 "
 
 SRC_URI[ed_1.14.2-2.dsc.md5sum] = "4463aa49154d025ff00ce32cc88235d8"

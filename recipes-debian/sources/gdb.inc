@@ -4,9 +4,9 @@ REPACK_PV = "8.1"
 PV = "8.1"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1-4.dsc;name=gdb_8.1-4.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1.orig.tar.xz;name=gdb_8.1.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1-4.debian.tar.xz;name=gdb_8.1-4.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1-4.dsc;name=gdb_8.1-4.dsc \
+    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1.orig.tar.xz;name=gdb_8.1.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/gdb/gdb_8.1-4.debian.tar.xz;name=gdb_8.1-4.debian.tar.xz \
 "
 
 SRC_URI[gdb_8.1-4.dsc.md5sum] = "2eff400140c45b617c8a1ec462775a1b"

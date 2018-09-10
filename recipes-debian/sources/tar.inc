@@ -4,9 +4,9 @@ REPACK_PV = "1.30+dfsg"
 PV = "1.30"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg-2.dsc;name=tar_1.30+dfsg-2.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg.orig.tar.xz;name=tar_1.30+dfsg.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg-2.debian.tar.xz;name=tar_1.30+dfsg-2.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg-2.dsc;name=tar_1.30+dfsg-2.dsc \
+    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg.orig.tar.xz;name=tar_1.30+dfsg.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/t/tar/tar_1.30+dfsg-2.debian.tar.xz;name=tar_1.30+dfsg-2.debian.tar.xz \
 "
 
 SRC_URI[tar_1.30+dfsg-2.dsc.md5sum] = "4a94b80636f86f414a6a751fc15d6b64"

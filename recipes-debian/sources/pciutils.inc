@@ -4,9 +4,9 @@ REPACK_PV = "3.5.2"
 PV = "3.5.2"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2-1.dsc;name=pciutils_3.5.2-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2.orig.tar.xz;name=pciutils_3.5.2.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2-1.debian.tar.xz;name=pciutils_3.5.2-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2-1.dsc;name=pciutils_3.5.2-1.dsc \
+    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2.orig.tar.xz;name=pciutils_3.5.2.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/p/pciutils/pciutils_3.5.2-1.debian.tar.xz;name=pciutils_3.5.2-1.debian.tar.xz \
 "
 
 SRC_URI[pciutils_3.5.2-1.dsc.md5sum] = "f0d9d8bf3e1c885d54d5d828e32ddf8c"

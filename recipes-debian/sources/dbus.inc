@@ -4,10 +4,10 @@ REPACK_PV = "1.12.10"
 PV = "1.12.10"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10-1.dsc;name=dbus_1.12.10-1.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10.orig.tar.gz;name=dbus_1.12.10.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10.orig.tar.gz.asc;name=dbus_1.12.10.orig.tar.gz.asc;apply=no \
-    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10-1.debian.tar.xz;name=dbus_1.12.10-1.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10-1.dsc;name=dbus_1.12.10-1.dsc \
+    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10.orig.tar.gz;name=dbus_1.12.10.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10.orig.tar.gz.asc;name=dbus_1.12.10.orig.tar.gz.asc \
+    ${DEBIAN_MIRROR}/main/d/dbus/dbus_1.12.10-1.debian.tar.xz;name=dbus_1.12.10-1.debian.tar.xz \
 "
 
 SRC_URI[dbus_1.12.10-1.dsc.md5sum] = "d3503542164bcc3c9dd4595525cf7d14"

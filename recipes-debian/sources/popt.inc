@@ -4,9 +4,9 @@ REPACK_PV = "1.16"
 PV = "1.16"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16-11.dsc;name=popt_1.16-11.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16.orig.tar.gz;name=popt_1.16.orig.tar.gz;apply=no \
-    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16-11.debian.tar.xz;name=popt_1.16-11.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16-11.dsc;name=popt_1.16-11.dsc \
+    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16.orig.tar.gz;name=popt_1.16.orig.tar.gz \
+    ${DEBIAN_MIRROR}/main/p/popt/popt_1.16-11.debian.tar.xz;name=popt_1.16-11.debian.tar.xz \
 "
 
 SRC_URI[popt_1.16-11.dsc.md5sum] = "bc1f4856cd95dcd872e4bbf66b098d14"

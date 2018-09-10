@@ -4,9 +4,9 @@ REPACK_PV = "2.27"
 PV = "2.27"
 
 DEBIAN_SRC_URI = " \
-    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27-5.dsc;name=glibc_2.27-5.dsc;apply=no \
-    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27.orig.tar.xz;name=glibc_2.27.orig.tar.xz;apply=no \
-    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27-5.debian.tar.xz;name=glibc_2.27-5.debian.tar.xz;apply=no \
+    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27-5.dsc;name=glibc_2.27-5.dsc \
+    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27.orig.tar.xz;name=glibc_2.27.orig.tar.xz \
+    ${DEBIAN_MIRROR}/main/g/glibc/glibc_2.27-5.debian.tar.xz;name=glibc_2.27-5.debian.tar.xz \
 "
 
 SRC_URI[glibc_2.27-5.dsc.md5sum] = "aa0a9b273b686f5f7c42d265d27945e5"
