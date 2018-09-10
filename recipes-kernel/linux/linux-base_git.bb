@@ -26,7 +26,9 @@ inherit linux-src
 
 # linux-cip 4.4 fails to build for arm with gcc8.
 # Backport fix from 4.4.145.
-SRC_URI += "file://ARM-fix-put_user-for-gcc-8.patch"
+SRC_URI += "file://ARM-fix-put_user-for-gcc-8.patch \
+            file://0001-turn-off-Wattribute-alias.patch \
+            "
 
 # use the common functions to merge multiple configs
 inherit merge-config
