@@ -18,7 +18,6 @@ DEBIAN_PATCH_TYPE = "quilt"
 SRC_URI += " \
        file://0001-gcc-4.3.1-ARCH_FLAGS_FOR_TARGET.patch \
        file://0003-gcc-poison-system-directories.patch \
-       file://0004-gcc-poison-dir-extend.patch \
        file://0005-gcc-4.3.3-SYSROOT_CFLAGS_FOR_TARGET.patch \
        file://0006-64-bit-multilib-hack.patch \
        file://0007-optional-libstdc.patch \
