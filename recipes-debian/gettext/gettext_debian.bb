@@ -86,8 +86,8 @@ FILES_gettext-runtime = "${bindir}/gettext \
                          ${libdir}/GNU.Gettext.dll \
                         "
 FILES_gettext-runtime-dev += "${libdir}/libasprintf.a \
-                      ${includedir}/autosprintf.h \
-                     "
+                              ${includedir}/autosprintf.h \
+                              "
 FILES_gettext-runtime-doc = "${mandir}/man1/gettext.* \
                              ${mandir}/man1/ngettext.* \
                              ${mandir}/man1/envsubst.* \
