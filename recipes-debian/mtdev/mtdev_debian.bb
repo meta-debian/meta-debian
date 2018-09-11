@@ -25,3 +25,4 @@ RPROVIDES_${PN}-dev += "lib${DPN}-dev"
 
 # Prevent mtdev-tools auto name to libmtdev-tools
 DEBIAN_NOAUTONAME_${PN}-tools = "1"
+BBCLASSEXTEND = "native"
