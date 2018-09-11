@@ -25,3 +25,4 @@ do_debian_patch_prepend() {
 # After removing use-system-libevdev-for-tests.patch,
 # there is no debian patch and no debian series file
 DEBIAN_QUILT_PATCHES = ""
+BBCLASSEXTEND = "native"
