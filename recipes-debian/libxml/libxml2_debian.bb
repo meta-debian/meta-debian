@@ -69,7 +69,11 @@ PACKAGES += "${PN}-utils ${PN}-python"
 
 FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 FILES_${PN}-staticdev += "${PYTHON_SITEPACKAGES_DIR}/*.a"
-FILES_${PN}-dev += "${libdir}/xml2Conf.sh"
+FILES_${PN}-dev += "\
+                   ${includedir}/libxml2/libxml/*.h \
+                   ${libdir}/pkgconfig/*.pc \
+                   ${libdir}/xml2Conf.sh \
+                   "
 FILES_${PN}-utils += "${bindir}/*"
 FILES_${PN}-python += "${PYTHON_SITEPACKAGES_DIR}"
 # Correct list of file in libxml2 package
