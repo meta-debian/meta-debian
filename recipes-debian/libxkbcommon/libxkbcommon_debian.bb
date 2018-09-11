@@ -36,3 +36,4 @@ FILES_${PN}-x11-dev = " \
     ${libdir}/libxkbcommon-x11${SOLIBSDEV} \
     ${libdir}/pkgconfig/xkbcommon-x11.pc \
 "
+BBCLASSEXTEND = "native"
