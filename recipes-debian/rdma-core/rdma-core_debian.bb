@@ -44,3 +44,8 @@ FILES_${PN} += " \
 "
 
 RDEPENDS_${PN} = "perl"
+
+# Avoid QA error about non -dev/-dbg/nativesdk- package contains symlink .so:
+#   /usr/lib/libibverbs/libmlx{4,5}-rdmav19.so
+# These files are not dev-so but alternative files.
+INSANE_SKIP_${PN} += "dev-so"
