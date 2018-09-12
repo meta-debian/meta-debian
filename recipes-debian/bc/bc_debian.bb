@@ -19,7 +19,7 @@ LIC_FILES_CHKSUM = " \
 	file://lib/number.c;endline=30;md5=8529a3cebb13aca3fb46658b89cb90c7 \
 "
 
-DEPENDS = "flex-native ed-native"
+DEPENDS = "bison-native flex-native ed-native"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-extended/bc/bc"
 SRC_URI += " \

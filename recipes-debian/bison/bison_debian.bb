@@ -34,7 +34,7 @@ SRC_URI += "\
 	file://remove-document-examples-target.patch \
 "
 
-DEPENDS = "bison-native flex-native bc-native"
+DEPENDS = "bison-native flex-native"
 
 # No point in hardcoding path to m4, just use PATH
 EXTRA_OECONF += "M4=m4"
