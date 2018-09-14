@@ -15,6 +15,7 @@ DEPENDS = " \
 SRC_URI += " \
     file://server-makefile.patch \
     file://httpd-2.4.3-fix-race-issue-of-dir-install.patch \
+    file://Fix-QA-ownership-files.patch \
 "
 
 # Configure follow debian/rules

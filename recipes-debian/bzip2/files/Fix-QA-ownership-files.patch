@@ -1,0 +1,15 @@
+Don't preserve the ownership of files when copy, prevent QA check wrong ownership.
+
+diff --git a/Makefile b/Makefile
+index ba05057..62bf2ec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -111,7 +111,7 @@ install: bzip2 bzip2recover libbz2.a
+ 	chmod a+r $(PREFIX)/man/man1/bzip2.1
+ 	cp -f bzlib.h $(PREFIX)/include
+ 	chmod a+r $(PREFIX)/include/bzlib.h
+-	cp -fa libbz2.a libbz2.so* $(PREFIX)/lib
++	cp -fa --no-preserve=ownership libbz2.a libbz2.so* $(PREFIX)/lib
+ 	chmod a+r $(PREFIX)/lib/libbz2.a
+ 	cp -f bzexe $(PREFIX)/bin/bzexe
+ 	chmod a+x $(PREFIX)/bin/bzexe

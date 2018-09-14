@@ -14,6 +14,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ddeb76cd34e791893c0f539fdab879bb"
 SRC_URI += " \
 file://Makefile-ptest.patch \
 file://run-ptest \
+file://Fix-QA-ownership-files.patch \
 "
 
 PACKAGES =+ "libbz2 libbz2-dev libbz2-staticdev"

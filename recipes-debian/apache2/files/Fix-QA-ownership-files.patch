@@ -1,0 +1,116 @@
+diff --git a/Makefile.in b/Makefile.in
+index f1b6796..06c2285 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -91,9 +91,9 @@ install-conf:
+ 	    done ; \
+ 	done ; \
+ 	if test -f "$(builddir)/envvars-std"; then \
+-	    cp -p envvars-std $(DESTDIR)$(sbindir); \
++	    cp -p --no-preserve=ownership envvars-std $(DESTDIR)$(sbindir); \
+ 	    if test ! -f $(DESTDIR)$(sbindir)/envvars; then \
+-	        cp -p envvars-std $(DESTDIR)$(sbindir)/envvars ; \
++	        cp -p --no-preserve=ownership envvars-std $(DESTDIR)$(sbindir)/envvars ; \
+ 	    fi ; \
+ 	fi
+ 
+@@ -145,7 +145,7 @@ install-htdocs:
+ 	    if test -d $(htdocs-srcdir) && test "x$(RSYNC)" != "x" && test -x $(RSYNC) ; then \
+ 		$(RSYNC) --exclude .svn -rlpt --numeric-ids $(htdocs-srcdir)/ $(DESTDIR)$(htdocsdir)/; \
+ 	    else \
+-		test -d $(htdocs-srcdir) && (cd $(htdocs-srcdir) && cp -rp * $(DESTDIR)$(htdocsdir)) ; \
++		test -d $(htdocs-srcdir) && (cd $(htdocs-srcdir) && cp -rp --no-preserve=ownership * $(DESTDIR)$(htdocsdir)) ; \
+ 		cd $(DESTDIR)$(htdocsdir) && find . -name ".svn" -type d -print | xargs rm -rf 2>/dev/null || true; \
+ 	    fi; \
+ 	fi
+@@ -156,7 +156,7 @@ install-error:
+         else \
+ 	    echo Installing error documents ; \
+ 	    $(MKINSTALLDIRS) $(DESTDIR)$(errordir) ; \
+-	    cd $(top_srcdir)/docs/error && cp -rp * $(DESTDIR)$(errordir) ; \
++	    cd $(top_srcdir)/docs/error && cp -rp --no-preserve=ownership * $(DESTDIR)$(errordir) ; \
+ 	    test "x$(errordir)" != "x" && cd $(DESTDIR)$(errordir) && find . -name ".svn" -type d -print | xargs rm -rf 2>/dev/null || true; \
+ 	fi
+ 
+@@ -166,7 +166,7 @@ install-icons:
+         else \
+ 	    echo Installing icons ; \
+ 	    $(MKINSTALLDIRS) $(DESTDIR)$(iconsdir) ; \
+-	    cd $(top_srcdir)/docs/icons && cp -rp * $(DESTDIR)$(iconsdir) ; \
++	    cd $(top_srcdir)/docs/icons && cp -rp --no-preserve=ownership * $(DESTDIR)$(iconsdir) ; \
+ 	    test "x$(iconsdir)" != "x" && cd $(DESTDIR)$(iconsdir) && find . -name ".svn" -type d -print | xargs rm -rf 2>/dev/null || true; \
+ 	fi
+ 
+@@ -176,7 +176,7 @@ install-cgi:
+ 	else \
+ 	   echo Installing CGIs ; \
+ 	   $(MKINSTALLDIRS) $(DESTDIR)$(cgidir) ; \
+-	   cd $(top_srcdir)/docs/cgi-examples && cp -rp * $(DESTDIR)$(cgidir) ; \
++	   cd $(top_srcdir)/docs/cgi-examples && cp -rp --no-preserve=ownership * $(DESTDIR)$(cgidir) ; \
+ 	   test "x$(cgidir)" != "x" && cd $(DESTDIR)$(cgidir) && find . -name ".svn" -type d -print | xargs rm -rf 2>/dev/null || true; \
+ 	fi
+ 
+@@ -186,12 +186,12 @@ install-other:
+ 	@for ext in dll x; do \
+ 		file=apachecore.$$ext; \
+ 		if test -f $$file; then \
+-			cp -p $$file $(DESTDIR)$(libdir); \
++			cp -p --no-preserve=ownership $$file $(DESTDIR)$(libdir); \
+ 		fi; \
+ 	done; \
+ 	file=httpd.dll; \
+ 	if test -f $$file; then \
+-		cp -p $$file $(DESTDIR)$(bindir); \
++		cp -p --no-preserve=ownership $$file $(DESTDIR)$(bindir); \
+ 	fi;
+ 
+ INSTALL_HEADERS = \
+@@ -229,12 +229,12 @@ install-man:
+ 	@test -d $(DESTDIR)$(mandir)/man1 || $(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man1
+ 	@test -d $(DESTDIR)$(mandir)/man8 || $(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man8
+ 	@test -d $(DESTDIR)$(manualdir)   || $(MKINSTALLDIRS) $(DESTDIR)$(manualdir)
+-	@cp -p $(top_srcdir)/docs/man/*.1 $(DESTDIR)$(mandir)/man1
+-	@cp -p $(top_srcdir)/docs/man/*.8 $(DESTDIR)$(mandir)/man8
++	@cp -p --no-preserve=ownership $(top_srcdir)/docs/man/*.1 $(DESTDIR)$(mandir)/man1
++	@cp -p --no-preserve=ownership $(top_srcdir)/docs/man/*.8 $(DESTDIR)$(mandir)/man8
+ 	@if test "x$(RSYNC)" != "x" && test -x $(RSYNC) ; then \
+ 	  $(RSYNC) --exclude .svn -rlpt --numeric-ids $(top_srcdir)/docs/manual/ $(DESTDIR)$(manualdir)/; \
+ 	else \
+-	  cd $(top_srcdir)/docs/manual && cp -rp * $(DESTDIR)$(manualdir); \
++	  cd $(top_srcdir)/docs/manual && cp -rp --no-preserve=ownership * $(DESTDIR)$(manualdir); \
+ 	  cd $(DESTDIR)$(manualdir) && find . -name ".svn" -type d -print | xargs rm -rf 2>/dev/null || true; \
+ 	fi
+ 
+diff --git a/support/Makefile.in b/support/Makefile.in
+index 165ff1e..a217d3e 100644
+--- a/support/Makefile.in
++++ b/support/Makefile.in
+@@ -16,23 +16,23 @@ install:
+ 	@test -d $(DESTDIR)$(bindir) || $(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+ 	@test -d $(DESTDIR)$(sbindir) || $(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+ 	@test -d $(DESTDIR)$(libexecdir) || $(MKINSTALLDIRS) $(DESTDIR)$(libexecdir)
+-	@cp -p $(top_builddir)/server/httpd.exp $(DESTDIR)$(libexecdir)
++	@cp -p --no-preserve=ownership envvars-std $(top_builddir)/server/httpd.exp $(DESTDIR)$(libexecdir)
+ 	@for i in apxs dbmmanage; do \
+ 	    if test -f "$(builddir)/$$i"; then \
+-	        cp -p $$i $(DESTDIR)$(bindir); \
++	        cp -p --no-preserve=ownership envvars-std $$i $(DESTDIR)$(bindir); \
+ 	        chmod 755 $(DESTDIR)$(bindir)/$$i; \
+ 	    fi ; \
+ 	done
+ 	@for i in apachectl; do \
+ 	    if test -f "$(builddir)/$$i"; then \
+-	        cp -p $$i $(DESTDIR)$(sbindir); \
++	        cp -p --no-preserve=ownership envvars-std $$i $(DESTDIR)$(sbindir); \
+ 	        chmod 755 $(DESTDIR)$(sbindir)/$$i; \
+ 	    fi ; \
+ 	done
+ 	@if test -f "$(builddir)/envvars-std"; then \
+-	    cp -p envvars-std $(DESTDIR)$(sbindir); \
++	    cp -p --no-preserve=ownership envvars-std envvars-std $(DESTDIR)$(sbindir); \
+ 	    if test ! -f $(DESTDIR)$(sbindir)/envvars; then \
+-	        cp -p envvars-std $(DESTDIR)$(sbindir)/envvars ; \
++	        cp -p --no-preserve=ownership envvars-std $(DESTDIR)$(sbindir)/envvars ; \
+ 	    fi ; \
+ 	fi
+ 
