@@ -11,6 +11,8 @@ PV = "4.2.6.p5+dfsg"
 LICENSE = "NTP"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=fea4b50c33b18c2194b4b1c9ca512670"
 
+DEPENDS = "openssl"
+
 inherit autotools pkgconfig useradd
 
 USERADD_PACKAGES = "${PN}"
@@ -29,14 +31,12 @@ EXTRA_OECONF += "--enable-all-clocks --enable-parse-clocks --enable-SHM \
                 --enable-ntp-signd \
                 --disable-dependency-tracking \
                 lo_cv_test_autoopts=no \
+                --with-openssl-libdir=${STAGING_LIBDIR} \
+                --with-openssl-incdir=${STAGING_INCDIR} \
+                --with-crypto \
 "
 
-PACKAGECONFIG ??= "openssl cap"
-PACKAGECONFIG[openssl] = "--with-openssl-libdir=${STAGING_LIBDIR} \
-                          --with-openssl-incdir=${STAGING_INCDIR} \
-                          --with-crypto, \
-                          --without-openssl --without-crypto, \
-                          openssl"
+PACKAGECONFIG ??= "cap"
 PACKAGECONFIG[cap] = "--enable-linuxcaps,--disable-linuxcaps,libcap"
 PACKAGECONFIG[readline] = "--with-lineeditlibs,--without-lineeditlibs,readline"
 
