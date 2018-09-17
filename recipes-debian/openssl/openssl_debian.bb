@@ -16,7 +16,9 @@ LICENSE = "openssl"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=d57d511030c9d66ef5f5966bee5a7eff"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-connectivity/openssl/openssl"
-SRC_URI += "file://run-ptest"
+SRC_URI += "file://run-ptest \
+            file://openssl-c_rehash.sh \
+            "
 
 inherit lib_package multilib_header ptest
 
@@ -149,3 +151,5 @@ FILES_${PN} =+ " ${libdir}/ssl-1.1/*"
 
 PACKAGES =+ "${PN}-engines"
 FILES_${PN}-engines = "${libdir}/engines-1.1"
+
+BBCLASSEXTEND = "native nativesdk"
