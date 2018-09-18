@@ -10,7 +10,7 @@ HOMEPAGE = "https://github.com/linux-rdma/rdma-core"
 
 inherit debian-package
 require recipes-debian/sources/rdma-core.inc
-DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-19"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-${@d.getVar('PV').split('.')[0]}"
 
 LICENSE = "(BSD-2-Clause | GPLv2) & CC0-1.0 & MIT & (GPLv2 | BSD-3-Clause)"
 LIC_FILES_CHKSUM = " \
@@ -26,9 +26,8 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "libnl"
 
-SRC_URI += " \
-    file://0001-Remove-man-files-which-cant-be-built.patch \
-"
+# source format is 3.0 but there is no patch
+DEBIAN_QUILT_PATCHES = ""
 
 inherit cmake
 
