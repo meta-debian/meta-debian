@@ -24,10 +24,11 @@ inherit kernel
 # use the same kernel source as linux-libc-headers-base_git.bb
 inherit linux-src
 
-# linux-cip 4.4 fails to build for arm with gcc8.
-# Backport fix from 4.4.145.
+# Fix linux-cip build error with gcc8 on arm, mips and ppc
 SRC_URI += "file://ARM-fix-put_user-for-gcc-8.patch \
             file://0001-turn-off-Wattribute-alias.patch \
+            file://powerpc-Disable-attribute-alias-warnings-from-gcc8.patch \
+            file://powerpc-ptrace-Disable-array-bounds-warning-with-gcc.patch \
             "
 
 # use the common functions to merge multiple configs
