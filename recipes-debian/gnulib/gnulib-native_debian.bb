@@ -10,6 +10,10 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=e4cf3810f33a067ea7ccd2cd889fed21"
 
 inherit native
 
+# Nothing to compile
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
+
 do_install() {
 	install -d ${D}${datadir}/gnulib ${D}${bindir}
 	cp -a --no-preserve=ownership build-aux posix-modules config doc lib m4 \
