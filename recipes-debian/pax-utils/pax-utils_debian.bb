@@ -16,15 +16,14 @@ require recipes-debian/sources/pax-utils.inc
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
+DEPENDS = "xmlto-native gnulib-native"
 RDEPENDS_${PN} += "bash"
 
 export GNULIB_OVERRIDES_WINT_T = "0"
 
-# source format is 3.0 but there is no patch
-DEBIAN_QUILT_PATCHES = ""
-
 do_configure_prepend() {
 	touch ${S}/NEWS ${S}/AUTHORS ${S}/ChangeLog ${S}/README
+	./autogen.sh --from=make
 }
 
 do_install() {
@@ -33,7 +32,7 @@ do_install() {
 
 BBCLASSEXTEND = "native"
 
-inherit autotools pkgconfig
+inherit autotools-brokensep pkgconfig
 
 PACKAGECONFIG ??= ""
 
