@@ -53,7 +53,8 @@ def fetch_Sources_xz(d):
         fetcher = bb.fetch2.Fetch([sources_xz], d)
         fetcher.download()
     except bb.fetch2.BBFetchException as e:
-        raise bb.build.FuncFailed(e)
+        bb.warn("Failed to fetch Sources.xz. Continue building.")
+        return False
 
     return True
 
