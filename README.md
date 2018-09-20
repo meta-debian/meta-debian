@@ -11,13 +11,13 @@ The main purpose of meta-debian is to provide reference Linux distribution for e
 * Customizability
 
 Currently, the following software versions are supported in meta-debian.
-* Source code: Debian GNU/Linux 8 (jessie)
-* Build system: Yocto Project 2.2 (morty)
+* Source code: Debian GNU/Linux 10 (buster)
+* Build system: Yocto Project 2.5 (master)
 
 Quick Start
 ===========
 
-Install essential packages poky requires into your host system according to http://www.yoctoproject.org/docs/2.2/ref-manual/ref-manual.html#intro-requirements
+Install essential packages poky requires into your host system according to https://www.yoctoproject.org/docs/2.5/ref-manual/ref-manual.html#required-packages-for-the-host-development-system
 
 ```sh
 $ sudo apt-get install git tar python3
@@ -32,9 +32,9 @@ NOTE: The following three packages have version limitation
 Setup repositories.
 
 ```sh
-$ git clone -b morty git://git.yoctoproject.org/poky.git
+$ git clone -b master git://git.yoctoproject.org/poky.git
 $ cd poky
-$ git clone -b morty https://github.com/meta-debian/meta-debian.git
+$ git clone -b master-ng https://github.com/meta-debian/meta-debian.git
 $ cd ..
 ```
 
