@@ -29,6 +29,8 @@ PV = "9.4.18"
 DPN = "postgresql-9.4"
 NONARCH_PN = "postgresql"
 
+SRCREV = "v9.4.15-0+deb8u1"
+
 LICENSE = "PostgreSQL"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=6dc95e63aa4d72502ff8193dfe2ddd38"
 
