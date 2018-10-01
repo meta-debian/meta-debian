@@ -23,6 +23,9 @@ SRC_URI += " \
 file://run-ptest \
 "
 
+# source format is 3.0 (quilt) but there is no debian/patches
+DEBIAN_QUILT_PATCHES = ""
+
 inherit autotools gettext update-alternatives
 
 do_configure() {
@@ -31,6 +34,7 @@ do_configure() {
 	oe_runconf
 	touch --date="Jan 01 2000" \
 		${S}/doc/gawktexi.in ${S}/doc/gawk.texi ${S}/doc/gawkinet.texi \
+		${S}/doc/gawkworkflow.texi ${S}/doc/gawkworkflow.info \
 		${S}/doc/gawk.info ${S}/doc/gawkinet.info ${S}/doc/sidebar.awk
 }
 
