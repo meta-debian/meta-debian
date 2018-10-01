@@ -16,7 +16,6 @@ SRC_URI += " \
     file://configure-libtool.patch \
     file://run-ptest \
     file://uclibc_musl_translation.patch \
-    file://allow-run-media-sdX-drive-mount-if-username-root.patch \
     file://0001-Install-gio-querymodules-as-libexec_PROGRAM.patch \
     file://0010-Do-not-hardcode-python-path-into-various-tools.patch \
 "
