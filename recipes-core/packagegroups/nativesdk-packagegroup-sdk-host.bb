@@ -20,5 +20,5 @@ RDEPENDS_${PN} = "nativesdk-autoconf \
                   nativesdk-libtool \
                   nativesdk-pkgconfig \
                   nativesdk-bc \
-                  nativesdk-libncurses5-dev \
+                  nativesdk-ncurses-dev \
                  "

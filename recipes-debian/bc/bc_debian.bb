@@ -1,36 +1,43 @@
 #
-# base recipe: meta/recipes-extended/bc/bc_1.06.bb
-# base branch: daisy
+# base recipe: meta/recipes-extended/bc/bc_1.07.1.bb
+# base branch: master
+# base commit: 028a292001f64ad86c6b960a05ba1f6fd72199de
 #
 
-SUMMARY = "GNU bc arbitrary precision calculator language"
-DESCRIPTION = "GNU bc is an interactive algebraic language with arbitrary precision which \
-follows the POSIX 1003.2 draft standard, with several extensions including \
-multi-character variable names, an `else' statement and full Boolean \
-expressions.  GNU bc does not require the separate GNU dc program."
-HOMEPAGE = "http://ftp.gnu.org/gnu/bc/"
-
-PR = "r1"
+SUMMARY = "Arbitrary precision calculator language"
+HOMEPAGE = "http://www.gnu.org/software/bc/"
 
 inherit debian-package
-PV = "1.06.95"
+require recipes-debian/sources/bc.inc
 
-LICENSE = "GPLv2+ & LGPLv2.1+ & MIT"
+LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
-	file://COPYING;md5=b492e6ce406929d0b0a96c4ae7abcccf \
-	file://COPYING.LIB;md5=bf0962157c971350d4701853721970b4 \
-	file://install-sh;beginline=6;endline=32;md5=2ab67672a6ca4781a8291d8e11f5ccaf \
-	file://bc/bcdefs.h;endline=28;md5=c130bad80e7e25940b5dd478a4cf9498 \
-	file://dc/dc.h;endline=23;md5=8b73f8cca832dac936fae39eea4269e0 \
-	file://lib/number.c;endline=30;md5=844a960b70c05456062f4d53b20f67b0 \
+	file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
+	file://COPYING.LIB;md5=6a6a8e020838b23406c81b19c1d46df6 \
+	file://bc/bcdefs.h;endline=26;md5=83710f912db7e902d45016ab235c586f \
+	file://dc/dc.h;endline=20;md5=be0fc95c3503cb8116eea6acb63a5922 \
+	file://lib/number.c;endline=30;md5=8529a3cebb13aca3fb46658b89cb90c7 \
 "
 
-DEPENDS = "flex-native"
+DEPENDS = "bison-native flex-native ed-native"
 
-inherit autotools-brokensep
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/bc/bc"
+SRC_URI += " \
+    file://no-gen-libmath.patch \
+    file://libmath.h \
+"
 
-PACKAGES += "dc"
-FILES_dc = "${bindir}/dc"
-FILES_${PN} = "${bindir}/bc"
+inherit autotools-brokensep texinfo update-alternatives
+
+PACKAGECONFIG ??= "readline"
+PACKAGECONFIG[readline] = "--with-readline,--without-readline,readline"
+PACKAGECONFIG[libedit] = "--with-libedit,--without-libedit,libedit"
+
+do_compile_prepend() {
+	cp -f ${WORKDIR}/libmath.h ${B}/bc/libmath.h
+}
+
+ALTERNATIVE_${PN} = "dc"
+ALTERNATIVE_PRIORITY = "100"
 
 BBCLASSEXTEND = "native nativesdk"

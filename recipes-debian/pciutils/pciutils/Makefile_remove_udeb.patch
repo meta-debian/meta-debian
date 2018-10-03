@@ -1,0 +1,31 @@
+We have nothing to do with lspci-udeb. Remove it.
+
+diff --git a/Makefile b/Makefile
+index 1d8db1e..c3fb142 100644
+--- a/Makefile
++++ b/Makefile
+@@ -61,7 +61,7 @@ export
+ 
+ pcimod-$(PCI_OS_LINUX) := pcimodules
+ pcimod8-$(PCI_OS_LINUX) := pcimodules.8
+-all: lib/$(PCILIB) lspci lspci-udeb setpci example lspci.8 setpci.8 pcilib.7 update-pciids update-pciids.8 $(PCI_IDS) $(pcimod-1) $(pcimod8-1)
++all: lib/$(PCILIB) lspci setpci example lspci.8 setpci.8 pcilib.7 update-pciids update-pciids.8 $(PCI_IDS) $(pcimod-1) $(pcimod8-1)
+ 
+ lib/$(PCILIB): $(PCIINC) force
+ 	$(MAKE) -C lib all
+@@ -123,7 +123,6 @@ install: all
+ # -c is ignored on Linux, but required on FreeBSD
+ 	$(DIRINSTALL) -m 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(IDSDIR) $(DESTDIR)$(MANDIR)/man8 $(DESTDIR)$(MANDIR)/man7
+ 	$(INSTALL) -c -m 755 $(STRIP) lspci setpci $(pcimod-1) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL) -c -m 755 $(STRIP) lspci-udeb $(DESTDIR)-udeb$(SBINDIR)/lspci
+ 	$(INSTALL) -c -m 755 update-pciids $(DESTDIR)$(SBINDIR)
+ 	$(INSTALL) -c -m 644 $(PCI_IDS) $(DESTDIR)$(IDSDIR)
+ 	$(INSTALL) -c -m 644 lspci.8 setpci.8 update-pciids.8 $(pcimod8-1) $(DESTDIR)$(MANDIR)/man8
+@@ -158,7 +157,6 @@ endif
+ 
+ uninstall: all
+ 	rm -f $(DESTDIR)$(SBINDIR)/lspci $(DESTDIR)$(SBINDIR)/setpci $(DESTDIR)$(SBINDIR)/update-pciids
+-	rm -f $(DESTDIR)-udeb$(SBINDIR)/lspci
+ 	rm -f $(DESTDIR)$(IDSDIR)/$(PCI_IDS)
+ 	rm -f $(DESTDIR)$(MANDIR)/man8/lspci.8 $(DESTDIR)$(MANDIR)/man8/setpci.8 $(DESTDIR)$(MANDIR)/man8/update-pciids.8
+ 	rm -f $(DESTDIR)$(SBINDIR)/pcimodules $(DESTDIR)$(MANDIR)/man8/pcimodules.8

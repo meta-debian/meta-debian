@@ -1,0 +1,29 @@
+#
+# base patch: meta/recipes-extended/bc/bc/no-gen-libmath.patch
+# base branch: master
+# base commit: 028a292001f64ad86c6b960a05ba1f6fd72199de
+#
+# These rules are not cross-friendly so delete them and we'll generate the file offline.
+#
+# Upstream-Status: Inappropriate
+# Signed-off-by: Ross Burton <ross.burton@intel.com>
+
+diff --git a/bc/Makefile.am b/bc/Makefile.am
+index 9c663e4..2fff15b 100644
+--- a/bc/Makefile.am
++++ b/bc/Makefile.am
+@@ -33,14 +33,6 @@ global_foo.c: global.c
+ 
+ fbcOBJ = main.o bc.o scan.o execute.o load.o storage.o util.o warranty.o
+ 
+-libmath.h: libmath.b $(fbcOBJ) $(LIBBC)
+-	echo '{0}' > libmath.h
+-	$(MAKE) global_foo.o
+-	$(LINK) -o fbc $(fbcOBJ) global_foo.o $(LIBBC) $(LIBL) $(READLINELIB) $(LIBS)
+-	./fbc -c $(srcdir)/libmath.b </dev/null >libmath.h
+-	$(srcdir)/fix-libmath_h
+-	rm -f ./fbc ./global_foo.o
+-
+ sbcOBJ = main.o sbc.o scan.o execute.o global.o load.o storage.o util.o \
+          warranty.o
+ sbc.o: sbc.c

@@ -1,0 +1,76 @@
+#
+# base patch: meta/recipes-devtools/gcc/gcc-8.2/0007-optional-libstdc.patch
+# base branch: master
+# base commit: da24071e92071ecbefe51314d82bf40f85172485
+#
+# Modified to work with Debian source code.
+# gcc/doc/invoke.texi is empty. Nothing to patch.
+#
+# From fb7df63e9548c29b70601d642a1850fc455f8565 Mon Sep 17 00:00:00 2001
+# From: Khem Raj <raj.khem@gmail.com>
+# Date: Fri, 29 Mar 2013 09:12:56 +0400
+# Subject: [PATCH 07/39] optional libstdc
+# 
+# gcc-runtime builds libstdc++ separately from gcc-cross-*. Its configure tests using g++
+# will not run correctly since by default the linker will try to link against libstdc++
+# which shouldn't exist yet. We need an option to disable -lstdc++
+# option whilst leaving -lc, -lgcc and other automatic library dependencies added by gcc
+# driver. This patch adds such an option which only disables the -lstdc++.
+# 
+# A "standard" gcc build uses xgcc and hence avoids this. We should ask upstream how to
+# do this officially, the likely answer is don't build libstdc++ separately.
+# 
+# RP 29/6/10
+# 
+# Signed-off-by: Khem Raj <raj.khem@gmail.com>
+# 
+# Upstream-Status: Inappropriate [embedded specific]
+# ---
+#  gcc/c-family/c.opt  |  4 ++++
+#  gcc/cp/g++spec.c    |  1 +
+#  gcc/doc/invoke.texi | 32 +++++++++++++++++++++++++++++++-
+#  gcc/gcc.c           |  1 +
+#  4 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/c-family/c.opt b/gcc/c-family/c.opt
+index 5013501b232..6312f2c8f90 100644
+--- a/gcc/c-family/c.opt
++++ b/gcc/c-family/c.opt
+@@ -1900,6 +1900,10 @@ nostdinc++
+ C++ ObjC++
+ Do not search standard system include directories for C++.
+ 
++nostdlib++
++Driver
++Do not link standard C++ runtime library
++
+ o
+ C ObjC C++ ObjC++ Joined Separate
+ ; Documented in common.opt
+diff --git a/gcc/cp/g++spec.c b/gcc/cp/g++spec.c
+index 443a1746da3..e9b51be62ef 100644
+--- a/gcc/cp/g++spec.c
++++ b/gcc/cp/g++spec.c
+@@ -137,6 +137,7 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options,
+       switch (decoded_options[i].opt_index)
+ 	{
+ 	case OPT_nostdlib:
++	case OPT_nostdlib__:
+ 	case OPT_nodefaultlibs:
+ 	  library = -1;
+ 	  break;
+diff --git a/gcc/gcc.c b/gcc/gcc.c
+index 02b3cd39fc2..8cd27a5dad5 100644
+--- a/gcc/gcc.c
++++ b/gcc/gcc.c
+@@ -1047,6 +1047,7 @@ proper position among the other output files.  */
+     %(mflib) " STACK_SPLIT_SPEC "\
+     %{fprofile-arcs|fprofile-generate*|coverage:-lgcov} " SANITIZER_SPEC " \
+     %{!nostdlib:%{!nodefaultlibs:%(link_ssp) %(link_gcc_c_sequence)}}\
++    %{!nostdlib++:}\
+     %{!nostdlib:%{!nostartfiles:%E}} %{T*}  \n%(post_link) }}}}}}"
+ #endif
+ 
+-- 
+2.17.0
+

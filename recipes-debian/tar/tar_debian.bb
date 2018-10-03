@@ -1,54 +1,74 @@
-PR = "r0"
+#
+# base recipe: meta/recipes-extended/tar/tar_1.30.bb
+# base branch: master
+# base commit: 63a4ff7cf5f7d1671ab85800bc2212dd9cd9748d
+#
+
+SUMMARY = "GNU file archiving program"
+DESCRIPTION = "GNU tar saves many files together into a single tape \
+or disk archive, and can restore individual files from the archive."
+HOMEPAGE = "http://www.gnu.org/software/tar/"
+
 
 inherit debian-package
-PV = "1.27.1"
+require recipes-debian/sources/tar.inc
 
-LICENSE = "GPLv2+ & GPLv3+"
-LIC_FILES_CHKSUM = " \
-	file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
-	file://debian/copyright;md5=6cc9239a1f4b61c5ea9db23f92b2d20b \
-"
+LICENSE = "GPLv3+"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/tar/tar"
+SRC_URI += "file://musl_dirent.patch"
+
+inherit autotools gettext texinfo
+
+PACKAGECONFIG ??= ""
+PACKAGECONFIG_append_class-target = " ${@bb.utils.filter('DISTRO_FEATURES', 'acl', d)}"
 
 PACKAGECONFIG[acl] = "--with-posix-acls, --without-posix-acls, acl,"
 
-inherit autotools gettext update-alternatives
+EXTRA_OECONF += "DEFAULT_RMT_DIR=${base_sbindir}"
 
-# Configure follow debian/rules
-# --dissable-gcc-warnings to avoid all warnings being treated as errors.
-EXTRA_OECONF += " \
-	--bindir=${base_bindir} \
-	--enable-backup-scripts \
-	--with-lzma=xz \
-	--disable-gcc-warnings \
-"
+# Let aclocal use the relative path for the m4 file rather than the
+# absolute since tar has a lot of m4 files, otherwise there might
+# be an "Argument list too long" error when it is built in a long/deep
+# directory.
+acpaths = "-I ./m4"
 
-# Follow debian/rules
-do_install_append(){
-	install -d ${D}${sysconfdir}
-	install -m 755 ${S}/debian/rmt.sh ${D}${sysconfdir}/rmt
-	mv ${D}${libexecdir}/rmt ${D}${sbindir}/rmt-tar
-	install -m 755 ${S}/debian/tarcat ${D}${sbindir}/tarcat
-
-	mv ${D}${sbindir}/backup ${D}${sbindir}/tar-backup
-	mv ${D}${sbindir}/restore ${D}${sbindir}/tar-restore
-
-	mkdir -p ${D}${libdir}/mime/packages
-	install -m 0644 ${S}/debian/tar.mime ${D}${libdir}/mime/packages/tar
+do_install_append () {
+	ln -s tar ${D}${bindir}/gtar
 }
 
-PACKAGES =+ "${PN}-scripts"
+do_install_append_class-target() {
+	if [ "${base_bindir}" != "${bindir}" ]; then
+		install -d ${D}${base_bindir}
+		mv ${D}${bindir}/tar ${D}${base_bindir}/tar
+		mv ${D}${bindir}/gtar ${D}${base_bindir}/gtar
+		rmdir ${D}${bindir}/
+	fi
+}
 
-FILES_${PN}-scripts = " \
-	${libexecdir}/backup.sh \
-	${libexecdir}/dump-remind \
-	${sbindir}/tar-backup \
-	${sbindir}/tar-restore \
-"
-FILES_${PN} += "${libdir}/mime/packages"
+do_install_append_libc-musl() {
+	rm -f ${D}${libdir}/charset.alias
+	rmdir ${D}${libdir}
+}
 
-# Add update-alternatives definitions
-ALTERNATIVE_PRIORITY="100"
+PACKAGES =+ "${PN}-rmt"
+
+FILES_${PN}-rmt = "${base_sbindir}/rmt*"
+
+inherit update-alternatives
+
+ALTERNATIVE_PRIORITY = "100"
+
 ALTERNATIVE_${PN} = "tar"
-ALTERNATIVE_LINK_NAME[tar] = "${base_bindir}/tar"
+ALTERNATIVE_${PN}-rmt = "rmt"
+ALTERNATIVE_${PN}_class-nativesdk = ""
+ALTERNATIVE_${PN}-rmt_class-nativesdk = ""
 
-BBCLASSEXTEND = "nativesdk"
+ALTERNATIVE_LINK_NAME[tar] = "${base_bindir}/tar"
+ALTERNATIVE_LINK_NAME[rmt] = "${base_sbindir}/rmt"
+
+PROVIDES_append_class-native = " tar-replacement-native"
+NATIVE_PACKAGE_PATH_SUFFIX = "/${PN}"
+
+BBCLASSEXTEND = "native nativesdk"

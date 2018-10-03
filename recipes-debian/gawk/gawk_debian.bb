@@ -1,40 +1,40 @@
 #
-# base recipe: meta/recipes-extended/gawk/gawk_4.0.2.bb
-# base branch: daisy
+# base recipe: meta/recipes-extended/gawk/gawk_4.2.1.bb
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 
-PR = "r0"
+SUMMARY = "GNU awk text processing utility"
+DESCRIPTION = "The GNU version of awk, a text processing utility. \
+Awk interprets a special-purpose programming language to do \
+quick and easy text pattern matching and reformatting jobs."
+HOMEPAGE = "https://www.gnu.org/software/gawk/"
 
 inherit debian-package
-PV = "4.1.1+dfsg"
+require recipes-debian/sources/gawk.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS += "readline"
 
-# 
-# remove-doc.patch:
-# Remove "doc" dir from build targets
-# since gawk.texi doesn't existed.
-# See patch file for more detail.
-#
-# run-ptest:
-# Patch file from reused recipes
+# run-ptest: test script for ptest
 SRC_URI += " \
-file://remove-doc.patch \
 file://run-ptest \
 "
 
+# source format is 3.0 (quilt) but there is no debian/patches
+DEBIAN_QUILT_PATCHES = ""
+
 inherit autotools gettext update-alternatives
 
-EXTRA_OECONF += "--disable-rpath --libexecdir=${libdir}"
-
-# Touch empty gawk.texi file according to debian/rules.
-do_configure_prepend() {
-	# see debian/rules and comments in remove-doc.patch
+do_configure() {
+	# Debian removed *.texi out of source code.
+	# Touch them to pass compiling.
+	oe_runconf
 	touch --date="Jan 01 2000" \
 		${S}/doc/gawktexi.in ${S}/doc/gawk.texi ${S}/doc/gawkinet.texi \
+		${S}/doc/gawkworkflow.texi ${S}/doc/gawkworkflow.info \
 		${S}/doc/gawk.info ${S}/doc/gawkinet.info ${S}/doc/sidebar.awk
 }
 
@@ -46,11 +46,7 @@ do_install_append() {
 	rm -rf ${D}${datadir}/info
 }
 
-FILES_${PN} += " \
-	${datadir}/awk \
-	${libdir}/awk \
-"
-FILES_${PN}-dbg += "${libdir}/awk/.debug"
+FILES_${PN} += "${datadir}/awk"
 
 ALTERNATIVE_${PN} = "awk"
 ALTERNATIVE_TARGET[awk] = "${bindir}/gawk"
@@ -63,4 +59,8 @@ do_install_ptest() {
 	for i in `grep -vE "@|^$|#|Gt-dummy" ${S}/test/Maketests |awk -F: '{print $1}'` Maketests; \
 		do cp ${S}/test/$i* ${D}${PTEST_PATH}/test; \
 	done
+	sed -i -e 's|/usr/local/bin|${bindir}|g' \
+	    -e 's|#!${base_bindir}/awk|#!${bindir}/awk|g' ${D}${PTEST_PATH}/test/*.awk
 }
+
+BBCLASSEXTEND = "native nativesdk"

@@ -1,77 +1,54 @@
 #
-# base recipe: meta/recipes-devtools/bison/bison_2.7.1.bb
-# base branch: daisy
+# base recipe: meta/recipes-devtools/bison/bison_3.0.4.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
-PR = "r1"
+SUMMARY = "YACC-compatible parser generator"
+DESCRIPTION = "Bison is a general-purpose parser generator that converts a\n\
+grammar description for an LALR(1) context-free grammar into a C\n\
+program to parse that grammar.  Once you are proficient with Bison, you\n\
+may use it to develop a wide range of language parsers, from those used\n\
+in simple desk calculators to complex programming languages.\n\
+.\n\
+Bison is upward compatible with Yacc: all properly-written Yacc\n\
+grammars ought to work with Bison with no change.  Anyone familiar with\n\
+Yacc should be able to use Bison with little trouble.  Documentation of\n\
+the program is in the bison-doc package."
+HOMEPAGE = "http://www.gnu.org/software/bison/"
 
 inherit debian-package
-PV = "3.0.2.dfsg"
+require recipes-debian/sources/bison.inc
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
 "
 
-DEPENDS = "bison-native flex-native"
-DEPENDS_class-native = "gettext-minimal-native"
 
-# Exclude following patches because they were tried to apply on 
-# doc/Makefile.am but there is no such file:
-# fix_cross_manpage_building.patch
-# dont-depend-on-help2man.patch
 # FIXME: file doc/bison.texi is missing, temporarily build without document
 # and examples for minimal implementation with
 # remove-document-examples-target.patch
-
-BASE_SRC_URI = " \
-	file://m4.patch \
+SRC_URI += "\
+	file://0001-src-local.mk-fix-parallel-issue.patch \
 	file://remove-document-examples-target.patch \
 "
 
-SRC_URI_class-native = " \
-	${DEBIAN_SRC_URI} \
-	${BASE_SRC_URI} \
-"
-
-SRC_URI += " \
-	${BASE_SRC_URI} \
-"
-
-# avoid a parallel build problem in src/yacc
-PARALLEL_MAKE = ""
+DEPENDS = "bison-native flex-native"
 
 # No point in hardcoding path to m4, just use PATH
 EXTRA_OECONF += "M4=m4"
 
 LDFLAGS_prepend_libc-uclibc = " -lrt "
 
-inherit autotools gettext update-alternatives
+inherit autotools gettext texinfo
+
+# The automatic m4 path detection gets confused, so force the right value
 acpaths = "-I ${S}/m4"
-
-do_configure_prepend(){
-	# Fix error gettext infrastructure mismatch
-	cp ${STAGING_DATADIR_NATIVE}/gettext/po/Makefile.in.in ${S}/runtime-po/
-}
-
-# Follow debian, rename yacc to bison.yacc
-do_install_append_class-target(){
-	mv ${D}${bindir}/yacc ${D}${bindir}/bison.yacc
-}
-
-do_install_append_class-nativesdk(){
-	mv ${D}${bindir}/yacc ${D}${bindir}/bison.yacc
-}
 
 do_install_append_class-native() {
 	create_wrapper ${D}/${bindir}/bison \
 		BISON_PKGDATADIR=${STAGING_DATADIR_NATIVE}/bison
 }
-
-# Follow debian/bison.postinst
-ALTERNATIVE_${PN} = "yacc"
-ALTERNATIVE_PRIORITY = "100"
-ALTERNATIVE_LINK_NAME[yacc] = "${bindir}/yacc"
-ALTERNATIVE_TARGET[yacc] = "${bindir}/bison.yacc"
 
 BBCLASSEXTEND = "native nativesdk"

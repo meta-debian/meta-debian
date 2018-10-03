@@ -1,32 +1,63 @@
 #
-# base recipe: meta/recipes-core/zlib/zlib_1.2.8.bb
-# base branch: daisy
+# base recipe: meta/recipes-core/zlib/zlib_1.2.11.bb
+# base branch: master
+# base commit: d886fa118c930d0e551f2a0ed02b35d08617f746
 #
 
-PR = "r0"
+SUMMARY = "compression library"
+DESCRIPTION = "zlib is a library implementing the deflate compression method found \
+ in gzip and PKZIP.  This package includes the development support \
+ files."
+HOMEPAGE = "http://zlib.net/"
 
 inherit debian-package
-PV = "1.2.8.dfsg"
+require recipes-debian/sources/zlib.inc
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \
-file://zlib.h;beginline=4;endline=23;md5=fde612df1e5933c428b73844a0c494fd \
+file://zlib.h;beginline=4;endline=23;md5=627e6ecababe008a45c70e318ae7014e \
 "
 
-# prevent make install-libs from creating invalid cache
-SRC_URI += "file://remove.ldconfig.call.patch"
+SRC_URI += "file://remove.ldconfig.call.patch \
+            file://Makefile-runtests.patch \
+            file://ldflags-tests.patch \
+            file://run-ptest \
+"
+FILESEXTRAPATHS =. "${FILE_DIRNAME}/files:${COREBASE}/meta/recipes-core/zlib/zlib-1.2.11:"
 
-# follow configure-stamp rule in debian/rules
+CFLAGS += "-D_REENTRANT"
+
+RDEPENDS_${PN}-ptest += "make"
+
+inherit ptest
+
 do_configure() {
-	./configure --shared --prefix=${prefix} --libdir=${libdir}
+	uname=GNU ./configure --prefix=${prefix} --shared --libdir=${libdir}
 }
 
-do_compile () {
-	oe_runmake
+do_compile() {
+	oe_runmake shared
+}
+
+do_compile_ptest() {
+	oe_runmake test
 }
 
 do_install() {
 	oe_runmake DESTDIR=${D} install
+}
+
+do_install_ptest() {
+	install ${B}/Makefile   ${D}${PTEST_PATH}
+	install ${B}/example    ${D}${PTEST_PATH}
+	install ${B}/minigzip   ${D}${PTEST_PATH}
+	install ${B}/examplesh  ${D}${PTEST_PATH}
+	install ${B}/minigzipsh ${D}${PTEST_PATH}
+
+	# Remove buildhost references...
+	sed -i -e "s,--sysroot=${STAGING_DIR_TARGET},,g" \
+            -e 's|${DEBUG_PREFIX_MAP}||g' \
+            ${D}${PTEST_PATH}/Makefile
 }
 
 # move run-time libraries to ${libdir}
@@ -36,35 +67,9 @@ do_install_append_class-target() {
 	then
 		mkdir -p ${D}/${base_libdir}
 		mv ${D}/${libdir}/libz.so.* ${D}/${base_libdir}
-		tmp=`readlink ${D}/${libdir}/libz.so`
-		ln -sf ../../${base_libdir}/$tmp ${D}/${libdir}/libz.so
+		 libname=`readlink ${D}/${libdir}/libz.so`
+		 ln -sf ${@oe.path.relative("${libdir}", "${base_libdir}")}/$libname ${D}/${libdir}/libz.so
 	fi
 }
 
-# In Debian, binary package name of zlib is "${PN}1g"
-DEBIANNAME_${PN}-dbg       = "${PN}1g-dbg"
-DEBIANNAME_${PN}-staticdev = "${PN}1g-staticdev"
-DEBIANNAME_${PN}-dev       = "${PN}1g-dev"
-DEBIANNAME_${PN}-doc       = "${PN}1g-doc"
-DEBIANNAME_${PN}           = "${PN}1g"
-
 BBCLASSEXTEND = "native nativesdk"
-
-inherit ptest
-
-SRC_URI += " \
-file://Makefile-runtests.patch \
-file://run-ptest \
-"
-
-do_compile_ptest() {
-	oe_runmake static shared
-}
-
-do_install_ptest() {
-	install ${B}/Makefile   ${D}${PTEST_PATH}
-	install ${B}/example    ${D}${PTEST_PATH}
-	install ${B}/minigzip   ${D}${PTEST_PATH}
-	install ${B}/examplesh  ${D}${PTEST_PATH}
-	install ${B}/minigzipsh ${D}${PTEST_PATH}
-}

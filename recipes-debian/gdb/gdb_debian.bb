@@ -1,43 +1,35 @@
 #
-# Base recipe: recipes-devtools/gdb/gdb_7.6.2.bb
-# Base branch: daisy
+# base recipe: meta/recipes-devtools/gdb/gdb_8.1.bb
+# base branch: master
+# base commit: b0f2f690a3513e4c9fa30fee1b8d7ac2d7140657
 #
 
-require gdb-common.inc
+require recipes-devtools/gdb/gdb.inc
+require gdb-8.1.inc
 
-inherit gettext
+inherit python3-dir
 
-# cross-canadian must not see this
-PACKAGES =+ "gdbserver"
-FILES_gdbserver = "${bindir}/gdbserver"
-
-inherit python-dir
-
-PACKAGECONFIG ??= ""
-PACKAGECONFIG[python] = "--with-python=${WORKDIR}/python,--without-python,python"
-PACKAGECONFIG[babeltrace] = "--with-babeltrace,--without-babeltrace,babeltrace"
+EXTRA_OEMAKE_append_libc-musl = "\
+                                 gt_cv_func_gnugettext1_libc=yes \
+                                 gt_cv_func_gnugettext2_libc=yes \
+                                 gl_cv_func_working_strerror=yes \
+                                 gl_cv_func_strerror_0_works=yes \
+                                 gl_cv_func_gettimeofday_clobber=no \
+                                "
 
 do_configure_prepend() {
-        if [ -n "${@bb.utils.contains('PACKAGECONFIG', 'python', 'python', '', d)}" ]; then
-                cat > ${WORKDIR}/python << EOF
+	if [ "${@bb.utils.filter('PACKAGECONFIG', 'python', d)}" ]; then
+		cat > ${WORKDIR}/python << EOF
 #!/bin/sh
 case "\$2" in
-        --includes) echo "-I${STAGING_INCDIR}/${PYTHON_DIR}/" ;;
-        --ldflags) echo "-Wl,-rpath-link,${STAGING_LIBDIR}/.. -Wl,-rpath,${libdir}/.. -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}" ;;
-        --exec-prefix) echo "${exec_prefix}" ;;
-        *) exit 1 ;;
+	--includes) echo "-I${STAGING_INCDIR}/${PYTHON_DIR}${PYTHON_ABI}/" ;;
+	--ldflags) echo "-Wl,-rpath-link,${STAGING_LIBDIR}/.. -Wl,-rpath,${libdir}/.. -lpthread -ldl -lutil -lm -lpython${PYTHON_BASEVERSION}${PYTHON_ABI}" ;;
+	--exec-prefix) echo "${exec_prefix}" ;;
+	*) exit 1 ;;
 esac
 exit 0
 EOF
-                chmod +x ${WORKDIR}/python
-        fi
+		chmod +x ${WORKDIR}/python
+	fi
 }
-
-do_install_append() {
-	# Install init script follow debian
-	install -d ${D}${sysconfdir}/${BPN}
-	install -m 0644 ${S}/debian/gdbinit ${D}${sysconfdir}/${BPN}
-	install -m 0755 ${S}/gdb/contrib/gdb-add-index.sh \
-			${D}${bindir}/gdb-add-index
-	install -m 0755 ${S}/debian/gdbtui ${D}${bindir}
-}
+CFLAGS_append_libc-musl = " -Drpl_gettimeofday=gettimeofday"

@@ -1,77 +1,71 @@
-PR = "r0"
+#
+# base recipe: recipes-extended/procps/procps_3.3.14.bb
+# base branch: master
+# base commit: 5fef9fcd58e88f296606ae6780904345014e4d29
+#
+
+SUMMARY = "System and process monitoring utilities"
+DESCRIPTION = "Procps contains a set of system utilities that provide system information about processes using \
+the /proc filesystem. The package includes the programs ps, top, vmstat, w, kill, and skill."
+HOMEPAGE = "https://gitlab.com/procps-ng/procps"
 
 inherit debian-package
-PV = "3.3.9"
+require recipes-debian/sources/procps.inc
 
-LICENSE = "GPLv2+ & LGPLv2+"
+LICENSE = "GPLv2+ & LGPLv2+ & LGPLv2.1+"
 LIC_FILES_CHKSUM=" \
 	file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 	file://COPYING.LIB;md5=4cf66a4984120007c9881cc871cf49db \
+	file://w.c;endline=24;md5=f5eb135dd206abcd8c8a3e49e1397ac6 \
 "
+
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/procps/procps"
+SRC_URI += "file://sysctl.conf"
 
 DEPENDS = "ncurses"
 
-# init.d/procps require lsb-base
-RDEPENDS_${PN} += "lsb-base"
+inherit autotools-brokensep gettext pkgconfig update-alternatives
 
-inherit autotools gettext pkgconfig update-alternatives
-
-# Configure options follow debian/rules.
-# Reconfigure path of bindir, sbindir for correct install dirs
-# follow Debian and procps Makefile:
-# 	bindir is set to /bin, include: kill, ps
-#	sbindir is set to /sbin, include: sysctl
-#	usrbin_execdir is set to /usr/bin, include other commands.
 EXTRA_OECONF = " \
-	--enable-watch8bit \
-	--enable-w-from \
 	--enable-skill \
-	--disable-pidof \
-	--prefix=${prefix} \
-	--exec_prefix=${base_prefix} \
-	--bindir=${base_bindir} \
-	--sbindir=${base_sbindir} \
+	--disable-modern-top \
 "
 
-CPPFLAGS += "-I${S}"
-
-# Install and link file base on debian/rules
 do_install_append () {
-	# Rename w as there are two of them
-	mv ${D}${bindir}/w ${D}${bindir}/w.procps
-	mv ${D}${mandir}/man1/w.1 ${D}${mandir}/man1/w.procps.1
+	install -d ${D}${base_bindir}
+	[ "${bindir}" != "${base_bindir}" ] && for i in ${base_bindir_progs}; do mv ${D}${bindir}/$i ${D}${base_bindir}/$i; done
+	install -d ${D}${base_sbindir}
+	[ "${sbindir}" != "${base_sbindir}" ] && for i in ${base_sbindir_progs}; do mv ${D}${sbindir}/$i ${D}${base_sbindir}/$i; done
+	if [ "${base_sbindir}" != "${sbindir}" ]; then
+		rmdir ${D}${sbindir}
+	fi
 
 	install -d ${D}${sysconfdir}
-	install -m 0644 ${S}/debian/sysctl.conf ${D}${sysconfdir}/sysctl.conf
-
-	install -d ${D}${sysconfdir}/init.d
-	install -m 0755 ${S}/debian/procps.init.linux ${D}${sysconfdir}/init.d/procps
-
-	# Correct library and link location follow Debian
-	if [ ${base_libdir} != ${libdir} ]; then
-		install -d ${D}${base_libdir}
-		mv ${D}${libdir}/libprocps${SOLIBS} ${D}${base_libdir}/
-		rm ${D}${libdir}/libprocps${SOLIBSDEV}
-		ln -s ../../${base_libdir}/libprocps.so.3 ${D}${libdir}/libprocps${SOLIBSDEV}
+	install -m 0644 ${WORKDIR}/sysctl.conf ${D}${sysconfdir}/sysctl.conf
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+		install -d ${D}${sysconfdir}/sysctl.d
+		ln -sf ../sysctl.conf ${D}${sysconfdir}/sysctl.d/99-sysctl.conf
 	fi
 }
 
 CONFFILES_${PN} = "${sysconfdir}/sysctl.conf"
 
-PACKAGES =+ " lib${PN}"
-FILES_lib${PN} = "${base_libdir}/*"
-DEBIANNAME_lib${PN} = "lib${PN}3"
+bindir_progs = "free pkill pmap pgrep pwdx skill snice top uptime"
+base_bindir_progs += "kill pidof ps watch"
+base_sbindir_progs += "sysctl"
 
-ALTERNATIVE_${PN} = "w"
-ALTERNATIVE_PRIORITY[w] = "50"
-ALTERNATIVE_LINK_NAME[w] = "${bindir}/w"
-ALTERNATIVE_TARGET[w] = "${bindir}/w.${DPN}"
+ALTERNATIVE_PRIORITY = "200"
 
-# Add update-alternatives definitions to avoid conflict with Debian
-ALTERNATIVE_${PN} += "kill ps sysctl"
-ALTERNATIVE_PRIORITY[kill] = "100"
-ALTERNATIVE_LINK_NAME[kill] = "${base_bindir}/kill"
-ALTERNATIVE_PRIORITY[ps] = "100"
-ALTERNATIVE_LINK_NAME[ps] = "${base_bindir}/ps"
-ALTERNATIVE_PRIORITY[sysctl] = "100"
-ALTERNATIVE_LINK_NAME[sysctl] = "${base_sbindir}/sysctl"
+ALTERNATIVE_${PN} = "${bindir_progs} ${base_bindir_progs} ${base_sbindir_progs}"
+
+ALTERNATIVE_${PN}-doc = "kill.1 uptime.1"
+ALTERNATIVE_LINK_NAME[kill.1] = "${mandir}/man1/kill.1"
+ALTERNATIVE_LINK_NAME[uptime.1] = "${mandir}/man1/uptime.1"
+
+python __anonymous() {
+    for prog in d.getVar('base_bindir_progs', True).split():
+        d.setVarFlag('ALTERNATIVE_LINK_NAME', prog, '%s/%s' % (d.getVar('base_bindir', True), prog))
+
+    for prog in d.getVar('base_sbindir_progs', True).split():
+        d.setVarFlag('ALTERNATIVE_LINK_NAME', prog, '%s/%s' % (d.getVar('base_sbindir', True), prog))
+}

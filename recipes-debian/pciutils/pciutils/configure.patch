@@ -1,0 +1,88 @@
+#
+# base patch: meta/recipes-bsp/pciutils/pciutils/configure.patch
+# base branch: master
+# base commit: 5fef9fcd58e88f296606ae6780904345014e4d29
+#
+# This patch has been modified to work with Debian source code
+#
+# This patch:
+# * ensures we link correctly
+# * allows us to optionally pass target information to configure rather than using uname
+# * select linux as the platform in most cases we care about
+# 
+# This is a merge of various tweaks to allow us to build pciutils including 
+# work from:
+# 
+# 7/30/2010 - Qing He <qing.he@intel.com>
+# 1/22/2012 - Shane Wang <shane.wang@intel.com>
+# Ionut Radu <ionutx.radu@intel.com>
+# 2017/6/15 - RP - Cleanups and merging patches
+# 
+# Upstream-Status: Inappropriate [embedded specific]
+
+Index: pciutils-3.5.2/Makefile
+===================================================================
+--- pciutils-3.5.2.orig/Makefile
++++ pciutils-3.5.2/Makefile
+@@ -96,7 +96,7 @@ example: example.o lib/$(PCILIB)
+ example.o: example.c $(PCIINC)
+ 
+ %: %.o
+-	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
++	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LIB_LDLIBS) $(LDLIBS) -o $@
+ 
+ lspci-udeb: lspci.o
+ 	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) $(WITH_LIBS) -o $@
+Index: pciutils-3.5.2/lib/configure
+===================================================================
+--- pciutils-3.5.2.orig/lib/configure
++++ pciutils-3.5.2/lib/configure
+@@ -9,6 +9,10 @@ echo_n() {
+ 	fi
+ }
+ 
++VERSION=$1
++IDSDIR=$2
++DNS=yes
++
+ if [ -z "$VERSION" -o -z "$IDSDIR" ] ; then
+ 	echo >&2 "Please run the configure script from the top-level Makefile"
+ 	exit 1
+@@ -16,8 +20,8 @@ fi
+ 
+ echo_n "Configuring libpci for your system..."
+ if [ -z "$HOST" ] ; then
+-	sys=`uname -s`
+-	rel=`uname -r`
++	sys=${3:-`uname -s`}
++	rel=
+ 	realsys="$sys"
+ 	if [ "$sys" = "AIX" -a -x /usr/bin/oslevel -a -x /usr/sbin/lsattr ]
+ 	then
+@@ -25,7 +29,7 @@ if [ -z "$HOST" ] ; then
+ 		proc=`/usr/sbin/lsdev -C -c processor -S available -F name | head -1`
+ 		cpu=`/usr/sbin/lsattr -F value -l $proc -a type | sed 's/_.*//'`
+ 	else
+-		cpu=`uname -m | sed 's/^i.86$/i386/;s/^sun4u$/sparc64/;s/^i86pc$/i386/;s/^BePC$/i386/;s/^BeMac$/powerpc/;s/^BeBox$/powerpc/'`
++		cpu=${4:-`uname -m | sed 's/^i.86$/i386/;s/^sun4u$/sparc64/;s/^i86pc$/i386/;s/^BePC$/i386/;s/^BeMac$/powerpc/;s/^BeBox$/powerpc/'`}
+ 	fi
+ 	if [ "$sys" = "GNU/kFreeBSD" -o "$sys" = "DragonFly" ]
+ 	then
+@@ -35,7 +39,7 @@ if [ -z "$HOST" ] ; then
+ 	then
+ 		sys=cygwin
+ 	fi
+-	HOST=${3:-$cpu-$sys}
++	HOST=$cpu-$sys
+ fi
+ [ -n "$RELEASE" ] && rel="${RELEASE}"
+ # CAVEAT: tr on Solaris is a bit weird and the extra [] is otherwise harmless.
+@@ -44,6 +48,8 @@ cpu=`echo $host | sed 's/^\([^-]*\)-\([^
+ sys=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+ echo " $host $rel $cpu $sys"
+ 
++{ echo "$host" | grep linux; } && sys=linux
++
+ c=config.h
+ m=config.mk
+ echo >$c '#define PCI_CONFIG_H'

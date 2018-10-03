@@ -1,0 +1,72 @@
+# This patch has been modified to work with Debian source code.
+#
+# base patch: meta/recipes-devtools/binutils/binutils/0002-binutils-cross-Do-not-generate-linker-script-directo.patch
+# base branch: master
+# base commit: 53dfa673d78216f852a47bdb48392ee213e3e1cd
+#
+
+# From 58ddf38fa53abb48b69dd76e398c73451ad1a5eb Mon Sep 17 00:00:00 2001
+# From: Khem Raj <raj.khem@gmail.com>
+# Date: Mon, 6 Mar 2017 23:37:05 -0800
+# Subject: [PATCH 02/15] binutils-cross: Do not generate linker script
+#  directories
+#
+# We don't place target libraries within ${exec_prefix}, we'd always place these
+# within the target sysroot within the standard library directories. Worse, the
+# append_to_lib_path code prefixes these paths with the sysroot which makes even
+# less sense.
+#
+# These directories therefore don't make sense in our case and mean we have to
+# relocate all the linker scripts if they're present. Dropping them
+# gives a reasonable performance improvement/simplification.
+#
+# Upstream-Status: Inappropriate
+#
+# RP 2017/01/30
+#
+# Signed-off-by: Khem Raj <raj.khem@gmail.com>
+# ---
+#  ld/genscripts.sh | 23 -----------------------
+#  1 file changed, 23 deletions(-)
+
+--- a/ld/genscripts.sh
++++ b/ld/genscripts.sh
+@@ -287,38 +287,6 @@ esac
+ lib_path1=
+ lib_path2=
+ 
+-# Always search $(tooldir)/lib, aka /usr/local/TARGET/lib when native
+-# except when LIBPATH=":".
+-if [ "${LIB_PATH}" != ":" ] ; then
+-  libs=
+-  if [ "x${TOOL_LIB}" = "x" ] ; then
+-    if [ "x${NATIVE}" = "xyes" ] ; then
+-      libs="${exec_prefix}/${target_alias}/lib"
+-    fi
+-  else
+-    # For multilib'ed targets, ensure both ${target_alias}/lib${LIBPATH_SUFFIX}
+-    # and ${TOOL_LIB}/lib${LIBPATH_SUFFIX} are in the default search path,
+-    # because 64bit libraries may be in both places, depending on
+-    # cross-development setup method (e.g.: /usr/s390x-linux/lib64
+-    # vs. /usr/s390-linux/lib64)
+-    for libpath_suffix in ${LIBPATH_SUFFIX}; do
+-      case "${NATIVE}:${libpath_suffix}:${TOOL_LIB}" in
+-	:* | *::* | *:*:*${libpath_suffix}) ;;
+-	*) libs="${exec_prefix}/${target_alias}/lib${libpath_suffix}" ;;
+-	*)
+-	  # FIXME:
+-	  # For the binutils-multiarch build on x86_64-linux-gnu configured
+-          # with --enable-targets=powerpc-linux-gnu, /usr/x86_64-linux-gnu/lib64
+-          # is added instead of /usr/powerpc64-linux-gnu/lib64. However this
+-	  # probably wanted for the "default" emulation. How to detect that?
+-	  libs="${exec_prefix}/${target_alias}/lib${libpath_suffix}" ;;
+-      esac
+-    done
+-    libs="${exec_prefix}/${TOOL_LIB}/lib ${libs}"
+-  fi
+-  append_to_lib_path ${libs}
+-fi
+-
+ case :${lib_path1}:${lib_path2}: in
+   *:: | ::*) LIB_PATH=${LIB_PATH}:${lib_path1}${lib_path2} ;;
+   *) LIB_PATH=${LIB_PATH}:${lib_path1}:${lib_path2} ;;

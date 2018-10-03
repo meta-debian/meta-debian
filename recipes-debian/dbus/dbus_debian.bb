@@ -1,37 +1,40 @@
 #
-# base recipe: meta/recipes-core/dbus/dbus.inc
-# base branch: daisy
+# base recipe: meta/recipes-core/dbus/dbus_1.12.8.bb
+# base branch: master
+# base commit: a5d1288804e517dee113cb9302149541f825d316
 #
 
 SUMMARY = "D-Bus message bus"
 DESCRIPTION = "D-Bus is a message bus system, a simple way for applications to talk to one another. In addition to interprocess communication, D-Bus helps coordinate process lifecycle; it makes it simple and reliable to code a \"single instance\" application or daemon, and to launch applications and daemons on demand when their services are needed."
 HOMEPAGE = "http://dbus.freedesktop.org"
 
-PR = "r1"
 inherit debian-package
-PV = "1.8.22"
+require recipes-debian/sources/dbus.inc
 
 LICENSE = "AFL-2.1 | GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=10dded3b58148f3f1fd804b26354af3e \
                     file://dbus/dbus.h;beginline=6;endline=20;md5=7755c9d7abccd5dbd25a6a974538bb3c"
-DEPENDS = "expat virtual/libintl"
 
-# init.d/dbus require lsb-base
-RDEPENDS_${PN}_class-target += "lsb-base"
+DEPENDS = "expat virtual/libintl autoconf-archive"
 
 RDEPENDS_dbus_class-native = ""
 RDEPENDS_dbus_class-nativesdk = ""
+
 PACKAGES += "${@bb.utils.contains('PTEST_ENABLED', '1', 'dbus-ptest', '', d)}"
 ALLOW_EMPTY_dbus-ptest = "1"
 RDEPENDS_dbus-ptest_class-target = "dbus-test-ptest"
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/dbus/dbus"
 SRC_URI += " \
-           file://dbus/tmpdir.patch \
-           file://dbus/os-test.patch \
-           file://dbus/clear-guid_from_server-if-send_negotiate_unix_f.patch \
-"
+            file://tmpdir.patch \
+            file://dbus-1.init \
+            file://clear-guid_from_server-if-send_negotiate_unix_f.patch \
+            "
 
-inherit useradd autotools pkgconfig gettext
+inherit useradd autotools pkgconfig gettext update-rc.d
+
+INITSCRIPT_NAME = "dbus-1"
+INITSCRIPT_PARAMS = "start 02 5 3 2 . stop 20 0 1 6 ."
 
 python __anonymous() {
     if not bb.utils.contains('DISTRO_FEATURES', 'sysvinit', True, False, d):
@@ -45,9 +48,6 @@ USERADD_PARAM_${PN} = "--system --home ${localstatedir}/lib/dbus \
                        --user-group messagebus"
 
 CONFFILES_${PN} = "${sysconfdir}/dbus-1/system.conf ${sysconfdir}/dbus-1/session.conf"
-
-DEBIANNAME_${PN}-dbg = "${PN}-1-dbg"
-DEBIANNAME_${PN}-doc = "${PN}-1-doc"
 
 PACKAGES =+ "${PN}-lib"
 
@@ -65,94 +65,78 @@ FILES_${PN} = "${bindir}/dbus-daemon* \
                ${bindir}/dbus-monitor \
                ${bindir}/dbus-launch \
                ${bindir}/dbus-run-session \
+               ${bindir}/dbus-update-activation-environment \
                ${libexecdir}/dbus* \
                ${sysconfdir} \
                ${localstatedir} \
                ${datadir}/dbus-1/services \
                ${datadir}/dbus-1/system-services \
-               ${systemd_unitdir}/system/"
-FILES_${PN}-lib = "${base_libdir}/lib*.so.*"
+               ${datadir}/dbus-1/session.d \
+               ${datadir}/dbus-1/session.conf \
+               ${datadir}/dbus-1/system.d \
+               ${datadir}/dbus-1/system.conf \
+               ${datadir}/xml/dbus-1 \
+               ${systemd_system_unitdir} \
+               ${systemd_user_unitdir} \
+               ${nonarch_libdir}/sysusers.d/dbus.conf \
+               ${nonarch_libdir}/tmpfiles.d/dbus.conf \
+"
+FILES_${PN}-lib = "${libdir}/lib*.so.*"
 RRECOMMENDS_${PN}-lib = "${PN}"
-FILES_${PN}-dev += "${libdir}/dbus-1.0/include ${bindir}/dbus-glib-tool"
+FILES_${PN}-dev += "${libdir}/dbus-1.0/include ${libdir}/cmake/DBus1 ${bindir}/dbus-test-tool"
 
+PACKAGE_WRITE_DEPS += "${@bb.utils.contains('DISTRO_FEATURES','systemd sysvinit','systemd-systemctl-native','',d)}"
 pkg_postinst_dbus() {
 	# If both systemd and sysvinit are enabled, mask the dbus-1 init script
-        if ${@bb.utils.contains('DISTRO_FEATURES','systemd sysvinit','true','false',d)}; then
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd sysvinit','true','false',d)}; then
 		if [ -n "$D" ]; then
 			OPTS="--root=$D"
 		fi
 		systemctl $OPTS mask dbus-1.service
 	fi
+
+	if [ -z "$D" ] && [ -e /etc/init.d/populate-volatile.sh ] ; then
+		/etc/init.d/populate-volatile.sh update
+	fi
 }
 
-# --disable-selinux: Don't use selinux support
 EXTRA_OECONF = " \
 		--disable-tests \
 		--disable-xml-docs \
 		--disable-doxygen-docs \
 		--disable-libaudit \
-		--disable-systemd \
-		--without-dbus-glib \
-		--disable-selinux \
-"
+		--enable-largefile \
+                "
 
-# Follow debian/rules, libexecdir is ${prefix}/lib/dbus-1.0
-libexecdir = "${libdir}/dbus-1.0"
-
-PACKAGECONFIG ??= "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
-                   ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'systemd x11', d)}"
 PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
 
-# Would like to --enable-systemd but that's a circular build-dependency between
-# systemd<->dbus
-PACKAGECONFIG[systemd] = "--with-systemdsystemunitdir=${systemd_unitdir}/system/,--without-systemdsystemunitdir"
+PACKAGECONFIG[systemd] = "--enable-systemd --with-systemdsystemunitdir=${systemd_system_unitdir},--disable-systemd --without-systemdsystemunitdir,systemd"
 PACKAGECONFIG[x11] = "--with-x --enable-x11-autolaunch,--without-x --disable-x11-autolaunch, virtual/libx11 libsm"
+PACKAGECONFIG[user-session] = "--enable-user-session --with-systemduserunitdir=${systemd_user_unitdir},--disable-user-session"
 
 do_install() {
 	autotools_do_install
 
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'sysvinit', 'true', 'false', d)}; then
 		install -d ${D}${sysconfdir}/init.d
-		install -m 0755 ${S}/debian/dbus.init ${D}${sysconfdir}/init.d/dbus
+		sed 's:@bindir@:${bindir}:' < ${WORKDIR}/dbus-1.init >${WORKDIR}/dbus-1.init.sh
+		install -m 0755 ${WORKDIR}/dbus-1.init.sh ${D}${sysconfdir}/init.d/dbus-1
 	fi
 
 	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
 		for i in dbus.target.wants sockets.target.wants multi-user.target.wants; do \
-			install -d ${D}${systemd_unitdir}/system/$i; done
-		install -m 0644 ${B}/bus/dbus.service ${B}/bus/dbus.socket ${D}${systemd_unitdir}/system/
-		cd ${D}${systemd_unitdir}/system/dbus.target.wants/
-		ln -fs ../dbus.socket ${D}${systemd_unitdir}/system/dbus.target.wants/dbus.socket
-		ln -fs ../dbus.socket ${D}${systemd_unitdir}/system/sockets.target.wants/dbus.socket
-		ln -fs ../dbus.service ${D}${systemd_unitdir}/system/multi-user.target.wants/dbus.service
+			install -d ${D}${systemd_system_unitdir}/$i; done
+		install -m 0644 ${B}/bus/dbus.service ${B}/bus/dbus.socket ${D}${systemd_system_unitdir}
+		ln -fs ../dbus.socket ${D}${systemd_system_unitdir}/dbus.target.wants/dbus.socket
+		ln -fs ../dbus.socket ${D}${systemd_system_unitdir}/sockets.target.wants/dbus.socket
+		ln -fs ../dbus.service ${D}${systemd_system_unitdir}/multi-user.target.wants/dbus.service
 	fi
 
-	if ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'true', 'false', d)}; then
-		install -m 644 -D ${S}/debian/dbus-Xsession ${D}${sysconfdir}/X11/Xsession.d/75dbus_dbus-launch
-	fi
-
-	# On Debian, libdbus is installed in /lib instead of /usr/lib
-	if [ ${libdir} != ${base_libdir} ]; then
-		if [ ! -d ${D}${base_libdir} ]; then
-			install -d ${D}${base_libdir}
-		fi
-		mv ${D}${libdir}/lib*.so.* ${D}${base_libdir}
-		LINKLIB=$(basename $(readlink ${D}${libdir}/libdbus-1.so))
-		rm ${D}${libdir}/libdbus-1.so
-		ln -s ../../lib/${LINKLIB} ${D}${libdir}/libdbus-1.so
-	fi
-
-	install -d ${D}${sysconfdir}/default
-	install -m 0644 ${S}/debian/dbus.default ${D}${sysconfdir}/default/dbus
-	if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
-		install -d ${D}${sysconfdir}/tmpfiles.d
-		echo "d ${localstatedir}/run/dbus 0755 messagebus messagebus - none" \
-		     > ${D}${sysconfdir}/tmpfiles.d/99_dbus.conf
-	else
-		install -d ${D}${sysconfdir}/default/volatiles
-		echo "d messagebus messagebus 0755 ${localstatedir}/run/dbus none" \
-		     > ${D}${sysconfdir}/default/volatiles/99_dbus
-	fi
+	install -d ${D}${sysconfdir}/default/volatiles
+	echo "d messagebus messagebus 0755 ${localstatedir}/run/dbus none" \
+	     > ${D}${sysconfdir}/default/volatiles/99_dbus
 
 	mkdir -p ${D}${localstatedir}/lib/dbus
 
@@ -174,14 +158,6 @@ do_install() {
 do_install_class-native() {
 	autotools_do_install
 
-	# for dbus-glib-native introspection generation
-	install -d ${STAGING_DATADIR_NATIVE}/dbus/
-	# N.B. is below install actually required?
-	install -m 0644 bus/session.conf ${STAGING_DATADIR_NATIVE}/dbus/session.conf
-
-	# dbus-glib-native and dbus-glib need this xml file
-	./bus/dbus-daemon --introspect > ${STAGING_DATADIR_NATIVE}/dbus/dbus-bus-introspect.xml
-
 	# dbus-launch has no X support so lets not install it in case the host
 	# has a more featured and useful version
 	rm -f ${D}${bindir}/dbus-launch
@@ -196,16 +172,5 @@ do_install_class-nativesdk() {
 
 	# Remove /var/run to avoid QA error
 	rm -rf ${D}${localstatedir}/run
-
-	# On Debian, libdbus is installed in /lib instead of /usr/lib
-	if [ ${libdir} != ${base_libdir} ]; then
-		if [ ! -d ${D}${base_libdir} ]; then
-			install -d ${D}${base_libdir}
-		fi
-		mv ${D}${libdir}/lib*.so.* ${D}${base_libdir}
-		LINKLIB=$(basename $(readlink ${D}${libdir}/libdbus-1.so))
-		rm ${D}${libdir}/libdbus-1.so
-		ln -s ../../lib/${LINKLIB} ${D}${libdir}/libdbus-1.so
-	fi
 }
 BBCLASSEXTEND = "native nativesdk"

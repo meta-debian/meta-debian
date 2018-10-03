@@ -2,26 +2,36 @@
 # debian-package.bbclass
 #
 
-# Debian source package name
-DPN ?= "${BPN}"
+# debian-source.bbclass will generate DEBIAN_SRC_URI information
+# in recipes-debian/sources/<source name>.inc
 
-# default SRC_URI
-DEBIAN_GIT_BRANCH ?= "${DISTRO_CODENAME}-master"
-DEBIAN_SRC_URI ?= "\
-${DEBIAN_GIT_URI}/${DEBIAN_GIT_PREFIX}${DPN}.git;\
-protocol=${DEBIAN_GIT_PROTOCOL};\
-branch=${DEBIAN_GIT_BRANCH}\
-"
-
+DEBIAN_SRC_URI ?= ""
 SRC_URI = "${DEBIAN_SRC_URI}"
 
-# By default, always use latest version of the default branch
-SRCREV = "${AUTOREV}"
-
-DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
-
-# sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
+DEBIAN_UNPACK_DIR ?= "${WORKDIR}/${BP}"
 S = "${DEBIAN_UNPACK_DIR}"
+DPV ?= "${PV}"
+
+
+###############################################################################
+# do_debian_unpack_extra
+###############################################################################
+
+# Make "debian" sub folder be inside source code folder
+addtask debian_unpack_extra after do_unpack before do_debian_patch
+do_debian_unpack_extra() {
+	if [ -d ${WORKDIR}/debian ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
+		mv ${WORKDIR}/debian ${DEBIAN_UNPACK_DIR}/
+	elif [ -f ${WORKDIR}/${BPN}_${DPV}.diff ]; then
+		rm -rf ${DEBIAN_UNPACK_DIR}/debian
+		cd ${DEBIAN_UNPACK_DIR}
+		patch -p1 < ${WORKDIR}/${BPN}_${DPV}.diff
+	fi
+}
+
+EXPORT_FUNCTIONS do_debian_unpack_extra
+
 
 ###############################################################################
 # do_debian_patch
@@ -137,9 +147,9 @@ DEBIAN_PATCH_TYPE ?= ""
 
 addtask debian_patch after do_unpack before do_patch
 do_debian_patch[dirs] = "${DEBIAN_UNPACK_DIR}"
-do_debian_patch[depends] += "${@base_conditional(\
+do_debian_patch[depends] += "${@oe.utils.conditional(\
     'PN', 'quilt-native', '', 'quilt-native:do_populate_sysroot', d)}"
-do_debian_patch[depends] += "${@base_conditional(\
+do_debian_patch[depends] += "${@oe.utils.conditional(\
     'DEBIAN_PATCH_TYPE', 'dpatch', 'dpatch-native:do_populate_sysroot', '', d)}"
 do_debian_patch() {
 	if debian_check_source_format; then
@@ -185,15 +195,3 @@ do_debian_patch() {
 	esac
 }
 EXPORT_FUNCTIONS do_debian_patch
-
-###############################################################################
-# do_debian_fix_timestamp
-###############################################################################
-
-inherit debian-fix-timestamp
-
-###############################################################################
-# do_debian_verify_version
-###############################################################################
-
-inherit debian-verify-version
