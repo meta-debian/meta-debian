@@ -42,7 +42,7 @@ do_install() {
         install -m 0755 ${S}/debian/scripts/7za ${D}${bindir}
 }
 
-PACKAGES =+ "${PN} ${PN}-full"
+PACKAGES =+ "${PN}-full"
 FILES_${PN} += "${libdir}/p7zip/7zr"
 FILES_${PN}-full = "${libdir}/p7zip/7z \
                     ${libdir}/p7zip/7zCon.sfx \
