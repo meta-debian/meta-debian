@@ -40,7 +40,7 @@ do_install_append() {
 		${D}${sysconfdir}/default/ldirectord
 	
 	# install the Asterisk PBX ocf resource agent
-	cp -ax ${S}/debian/patches/ocf-asterisk \
+	cp -ax --no-preserve=ownership ${S}/debian/patches/ocf-asterisk \
 		${D}${libdir}/ocf/resource.d/heartbeat/asterisk
 
 	ln -sf ../../../..${datadir}/cluster \

@@ -30,7 +30,8 @@ PV = "3.5.6"
 #disable-build-doc_debian.patch:
 #	this patch to disable build doc, \
 #	to build doc folder need to docbook-xsl packages.
-SRC_URI += "file://disable-build-doc_debian.patch"
+SRC_URI += "file://disable-build-doc_debian.patch \
+            file://Fix-QA-ownership-files.patch"
 
 DEPENDS = "flex glib-2.0 util-linux"
 

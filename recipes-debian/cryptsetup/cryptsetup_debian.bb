@@ -109,7 +109,7 @@ do_install_append() {
 	ln -s ${rel_lib_prefix}${base_libdir}/${DEB_HOST_MULTIARCH}/$LINKLIB \
 		${D}${libdir}/${DEB_HOST_MULTIARCH}/libcryptsetup.so
 	rm -r ${D}${base_libdir}/pkgconfig
-	cp -a ${S}/lib/libcryptsetup.pc ${D}${libdir}/pkgconfig/
+	cp -a --no-preserve=ownership ${S}/lib/libcryptsetup.pc ${D}${libdir}/pkgconfig/
 
 	${CC} $CFLAGS $LDFLAGS -pedantic -std=c99 				\
 	${S}/debian/askpass.c -o ${S}/debian/askpass

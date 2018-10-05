@@ -22,6 +22,8 @@ PV = "0.11.0"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d84d659a35c666d23233e54503aaea51"
 
+SRC_URI += "file://Fix-QA-ownership-files.patch"
+
 inherit autotools-brokensep
 
 do_compile() {

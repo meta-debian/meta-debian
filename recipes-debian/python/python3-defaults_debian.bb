@@ -38,7 +38,7 @@ do_install() {
 	ln -sf python3.xpm ${D}${datadir}/pixmaps/idle3.xpm
 
 	install -d ${D}${datadir}/applications
-	cp -p ${S}/debian/idle3.desktop ${D}${datadir}/applications/
+	cp -p --no-preserve=ownership ${S}/debian/idle3.desktop ${D}${datadir}/applications/
 
 	# provide the python and python.1 defaults
 	install -d ${D}${mandir}/man1
@@ -49,7 +49,7 @@ do_install() {
 	ln -sf python${VER}m.1.gz \
 	        ${D}${mandir}/man1/python3m.1.gz
 
-	cp -p ${S}/debian/debian_defaults ${D}${datadir}/python3/
+	cp -p --no-preserve=ownership ${S}/debian/debian_defaults ${D}${datadir}/python3/
 
 	install -m 755 ${S}/debian/py3versions.py ${D}${datadir}/python3/
 	install -m 644 ${S}/debian/py3versions.1 ${D}${mandir}/man1/
@@ -93,7 +93,7 @@ do_install() {
 	ln -sf ../python${VER}/README.debug ${D}${docdir}/python3/README.debug
 
 	install -d ${D}${libdir}/valgrind
-	cp -p ${S}/debian/valgrind-python.supp ${D}${libdir}/valgrind/python3.supp
+	cp -p --no-preserve=ownership ${S}/debian/valgrind-python.supp ${D}${libdir}/valgrind/python3.supp
 
 	# provide the pyvenv and pyvenv.1 defaults
 	ln -sf pyvenv-${VER} ${D}${bindir}/pyvenv

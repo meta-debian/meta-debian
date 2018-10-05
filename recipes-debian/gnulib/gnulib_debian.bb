@@ -28,7 +28,7 @@ do_install() {
 	install -m 0755 ${S}/check-module ${D}${bindir}
 	install -m 0755 ${S}/modules/git-merge-changelog ${D}${bindir}
 
-	cp -a build-aux posix-modules config doc lib m4 modules top tests \
+	cp -a --no-preserve=ownership build-aux posix-modules config doc lib m4 modules top tests \
 		MODULES.html.sh Makefile ${D}${datadir}/gnulib
 	install -m 0755 ${S}/gnulib-tool ${D}${datadir}/gnulib
 	ln -s ../..${datadir}/gnulib/gnulib-tool ${D}${bindir}/gnulib-tool

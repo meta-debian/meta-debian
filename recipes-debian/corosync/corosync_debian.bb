@@ -56,7 +56,7 @@ do_install_append() {
 	install -m 0755 ${S}/debian/corosync.corosync-notifyd.init \
 	                ${D}${sysconfdir}/init.d/corosync-notifyd
 
-	cp -ax ${S}/debian/corosync.example-config \
+	cp -ax --no-preserve=ownership ${S}/debian/corosync.example-config \
 	       ${D}${sysconfdir}/corosync/corosync.conf
 	chmod 644 ${D}${libdir}/lcrso/*.lcrso
 }

@@ -58,8 +58,8 @@ do_install_append() {
 	find ${D}${libdir} -name "*.la" -delete
 
 	mkdir -p ${D}${datadir}/alsa/alsa.conf.d
-	cp -a ${S}/debian/pulse.conf ${D}${datadir}/alsa/alsa.conf.d
-	cp -a ${S}/debian/pulse-alsa.conf ${D}${datadir}/alsa
+	cp -a --no-preserve=ownership ${S}/debian/pulse.conf ${D}${datadir}/alsa/alsa.conf.d
+	cp -a --no-preserve=ownership ${S}/debian/pulse-alsa.conf ${D}${datadir}/alsa
 
 	install -d ${D}${datadir}/apport/package-hooks
 	cp ${S}/debian/apport-hook.py \

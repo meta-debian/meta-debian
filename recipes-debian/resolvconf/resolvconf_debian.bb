@@ -24,7 +24,7 @@ do_install() {
 	           ${D}${sysconfdir}/network/if-down.d \
 	           ${D}${localstatedir}/lib/${DPN}
 
-	cp -a ${S}/etc ${D}/
+	cp -a --no-preserve=ownership ${S}/etc ${D}/
 	install -p --owner=root --group=root --mode=0755 ${S}/bin/resolvconf ${D}${base_sbindir}
 	install -p --owner=root --group=root --mode=0755 ${S}/bin/list-records ${D}${base_libdir}/${DPN}/
 	install -p --owner=root --group=root --mode=0755 ${S}/bin/dump-debug-info ${D}${datadir}/${DPN}/

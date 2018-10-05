@@ -56,7 +56,7 @@ do_install() {
 	# Follow debian/rules
 	cp src/slang.ver ${D}${libdir}/libslang_pic.map
 	mkdir -p ${D}${base_libdir}
-	cp -a src/objs/libslang.a ${D}${libdir}/
+	cp -a --no-preserve=ownership src/objs/libslang.a ${D}${libdir}/
 	mv ${D}${libdir}/libslang.so.* ${D}${base_libdir}/
 
 	# Relink libslang.so

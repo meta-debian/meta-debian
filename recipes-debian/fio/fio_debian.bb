@@ -86,5 +86,5 @@ do_configure () {
 do_install() {
 	oe_runmake install DESTDIR=${D} prefix=${prefix} mandir=${mandir}
 	install -d ${D}/${docdir}/${DPN}
-	cp -a ${S}/examples ${D}/${docdir}/${DPN}/
+	cp -a --no-preserve=ownership ${S}/examples ${D}/${docdir}/${DPN}/
 }

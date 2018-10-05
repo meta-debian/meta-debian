@@ -31,7 +31,7 @@ do_configure_prepend() {
 }
 do_install_append() {
 	install -m 755 ${S}/debian/cluster-glue.logd.init ${D}${sysconfdir}/init.d/logd
-	cp -ax ${S}/logd/logd.cf ${D}${sysconfdir}
+	cp -ax --no-preserve=ownership ${S}/logd/logd.cf ${D}${sysconfdir}
 }
 PACKAGES =+ "liblrm liblrm-dev libplumb libplumb-dev libpils \
 	libpils-dev libplumbgpl libstonith libstonith-dev"

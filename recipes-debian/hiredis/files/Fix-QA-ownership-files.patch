@@ -1,0 +1,15 @@
+Don't preserve the ownership of files when copy, prevent QA check wrong ownership.
+
+diff --git a/Makefile b/Makefile
+index 7da6496..b0fa0f2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -122,7 +122,7 @@ ifeq ($(uname_S),SunOS)
+   INSTALL?= cp -r
+ endif
+ 
+-INSTALL?= cp -a
++INSTALL?= cp -a --no-preserve=ownership
+ 
+ hiredis.pc: hiredis.pc.in
+ 	test -d $(INSTALL_PKGCONFIG_PATH) && \

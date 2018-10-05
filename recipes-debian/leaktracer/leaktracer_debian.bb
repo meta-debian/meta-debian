@@ -30,9 +30,9 @@ do_compile() {
 
 do_install() {
 	install -d ${D}${bindir} ${D}${libexecdir}
-	cp -p leak-analyze ${D}${bindir}/
+	cp -p --no-preserve=ownership leak-analyze ${D}${bindir}/
 	sed "s,\`dirname \$0\`,${libexecdir}," < LeakCheck \
 		> ${D}${bindir}/LeakCheck
 	chmod +x ${D}${bindir}/LeakCheck
-	cp -p LeakTracer.so ${D}${libexecdir}/
+	cp -p --no-preserve=ownership LeakTracer.so ${D}${libexecdir}/
 }

@@ -37,8 +37,8 @@ do_install_append() {
 		${D}${bindir}/geteltorito
 	install -m 0755 ${S}/3rd-party/zisofs_tools/mkzftree ${D}${bindir}/
 	install -d ${D}${sysconfdir}
-	cp -a ${S}/wodim/wodim.dfl ${D}${sysconfdir}/wodim.conf
-	cp -a ${S}/netscsid/netscsid.dfl ${D}${sysconfdir}/netscsid.conf
+	cp -a --no-preserve=ownership ${S}/wodim/wodim.dfl ${D}${sysconfdir}/wodim.conf
+	cp -a --no-preserve=ownership ${S}/netscsid/netscsid.dfl ${D}${sysconfdir}/netscsid.conf
 
 	# Follow debian/icedax.links
 	ln -sf icedax ${D}${bindir}/list_audio_tracks

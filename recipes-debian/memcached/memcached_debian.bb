@@ -37,7 +37,7 @@ do_install_append() {
 	install -m 0644 ${S}/debian/memcached.conf \
 		${D}${datadir}/memcached/memcached.conf.default
 
-	cp -a ${S}/scripts ${D}${datadir}/memcached
+	cp -a --no-preserve=ownership ${S}/scripts ${D}${datadir}/memcached
 	install -m 0755 ${S}/debian/systemd-memcached-wrapper \
 		${D}${datadir}/memcached/scripts
 	rm ${D}${datadir}/memcached/scripts/memcached-init
