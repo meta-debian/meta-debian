@@ -4,9 +4,9 @@ DESCRIPTION = "LZ4 is a very fast lossless compression algorithm, providing comp
 inherit debian-package
 
 LICENSE = "BSD"
-LIC_FILES_CHKSUM = "file://lib/LICENSE;md5=0b0d063f37a4477b54af2459477dcafd"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=0b0d063f37a4477b54af2459477dcafd"
 
-PV = "131+git${SRCPV}"
+PV = "0.0~r122"
 
 EXTRA_OEMAKE = "PREFIX=${prefix} CC='${CC}' DESTDIR=${D} LIBDIR=${libdir} INCLUDEDIR=${includedir}"
 
