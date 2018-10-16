@@ -7,7 +7,7 @@
 DPN ?= "${BPN}"
 
 python () {
-    import json, os
+    import json, os, re
 
     def _readjsonstr(path):
         import urllib.request
@@ -64,7 +64,7 @@ python () {
                 first_seen = results[i]['first_seen']
 
                 return filename, archive_path, first_seen, archive
-    
+
     pkgname = d.getVar("DPN", True)
     pkgver = d.getVar("DPV", True)
     if pkgver is None:
@@ -91,10 +91,9 @@ python () {
     if results is None:
         return
 
-    dscfile = ''
-    ascfile = ''
-    tarfile = ''
-    debianfile = ''
+    dscdict = {}
+    dsckey = ''
+    debfile_uris = ''
     for i in range(len(results)):
         filehash = results[i]['hash']
         fileinfo = _fileinfo(dl_dir, filehash, pkgname, pkgver)
@@ -109,28 +108,37 @@ python () {
                 info[2] + \
                 info[1] + "/" + \
                 info[0]
+
         # dsc
         if '.dsc' in os.path.splitext(info[0])[1]:
-            dscfile = u + ";name=dsc "
-            bb.debug(2, 'URI(dsc): %s' % dscfile)
+            dsckey = 'dsc'
+        # asc
+        elif '.asc' in os.path.splitext(info[0])[1]:
+            dsckey = 'asc'
         # debian specific data
         elif '.debian.tar.' in info[0]:
-            debianfile = u + ";name=debian "
-            bb.debug(2, 'URI(debian): %s' % u)
+            dsckey = 'debian.tar'
         # old source format
         elif '.diff.' in info[0]:
-            debianfile = u + ";name=patch" + " "
-            bb.debug(2, 'URI(diff): %s' % u)
-        elif '.asc' in os.path.splitext(info[0])[1]:
-            ascfile = u + ";name=asc "
-            bb.debug(2, 'URI(asc): %s' % ascfile)
-        # tar
+            dsckey = 'debian.diff'
+        elif '.orig' in info[0]:
+            pattern = '.*?\.orig-(.+)\.tar\.*'
+            match_result = re.match(pattern, info[0])
+            if match_result:
+                dsckey = match_result.group(1) + '.tarball'
+            else:
+                dsckey = 'orig.tarball'
+        # tar / native package
         else:
-            tarfile = u + ";name=tarball "
-            bb.debug(2, 'URI(tarball): %s' % u)
+            dsckey = 'tarball'
 
-    # This order is hash value in dsc.
-    debfile_uris = dscfile + tarfile  + ascfile + debianfile
+        dscdict[dsckey] = u + ';name=' + dsckey
+
+        if dsckey is not 'dsc':
+            debfile_uris = debfile_uris + u + ';name=' + dsckey + ' '
+
+    # This order is hash value in dsc
+    debfile_uris = dscdict['dsc'] + ' ' + debfile_uris
     bb.debug(2, 'URI(finish): %s' % debfile_uris)
 
     if not debfile_uris:
@@ -140,6 +148,35 @@ python () {
     d.prependVar('SRC_URI', debfile_uris)
     bb.debug(2, 'SRC_URI : %s' % d.getVar("SRC_URI", True))
 }
+
+def __get_dsckey(str):
+    import os, re
+
+    dsckey = ''
+    # dsc
+    if '.dsc' in os.path.splitext(str)[1]:
+        dsckey = 'dsc'
+    # asc
+    elif '.asc' in os.path.splitext(str)[1]:
+        dsckey = 'asc'
+    # debian specific data
+    elif '.debian.tar.' in str:
+        dsckey = 'debian.tar'
+    # old source format
+    elif '.diff.' in str:
+        dsckey = 'debian.diff'
+    elif '.orig' in str:
+        pattern = '.*?\.orig-(.+)\.tar\.*'
+        match_result = re.match(pattern, str)
+        if match_result:
+            dsckey = match_result.group(1) + '.tarball'
+        else:
+            dsckey = 'orig.tarball'
+    # tar / native package
+    else:
+        dsckey = 'tarball'
+
+    return dsckey
 
 def debian_src_version(d):
     pv = d.getVar("PV", True)
@@ -154,40 +191,48 @@ S = "${WORKDIR}/${DPN}-${DEB_SRC_VERSION}"
 python do_fetch_prepend () {
     import re
 
-    src_uri = (d.getVar('SRC_URI', True) or "").split()
-    if len(src_uri) == 0:
+    src_uris = (d.getVar('SRC_URI', True) or "").split()
+    if len(src_uris) == 0:
         return
 
     try:
-        fetcher = bb.fetch2.Fetch([src_uri[0]], d)
+        fetcher = bb.fetch2.Fetch([src_uris[0]], d)
         fetcher.download()
     except bb.fetch2.BBFetchException as e:
         raise bb.build.FuncFailed(e)
         return
 
-    sha256_idx = 1
-    md5_idx = 1
-
     # re-initialize fetcher
     try:
-        fetcher = bb.fetch2.Fetch(src_uri, d)
+        fetcher = bb.fetch2.Fetch(src_uris, d)
     except bb.fetch2.BBFetchException as e:
         raise bb.build.FuncFailed(e)
         return
 
     try:
-        with open(fetcher.localpath(src_uri[0])) as f:
+        with open(fetcher.localpath(src_uris[0])) as f:
             data = f.read()
             for m in re.finditer(r'^ ([0-9a-f]*) ([0-9]*) (.*)$', data, re.MULTILINE):
-                # sha256sum
-                if len(m.group(1)) == 64:
-                    fetcher.ud[src_uri[sha256_idx]].sha256_expected = m.group(1)
-                    sha256_idx += 1
-                # md5sum
-                if len(m.group(1)) == 32:
-                    fetcher.ud[src_uri[md5_idx]].md5_expected = m.group(1)
-                    md5_idx += 1
+                # 1:hash, 2:size, 3:filename
+                dsckey = __get_dsckey(m.group(3))
 
+                # sha1sum: ignore
+                if len(m.group(1)) == 40:
+                    continue
+
+                for src_uri in src_uris:
+                    bb.debug(2, 'name %s' % fetcher.ud[src_uri].parm.get('name'))
+                    if fetcher.ud[src_uri].parm.get('name') == dsckey:
+                        # sha256sum
+                        if len(m.group(1)) == 64:
+                            bb.debug(2, "%s: %s %s" % (src_uri, m.group(1), m.group(3)))
+                            fetcher.ud[src_uri].sha256_expected = m.group(1)
+                            break
+                        # md5sum
+                        if len(m.group(1)) == 32:
+                            bb.debug(2, "%s: %s %s" % (src_uri, m.group(1), m.group(3)))
+                            fetcher.ud[src_uri].md5_expected = m.group(1)
+                            break
     except Exception as e:
         raise bb.build.FuncFailed(e)
         return
