@@ -121,6 +121,7 @@ python () {
         # old source format
         elif '.diff.' in info[0]:
             dsckey = 'debian.diff'
+            d.setVar ('USE_DO_DEBIAN_PATCH', '0')
         elif '.orig' in info[0]:
             pattern = '.*?\.orig-(.+)\.tar\.*'
             match_result = re.match(pattern, info[0])
@@ -225,18 +226,20 @@ python do_fetch_prepend () {
                     if fetcher.ud[src_uri].parm.get('name') == dsckey:
                         # sha256sum
                         if len(m.group(1)) == 64:
-                            bb.debug(2, "%s: %s %s" % (src_uri, m.group(1), m.group(3)))
+                            bb.debug(2, "sha256sum: %s: %s %s" % (src_uri, m.group(1), m.group(3)))
                             fetcher.ud[src_uri].sha256_expected = m.group(1)
                             break
                         # md5sum
                         if len(m.group(1)) == 32:
-                            bb.debug(2, "%s: %s %s" % (src_uri, m.group(1), m.group(3)))
+                            bb.debug(2, "md5sum: %s: %s %s" % (src_uri, m.group(1), m.group(3)))
                             fetcher.ud[src_uri].md5_expected = m.group(1)
                             break
     except Exception as e:
         raise bb.build.FuncFailed(e)
         return
 }
+
+USE_DO_DEBIAN_PATCH ?= "1"
 
 python do_unpack_append() {
     import os.path, shutil
@@ -310,15 +313,13 @@ debian_patch_quilt() {
 
 	# some source packages don't have patch
 	if [ -z "${DEBIAN_QUILT_PATCHES}" ]; then
-		if [ -d ${DEBIAN_UNPACK_DIR}/debian/patches ]; then
-			bbfatal "DEBIAN_QUILT_PATCHES is null, but ${DEBIAN_UNPACK_DIR}/debian/patches exists"
-		fi
 		bbnote "no debian patch exists in the source tree, nothing to do"
 		return
 	fi
 
 	if [ ! -d ${DEBIAN_QUILT_PATCHES} ]; then
-		bbfatal "${DEBIAN_QUILT_PATCHES} not found"
+		bbnote "${DEBIAN_QUILT_PATCHES} not found"
+		return
 	elif [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
 		bbfatal "${DEBIAN_QUILT_PATCHES}/series not found"
 	# sometimes series is empty, it's too scary
@@ -380,6 +381,12 @@ do_debian_patch[depends] += "${@base_conditional(\
 do_debian_patch[depends] += "${@base_conditional(\
     'DEBIAN_PATCH_TYPE', 'dpatch', 'dpatch-native:do_populate_sysroot', '', d)}"
 do_debian_patch() {
+
+	if [ "${USE_DO_DEBIAN_PATCH}" = "0" ]; then
+		bbnote "USE_DO_DEBIAN_PATCH not set"
+		return 0
+        fi
+
 	if debian_check_source_format; then
 		return 0
 	else
