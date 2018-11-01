@@ -5,6 +5,7 @@
 #            Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
 
 DPN ?= "${BPN}"
+DEB_SRC_KEYS = ""
 
 python () {
     import json, os, re
@@ -133,6 +134,7 @@ python () {
         else:
             dsckey = 'tarball'
 
+        d.appendVar('DEBIAN_SRC_KEYS', ' ' + dsckey)
         dscdict[dsckey] = u + ';name=' + dsckey
 
         if dsckey is not 'dsc':
@@ -148,6 +150,7 @@ python () {
 
     d.prependVar('SRC_URI', debfile_uris)
     bb.debug(2, 'SRC_URI : %s' % d.getVar("SRC_URI", True))
+    bb.debug(2, 'DEBIAN_SRC_KEYS : %s' % d.getVar("DEBIAN_SRC_KEYS", True))
 }
 
 def __get_dsckey(str):
@@ -242,7 +245,7 @@ python do_fetch_prepend () {
 USE_DO_DEBIAN_PATCH ?= "1"
 
 python do_unpack_append() {
-    import os.path, shutil
+    import os.path, shutil, re
     
     workdir = d.getVar('WORKDIR', True)
     srcdir = d.getVar('S', True)
@@ -262,6 +265,33 @@ python do_unpack_append() {
 
     if os.path.exists(debiandir):
         shutil.move(debiandir, srcdebiandir)
+
+    # component support
+    src_keys = d.getVar('DEBIAN_SRC_KEYS', True).split()
+    deb_components = d.getVar('DEB_COMPONENTS', True)
+    # adhoc
+    if deb_components is not None:
+        deb_components = deb_components.split(',')
+
+    for src_key in src_keys:
+        pattern = '^(.+)\.tarball'
+        match_result = re.match(pattern, src_key)
+        if match_result:
+            dsckey = match_result.group(1)
+            if dsckey == 'orig':
+                continue
+            deb_component_dir = dsckey
+            orig_component_dir = ''
+            for component in deb_components:
+                bb.note("compnent: %s" % component)
+                __compnent_info = component.split('@')
+                if __compnent_info[0] == dsckey:
+                    orig_component_dir = __compnent_info[1]
+
+            bb.note("deb_compnent_dir: %s" % deb_component_dir)
+            bb.note("deb_compnent_dir: %s" % orig_component_dir)
+            shutil.move(os.path.join(workdir, orig_component_dir),
+                os.path.join(srcdir, deb_component_dir))
 }
 
 ###############################################################################
