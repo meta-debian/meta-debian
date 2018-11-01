@@ -243,7 +243,7 @@ CONFFILES_${PN} = " \
     ${sysconfdir}/init.d/apache2 \
 "
 
-RDEPENDS_${PN} += "lsb-base perl openssl"
+RDEPENDS_${PN} += "lsb-base perl openssl coreutils"
 
 PACKAGES =+ " \
     ${PN}-suexec-custom ${PN}-suexec-pristine \

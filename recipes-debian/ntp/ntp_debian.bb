@@ -96,3 +96,5 @@ FILES_ntpdate = " \
 	${sysconfdir}/*/*/ntpdate \
 	${sbindir}/ntpdate* \
 "
+
+RDEPENDS_${PN} += "glibc-utils"

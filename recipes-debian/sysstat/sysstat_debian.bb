@@ -24,8 +24,8 @@ EXTRA_OECONF += " \
 		--disable-man-group \
 		--disable-compress-manpg \
 		--enable-copy-only \
-		sa_lib_dir=${libdir}/${DPN} \
-		sa_di=${localstatedir}/log/${DPN} \
+		sa_lib_dir=${nonarch_libdir}/${DPN} \
+		sa_dir=${localstatedir}/log/${DPN} \
 		conf_dir=${sysconfdir}/${DPN}"
 
 # Install files follow deian/rules
@@ -35,9 +35,7 @@ do_install_append() {
 	install -m 0644 ${S}/contrib/isag/isag.1 ${D}${mandir}/man1
 	install -d ${D}${datadir}/applications
 	install -m 0644 ${S}/debian/isag.desktop ${D}${datadir}/applications
-	install -m 0755 ${S}/debian/debian-sa1 ${D}${libdir}/${DPN}
-	mv ${D}${bindir}/sar ${D}${bindir}/sar.sysstat
-	mv ${D}${mandir}/man1/sar.1 ${D}${mandir}/man1/sar.sysstat.1
+	install -m 0755 ${S}/debian/debian-sa1 ${D}${nonarch_libdir}/${DPN}
 	rm -rf ${D}${docdir}
 	install -d ${D}${sysconfdir}/cron.d
 	install -m 0644 ${S}/debian/sysstat.cron.d ${D}${sysconfdir}/cron.d/sysstat
@@ -47,10 +45,29 @@ do_install_append() {
 	install -m 0755 ${S}/debian/sysstat.init.d ${D}${sysconfdir}/init.d/sysstat
 }
 
+# According to debian/sysstat.postinst
+inherit update-alternatives
+ALTERNATIVE_PRIORITY = "0"
+ALTERNATIVE_${PN} = "sar"
+ALTERNATIVE_LINK_NAME[sar] = "${bindir}/sar"
+
+pkg_postinst_${PN}() {
+	cat > $D${sysconfdir}/default/sysstat << EOF
+#
+# Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat
+# and /etc/cron.daily/sysstat files
+#
+
+# Should sadc collect system activity informations? Valid values
+# are "true" and "false". Please do not put other values, they
+# will be overwritten by debconf!
+ENABLED="false"
+
+EOF
+}
 
 # Ship packages follow debian
-PACKAGES =+ "isag isag-doc"
-FILES_isag += "${bindir}/isag"
-FILES_isag-doc += "${datadir}/applications \
-		   ${mandir}/man1/isag.1 \
-		   ${datadir}/menu/"
+PACKAGES =+ "isag"
+FILES_isag += "${bindir}/isag \
+               ${datadir}/applications/isag.desktop \
+               "

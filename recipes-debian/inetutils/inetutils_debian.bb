@@ -137,6 +137,10 @@ ALTERNATIVE_${BPN}-telnet = "telnet"
 ALTERNATIVE_LINK_NAME[telnet] = "${bindir}/telnet"
 ALTERNATIVE_TARGET[telnet] = "${bindir}/inetutils-telnet"
 
+ALTERNATIVE_PRIORITY_${BPN}-ping ?= "99"
+ALTERNATIVE_${BPN}-ping = "ping"
+ALTERNATIVE_LINK_NAME[ping] = "${base_bindir}/ping"
+
 RDEPENDS_${BPN}-ftp += "netbase"
 RDEPENDS_${BPN}-ftpd += "netbase"
 RDEPENDS_${BPN}-inetd += "tcpd lsb-base"

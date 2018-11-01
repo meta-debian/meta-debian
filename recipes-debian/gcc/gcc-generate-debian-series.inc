@@ -101,12 +101,23 @@ do_debian_patch_prepend() {
 		libjava-fixed-symlinks \
 		libffi-ro-eh_frame_sect \
 		libjava-nobiarch-check \
+		mips-fix-loongson2f-nop \
 		libgomp-kfreebsd-testsuite \
 		go-testsuite \
 		fix-ffi_call_VFP-with-no-VFP-argument \
 		ada-749574 \
 		ada-mips \
-		ada-ppc64"
+		ada-ppc64 \
+		0001-i386-Move-struct-ix86_frame-to-machine_function \
+		0002-i386-Use-reference-of-struct-ix86_frame-to-avoid-copy \
+		0003-i386-Use-const-reference-of-struct-ix86_frame-to-avoi \
+		0004-x86-Add-mindirect-branch \
+		0005-x86-Add-mfunction-return \
+		0006-x86-Add-mindirect-branch-register \
+		0007-x86-Add-V-register-operand-modifier \
+		0008-x86-Disallow-mindirect-branch-mfunction-return-with-m \
+		0009-Use-INVALID_REGNUM-in-indirect-thunk-processing \
+		"
 
 	for patch in $debian_patches; do
 		echo "$patch".diff >> ${DEBIAN_QUILT_PATCHES}/series
