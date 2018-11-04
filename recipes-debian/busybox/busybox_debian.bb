@@ -50,7 +50,6 @@ SRC_URI += " \
            file://inittab \
            file://rcS \
            file://rcK \
-           file://runlevel \
            file://makefile-libbb-race.patch \
            file://busybox-fix-lzma-segfaults.patch \
 "
