@@ -3,10 +3,8 @@
 # base branch: master
 #
 
-PR = "r0"
-
 inherit debian-package
-PV = "3.3.8"
+PV = "3.3.30"
 
 LICENSE = "GPLv3+ & LGPLv2.1+ & ISC"
 LIC_FILES_CHKSUM = " \
@@ -26,11 +24,10 @@ EXTRA_OECONF="--enable-ld-version-script \
               --enable-cxx \
               --enable-static \
               --disable-libdane \
-              --without-tpm \
               --disable-heartbeat-support \
               --disable-silent-rules \
               --disable-gtk-doc \
-              --disable-gtk-doc \
+              --disable-doc \
               --disable-guile \
               --enable-local-libopts \
               "
