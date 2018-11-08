@@ -2,8 +2,13 @@ include mysql.inc
 
 inherit native
 
-EXTRA_OECMAKE += "-DSTACK_DIRECTION=-1 -DCAT_EXECUTABLE=`which cat` -DAWK_EXECUTABLE=`which awk`"
-DEPENDS += "libaio libbsd"
+EXTRA_OECMAKE += " \
+    -DSTACK_DIRECTION=-1 \
+    -DCAT_EXECUTABLE=`which cat` \
+    -DAWK_EXECUTABLE=`which awk` \
+    -DWITH_ZLIB=system \
+"
+
 do_generate_toolchain_file_append () {
     # If these are set cmake will assume we're cross-compiling, which will
     # result in certain things we want being disabled
