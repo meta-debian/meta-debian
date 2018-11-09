@@ -6,6 +6,14 @@
 
 DEBIAN_CODENAME ?= "${DISTRO_CODENAME}"
 
+# Get layer path of meta-debian from BBLAYERS
+def get_layerbase_path(d):
+    layers = (d.getVar('BBLAYERS') or "").split()
+    for layer in layers:
+        if 'meta-debian' in layer:
+            return layer
+    return None
+
 def fetch_Sources_xz(d):
     """
     Download 'dists/<codename>/main/source/Sources.xz' from Debian mirror.
@@ -75,8 +83,13 @@ def save_to_file(package, dpv, pv, repack_pv, directory, files, md5sum, sha256su
         return
 
     import os
-    corebase = d.getVar('COREBASE', True)
-    filepath = '%s/meta-debian/recipes-debian/sources/%s.inc' % (corebase, package)
+
+    layerbase = get_layerbase_path(d)
+    if layerbase is None:
+        bb.warn('Can not get layer path of meta-debian')
+        return
+
+    filepath = '%s/recipes-debian/sources/%s.inc' % (layerbase, package)
     if not os.path.isfile(filepath):
         return
 
@@ -176,9 +189,12 @@ def get_pkg_dpv_map(d):
     import os
 
     pkg_dpv_map = {}
-    corebase = d.getVar('COREBASE', True)
-    sources_dir = os.path.join(corebase, 'meta-debian/recipes-debian/sources')
+    layerbase = get_layerbase_path(d)
+    if layerbase is None:
+        bb.warn('Can not get layer path of meta-debian')
+        return {}
 
+    sources_dir = os.path.join(layerbase, 'recipes-debian/sources')
     if not os.path.isdir(sources_dir):
         return {}
 
