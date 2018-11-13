@@ -75,8 +75,8 @@ def save_to_file(package, dpv, pv, repack_pv, directory, files, md5sum, sha256su
         return
 
     import os
-    corebase = d.getVar('COREBASE', True)
-    filepath = '%s/meta-debian/recipes-debian/sources/%s.inc' % (corebase, package)
+    layerdir = d.getVar('LAYERDIR_DEBIAN', True)
+    filepath = '%s/recipes-debian/sources/%s.inc' % (layerdir, package)
     if not os.path.isfile(filepath):
         return
 
@@ -176,8 +176,8 @@ def get_pkg_dpv_map(d):
     import os
 
     pkg_dpv_map = {}
-    corebase = d.getVar('COREBASE', True)
-    sources_dir = os.path.join(corebase, 'meta-debian/recipes-debian/sources')
+    layerdir = d.getVar('LAYERDIR_DEBIAN', True)
+    sources_dir = os.path.join(layerdir, 'recipes-debian/sources')
 
     if not os.path.isdir(sources_dir):
         return {}
