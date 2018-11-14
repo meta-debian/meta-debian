@@ -66,18 +66,27 @@ Index: perl-5.24.4/Makefile.SH
  	    ;;
  	os390)	test -f /bin/env && ldlibpth="/bin/env $ldlibpth"
  		;;
+@@ -319,7 +319,7 @@ PATH_SEP = $p_
+ # Macros to invoke a copy of miniperl during the build.  Targets which
+ # are built using these macros should depend on \$(MINIPERL_EXE)
+ MINIPERL_EXE = miniperl\$(EXE_EXT)
+-MINIPERL = \$(LDLIBPTH) ./miniperl\$(EXE_EXT) -Ilib
++MINIPERL = \$(LDLIBPTH) ./miniperl\$(EXE_EXT)
+
+ # Macros to invoke sort the MANIFEST during build
+ MANIFEST_SRT = MANIFEST.srt
 @@ -596,13 +586,23 @@ splintfiles = $(c1)
  	@echo `$(CCCMDSRC)` -S $*.c
  	@`$(CCCMDSRC)` -S $*.c
  
--all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make $(MANIFEST_SRT)
+-all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make $(MANIFEST_SRT) common_build
 -	@echo " ";
 -	@echo "	Everything is up to date. Type '$(MAKE) test' to run test suite."
 -
 -$(MANIFEST_SRT):	MANIFEST $(PERL_EXE)
 -	@$(RUN_PERL) Porting/manisort -q || (echo "WARNING: re-sorting MANIFEST"; \
 -	    $(RUN_PERL) Porting/manisort -q -o MANIFEST; sh -c true)
-+#all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make $(MANIFEST_SRT)
++#all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make $(MANIFEST_SRT) common_build
 +#	@echo " ";
 +#	@echo "	Everything is up to date. Type '$(MAKE) test' to run test suite."
 +
@@ -237,7 +246,7 @@ Index: perl-5.24.4/Makefile.SH
 @@ -1056,16 +1066,16 @@ esac
  $spitshell >>$Makefile <<'!NO!SUBS!'
  
- .PHONY: preplibrary
+ .PHONY: preplibrary common_build
 -preplibrary: $(MINIPERL_EXE) $(CONFIGPM) $(PREPLIBRARY_LIBPERL)
 +preplibrary: $(CONFIGPM) $(PREPLIBRARY_LIBPERL)
  
@@ -258,7 +267,7 @@ Index: perl-5.24.4/Makefile.SH
  # $(PERL_EXE) and ext because pod_lib.pl needs Digest::MD5
  # But also this ensures that all extensions are built before we try to scan
  # them, which picks up Devel::PPPort's documentation.
--pod/perltoc.pod: $(perltoc_pod_prereqs)  $(PERL_EXE) $(ext) pod/buildtoc
+-pod/perltoc.pod: $(perltoc_pod_prereqs) $(PERL_EXE) $(ext) pod/buildtoc
 -	$(RUN_PERL) -f pod/buildtoc -q
 +pod/perltoc.pod: $(perltoc_pod_prereqs) $(ext) pod/buildtoc
 +	$(MINIPERL) -f pod/buildtoc -q
@@ -271,8 +280,8 @@ Index: perl-5.24.4/Makefile.SH
  
  pod/perlmodlib.pod: $(MINIPERL_EXE) pod/perlmodlib.PL MANIFEST
 @@ -1089,7 +1099,7 @@ pod/perl5241delta.pod: pod/perldelta.pod
- 	$(RMS) pod/perl5262delta.pod
- 	$(LNS) perldelta.pod pod/perl5262delta.pod
+ 	$(RMS) pod/perl5280delta.pod
+ 	$(LNS) perldelta.pod pod/perl5280delta.pod
  
 -extra.pods: $(MINIPERL_EXE)
 +extra.pods:
@@ -289,45 +298,45 @@ Index: perl-5.24.4/Makefile.SH
  EOT
      fi
  
-@@ -1144,11 +1153,7 @@ done
- if test "X$hostperl" != X; then
+@@ -1201,36 +1201,19 @@
+ 	LOCAL_PERL='$(HOST_PERL)'
  	$spitshell >>$Makefile <<'!NO!SUBS!'
  install.perl:	$(INSTALL_DEPENDENCE) installperl
 -	$(HOST_PERL) installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
--	-@test ! -s extras.lst || $(MAKE) extras.install
--
--install.man:	all installman
--	$(HOST_PERL) installman --destdir=$(DESTDIR) $(INSTALLFLAGS)
 +	./hostperl -Ifake_config_library -Ilib -MConfig installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
- 
- # XXX Experimental. Hardwired values, but useful for testing.
- # Eventually Configure could ask for some of these values.
-@@ -1166,24 +1171,8 @@ install.html: all installhtml
+ 	-@test ! -s extras.lst || $(MAKE) extras.install
+ !NO!SUBS!
  else
+ 	LOCAL_PERL='$(RUN_PERL)'
  	$spitshell >>$Makefile <<'!NO!SUBS!'
  install.perl:	$(INSTALL_DEPENDENCE) installperl
 -	$(RUN_PERL) installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
--	-@test ! -s extras.lst || PATH="`pwd`:\${PATH}" PERL5LIB="`pwd`/lib" \$(RUN_PERL) -Ilib -MCPAN -e '@ARGV&&install(@ARGV)' `cat extras.lst`
--
--install.man:	all installman
--	$(RUN_PERL) installman --destdir=$(DESTDIR) $(INSTALLFLAGS)
 +	./hostperl -Ifake_config_library -Ilib -MConfig installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
+ 	-@test ! -s extras.lst || PATH="`pwd`:\${PATH}" PERL5LIB="`pwd`/lib" \$(RUN_PERL) -Ilib -MCPAN -e '@ARGV&&install(@ARGV)' `cat extras.lst`
  
--# XXX Experimental. Hardwired values, but useful for testing.
--# Eventually Configure could ask for some of these values.
--install.html: all installhtml
--	-@test -f README.vms && cd vms && $(LNS) ../README.vms README_vms.pod && cd ..
--	$(RUN_PERL) installhtml   \
--      --podroot=. --podpath=. --recurse  \
--      --htmldir=$(privlib)/html   \
--      --htmlroot=$(privlib)/html  \
--      --splithead=pod/perlipc     \
--      --splititem=pod/perlfunc    \
--      --ignore=Porting/Maintainers.pm,Porting/pumpkin.pod,Porting/repository.pod \
--      --verbose
  !NO!SUBS!
  fi
  
+-$spitshell >>$Makefile <<!GROK!THIS!
+-install.man:	all installman
+-	${LOCAL_PERL} installman --destdir=\$(DESTDIR) \$(INSTALLFLAGS)
+-
+-# XXX Experimental. Hardwired values, but useful for testing.
+-# Eventually Configure could ask for some of these values.
+-install.html: all installhtml
+-	-@test -f README.vms && cd vms && \$(LNS) ../README.vms README_vms.pod && cd ..
+-	${LOCAL_PERL} installhtml   \\
+-      --podroot=. --podpath=. --recurse  \\
+-      --htmldir=\$(privlib)/html   \\
+-      --splithead=pod/perlipc     \\
+-      --splititem=pod/perlfunc    \\
+-      --ignore=Porting/Maintainers.pm,Porting/pumpkin.pod,Porting/repository.pod \\
+-      --verbose
+-!GROK!THIS!
+-
+ $spitshell >>$Makefile <<'!NO!SUBS!'
+ 
+ # I now supply perly.c with the kits, so the following section is
 @@ -1275,13 +1264,13 @@ manicheck:	FORCE
  #
  # DynaLoader may be needed for extensions that use Makefile.PL.
@@ -351,7 +360,7 @@ Index: perl-5.24.4/Makefile.SH
  '') $spitshell >>$Makefile <<'!NO!SUBS!'
 -test_prep test-prep: test_prep_pre $(MINIPERL_EXE) $(unidatafiles) $(PERL_EXE) \
 +test_prep test-prep: test_prep_pre $(unidatafiles) $(PERL_EXE) \
- 	$(dynamic_ext) $(TEST_PERL_DLL) runtests $(generated_pods)
+ 	$(dynamic_ext) $(TEST_PERL_DLL) runtests $(generated_pods) common_build
  	cd t && (rm -f $(PERL_EXE); $(LNS) ../$(PERL_EXE) $(PERL_EXE))
  
  !NO!SUBS!
@@ -360,7 +369,7 @@ Index: perl-5.24.4/Makefile.SH
 -test_prep test-prep: test_prep_pre \$(MINIPERL_EXE) \$(unidatafiles) \$(PERL_EXE) \
 +test_prep test-prep: test_prep_pre \$(unidatafiles) \$(PERL_EXE) \
  	\$(dynamic_ext) \$(TEST_PERL_DLL) runtests \
- 	\$(generated_pods)
+ 	\$(generated_pods) common_build
  	$to libperl.*
 @@ -1539,7 +1528,7 @@ test_prep test-prep: test_prep_pre \$(MI
  esac

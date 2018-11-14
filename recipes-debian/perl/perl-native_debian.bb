@@ -14,6 +14,8 @@ EXTRA_OEMAKE = "-e MAKEFLAGS="
 # Ignore duplicate patches:
 #   native-nopacklist.patch: duplicate with debian/patches/debian/no_packlist_perllocal.diff
 #   errno_ver.diff: duplicate with debian/patches/debian/errno_ver.diff
+# Ignore obsolete patches:
+#   perl-5.26.1-guard_old_libcrypt_fix.patch
 SRC_URI += "\
     file://Configure-multilib.patch \
     file://perl-configpm-switch.patch \
@@ -21,7 +23,6 @@ SRC_URI += "\
     file://MM_Unix.pm.patch \
     file://dynaloaderhack.patch \
     file://0001-Configure-Remove-fstack-protector-strong-for-native-.patch \
-    file://perl-5.26.1-guard_old_libcrypt_fix.patch \
 "
 
 inherit native
