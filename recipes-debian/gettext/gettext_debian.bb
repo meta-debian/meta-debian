@@ -13,7 +13,7 @@ DESCRIPTION = "GNU gettext is a set of tools that provides a framework to help o
 LICENSE = "GPLv3+ & LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-DEPENDS = "gettext-native virtual/libiconv"
+DEPENDS = "gettext-native virtual/libiconv bison-native"
 PROVIDES = "virtual/libintl virtual/gettext"
 RCONFLICTS_${PN} = "proxy-libintl"
 
