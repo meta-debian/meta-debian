@@ -12,6 +12,8 @@ DEPENDS = "db grep-native gdbm zlib virtual/crypt"
 # Ignore obsolete patches:
 #   perl-fix-conflict-between-skip_all-and-END.patch
 #   perl-test-customized.patch
+#   fix_bad_rpath.patch
+#   perl-5.26.1-guard_old_libcrypt_fix.patch
 SRC_URI += " \
     file://Makefile.patch \
     file://Makefile.SH.patch \
@@ -23,7 +25,6 @@ SRC_URI += " \
     file://generate-sh.patch \
     file://native-perlinc.patch \
     file://cross-generate_uudmap.patch \
-    file://fix_bad_rpath.patch \
     file://dynaloaderhack.patch \
     file://config.sh \
     file://config.sh-32 \
@@ -37,7 +38,6 @@ SRC_URI += " \
     file://ext-ODBM_File-hints-linux.pl-link-libgdbm_compat.patch \
     file://ext-ODBM_File-t-odbm.t-fix-the-path-of-dbmt_common.p.patch \
     file://perl-errno-generation-gcc5.patch \
-    file://perl-5.26.1-guard_old_libcrypt_fix.patch \
     file://INC-local-path-fix.patch \
 "
 
