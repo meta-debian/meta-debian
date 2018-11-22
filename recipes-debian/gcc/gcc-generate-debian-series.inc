@@ -1,125 +1,69 @@
 #
-# Generate debian/patches/series follow debian/rules.patch
+# Generate debian/patches/series
 #
-# DPKG_ARCH is a mapping from TARGET_ARCH to Debian's architectures,
-# we use DPKG_ARCH for checking to match with debian/rules.patch.
+
+# DPKG_ARCH is a mapping from TARGET_ARCH to Debian's architectures.
 do_debian_patch_prepend() {
-	# Remove old series file if existed
-	if [ -f ${DEBIAN_QUILT_PATCHES}/series ]; then
-		rm ${DEBIAN_QUILT_PATCHES}/series
+	# Base on debian/rules.defs, set required variables for
+	# using debian/rules.patch to generate debian/patches/series.
+	export distrelease=${DISTRO_DEB_CODENAME}
+	export derivative=${DISTRO_DEB_NAME}
+	export distribution=${DISTRO_DEB_NAME}
+	export GFDL_INVARIANT_FREE=yes
+	export PKGSOURCE=${DPN}
+	export DEB_TARGET_ARCH=${DPKG_ARCH}
+	export DEB_TARGET_ARCH_OS=${TARGET_OS}
+
+	if [ "${HOST_SYS}" != "${TARGET_SYS}" ]; then
+		export DEB_CROSS=yes
 	fi
 
-	debian_patches="svn-updates"
-	if [ "${DPKG_ARCH}" = "arm64" ]; then
-		debian_patches="$debian_patches \
-			gcc-linaro \
-			gcc-linaro-no-macros \
-			linaro331"
+	if [ $distribution-$DEB_TARGET_ARCH = Debian-arm64 ]; then
+		export with_linaro_branch=yes
 	fi
 
-	debian_patches="$debian_patches \
-		gcc-gfdl-build \
-		gcc-textdomain \
-		gcc-driver-extra-langs \
-		gcc-hash-style-gnu \
-		libstdc++-pic \
-		libstdc++-doclink \
-		libstdc++-man-3cxx \
-		libstdc++-test-installed \
-		libjava-stacktrace \
-		libjava-jnipath \
-		libjava-sjlj \
-		libjava-disable-plugin \
-		alpha-no-ev4-directive \
-		boehm-gc-getnprocs \
-		note-gnu-stack \
-		libgomp-omp_h-multilib \
-		sparc-force-cpu \
-		gccgo-version \
-		pr47818 \
-		pr49944 \
-		gcc-base-version \
-		libgo-testsuite \
-		gcc-target-include-asm \
-		libgo-revert-timeout-exp \
-		libgo-setcontext-config \
-		gcc-auto-build \
-		kfreebsd-unwind \
-		kfreebsd-boehm-gc \
-		hurd-boehm-gc \
-		libffi-m68k \
-		libitm-no-fortify-source \
-		pr57653 \
-		pr61257 \
-		pr61046 \
-		pr61336 \
-		pr61126 \
-		gcc-setmultilib-fix \
-		sparc64-biarch-long-double-128 \
-		pr61841 \
-		pr61294 \
-		pr59586 \
-		pr60655-debug-loc \
-		pr63751 \
-		gccgo-arm64 \
-		ada-arm \
-		ada-hurd \
-		ada-kfreebsd \
-		ada-revert-pr63225"
-
-	if [ "${DPKG_ARCH}" = "arm" ] || \
-	   [ "${DPKG_ARCH}" = "armel" ] || \
-	   [ "${DPKG_ARCH}" = "armhf" ]; then
-		debian_patches="$debian_patches libjava-armel-unwind"
+	export with_ssp=yes
+	ssp_no_archs="alpha hppa ia64 m68k"
+	if echo $ssp_no_archs | grep -q "$DEB_TARGET_ARCH"; then
+		export with_ssp="not available on $DEB_TARGET_ARCH"
 	fi
-	if [ "${DPKG_ARCH}" = "armhf" ]; then
-		debian_patches="$debian_patches gcj-arm-mode"
+	# with_ssp_default is only set if $derivative is not Debian. Ignore it.
+
+	export biarch64=no
+	export with_dev=yes
+	separate_lang=no
+	export with_ada=no
+	if [ x$with_ada = xyes ]; then
+		export with_libgnat=yes
 	fi
 
-	if [ "${DPKG_ARCH}" = "m68k" ]; then
-		debian_patches="$debian_patches \
-			m68k-ada \
-			m68k-revert-pr45144 \
-			pr52306"
+	if [ x$separate_lang != xyes ]; then
+		export with_d=yes
 	fi
 
-	if [ "${DPKG_ARCH}" = "powerpcspe" ]; then
-		debian_patches="$debian_patches \
-			powerpc_remove_many \
-			powerpc_nofprs \
-			fix-powerpcspe"
+	export with_libphobos=no
+	export single_package=no
+	export multilib=yes
+	export with_multiarch_lib=yes
+	if [ x$with_multiarch_lib = xyes ] && [ x$single_package != xyes ] && [ x$DEB_CROSS != xyes ]; then
+		export with_multiarch_cxxheaders=yes
 	fi
 
-	debian_patches="$debian_patches \
-		gcc-sysroot \
-		sys-auxv-header \
-		libcilkrts-targets \
-		go-use-gold \
-		arm-multilib-defaults \
-		gcc-ice-hack \
-		gcc-ice-apport \
-		libjava-fixed-symlinks \
-		libffi-ro-eh_frame_sect \
-		libjava-nobiarch-check \
-		mips-fix-loongson2f-nop \
-		libgomp-kfreebsd-testsuite \
-		go-testsuite \
-		fix-ffi_call_VFP-with-no-VFP-argument \
-		ada-749574 \
-		ada-mips \
-		ada-ppc64 \
-		0001-i386-Move-struct-ix86_frame-to-machine_function \
-		0002-i386-Use-reference-of-struct-ix86_frame-to-avoid-copy \
-		0003-i386-Use-const-reference-of-struct-ix86_frame-to-avoi \
-		0004-x86-Add-mindirect-branch \
-		0005-x86-Add-mfunction-return \
-		0006-x86-Add-mindirect-branch-register \
-		0007-x86-Add-V-register-operand-modifier \
-		0008-x86-Disallow-mindirect-branch-mfunction-return-with-m \
-		0009-Use-INVALID_REGNUM-in-indirect-thunk-processing \
-		"
+	cd ${DEBIAN_UNPACK_DIR}
+	export stampdir=.
+	rm -f debian/patches/series $stampdir/02-series-stamp
+	make series -f debian/rules.patch
+	cd -
 
-	for patch in $debian_patches; do
-		echo "$patch".diff >> ${DEBIAN_QUILT_PATCHES}/series
-	done
+	# Poky has its own way and configs to cross build.
+	# It's hard to bitbake work with these patches because of
+	# different way/stage/process in building.
+	# The current implementation for recipe is still work fine,
+	# so temporarily ignore them.
+	sed -i -e '/gcc-multiarch.*.diff/d' \
+	       -e '/g++-multiarch.*.diff/d' \
+	       -e '/config-ml.*.diff/d' \
+	       -e '/gcc-multilib-multiarch.diff/d' \
+	       -e '/cross-install-location.diff/d' \
+	    ${DEBIAN_UNPACK_DIR}/debian/patches/series
 }

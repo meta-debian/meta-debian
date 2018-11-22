@@ -14,7 +14,6 @@ do_populate_lic[depends] += "gcc-source:do_unpack"
 S = "${DEBIAN_UNPACK_DIR}/src"
 do_unpack_extra() {
 	test -d ${DEBIAN_UNPACK_DIR} || mkdir -p ${DEBIAN_UNPACK_DIR}
-	test -d ${S} || mkdir -p ${S}
 
 	# copy source from shared folder to each package
 	cp -rf ${SW}/git/debian ${DEBIAN_UNPACK_DIR}/
@@ -24,10 +23,15 @@ do_unpack_extra() {
 	                                  sed "s|.*(\([^()]*\)).*|\1|")
 	PV_ORIG=$(echo $PV_SRCPKG | sed "s|-.*||")
 
-	# extract source code from shared folder
-	tar xf ${SW}/git/gcc-$PV_ORIG-dfsg.tar.xz -C ${S}
-	mv -n ${S}/gcc-$PV_ORIG/* ${S}/
-	rm -r ${S}/gcc-$PV_ORIG
+	# extract source code from shared folder base on debian/rules.unpack
+	rm -rf ${S}
+	tar xf ${SW}/git/gcc-$PV_ORIG-dfsg.tar.xz -C ${DEBIAN_UNPACK_DIR}/
+	mv ${DEBIAN_UNPACK_DIR}/gcc-$PV_ORIG ${S}
+	ln -sf libsanitizer ${S}/libasan
+
+	rm -rf ${S}/gcc/d ${S}/gcc/testsuite/gdc.test \
+	       ${S}/gcc/testsuite/lib/gdc*.exp ${S}/libphobos
+	tar -x -C ${S} --strip-components=1 -f ${SW}/git/gdc-*.tar.xz
 }
 
 addtask unpack_extra after do_unpack before do_debian_verify_version
