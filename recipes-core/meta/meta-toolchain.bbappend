@@ -29,3 +29,17 @@ ld_so_conf_postinst() {
 	    -e "s@\(^include\s*\)${sysconfdir}@\1$target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${sysconfdir}@g" \
 	    $target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${sysconfdir}/ld.so.conf
 }
+
+# Update include/library/pkgconfig paths to SDK sysroot for /usr/lib/$MULTILIB/qt5/mkspecs/*.pri \
+# and /usr/lib/$MULTILIB/libQt5*.prl
+SDK_POST_INSTALL_COMMAND += "${qt5_config_postinst}"
+qt5_config_postinst() {
+	for file in $target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${libdir}/qt5/mkspecs/*.pri \
+	            $target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}${nonarch_libdir}/libQt5*.prl; do
+		if [ -f "$file" ]; then
+			$SUDO_EXEC sed -i \
+			    -e "s@${STAGING_DIR_HOST}@$target_sdk_dir/sysroots/${REAL_MULTIMACH_TARGET_SYS}@g" \
+			    $file
+		fi
+	done
+}
