@@ -65,5 +65,6 @@ do_debian_patch_prepend() {
 	       -e '/config-ml.*.diff/d' \
 	       -e '/gcc-multilib-multiarch.diff/d' \
 	       -e '/cross-install-location.diff/d' \
+	       -e '/arm-multilib-.*.diff/d' \
 	    ${DEBIAN_UNPACK_DIR}/debian/patches/series
 }
