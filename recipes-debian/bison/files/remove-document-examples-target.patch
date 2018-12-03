@@ -16,12 +16,13 @@ diff --git a/Makefile.in b/Makefile.in
 index f8535d2..3064825 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -5187,14 +5187,6 @@ html-local: doc/Doxyfile
+@@ -5187,15 +5187,6 @@ html-local: doc/Doxyfile
  # configure, because the former is way faster than the latter.
  doc/Doxyfile: $(top_srcdir)/doc/Doxyfile.in
  	$(AM_V_GEN) $(edit) $(top_srcdir)/doc/Doxyfile.in >doc/Doxyfile
 -examples/extracted.stamp: $(doc) $(extexi)
 -	$(AM_V_GEN)rm -f $@ $@.tmp
+-	$(AM_V_at)$(MKDIR_P) examples
 -	$(AM_V_at)touch $@.tmp
 -	$(AM_V_at)$(extract) $(extracted)
 -	$(AM_V_at)mv $@.tmp $@
@@ -29,16 +30,16 @@ index f8535d2..3064825 100644
 -$(extracted): examples/extracted.stamp
 -	touch $@
  
- # Don't depend on $(BISON) otherwise we would rebuild these files
- # in srcdir, including during distcheck, which is forbidden.
+ # Suppress the #lines from the examples when rolling the tarball, so
+ # that regular users have readable examples even before installing
 diff --git a/tests/local.mk b/tests/local.mk
 index 394a92e..9ad26f1 100644
 --- a/tests/local.mk
 +++ b/tests/local.mk
 @@ -18,7 +18,7 @@
- EXTRA_DIST += $(TESTSUITE_AT) tests/testsuite
+ EXTRA_DIST += $(TESTSUITE_AT) %D%/testsuite %D%/testsuite.h
  
- DISTCLEANFILES       += tests/atconfig $(check_SCRIPTS)
+ DISTCLEANFILES       += %D%/atconfig $(check_SCRIPTS)
 -MAINTAINERCLEANFILES += $(TESTSUITE)
 +MAINTAINERCLEANFILES = $(TESTSUITE)
  
