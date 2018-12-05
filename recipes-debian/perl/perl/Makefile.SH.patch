@@ -280,8 +280,8 @@ Index: perl-5.24.4/Makefile.SH
  
  pod/perlmodlib.pod: $(MINIPERL_EXE) pod/perlmodlib.PL MANIFEST
 @@ -1089,7 +1099,7 @@ pod/perl5241delta.pod: pod/perldelta.pod
- 	$(RMS) pod/perl5280delta.pod
- 	$(LNS) perldelta.pod pod/perl5280delta.pod
+ 	$(RMS) pod/perl5281delta.pod
+ 	$(LNS) perldelta.pod pod/perl5281delta.pod
  
 -extra.pods: $(MINIPERL_EXE)
 +extra.pods:

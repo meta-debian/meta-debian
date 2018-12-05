@@ -30,7 +30,6 @@ LIC_FILES_CHKSUM = " \
 # and examples for minimal implementation with
 # remove-document-examples-target.patch
 SRC_URI += "\
-	file://0001-src-local.mk-fix-parallel-issue.patch \
 	file://remove-document-examples-target.patch \
 "
 
