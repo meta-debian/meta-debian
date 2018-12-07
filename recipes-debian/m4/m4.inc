@@ -16,6 +16,9 @@ LIC_FILES_CHKSUM = " \
 	file://examples/COPYING;md5=4031593b2166d6c47cae282d944a7ede \
 "
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/m4/m4"
+SRC_URI += "file://m4-1.4.18-glibc-change-work-around.patch"
+
 inherit autotools texinfo
 
 # source format is 3.0 but there is no debian/patches
