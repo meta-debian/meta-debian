@@ -1,6 +1,6 @@
 require recipes-core/glibc/glibc-locale.inc
 
-PV = "2.27"
+PV = "2.28"
 
 do_install_append() {
 	# Only install /usr/lib/gconv and /usr/share/i18n if charset/locales/locale-code is enabled
