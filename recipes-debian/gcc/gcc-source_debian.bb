@@ -9,7 +9,7 @@ do_unpack_append() {
 }
 
 unpack_extra() {
-	rm -rf ${S}
+	rm -rf ${S} ${DEBIAN_UNPACK_DIR}/.pc.debian
 	tar xf ${DEBIAN_UNPACK_DIR}/gcc-${PV}-dfsg.tar.xz -C ${DEBIAN_UNPACK_DIR}/
 	mv ${DEBIAN_UNPACK_DIR}/gcc-${PV} ${S}
 	ln -sf libsanitizer ${S}/libasan
