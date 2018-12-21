@@ -9,6 +9,9 @@ LIC_FILES_CHKSUM = " \
 	file://gzip.h;beginline=8;endline=20;md5=6e47caaa630e0c8bf9f1bc8d94a8ed0e \
 "
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-extended/gzip/gzip-1.9"
+SRC_URI += "file://gnulib.patch"
+
 PROVIDES_append_class-native = " gzip-replacement-native"
 
 BBCLASSEXTEND = "native"

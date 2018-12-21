@@ -18,9 +18,6 @@ LIC_FILES_CHKSUM = " \
 
 inherit autotools texinfo
 
-# source format is 3.0 but there is no debian/patches
-DEBIAN_QUILT_PATCHES = ""
-
 # Fix "Argument list too long" error when len(TMPDIR) = 410
 acpaths = "-I ./m4"
 
