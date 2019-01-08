@@ -24,6 +24,8 @@ inherit kernel
 # use the same kernel source as linux-libc-headers-base_git.bb
 inherit linux-src
 
+KERNEL_DEVICETREE_qemuarm = "versatile-pb.dtb"
+
 # Fix linux-cip build error with gcc8 on ppc
 SRC_URI += "file://powerpc-Disable-attribute-alias-warnings-from-gcc8.patch \
             file://powerpc-ptrace-Disable-array-bounds-warning-with-gcc.patch \
