@@ -12,7 +12,6 @@ LIC_FILES_CHKSUM = " \
 FILESPATH_append = ":${COREBASE}/meta/recipes-extended/gzip/gzip-1.9:${COREBASE}/meta/recipes-extended/gzip/files"
 SRC_URI += " \
     file://run-ptest \
-    file://gnulib.patch \
 "
 
 PROVIDES_append_class-native = " gzip-replacement-native"
