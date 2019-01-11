@@ -98,9 +98,10 @@ def save_to_file(package, dpv, pv, repack_pv, directory, files, md5sum, sha256su
             prevent_apply = ""
             if ".diff" in file or ".patch" in file:
                 prevent_apply = ";apply=no"
-            src_uri += '    %s/%s;name=%s%s \\\n' % (debian_uri, file, file, prevent_apply)
-            src_uri_md5 += 'SRC_URI[%s.md5sum] = "%s"\n' % (file, md5sum[file])
-            src_uri_sha256 += 'SRC_URI[%s.sha256sum] = "%s"\n' % (file, sha256sum[file])
+            nametag = file.replace('~', '_')
+            src_uri += '    %s/%s;name=%s%s \\\n' % (debian_uri, file, nametag, prevent_apply)
+            src_uri_md5 += 'SRC_URI[%s.md5sum] = "%s"\n' % (nametag, md5sum[file])
+            src_uri_sha256 += 'SRC_URI[%s.sha256sum] = "%s"\n' % (nametag, sha256sum[file])
         src_uri += '"\n'
 
         source_info += '\n' + src_uri + '\n' + src_uri_md5 + '\n' + src_uri_sha256
