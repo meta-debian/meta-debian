@@ -5,6 +5,7 @@
 # to generate informations for DEBIAN_SRC_URI and PV.
 
 DEBIAN_CODENAME ?= "${DISTRO_CODENAME}"
+DEBIAN_SRC_FORCE_REGEN ?= "0"
 
 def fetch_Sources_xz(d):
     """
@@ -40,8 +41,13 @@ def fetch_Sources_xz(d):
     if os.path.isfile(old_Sources_xz):
         old_md5sum_Source_xz = bb.utils.md5_file(old_Sources_xz)
         if md5sum_Source_xz == old_md5sum_Source_xz:
-            bb.plain('Sources.xz is not changed. Nothing to do.')
-            return False
+            bb.plain('Sources.xz is not changed.')
+            force = d.getVar('DEBIAN_SRC_FORCE_REGEN', True)
+            if not force:
+                return False
+            else:
+                bb.plain('Force regenerate source code information.')
+                return True
         else:
             os.remove(old_Sources_xz)
 

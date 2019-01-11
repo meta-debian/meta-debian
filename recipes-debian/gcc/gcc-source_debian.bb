@@ -9,81 +9,88 @@ do_unpack_append() {
 }
 
 unpack_extra() {
-	rm -rf ${S}/*
-	tar xf ${DEBIAN_UNPACK_DIR}/gcc-${PV}-dfsg.tar.xz -C ${DEBIAN_UNPACK_DIR}
-	mv ${DEBIAN_UNPACK_DIR}/gcc-${PV}/* ${S}/
-	rm -rf ${DEBIAN_UNPACK_DIR}/gcc-${PV}
+	rm -rf ${S} ${DEBIAN_UNPACK_DIR}/.pc.debian
+	tar xf ${DEBIAN_UNPACK_DIR}/gcc-${PV}-dfsg.tar.xz -C ${DEBIAN_UNPACK_DIR}/
+	mv ${DEBIAN_UNPACK_DIR}/gcc-${PV} ${S}
+	ln -sf libsanitizer ${S}/libasan
+
+	rm -rf ${S}/gcc/d ${S}/gcc/testsuite/gdc.test \
+	       ${S}/gcc/testsuite/lib/gdc*.exp ${S}/libphobos
+	tar -x -C ${S}/ --strip-components=1 -f ${DEBIAN_UNPACK_DIR}/gdc-*.tar.xz
 }
 
 # Generate debian/patches/series
 do_debian_patch_prepend() {
-	# Remove old series file if existed
-	test -f ${DEBIAN_QUILT_PATCHES}/series && rm -f ${DEBIAN_QUILT_PATCHES}/series
-
-	debian_patches="svn-updates \
-		gcc-gfdl-build \
-		gcc-textdomain \
-		gcc-driver-extra-langs \
-		gcc-hash-style-gnu \
-		libstdc++-pic \
-		libstdc++-doclink \
-		libstdc++-man-3cxx \
-		libstdc++-test-installed \
-		alpha-no-ev4-directive \
-		note-gnu-stack \
-		libgomp-omp_h-multilib \
-		pr47818 \
-		libgo-testsuite \
-		libgo-cleanfiles \
-		gcc-target-include-asm \
-		libgo-revert-timeout-exp \
-		libgo-setcontext-config \
-		gcc-auto-build \
-		kfreebsd-unwind \
-		libitm-no-fortify-source \
-		sparc64-biarch-long-double-128 \
-		pr66368 \
-		pr67590 \
-		libjit-ldflags \
-		libffi-pax \
-		libffi-race-condition \
-		gcc-foffload-default \
-		gcc-fuse-ld-lld \
-		cuda-float128 \
-		libffi-mipsen-r6 \
-		t-libunwind-elf-Wl-z-defs \
-		gcc-alpha-bs-ignore \
-		libffi-riscv \
-		gcc-force-cross-layout \
-		gcc-search-prefixed-as-ld \
-		kfreebsd-decimal-float \
-		powerpcspe_remove_many \
-		gcc-as-needed-push-pop \
-		ada-arm \
-		gcc-d-lang \
-	"
-
-	if [ "${DPKG_ARCH}" = "powerpcspe" ]; then
-		debian_patches="$debian_patches \
-			powerpcspe_nofprs"
+	# Base on debian/rules.defs, set required variables for
+	# using debian/rules.patch to generate debian/patches/series.
+	export distrelease=${DISTRO_CODENAME}
+	export derivative=${DISTRO_NAME}
+	export distribution=${DISTRO_NAME}
+	export GFDL_INVARIANT_FREE=yes
+	export PKGSOURCE=${DPN}
+	export DEB_TARGET_ARCH=${DPKG_ARCH}
+	export DEB_TARGET_ARCH_OS=${TARGET_OS}
+	if [ "${HOST_SYS}" != "${BUILD_SYS}" ]; then
+		if [ "${HOST_SYS}" != "${TARGET_SYS}" ]; then
+			export DEB_CROSS=yes
+			export build_type=cross-build-cross
+		else
+			export build_type=cross-build-native
+		fi
+	else
+		if [ "${HOST_SYS}" != "${TARGET_SYS}" ]; then
+			export DEB_CROSS=yes
+			export build_type=build-cross
+		else
+			export build_type=build-native
+		fi
 	fi
 
-	debian_patches="$debian_patches \
-		sys-auxv-header \
-		gcc-ice-dump \
-		gcc-ice-apport \
-		skip-bootstrap-multilib \
-		libffi-ro-eh_frame_sect \
-		libffi-mips \
-		ada-kfreebsd \
-		ada-drop-termio-h \
-		libgomp-kfreebsd-testsuite \
-		go-testsuite \
-		ada-749574 \
-		ada-changes-in-autogen-output \
-		"
+	if [ $distribution-$DEB_TARGET_ARCH = Debian-arm64 ]; then
+		export with_linaro_branch=yes
+	fi
+	export with_ssp=yes
+	ssp_no_archs="alpha hppa ia64 m68k"
+	if echo $ssp_no_archs | grep -q "$DEB_TARGET_ARCH"; then
+		export with_ssp="not available on $DEB_TARGET_ARCH"
+	fi
+	# with_ssp_default is only set if $derivative is not Debian. Ignore it.
+	pie_archs="amd64 arm64 armel armhf i386 \
+	    mips mipsel mips64 mips64el mipsn32 mipsn32el \
+	    mipsr6 mipsr6el mips64r6 mips64r6el mipsn32r6 mipsn32r6el \
+	    ppc64el s390x sparc sparc64 kfreebsd-amd64 kfreebsd-i386 \
+	    hurd-i386 riscv64"
+	if echo $pie_archs | grep -q $DEB_TARGET_ARCH; then
+		export with_pie=yes
+	fi
 
-	for patch in $debian_patches; do
-		echo "$patch".diff >> ${DEBIAN_QUILT_PATCHES}/series
-	done
+	export biarch64=no
+	export separate_lang=no
+	export with_ada=no
+	if [ x$separate_lang != xyes ]; then
+		export with_d=yes
+	fi
+	export with_libphobos=no
+	export single_package=no
+
+	# Poky has a different way to support multilib,
+	# using Debian multilib patches will cause conflict.
+	export multilib=no
+	export with_multiarch_lib=no
+	if [ x$with_multiarch_lib = xyes ] && [ x$single_package != xyes ] && [ x$DEB_CROSS != xyes ]; then
+		export with_multiarch_cxxheaders=yes
+	fi
+
+	cd ${DEBIAN_UNPACK_DIR}
+	export stampdir=.
+	rm -f debian/patches/series $stampdir/02-series-stamp
+	make series -f debian/rules.patch
+	cd -
+
+	sed -i -e '/gcc-multiarch.*.diff/d' \
+               -e '/config-ml.*.diff/d' \
+               -e '/gcc-multilib-multiarch.diff/d' \
+               -e '/cross-install-location.diff/d' \
+               -e '/arm-multilib-.*.diff/d' \
+            ${DEBIAN_UNPACK_DIR}/debian/patches/series
 }

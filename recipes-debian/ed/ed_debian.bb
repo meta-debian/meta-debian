@@ -13,9 +13,9 @@ require recipes-debian/sources/ed.inc
 LICENSE = "GPLv3+ & GPLv2+ & BSD-2-Clause"
 LIC_FILES_CHKSUM = " \
     file://COPYING;md5=0c7051aef9219dc7237f206c5c4179a7 \
-    file://ed.h;endline=18;md5=732c441d6778edd95456153ea8c00ea6 \
-    file://main.c;endline=16;md5=0c4723efd750563ae7d6ae847b50cd41 \
-    file://carg_parser.h;endline=18;md5=407288513b2b9492418fc61112d342de \
+    file://ed.h;endline=18;md5=aac311aae1aae141556ce145766cf580 \
+    file://main.c;endline=16;md5=44d420b4d0fe253a1943256287c0e426 \
+    file://carg_parser.h;endline=18;md5=07e98b8362be5db7ece208c9420011c1 \
 "
 
 # source format is 3.0 (quilt) but there is no debian/patches

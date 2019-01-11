@@ -24,10 +24,10 @@ inherit kernel
 # use the same kernel source as linux-libc-headers-base_git.bb
 inherit linux-src
 
-# Fix linux-cip build error with gcc8 on arm, mips and ppc
-SRC_URI += "file://ARM-fix-put_user-for-gcc-8.patch \
-            file://0001-turn-off-Wattribute-alias.patch \
-            file://powerpc-Disable-attribute-alias-warnings-from-gcc8.patch \
+KERNEL_DEVICETREE_qemuarm = "versatile-pb.dtb"
+
+# Fix linux-cip build error with gcc8 on ppc
+SRC_URI += "file://powerpc-Disable-attribute-alias-warnings-from-gcc8.patch \
             file://powerpc-ptrace-Disable-array-bounds-warning-with-gcc.patch \
             "
 
