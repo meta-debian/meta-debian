@@ -9,13 +9,6 @@ LIC_FILES_CHKSUM = " \
     file://Artistic;md5=71a4d5d9acc18c0952a6df2218bb68da \
 "
 
-do_debian_unpack_extra_append() {
-	if [ -d ${WORKDIR}/metaconfig-debian-${BPN}-5.26.1 ]; then
-		rm -rf ${DEBIAN_UNPACK_DIR}/regen-configure
-		mv ${WORKDIR}/metaconfig-debian-${BPN}-5.26.1 ${DEBIAN_UNPACK_DIR}/regen-configure
-	fi
-}
-
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/perl/perl"
 
 do_debian_unpack_extra_append() {
