@@ -98,10 +98,10 @@ debian_patch_quilt() {
 		FOUND_PATCHES="$(debian_find_patches)"
 		if [ -z "${FOUND_PATCHES}" ]; then
 			bbnote "series is empty, nothing to do"
-			return
 		else
-			bbfatal "series is empty, but some patches found"
+			bbnote "series is empty, but some patches found"
 		fi
+		return
 	fi
 
 	# apply patches
