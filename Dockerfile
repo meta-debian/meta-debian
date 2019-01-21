@@ -29,4 +29,6 @@ RUN bash -c 'if test -n "$https_proxy"; then git config --global https.proxy "$h
 RUN bash -c 'if test -n "$no_proxy"; then git config --global core.noproxy "$no_proxy"; fi'
 
 RUN git clone $POKY_GIT_URL /home/$USER/poky
-RUN cd /home/$USER/poky; git checkout $POKY_REV; mkdir meta-debian
+RUN cd /home/$USER/poky && git checkout $POKY_REV
+RUN mkdir -p /home/$USER/poky/meta-debian
+RUN mkdir -p /home/$USER/build/downloads

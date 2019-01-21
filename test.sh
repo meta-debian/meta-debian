@@ -20,6 +20,7 @@ docker run \
 	--workdir /home/deby \
 	--cap-add SYS_ADMIN \
 	-v $META_DEBIAN_DIR:/home/deby/poky/meta-debian:rw \
+	-v $META_DEBIAN_DIR/.build-downloads:/home/deby/build/downloads:rw \
 	-u $uid \
 	--rm \
 	-i \
