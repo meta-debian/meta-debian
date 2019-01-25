@@ -23,9 +23,9 @@ unpack_extra() {
 do_debian_patch_prepend() {
 	# Base on debian/rules.defs, set required variables for
 	# using debian/rules.patch to generate debian/patches/series.
-	export distrelease=${DISTRO_CODENAME}
-	export derivative=${DISTRO_NAME}
-	export distribution=${DISTRO_NAME}
+	export distrelease="${DISTRO_CODENAME}"
+	export derivative="${DISTRO_NAME}"
+	export distribution="${DISTRO_NAME}"
 	export GFDL_INVARIANT_FREE=yes
 	export PKGSOURCE=${DPN}
 	export DEB_TARGET_ARCH=${DPKG_ARCH}

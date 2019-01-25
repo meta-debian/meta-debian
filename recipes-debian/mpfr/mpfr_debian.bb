@@ -10,11 +10,11 @@ LICENSE = "GPLv3+ & LGPLv3+"
 inherit debian-package
 require recipes-debian/sources/mpfr4.inc
 BPN = "mpfr4"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/mpfr-${PV}"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/mpfr-4.0.2-rc1"
 
 LIC_FILES_CHKSUM = " \
-file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
-file://COPYING.LESSER;md5=6a6a8e020838b23406c81b19c1d46df6 \
+file://COPYING;md5=1ebbd3e34237af26da5dc08a4e440464 \
+file://COPYING.LESSER;md5=3000208d539ec061b899bce1d9ce9404 \
 "
 
 inherit autotools
