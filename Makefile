@@ -1,6 +1,6 @@
 IMAGENAME := deby-image
 CNAME := deby
-POKY_REV := d94ac527b3a2bf1a8330b676513062bf699fbbe3
+POKY_REV := a7774aced031de1c8e42d0559182e802df8bcaa8
 META_DEBIAN_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 UID := $(shell id -u)
