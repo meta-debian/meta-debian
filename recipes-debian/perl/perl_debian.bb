@@ -1,203 +1,139 @@
 #
-# base recipe: meta/recipes-devtools/perl/perl_5.24.4.bb
+# base recipe: meta/recipes-devtools/perl-sanity/perl_5.28.1.bb
 # base branch: master
-# base commit: dbda297fd91aab2727f7a69d3b7d3a32ad4261d2
+# base commit: a7774aced031de1c8e42d0559182e802df8bcaa8
 #
 
-require perl.inc
+SUMMARY = "Perl scripting language"
+HOMEPAGE = "http://www.perl.org/"
+LICENSE = "Artistic-1.0 | GPL-1.0+"
+LIC_FILES_CHKSUM = " \
+    file://Copying;md5=5b122a36d0f6dc55279a0ebc69f3c60b \
+    file://Artistic;md5=71a4d5d9acc18c0952a6df2218bb68da \
+"
 
-# We need gnugrep (for -I)
-DEPENDS = "db grep-native gdbm zlib virtual/crypt"
+inherit debian-package
+require recipes-debian/sources/perl.inc
 
-# Ignore obsolete patches:
-#   perl-fix-conflict-between-skip_all-and-END.patch
-#   perl-test-customized.patch
-#   fix_bad_rpath.patch
-#   perl-5.26.1-guard_old_libcrypt_fix.patch
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/perl-sanity/files"
 SRC_URI += " \
-    file://Makefile.patch \
-    file://Makefile.SH.patch \
-    file://installperl.patch \
-    file://perl-archlib-exp.patch \
-    file://perl-dynloader.patch \
-    file://perl-moreconfig.patch \
-    file://letgcc-find-errno.patch \
-    file://generate-sh.patch \
+    https://github.com/arsv/perl-cross/releases/download/1.2.1/perl-cross-1.2.1.tar.gz;name=perl-cross \
+    file://perl-rdepends.txt \
+    file://0001-configure_tool.sh-do-not-quote-the-argument-to-comma.patch \
+    file://0001-ExtUtils-MakeMaker-add-LDFLAGS-when-linking-binary-m.patch \
+    file://0001-Somehow-this-module-breaks-through-the-perl-wrapper-.patch \
+    file://perl-configpm-switch.patch \
     file://native-perlinc.patch \
-    file://cross-generate_uudmap.patch \
-    file://dynaloaderhack.patch \
-    file://config.sh \
-    file://config.sh-32 \
-    file://config.sh-32-le \
-    file://config.sh-32-be \
-    file://config.sh-64 \
-    file://config.sh-64-le \
-    file://config.sh-64-be \
-    file://make_ext.pl-fix-regenerate-makefile-failed-while-cc-.patch \
-    file://t-run-switches.t-perl5-perl.patch \
-    file://ext-ODBM_File-hints-linux.pl-link-libgdbm_compat.patch \
-    file://ext-ODBM_File-t-odbm.t-fix-the-path-of-dbmt_common.p.patch \
-    file://perl-errno-generation-gcc5.patch \
-    file://INC-local-path-fix.patch \
+    file://0001-perl-cross-add-LDFLAGS-when-linking-libperl.patch \
+    file://perl-dynloader.patch \
+    file://0001-configure_path.sh-do-not-hardcode-prefix-lib-as-libr.patch \
+    file://fix-race-failures.patch \
+    file://fix-race-failures-2.patch \
+    file://0001-Also-build-dynaloader-separately-as-race-failures-ha.patch \
+    file://0001-Make-sure-install.perl-runs-before-install.man.patch \
+    file://0001-Makefile-Make-install.perl-depend-on-install.sym.patch \
 "
 
-# Fix test case issues
-SRC_URI_append_class-target = " \
-    file://test/dist-threads-t-join.t-adjust-ps-option.patch \
-    file://test/ext-DynaLoader-t-DynaLoader.t-fix-calling-dl_findfil.patch \
-"
+SRC_URI[perl-cross.md5sum] = "c5cdc8b7ebc449ee57fe18fc1ac60c80"
+SRC_URI[perl-cross.sha256sum] = "8b706bc688ddf71b62d649bde72f648669f18b37fe0c54ec6201142ca3943498"
 
-inherit perlnative siteinfo
+do_unpack_append() {
+    bb.build.exec_func('do_unpack_extra', d)
+}
 
-# Where to find the native perl
-HOSTPERL = "${STAGING_BINDIR_NATIVE}/perl-native/perl${PV}"
+do_unpack_extra() {
+	cp -rf ${WORKDIR}/perl-cross*/* ${S}
+	mv ${WORKDIR}/metaconfig-* ${DEBIAN_UNPACK_DIR}/regen-configure
+}
 
-# Where to find .so files - use the -native versions not those from the target build
-export PERLHOSTLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
+do_configure_class-target() {
+	./configure --prefix=${prefix} --libdir=${libdir} \
+	--target=${TARGET_SYS} \
+	-Duseshrplib \
+	-Dsoname=libperl.so.5 \
+	-Dvendorprefix=${prefix} \
+	-Darchlibexp=${STAGING_LIBDIR}/perl5/${PV}/${TARGET_ARCH}-linux
 
-# Where to find perl @INC/#include files
-# - use the -native versions not those from the target build
-export PERL_LIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
-export PERL_ARCHLIB = "${STAGING_LIBDIR_NATIVE}/perl-native/perl/${PV}/"
+	#perl.c uses an ARCHLIB_EXP define to generate compile-time code that
+	#adds the archlibexp path to @INC during run-time initialization of a
+	#new perl interpreter.
 
-EXTRA_OEMAKE = "-e MAKEFLAGS="
+	#Because we've changed this value in a temporary way to make it
+	#possible to use ExtUtils::Embed in the target build (the temporary
+	#value in config.sh gets re-stripped out during packaging), the
+	#ARCHLIB_EXP value that gets generated still uses the temporary version
+	#instead of the original expected version (i.e. becauses it's in the
+	#generated config.h, it doesn't get stripped out during packaging like
+	#the others in config.sh).
 
-# LDFLAGS for shared libraries
-export LDDLFLAGS = "${LDFLAGS} -shared"
+	sed -i -e "s,${STAGING_LIBDIR},${libdir},g" config.h
+}
 
-LDFLAGS_append = " -fstack-protector"
+do_configure_class-nativesdk() {
+	./configure --prefix=${prefix} \
+	--target=${TARGET_SYS} \
+	-Duseshrplib \
+	-Dsoname=libperl.so.5 \
+	-Dvendorprefix=${prefix} \
+	-Darchlibexp=${STAGING_LIBDIR}/perl5/${PV}/${TARGET_ARCH}-linux
 
-CFLAGS += "-DDEBIAN"
+	# See the comment above
+	sed -i -e "s,${STAGING_LIBDIR},${libdir},g" config.h
+}
 
-do_configure() {
-	# Make hostperl in build directory be the native perl
-	ln -sf ${HOSTPERL} hostperl
-
-	if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
-		if [ "`cat ${CONFIGURESTAMPFILE}`" != "${BB_TASKHASH}" -a -e Makefile ]; then
-			${MAKE} clean
-		fi
-		find ${S} -name *.so -delete
-	fi
-	if [ -n "${CONFIGURESTAMPFILE}" ]; then
-		echo ${BB_TASKHASH} > ${CONFIGURESTAMPFILE}
-	fi
-
-	# Do our work in the cross subdir
-	cd Cross
-
-	# Generate configuration
-	rm -f config.sh-${TARGET_ARCH}-${TARGET_OS}
-	for i in ${WORKDIR}/config.sh \
-	         ${WORKDIR}/config.sh-${SITEINFO_BITS} \
-	         ${WORKDIR}/config.sh-${SITEINFO_BITS}-${SITEINFO_ENDIANNESS}; do
-		cat $i >> config.sh-${TARGET_ARCH}-${TARGET_OS}
-	done
-
-	# Fixups for musl
-	if [ "${TARGET_OS}" = "linux-musl" -o "${TARGET_OS}" = "linux-musleabi" -o "${TARGET_OS}" = "linux-muslx32" ]; then
-		sed -i -e "s,\(d_libm_lib_version=\)'define',\1'undef',g" \
-		       -e "s,\(d_stdio_ptr_lval=\)'define',\1'undef',g" \
-		       -e "s,\(d_stdio_ptr_lval_sets_cnt=\)'define',\1'undef',g" \
-		       -e "s,\(d_stdiobase=\)'define',\1'undef',g" \
-		       -e "s,\(d_stdstdio=\)'define',\1'undef',g" \
-		       -e "s,\(d_getnetbyname_r=\)'define',\1'undef',g" \
-		       -e "s,\(d_finitel=\)'define',\1'undef',g" \
-		       -e "s,\(getprotobyname_r=\)'define',\1'undef',g" \
-		       -e "s,\(getpwent_r=\)'define',\1'undef',g" \
-		       -e "s,\(getservent_r=\)'define',\1'undef',g" \
-		       -e "s,\(gethostent_r=\)'define',\1'undef',g" \
-		       -e "s,\(getnetent_r=\)'define',\1'undef',g" \
-		       -e "s,\(getnetbyaddr_r=\)'define',\1'undef',g" \
-		       -e "s,\(getprotoent_r=\)'define',\1'undef',g" \
-		       -e "s,\(getprotobynumber_r=\)'define',\1'undef',g" \
-		       -e "s,\(getgrent_r=\)'define',\1'undef',g" \
-		       -e "s,\(i_fcntl=\)'undef',\1'define',g" \
-		       -e "s,\(h_fcntl=\)'false',\1'true',g" \
-		       -e "s,-fstack-protector,-fno-stack-protector,g" \
-		    config.sh-${TARGET_ARCH}-${TARGET_OS}
-	fi
-
-	# Update some paths in the configuration
-	sed -i -e 's,@ARCH@-thread-multi,,g' \
-	       -e 's,@ARCH@,${TARGET_ARCH}-${TARGET_OS},g' \
-	       -e 's,@STAGINGDIR@,${STAGING_DIR_HOST},g' \
-	       -e "s,@INCLUDEDIR@,${STAGING_INCDIR},g" \
-	       -e "s,@LIBDIR@,${libdir},g" \
-	       -e "s,@BASELIBDIR@,${base_libdir},g" \
-	       -e "s,@EXECPREFIX@,${exec_prefix},g" \
-	       -e 's,@USRBIN@,${bindir},g' \
-	       -e "s,-lnsl,,g" \
-	    config.sh-${TARGET_ARCH}-${TARGET_OS}
-
-	case "${TARGET_ARCH}" in
-		x86_64 | powerpc | s390)
-			sed -i -e "s,\(need_va_copy=\)'undef',\1'define',g" \
-				config.sh-${TARGET_ARCH}-${TARGET_OS}
-			;;
-		arm)
-			sed -i -e "s,\(d_u32align=\)'undef',\1'define',g" \
-				config.sh-${TARGET_ARCH}-${TARGET_OS}
-			;;
-	esac
-	# These are strewn all over the source tree
-	for foo in `grep -I --exclude="*.patch" --exclude="*.diff" --exclude="*.pod" --exclude="README*" --exclude="Glossary" -m1 "/usr/include/.*\.h" ${S}/* -r -l` ${S}/utils/h2xs.PL ; do
-		echo Fixing: $foo
-		sed -e 's|\([ "^'\''I]\+\)/usr/include/|\1${STAGING_INCDIR}/|g' -i $foo
-	done
-
-	rm -f config
-	echo "ARCH = ${TARGET_ARCH}" > config
-	echo "OS = ${TARGET_OS}" >> config
+do_configure_class-native() {
+	./configure --prefix=${prefix} \
+	-Dbin=${bindir}/perl-native \
+	-Duseshrplib \
+	-Dsoname=libperl.so.5 \
+	-Dvendorprefix=${prefix} \
+	-Ui_xlocale
 }
 
 do_compile() {
-	# Fix to avoid recursive substitution of path
-	sed -i -e 's|(@libpath, ".*"|(@libpath, "${STAGING_LIBDIR}"|g' cpan/ExtUtils-MakeMaker/lib/ExtUtils/Liblist/Kid.pm
-
-	cd Cross
-	oe_runmake perl LD="${CCLD}"
-}
-
-do_compile_append_class-target() {
-	# Remove build host references from numerous comments...
-	find "${S}/cpan/Encode" -type f \
-	    \( -name '*.exh' -o -name '*.c' -o -name '*.h' \)\
-	    -exec sed -i -e 's:${RECIPE_SYSROOT_NATIVE}::g' {} +
-	sed -i -e 's:${RECIPE_SYSROOT}::g' ${S}/perl.h ${S}/pp.h
-	sed -i -e 's:${RECIPE_SYSROOT_NATIVE}/usr/bin/perl-native/perl${PV}.real:/usr/bin/perl${PV}:g'  \
-	    ${S}/cpan/Compress-Raw-Bzip2/constants.h \
-	    ${S}/cpan/Compress-Raw-Zlib/constants.h \
-	    ${S}/cpan/IPC-SysV/const-c.inc \
-	    ${S}/dist/Time-HiRes/const-c.inc
+	oe_runmake
 }
 
 do_install() {
-	oe_runmake install DESTDIR=${D}
-	# Add perl pointing at current version
-	ln -sf perl${PV} ${D}${bindir}/perl
+	oe_runmake 'DESTDIR=${D}' install
 
-	ln -sf perl ${D}/${libdir}/perl5
+	install -D -d ${D}${libdir}/perl5/${PV}/ExtUtils/
 
-	# Remove unwanted file and empty directories
-	rm -f ${D}/${libdir}/perl/${PV}/.packlist
-	rmdir ${D}/${libdir}/perl/site_perl/${PV}
-	rmdir ${D}/${libdir}/perl/site_perl
+	# Save native config
+	install config.sh ${D}${libdir}/perl5
+	install lib/Config.pm ${D}${libdir}/perl5/${PV}/
+	install lib/ExtUtils/typemap ${D}${libdir}/perl5/${PV}/ExtUtils/
 
 	# Fix up shared library
-	mv ${D}/${libdir}/perl/${PV}/CORE/libperl.so ${D}/${libdir}/libperl.so.${PV}
-	ln -sf libperl.so.${PV} ${D}/${libdir}/libperl.so.5
-	ln -sf ../../../libperl.so.${PV} ${D}/${libdir}/perl/${PV}/CORE/libperl.so
-
-	# target config, used by cpan.bbclass to extract version information
-	install config.sh ${D}${libdir}/perl
-
-	ln -s Config_heavy.pl ${D}${libdir}/perl/${PV}/Config_heavy-target.pl
+	rm -f ${D}/${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/CORE/libperl.so
+	ln -sf ../../../../libperl.so.${PV} ${D}/${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/CORE/libperl.so
 }
 
-do_install_append_class-nativesdk () {
+do_install_append_class-target() {
+	# This is used to substitute target configuration when running native perl via perl-configpm-switch.patch
+	ln -sf Config_heavy.pl ${D}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/Config_heavy-target.pl
+
+}
+
+do_install_append_class-nativesdk() {
+	# This is used to substitute target configuration when running native perl via perl-configpm-switch.patch
+	ln -sf Config_heavy.pl ${D}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/Config_heavy-target.pl
+
 	create_wrapper ${D}${bindir}/perl \
-	    PERL5LIB='$PERL5LIB:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/site_perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/vendor_perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl/${PV}'
+	    PERL5LIB='$PERL5LIB:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl5/site_perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl5/vendor_perl/${PV}:$OECORE_NATIVE_SYSROOT/${libdir_nativesdk}/perl5/${PV}'
+}
+
+do_install_append_class-native () {
+	# Those wrappers mean that perl installed from sstate (which may change
+	# path location) works and that in the nativesdk case, the SDK can be
+	# installed to a different location from the one it was built for.
+	create_wrapper ${D}${bindir}/perl-native/perl PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl5/site_perl/${PV}:${STAGING_LIBDIR}/perl5/vendor_perl/${PV}:${STAGING_LIBDIR}/perl5/${PV}'
+	create_wrapper ${D}${bindir}/perl-native/perl${PV} PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl5/site_perl/${PV}:${STAGING_LIBDIR}/perl5/vendor_perl/${PV}:${STAGING_LIBDIR}/perl5/${PV}'
+
+	# Use /usr/bin/env nativeperl for the perl script.
+	for f in `grep -Il '#! *${bindir}/perl' ${D}/${bindir}/*`; do
+		sed -i -e 's|${bindir}/perl|/usr/bin/env nativeperl|' $f
+	done
 }
 
 PACKAGE_PREPROCESS_FUNCS += "perl_package_preprocess"
@@ -222,100 +158,117 @@ perl_package_preprocess () {
 	    ${PKGD}${bindir}/pod2usage \
 	    ${PKGD}${bindir}/podchecker \
 	    ${PKGD}${bindir}/podselect \
-	    ${PKGD}${libdir}/perl/${PV}/CORE/config.h \
-	    ${PKGD}${libdir}/perl/${PV}/CORE/perl.h \
-	    ${PKGD}${libdir}/perl/${PV}/CORE/pp.h \
-	    ${PKGD}${libdir}/perl/${PV}/Config.pm \
-	    ${PKGD}${libdir}/perl/${PV}/Config.pod \
-	    ${PKGD}${libdir}/perl/${PV}/Config_heavy.pl \
-	    ${PKGD}${libdir}/perl/${PV}/ExtUtils/Liblist/Kid.pm \
-	    ${PKGD}${libdir}/perl/${PV}/FileCache.pm \
-	    ${PKGD}${libdir}/perl/${PV}/pod/*.pod \
-	    ${PKGD}${libdir}/perl/config.sh
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/CORE/config.h \
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/CORE/perl.h \
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/CORE/pp.h \
+	    ${PKGD}${libdir}/perl5/${PV}/Config.pm \
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/Config.pm \
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/Config.pod \
+	    ${PKGD}${libdir}/perl5/${PV}/${TARGET_ARCH}-linux/Config_heavy.pl \
+	    ${PKGD}${libdir}/perl5/${PV}/ExtUtils/Liblist/Kid.pm \
+	    ${PKGD}${libdir}/perl5/${PV}/FileCache.pm \
+	    ${PKGD}${libdir}/perl5/${PV}/pod/*.pod \
+	    ${PKGD}${libdir}/perl5/config.sh
 }
 
-PACKAGES = "perl-dbg perl perl-misc perl-dev perl-pod perl-doc perl-lib \
-            perl-module-cpan perl-module-cpanplus perl-module-unicore"
-FILES_${PN} = "${bindir}/perl ${bindir}/perl${PV} \
-               ${libdir}/perl/${PV}/Config.pm \
-               ${libdir}/perl/${PV}/strict.pm \
-               ${libdir}/perl/${PV}/warnings.pm \
-               ${libdir}/perl/${PV}/warnings \
-               ${libdir}/perl/${PV}/vars.pm \
-               "
-FILES_${PN}_append_class-nativesdk = " ${bindir}/perl.real"
-RPROVIDES_${PN} += "perl-module-strict perl-module-vars perl-module-config perl-module-warnings \
-                    perl-module-warnings-register"
-FILES_${PN}-dev = "${libdir}/perl/${PV}/CORE"
-FILES_${PN}-lib = "${libdir}/libperl.so* \
-                   ${libdir}/perl5 \
-                   ${libdir}/perl/config.sh \
-                   ${libdir}/perl/${PV}/Config_git.pl \
-                   ${libdir}/perl/${PV}/Config_heavy.pl \
-                   ${libdir}/perl/${PV}/Config_heavy-target.pl"
-FILES_${PN}-pod = "${libdir}/perl/${PV}/pod \
-                   ${libdir}/perl/${PV}/*.pod \
-                   ${libdir}/perl/${PV}/*/*.pod \
-                   ${libdir}/perl/${PV}/*/*/*.pod "
-FILES_perl-misc = "${bindir}/*"
-FILES_${PN}-doc = "${libdir}/perl/${PV}/*/*.txt \
-                   ${libdir}/perl/${PV}/*/*/*.txt \
-                   ${libdir}/perl/${PV}/auto/XS/Typemap \
-                   ${libdir}/perl/${PV}/B/assemble \
-                   ${libdir}/perl/${PV}/B/cc_harness \
-                   ${libdir}/perl/${PV}/B/disassemble \
-                   ${libdir}/perl/${PV}/B/makeliblinks \
-                   ${libdir}/perl/${PV}/CGI/eg \
-                   ${libdir}/perl/${PV}/CPAN/PAUSE2003.pub \
-                   ${libdir}/perl/${PV}/CPAN/SIGNATURE \
-                   ${libdir}/perl/${PV}/CPANPLUS/Shell/Default/Plugins/HOWTO.pod \
-                   ${libdir}/perl/${PV}/Encode/encode.h \
-                   ${libdir}/perl/${PV}/ExtUtils/MANIFEST.SKIP \
-                   ${libdir}/perl/${PV}/ExtUtils/NOTES \
-                   ${libdir}/perl/${PV}/ExtUtils/PATCHING \
-                   ${libdir}/perl/${PV}/ExtUtils/typemap \
-                   ${libdir}/perl/${PV}/ExtUtils/xsubpp \
-                   ${libdir}/perl/${PV}/ExtUtils/Changes_EU-Install \
-                   ${libdir}/perl/${PV}/Net/*.eg \
-                   ${libdir}/perl/${PV}/unicore/mktables \
-                   ${libdir}/perl/${PV}/unicore/mktables.lst \
-                   ${libdir}/perl/${PV}/unicore/version "
+require recipes-devtools/perl-sanity/perl-ptest.inc
 
-FILES_perl-module-cpan += "${libdir}/perl/${PV}/CPAN \
-                           ${libdir}/perl/${PV}/CPAN.pm"
-FILES_perl-module-cpanplus += "${libdir}/perl/${PV}/CPANPLUS \
-                               ${libdir}/perl/${PV}/CPANPLUS.pm"
-FILES_perl-module-unicore += "${libdir}/perl/${PV}/unicore"
+FILES_${PN} = " \
+    ${bindir}/perl ${bindir}/perl.real ${bindir}/perl${PV} ${libdir}/libperl.so* \
+    ${libdir}/perl5/site_perl \
+    ${libdir}/perl5/${PV}/Config.pm \
+    ${libdir}/perl5/${PV}/*/Config_heavy-target.pl \
+    ${libdir}/perl5/config.sh \
+    ${libdir}/perl5/${PV}/strict.pm \
+    ${libdir}/perl5/${PV}/warnings.pm \
+    ${libdir}/perl5/${PV}/warnings \
+    ${libdir}/perl5/${PV}/vars.pm \
+    ${libdir}/perl5/site_perl \
+"
+RPROVIDES_${PN} += " \
+    perl-module-strict perl-module-vars perl-module-config perl-module-warnings \
+    perl-module-warnings-register"
+
+FILES_${PN}-staticdev += "${libdir}/perl5/${PV}/*/CORE/libperl.a"
+FILES_${PN}-dev += "${libdir}/perl5/${PV}/*/CORE"
+FILES_${PN}-doc += " \
+    ${libdir}/perl5/${PV}/Unicode/Collate/*.txt \
+    ${libdir}/perl5/${PV}/*/.packlist \
+    ${libdir}/perl5/${PV}/ExtUtils/MANIFEST.SKIP \
+    ${libdir}/perl5/${PV}/ExtUtils/xsubpp \
+    ${libdir}/perl5/${PV}/ExtUtils/typemap \
+    ${libdir}/perl5/${PV}/Encode/encode.h \
+"
+PACKAGES += "${PN}-misc"
+
+FILES_${PN}-misc = "${bindir}/*"
+
+PACKAGES += "${PN}-pod"
+
+FILES_${PN}-pod = " \
+    ${libdir}/perl5/${PV}/pod \
+    ${libdir}/perl5/${PV}/*.pod \
+    ${libdir}/perl5/${PV}/*/*.pod \
+    ${libdir}/perl5/${PV}/*/*/*.pod \
+    ${libdir}/perl5/${PV}/*/*/*/*.pod \
+"
+
+PACKAGES += "${PN}-module-cpan ${PN}-module-unicore"
+
+FILES_${PN}-module-cpan += "${libdir}/perl5/${PV}/CPAN"
+FILES_${PN}-module-unicore += "${libdir}/perl5/${PV}/unicore"
 
 # Create a perl-modules package recommending all the other perl
 # packages (actually the non modules packages and not created too)
-ALLOW_EMPTY_perl-modules = "1"
-PACKAGES_append = " perl-modules "
+ALLOW_EMPTY_${PN}-modules = "1"
+PACKAGES += "${PN}-modules "
 
 PACKAGESPLITFUNCS_prepend = "split_perl_packages "
 
 python split_perl_packages () {
-    libdir = d.expand('${libdir}/perl/${PV}')
-    do_split_packages(d, libdir, 'auto/([^.]*)/[^/]*\.(so|ld|ix|al)', 'perl-module-%s', 'perl module %s', recursive=True, match_path=True, prepend=False)
-    do_split_packages(d, libdir, 'Module/([^\/]*)\.pm', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
-    do_split_packages(d, libdir, 'Module/([^\/]*)/.*', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
-    do_split_packages(d, libdir, '(^(?!(CPAN\/|CPANPLUS\/|Module\/|unicore\/|auto\/)[^\/]).*)\.(pm|pl|e2x)', 'perl-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
+    libdir = d.expand('${libdir}/perl5/${PV}')
+    do_split_packages(d, libdir, r'.*/auto/([^.]*)/[^/]*\.(so|ld|ix|al)', '${PN}-module-%s', 'perl module %s', recursive=True, match_path=True, prepend=False)
+    do_split_packages(d, libdir, r'.*linux/([^\/]*)\.pm', '${PN}-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
+    do_split_packages(d, libdir, r'Module/([^\/]*)\.pm', '${PN}-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
+    do_split_packages(d, libdir, r'Module/([^\/]*)/.*', '${PN}-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
+    do_split_packages(d, libdir, r'.*linux/([^\/].*)\.(pm|pl|e2x)', '${PN}-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
+    do_split_packages(d, libdir, r'(^(?!(CPAN\/|CPANPLUS\/|Module\/|unicore\/)[^\/]).*)\.(pm|pl|e2x)', '${PN}-module-%s', 'perl module %s', recursive=True, allow_dirs=False, match_path=True, prepend=False)
 
     # perl-modules should recommend every perl module, and only the
     # modules. Don't attempt to use the result of do_split_packages() as some
     # modules are manually split (eg. perl-module-unicore).
     packages = filter(lambda p: 'perl-module-' in p, d.getVar('PACKAGES').split())
     d.setVar(d.expand("RRECOMMENDS_${PN}-modules"), ' '.join(packages))
+
+    # Read the pre-generated dependency file, and use it to set module dependecies
+    for line in open(d.expand("${WORKDIR}") + '/perl-rdepends.txt').readlines():
+        splitline = line.split()
+        module = splitline[0].replace("RDEPENDS_perl", "RDEPENDS_${PN}")
+        depends = splitline[2].strip('"').replace("perl-module", "${PN}-module")
+        d.appendVar(d.expand(module), " " + depends)
 }
 
-PACKAGES_DYNAMIC += "^perl-module-.*(?<!\-native)$"
+PACKAGES_DYNAMIC_class-target += "^perl-module-.*"
 PACKAGES_DYNAMIC_class-nativesdk += "^nativesdk-perl-module-.*"
 
-RPROVIDES_perl-lib = "perl-lib"
+RDEPENDS_${PN}-misc += "perl perl-modules"
+RDEPENDS_${PN}-pod += "perl"
 
-require recipes-devtools/perl/perl-rdepends_5.24.4.inc
-require recipes-devtools/perl/perl-ptest.inc
+BBCLASSEXTEND = "native nativesdk"
 
 SSTATE_SCAN_FILES += "*.pm *.pod *.h *.pl *.sh"
 
-BBCLASSEXTEND = "nativesdk"
+SYSROOT_PREPROCESS_FUNCS += "perl_sysroot_create_wrapper"
+
+perl_sysroot_create_wrapper () {
+       mkdir -p ${SYSROOT_DESTDIR}${bindir}
+       # Create a wrapper that /usr/bin/env perl will use to get perl-native.
+       # This MUST live in the normal bindir.
+       cat > ${SYSROOT_DESTDIR}${bindir}/nativeperl << EOF
+#!/bin/sh
+realpath=\`readlink -fn \$0\`
+exec \`dirname \$realpath\`/perl-native/perl "\$@"
+EOF
+       chmod 0755 ${SYSROOT_DESTDIR}${bindir}/nativeperl
+       cat ${SYSROOT_DESTDIR}${bindir}/nativeperl
+}
