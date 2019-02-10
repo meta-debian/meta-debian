@@ -26,9 +26,6 @@ LIC_FILES_CHKSUM = " \
 
 DEPENDS = "libnl"
 
-# source format is 3.0 but there is no patch
-DEBIAN_QUILT_PATCHES = ""
-
 inherit cmake
 
 EXTRA_OECMAKE = " \
