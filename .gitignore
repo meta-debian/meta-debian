@@ -1,2 +1,2 @@
-.build
-.build-downloads
+docker/.build
+docker/.build-downloads

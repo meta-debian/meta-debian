@@ -1,7 +1,9 @@
 IMAGENAME := deby-image
 CNAME := deby
 POKY_REV := a7774aced031de1c8e42d0559182e802df8bcaa8
-META_DEBIAN_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+
+DOCKER_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+META_DEBIAN_DIR := $(DOCKER_DIR)/..
 
 UID := $(shell id -u)
 ifeq ($(UID),0)
@@ -14,7 +16,7 @@ DOCKERRUN ?= docker run \
 		--env no_proxy=$(no_proxy) \
 		--workdir /home/deby \
 		-v $(META_DEBIAN_DIR):/home/deby/poky/meta-debian:rw \
-		-v $(META_DEBIAN_DIR)/.build-downloads:/home/deby/build/downloads:rw \
+		-v $(DOCKER_DIR)/.build-downloads:/home/deby/build/downloads:rw \
 		-u $(UID) \
 		--rm \
 		--name $(CNAME)
@@ -24,13 +26,13 @@ start: .build
 
 .build:
 	-docker stop -t0 $(CNAME)
-	mkdir -p $(META_DEBIAN_DIR)/.build-downloads
+	mkdir -p $(DOCKER_DIR)/.build-downloads
 	docker build --build-arg http_proxy="$(http_proxy)" \
 	             --build-arg https_proxy="$(https_proxy)" \
 	             --build-arg no_proxy="$(no_proxy)" \
 	             --build-arg POKY_REV="$(POKY_REV)" \
 	             --build-arg UID="$(UID)" \
-	             -t $(IMAGENAME) . && touch .build
+	             -t $(IMAGENAME) . && touch $@
 
 TEST_TARGETS ?= core-image-minimal
 export TEST_TARGETS
@@ -42,6 +44,6 @@ clean:
 	rm -f .build
 
 cleanall: clean
-	rm -f $(META_DEBIAN_DIR)/.build-downloads
+	rm -f $(DOCKER_DIR)/.build-downloads
 
 .PHONY: start clean

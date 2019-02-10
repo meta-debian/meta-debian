@@ -4,7 +4,8 @@ set -xe
 
 IMAGENAME=deby-image
 CNAME=deby
-META_DEBIAN_DIR=$(dirname $(readlink -f "$0"))
+DOCKER_DIR=$(dirname $(readlink -f "$0"))
+META_DEBIAN_DIR=${DOCKER_DIR}/..
 
 uid=1000
 if [ "$UID" != "0" ]; then
@@ -20,7 +21,7 @@ docker run \
 	--workdir /home/deby \
 	--cap-add SYS_ADMIN \
 	-v $META_DEBIAN_DIR:/home/deby/poky/meta-debian:rw \
-	-v $META_DEBIAN_DIR/.build-downloads:/home/deby/build/downloads:rw \
+	-v $DOCKER_DIR/.build-downloads:/home/deby/build/downloads:rw \
 	-u $uid \
 	--rm \
 	-i \
