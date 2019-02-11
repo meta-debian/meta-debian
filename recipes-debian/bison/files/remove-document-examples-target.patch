@@ -3,9 +3,9 @@ index 339a3c6..da52847 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -54,9 +54,7 @@ noinst_LIBRARIES =
+
  include build-aux/local.mk
  include data/local.mk
- include djgpp/local.mk
 -include doc/local.mk
  include etc/local.mk
 -include examples/local.mk
@@ -20,7 +20,7 @@ index f8535d2..3064825 100644
  # configure, because the former is way faster than the latter.
  doc/Doxyfile: $(top_srcdir)/doc/Doxyfile.in
  	$(AM_V_GEN) $(edit) $(top_srcdir)/doc/Doxyfile.in >doc/Doxyfile
--examples/extracted.stamp: $(doc) $(extexi)
+-examples/extracted.stamp: $(doc) doc/version.texi $(extexi)
 -	$(AM_V_GEN)rm -f $@ $@.tmp
 -	$(AM_V_at)$(MKDIR_P) examples
 -	$(AM_V_at)touch $@.tmp
