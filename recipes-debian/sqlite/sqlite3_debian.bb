@@ -115,7 +115,7 @@ FILES_${PN}-dbg += "${nonarch_libdir}/tcltk/sqlite3/.debug"
 # tcl modules are installed in /usr/lib/tcltk
 # which is not in libdir (/usr/lib/<triplet arch>/).
 # Skip QA warnings about that.
-INSANE_SKIP_lib${DPN}-tcl += "libdir"
+INSANE_SKIP_${MLPREFIX}lib${DPN}-tcl += "libdir"
 INSANE_SKIP_${PN}-dbg += "libdir"
 
 AUTO_LIBNAME_PKGS = "${MLPREFIX}lib${DPN}"
