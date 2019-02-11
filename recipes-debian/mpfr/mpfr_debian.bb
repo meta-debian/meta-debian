@@ -10,7 +10,7 @@ LICENSE = "GPLv3+ & LGPLv3+"
 inherit debian-package
 require recipes-debian/sources/mpfr4.inc
 BPN = "mpfr4"
-DEBIAN_UNPACK_DIR = "${WORKDIR}/mpfr-4.0.2-rc1"
+DEBIAN_UNPACK_DIR = "${WORKDIR}/mpfr-${@d.getVar('PV', True).replace('~','-')}"
 
 LIC_FILES_CHKSUM = " \
 file://COPYING;md5=1ebbd3e34237af26da5dc08a4e440464 \
