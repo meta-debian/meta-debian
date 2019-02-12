@@ -30,7 +30,6 @@ LIC_FILES_CHKSUM = " \
 SRC_URI += " \
      file://0003-configure-widen-the-regexp-for-SH-architectures.patch \
      file://0006-Use-libtool-2.4.patch \
-     file://0007-Add-the-armv5e-architecture-to-binutils.patch \
      file://0008-don-t-let-the-distro-compiler-point-to-the-wrong-ins.patch \
      file://0009-warn-for-uses-of-system-directories-when-cross-linki.patch \
      file://0010-Fix-rpath-in-libtool-when-sysroot-is-enabled.patch \
