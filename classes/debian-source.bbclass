@@ -5,6 +5,7 @@
 # to generate informations for DEBIAN_SRC_URI and PV.
 
 DEBIAN_CODENAME ?= "${DISTRO_CODENAME}"
+DEBIAN_SOURCE_ENABLED ?= "0"
 DEBIAN_SRC_FORCE_REGEN ?= "0"
 
 def fetch_Sources_xz(d):
@@ -217,7 +218,8 @@ def get_pkg_dpv_map(d):
 addhandler debian_source_eventhandler
 debian_source_eventhandler[eventmask] = "bb.event.ParseStarted"
 python debian_source_eventhandler() {
-    if not fetch_Sources_xz(d):
+    debian_source_enabled = d.getVar('DEBIAN_SOURCE_ENABLED', True)
+    if debian_source_enabled == '0' or not fetch_Sources_xz(d):
         # Nothing to do
         return
 
