@@ -130,6 +130,14 @@ do_compile () {
 	fi
 }
 
+do_install_append() {
+	# TODO: Should disable build/install these files by configurations.
+	# Poky has split rpc and libnsl to other recipes,
+	# this is workaround to avoid conflict with libnsl2.
+	rm -f ${D}${includedir}/rpcsvc/yppasswd.*
+	rm -f ${D}${libdir}/libnsl*
+}
+
 require recipes-core/glibc/glibc-package.inc
 
 do_poststash_install_cleanup_append() {
