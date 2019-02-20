@@ -1,6 +1,6 @@
 IMAGENAME := deby-image
 CNAME := deby
-POKY_REV := a7774aced031de1c8e42d0559182e802df8bcaa8
+POKY_REV := f4a270a519a14652b7c13a151068b4ef255710e7
 
 DOCKER_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 META_DEBIAN_DIR := $(DOCKER_DIR)/..
