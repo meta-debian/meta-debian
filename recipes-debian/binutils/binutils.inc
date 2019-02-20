@@ -30,11 +30,11 @@ LIC_FILES_CHKSUM = " \
 SRC_URI += " \
      file://0003-configure-widen-the-regexp-for-SH-architectures.patch \
      file://0006-Use-libtool-2.4.patch \
-     file://0008-don-t-let-the-distro-compiler-point-to-the-wrong-ins.patch \
-     file://0009-warn-for-uses-of-system-directories-when-cross-linki.patch \
-     file://0010-Fix-rpath-in-libtool-when-sysroot-is-enabled.patch \
+     file://0007-don-t-let-the-distro-compiler-point-to-the-wrong-ins.patch \
+     file://0008-warn-for-uses-of-system-directories-when-cross-linki.patch \
+     file://0009-Fix-rpath-in-libtool-when-sysroot-is-enabled.patch \
      file://0012-Add-support-for-Netlogic-XLP.patch \
-     file://0013-fix-the-incorrect-assembling-for-ppc-wait-mnemonic.patch \
-     file://0015-sync-with-OE-libtool-changes.patch \
+     file://0012-fix-the-incorrect-assembling-for-ppc-wait-mnemonic.patch \
+     file://0014-sync-with-OE-libtool-changes.patch \
 "
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/binutils/binutils"
