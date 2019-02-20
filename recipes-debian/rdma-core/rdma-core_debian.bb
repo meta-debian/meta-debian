@@ -38,7 +38,7 @@ FILES_${PN} += " \
     ${systemd_system_unitdir} \
 "
 
-RDEPENDS_${PN} = "perl"
+RDEPENDS_${PN} = "perl bash"
 
 # Avoid QA error about non -dev/-dbg/nativesdk- package contains symlink .so:
 #   /usr/lib/libibverbs/libmlx{4,5}-rdmav19.so
