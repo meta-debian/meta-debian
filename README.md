@@ -1,10 +1,13 @@
 What is meta-debian?
 ====================
 
-meta-debian is a set of recipes (metadata) for the poky build system, which allows cross-building GNU/Linux images using Debian source packages.
-By enabling meta-debian, you can cross-build a small GNU/Linux image with Debian sources for multiple architectures.
+meta-debian is a set of recipes (metadata) for the poky build system, 
+which allows cross-building GNU/Linux images using Debian source packages.
+By enabling meta-debian, you can cross-build a small GNU/Linux image 
+with Debian sources for multiple architectures.
 
-The main purpose of meta-debian is to provide reference Linux distribution for embedded systems satisfying the following needs.
+The main purpose of meta-debian is to provide reference Linux distribution 
+for embedded systems satisfying the following needs.
 * Long-term support
 * Stability
 * Wide embedded CPU support
@@ -12,40 +15,58 @@ The main purpose of meta-debian is to provide reference Linux distribution for e
 
 Currently, the following software versions are supported in meta-debian.
 * Source code: Debian GNU/Linux 10 (buster)
-* Build system: Yocto Project 2.5 (master)
+* Build system: Yocto Project (master)
 
 Quick Start
 ===========
 
-Install essential packages poky requires into your host system according to https://www.yoctoproject.org/docs/2.5/ref-manual/ref-manual.html#required-packages-for-the-host-development-system
+meta-debian can be built in a docker container or on a Linux machine (native build).
 
+### Setup build environment
+
+Clone meta-debian:
 ```sh
-$ sudo apt-get install git tar python3
-$ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
+$ git clone -b master https://github.com/meta-debian/meta-debian.git
 ```
 
-NOTE: The following three packages have version limitation
-* git: 1.7.8 or greater
-* tar: 1.24 or greater
-* python: 2.7.3 or greater not including Python 3.x
+* For docker build:
+   ```sh
+   $ cd meta-debian
+   $ make -C docker
+   ```
 
-Setup repositories.
+* For native build:
 
-```sh
-$ git clone -b master git://git.yoctoproject.org/poky.git
-$ cd poky
-$ git clone -b master-ng https://github.com/meta-debian/meta-debian.git
-$ cd ..
-```
+   * Install essential packages poky requires into your host system according to 
+   <https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html#required-packages-for-the-build-host>
 
-Setup build directory.
+      ```sh
+      $ sudo apt-get gawk wget git-core diffstat unzip texinfo gcc-multilib \
+      build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
+      xz-utils debianutils iputils-ping
+      ```
+
+      NOTE: The following three packages have version limitation
+      * git: 1.8.3.1 or greater
+      * tar: 1.27 or greater
+      * python: 3.4.0 or greater
+
+   * Setup repositories
+
+      ```sh
+      $ git clone -b master git://git.yoctoproject.org/poky.git
+      $ mv meta-debian poky/
+      ```
+
+### Build
 
 ```sh
 $ export TEMPLATECONF=meta-debian/conf
 $ source ./poky/oe-init-build-env
 ```
 
-You can change the target machine by setting `MACHINE` variable in `conf/local.conf` to one of the following machines.
+You can change the target machine by setting `MACHINE` variable in `conf/local.conf` 
+to one of the following machines.
 * qemux86 (default)
 * qemux86-64
 * qemuarm
@@ -66,24 +87,18 @@ It takes a while to complete (more than 30 minutes).
 $ bitbake core-image-minimal
 ```
 
-Run the built Linux on QEMU.
+### Run the built Linux on QEMU
+
 Please replace `${MACHINE}` by the target machine you selected in the above step.
-NOTE: Confirm that the tun module, which runqemu depends on, is correctly loaded in your system.
+
+NOTE: Confirm that the tun module, which runqemu depends on, 
+is correctly loaded in your system.
 
 ```sh
 $ runqemu ${MACHINE} nographic
 ```
 
-Only if `MACHINE` is `qemuarm`, the console should be set to the correct serial device.
-
-```sh
-$ runqemu qemuarm nographic bootparams="console=ttyAMA0"
-```
-
 After boot, you can login as `root` without password.
-
-If you'd like to reduce the time of bitbake,
-please refer to https://github.com/meta-debian/meta-debian-docker.
 
 License
 =======
