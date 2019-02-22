@@ -17,7 +17,7 @@ require recipes-debian/sources/perl.inc
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/perl-sanity/files"
 SRC_URI += " \
-    https://github.com/arsv/perl-cross/releases/download/1.2.1/perl-cross-1.2.1.tar.gz;name=perl-cross \
+    https://github.com/arsv/perl-cross/releases/download/1.2.2/perl-cross-1.2.2.tar.gz;name=perl-cross \
     file://perl-rdepends.txt \
     file://0001-configure_tool.sh-do-not-quote-the-argument-to-comma.patch \
     file://0001-ExtUtils-MakeMaker-add-LDFLAGS-when-linking-binary-m.patch \
@@ -27,15 +27,12 @@ SRC_URI += " \
     file://0001-perl-cross-add-LDFLAGS-when-linking-libperl.patch \
     file://perl-dynloader.patch \
     file://0001-configure_path.sh-do-not-hardcode-prefix-lib-as-libr.patch \
-    file://fix-race-failures.patch \
-    file://fix-race-failures-2.patch \
-    file://0001-Also-build-dynaloader-separately-as-race-failures-ha.patch \
-    file://0001-Make-sure-install.perl-runs-before-install.man.patch \
-    file://0001-Makefile-Make-install.perl-depend-on-install.sym.patch \
 "
 
-SRC_URI[perl-cross.md5sum] = "c5cdc8b7ebc449ee57fe18fc1ac60c80"
-SRC_URI[perl-cross.sha256sum] = "8b706bc688ddf71b62d649bde72f648669f18b37fe0c54ec6201142ca3943498"
+SRC_URI[perl-cross.md5sum] = "9a6c05497bdde9a3106e3be9246f4da1"
+SRC_URI[perl-cross.sha256sum] = "e6987838f27d8cd3368ea68fc56a68cc52371505950927b8b7c5cb76e3a94caa"
+
+PR = "r1"
 
 do_unpack_append() {
     bb.build.exec_func('do_unpack_extra', d)
@@ -128,7 +125,6 @@ do_install_append_class-native () {
 	# path location) works and that in the nativesdk case, the SDK can be
 	# installed to a different location from the one it was built for.
 	create_wrapper ${D}${bindir}/perl-native/perl PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl5/site_perl/${PV}:${STAGING_LIBDIR}/perl5/vendor_perl/${PV}:${STAGING_LIBDIR}/perl5/${PV}'
-	create_wrapper ${D}${bindir}/perl-native/perl${PV} PERL5LIB='$PERL5LIB:${STAGING_LIBDIR}/perl5/site_perl/${PV}:${STAGING_LIBDIR}/perl5/vendor_perl/${PV}:${STAGING_LIBDIR}/perl5/${PV}'
 
 	# Use /usr/bin/env nativeperl for the perl script.
 	for f in `grep -Il '#! *${bindir}/perl' ${D}/${bindir}/*`; do

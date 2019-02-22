@@ -43,16 +43,16 @@ SRC_URI += " \
            file://0018-eglibc-Cross-building-and-testing-instructions.patch \
            file://0022-eglibc-Forward-port-cross-locale-generation-support.patch \
            file://0023-Define-DUMMY_LOCALE_T-if-not-defined.patch \
-           file://0024-elf-dl-deps.c-Make-_dl_build_local_scope-breadth-fir.patch \
+           file://0024-localedef-add-to-archive-uses-a-hard-coded-locale-pa.patch \
+           file://0025-elf-dl-deps.c-Make-_dl_build_local_scope-breadth-fir.patch \
            file://0025-locale-fix-hard-coded-reference-to-gcc-E.patch \
            file://0026-reset-dl_load_write_lock-after-forking.patch \
            file://0027-Acquire-ld.so-lock-before-switching-to-malloc_atfork.patch \
            file://0028-bits-siginfo-consts.h-enum-definition-for-TRAP_HWBKP.patch \
-           file://0029-localedef-add-to-archive-uses-a-hard-coded-locale-pa.patch \
-           file://0030-intl-Emit-no-lines-in-bison-generated-files.patch \
+           file://0028-intl-Emit-no-lines-in-bison-generated-files.patch \
+           file://0029-inject-file-assembly-directives.patch \
            file://0031-sysdeps-ieee754-prevent-maybe-uninitialized-errors-w.patch \
            file://0033-locale-prevent-maybe-uninitialized-errors-with-Os-BZ.patch \
-           file://0034-inject-file-assembly-directives.patch \
            "
 
 NATIVESDKFIXES ?= ""
@@ -128,6 +128,14 @@ do_compile () {
 			sed -i ${B}/elf/ldd -e "s#^RTLDLIST=.*\$#RTLDLIST=\"${prevrtld} ${RTLDLIST}\"#"
 		fi
 	fi
+}
+
+do_install_append() {
+	# TODO: Should disable build/install these files by configurations.
+	# Poky has split rpc and libnsl to other recipes,
+	# this is workaround to avoid conflict with libnsl2.
+	rm -f ${D}${includedir}/rpcsvc/yppasswd.*
+	rm -f ${D}${libdir}/libnsl*
 }
 
 require recipes-core/glibc/glibc-package.inc
