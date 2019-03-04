@@ -13,11 +13,11 @@ DEBIAN_UNPACK_DIR = "${WORKDIR}/glib-${PV}"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/glib-2.0/glib-2.0"
 SRC_URI += " \
-    file://configure-libtool.patch \
     file://run-ptest \
     file://uclibc_musl_translation.patch \
     file://Enable-more-tests-while-cross-compiling.patch \
     file://0001-Install-gio-querymodules-as-libexec_PROGRAM.patch \
     file://0010-Do-not-hardcode-python-path-into-various-tools.patch \
+    file://0001-meson.build-do-not-hardcode-linux-as-the-host-system.patch \
 "
 SRC_URI_append_class-natve = "file://relocate-modules.patch"
