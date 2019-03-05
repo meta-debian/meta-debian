@@ -12,6 +12,7 @@ HOMEPAGE = "http://zlib.net/"
 
 inherit debian-package
 require recipes-debian/sources/zlib.inc
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-${REPACK_PV}"
 
 LICENSE = "Zlib"
 LIC_FILES_CHKSUM = " \
