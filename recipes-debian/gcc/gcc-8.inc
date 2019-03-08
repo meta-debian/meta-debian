@@ -7,7 +7,7 @@
 FILESPATH_append = "${FILE_DIRNAME}/gcc-8:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.3:${COREBASE}/meta/recipes-devtools/gcc/gcc-8.3/backport"
 
 require recipes-devtools/gcc/gcc-8.3.inc
-BINV = "8.2.0"
+BINV = "${PV}"
 
 inherit debian-package
 require recipes-debian/sources/gcc-8.inc
