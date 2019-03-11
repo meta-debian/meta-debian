@@ -16,12 +16,14 @@
 # CONFIG_FEATURE_TOP_DECIMALS=y
 # CONFIG_FEATURE_TOP_SMP_PROCESS=y
 #   multi core CPU becomes general also in embedded system
+# CONFIG_FEATURE_ROTATE_LOGFILE=y
+#   Log rotate is usually required to restrict the size of syslog outputs.
 #
 
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.22.1
-# Thu Mar 17 14:00:34 2016
+# Mon Mar 11 08:59:54 2019
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -1039,7 +1041,7 @@ CONFIG_FEATURE_SH_HISTFILESIZE=y
 # System Logging Utilities
 #
 CONFIG_SYSLOGD=y
-# CONFIG_FEATURE_ROTATE_LOGFILE is not set
+CONFIG_FEATURE_ROTATE_LOGFILE=y
 CONFIG_FEATURE_REMOTE_LOG=y
 # CONFIG_FEATURE_SYSLOGD_DUP is not set
 # CONFIG_FEATURE_SYSLOGD_CFG is not set
