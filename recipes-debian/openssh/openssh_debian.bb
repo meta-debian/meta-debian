@@ -165,6 +165,7 @@ RDEPENDS_${PN} += " \
 	${PN}-client \
 	${PN}-sftp-server \
 	lsb-base \
+	procps \
 	${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam-modules', '', d)} \
 "
 
