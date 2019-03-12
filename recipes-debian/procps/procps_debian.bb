@@ -59,9 +59,13 @@ do_install_append () {
 
 CONFFILES_${PN} = "${sysconfdir}/sysctl.conf"
 
-PACKAGES =+ " lib${DPN}"
+PACKAGES =+ " ${PN}-ps lib${DPN}"
+
+FILES_${PN}-ps = "${base_bindir}/ps*"
 FILES_lib${DPN} = "${base_libdir}/*"
 DEBIANNAME_lib${DPN} = "lib${DPN}3"
+
+RDEPENDS_${PN} += "${PN}-ps"
 
 ALTERNATIVE_${PN} = "w"
 ALTERNATIVE_PRIORITY[w] = "50"
@@ -69,10 +73,12 @@ ALTERNATIVE_LINK_NAME[w] = "${bindir}/w"
 ALTERNATIVE_TARGET[w] = "${bindir}/w.${DPN}"
 
 # Add update-alternatives definitions to avoid conflict with Debian
-ALTERNATIVE_${PN} += "kill ps sysctl"
+ALTERNATIVE_${PN} += "kill sysctl"
 ALTERNATIVE_PRIORITY[kill] = "100"
 ALTERNATIVE_LINK_NAME[kill] = "${base_bindir}/kill"
-ALTERNATIVE_PRIORITY[ps] = "100"
-ALTERNATIVE_LINK_NAME[ps] = "${base_bindir}/ps"
 ALTERNATIVE_PRIORITY[sysctl] = "100"
 ALTERNATIVE_LINK_NAME[sysctl] = "${base_sbindir}/sysctl"
+
+ALTERNATIVE_${PN}-ps = "ps"
+ALTERNATIVE_PRIORITY[ps] = "100"
+ALTERNATIVE_LINK_NAME[ps] = "${base_bindir}/ps"
