@@ -51,5 +51,4 @@ SRC_URI += " \
            file://rcS \
            file://rcK \
            file://makefile-libbb-race.patch \
-           file://busybox-fix-lzma-segfaults.patch \
 "

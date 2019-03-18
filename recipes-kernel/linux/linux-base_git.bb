@@ -41,6 +41,7 @@ B = "${WORKDIR}/build"
 
 # 3.9 or later kernel needs bc to build kernel/timeconst.h
 DEPENDS += "bc-native"
+DEPENDS += "${@bb.utils.contains('ARCH', 'x86', 'elfutils-native', '', d)}"
 
 # space separated file list of defconfig files in ${S}/arch/.../configs
 # Example:

@@ -19,6 +19,7 @@ HOMEPAGE = "http://www.gnu.org/software/bison/"
 
 inherit debian-package
 require recipes-debian/sources/bison.inc
+DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}-${REPACK_PV}"
 
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = " \

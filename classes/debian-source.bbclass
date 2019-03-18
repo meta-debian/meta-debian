@@ -177,7 +177,7 @@ def parse_Sources_xz(d):
                     full_version = line.replace('Version: ', '', 1)
                     noepoch_version = re.sub(r'^\S*:', '', full_version)
                     repack_version = re.sub(r'-[^-]*$', '', noepoch_version)
-                    upstream_version = re.sub(r'\+(dfsg|ds|repack).*', '', repack_version)
+                    upstream_version = re.sub(r'[\+,\.](dfsg|ds|repack).*', '', repack_version)
 
 
 def get_pkg_dpv_map(d):
