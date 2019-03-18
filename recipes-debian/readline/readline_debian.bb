@@ -9,5 +9,7 @@ require recipes-core/readline/readline.inc
 inherit debian-package
 require recipes-debian/sources/readline.inc
 
-FILESPATH_append = ":${COREBASE}/meta/recipes-core/readline/files"
-SRC_URI += "file://inputrc"
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/readline/files:${COREBASE}/meta/recipes-core/readline/readline-8.0"
+SRC_URI += "file://inputrc \
+            file://configure-fix.patch \
+            "
