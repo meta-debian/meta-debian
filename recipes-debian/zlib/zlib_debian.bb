@@ -19,12 +19,12 @@ LIC_FILES_CHKSUM = " \
 file://zlib.h;beginline=4;endline=23;md5=627e6ecababe008a45c70e318ae7014e \
 "
 
-SRC_URI += "file://remove.ldconfig.call.patch \
-            file://Makefile-runtests.patch \
+SRC_URI += "file://Makefile-runtests.patch \
             file://ldflags-tests.patch \
             file://run-ptest \
 "
-FILESEXTRAPATHS =. "${FILE_DIRNAME}/files:${COREBASE}/meta/recipes-core/zlib/zlib-1.2.11:"
+
+FILESEXTRAPATHS =. "${FILE_DIRNAME}/files:${COREBASE}/meta/recipes-core/zlib/zlib:"
 
 CFLAGS += "-D_REENTRANT"
 
