@@ -80,28 +80,41 @@ debian_patch_quilt() {
 		bbfatal "unknown quilt patches already applied"
 	fi
 
-	# some source packages don't have patch
+	# Some source packages don't have patch. In such cases,
+	# users can intentionally ignore applying patches
+	# by setting DEBIAN_QUILT_PATCHES to "".
 	if [ -z "${DEBIAN_QUILT_PATCHES}" ]; then
+		# Some patches are possibly added by mainteners after
+		# users intentionally set DEBIAN_QUILT_PATCHES to "",
+		# so here need to check if series and patch files
+		# are not really included.
 		if [ -s ${DEBIAN_UNPACK_DIR}/debian/patches/series ]; then
-			bbfatal "DEBIAN_QUILT_PATCHES is null, but ${DEBIAN_UNPACK_DIR}/debian/patches/series exists"
+			bberror "DEBIAN_QUILT_PATCHES is null, but ${DEBIAN_UNPACK_DIR}/debian/patches/series exists"
+			bbfatal "Please consider to redefine DEBIAN_QUILT_PATCHES"
 		fi
+		FOUND_PATCHES="$(debian_find_patches)"
+		if [ -n "${FOUND_PATCHES}" ]; then
+			bberror "DEBIAN_QUILT_PATCHES is null, but some patches found in ${DEBIAN_FIND_PATCHES_DIR}"
+			bbfatal "Please consider to redefine DEBIAN_QUILT_PATCHES"
+		fi
+
+		# no doubt, ignore applying patches
 		bbnote "no debian patch exists in the source tree, nothing to do"
 		return
 	fi
 
+	# Confirmations for the following quilt command
 	if [ ! -d ${DEBIAN_QUILT_PATCHES} ]; then
 		bbfatal "${DEBIAN_QUILT_PATCHES} not found"
 	elif [ ! -f ${DEBIAN_QUILT_PATCHES}/series ]; then
 		bbfatal "${DEBIAN_QUILT_PATCHES}/series not found"
-	# sometimes series is empty, it's too scary
-	elif [ -z "$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)" ]; then
-		FOUND_PATCHES="$(debian_find_patches)"
-		if [ -z "${FOUND_PATCHES}" ]; then
-			bbnote "series is empty, nothing to do"
-			return
-		else
-			bbfatal "series is empty, but some patches found"
-		fi
+	fi
+	# In some limitted packages, series is empty or comments only
+	# (too strange...). Need to expressly exit here because
+	# quilt command raises an error if no patch is listed in the series.
+	if [ -z "$(sed '/^#/d' ${DEBIAN_QUILT_PATCHES}/series)" ]; then
+		bbnote "no patch in series, nothing to do"
+		return
 	fi
 
 	# apply patches
