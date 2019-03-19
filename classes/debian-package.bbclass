@@ -82,8 +82,7 @@ debian_patch_quilt() {
 
 	# some source packages don't have patch
 	if [ -z "${DEBIAN_QUILT_PATCHES}" ]; then
-		if [ -f ${DEBIAN_UNPACK_DIR}/debian/patches/series \
-			-s ${DEBIAN_UNPACK_DIR}/debian/patches/series ]; then
+		if [ -s ${DEBIAN_UNPACK_DIR}/debian/patches/series ]; then
 			bbfatal "DEBIAN_QUILT_PATCHES is null, but ${DEBIAN_UNPACK_DIR}/debian/patches/series exists"
 		fi
 		bbnote "no debian patch exists in the source tree, nothing to do"
