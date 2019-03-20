@@ -24,7 +24,7 @@ inherit kernel
 # use the same kernel source as linux-libc-headers-base_git.bb
 inherit linux-src
 
-KERNEL_DEVICETREE_qemuarm = "versatile-pb.dtb"
+KERNEL_DEVICETREE_qemuarmv5 = "versatile-pb.dtb"
 
 # Fix linux-cip build error with gcc8 on ppc
 SRC_URI_append_powerpc = " \

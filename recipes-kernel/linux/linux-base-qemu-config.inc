@@ -13,8 +13,11 @@ SRC_URI_append_qemux86 = " file://qemu.config"
 LINUX_DEFCONFIG_qemux86-64 ?= "x86_64_defconfig"
 SRC_URI_append_qemux86-64 = " file://qemu.config"
 
-LINUX_DEFCONFIG_qemuarm ?= "versatile_defconfig"
-SRC_URI_append_qemuarm = " file://qemu.config file://${MACHINE}.config"
+LINUX_DEFCONFIG_qemuarm ?= "multi_v7_defconfig"
+SRC_URI_append_qemuarm = " file://qemu.config"
+
+LINUX_DEFCONFIG_qemuarmv5 ?= "versatile_defconfig"
+SRC_URI_append_qemuarmv5 = " file://qemu.config file://${MACHINE}.config"
 
 LINUX_DEFCONFIG_qemumips ?= "malta_defconfig"
 SRC_URI_append_qemumips = " file://qemu.config file://${MACHINE}.config"
