@@ -7,6 +7,8 @@
 SUMMARY = "Secure Socket Layer"
 DESCRIPTION = "Secure Socket Layer (SSL) binary and related cryptographic tools."
 HOMEPAGE = "http://www.openssl.org/"
+BUGTRACKER = "http://www.openssl.org/news/vulnerabilities.html"
+SECTION = "libs/network"
 
 inherit debian-package
 require recipes-debian/sources/openssl.inc
@@ -18,18 +20,25 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=d343e62fc9c833710bbbed25f27364c8"
 
 DEPENDS = "hostperl-runtime-native"
 
-FILESPATH_append = ":${COREBASE}/meta/recipes-connectivity/openssl/openssl:${COREBASE}/meta/recipes-connectivity/openssl/files"
+FILESPATH_append = ":${COREBASE}/meta/recipes-connectivity/openssl/openssl:${COREBASE}/meta/recipes-connectivity/openssl/files:"
 SRC_URI += " \
-    file://run-ptest \
-    file://openssl-c_rehash.sh \
-    file://0001-skip-test_symbol_presence.patch \
-"
+           file://run-ptest \
+           file://0001-skip-test_symbol_presence.patch \
+           file://0001-buildinfo-strip-sysroot-and-debug-prefix-map-from-co.patch \
+           file://afalg.patch \
+           "
 
 SRC_URI_append_class-nativesdk = " \
-    file://environment.d-openssl.sh \
-"
+           file://environment.d-openssl.sh \
+           "
 
 inherit lib_package multilib_header ptest
+
+PACKAGECONFIG ?= ""
+PACKAGECONFIG_class-native = ""
+PACKAGECONFIG_class-nativesdk = ""
+
+PACKAGECONFIG[cryptodev-linux] = "enable-devcryptoeng,disable-devcryptoeng,cryptodev-linux"
 
 B = "${WORKDIR}/build"
 do_configure[cleandirs] = "${B}"
@@ -38,6 +47,7 @@ do_configure[cleandirs] = "${B}"
 #| ./libcrypto.so: undefined reference to `setcontext'
 #| ./libcrypto.so: undefined reference to `makecontext'
 EXTRA_OECONF_append_libc-musl = " no-async"
+EXTRA_OECONF_append_libc-musl_powerpc64 = " no-asm"
 
 # This prevents openssl from using getrandom() which is not available on older glibc versions
 # (native versions can be built with newer glibc, but then relocated onto a system with older glibc)
@@ -116,6 +126,7 @@ do_configure () {
 	# environment variables set by bitbake. Adjust the environment variables instead.
 	PERL5LIB="${S}/external/perl/Text-Template-1.46/lib/" \
 	perl ${S}/Configure ${EXTRA_OECONF} ${PACKAGECONFIG_CONFARGS} --prefix=$useprefix --openssldir=${libdir}/ssl-1.1 --libdir=${libdir} $target
+	perl ${B}/configdata.pm --dump
 }
 
 do_install () {
@@ -144,12 +155,6 @@ do_install_append_class-native () {
 	    SSL_CERT_DIR=${libdir}/ssl-1.1/certs \
 	    SSL_CERT_FILE=${libdir}/ssl-1.1/cert.pem \
 	    OPENSSL_ENGINES=${libdir}/ssl-1.1/engines
-
-	# Install a custom version of c_rehash that can handle sysroots properly.
-	# This version is used for example when installing ca-certificates during
-	# image creation.
-	install -Dm 0755 ${WORKDIR}/openssl-c_rehash.sh ${D}${bindir}/c_rehash
-	sed -i -e 's,/etc/openssl,${sysconfdir}/ssl,g' ${D}${bindir}/c_rehash
 }
 
 do_install_append_class-nativesdk () {
@@ -158,6 +163,8 @@ do_install_append_class-nativesdk () {
 	sed 's|/usr/lib/ssl/|/usr/lib/ssl-1.1/|g' -i ${D}${SDKPATHNATIVE}/environment-setup.d/openssl.sh
 }
 
+PTEST_BUILD_HOST_FILES += "configdata.pm"
+PTEST_BUILD_HOST_PATTERN = "perl_version ="
 do_install_ptest () {
 	# Prune the build tree
 	rm -f ${B}/fuzz/*.* ${B}/test/*.*
@@ -196,9 +203,7 @@ FILES_${PN}_append_class-nativesdk = " ${SDKPATHNATIVE}/environment-setup.d/open
 CONFFILES_openssl-conf = "${sysconfdir}/ssl/openssl.cnf"
 
 RRECOMMENDS_libcrypto += "openssl-conf"
-RDEPENDS_${PN}-bin = "perl"
-RDEPENDS_${PN}-misc = "perl"
-RDEPENDS_${PN}-ptest += "openssl-bin perl perl-modules bash python"
+RDEPENDS_${PN}-ptest += "openssl-bin perl perl-modules bash"
 
 RPROVIDES_openssl-conf = "openssl10-conf"
 RREPLACES_openssl-conf = "openssl10-conf"
