@@ -37,17 +37,13 @@ SRC_URI += " \
 	file://sysroot-arg.patch \
 "
 
-# Debian does not provide fontconfig-utils,
-# but fontconfig-utils is required by fontcache.bbclass,
-# so we need provide it too.
-PACKAGES =+ "${PN}-utils ${PN}-config lib${DPN}"
+PACKAGES =+ "${PN}-config lib${DPN}"
 RDEPENDS_${PN}_class-target += "${PN}-utils ${PN}-config"
 
 do_install_append_class-target() {
 	sed -i -e "s|${STAGING_DIR_HOST}||" \
 		${D}${libdir}/pkgconfig/fontconfig.pc
 }
-FILES_${PN}-utils = "${bindir}/*"
 FILES_${PN}-config = " \
     ${sysconfdir} \
     ${datadir}/fontconfig/conf.avail \
@@ -55,11 +51,10 @@ FILES_${PN}-config = " \
 "
 FILES_lib${DPN} = "${libdir}/libfontconfig${SOLIBS}"
 
-# Work around past breakage in debian.bbclass
-RPROVIDES_${PN}-utils = "lib${DPN}-utils"
-RREPLACES_${PN}-utils = "lib${DPN}-utils"
-RCONFLICTS_${PN}-utils = "lib${DPN}-utils"
-DEBIAN_NOAUTONAME_${PN}-utils = "1"
+# Debian does not provide fontconfig-utils,
+# but fontconfig-utils is required by fontcache.bbclass,
+# so we need provide it too.
+RPROVIDES_${PN} += "${PN}-utils"
 
 DEBIANNAME_${PN}-dev = "lib${DPN}1-dev"
 DEBIANNAME_${PN}-dbg = "lib${DPN}1-dbg"
