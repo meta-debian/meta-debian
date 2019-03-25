@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for r in poky meta-debian meta-debian-extended; do
+    if [ -e $r ] ; then
+        echo "$r remote update, and merge"
+        cd $r; git remote update; git merge origin/master; cd ..
+    fi
+done
