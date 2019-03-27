@@ -131,8 +131,9 @@ do_compile () {
 do_install_append() {
 	# TODO: Should disable build/install these files by configurations.
 	# Poky has split rpc and libnsl to other recipes,
-	# this is workaround to avoid conflict with libnsl2.
+	# this is workaround to avoid conflict with libnsl2, quota.
 	rm -f ${D}${includedir}/rpcsvc/yppasswd.*
+	rm -f ${D}${includedir}/rpcsvc/rquota.*
 	rm -f ${D}${libdir}/libnsl*
 }
 

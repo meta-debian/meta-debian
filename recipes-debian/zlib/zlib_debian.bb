@@ -33,7 +33,7 @@ RDEPENDS_${PN}-ptest += "make"
 inherit ptest
 
 do_configure() {
-	uname=GNU ./configure --prefix=${prefix} --shared --libdir=${libdir}
+	LDCONFIG=true ./configure --prefix=${prefix} --shared --libdir=${libdir} --uname=GNU
 }
 
 do_compile() {
