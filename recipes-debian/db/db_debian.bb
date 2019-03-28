@@ -52,6 +52,12 @@ FILES_${PN}-cxx = "${libdir}/*cxx*so"
 SOLIBS = "-5*.so"
 FILES_SOLIBSDEV = "${libdir}/libdb.so ${libdir}/libdb_cxx.so"
 
+# Debian adds a patch that gets versioned symbols from object files,
+# it will fail if disable static build.
+# Fix error:
+#   | .../tmp/hosttools/ld:Versions:3: syntax error in VERSION script
+DISABLE_STATIC = ""
+
 #configuration - set in local.conf to override
 # All the --disable-* options replace --enable-smallbuild, which breaks a bunch of stuff (eg. postfix)
 DB5_CONFIG ?= "--enable-o_direct --disable-cryptography --disable-queue --disable-replication --disable-verify --disable-compat185 --disable-sql"
