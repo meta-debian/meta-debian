@@ -7,5 +7,6 @@ BBFILES ?= ""
 
 BBLAYERS ?= " \
   ##OEROOT##/meta \
+  ##OEROOT##/meta-poky \
   ##OEROOT##/meta-debian \
   "
