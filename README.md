@@ -15,7 +15,7 @@ for embedded systems satisfying the following needs.
 
 Currently, the following software versions are supported in meta-debian.
 * Source code: Debian GNU/Linux 10 (buster)
-* Build system: Yocto Project (master)
+* Build system: Yocto Project (warrior)
 
 Quick Start
 ===========
@@ -26,7 +26,7 @@ meta-debian can be built in a docker container or on a Linux machine (native bui
 
 Clone meta-debian:
 ```sh
-$ git clone -b master https://github.com/meta-debian/meta-debian.git
+$ git clone -b warrior https://github.com/meta-debian/meta-debian.git
 ```
 
 * For docker build:
@@ -54,7 +54,7 @@ $ git clone -b master https://github.com/meta-debian/meta-debian.git
    * Setup repositories
 
       ```sh
-      $ git clone -b master git://git.yoctoproject.org/poky.git
+      $ git clone -b warrior git://git.yoctoproject.org/poky.git
       $ mv meta-debian poky/
       ```
 
