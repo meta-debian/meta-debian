@@ -5,6 +5,10 @@ clean_up()
     unset BUILDDIR
 }
 
+# save error during 'source setup-emlinux'
+_ERROR=0
+trap '_ERROR=$?' ERR
+
 BUILDDIR="build"
 if [ -n "$1" ]; then
     BUILDDIR=$1
@@ -38,3 +42,7 @@ echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_deb
 echo "DEBIAN_SOURCE_ENABLED = \"1\"" >> conf/local.conf
 
 clean_up
+if [ $_ERROR -ne 0 ]; then
+    echo "ERROR: an error occured during setup ($_ERROR)"
+fi
+return $_ERROR
