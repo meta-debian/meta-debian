@@ -50,6 +50,7 @@ echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
 echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
 echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
 echo "DEBIAN_SOURCE_ENABLED = \"1\"" >> conf/local.conf
+echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
 
 clean_up
 if [ $_ERROR -ne 0 ]; then
