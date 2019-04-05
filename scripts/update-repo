@@ -1,8 +1,9 @@
 #!/bin/bash
 
+REPOS=${PWD}/repos
 for r in poky meta-debian meta-debian-extended; do
-    if [ -e $r ] ; then
+    if [ -e ${REPOS}/$r ] ; then
         echo "$r remote update, and merge"
-        cd $r; git remote update; git merge origin/master; cd ..
+        cd $r; git remote update; git merge origin/master
     fi
 done

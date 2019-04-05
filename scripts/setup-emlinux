@@ -2,7 +2,7 @@
 
 clean_up()
 {
-    unset BUILDDIR
+    unset BUILDDIR REPOS
 }
 
 # save error during 'source setup-emlinux'
@@ -19,20 +19,21 @@ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib \
      build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
      xz-utils debianutils iputils-ping libsdl1.2-dev xterm
 
-git clone -b master https://git.yoctoproject.org/git/poky ${PWD}/poky
-git clone -b master https://github.com/meta-debian/meta-debian.git ${PWD}/meta-debian
-git clone -b master https://github.com/iwamatsu/meta-debian-extended.git ${PWD}/meta-debian-extended
+REPOS=${PWD}/repos
+git clone -b master https://git.yoctoproject.org/git/poky ${REPOS}/poky
+git clone -b master https://github.com/meta-debian/meta-debian.git ${REPOS}/meta-debian
+git clone -b master https://github.com/iwamatsu/meta-debian-extended.git ${REPOS}/meta-debian-extended
 
-source ${PWD}/poky/oe-init-build-env ${BUILDDIR}
+source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}
 
 # delete layer
 bitbake-layers remove-layer meta-poky
 bitbake-layers remove-layer meta-yocto-bsp
 
 # add layer
-bitbake-layers add-layer ../meta-debian
-bitbake-layers add-layer ../meta-debian-extended
-bitbake-layers add-layer ../meta-emlinux
+bitbake-layers add-layer ${REPOS}/meta-debian
+bitbake-layers add-layer ${REPOS}/meta-debian-extended
+bitbake-layers add-layer ${REPOS}/meta-emlinux
 
 # Add config
 echo "DISTRO = \"emlinux\"" >> conf/local.conf
