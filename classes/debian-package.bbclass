@@ -11,7 +11,8 @@ SRC_URI = "${DEBIAN_SRC_URI}"
 DEBIAN_UNPACK_DIR ?= "${WORKDIR}/${BP}"
 S = "${DEBIAN_UNPACK_DIR}"
 DPV ?= "${PV}"
-
+DEBIAN_USE_SNAPSHOT ?= "0"
+DEBIAN_SDO_URL ?= "http://snapshot.debian.org/archive"
 
 ###############################################################################
 # do_debian_unpack_extra
@@ -208,3 +209,151 @@ do_debian_patch() {
 	esac
 }
 EXPORT_FUNCTIONS do_debian_patch
+
+
+python () {
+    import json, os, re
+
+    # get json data from snapshot.d.o
+    def _get_sdo_json_data(path):
+        import urllib.request
+
+        base_url = d.getVar("DEBIAN_SDO_URL", True)
+        try:
+            readobj = urllib.request.urlopen(base_url + path)
+        except urllib.error.URLError as e:
+            bb.fatal('Can not access to %s' % base_url + path)
+            print(e.reason)
+        else:
+            return readobj.read()
+
+    # get json data from snapshot.d.o or files
+    def _get_sdo_json (api_path, json_path):
+        if os.path.exists(json_path):
+            with open(json_path) as f:
+                return f.read()
+        else:
+            _data = _get_sdo_json_data(api_path)
+            if _data is not None:
+                with open(json_path, mode = 'w') as f:
+                    data = _data.decode('utf-8')
+                    f.write(data)
+                    return data
+
+    # get json data of source files
+    def _get_sdo_json_srcfiles (dl_dir, pkgname, pkgver):
+        api_path = os.path.join('/mr/package/', pkgname, pkgver, 'srcfiles')
+        json_path = os.path.join(dl_dir, pkgname + '_' + pkgver + '_srcfiles.json')
+
+        return _get_sdo_json(api_path, json_path)
+
+    # get json data of pkg info
+    def _get_sdo_json_pkginfo (dl_dir, filehash, pkgname, pkgver):
+        api_path = os.path.join('/mr/file/', filehash, 'info')
+        json_path = os.path.join(dl_dir, pkgname + '_' + pkgver + '_' + filehash +'_info.json')
+
+        return _get_sdo_json(api_path, json_path)
+
+    def _get_sdo_spkgdata (pkgname, filename, fileinfo):
+        jsondata = json.loads(fileinfo)
+
+        # result data check
+        results = jsondata['result']
+        if results is None:
+            return
+
+        for i in range(len(results)):
+            name = results[i]['name']
+            archive_name = results[i]['archive_name']
+
+            # compare file names
+            if name == filename:
+                p = name.split('_')
+                if p[0] in pkgname:
+                    archive_path = results[i]['path']
+                    first_seen = results[i]['first_seen']
+
+                    return name, archive_path, first_seen, archive_name
+
+    if d.getVar("DEBIAN_USE_SNAPSHOT", True) == "0":
+        return
+
+    # check DEBIAN_SRC_URI
+    debian_src_uri_orig = d.getVar('DEBIAN_SRC_URI', True).split()
+    if len(debian_src_uri_orig) == 0:
+        bb.bbfatal('There is no data for DEBIAN_SRC_URI.')
+        return
+
+    # set package name as debian source package name
+    pkgname = d.getVar("DSPN", True)
+    pkgver = d.getVar("DPV", True)
+    if pkgver is None:
+        pkgver = d.getVar("PV", True)
+    # get epoch
+    pkgepoch = d.getVar("DPV_EPOCH", True)
+    if pkgepoch != '':
+        pkgver = pkgepoch + ':' + pkgver
+
+    dl_dir = d.getVar('DL_DIR', True)
+
+    # check and create DL_DIR
+    if os.path.exists(dl_dir) is not True:
+        os.makedirs(dl_dir)
+
+    # get src files from json
+    srcfiles = _get_sdo_json_srcfiles(dl_dir, pkgname, pkgver)
+    if srcfiles is None:
+        return
+
+    jsondata = json.loads(srcfiles)
+
+    # check src package name
+    if jsondata['package'] not in pkgname:
+        return
+
+    # check src package version
+    if jsondata['version'] not in pkgver:
+        return
+
+    # check result data
+    results = jsondata['result']
+    if results is None:
+        return
+
+    debfile_urls = ''
+
+    for i in range(len(results)):
+        prevent_apply = ""
+        filehash = results[i]['hash']
+        pkginfo = _get_sdo_json_pkginfo(dl_dir, filehash, pkgname, pkgver)
+        if pkginfo is None:
+            continue
+
+        for _uri in debian_src_uri_orig:
+            # get filename from DEBIAN_SRC_URI
+            _match_data = re.search(r"^.*/(\S.*);name=\S.*$", _uri)
+            if _match_data:
+                # get package infomation form json
+                info = _get_sdo_spkgdata(pkgname, _match_data.group(1), pkginfo)
+                if info:
+                    break
+            else:
+                continue
+
+        if info is None:
+            continue
+
+        base_url = d.getVar("DEBIAN_SDO_URL", True)
+        u = "%s/%s/%s/%s" % (base_url, info[3], info[2], info[1])
+        if ".diff" in info[0] or ".patch" in info[0]:
+            prevent_apply = ";apply=no"
+        nametag = info[0].replace('~', '_')
+        debfile_urls += '%s/%s;name=%s%s ' % (u, info[0], nametag, prevent_apply)
+
+    if not debfile_urls:
+        bb.bbfatal('Can not get URI of debian source packages.')
+        return None
+
+    # overwrite DEBIAN_SRC_URI
+    d.setVar('DEBIAN_SRC_URI', debfile_urls)
+}
