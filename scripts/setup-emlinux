@@ -1,32 +1,62 @@
 #!/bin/bash
 
+clean_up()
+{
+    unset BUILDDIR REPOS SYNC_POKY POKY_REV
+}
+
+# save error during 'source setup-emlinux'
+_ERROR=0
+trap '_ERROR=$?' ERR
+
 BUILDDIR="build"
 if [ -n "$1" ]; then
     BUILDDIR=$1
 fi
 
-sudo apt-get update
-sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib \
-     build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
-     xz-utils debianutils iputils-ping libsdl1.2-dev xterm
+REPOS=${PWD}/repos
+if [ ! -d ${REPOS}/poky ]; then
+    git clone -b master https://git.yoctoproject.org/git/poky ${REPOS}/poky
+fi
+if [ ! -d ${REPOS}/meta-debian ]; then
+    git clone -b master \
+	https://github.com/meta-debian/meta-debian.git ${REPOS}/meta-debian
+fi
+if [ ! -d ${REPOS}/meta-debian-extended ]; then
+    git clone -b master \
+	https://github.com/miraclelinux/meta-debian-extended.git \
+	${REPOS}/meta-debian-extended
+fi
 
-git clone -b master https://git.yoctoproject.org/git/poky ${PWD}/poky
-git clone -b master https://github.com/meta-debian/meta-debian.git ${PWD}/meta-debian
-git clone -b master https://github.com/iwamatsu/meta-debian-extended.git ${PWD}/meta-debian-extended
+if [ "$SYNC_POKY" -eq "1" ]; then
+    POKY_REV=$(grep "^POKY_REV :=" ${REPOS}/meta-debian/docker/Makefile \
+		      | sed -r 's/^POKY_REV := (\S*)$/\1/')
+    cd $REPOS/poky
+    git checkout ${POKY_REV}
+    cd -
+fi
 
-source ${PWD}/poky/oe-init-build-env ${BUILDDIR}
+source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}
 
 # delete layer
 bitbake-layers remove-layer meta-poky
 bitbake-layers remove-layer meta-yocto-bsp
 
 # add layer
-bitbake-layers add-layer ../meta-debian
-bitbake-layers add-layer ../meta-debian-extended
-bitbake-layers add-layer ../meta-emlinux
+bitbake-layers add-layer ${REPOS}/meta-debian
+bitbake-layers add-layer ${REPOS}/meta-debian-extended
+bitbake-layers add-layer ${REPOS}/meta-emlinux
 
 # Add config
 echo "DISTRO = \"emlinux\"" >> conf/local.conf
 echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
 echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
 echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
+echo "DEBIAN_SOURCE_ENABLED = \"1\"" >> conf/local.conf
+echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
+
+clean_up
+if [ $_ERROR -ne 0 ]; then
+    echo "ERROR: an error occured during setup ($_ERROR)"
+fi
+return $_ERROR
