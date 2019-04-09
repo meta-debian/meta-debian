@@ -41,7 +41,7 @@ $ git clone -b master https://github.com/meta-debian/meta-debian.git
    <https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html#required-packages-for-the-build-host>
 
       ```sh
-      $ sudo apt-get gawk wget git-core diffstat unzip texinfo gcc-multilib \
+      $ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib \
       build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
       xz-utils debianutils iputils-ping
       ```
