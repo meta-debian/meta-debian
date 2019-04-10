@@ -19,6 +19,7 @@ SRC_URI += " \
     file://0001-Install-gio-querymodules-as-libexec_PROGRAM.patch \
     file://0010-Do-not-hardcode-python-path-into-various-tools.patch \
     file://0001-meson.build-do-not-hardcode-linux-as-the-host-system.patch \
+    file://0001-meson-do-a-build-time-check-for-strlcpy-before-attem.patch \
     file://glib-meson.cross \
 "
 SRC_URI_append_class-natve = "file://relocate-modules.patch"
