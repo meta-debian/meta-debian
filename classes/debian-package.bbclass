@@ -12,7 +12,7 @@ DEBIAN_UNPACK_DIR ?= "${WORKDIR}/${BP}"
 S = "${DEBIAN_UNPACK_DIR}"
 DPV ?= "${PV}"
 DEBIAN_USE_SNAPSHOT ?= "0"
-DEBIAN_SDO_URL ?= "http://snapshot.debian.org/archive"
+DEBIAN_SDO_URL ?= "http://snapshot.debian.org"
 
 ###############################################################################
 # do_debian_unpack_extra
@@ -344,7 +344,7 @@ python () {
             continue
 
         base_url = d.getVar("DEBIAN_SDO_URL", True)
-        u = "%s/%s/%s/%s" % (base_url, info[3], info[2], info[1])
+        u = "%s/archive/%s/%s/%s" % (base_url, info[3], info[2], info[1])
         if ".diff" in info[0] or ".patch" in info[0]:
             prevent_apply = ";apply=no"
         nametag = info[0].replace('~', '_')
