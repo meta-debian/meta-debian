@@ -39,25 +39,12 @@ do_compile() {
 	oe_runmake shared
 }
 
-do_compile_ptest() {
-	oe_runmake test
-}
-
 do_install() {
 	oe_runmake DESTDIR=${D} install
 }
 
 do_install_ptest() {
-	install ${B}/Makefile   ${D}${PTEST_PATH}
-	install ${B}/example    ${D}${PTEST_PATH}
-	install ${B}/minigzip   ${D}${PTEST_PATH}
-	install ${B}/examplesh  ${D}${PTEST_PATH}
-	install ${B}/minigzipsh ${D}${PTEST_PATH}
-
-	# Remove buildhost references...
-	sed -i -e "s,--sysroot=${STAGING_DIR_TARGET},,g" \
-            -e 's|${DEBUG_PREFIX_MAP}||g' \
-            ${D}${PTEST_PATH}/Makefile
+	install ${B}/examplesh ${D}${PTEST_PATH}
 }
 
 # move run-time libraries to ${libdir}
