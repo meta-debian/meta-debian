@@ -2,7 +2,7 @@
 
 clean_up()
 {
-    unset BUILDDIR REPOS SYNC_POKY POKY_REV
+    unset BUILDDIR BUILDDIR_SETUP_DONE REPOS SYNC_POKY POKY_REV
 }
 
 # save error during 'source setup-emlinux'
@@ -12,6 +12,11 @@ trap '_ERROR=$?' ERR
 BUILDDIR="build"
 if [ -n "$1" ]; then
     BUILDDIR=$1
+fi
+
+BUILDDIR_SETUP_DONE="true"
+if [ ! -e ${BUILDDIR}/conf/local.conf ]; then
+    BUILDDIR_SETUP_DONE="false"
 fi
 
 REPOS=${PWD}/repos
@@ -38,22 +43,24 @@ fi
 
 source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}
 
-# delete layer
-bitbake-layers remove-layer meta-poky
-bitbake-layers remove-layer meta-yocto-bsp
+if [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
+    # delete layer
+    bitbake-layers remove-layer meta-poky
+    bitbake-layers remove-layer meta-yocto-bsp
 
-# add layer
-bitbake-layers add-layer ${REPOS}/meta-debian
-bitbake-layers add-layer ${REPOS}/meta-debian-extended
-bitbake-layers add-layer ${REPOS}/meta-emlinux
+    # add layer
+    bitbake-layers add-layer ${REPOS}/meta-debian
+    bitbake-layers add-layer ${REPOS}/meta-debian-extended
+    bitbake-layers add-layer ${REPOS}/meta-emlinux
 
-# Add config
-echo "DISTRO = \"emlinux\"" >> conf/local.conf
-echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
-echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
-echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
-echo "DEBIAN_SOURCE_ENABLED = \"1\"" >> conf/local.conf
-echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
+    # Add config
+    echo "DISTRO = \"emlinux\"" >> conf/local.conf
+    echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
+    echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
+    echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
+    echo "DEBIAN_SOURCE_ENABLED = \"1\"" >> conf/local.conf
+    echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
+fi
 
 clean_up
 if [ $_ERROR -ne 0 ]; then
