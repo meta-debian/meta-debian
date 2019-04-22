@@ -28,7 +28,7 @@ if [ ! -d ${REPOS}/meta-debian-extended ]; then
 	${REPOS}/meta-debian-extended
 fi
 
-if [ "$SYNC_POKY" -eq "1" ]; then
+if [[ "$SYNC_POKY" -eq "1" ]]; then
     POKY_REV=$(grep "^POKY_REV :=" ${REPOS}/meta-debian/docker/Makefile \
 		      | sed -r 's/^POKY_REV := (\S*)$/\1/')
     cd $REPOS/poky
