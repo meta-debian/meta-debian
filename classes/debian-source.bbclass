@@ -44,7 +44,7 @@ def fetch_Sources_xz(d):
         if md5sum_Source_xz == old_md5sum_Source_xz:
             bb.plain('Sources.xz is not changed.')
             force = d.getVar('DEBIAN_SRC_FORCE_REGEN', True)
-            if not force:
+            if force != "1":
                 return False
             else:
                 bb.plain('Force regenerate source code information.')
