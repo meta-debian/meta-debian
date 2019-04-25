@@ -35,7 +35,9 @@ start: .build
 	             -t $(IMAGENAME) . && touch $@
 
 TEST_TARGETS ?= core-image-minimal
+TEST_MACHINES ?= qemux86
 export TEST_TARGETS
+export TEST_MACHINES
 
 test: clean .build
 	bash ./test.sh
