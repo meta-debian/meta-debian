@@ -30,6 +30,10 @@ docker run \
 	$IMAGENAME
 
 test -z "$TEST_TARGETS" && TEST_TARGETS="core-image-minimal"
+test -z "$TEST_MACHINES" && TEST_MACHINES="qemux86"
 $E "export TEMPLATECONF=meta-debian/conf; \
     source ./poky/oe-init-build-env; \
-    bitbake $TEST_TARGETS"
+    for machine in $TEST_MACHINES; do \
+      sed -i -e \"s/\(^MACHINE\s*?*=\).*/\1 \\\"\$machine\\\"/\" conf/local.conf; \
+      bitbake $TEST_TARGETS; \
+    done"
