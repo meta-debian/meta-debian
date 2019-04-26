@@ -284,8 +284,18 @@ python () {
         bb.bbfatal('There is no data for DEBIAN_SRC_URI.')
         return
 
-    # set package name as debian source package name
-    pkgname = d.getVar("DSPN", True)
+    pkgname = ""
+    # Get source package name from original source uri (DEBIAN_SRC_URI)
+    for _pkg_uri in debian_src_uri_orig:
+        if ".dsc" in _pkg_uri:
+            _pkg_file_name = os.path.basename(_pkg_uri)
+            pkgname = _pkg_file_name.split(";")[0].split("_")[0]
+            break
+
+    if len(pkgname) == 0:
+        bb.bbfatal('There is no Debian source package name.')
+        return
+
     pkgver = d.getVar("DPV", True)
     if pkgver is None:
         pkgver = d.getVar("PV", True)
