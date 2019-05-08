@@ -34,6 +34,15 @@ EXTRA_OEMAKE += "m4=${STAGING_BINDIR_NATIVE}/m4"
 
 EXTRA_OEMAKE += "${@bb.utils.contains('PTEST_ENABLED', '1', 'FLEX=${STAGING_BINDIR_NATIVE}/flex', '', d)}"
 
+do_configure_prepend() {
+	# Make sure scan.c is newer than scan.l. Avoid error:
+	# | WARNING: 'flex' is missing on your system
+	# |          You should only need it if you modified a '.l' file.
+	# | ...
+	# | make[2]: *** [Makefile:1462: scan.c] Error 127
+	touch ${S}/src/scan.c
+}
+
 do_install_append_class-native() {
 	create_wrapper ${D}/${bindir}/flex M4=${M4}
 }
