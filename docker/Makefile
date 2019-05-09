@@ -44,6 +44,6 @@ clean:
 	rm -f .build
 
 cleanall: clean
-	rm -f $(DOCKER_DIR)/.build-downloads
+	rm -rf $(DOCKER_DIR)/.build-downloads
 
 .PHONY: start clean
