@@ -21,14 +21,14 @@ fi
 
 REPOS=${PWD}/repos
 if [ ! -d ${REPOS}/poky ]; then
-    git clone -b master https://git.yoctoproject.org/git/poky ${REPOS}/poky
+    git clone -b warrior https://git.yoctoproject.org/git/poky ${REPOS}/poky
 fi
 if [ ! -d ${REPOS}/meta-debian ]; then
-    git clone -b master \
+    git clone -b warrior \
 	https://github.com/meta-debian/meta-debian.git ${REPOS}/meta-debian
 fi
 if [ ! -d ${REPOS}/meta-debian-extended ]; then
-    git clone -b master \
+    git clone -b warrior \
 	https://github.com/miraclelinux/meta-debian-extended.git \
 	${REPOS}/meta-debian-extended
 fi
