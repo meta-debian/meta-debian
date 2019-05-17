@@ -17,7 +17,7 @@ inherit autotools
 # Debian's source code isn't contains patch file
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEPENDS += "util-macros resourceproto"
+DEPENDS += "util-macros resourceproto virtual/libx11 libxext"
 
 do_install_append() {
 	#remove .la files
