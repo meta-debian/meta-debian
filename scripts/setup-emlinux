@@ -2,7 +2,7 @@
 
 clean_up()
 {
-    unset BUILDDIR BUILDDIR_SETUP_DONE REPOS SYNC_POKY POKY_REV
+    unset BUILDDIR BUILDDIR_SETUP_DONE REPOS
 }
 
 # save error during 'source setup-emlinux'
@@ -31,14 +31,6 @@ if [ ! -d ${REPOS}/meta-debian-extended ]; then
     git clone -b warrior \
 	https://github.com/miraclelinux/meta-debian-extended.git \
 	${REPOS}/meta-debian-extended
-fi
-
-if [[ "$SYNC_POKY" -eq "1" ]]; then
-    POKY_REV=$(grep "^POKY_REV :=" ${REPOS}/meta-debian/docker/Makefile \
-		      | sed -r 's/^POKY_REV := (\S*)$/\1/')
-    cd $REPOS/poky
-    git checkout ${POKY_REV}
-    cd -
 fi
 
 source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}

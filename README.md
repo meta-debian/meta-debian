@@ -24,12 +24,6 @@ Setup build directory:
 $ source repos/meta-emlinux/scripts/setup-emlinux build
 ```
 
-(Optional) If you want to synchronize poky's revision for meta-debian:
-
-```sh
-$ SYNC_POKY=1 source repos/meta-emlinux/scripts/setup-emlinux build
-```
-
 Set your target machine to `conf/local.conf`:
 
 ```sh
