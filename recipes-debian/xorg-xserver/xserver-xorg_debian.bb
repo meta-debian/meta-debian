@@ -98,7 +98,7 @@ PACKAGECONFIG ??= "dmx dri2 dri3 udev xephyr xinerama xshmfence ${XORG_CRYPTO} \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'selinux', 'xselinux', '', d)} \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'xwayland', '', d)} \
                    "
-PACKAGECONFIG[dmx] = "--enable-dmx,--disable-dmx,libdmx libxtst libxres"
+PACKAGECONFIG[dmx] = "--enable-dmx,--disable-dmx,libdmx libxtst libxres libxrender libxmu libxaw"
 PACKAGECONFIG[dri] = "--enable-dri,--disable-dri,glproto virtual/mesa xf86driproto"
 PACKAGECONFIG[dri2] = "--enable-dri2,--disable-dri2,dri2proto"
 PACKAGECONFIG[dri3] = "--enable-dri3,--disable-dri3,x11proto-dri3 libxshmfence"
