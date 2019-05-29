@@ -34,53 +34,34 @@ This branch is tested on the following build environment.
 Quick Start
 ===========
 
-meta-debian can be built in a docker container or on a Linux machine (native build).
+This section introduces how to generate the minimal system with meta-debian
+and how to run it on the QEMU environment.
 
-### Setup build environment
+Setup build environment
+-----------------------
 
-Clone meta-debian:
-```sh
-$ git clone -b warrior https://github.com/meta-debian/meta-debian.git
-```
+In case of using the [supported build environment](#supported-build-environment),
+run the following commands.
 
-* For docker build:
-   ```sh
-   $ cd meta-debian
-   $ make -C docker
-   ```
+    $ git clone -b warrior git://git.yoctoproject.org/poky.git
+    $ git clone -b warrior https://github.com/meta-debian/meta-debian.git poky/meta-debian
+    $ sudo ./poky/meta-debian/scripts/install-deps.sh
 
-* For native build:
+Otherwise, use the docker container.
 
-   * Install essential packages poky requires into your host system according to 
-   <https://www.yoctoproject.org/docs/2.7/ref-manual/ref-manual.html#required-packages-for-the-build-host>
+    $ git clone -b warrior https://github.com/meta-debian/meta-debian.git
+    $ make -C meta-debian/docker
 
-      ```sh
-      $ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib \
-      build-essential chrpath socat cpio python python3 python3-pip python3-pexpect \
-      xz-utils debianutils iputils-ping
-      ```
+Build target images
+-------------------
 
-      NOTE: The following three packages have version limitation
-      * git: 1.8.3.1 or greater
-      * tar: 1.27 or greater
-      * python: 3.4.0 or greater
+Setup the build directory.
 
-   * Setup repositories
+    $ export TEMPLATECONF=meta-debian/conf
+    $ source ./poky/oe-init-build-env
 
-      ```sh
-      $ git clone -b warrior git://git.yoctoproject.org/poky.git
-      $ mv meta-debian poky/
-      ```
+Set `MACHINE` variable in `conf/local.conf` to one of the following machines.
 
-### Build
-
-```sh
-$ export TEMPLATECONF=meta-debian/conf
-$ source ./poky/oe-init-build-env
-```
-
-You can change the target machine by setting `MACHINE` variable in `conf/local.conf` 
-to one of the following machines.
 * qemux86 (default)
 * qemux86-64
 * qemuarm
@@ -88,29 +69,23 @@ to one of the following machines.
 * qemuppc
 * qemumips
 
-For example, the target machine is set to QEMU ARM by adding the following difinition to `conf/local.conf`.
-```
-MACHINE = "qemuarm"
-```
+Example:
 
-Now, the build system is ready.
+    MACHINE = "qemuarm"
+
+Now ready for building.
 Build Linux kernel and the minimal rootfs by the following command.
 It takes a while to complete (more than 30 minutes).
 
-```sh
-$ bitbake core-image-minimal
-```
+    $ bitbake core-image-minimal
 
-### Run the built Linux on QEMU
+Run images on QEMU
+------------------
 
+Run the images built in the above step on QEMU.
 Please replace `${MACHINE}` by the target machine you selected in the above step.
 
-NOTE: Confirm that the tun module, which runqemu depends on, 
-is correctly loaded in your system.
-
-```sh
-$ runqemu ${MACHINE} nographic
-```
+    $ runqemu ${MACHINE} nographic
 
 After boot, you can login as `root` without password.
 
