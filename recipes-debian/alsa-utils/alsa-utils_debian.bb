@@ -96,8 +96,6 @@ SUMMARY_alsa-utils-aseqdump     = "Shows the events received at an ALSA sequence
 SUMMARY_alsa-utils-alsaloop     = "ALSA PCM loopback utility"
 SUMMARY_alsa-utils-alsaucm      = "ALSA Use Case Manager"
 
-ALLOW_EMPTY_alsa-utils = "1"
-
 # Follow Debian
 do_install_append() {
 	install -d ${D}${sysconfdir}/init.d

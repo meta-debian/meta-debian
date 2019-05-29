@@ -73,10 +73,6 @@ FILES_${PN}-dev += "${libdir}/openhpi/*${SOLIBSDEV}"
 
 RDEPENDS_${PN} += "lsb-base"
 
-# Debian provides openhpi package with doc files only,
-# but on Poky it becomes empty.
-ALLOW_EMPTY_${PN} = "1"
-
 # Follow debian/control
 RDEPENDS_${PN} += " \
     ${PN}d ${PN}-clients ${PN}-plugin-ilo2-ribcl \

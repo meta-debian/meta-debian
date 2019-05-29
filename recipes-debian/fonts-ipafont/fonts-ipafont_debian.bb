@@ -27,9 +27,6 @@ do_install() {
 	install -m 0644 ${S}/ipam*.ttf ${D}${datadir}/fonts/opentype/ipafont-mincho/
 }
 
-# fonts-ipafont is metapackage that depends on gothic and mincho font packages
-ALLOW_EMPTY_${PN} = "1"
-
 PACKAGES =+ "${PN}-gothic ${PN}-mincho"
 
 FILES_${PN}-gothic = "${datadir}/fonts/opentype/ipafont-gothic"

@@ -60,7 +60,6 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_install[noexec] = "1"
 
-ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} = "bitmap ico oclock rendercheck transset x11perf xbiff xcalc \
                   xclipboard xclock xconsole xcursorgen xditview xedit xeyes \
                   xgc xload xlogo xmag xman xmore xwd xwud \

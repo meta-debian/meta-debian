@@ -36,8 +36,6 @@ PACKAGES =+ "${PN}-gothic ${PN}-mincho"
 FILES_${PN}-gothic = "${datadir}/fonts/truetype/takao-gothic"
 FILES_${PN}-mincho = "${datadir}/fonts/truetype/takao-mincho"
 
-# fonts-takap is metapackage, depends on fonts-takao-{mincho,gothic} packages.
-ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} += "${PN}-gothic ${PN}-mincho"
 
 RPROVIDES_${PN}-gothic += "fonts-japanese-gothic"

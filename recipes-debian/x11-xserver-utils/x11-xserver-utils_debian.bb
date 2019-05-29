@@ -50,7 +50,6 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_install[noexec] = "1"
 
-ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} += "iceauth rgb sessreg xcmsdb xgamma xhost xmodmap \
                   xrandr xrdb xrefresh xset xsetmode xsetpointer \
                   xsetroot xstdcmap xvidtune \

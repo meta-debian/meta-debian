@@ -73,7 +73,6 @@ FILES_${PN}-staticdev = "${libdir}/libboost_*.a"
 PACKAGES += "${PN}"
 RRECOMMENDS_${PN} += "${BOOST_PACKAGES}"
 RRECOMMENDS_${PN}_class-native = ""
-ALLOW_EMPTY_${PN} = "1"
 
 # to avoid GNU_HASH QA errors added LDFLAGS to ARCH; a little bit dirty but at least it works
 TARGET_CC_ARCH += " ${LDFLAGS}"

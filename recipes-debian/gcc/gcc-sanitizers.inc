@@ -53,7 +53,6 @@ do_install () {
 }
 
 INHIBIT_DEFAULT_DEPS = "1"
-ALLOW_EMPTY_${PN} = "1"
 DEPENDS = "gcc-runtime virtual/${TARGET_PREFIX}gcc"
 
 BBCLASSEXTEND = "nativesdk"

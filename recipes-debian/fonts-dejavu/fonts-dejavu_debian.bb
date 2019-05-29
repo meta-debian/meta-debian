@@ -83,7 +83,6 @@ FILES_ttf-dejavu-extra = " \
     ${datadir}/fonts/truetype/ttf-dejavu/DejaVu*Oblique.ttf \
 "
 
-ALLOW_EMPTY_${PN} = "1"
 ALLOW_EMPTY_ttf-dejavu = "1"
 
 RDEPENDS_${PN} += "${PN}-core ${PN}-extra"
