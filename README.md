@@ -13,9 +13,23 @@ for embedded systems satisfying the following needs.
 * Wide embedded CPU support
 * Customizability
 
-Currently, the following software versions are supported in meta-debian.
-* Source code: Debian GNU/Linux 10 (buster)
-* Build system: Yocto Project (warrior)
+Supported Versions
+==================
+
+This branch provides recipes to cross-build Debian source packages
+of the following Debian version. These recipes are compatible
+with the following Yocto Project version.
+
+* Debian GNU/Linux 10 (buster)
+* Yocto Project 2.7 (warrior)
+
+Supported Build Environment
+===========================
+
+This branch is tested on the following build environment.
+
+* Distribution: Debian GNU/Linux 10 (buster)
+* Architecture: amd64
 
 Quick Start
 ===========
