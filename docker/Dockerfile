@@ -1,22 +1,26 @@
 FROM debian:buster
+
 ARG UID
-ARG POKY_REV
 
 USER root
 
 ENV USER deby
 ENV PASS deby
+ENV HOME /home/deby
 ENV POKY_GIT_URL https://git.yoctoproject.org/git/poky
+ENV POKY_REV warrior
 
 RUN bash -c 'if test -n "$http_proxy"; then echo "Acquire::http::proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/99proxy; fi'
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends sudo \
 	gawk wget git-core diffstat unzip texinfo gcc-multilib \
 	build-essential chrpath socat cpio python python3 python3-pip \
 	python3-pexpect xz-utils debianutils iputils-ping file locales
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
-RUN useradd -d /home/$USER -U -m -s /bin/bash -u $UID $USER
+RUN useradd -d $HOME -U -m -s /bin/bash -u $UID $USER
+RUN usermod -a -G sudo $USER
+RUN echo "$USER:$PASS" | chpasswd
 
 USER $USER
 
@@ -28,7 +32,9 @@ RUN bash -c 'if test -n "$http_proxy"; then git config --global http.proxy "$htt
 RUN bash -c 'if test -n "$https_proxy"; then git config --global https.proxy "$https_proxy"; fi'
 RUN bash -c 'if test -n "$no_proxy"; then git config --global core.noproxy "$no_proxy"; fi'
 
-RUN git clone $POKY_GIT_URL /home/$USER/poky
-RUN cd /home/$USER/poky && git checkout $POKY_REV
-RUN mkdir -p /home/$USER/poky/meta-debian
-RUN mkdir -p /home/$USER/build/downloads
+RUN git clone $POKY_GIT_URL $HOME/poky
+RUN cd $HOME/poky && git checkout $POKY_REV
+RUN mkdir -p $HOME/poky/meta-debian
+RUN mkdir -p $HOME/build/downloads
+
+WORKDIR $HOME

@@ -1,2 +1,1 @@
-docker/.build
-docker/.build-downloads
+tests/logs
