@@ -29,9 +29,9 @@ for distro in $TEST_DISTROS; do
     touch $RESULT
 
     for target in $TEST_TARGETS; do
-      bitbake $target 2>&1 | tee $LOGDIR/${target}.log
-
       version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/ *$//"`
+      bitbake $target 2>&1 > $LOGDIR/${target}.log
+
       if [ "$?" = "0" ]; then
         echo "$target $version PASS" >> $RESULT
       else
