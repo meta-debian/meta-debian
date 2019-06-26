@@ -21,7 +21,7 @@ for distro in $TEST_DISTROS; do
   for machine in $TEST_MACHINES; do
     sed -i -e "s/\(^MACHINE\s*?*=\).*/\1 \"$machine\"/" conf/local.conf
 
-    LOGDIR=$THISDIR/logs/$TEST_DISTROS/$TEST_MACHINES
+    LOGDIR=$THISDIR/logs/$distro/$machine
     RESULT=$LOGDIR/result.txt
 
     mkdir -p $LOGDIR
