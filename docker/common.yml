@@ -14,3 +14,7 @@ services:
     volumes:
       - ../:/home/deby/poky/meta-debian
       - downloads:/home/deby/build/downloads
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN

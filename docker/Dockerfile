@@ -12,7 +12,7 @@ ENV POKY_REV warrior
 
 RUN bash -c 'if test -n "$http_proxy"; then echo "Acquire::http::proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/99proxy; fi'
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends sudo \
+    apt-get install -y --no-install-recommends sudo iptables \
 	gawk wget git-core diffstat unzip texinfo gcc-multilib \
 	build-essential chrpath socat cpio python python3 python3-pip \
 	python3-pexpect xz-utils debianutils iputils-ping file locales
@@ -21,6 +21,8 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && loca
 RUN useradd -d $HOME -U -m -s /bin/bash -u $UID $USER
 RUN usermod -a -G sudo $USER
 RUN echo "$USER:$PASS" | chpasswd
+RUN echo "%$USER  ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/debygrp
+RUN chmod 0440 /etc/sudoers.d/debygrp
 
 USER $USER
 
