@@ -107,9 +107,17 @@ do_install_append () {
 	install -m 0644 ${S}/debian/util-linux.runuser.pam ${D}${sysconfdir}/pam.d/runuser
 	install -m 0644 ${S}/debian/util-linux.runuser-l.pam ${D}${sysconfdir}/pam.d/runuser-l
 
-	# install /etc/default/hwclock
+	# install hwclock scripts
+	# hwclock-set and hwclock.rules for udev are essential if
+	# udev (with or without systemd) is installed and enabled in the target.
+	# /etc/init.d/hwclock.sh replaces the startup hctosys if udev is not used.
 	install -d ${D}${sysconfdir}/default
-	install -m 0644 ${S}/debian/util-linux.hwclock.default ${D}${sysconfdir}/default/hwclock
+	install -m 0644 ${S}/debian/util-linux.hwclock.default \
+		${D}${sysconfdir}/default/hwclock
+	install -d ${D}${nonarch_base_libdir}/udev/rules.d
+	install -m 0755 ${S}/debian/hwclock-set ${D}${nonarch_base_libdir}/udev
+	install -m 0644 ${S}/debian/hwclock.rules \
+		${D}${nonarch_base_libdir}/udev/rules.d/85-hwclock.rules
 
 	# create soft link getty to agetty command
 	ln -sf agetty ${D}/${base_sbindir}/getty.${DPN}
