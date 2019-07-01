@@ -16,9 +16,6 @@ S = "${DEBIAN_UNPACK_DIR}/expat"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=5b8620d98e49772d95fc1d291c26aa79"
 
-# Empty DEBIAN_QUILT_PATCHES to avoid error "debian/patches not found"
-DEBIAN_QUILT_PATCHES = ""
-
 #  Don't build doc to reduce dependency, it depends on docbook-to-man
 SRC_URI += "file://disable-build-doc.patch \
             file://autotools.patch"
