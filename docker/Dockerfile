@@ -24,13 +24,18 @@ RUN echo "$USER:$PASS" | chpasswd
 RUN echo "%$USER  ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/debygrp
 RUN chmod 0440 /etc/sudoers.d/debygrp
 
+ADD gitproxy /usr/bin
+RUN chmod +x /usr/bin/gitproxy
+RUN bash -c 'if test -n "$http_proxy"; then sed -i -e "s#\(http_proxy=\"\).*#\1$http_proxy\"#" /usr/bin/gitproxy; fi'
+
 USER $USER
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN bash -c 'if test -n "$http_proxy"; then git config --global http.proxy "$http_proxy"; fi'
+RUN bash -c 'if test -n "$http_proxy"; then git config --global http.proxy "$http_proxy"; \
+                                            git config --global core.gitproxy gitproxy; fi'
 RUN bash -c 'if test -n "$https_proxy"; then git config --global https.proxy "$https_proxy"; fi'
 RUN bash -c 'if test -n "$no_proxy"; then git config --global core.noproxy "$no_proxy"; fi'
 

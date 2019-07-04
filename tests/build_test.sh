@@ -11,6 +11,7 @@ TEST_MACHINES=${TEST_MACHINES:-qemux86}
 cd $WORKDIR
 export TEMPLATECONF=meta-debian/conf
 source ./poky/oe-init-build-env
+echo "HOSTTOOLS_append = \" gitproxy\"" >> conf/local.conf
 
 # Get version of recipes
 all_versions=`pwd`/all_versions.txt
