@@ -23,6 +23,11 @@ DEBIAN_UNPACK_DIR ?= "${WORKDIR}/git"
 # sometimes need to be set to a sub directory in DEBIAN_UNPACK_DIR
 S = "${DEBIAN_UNPACK_DIR}"
 
+# ${PN}-dev always depends on ${PN}, allow them to be empty
+# or "-c populate_sdk core-image-minimal" will not be able to
+# install ${PN}-dev into SDK.
+ALLOW_EMPTY_${PN} = "1"
+
 ###############################################################################
 # do_debian_patch
 ###############################################################################
