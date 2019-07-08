@@ -15,7 +15,7 @@ Clone meta-emlinux:
 
 ```sh
 $ mkdir repos
-$ git clone -b master https://github.com/miraclelinux/meta-emlinux.git repos/meta-emlinux
+$ git clone -b warrior https://github.com/miraclelinux/meta-emlinux.git repos/meta-emlinux
 ```
 
 Setup build directory:
