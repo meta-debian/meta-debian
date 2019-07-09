@@ -9,12 +9,12 @@ GREY="#bdc3c7"
 RED="#e74c3c"
 
 for i in $LOGDIR/*; do
-  distro=`basename $i`
-  for m in $LOGDIR/$distro/*; do
-    machine=`basename $m`
-    mkdir -p $HTMLDIR/$distro/$machine
-    index=$HTMLDIR/$distro/$machine/index.html
-    cat > $index << EOF
+	distro=`basename $i`
+	for m in $LOGDIR/$distro/*; do
+		machine=`basename $m`
+		mkdir -p $HTMLDIR/$distro/$machine
+		index=$HTMLDIR/$distro/$machine/index.html
+		cat > $index << EOF
 <html>
 <head><title>meta-debian Status</title>
 <style>
@@ -40,22 +40,24 @@ Built machine: $machine<br>
 <th>Recipe</th>
 <th>Version</th>
 <th>Build Status</th>
+<th>Ptest Status</th>
 </tr>
 EOF
-  while read -r line; do
-    recipe=`echo $line | awk '{print $1}'`
-    version=`echo $line | awk '{print $2}'`
-    status=`echo $line | awk '{print $3}'`
+		while read -r line; do
+			recipe=`echo $line | awk '{print $1}'`
+			version=`echo $line | awk '{print $2}'`
+			build_status=`echo $line | awk '{print $3}'`
+			ptest_status=`echo $line | awk '{print $4}'`
 
-    if echo $status | grep -iq "PASS"; then
-      color=$GREEN
-    else
-      color=$RED
-    fi
+			if echo $build_status | grep -iq "PASS"; then
+				color=$GREEN
+			else
+				color=$RED
+			fi
 
-    echo "<tr bgcolor=\"$color\"><td></td><td>$recipe</td><td>$version</td><td>$status</td></tr>" >> $index
-  done < $LOGDIR/$distro/$machine/result.txt
+			echo "<tr bgcolor=\"$color\"><td></td><td>$recipe</td><td>$version</td><td>$build_status</td><td>$ptest_status</td></tr>" >> $index
+		done < $LOGDIR/$distro/$machine/result.txt
 
-  echo "</table></body></html>" >> $index
-  done
+		echo "</table></body></html>" >> $index
+	done
 done
