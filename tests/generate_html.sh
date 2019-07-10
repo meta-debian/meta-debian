@@ -20,9 +20,9 @@ for i in $LOGDIR/*; do
 <style>
 .main_table table {
     counter-reset: rowNumber;
-} tr {
+}.main_table tr {
     counter-increment: rowNumber;
-} tr td:first-child::before {
+}.main_table tr td:first-child::before {
     content: counter(rowNumber);
 }
 </style>
@@ -31,8 +31,10 @@ for i in $LOGDIR/*; do
 <body>
 <h1>meta-debian Status</h1>
 <br>
-Built distro : $distro<br>
-Built machine: $machine<br>
+<table>
+<tr><td><b>Built distro</b></td><td>$distro</td></tr>
+<tr><td><b>Built machine</b></td><td>$machine</td></tr>
+</table>
 <br>
 <br><table class="main_table">
 <thead>
@@ -51,12 +53,22 @@ EOF
 			ptest_status=`echo $line | awk '{print $4}'`
 
 			if echo $build_status | grep -iq "PASS"; then
-				color=$GREEN
+				bcolor=$GREEN
+			elif echo $build_status | grep -iq "FAIL"; then
+				bcolor=$RED
 			else
-				color=$RED
+				bcolor=$GREY
 			fi
 
-			echo "<tr bgcolor=\"$color\"><td></td><td>$recipe</td><td>$version</td><td>$build_status</td><td>$ptest_status</td></tr>" >> $index
+			if echo $ptest_status | grep -iq "PASS"; then
+				pcolor=$GREEN
+			elif echo $ptest_status | grep -iq "FAIL"; then
+				pcolor=$RED
+			else
+				pcolor=$GREY
+			fi
+
+			echo "<tr><td></td><td>$recipe</td><td>$version</td><td bgcolor=\"$bcolor\">$build_status</td><td bgcolor=\"$pcolor\">$ptest_status</td></tr>" >> $index
 		done < $LOGDIR/$distro/$machine/result.txt
 
 		echo "</table></body></html>" >> $index
