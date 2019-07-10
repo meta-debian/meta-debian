@@ -29,8 +29,10 @@ all_recipes_version "$all_versions"
 add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
 
 for distro in $TEST_DISTROS; do
+	note "Testing distro $distro ..."
 	add_or_replace "DISTRO" "$distro" conf/local.conf
 	for machine in $TEST_MACHINES; do
+		note "Testing machine $machine ..."
 		add_or_replace "MACHINE" "$machine" conf/local.conf
 
 		# Get required layers
@@ -62,7 +64,7 @@ for distro in $TEST_DISTROS; do
 			get_version "$all_versions"
 
 			note "Building $target ..."
-			bitbake $target 2>&1 > $LOGDIR/${target}-build.log
+			bitbake $target &> $LOGDIR/${target}.build.log
 
 			if [ "$?" = "0" ]; then
 				status=PASS
@@ -82,5 +84,9 @@ for distro in $TEST_DISTROS; do
 				echo "$target $version $status NA" >> $RESULT
 			fi
 		done
+
+		# Sort result file by alphabet
+		sort -u $RESULT > result.tmp
+		mv result.tmp $RESULT
 	done
 done

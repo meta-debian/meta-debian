@@ -32,6 +32,7 @@ add_or_replace "IMAGE_INSTALL_append" " dropbear $TEST_TARGETS" conf/local.conf
 add_or_replace "DISTRO" "$TEST_DISTROS" conf/local.conf
 
 for machine in $TEST_MACHINES; do
+	note "Testing machine $machine ..."
 	add_or_replace "MACHINE" "$machine" conf/local.conf
 
 	bitbake core-image-minimal
@@ -65,7 +66,7 @@ for machine in $TEST_MACHINES; do
 	for target in $TEST_TARGETS; do
 		get_version "$all_versions"
 
-		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}-ptest.log
+		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}.ptest.log
 		if [ "$?" != "0" ]; then
 			note "ptest for $target is not available. Skip."
 			status=NA
@@ -95,4 +96,8 @@ for machine in $TEST_MACHINES; do
 
 	# Turn off machine after finish testing
 	$SSH "/sbin/poweroff"
+
+	# Sort result file by alphabet
+	sort -u $RESULT > tmp
+	mv tmp $RESULT
 done
