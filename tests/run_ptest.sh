@@ -67,32 +67,34 @@ for machine in $TEST_MACHINES; do
 	RESULT=$LOGDIR/result.txt
 
 	mkdir -p $LOGDIR
-	rm -f $RESULT
-	touch $RESULT
 
 	for target in $TEST_TARGETS; do
 		version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/ *$//"`
 
-		$SSH "ls /usr/lib/$target/ptest/" 2>&1 > $LOGDIR/${target}-ptest.log
+		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}-ptest.log
 		if [ "$?" != "0" ]; then
 			echo "NOTE: ptest for $target is not available. Skip."
-			echo "$target $version SKIP" >> $RESULT
-			continue
+			status=NA
+		else
+			echo "NOTE: Running ptest for $target ..."
+			$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &> $LOGDIR/${target}-ptest.log
+
+			if [ "$?" = "0" ]; then
+				status=PASS
+			else
+				status=FAIL
+			fi
 		fi
 
-		echo "NOTE: Testing $target ..."
-		$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" 2>&1 > $LOGDIR/${target}-ptest.log
-
-		if [ "$?" = "0" ]; then
-			status=PASS
+		echo "NOTE: Run ptest for $target: $status"
+		if grep -q "^$target $version" $RESULT 2> /dev/null; then
+			sed -i -e "s/^\($target $version \S* \)\S*/\1$status/" $RESULT
 		else
-			status=FAIL
-		fi
+			# Remove old version
+			if grep -q "^$target " $RESULT 2> /dev/null; then
+				sed -i "/^$target /d" $RESULT
+			fi
 
-		echo "NOTE: Test $target: $status"
-		if grep -q "^$target " $RESULT 2> /dev/null; then
-			sed -i -e "s/^\($target \)\S*\( \S* \)\S*/\1$version\2$status/" $RESULT
-		else
 			echo "$target $version NA $status" >> $RESULT
 		fi
 	done
