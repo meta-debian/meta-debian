@@ -75,9 +75,14 @@ for distro in $TEST_DISTROS; do
 			fi
 
 			echo "NOTE: Build $target: $status"
-			if grep -q "^$target " $RESULT; then
-				sed -i -e "s/^\($target \)\S* \S*\( \S*\)/\1$version $status\2/" $RESULT
+			if grep -q "^$target $version" $RESULT 2> /dev/null; then
+				sed -i -e "s/^\($target $version \)\S*\( \S*\)/\1$status\2/" $RESULT
 			else
+				# Remove old version
+				if grep -q "^$target " $RESULT 2> /dev/null; then
+					sed -i "/^$target /d" $RESULT
+				fi
+
 				echo "$target $version $status NA" >> $RESULT
 			fi
 		done
