@@ -46,6 +46,10 @@ for i in $LOGDIR/*; do
 <th>Ptest Status</th>
 </tr></thead>
 EOF
+		if [ ! -f $LOGDIR/$distro/$machine/result.txt ]; then
+			continue
+		fi
+
 		while read -r line; do
 			recipe=`echo $line | awk '{print $1}'`
 			version=`echo $line | awk '{print $2}'`
