@@ -5,6 +5,8 @@ trap "exit" INT
 THISDIR=$(dirname $(readlink -f "$0"))
 WORKDIR=$THISDIR/../../..
 
+. $THISDIR/common.sh
+
 # deby-tiny has limited image size, it's better to use deby instead
 TEST_DISTROS=deby
 TEST_TARGETS=${TEST_TARGETS}
@@ -15,34 +17,24 @@ SSH='ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1'
 # Clean old key
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:2222"
 
-### Setup builddir ###
-cd $WORKDIR
-export TEMPLATECONF=meta-debian/conf
-source ./poky/oe-init-build-env
-echo "HOSTTOOLS_append = \" gitproxy\"" >> conf/local.conf
-sed -i -e "s/\(^DISTRO\s*?*=\).*/\1 \"$TEST_DISTROS\"/" conf/local.conf
+setup_builddir
+get_recipes_version
 
 # Enable ptest
-echo 'DISTRO_FEATURES_append = " ptest"' >> conf/local.conf
-echo 'EXTRA_IMAGE_FEATURES += "ptest-pkgs"' >> conf/local.conf
+add_or_replace "DISTRO_FEATURES_append" " ptest $TEST_DISTRO_FEATURES" conf/local.conf
+add_or_replace "EXTRA_IMAGE_FEATURES_append" " ptest-pkgs" conf/local.conf
 
 # we use ssh for calling ptest, so add dropbear
-echo "IMAGE_INSTALL_append = \" dropbear $TEST_TARGETS\"" >> conf/local.conf
+add_or_replace "IMAGE_INSTALL_append" " dropbear $TEST_TARGETS" conf/local.conf
 
-# Get version of all recipes
-all_versions=`pwd`/all_versions.txt
-bitbake -s > $all_versions
-if [ "$?" != "0" ]; then
-	echo "ERROR: Failed to bitbake."
-	exit 1
-fi
+add_or_replace "DISTRO" "$TEST_DISTROS" conf/local.conf
 
 for machine in $TEST_MACHINES; do
-	sed -i -e "s/\(^MACHINE\s*?*=\).*/\1 \"$machine\"/" conf/local.conf
+	add_or_replace "MACHINE" "$machine" conf/local.conf
 
 	bitbake core-image-minimal
 	if [ "$?" != "0" ]; then
-		echo "ERROR: Failed to build image for $machine."
+		error "Failed to build image for $machine."
 		continue
 	fi
 
@@ -53,12 +45,12 @@ for machine in $TEST_MACHINES; do
 	timeout=60
 	start=`date +%s`
 	while ! $SSH "#" 2> /dev/null; do
-			echo "NOTE: Waiting for SSH to be ready..."
+			note "Waiting for SSH to be ready..."
 			sleep 5
 			now=`date +%s`
 			waited=$((now-start))
 		if [ $waited -gt $timeout ]; then
-			echo "ERROR: Cannot connect to qemu machine."
+			error "Cannot connect to qemu machine."
 			exit 1
 		fi
 	done
@@ -69,14 +61,14 @@ for machine in $TEST_MACHINES; do
 	mkdir -p $LOGDIR
 
 	for target in $TEST_TARGETS; do
-		version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/ *$//"`
+		version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
 
 		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}-ptest.log
 		if [ "$?" != "0" ]; then
-			echo "NOTE: ptest for $target is not available. Skip."
+			note "ptest for $target is not available. Skip."
 			status=NA
 		else
-			echo "NOTE: Running ptest for $target ..."
+			note "Running ptest for $target ..."
 			$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &> $LOGDIR/${target}-ptest.log
 
 			if [ "$?" = "0" ]; then
@@ -86,7 +78,7 @@ for machine in $TEST_MACHINES; do
 			fi
 		fi
 
-		echo "NOTE: Run ptest for $target: $status"
+		note "Run ptest for $target: $status"
 		if grep -q "^$target $version" $RESULT 2> /dev/null; then
 			sed -i -e "s/^\($target $version \S* \)\S*/\1$status/" $RESULT
 		else

@@ -4,7 +4,9 @@ trap "exit" INT
 
 THISDIR=$(dirname $(readlink -f "$0"))
 WORKDIR=$THISDIR/../../..
-POKYDIR=$THISDIR/../../../poky
+POKYDIR=$THISDIR/../..
+
+. $THISDIR/common.sh
 
 TEST_TARGETS=${TEST_TARGETS:-core-image-minimal}
 TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
@@ -19,24 +21,15 @@ LAYER_DEPS[raspberrypi3]="meta-raspberrypi meta-debian/bsp/meta-raspberrypi"
 LAYER_DEPS_URL[beaglebone]="https://git.yoctoproject.org/git/meta-ti;branch=master"
 LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;branch=warrior"
 
-# Setup builddir
-cd $WORKDIR
-export TEMPLATECONF=meta-debian/conf
-source ./poky/oe-init-build-env
-echo "HOSTTOOLS_append = \" gitproxy\"" >> conf/local.conf
+setup_builddir
+get_recipes_version
 
-# Get version of all recipes
-all_versions=`pwd`/all_versions.txt
-bitbake -s > $all_versions
-if [ "$?" != "0" ]; then
-	echo "ERROR: Failed to bitbake."
-	exit 1
-fi
+add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
 
 for distro in $TEST_DISTROS; do
-	sed -i -e "s/\(^DISTRO\s*?*=\).*/\1 \"$distro\"/" conf/local.conf
+	add_or_replace "DISTRO" "$distro" conf/local.conf
 	for machine in $TEST_MACHINES; do
-		sed -i -e "s/\(^MACHINE\s*?*=\).*/\1 \"$machine\"/" conf/local.conf
+		add_or_replace "MACHINE" "$machine" conf/local.conf
 
 		# Get required layers
 		for layer_url in ${LAYER_DEPS_URL[$machine]}; do
@@ -56,7 +49,7 @@ for distro in $TEST_DISTROS; do
 		for layer in ${LAYER_DEPS[$machine]}; do
 			EXTRA_BBLAYERS="$EXTRA_BBLAYERS $POKYDIR/$layer"
 		done
-		sed -i -e "s@^\(EXTRA_BBLAYERS\s*=\).*@\1\"$EXTRA_BBLAYERS\"@g"  conf/bblayers.conf
+		add_or_replace "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS"  conf/bblayers.conf
 
 		LOGDIR=$THISDIR/logs/$distro/$machine
 		RESULT=$LOGDIR/result.txt
@@ -64,8 +57,8 @@ for distro in $TEST_DISTROS; do
 		test -d $LOGDIR || mkdir -p $LOGDIR
 
 		for target in $TEST_TARGETS; do
-			version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/ *$//"`
-			echo "NOTE: Building $target ..."
+			version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
+			note "Building $target ..."
 			bitbake $target 2>&1 > $LOGDIR/${target}-build.log
 
 			if [ "$?" = "0" ]; then
@@ -74,7 +67,7 @@ for distro in $TEST_DISTROS; do
 				status=FAIL
 			fi
 
-			echo "NOTE: Build $target: $status"
+			note "Build $target: $status"
 			if grep -q "^$target $version" $RESULT 2> /dev/null; then
 				sed -i -e "s/^\($target $version \)\S*\( \S*\)/\1$status\2/" $RESULT
 			else
