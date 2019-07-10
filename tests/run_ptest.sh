@@ -12,6 +12,9 @@ TEST_DISTROS=deby
 TEST_TARGETS=${TEST_TARGETS}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
 
+# Clean TEST_TARGETS. Remove native and nativesdk packages if any.
+TEST_TARGETS=`echo $TEST_TARGETS | sed -e "s/\s*\S*-native\s*/ /g" -e "s/\s*nativesdk-\S*\s*/ /g"`
+
 # SSH to QEMU machine through port 2222
 SSH='ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1'
 # Clean old key
