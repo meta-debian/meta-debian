@@ -18,6 +18,7 @@ ptest:
 
 clean:
 	rm -rf ../tests/logs
+	rm -rf ../tests/html
 
 cleanall:
 	docker-compose rm -svf work
