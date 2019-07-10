@@ -18,11 +18,11 @@ for i in $LOGDIR/*; do
 <html>
 <head><title>meta-debian Status</title>
 <style>
-.sortable table {
+.main_table table {
     counter-reset: rowNumber;
-}.sortable tr {
+} tr {
     counter-increment: rowNumber;
-}.sortable tr td:first-child::before {
+} tr td:first-child::before {
     content: counter(rowNumber);
 }
 </style>
@@ -34,14 +34,15 @@ for i in $LOGDIR/*; do
 Built distro : $distro<br>
 Built machine: $machine<br>
 <br>
-<br><table>
+<br><table class="main_table">
+<thead>
 <tr bgcolor="$GREY">
 <th></th>
-<th>Recipe</th>
+<th>Package</th>
 <th>Version</th>
 <th>Build Status</th>
 <th>Ptest Status</th>
-</tr>
+</tr></thead>
 EOF
 		while read -r line; do
 			recipe=`echo $line | awk '{print $1}'`
