@@ -18,7 +18,9 @@ SSH='ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1'
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:2222"
 
 setup_builddir
-get_recipes_version
+
+all_versions=`pwd`/all_versions.txt
+all_recipes_version "$all_versions"
 
 # Enable ptest
 add_or_replace "DISTRO_FEATURES_append" " ptest $TEST_DISTRO_FEATURES" conf/local.conf
@@ -61,7 +63,7 @@ for machine in $TEST_MACHINES; do
 	mkdir -p $LOGDIR
 
 	for target in $TEST_TARGETS; do
-		version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
+		get_version "$all_versions"
 
 		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}-ptest.log
 		if [ "$?" != "0" ]; then

@@ -45,13 +45,28 @@ function setup_builddir {
 }
 
 # Run bitbake -s to get version of all recipes.
-# No params.
-function get_recipes_version {
-	all_versions=`pwd`/all_versions.txt
+# Params:
+#   $1: target file that stores version information
+function all_recipes_version {
+	all_versions=$1
+
 	note "Getting version of all recipes ..."
 	bitbake -s > $all_versions
 	if [ "$?" != "0" ]; then
 		error "Failed to bitbake."
 		exit 1
+	fi
+}
+
+# Get version of recipe
+# Params:
+#   $1: target file that stores version information
+function get_version {
+	all_versions=$1
+
+	version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
+	# If version is empty or contains only space, set it to NA
+	if echo $version | grep -q "^\s*$"; then
+		version=NA
 	fi
 }

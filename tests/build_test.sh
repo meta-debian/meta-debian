@@ -22,7 +22,9 @@ LAYER_DEPS_URL[beaglebone]="https://git.yoctoproject.org/git/meta-ti;branch=mast
 LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;branch=warrior"
 
 setup_builddir
-get_recipes_version
+
+all_versions=`pwd`/all_versions.txt
+all_recipes_version "$all_versions"
 
 add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
 
@@ -57,7 +59,8 @@ for distro in $TEST_DISTROS; do
 		test -d $LOGDIR || mkdir -p $LOGDIR
 
 		for target in $TEST_TARGETS; do
-			version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
+			get_version "$all_versions"
+
 			note "Building $target ..."
 			bitbake $target 2>&1 > $LOGDIR/${target}-build.log
 
