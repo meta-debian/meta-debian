@@ -66,7 +66,7 @@ for distro in $TEST_DISTROS; do
 		for target in $TEST_TARGETS; do
 			version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/ *$//"`
 			echo "NOTE: Building $target ..."
-			bitbake $target 2>&1 > $LOGDIR/${target}.log
+			bitbake $target 2>&1 > $LOGDIR/${target}-build.log
 
 			if [ "$?" = "0" ]; then
 				status=PASS
