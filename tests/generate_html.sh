@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# Generate HTML output from test result.
 
 THISDIR=$(dirname $(readlink -f "$0"))
 LOGDIR=$THISDIR/logs

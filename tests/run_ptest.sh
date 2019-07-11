@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# Script for run ptest.
+# Input params from env:
+#   TEST_TARGETS: recipes/packages will be run ptest. Eg: "zlib core-image-minimal"
+#   TEST_MACHINES: machines will be tested. Currently only support qemu machine.
+#                  Eg: "qemux86 qemuarm"
+#   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
 
 trap "exit" INT
 

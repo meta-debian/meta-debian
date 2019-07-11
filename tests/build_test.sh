@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# Script for building meta-debian.
+# Input params from env:
+#   TEST_TARGETS: recipes/packages will be built. Eg: "zlib core-image-minimal"
+#   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
+#   TEST_MACHINES: machines will be tested. Eg: "raspberrypi3 qemuarm"
+#   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
 
 trap "exit" INT
 

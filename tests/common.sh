@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Common functions for other scripts.
 
 RED='\e[91m'
 BLD='\e[1m'
