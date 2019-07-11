@@ -8,6 +8,8 @@ GREEN="#2ecc71"
 GREY="#bdc3c7"
 RED="#e74c3c"
 
+TESTING_LOGS="https://raw.githubusercontent.com/tswcos/meta-debian-test-logs/master"
+
 for i in $LOGDIR/*; do
 	distro=`basename $i`
 	for m in $LOGDIR/$distro/*; do
@@ -72,7 +74,7 @@ EOF
 				pcolor=$GREY
 			fi
 
-			echo "<tr><td></td><td>$recipe</td><td>$version</td><td bgcolor=\"$bcolor\">$build_status</td><td bgcolor=\"$pcolor\">$ptest_status</td></tr>" >> $index
+			echo "<tr><td></td><td>$recipe</td><td>$version</td><td bgcolor=\"$bcolor\"><a href=$TESTING_LOGS/$distro/$machine/$recipe.build.log>$build_status</a></td><td bgcolor=\"$pcolor\">$ptest_status</td></tr>" >> $index
 		done < $LOGDIR/$distro/$machine/result.txt
 
 		echo "</table></body></html>" >> $index
