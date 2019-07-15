@@ -60,6 +60,9 @@ EOF
 			build_status=`echo $line | awk '{print $3}'`
 			ptest_status=`echo $line | awk '{print $4}'`
 
+			build_log="$TESTING_LOGS/$distro/$machine/$recipe.build.log"
+			ptest_log="$TESTING_LOGS/$distro/$machine/$recipe.ptest.log"
+
 			if echo $build_status | grep -iq "PASS"; then
 				bcolor=$GREEN
 			elif echo $build_status | grep -iq "FAIL"; then
@@ -68,15 +71,22 @@ EOF
 				bcolor=$GREY
 			fi
 
-			if echo $ptest_status | grep -iq "PASS"; then
-				pcolor=$GREEN
-			elif echo $ptest_status | grep -iq "FAIL"; then
-				pcolor=$RED
-			else
+			html_ptest_status=$ptest_status
+			if echo $ptest_status |  egrep -vq "PASS|FAIL"; then
 				pcolor=$GREY
+			else
+				if echo $ptest_status | grep -iq "PASS"; then
+					pcolor=$GREEN
+				else
+					pcolor=$RED
+				fi
+
+				html_ptest_status="<a href=$ptest_log>$ptest_status</a>"
 			fi
 
-			echo "<tr><td></td><td>$recipe</td><td>$version</td><td bgcolor=\"$bcolor\"><a href=$TESTING_LOGS/$distro/$machine/$recipe.build.log>$build_status</a></td><td bgcolor=\"$pcolor\">$ptest_status</td></tr>" >> $index
+			html_build_status="<td bgcolor=\"$bcolor\"><a href=$build_log>$build_status</a></td>"
+			html_ptest_status="<td bgcolor=\"$pcolor\">$html_ptest_status</td>"
+			echo "<tr><td></td><td>$recipe</td><td>$version</td>${html_build_status}${html_ptest_status}</tr>" >> $index
 		done < $LOGDIR/$distro/$machine/result.txt
 
 		echo "</table></body></html>" >> $index
