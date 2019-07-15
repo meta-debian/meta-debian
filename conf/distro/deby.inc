@@ -7,13 +7,6 @@ SDK_VERSION := "${DISTRO_VERSION}"
 MAINTAINER = "meta-debian Development Team"
 TARGET_VENDOR = "-deby"
 
-LINUX_GIT_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/cip"
-LINUX_GIT_PROTOCOL ??= "https"
-LINUX_GIT_PREFIX ??= ""
-LINUX_GIT_REPO ??= "linux-cip.git"
-LINUX_GIT_BRANCH ??= "linux-4.19.y-cip"
-LINUX_GIT_SRCREV ??= "${LINUX_GIT_BRANCH}"
-
 # Add an eventhandler that generates DEBIAN_SRC_URI information
 # from Debian apt repository.
 INHERIT += "debian-source"
