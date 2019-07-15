@@ -2,6 +2,7 @@
 #
 # Script for run ptest.
 # Input params from env:
+#   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
 #   TEST_TARGETS: recipes/packages will be run ptest. Eg: "zlib core-image-minimal"
 #   TEST_MACHINES: machines will be tested. Currently only support qemu machine.
 #                  Eg: "qemux86 qemuarm"
@@ -15,7 +16,7 @@ WORKDIR=$THISDIR/../../..
 . $THISDIR/common.sh
 
 # deby-tiny has limited image size, it's better to use deby instead
-TEST_DISTROS=deby
+TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
 TEST_TARGETS=${TEST_TARGETS}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
 
@@ -39,75 +40,84 @@ add_or_replace "EXTRA_IMAGE_FEATURES_append" " ptest-pkgs" conf/local.conf
 # we use ssh for calling ptest, so add dropbear
 add_or_replace "IMAGE_INSTALL_append" " dropbear $TEST_TARGETS" conf/local.conf
 
-add_or_replace "DISTRO" "$TEST_DISTROS" conf/local.conf
-
-for machine in $TEST_MACHINES; do
-	note "Testing machine $machine ..."
-	add_or_replace "MACHINE" "$machine" conf/local.conf
-
-	bitbake core-image-minimal
-	if [ "$?" != "0" ]; then
-		error "Failed to build image for $machine."
-		continue
+for distro in $TEST_DISTROS; do
+	add_or_replace "DISTRO" "$distro" conf/local.conf
+	if [ "$distro" = "deby-tiny" ]; then
+		# Start dropbear on boot
+		add_or_replace "INITTAB_APPEND_pn-busybox-inittab" "::sysinit:/etc/init.d/dropbear start" conf/local.conf
+		# Boot with ext4 to avoid limited initramfs size
+		add_or_replace "IMAGE_FSTYPES_append" " ext4" conf/local.conf
+		add_or_replace "IMAGE_FSTYPES_remove" "cpio.gz" conf/local.conf
 	fi
 
-	# Boot image with QEMU
-	nohup runqemu $machine nographic slirp &
+	for machine in $TEST_MACHINES; do
+		note "Testing machine $machine ..."
+		add_or_replace "MACHINE" "$machine" conf/local.conf
 
-	# Wait for SSH
-	timeout=60
-	start=`date +%s`
-	while ! $SSH "#" 2> /dev/null; do
-			note "Waiting for SSH to be ready..."
-			sleep 5
-			now=`date +%s`
-			waited=$((now-start))
-		if [ $waited -gt $timeout ]; then
-			error "Cannot connect to qemu machine."
-			exit 1
-		fi
-	done
-
-	LOGDIR=$THISDIR/logs/$TEST_DISTROS/$machine
-	RESULT=$LOGDIR/result.txt
-
-	mkdir -p $LOGDIR
-
-	for target in $TEST_TARGETS; do
-		get_version "$all_versions"
-
-		$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}.ptest.log
+		bitbake core-image-minimal
 		if [ "$?" != "0" ]; then
-			note "ptest for $target is not available. Skip."
-			status=NA
-		else
-			note "Running ptest for $target ..."
-			$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &> $LOGDIR/${target}-ptest.log
+			error "Failed to build image for $machine."
+			continue
+		fi
 
-			if [ "$?" = "0" ]; then
-				status=PASS
+		# Boot image with QEMU
+		nohup runqemu $machine nographic slirp &
+
+		# Wait for SSH
+		timeout=60
+		start=`date +%s`
+		while ! $SSH "#" 2> /dev/null; do
+				note "Waiting for SSH to be ready..."
+				sleep 5
+				now=`date +%s`
+				waited=$((now-start))
+			if [ $waited -gt $timeout ]; then
+				error "Cannot connect to qemu machine."
+				exit 1
+			fi
+		done
+
+		LOGDIR=$THISDIR/logs/$distro/$machine
+		RESULT=$LOGDIR/result.txt
+
+		mkdir -p $LOGDIR
+
+		for target in $TEST_TARGETS; do
+			get_version "$all_versions"
+
+			$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}.ptest.log
+			if [ "$?" != "0" ]; then
+				note "ptest for $target is not available. Skip."
+				status=NA
 			else
-				status=FAIL
-			fi
-		fi
+				note "Running ptest for $target ..."
+				$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &> $LOGDIR/${target}-ptest.log
 
-		note "Run ptest for $target: $status"
-		if grep -q "^$target $version" $RESULT 2> /dev/null; then
-			sed -i -e "s/^\($target $version \S* \)\S*/\1$status/" $RESULT
-		else
-			# Remove old version
-			if grep -q "^$target " $RESULT 2> /dev/null; then
-				sed -i "/^$target /d" $RESULT
+				if [ "$?" = "0" ]; then
+					status=PASS
+				else
+					status=FAIL
+				fi
 			fi
 
-			echo "$target $version NA $status" >> $RESULT
-		fi
+			note "Run ptest for $target: $status"
+			if grep -q "^$target $version" $RESULT 2> /dev/null; then
+				sed -i -e "s/^\($target $version \S* \)\S*/\1$status/" $RESULT
+			else
+				# Remove old version
+				if grep -q "^$target " $RESULT 2> /dev/null; then
+					sed -i "/^$target /d" $RESULT
+				fi
+
+				echo "$target $version NA $status" >> $RESULT
+			fi
+		done
+
+		# Turn off machine after finish testing
+		$SSH "/sbin/poweroff"
+
+		# Sort result file by alphabet
+		sort -u $RESULT > result.tmp
+		mv result.tmp $RESULT
 	done
-
-	# Turn off machine after finish testing
-	$SSH "/sbin/poweroff"
-
-	# Sort result file by alphabet
-	sort -u $RESULT > tmp
-	mv tmp $RESULT
 done
