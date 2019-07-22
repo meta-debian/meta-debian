@@ -72,3 +72,30 @@ function get_version {
 		version=NA
 	fi
 }
+
+function get_all_packages {
+	targets=""
+	recipes=`find $THISDIR/.. -name *.bb`
+	for recipe in $recipes; do
+		recipe_env="bb_e.env"
+		bitbake -e -b $recipe > $recipe_env
+
+		# Get the final PN
+		pn=`grep "^PN=" $recipe_env | cut -d\" -f2`
+		targets="$targets $pn"
+
+		# Get BBCLASSEXTEND
+		bbclassextend=`grep "^BBCLASSEXTEND=" $recipe_env | cut -d\" -f2`
+		for variant in $bbclassextend; do
+			if [ "$variant" = "native" ] || [ "$variant" = "cross" ]; then
+				targets="$targets ${pn}-$variant"
+			else
+				targets="$targets ${variant}-$pn"
+			fi
+		done
+
+		rm -f $recipe_env
+	done
+
+	echo $targets
+}

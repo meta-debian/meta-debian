@@ -2,7 +2,8 @@
 #
 # Script for building meta-debian.
 # Input params from env:
-#   TEST_TARGETS: recipes/packages will be built. Eg: "zlib core-image-minimal"
+#   TEST_TARGETS: recipes/packages will be built. Eg: "zlib core-image-minimal".
+#                 If not set, all meta-debian's recipes will be built.
 #   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
 #   TEST_MACHINES: machines will be tested. Eg: "raspberrypi3 qemuarm"
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
@@ -15,7 +16,6 @@ POKYDIR=$THISDIR/../..
 
 . $THISDIR/common.sh
 
-TEST_TARGETS=${TEST_TARGETS:-core-image-minimal}
 TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
 
@@ -66,6 +66,13 @@ for distro in $TEST_DISTROS; do
 		RESULT=$LOGDIR/result.txt
 
 		test -d $LOGDIR || mkdir -p $LOGDIR
+
+		if [ "$TEST_TARGETS" = "" ]; then
+			note "TEST_TARGETS is not defined. Getting all recipes available..."
+			TEST_TARGETS=`get_all_packages`
+		fi
+
+		note "These recipes will be tested: $TEST_TARGETS"
 
 		for target in $TEST_TARGETS; do
 			get_version "$all_versions"
