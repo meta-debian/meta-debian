@@ -44,6 +44,14 @@ function setup_builddir {
 	export TEMPLATECONF=meta-debian/conf
 	source ./poky/oe-init-build-env
 	add_or_replace "HOSTTOOLS_append" " gitproxy" conf/local.conf
+
+	# Configurations for u-boot
+	add_or_replace "UBOOT_MACHINE_qemux86" "qemu-x86_defconfig" conf/local.conf
+	add_or_replace "UBOOT_MACHINE_qemux86-64" "qemu-x86_64_defconfig" conf/local.conf
+	add_or_replace "UBOOT_MACHINE_qemumips" "qemu_mips_defconfig" conf/local.conf
+	add_or_replace "UBOOT_MACHINE_qemuppc" "qemu-ppce500_defconfig" conf/local.conf
+	add_or_replace "UBOOT_MACHINE_qemuarm" "qemu_arm_defconfig" conf/local.conf
+	add_or_replace "UBOOT_MACHINE_qemuarm64" "qemu_arm64_defconfig" conf/local.conf
 }
 
 # Run bitbake -s to get version of all recipes.
