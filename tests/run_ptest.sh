@@ -96,7 +96,7 @@ for distro in $TEST_DISTROS; do
 				status=NA
 			else
 				note "Running ptest for $target ..."
-				$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &> $LOGDIR/${target}-ptest.log
+				$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
 
 				if [ "$?" = "0" ]; then
 					status=PASS
