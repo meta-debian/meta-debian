@@ -52,4 +52,5 @@ SRC_URI += " \
            file://rcK \
            file://makefile-libbb-race.patch \
            file://0001-testsuite-check-uudecode-before-using-it.patch \
+           file://0001-dc.tests-fix-two-test-case-to-also-depend-on-DC_BIG.patch \
 "
