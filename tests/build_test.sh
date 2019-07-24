@@ -69,7 +69,8 @@ for distro in $TEST_DISTROS; do
 
 		if [ "$TEST_TARGETS" = "" ]; then
 			note "TEST_TARGETS is not defined. Getting all recipes available..."
-			TEST_TARGETS=`get_all_packages`
+			get_all_packages
+			TEST_TARGETS=$BTEST_TARGETS
 		fi
 
 		note "These recipes will be tested: $TEST_TARGETS"

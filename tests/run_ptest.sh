@@ -15,18 +15,9 @@ WORKDIR=$THISDIR/../../..
 
 . $THISDIR/common.sh
 
-# deby-tiny has limited image size, it's better to use deby instead
 TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
 TEST_TARGETS=${TEST_TARGETS}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
-
-# Clean TEST_TARGETS. Remove native and nativesdk packages if any.
-TEST_TARGETS=`echo $TEST_TARGETS | sed -e "s/\s*\S*-native\s*/ /g" \
-                                       -e "s/\s*nativesdk-\S*\s*/ /g" \
-                                       -e "s/\s*\S*-cross\s*/ /g" \
-                                       -e "s/\s*\S*-crosssdk\s*/ /g" \
-                                       -e "s/\s*\S*-cross-canadian\s*/ /g" \
-                                       `
 
 # SSH to QEMU machine through port 2222
 SSH='ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1'
@@ -42,10 +33,27 @@ all_recipes_version "$all_versions"
 add_or_replace "DISTRO_FEATURES_append" " ptest $TEST_DISTRO_FEATURES" conf/local.conf
 add_or_replace "EXTRA_IMAGE_FEATURES_append" " ptest-pkgs" conf/local.conf
 
+if [ "$TEST_TARGETS" = "" ]; then
+	note "TEST_TARGETS is not defined. Getting all recipes with ptest enabled..."
+	get_all_packages
+	TEST_TARGETS=$PTEST_TARGETS
+else
+	# Clean TEST_TARGETS. Remove native and nativesdk packages if any.
+	TEST_TARGETS=`echo $TEST_TARGETS | sed -e "s/\s*\S*-native\s*/ /g" \
+										-e "s/\s*nativesdk-\S*\s*/ /g" \
+										-e "s/\s*\S*-cross\s*/ /g" \
+										-e "s/\s*\S*-crosssdk\s*/ /g" \
+										-e "s/\s*\S*-cross-canadian\s*/ /g" \
+                                       `
+fi
+
+note "These recipes will be tested: $TEST_TARGETS"
+
 # we use ssh for calling ptest, so add dropbear
 add_or_replace "IMAGE_INSTALL_append" " dropbear $TEST_TARGETS" conf/local.conf
 
 for distro in $TEST_DISTROS; do
+	note "Testing distro $distro ..."
 	add_or_replace "DISTRO" "$distro" conf/local.conf
 	if [ "$distro" = "deby-tiny" ]; then
 		# Start dropbear on boot

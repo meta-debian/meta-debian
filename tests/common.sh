@@ -82,7 +82,9 @@ function get_version {
 }
 
 function get_all_packages {
-	targets=""
+	BTEST_TARGETS=""
+	PTEST_TARGETS=""
+
 	recipes=`find $THISDIR/.. -name *.bb`
 	for recipe in $recipes; do
 		recipe_env="bb_e.env"
@@ -90,20 +92,24 @@ function get_all_packages {
 
 		# Get the final PN
 		pn=`grep "^PN=" $recipe_env | cut -d\" -f2`
-		targets="$targets $pn"
+		BTEST_TARGETS="$BTEST_TARGETS $pn"
+
+		# Check if ptest available
+		ptest_enabled=`grep "^PTEST_ENABLED=" $recipe_env | cut -d\" -f2`
+		if [ "$ptest_enabled" = "1" ]; then
+			PTEST_TARGETS="$PTEST_TARGETS $pn"
+		fi
 
 		# Get BBCLASSEXTEND
 		bbclassextend=`grep "^BBCLASSEXTEND=" $recipe_env | cut -d\" -f2`
 		for variant in $bbclassextend; do
 			if [ "$variant" = "native" ] || [ "$variant" = "cross" ]; then
-				targets="$targets ${pn}-$variant"
+				BTEST_TARGETS="$BTEST_TARGETS ${pn}-$variant"
 			else
-				targets="$targets ${variant}-$pn"
+				BTEST_TARGETS="$BTEST_TARGETS ${variant}-$pn"
 			fi
 		done
 
 		rm -f $recipe_env
 	done
-
-	echo $targets
 }
