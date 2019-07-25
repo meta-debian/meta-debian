@@ -98,13 +98,16 @@ for distro in $TEST_DISTROS; do
 		for target in $TEST_TARGETS; do
 			get_version "$all_versions"
 
-			$SSH "ls /usr/lib/$target/ptest/" &> $LOGDIR/${target}.ptest.log
+			BPN=`bitbake -e $target | grep "^BPN=" | cut -d\" -f2`
+			PTEST_PATH="/usr/lib/$BPN/ptest"
+
+			$SSH "ls $PTEST_PATH/" &> $LOGDIR/${target}.ptest.log
 			if [ "$?" != "0" ]; then
 				note "ptest for $target is not available. Skip."
 				status=NA
 			else
 				note "Running ptest for $target ..."
-				$SSH "cd /usr/lib/$target/ptest/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
+				$SSH "cd $PTEST_PATH/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
 
 				if [ "$?" = "0" ]; then
 					status=PASS
