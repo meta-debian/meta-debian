@@ -20,7 +20,10 @@ TEST_TARGETS=${TEST_TARGETS}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
 
 # SSH to QEMU machine through port 2222
-SSH='ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1'
+function ssh_qemu {
+	ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1 "/bin/sh -l -c \"$1\""
+}
+
 # Clean old key
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:2222"
 
@@ -79,7 +82,7 @@ for distro in $TEST_DISTROS; do
 		# Wait for SSH
 		timeout=60
 		start=`date +%s`
-		while ! $SSH "#" 2> /dev/null; do
+		while ! ssh_qemu "#" 2> /dev/null; do
 				note "Waiting for SSH to be ready..."
 				sleep 5
 				now=`date +%s`
@@ -101,13 +104,13 @@ for distro in $TEST_DISTROS; do
 			BPN=`bitbake -e $target | grep "^BPN=" | cut -d\" -f2`
 			PTEST_PATH="/usr/lib/$BPN/ptest"
 
-			$SSH "ls $PTEST_PATH/" &> $LOGDIR/${target}.ptest.log
+			ssh_qemu "ls $PTEST_PATH/" &> $LOGDIR/${target}.ptest.log
 			if [ "$?" != "0" ]; then
 				note "ptest for $target is not available. Skip."
 				status=NA
 			else
 				note "Running ptest for $target ..."
-				$SSH "cd $PTEST_PATH/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
+				ssh_qemu "cd $PTEST_PATH/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
 
 				if [ "$?" = "0" ]; then
 					status=PASS
@@ -130,7 +133,7 @@ for distro in $TEST_DISTROS; do
 		done
 
 		# Turn off machine after finish testing
-		$SSH "/sbin/poweroff"
+		ssh_qemu "/sbin/poweroff"
 
 		# Sort result file by alphabet
 		sort -u $RESULT > result.tmp
