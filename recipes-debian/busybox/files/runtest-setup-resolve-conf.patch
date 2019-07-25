@@ -1,0 +1,53 @@
+diff -uprN busybox-1.30.1.orig/testsuite/runtest busybox-1.30.1.new/testsuite/runtest
+--- busybox-1.30.1.orig/testsuite/runtest	2018-12-05 23:44:34.000000000 +0900
++++ busybox-1.30.1.new/testsuite/runtest	2019-07-24 08:23:43.696989025 +0900
+@@ -82,7 +82,30 @@ run_oldstyle_applet_tests()
+ 	return $status
+ }
+ 
++# setup resolve.conf if nameserver is not set
++setup_resolve_conf_file()
++{
++	wget -q -O /dev/null -T 3 http://www.example.com >/dev/null 2>&1
++        if [ $? -eq 0 ]; then
++		# if system can resolve domain name, it doesn't need any setup
++        	return
++        fi
++
++        # Need root privileges to edit /etc/resolv.conf 
++        if [ $UID -ne 0 ]; then
++		return
++        fi
++        
++       	cp /etc/resolv.conf  /etc/resolv.conf.bak
++       	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
++}
+ 
++restore_resolve_conf_file()
++{
++	if [ -f "/etc/resolv.conf.bak" ]; then
++        	mv /etc/resolv.conf.bak /etc/resolv.conf
++        fi
++}
+ 
+ lcwd=$(pwd)
+ [ x"$tsdir" != x"" ] || tsdir="$lcwd"
+@@ -137,6 +160,8 @@ export OPTIONFLAGS=:$(
+ 	sed 's/=.*//' | xargs | sed 's/ /:/g'
+ 	):
+ 
++setup_resolve_conf_file
++
+ status=0
+ for applet in $applets; do
+ 	# Any old-style tests for this applet?
+@@ -165,6 +190,9 @@ done
+ # Leaving the dir makes it somewhat easier to run failed test by hand
+ #rm -rf "$LINKSDIR"
+ 
++# restore /etc/resolv.conf file before finish test
++restore_resolve_conf_file
++
+ if [ $status -ne 0 ] && [ x"$VERBOSE" = x ]; then
+ 	echo "$total_failed failure(s) detected; running with -v (verbose) will give more info"
+ fi
