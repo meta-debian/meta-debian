@@ -101,31 +101,31 @@ for distro in $TEST_DISTROS; do
 		for target in $TEST_TARGETS; do
 			get_version "$all_versions"
 
+			LOGFILE=$LOGDIR/${target}.ptest.log
 			BPN=`bitbake -e $target | grep "^BPN=" | cut -d\" -f2`
 			PTEST_PATH="/usr/lib/$BPN/ptest"
 
-			ssh_qemu "ls $PTEST_PATH/" &> $LOGDIR/${target}.ptest.log
+			ssh_qemu "ls $PTEST_PATH/" &> $LOGFILE
 			if [ "$?" != "0" ]; then
 				note "ptest for $target is not available. Skip."
 				status=NA
 			else
 				note "Running ptest for $target ..."
-				ssh_qemu "cd $PTEST_PATH/ && ./run-ptest" &>> $LOGDIR/${target}.ptest.log
+				ssh_qemu "cd $PTEST_PATH/ && ./run-ptest" &>> $LOGFILE
 
-				if [ "$?" = "0" ]; then
-					status=PASS
-				else
-					status=FAIL
-				fi
+				pass=`grep "^PASS:" $LOGFILE | wc -l`
+				skip=`grep "^SKIP:" $LOGFILE | wc -l`
+				fail=`grep "^FAIL:" $LOGFILE | wc -l`
+				status="$pass/$skip/$fail"
 			fi
 
 			note "Run ptest for $target: $status"
 			if grep -q "^$target $version" $RESULT 2> /dev/null; then
-				sed -i -e "s/^\($target $version \S* \)\S*/\1$status/" $RESULT
+				sed -i -e "s#^\($target $version \S* \)\S*#\1$status#" $RESULT
 			else
 				# Remove old version
 				if grep -q "^$target " $RESULT 2> /dev/null; then
-					sed -i "/^$target /d" $RESULT
+					sed -i "#^$target #d" $RESULT
 				fi
 
 				echo "$target $version NA $status" >> $RESULT

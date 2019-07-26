@@ -14,8 +14,12 @@ TESTING_LOGS="https://raw.githubusercontent.com/tswcos/meta-debian-test-logs/mas
 
 for i in $LOGDIR/*; do
 	distro=`basename $i`
+	echo "DISTRO: $distro"
+
 	for m in $LOGDIR/$distro/*; do
 		machine=`basename $m`
+		echo "Generating html for $machine..."
+
 		mkdir -p $HTMLDIR/$distro/$machine
 		index=$HTMLDIR/$distro/$machine/index.html
 		cat > $index << EOF
@@ -47,7 +51,7 @@ for i in $LOGDIR/*; do
 <th>Package</th>
 <th>Version</th>
 <th>Build Status</th>
-<th>Ptest Status</th>
+<th>Ptest Status<br/>(PASS/SKIP/FAIL)</th>
 </tr></thead>
 EOF
 		if [ ! -f $LOGDIR/$distro/$machine/result.txt ]; then
@@ -72,14 +76,13 @@ EOF
 			fi
 
 			html_ptest_status=$ptest_status
-			if echo $ptest_status |  egrep -vq "PASS|FAIL"; then
+			if echo $ptest_status | grep -iq "NA"; then
 				pcolor=$GREY
 			else
-				if echo $ptest_status | grep -iq "PASS"; then
-					pcolor=$GREEN
-				else
-					pcolor=$RED
-				fi
+				fail=`echo $ptest_status | cut -d/ -f3`
+
+				pcolor=$RED
+				test "$fail" = "0" && pcolor=$GREEN
 
 				html_ptest_status="<a href=$ptest_log>$ptest_status</a>"
 			fi
