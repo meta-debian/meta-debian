@@ -35,6 +35,10 @@ all_recipes_version "$all_versions"
 
 add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
 
+if [ "$TEST_TARGETS" = "" ]; then
+	TEST_TARGETS_NOTSET=1
+fi
+
 for distro in $TEST_DISTROS; do
 	note "Testing distro $distro ..."
 	add_or_replace "DISTRO" "$distro" conf/local.conf
@@ -67,7 +71,7 @@ for distro in $TEST_DISTROS; do
 
 		test -d $LOGDIR || mkdir -p $LOGDIR
 
-		if [ "$TEST_TARGETS" = "" ]; then
+		if [ "$TEST_TARGETS_NOTSET" = "1" ]; then
 			note "TEST_TARGETS is not defined. Getting all recipes available..."
 			get_all_packages
 			TEST_TARGETS=$BTEST_TARGETS
