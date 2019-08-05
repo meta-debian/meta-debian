@@ -43,7 +43,10 @@ function setup_builddir {
 	rm -rf build/conf
 	export TEMPLATECONF=meta-debian/conf
 	source ./poky/oe-init-build-env
-	add_or_replace "HOSTTOOLS_append" " gitproxy" conf/local.conf
+
+	if which gitproxy &> /dev/null; then
+		add_or_replace "HOSTTOOLS_append" " gitproxy" conf/local.conf
+	fi
 
 	# Configurations for u-boot
 	add_or_replace "UBOOT_MACHINE_qemux86" "qemu-x86_defconfig" conf/local.conf
