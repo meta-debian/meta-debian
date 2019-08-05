@@ -26,12 +26,6 @@ inherit linux-src
 
 KERNEL_DEVICETREE_qemuarmv5 = "versatile-pb.dtb"
 
-# Fix linux-cip build error with gcc8 on ppc
-SRC_URI_append_powerpc = " \
-    file://powerpc-Disable-attribute-alias-warnings-from-gcc8.patch \
-    file://powerpc-ptrace-Disable-array-bounds-warning-with-gcc.patch \
-"
-
 # use the common functions to merge multiple configs
 inherit merge-config
 
