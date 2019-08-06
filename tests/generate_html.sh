@@ -12,11 +12,15 @@ RED="#e74c3c"
 
 TESTING_LOGS="https://raw.githubusercontent.com/tswcos/meta-debian-test-logs/master"
 
-for i in $LOGDIR/*; do
-	distro=`basename $i`
+for d in $LOGDIR/*; do
+	test -d $d || continue
+
+	distro=`basename $d`
 	echo "DISTRO: $distro"
 
 	for m in $LOGDIR/$distro/*; do
+		test -d $m || continue
+
 		machine=`basename $m`
 		echo "Generating html for $machine..."
 
