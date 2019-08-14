@@ -30,3 +30,5 @@ require conf/distro/include/debian-preferred-provider.inc
 
 # WORKAROUND for https://bugzilla.yoctoproject.org/show_bug.cgi?id=13338
 TOOLCHAIN_TARGET_TASK_remove = "target-sdk-provides-dummy"
+
+ROOT_HOME = "/root"
