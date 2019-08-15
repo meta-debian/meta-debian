@@ -1,5 +1,4 @@
-HOMEPAGE = "http://mesonbuild.com"
-SUMMARY = "A high performance build system"
+require recipes-devtools/meson/meson.inc
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3b83ef96387f14655fc854ddc3c6bd57"
@@ -18,16 +17,3 @@ SRC_URI += " \
            file://many-cross.patch \
            file://cross-libdir.patch \
            "
-
-SRC_URI_append_class-native = " \
-    file://0001-Make-CPU-family-warnings-fatal.patch \
-    file://0002-Support-building-allarch-recipes-again.patch \
-"
-
-UPSTREAM_CHECK_URI = "https://github.com/mesonbuild/meson/releases"
-
-inherit setuptools3
-
-RDEPENDS_${PN} = "ninja python3-core python3-modules"
-
-FILES_${PN} += "${datadir}/polkit-1"
