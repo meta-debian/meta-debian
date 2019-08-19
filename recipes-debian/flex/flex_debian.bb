@@ -75,6 +75,8 @@ do_install_ptest() {
 	    -e 's:${BASE_WORKDIR}/${MULTIMACH_TARGET_SYS}::g' \-e 's/^Makefile:/_Makefile:/' \
 	    -e 's/^srcdir = \(.*\)/srcdir = ./' -e 's/^top_srcdir = \(.*\)/top_srcdir = ./' \
 	    -e 's/^builddir = \(.*\)/builddir = ./' -e 's/^top_builddir = \(.*\)/top_builddir = ./' \
+	    -e "s:^abs_builddir = \(.*\):abs_builddir = ${PTEST_PATH}:" -e "s:^abs_top_builddir = \(.*\):abs_top_builddir = ${PTEST_PATH}:" \
+	    -e "s:^abs_srcdir = \(.*\):abs_srcdir = ${PTEST_PATH}:" -e "s:^abs_top_srcdir = \(.*\):abs_top_srcdir = ${PTEST_PATH}:" \
 	    -i ${D}${PTEST_PATH}/Makefile
 }
 
