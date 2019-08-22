@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  deby:
+    build:
+      context: .
+      args:
+        http_proxy: $http_proxy
+        UID: ${UID:-1000}
+    image: deby-image
+    environment:
+      - http_proxy
+      - https_proxy
+      - no_proxy
+    volumes:
+      - ../:/home/deby/poky/meta-debian
+      - downloads:/home/deby/build/downloads
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN

@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Script for using proxy with git protocol
+
+http_proxy=""
+http_proxy=`echo $http_proxy | sed -e "s#http://##g"`
+
+_proxy=`echo $http_proxy | cut -d@ -f2 | cut -d: -f1`
+_proxyport=`echo $http_proxy | cut -d@ -f2 | cut -d: -f2`
+_proxyuser=`echo $http_proxy | cut -d@ -f1 | cut -d: -f1`
+_proxypass=`echo $http_proxy | cut -d@ -f1 | cut -d: -f2`
+
+if [ -n "$_proxyuser" ] && [ -n "$_proxypass" ]; then
+	_proxyauth=",proxyauth=$_proxyuser:$_proxypass"
+
+fi
+
+exec socat STDIO PROXY:$_proxy:$1:$2,proxyport=$_proxyport$_proxyauth

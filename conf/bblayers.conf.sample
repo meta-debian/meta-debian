@@ -9,4 +9,7 @@ BBLAYERS ?= " \
   ##OEROOT##/meta \
   ##OEROOT##/meta-poky \
   ##OEROOT##/meta-debian \
+  ${EXTRA_BBLAYERS} \
   "
+
+EXTRA_BBLAYERS = ""

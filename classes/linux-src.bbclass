@@ -24,6 +24,13 @@
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
+LINUX_GIT_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/cip"
+LINUX_GIT_PROTOCOL ??= "https"
+LINUX_GIT_PREFIX ??= ""
+LINUX_GIT_REPO ??= "linux-cip.git"
+LINUX_GIT_BRANCH ??= "linux-4.19.y-cip"
+LINUX_GIT_SRCREV ??= "${LINUX_GIT_BRANCH}"
+
 SRC_URI = "${LINUX_GIT_URI}/${LINUX_GIT_PREFIX}${LINUX_GIT_REPO};branch=${LINUX_GIT_BRANCH};protocol=${LINUX_GIT_PROTOCOL}"
 
 SRCREV = "${LINUX_GIT_SRCREV}"
