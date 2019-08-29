@@ -15,7 +15,8 @@ UPSTREAM_CHECK_URI = "${DEBIAN_MIRROR}/main/d/${BPN}/"
 inherit autotools update-alternatives
 
 do_configure_prepend() {
-    sed -i -e 's:tempfile.1 which.1:which.1:g' ${S}/Makefile.am
+    sed -i -e 's:tempfile.1 which.1::g' ${S}/Makefile.am
+    sed -i -e 's:^\(bin_SCRIPTS.*\)which:\1:g' ${S}/Makefile.am
 }
 
 do_install_append() {
@@ -33,17 +34,14 @@ do_install_append() {
 PACKAGES =+ "${PN}-run-parts"
 FILES_${PN}-run-parts = "${base_bindir}/run-parts.debianutils"
 
-RDEPENDS_${PN} += "${PN}-run-parts"
+RDEPENDS_${PN} += "${PN}-run-parts which"
 RDEPENDS_${PN}_class-native = ""
 
 ALTERNATIVE_PRIORITY="30"
-ALTERNATIVE_${PN} = "add-shell installkernel remove-shell savelog tempfile which"
+ALTERNATIVE_${PN} = "add-shell installkernel remove-shell savelog tempfile"
 
 ALTERNATIVE_PRIORITY_${PN}-run-parts = "60"
 ALTERNATIVE_${PN}-run-parts = "run-parts"
-
-ALTERNATIVE_${PN}-doc = "which.1"
-ALTERNATIVE_LINK_NAME[which.1] = "${mandir}/man1/which.1"
 
 ALTERNATIVE_LINK_NAME[add-shell]="${sbindir}/add-shell"
 ALTERNATIVE_LINK_NAME[installkernel]="${sbindir}/installkernel"
@@ -51,6 +49,5 @@ ALTERNATIVE_LINK_NAME[remove-shell]="${sbindir}/remove-shell"
 ALTERNATIVE_LINK_NAME[run-parts]="${base_bindir}/run-parts"
 ALTERNATIVE_LINK_NAME[savelog]="${bindir}/savelog"
 ALTERNATIVE_LINK_NAME[tempfile]="${base_bindir}/tempfile"
-ALTERNATIVE_LINK_NAME[which]="${bindir}/which"
 
 BBCLASSEXTEND = "native"
