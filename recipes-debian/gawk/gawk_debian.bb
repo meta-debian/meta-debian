@@ -52,6 +52,8 @@ ALTERNATIVE_${PN} = "awk"
 ALTERNATIVE_TARGET[awk] = "${bindir}/gawk"
 ALTERNATIVE_PRIORITY = "100"
 
+RDEPENDS_${PN}-ptest += "make"
+
 inherit ptest
 
 do_install_ptest() {
