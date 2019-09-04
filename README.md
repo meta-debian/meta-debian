@@ -30,6 +30,12 @@ Set your target machine to `conf/local.conf`:
 $ echo "MACHINE = \"qemuarm64\"" >> conf/local.conf
 ```
 
+You can use following variables for MACHINE.
+
+- qemuarm64
+- qemuarm
+- raspberrypi3-64 (Raspberry Pi3 64bit mode)
+
 Build:
 
 ```sh
