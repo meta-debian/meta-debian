@@ -40,6 +40,9 @@ build_bios() {
 
 # Base on debian/rules
 do_compile() {
+    # Sometimes seabios fails when rebuild. Clean the old config.
+    rm -f .config
+
     mkdir -p build
 
     # upstream ships .hex files in tarball, result of iasl compilation
