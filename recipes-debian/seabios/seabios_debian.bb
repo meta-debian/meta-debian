@@ -94,7 +94,6 @@ do_compile() {
 
     oe_runmake -C debian/optionrom/
     chmod -x debian/optionrom/*.bin
-        mkdir -p build && touch build/optionrom-stamp
 }
 
 do_install() {
@@ -102,6 +101,7 @@ do_install() {
     install -m 644 build/*.bin ${D}${datadir}/seabios
     install -m 644 build/src/fw/*dsdt.aml ${D}${datadir}/seabios
     install -m 644 debian/optionrom/*.bin ${D}${datadir}/seabios
+    ln -sf kvmvapic.bin ${D}${datadir}/seabios/vapic.bin
 
     for i in extboot.bin kvmvapic.bin linuxboot.bin multiboot.bin vapic.bin; do
         ln -sf ../$i ${D}${datadir}/seabios/optionrom/$i
