@@ -62,6 +62,7 @@ EXTRA_OEMAKE = "'CC=${CC}' \
                 'AUX_OBJ=weak_symbols.o' \
                 'TLI=' \
                 'COPTS=' \
+                'LDOPTS=${LDFLAGS}' \
                 'EXTRA_CFLAGS=${CFLAGS} -DSYS_ERRLIST_DEFINED -DHAVE_STRERROR -DHAVE_WEAKSYMS -D_REENTRANT -DINET6=1 -Dss_family=__ss_family -Dss_len=__ss_len'"
 
 EXTRA_OEMAKE_NETGROUP = "-DNETGROUP -DUSE_GETDOMAIN"
