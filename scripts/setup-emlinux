@@ -36,7 +36,8 @@ fi
 
 source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}
 
-if [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
+# We skip configurations when TEMPLATECONF is set.
+if [ -z "$TEMPLATECONF" ] && [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     # delete layer
     bitbake-layers remove-layer meta-poky
     bitbake-layers remove-layer meta-yocto-bsp
