@@ -19,6 +19,7 @@ if [ ! -e ${BUILDDIR}/conf/local.conf ]; then
     BUILDDIR_SETUP_DONE="false"
 fi
 
+HOOKS=${PWD}/setup-hooks
 REPOS=${PWD}/repos
 if [ ! -d ${REPOS}/poky ]; then
     git clone -b warrior https://git.yoctoproject.org/git/poky ${REPOS}/poky
@@ -35,7 +36,8 @@ fi
 
 source ${REPOS}/poky/oe-init-build-env ${BUILDDIR}
 
-if [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
+# We skip configurations when TEMPLATECONF is set.
+if [ -z "$TEMPLATECONF" ] && [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     # delete layer
     bitbake-layers remove-layer meta-poky
     bitbake-layers remove-layer meta-yocto-bsp
@@ -51,6 +53,12 @@ if [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
     echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
     echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
+
+    if [ -d "$HOOKS" ]; then
+	for hook in $(ls $HOOKS); do
+	    source $HOOKS/$hook
+	done
+    fi
 fi
 
 clean_up
