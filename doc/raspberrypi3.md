@@ -10,13 +10,12 @@ In this document, following directory structure is used.
 ```
 build/
 downloads/
-emlinux/repos/meta-debian 
+emlinux/repos/meta-debian
 emlinux/repos/meta-debian-extended
 emlinux/repos/meta-emlinux
 emlinux/repos/poky
 firmware
 linux-firmware
-u-boot
 ```
 
 ## Build EMLinux
@@ -31,34 +30,10 @@ $ source repos/meta-emlinux/scripts/setup-emlinux build
 
 2. Build image
 
-In the build directroy, you can build image. You needs to set raspberrypi3-64 to MACHINE variable. 
+In the build directroy, you can build image. You needs to set raspberrypi3-64 to MACHINE variable.
 
 ```
 $ MACHINE=raspberrypi3-64 bitbake core-image-minimal
-```
-
-## Build u-boot
-
-Building u-boot, you must have cross compiler. 
-
-1. Download source code
-
-```
-$ git clone https://github.com/u-boot/u-boot
-```
-
-2. Checkout release version
-
-```
-$ cd u-boot
-$ git checkout -b v201907 v2019.07
-```
-
-3. Build u-boot
-
-```
-$ make CROSS_COMPILE=aarch64-linux-gnu- rpi_3_defconfig
-$ make CROSS_COMPILE=aarch64-linux-gnu- u-boot.bin
 ```
 
 ## Create sdcard image
@@ -68,13 +43,13 @@ This document uses parted to create partions and /dev/sde as sdcard device.
 1. Create fat32 partition for boot.
 
 ```
-$ sudo parted /dev/sde mkpart primary fat32 1024KiB 65MiB 
+$ sudo parted /dev/sde mkpart primary fat32 1024KiB 65MiB
 ```
 
 2. Create root partition
 
 ```
-$ sudo parted /dev/sde mkpart primary ext4  65MiB 1GiB 
+$ sudo parted /dev/sde mkpart primary ext4  65MiB 1GiB
 ```
 
 3. Create fat32 file system on fat32 partition
@@ -116,13 +91,14 @@ $ sudo cp -r boot/overlays /mnt/rpi/.
 $ sudo cp boot/bootcode.bin /mnt/rpi/.
 ```
 
-## Copy kernel and dtb 
+## Copy kernel, dtb and u-boot
 
-Go to your build directory.
+Go to your build directory. Then,
 
 ```
-$ cp tmp-glibc/deploy/images/raspberrypi3-64/Image /mnt/rpi/.
-$ cp tmp-glibc/deploy/images/raspberrypi3-64/bcm2837-rpi-3-b-plus.dtb /mnt/rpi/.
+$ sudo cp tmp-glibc/deploy/images/raspberrypi3-64/Image /mnt/rpi/.
+$ sudo cp tmp-glibc/deploy/images/raspberrypi3-64/bcm2837-rpi-3-b-plus.dtb /mnt/rpi/.
+$ sudo cp tmp-glibc/deploy/images/raspberrypi3-64/u-boot.bin /mnt/rpi/.
 ```
 
 ##  Create config.txt
@@ -149,23 +125,16 @@ mask_gpu_interrupt1=0x100
 
 ## Setup u-boot
 
-1. Copy u-boot binary
-
-```
-$ cd u-boot
-$ sudo cp ./u-boot.bin /mnt/rpi/.
-```
-
-2. Create boot.cmd file on any directory.
+1. Create boot.cmd file on any directory.
 
 ```
 fatload mmc 0 ${kernel_addr_r} Image
 fatload mmc 0 ${fdt_addr_r} bcm2837-rpi-3-b-plus.dtb
-setenv bootargs dwc_otg.lpm_enable=0 earlyprintk root=/dev/mmcblk0p2 rootfstype=ext4 rootwait 
+setenv bootargs dwc_otg.lpm_enable=0 earlyprintk root=/dev/mmcblk0p2 rootfstype=ext4 rootwait
 booti ${kernel_addr_r} - ${fdt_addr_r}
 ```
 
-3. Create .src file
+2. Create .src file
 
 ```
 $ sudo mkimage -C none -A arm64 -T script -d ./boot.cmd /mnt/rpi/boot.scr
@@ -179,12 +148,12 @@ Contents:
    Image 0: 248 Bytes = 0.24 KiB = 0.00 MiB
 ```
 
-4. (optional) Enable early UART support
+3. (optional) Enable early UART support
 
 If you want see u-boot's message by uart, you needs to run following command.
 
 ```
-$ sudo sed -i -e "s/BOOT_UART=0/BOOT_UART=1/" /mnt/rpi/bootcode.bin 
+$ sudo sed -i -e "s/BOOT_UART=0/BOOT_UART=1/" /mnt/rpi/bootcode.bin
 ```
 
 ## Setup root file system
@@ -197,7 +166,7 @@ Go to build directory then.
 $ sudo tar xvf tmp-glibc/deploy/images/raspberrypi3-64/core-image-minimal-raspberrypi3-64.tar.gz -C /mnt/rootfs/
 ```
 
-2. Clone linux firmwares from git repository 
+2. Clone linux firmwares from git repository
 
 ```
 $ git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
@@ -235,7 +204,7 @@ raspberrypi3-64 login: [    3.675695] lan78xx 1-1.1.1:1.0 (unnamed net_device) (
 EMLinux 2.0 raspberrypi3-64 /dev/ttyS1
 
 raspberrypi3-64 login: root
-root@raspberrypi3-64:~# 
+root@raspberrypi3-64:~#
 ```
 
 If firmwares are loaded correctlly, you'll see wlan0 and eth0 devices.
