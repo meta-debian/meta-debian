@@ -134,7 +134,7 @@ setenv bootargs dwc_otg.lpm_enable=0 earlyprintk root=/dev/mmcblk0p2 rootfstype=
 booti ${kernel_addr_r} - ${fdt_addr_r}
 ```
 
-2. Create .src file
+2. Create .scr file
 
 ```
 $ sudo mkimage -C none -A arm64 -T script -d ./boot.cmd /mnt/rpi/boot.scr
