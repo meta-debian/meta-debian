@@ -37,7 +37,7 @@ RREPLACES_${PN}-bin += "${PN}-utils"
 
 
 do_install_append_class-native () {
-    create_wrapper ${D}/${bindir}/xsltproc XML_CATALOG_FILES=${sysconfdir}/xml/catalog.xml
+	create_wrapper ${D}/${bindir}/xsltproc XML_CATALOG_FILES=${sysconfdir}/xml/catalog
 }
 
 FILES_${PN} += "${libdir}/libxslt-plugins"
