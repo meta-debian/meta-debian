@@ -14,7 +14,9 @@ LICENSE = "GPLv3+ & LGPL-2.1+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 DEPENDS = "gettext-native virtual/libiconv bison-native"
+DEPENDS_class-native = "bison-native gettext-minimal-native"
 PROVIDES = "virtual/libintl virtual/gettext"
+PROVIDES_class-native = "virtual/gettext-native"
 RCONFLICTS_${PN} = "proxy-libintl"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/gettext/gettext-0.19.8.1"
@@ -37,6 +39,7 @@ EXTRA_OECONF += "--without-lispdir \
                 "
 
 PACKAGECONFIG ??= "croco glib libxml"
+PACKAGECONFIG_class-native = ""
 PACKAGECONFIG_class-nativesdk = ""
 
 PACKAGECONFIG[croco] = "--without-included-libcroco,--with-included-libcroco,libcroco"
@@ -53,6 +56,16 @@ acpaths = '-I ${S}/gettext-runtime/m4 \
 
 do_install_append() {
 	rm -f ${D}${libdir}/preloadable_libintl.so
+}
+
+do_install_append_class-native() {
+	rm ${D}${datadir}/aclocal/*
+	rm ${D}${datadir}/gettext/config.rpath
+	rm ${D}${datadir}/gettext/po/Makefile.in.in
+	rm ${D}${datadir}/gettext/po/remove-potcdate.sin
+
+	create_wrapper ${D}${bindir}/msgfmt \
+		GETTEXTDATADIR="${STAGING_DATADIR_NATIVE}/gettext-0.19.8/"
 }
 
 # these lack the .x behind the .so, but shouldn't be in the -dev package
@@ -103,4 +116,4 @@ FILES_gettext-runtime-doc = "${mandir}/man1/gettext.* \
                              ${infodir}/autosprintf.info \
                             "
 
-BBCLASSEXTEND = "nativesdk"
+BBCLASSEXTEND = "native nativesdk"
