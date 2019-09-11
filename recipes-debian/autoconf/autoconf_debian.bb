@@ -13,7 +13,7 @@ LICENSE = "GPLv2+ & GPLv3+ & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
 	file://COPYINGv3;md5=d32239bcb673463ab874e80d47fae504 \
-	file://doc/autoconf.info;beginline=8;endline=15;md5=7d7c48253fc5f07f296c80f56e817aa2 \
+	file://doc/autoconf.texi;beginline=198;endline=216;md5=69a78e701d621162d545a8d6911c069a \
 "
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/autoconf/autoconf"
@@ -29,6 +29,8 @@ SRC_URI += " \
 	file://autoconf-replace-w-option-in-shebangs-with-modern-use-warnings.patch \
 "
 
+SRC_URI_append_class-native = " file://fix_path_xtra.patch"
+
 EXTRA_OECONF += "ac_cv_path_M4=m4 ac_cv_prog_TEST_EMACS=no"
 
-BBCLASSEXTEND = "nativesdk"
+BBCLASSEXTEND = "native nativesdk"
