@@ -55,7 +55,7 @@ if [ -z "$TEMPLATECONF" ] && [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
 
     if [ -d "$HOOKS" ]; then
-	for hook in $(ls $HOOKS); do
+	for hook in $(\ls $HOOKS); do
 	    source $HOOKS/$hook
 	done
     fi
