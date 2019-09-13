@@ -1,0 +1,36 @@
+From a05eba68c42222f02465d7ba376015926433c531 Mon Sep 17 00:00:00 2001
+From: Alexander Kanavin <alex.kanavin@gmail.com>
+Date: Wed, 26 Jul 2017 13:37:49 +0300
+Subject: [PATCH] Fix build with gperf 3.1
+
+The generated gperf file refers to size_t which needs to be
+provided by stddef.h include. Also, adjust the makefile
+to match the declaration in the gperf file.
+
+# note
+# Remove second hunk, because that already applied by
+# Hide-private-symbols.patch in debian patches.
+
+Upstream-Status: Pending
+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
+
+---
+ libcap/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libcap/Makefile b/libcap/Makefile
+index d189777..1a57206 100644
+--- a/libcap/Makefile
++++ b/libcap/Makefile
+@@ -22,7 +22,7 @@ all: $(MINLIBNAME) $(STALIBNAME) libcap.pc
+ 
+ ifeq ($(BUILD_GPERF),yes)
+ USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
+-INCLUDE_GPERF_OUTPUT = -include $(GPERF_OUTPUT)
++INCLUDE_GPERF_OUTPUT = -include stddef.h -include $(GPERF_OUTPUT)
+ endif
+ 
+ libcap.pc: libcap.pc.in
+-- 
+2.13.2
+
