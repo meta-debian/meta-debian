@@ -1,0 +1,13 @@
+diff --git a/gtk-doc.make b/gtk-doc.make
+index 7d9a27f..8cb336d 100644
+--- a/gtk-doc.make
++++ b/gtk-doc.make
+@@ -111,7 +111,7 @@ setup-build.stamp:
+ 	      destdir=`dirname $(abs_builddir)/$$file`; \
+ 	      test -d "$$destdir" || mkdir -p "$$destdir"; \
+ 	      test -f $(abs_srcdir)/$$file && \
+-	        cp -pf $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
++	        cp -pn $(abs_srcdir)/$$file $(abs_builddir)/$$file || true; \
+ 	    done; \
+ 	  fi; \
+ 	fi

@@ -1,0 +1,48 @@
+From a99b908d2f2c5e677e0d8169c6e00169f12c31ff Mon Sep 17 00:00:00 2001
+From: Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
+Date: Tue, 12 Mar 2019 01:08:09 +0000
+Subject: [PATCH] useradd: copy extended attributes of home
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The Home directory wasn't getting the extended attributes
+of /etc/skel. This patch fixes that issue and adds the copy
+of the extended attributes of the root of the home directory.
+
+Upstream-Status: Pending
+
+Signed-off-by: José Bollo <jose.bollo@iot.bzh>
+Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro.iwamatsu@miraclelinux.com>
+---
+ src/useradd.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/useradd.c b/src/useradd.c
+index f1e97e8..69cdbd3 100644
+--- a/src/useradd.c
++++ b/src/useradd.c
+@@ -54,6 +54,9 @@
+ #include <sys/wait.h>
+ #include <time.h>
+ #include <unistd.h>
++#ifdef WITH_ATTR
++#include <attr/libattr.h>
++#endif
+ #include "chkname.h"
+ #include "defines.h"
+ #include "faillog.h"
+@@ -1968,6 +1971,9 @@ static void create_home (void)
+ 		chown (user_home, user_id, user_gid);
+ 		chmod (user_home,
+ 		       0777 & ~getdef_num ("UMASK", GETDEF_DEFAULT_UMASK));
++#ifdef WITH_ATTR
++	               attr_copy_file (def_template, user_home, NULL, NULL);
++#endif
+ 		home_added = true;
+ #ifdef WITH_AUDIT
+ 		audit_logger (AUDIT_ADD_USER, Prog,
+-- 
+2.17.1
+

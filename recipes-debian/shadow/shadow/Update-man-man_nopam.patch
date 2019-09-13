@@ -1,0 +1,128 @@
+From f2beb9245cb9f5783f177af02839f66dbac312ce Mon Sep 17 00:00:00 2001
+From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Date: Mon, 18 Feb 2019 10:06:37 +0900
+Subject: [PATCH] Update man/man_nopam
+
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ man/de/Makefile.am    | 5 +----
+ man/fr/Makefile.am    | 5 +----
+ man/it/Makefile.am    | 5 +----
+ man/pl/Makefile.am    | 3 +--
+ man/ru/Makefile.am    | 5 +----
+ man/sv/Makefile.am    | 4 +---
+ man/zh_CN/Makefile.am | 5 +----
+ 7 files changed, 7 insertions(+), 25 deletions(-)
+
+diff --git a/man/de/Makefile.am b/man/de/Makefile.am
+index 3cd302e..0a1ad0c 100644
+--- a/man/de/Makefile.am
++++ b/man/de/Makefile.am
+@@ -44,10 +44,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/login.access.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/fr/Makefile.am b/man/fr/Makefile.am
+index 230d212..a070e8a 100644
+--- a/man/fr/Makefile.am
++++ b/man/fr/Makefile.am
+@@ -44,10 +44,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/login.access.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/it/Makefile.am b/man/it/Makefile.am
+index 94460aa..05aee32 100644
+--- a/man/it/Makefile.am
++++ b/man/it/Makefile.am
+@@ -44,10 +44,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/login.access.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/pl/Makefile.am b/man/pl/Makefile.am
+index 724d25f..1ab559e 100644
+--- a/man/pl/Makefile.am
++++ b/man/pl/Makefile.am
+@@ -25,8 +25,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/ru/Makefile.am b/man/ru/Makefile.am
+index 8a776a8..4c38291 100644
+--- a/man/ru/Makefile.am
++++ b/man/ru/Makefile.am
+@@ -44,10 +44,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/login.access.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/sv/Makefile.am b/man/sv/Makefile.am
+index e64b7bc..d862cc6 100644
+--- a/man/sv/Makefile.am
++++ b/man/sv/Makefile.am
+@@ -29,9 +29,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+diff --git a/man/zh_CN/Makefile.am b/man/zh_CN/Makefile.am
+index e9d8f2c..5c22fcc 100644
+--- a/man/zh_CN/Makefile.am
++++ b/man/zh_CN/Makefile.am
+@@ -44,10 +44,7 @@ man_MANS = \
+ 	man8/vigr.8 \
+ 	man8/vipw.8
+ 
+-man_nopam = \
+-	man5/limits.5 \
+-	man5/login.access.5 \
+-	man5/porttime.5
++man_nopam =
+ 
+ if !USE_PAM
+ man_MANS += $(man_nopam)
+-- 
+2.20.1
+
