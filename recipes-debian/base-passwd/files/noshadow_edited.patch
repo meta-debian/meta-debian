@@ -1,0 +1,18 @@
+From 5737d272f71f51e720a2e6a31e81c0d3d165b787 Mon Sep 17 00:00:00 2001
+From: CongNT <cong.nguyenthe@toshiba-tsdv.com>
+Date: Tue, 10 Feb 2015 20:05:21 +0000
+
+---
+ passwd.master | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/passwd.master b/passwd.master
+index 041685a..31a84d4 100644
+--- a/passwd.master
++++ b/passwd.master
+@@ -1,4 +1,4 @@
+-root:*:0:0:root:/root:/bin/sh
++root::0:0:root:/root:/bin/sh
+ daemon:*:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+ bin:*:2:2:bin:/bin:/usr/sbin/nologin
+ sys:*:3:3:sys:/dev:/usr/sbin/nologin

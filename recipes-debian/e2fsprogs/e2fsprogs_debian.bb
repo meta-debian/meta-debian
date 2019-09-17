@@ -2,7 +2,7 @@ require ${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs.inc
 
 inherit debian-package
 require recipes-debian/sources/e2fsprogs.inc
-DEBIAN_QUILT_PATCHES = ""
+
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/e2fsprogs/e2fsprogs"
 
 SRC_URI += "file://remove.ldconfig.call.patch \

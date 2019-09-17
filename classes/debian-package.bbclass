@@ -14,6 +14,14 @@ DPV ?= "${PV}"
 DEBIAN_USE_SNAPSHOT ?= "0"
 DEBIAN_SDO_URL ?= "http://snapshot.debian.org"
 
+# Most of files in Debian repo are in *.xz format.
+# Remove dependency xz-native to avoid dependency loop.
+python () {
+    unpack_deps = d.getVarFlag('do_unpack', 'depends') or ""
+    unpack_deps = unpack_deps.replace('xz-native:do_populate_sysroot','')
+    d.setVarFlag('do_unpack', 'depends', unpack_deps)
+}
+
 ###############################################################################
 # do_debian_unpack_extra
 ###############################################################################

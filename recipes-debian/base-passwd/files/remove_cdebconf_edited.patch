@@ -1,0 +1,672 @@
+From 4c9a84fe0e38d22976d6ca2ab4f6087b783a2c43 Mon Sep 17 00:00:00 2001
+From: OpenEmbedded <oe.patch@oe>
+Date: Tue, 13 Aug 2019 08:56:50 +0000
+
+---
+ Makefile.am         |   1 -
+ debian/control      |   2 +-
+ man/update-passwd.8 |  15 --
+ update-passwd.c     | 445 +++++++++-----------------------------------
+ 4 files changed, 91 insertions(+), 372 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index c116c7d..a279903 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,7 +1,6 @@
+ sbin_PROGRAMS = update-passwd
+ 
+ update_passwd_SOURCES = update-passwd.c
+-update_passwd_LDADD = -ldebconfclient
+ 
+ pkgdata_DATA = passwd.master group.master
+ 
+diff --git a/debian/control b/debian/control
+index 7754f68..65199da 100644
+--- a/debian/control
++++ b/debian/control
+@@ -3,7 +3,7 @@ Section: admin
+ Priority: required
+ Maintainer: Colin Watson <cjwatson@debian.org>
+ Standards-Version: 3.9.8
+-Build-Depends: dpkg-dev (>= 1.15.7~), debhelper (>= 9~), dh-autoreconf, sgmltools-lite, dpkg (>= 1.16.4), w3m, po4a, libdebconfclient0-dev
++Build-Depends: dpkg-dev (>= 1.15.7~), debhelper (>= 9~), dh-autoreconf, sgmltools-lite, dpkg (>= 1.16.4), w3m, po4a
+ Vcs-Git: https://salsa.debian.org/debian/base-passwd.git
+ Vcs-Browser: https://salsa.debian.org/debian/base-passwd
+ Rules-Requires-Root: no
+diff --git a/man/update-passwd.8 b/man/update-passwd.8
+index 6d7e1c6..05480c4 100644
+--- a/man/update-passwd.8
++++ b/man/update-passwd.8
+@@ -63,21 +63,6 @@ Show a summary of how to use
+ .TP
+ .BR \-V ,\  \-\-version
+ Show the version number
+-.SH ENVIRONMENT
+-.TP
+-DEBIAN_HAS_FRONTEND
+-If this environment variable is sent and the
+-.B \-\-dry\-run
+-flag was not given,
+-.B update\-passwd
+-uses debconf to prompt for whether to make changes.
+-Each proposed change will produce a separate prompt.
+-User or group removals, UID or GID changes, and home directory changes
+-will be asked with high priority.
+-User or group additions and shell changes will be asked with medium
+-priority.
+-Questions about whether to move entries above the NIS compat inclusion
+-entry or whether to change the GECOS of a user are asked at low priority.
+ .SH BUGS
+ At this moment
+ .B update\-passwd
+diff --git a/update-passwd.c b/update-passwd.c
+index a38afaa..f20c077 100644
+--- a/update-passwd.c
++++ b/update-passwd.c
+@@ -36,10 +36,6 @@
+ #include <pwd.h>
+ #include <shadow.h>
+ #include <grp.h>
+-#include <stdarg.h>
+-#include <ctype.h>
+-
+-#include <cdebconf/debconfclient.h>
+ 
+ #define DEFAULT_PASSWD_MASTER	"/usr/share/base-passwd/passwd.master"
+ #define DEFAULT_GROUP_MASTER	"/usr/share/base-passwd/group.master"
+@@ -47,8 +43,6 @@
+ #define DEFAULT_SHADOW_SYSTEM	_PATH_SHADOW
+ #define DEFAULT_GROUP_SYSTEM	"/etc/group"
+ 
+-#define DEFAULT_DEBCONF_DOMAIN	"system"
+-
+ #define	WRITE_EXTENSION		".upwd-write"
+ #define	BACKUP_EXTENSION	".org"
+ 
+@@ -138,30 +132,6 @@ int		opt_nolock	= 0;
+ int		opt_sanity	= 0;
+ 
+ int		flag_dirty	= 0;
+-int		flag_debconf	= 0;
+-
+-const char*	user_domain	= DEFAULT_DEBCONF_DOMAIN;
+-const char*	group_domain	= DEFAULT_DEBCONF_DOMAIN;
+-
+-struct debconfclient*	debconf	= NULL;
+-
+-/* Abort the program if talking to debconf fails.  Use ret exactly once. */
+-#define DEBCONF_CHECK(ret)					\
+-    do {							\
+-	if ((ret)!=0) {						\
+-	    fprintf(stderr, "Debconf interaction failed\n");	\
+-	    exit(1);						\
+-	}							\
+-    } while (0)
+-
+-/* Wrapper macros around the debconfclient interface that check the return
+- * status and use the global debconf client.  The mechanics of asking the
+- * question and retrieving the answer are handled by the ask_debconf
+- * function below. */
+-#define DEBCONF_REGISTER(template, question) \
+-    DEBCONF_CHECK(debconf_register(debconf, (template), (question)))
+-#define DEBCONF_SUBST(question, var, value) \
+-    DEBCONF_CHECK(debconf_subst(debconf, (question), (var), (value)))
+ 
+ 
+ /* malloc() with out-of-memory checking.
+@@ -186,24 +156,6 @@ char* xstrdup(const char *string) {
+     return strcpy(xmalloc(strlen(string) + 1), string);
+ }
+ 
+-/* asprintf() with out-of-memory checking.  Also fail if formatting fails so
+- * that the caller doesn't have to check any error return.
+- */
+-char* xasprintf(const char* fmt, ...) {
+-    va_list	args;
+-    int		ret;
+-    char*	result;
+-
+-    va_start(args, fmt);
+-    ret=vasprintf(&result, fmt, args);
+-    va_end(args);
+-    if (ret<0) {
+-	fprintf(stderr, "Formatting string failed: %s\n", strerror(errno));
+-	exit(1);
+-    }
+-    return result;
+-}
+-
+ /* Create an empty list-entry
+  */
+ struct _node* create_node() {
+@@ -612,51 +564,7 @@ void usage() {
+ /* Simple function to print our name and version
+  */
+ void version() {
+-    printf("update-passwd %s\n", PACKAGE_VERSION);
+-}
+-
+-
+-/* Assuming that we've already queued up a debconf question using REGISTER and
+- * any necessary SUBST, ask the question and return the answer as a boolean
+- * flag.  Aborts the problem on any failure.
+- */
+-int ask_debconf(const char* priority, const char* question) {
+-    int		ret;
+-    const char*	response;
+-
+-    ret=debconf_input(debconf, priority, question);
+-    if (ret==0)
+-	ret=debconf_go(debconf);
+-    else if (ret==30)
+-	ret=0;
+-    if (ret==0)
+-	ret=debconf_get(debconf, question);
+-    if (ret!=0) {
+-	fprintf(stderr, "Debconf interaction failed\n");
+-	exit(1);
+-    }
+-    response=debconf->ret(debconf);
+-    if (response!=NULL && strcmp(response, "true")==0)
+-	return 1;
+-    else
+-	return 0;
+-}
+-
+-
+-/* Escape an arbitrary string for use in a debconf question.  We take the
+- * conservative approach of replacing all non-alphanumeric characters except
+- * hyphen (-) and underscore (_) with underscores.  Returns newly allocated
+- * memory that the caller is responsible for freeing.
+- */
+-char* escape_debconf(const char* string) {
+-    char*	copy;
+-    char*       p;
+-
+-    copy=xstrdup(string);
+-    for (p=copy; *p!='\0'; p++)
+-	if (!isalnum((int)*p) && *p!='-' && *p!='_')
+-	    *p='_';
+-    return copy;
++    printf("update-passwd %s\n", VERSION);
+ }
+ 
+ 
+@@ -677,37 +585,13 @@ void process_moved_entries(const struct _info* lst, struct _node** passwd, struc
+ 	if (find_by_named_entry(master, walk)) {
+ 	    if (!noautoadd(lst, walk->id)) {
+ 		struct _node*	movednode=walk;
+-		int		make_change=1;
+-
+-		if (flag_debconf) {
+-		    char*	question;
+-		    char*	template;
+-		    char*	id;
+-		    const char*	domain=user_domain;
+-
+-		    if (strcmp(descr, "group")==0)
+-			domain=group_domain;
+-		    question=xasprintf("base-passwd/%s/%s/%s/move", domain, descr, movednode->name);
+-		    template=xasprintf("base-passwd/%s-move", descr);
+-		    id=xasprintf("%u", movednode->id);
+-		    DEBCONF_REGISTER(template, question);
+-		    DEBCONF_SUBST(question, "name", movednode->name);
+-		    DEBCONF_SUBST(question, "id", id);
+-		    make_change=ask_debconf("low", question);
+-		    free(question);
+-		    free(template);
+-		    free(id);
+-		}
+-
+-		if (make_change) {
+-		    if (opt_verbose)
+-			printf("Moving %s \"%s\" (%u) to before \"+\" entry\n", descr, movednode->name, movednode->id);
+-		    remove_node(passwd, movednode);
+-		    add_node(passwd, movednode, 1);
+-		    flag_dirty++;
+-		}
+-
+ 		walk=walk->next;
++		remove_node(passwd, movednode);
++		add_node(passwd, movednode, 1);
++		flag_dirty++;
++
++		if (opt_verbose)
++		    printf("Moving %s \"%s\" (%u) to before \"+\" entry\n", descr, movednode->name, movednode->id);
+ 		continue;
+ 	    }
+ 	}
+@@ -723,41 +607,19 @@ void process_moved_entries(const struct _info* lst, struct _node** passwd, struc
+ void process_new_entries(const struct _info* lst, struct _node** passwd, struct _node* master, const char* descr) {
+     while (master) {
+ 	if (find_by_named_entry(*passwd, master)==NULL) {
+-	    struct _node*	newnode;
+-	    int			make_change=1;
++	    struct _node* newnode;
+ 
+ 	    if (noautoadd(lst, master->id)) {
+ 		master=master->next;
+ 		continue;
+ 	    }
+ 
+-	    if (flag_debconf) {
+-		char*		question;
+-		char*		template;
+-		char*		id;
+-		const char*	domain=user_domain;
+-
+-		if (strcmp(descr, "group")==0)
+-		    domain=group_domain;
+-		question=xasprintf("base-passwd/%s/%s/%s/add", domain, descr, master->name);
+-		template=xasprintf("base-passwd/%s-add", descr);
+-		id=xasprintf("%u", master->id);
+-		DEBCONF_REGISTER(template, question);
+-		DEBCONF_SUBST(question, "name", master->name);
+-		DEBCONF_SUBST(question, "id", id);
+-		make_change=ask_debconf("medium", question);
+-		free(question);
+-		free(template);
+-		free(id);
+-	    }
++	    newnode=copy_node(master);
++	    add_node(passwd, newnode, 1);
++	    flag_dirty++;
+ 
+-	    if (make_change) {
+-		if (opt_verbose)
+-		    printf("Adding %s \"%s\" (%u)\n", descr, master->name, master->id);
+-		newnode=copy_node(master);
+-		add_node(passwd, newnode, 1);
+-		flag_dirty++;
+-	    }
++	    if (opt_verbose)
++		printf("Adding %s \"%s\" (%u)\n", descr, newnode->name, newnode->id);
+ 	}
+ 	master=master->next;
+     }
+@@ -784,35 +646,13 @@ void process_old_entries(const struct _info* lst, struct _node** passwd, struct
+ 
+ 	if (find_by_named_entry(master, walk)==NULL) {
+ 	    struct _node*	oldnode=walk;
+-	    int			make_change=1;
+-
+-	    if (flag_debconf) {
+-		char*		question;
+-		char*		template;
+-		char*		id;
+-		const char*	domain=user_domain;
+-
+-		if (strcmp(descr, "group")==0)
+-		    domain=group_domain;
+-		question=xasprintf("base-passwd/%s/%s/%s/remove", domain, descr, oldnode->name);
+-		template=xasprintf("base-passwd/%s-remove", descr);
+-		id=xasprintf("%u", oldnode->id);
+-		DEBCONF_REGISTER(template, question);
+-		DEBCONF_SUBST(question, "name", oldnode->name);
+-		DEBCONF_SUBST(question, "id", id);
+-		make_change=ask_debconf("high", question);
+-		free(question);
+-		free(template);
+-		free(id);
+-	    }
+ 
+-	    if (make_change) {
+-		if (opt_verbose)
+-		    printf("Removing %s \"%s\" (%u)\n", descr, oldnode->name, oldnode->id);
+-		remove_node(passwd, oldnode);
+-		flag_dirty++;
+-	    }
++	    if (opt_verbose)
++		printf("Removing %s \"%s\" (%u)\n", descr, oldnode->name, oldnode->id);
++
+ 	    walk=walk->next;
++	    remove_node(passwd, oldnode);
++	    flag_dirty++;
+ 	    continue;
+ 	}
+ 	walk=walk->next;
+@@ -825,12 +665,6 @@ void process_old_entries(const struct _info* lst, struct _node** passwd, struct
+ void process_changed_accounts(struct _node* passwd, struct _node* group, struct _node* master) {
+     for (;passwd; passwd=passwd->next) {
+ 	struct _node*	mc;	/* mastercopy of this account */
+-	char*		question;
+-	char*		old_id;
+-	char*		new_id;
+-	char*		oldpart;
+-	char*		newpart;
+-	int		make_change;
+ 
+ 	if (((passwd->id<0) || (passwd->id>99)) && (passwd->id!=65534))
+ 	    continue;
+@@ -840,148 +674,65 @@ void process_changed_accounts(struct _node* passwd, struct _node* group, struct
+ 	    continue;
+ 
+ 	if (passwd->id!=mc->id) {
+-	    make_change=1;
+-	    if (flag_debconf) {
+-		question=xasprintf("base-passwd/%s/user/%s/uid/%u/%u", user_domain, passwd->name, passwd->id, mc->id);
+-		old_id=xasprintf("%u", passwd->id);
+-		new_id=xasprintf("%u", mc->id);
+-		DEBCONF_REGISTER("base-passwd/user-change-uid", question);
+-		DEBCONF_SUBST(question, "name", passwd->name);
+-		DEBCONF_SUBST(question, "old_uid", old_id);
+-		DEBCONF_SUBST(question, "new_uid", new_id);
+-		make_change=ask_debconf("high", question);
+-		free(question);
+-		free(old_id);
+-		free(new_id);
+-	    }
+-
+-	    if (make_change) {
+-		if (opt_verbose)
+-		    printf("Changing uid of %s from %u to %u\n", passwd->name, passwd->id, mc->id);
+-		passwd->id=mc->id;
+-		passwd->d.pw.pw_uid=mc->d.pw.pw_uid;
+-		flag_dirty++;
+-	    }
++	    if (opt_verbose)
++		printf("Changing uid of %s from %u to %u\n", passwd->name, passwd->id, mc->id);
++	    passwd->id=mc->id;
++	    passwd->d.pw.pw_uid=mc->d.pw.pw_uid;
++	    flag_dirty++;
+ 	}
+ 
+ 	if (passwd->d.pw.pw_gid!=mc->d.pw.pw_gid) {
+-	    const struct _node* oldentry = find_by_id(group, passwd->d.pw.pw_gid);
+-	    const struct _node* newentry = find_by_id(group, mc->d.pw.pw_gid);
+-	    const char* oldname = oldentry ? oldentry->name : "ABSENT";
+-	    const char* newname = newentry ? newentry->name : "ABSENT";
+-
+-	    make_change=1;
+-	    if (flag_debconf) {
+-		question=xasprintf("base-passwd/%s/user/%s/gid/%u/%u", user_domain, passwd->name, passwd->d.pw.pw_gid, mc->d.pw.pw_gid);
+-		old_id=xasprintf("%u", passwd->d.pw.pw_gid);
+-		new_id=xasprintf("%u", mc->d.pw.pw_gid);
+-		DEBCONF_REGISTER("base-passwd/user-change-gid", question);
+-		DEBCONF_SUBST(question, "name", passwd->name);
+-		DEBCONF_SUBST(question, "old_gid", old_id);
+-		DEBCONF_SUBST(question, "old_group", oldname);
+-		DEBCONF_SUBST(question, "new_gid", new_id);
+-		DEBCONF_SUBST(question, "new_group", newname);
+-		make_change=ask_debconf("high", question);
+-		free(question);
+-		free(old_id);
+-		free(new_id);
+-	    }
+-
+-	    if (make_change) {
+-		if (opt_verbose)
+-		    printf("Changing gid of %s from %u (%s) to %u (%s)\n", passwd->name, passwd->d.pw.pw_gid, oldname, mc->d.pw.pw_gid, newname);
+-		passwd->d.pw.pw_gid=mc->d.pw.pw_gid;
+-		flag_dirty++;
++	    if (opt_verbose) {
++		const struct _node* oldentry = find_by_id(group, passwd->d.pw.pw_gid);
++		const struct _node* newentry = find_by_id(group, mc->d.pw.pw_gid);
++		const char* oldname = oldentry ? oldentry->name : "ABSENT";
++		const char* newname = newentry ? newentry->name : "ABSENT";
++		printf("Changing gid of %s from %u (%s) to %u (%s)\n", passwd->name, passwd->d.pw.pw_gid, oldname, mc->d.pw.pw_gid, newname);
+ 	    }
++	    passwd->d.pw.pw_gid=mc->d.pw.pw_gid;
++	    flag_dirty++;
+ 	}
+ 
+ 	if (!keepgecos(specialusers, passwd->id))
+ 	    if ((passwd->d.pw.pw_gecos==NULL) || (strcmp(passwd->d.pw.pw_gecos, mc->d.pw.pw_gecos)!=0)) {
+-		const char *oldgecos = passwd->d.pw.pw_gecos ? passwd->d.pw.pw_gecos : "";
+-
+-		make_change=1;
+-		if (flag_debconf) {
+-		    question=xasprintf("base-passwd/%s/user/%s/gecos", user_domain, passwd->name);
+-		    DEBCONF_REGISTER("base-passwd/user-change-gecos", question);
+-		    DEBCONF_SUBST(question, "name", passwd->name);
+-		    DEBCONF_SUBST(question, "old_gecos", oldgecos);
+-		    DEBCONF_SUBST(question, "new_gecos", mc->d.pw.pw_gecos);
+-		    make_change=ask_debconf("low", question);
+-		    free(question);
+-		}
+-
+-		if (make_change) {
+-		    if (opt_verbose)
+-			printf("Changing GECOS of %s from \"%s\" to \"%s\".\n", passwd->name, oldgecos, mc->d.pw.pw_gecos);
+-		    /* We update the pw_gecos entry of passwd so it now points into the
+-		     * buffer from mc. This is safe for us, since we know we won't free
+-		     * the data in mc until after we are done.
+-		     */
+-		    passwd->d.pw.pw_gecos=mc->d.pw.pw_gecos;
+-		    flag_dirty++;
++		if (opt_verbose) {
++		    const char *oldgecos = passwd->d.pw.pw_gecos ? passwd->d.pw.pw_gecos : "";
++		    printf("Changing GECOS of %s from \"%s\" to \"%s\".\n", passwd->name, oldgecos, mc->d.pw.pw_gecos);
+ 		}
++		/* We update the pw_gecos entry of passwd so it now points into the
++		 * buffer from mc. This is safe for us, since we know we won't free
++		 * the data in mc until after we are done.
++		 */
++		passwd->d.pw.pw_gecos=mc->d.pw.pw_gecos;
++		flag_dirty++;
+ 	    }
+ 
+ 	if (!keephome(specialusers, passwd->id))
+ 	    if ((passwd->d.pw.pw_dir==NULL) || (strcmp(passwd->d.pw.pw_dir, mc->d.pw.pw_dir)!=0)) {
+-		const char *olddir = passwd->d.pw.pw_dir ? passwd->d.pw.pw_dir : "(none)";
+-
+-		make_change=1;
+-		if (flag_debconf) {
+-		    oldpart=escape_debconf(olddir);
+-		    newpart=escape_debconf(mc->d.pw.pw_dir);
+-		    question=xasprintf("base-passwd/%s/user/%s/home/%s/%s", user_domain, passwd->name, oldpart, newpart);
+-		    free(oldpart);
+-		    free(newpart);
+-		    DEBCONF_REGISTER("base-passwd/user-change-home", question);
+-		    DEBCONF_SUBST(question, "name", passwd->name);
+-		    DEBCONF_SUBST(question, "old_home", olddir);
+-		    DEBCONF_SUBST(question, "new_home", mc->d.pw.pw_dir);
+-		    make_change=ask_debconf("high", question);
+-		    free(question);
+-		}
+-
+-		if (make_change) {
+-		    if (opt_verbose)
+-			printf("Changing home-directory of %s from %s to %s\n", passwd->name, olddir, mc->d.pw.pw_dir);
+-		    /* We update the pw_dir entry of passwd so it now points into the
+-		     * buffer from mc. This is safe for us, since we know we won't free
+-		     * the data in mc until after we are done.
+-		     */
+-		    passwd->d.pw.pw_dir=mc->d.pw.pw_dir;
+-		    flag_dirty++;
++		if (opt_verbose) {
++		    const char *olddir = passwd->d.pw.pw_dir ? passwd->d.pw.pw_dir : "(none)";
++		    printf("Changing home-directory of %s from %s to %s\n", passwd->name, olddir, mc->d.pw.pw_dir);
+ 		}
++		/* We update the pw_dir entry of passwd so it now points into the
++		 * buffer from mc. This is safe for us, since we know we won't free
++		 * the data in mc until after we are done.
++		 */
++		passwd->d.pw.pw_dir=mc->d.pw.pw_dir;
++		flag_dirty++;
+ 	    }
+ 
+ 	if (!keepshell(specialusers, passwd->id))
+ 	    if ((passwd->d.pw.pw_shell==NULL) || (strcmp(passwd->d.pw.pw_shell, mc->d.pw.pw_shell)!=0)) {
+-		const char *oldshell = passwd->d.pw.pw_shell ? passwd->d.pw.pw_shell : "(none)";
+-
+-		make_change=1;
+-		if (flag_debconf) {
+-		    oldpart=escape_debconf(oldshell);
+-		    newpart=escape_debconf(mc->d.pw.pw_shell);
+-		    question=xasprintf("base-passwd/%s/user/%s/shell/%s/%s", user_domain, passwd->name, oldpart, newpart);
+-		    free(oldpart);
+-		    free(newpart);
+-		    DEBCONF_REGISTER("base-passwd/user-change-shell", question);
+-		    DEBCONF_SUBST(question, "name", passwd->name);
+-		    DEBCONF_SUBST(question, "old_shell", oldshell);
+-		    DEBCONF_SUBST(question, "new_shell", mc->d.pw.pw_shell);
+-		    make_change=ask_debconf("medium", question);
+-		    free(question);
+-		}
+-
+-		if (make_change) {
+-		    if (opt_verbose)
+-			printf("Changing shell of %s from %s to %s\n", passwd->name, oldshell, mc->d.pw.pw_shell);
+-		    /* We update the pw_shell entry of passwd so it now points into the
+-		     * buffer from mc. This is safe for us, since we know we won't free
+-		     * the data in mc until after we are done.
+-		     */
+-		    passwd->d.pw.pw_shell=mc->d.pw.pw_shell;
+-		    flag_dirty++;
++		if (opt_verbose) {
++		    const char *oldshell = passwd->d.pw.pw_shell ? passwd->d.pw.pw_shell : "(none)";
++		    printf("Changing shell of %s from %s to %s\n", passwd->name, oldshell, mc->d.pw.pw_shell);
+ 		}
++		/* We update the pw_shell entry of passwd so it now points into the
++		 * buffer from mc. This is safe for us, since we know we won't free
++		 * the data in mc until after we are done.
++		 */
++		passwd->d.pw.pw_shell=mc->d.pw.pw_shell;
++		flag_dirty++;
+ 	    }
+     }
+ }
+@@ -1001,33 +752,11 @@ void process_changed_groups(struct _node* group, struct _node* master) {
+ 	    continue;
+ 
+ 	if (group->id!=mc->id) {
+-	    int	make_change=1;
+-
+-	    if (flag_debconf) {
+-		char*	question;
+-		char*	old_gid;
+-		char*	new_gid;
+-
+-		question=xasprintf("base-passwd/%s/group/%s/gid/%u/%u", group_domain, group->name, group->id, mc->id);
+-		old_gid=xasprintf("%u", group->id);
+-		new_gid=xasprintf("%u", mc->id);
+-		DEBCONF_REGISTER("base-passwd/group-change-gid", question);
+-		DEBCONF_SUBST(question, "name", group->name);
+-		DEBCONF_SUBST(question, "old_gid", old_gid);
+-		DEBCONF_SUBST(question, "new_gid", new_gid);
+-		make_change=ask_debconf("high", question);
+-		free(question);
+-		free(old_gid);
+-		free(new_gid);
+-	    }
+-
+-	    if (make_change) {
+-		if (opt_verbose)
+-		    printf("Changing gid of %s from %u to %u\n", group->name, group->id, mc->id);
+-		group->id=mc->id;
+-		group->d.gr.gr_gid=mc->d.gr.gr_gid;
+-		flag_dirty++;
+-	    }
++	    if (opt_verbose)
++		printf("Changing gid of %s from %u to %u\n", group->name, group->id, mc->id);
++	    group->id=mc->id;
++	    group->d.gr.gr_gid=mc->d.gr.gr_gid;
++	    flag_dirty++;
+ 	}
+     }
+ }
+@@ -1246,7 +975,12 @@ int put_file_in_place(const char* source, const char* target) {
+     if (opt_verbose>2)
+ 	printf("Replacing \"%s\" with \"%s\"\n", target, source);
+ 
+-    uf=xasprintf("%s%s", target, BACKUP_EXTENSION);
++    asprintf(&uf, "%s%s", target, BACKUP_EXTENSION);
++
++    if (uf==NULL) {
++	fprintf(stderr, "put_file_in_place: Not enough memory available\n");
++	return 0;
++    }
+ 
+     if (!copy_filemodes(target, source)) {
+ 	free(uf);
+@@ -1281,7 +1015,13 @@ int commit_files() {
+     if (opt_verbose==2)
+ 	printf("Writing passwd-file to %s\n", sys_passwd);
+ 
+-    wf=xasprintf("%s%s", sys_passwd, WRITE_EXTENSION);
++    asprintf(&wf, "%s%s", sys_passwd, WRITE_EXTENSION);
++
++    if (wf==NULL) {
++	fprintf(stderr, "Not enough memory available while committing "
++			"passwd-file\n");
++	return 0;
++    }
+ 
+     if (!write_passwd(system_accounts, wf)) {
+ 	free(wf);
+@@ -1299,7 +1039,13 @@ int commit_files() {
+ 	if (opt_verbose==2)
+ 	    printf("Writing shadow-file to %s\n", sys_shadow);
+ 
+-	wf=xasprintf("%s%s", sys_shadow, WRITE_EXTENSION);
++	asprintf(&wf, "%s%s", sys_shadow, WRITE_EXTENSION);
++
++	if (wf==NULL) {
++	    fprintf(stderr, "Not enough memory available while committing "
++			    "shadow-file\n");
++	    return 0;
++	}
+ 
+ 	if (!write_shadow(system_shadow, wf)) {
+ 	    free(wf);
+@@ -1317,7 +1063,13 @@ int commit_files() {
+     if (opt_verbose==2)
+ 	printf("Writing group-file to %s\n", sys_group);
+ 
+-    wf=xasprintf("%s%s", sys_group, WRITE_EXTENSION);
++    asprintf(&wf, "%s%s", sys_group, WRITE_EXTENSION);
++
++    if (wf==NULL) {
++	fprintf(stderr, "Not enough memory available while committing "
++			"group-file\n");
++	return 0;
++    }
+ 
+     if (!write_group(system_groups, wf)) {
+ 	free(wf);
+@@ -1389,14 +1141,12 @@ int main(int argc, char** argv) {
+ 		break;
+ 	    case 'P':
+ 		sys_passwd=optarg;
+-		user_domain="other";
+ 		break;
+ 	    case 'S':
+ 		sys_shadow=optarg;
+ 		break;
+ 	    case 'G':
+ 		sys_group=optarg;
+-		group_domain="other";
+ 		break;
+ 	    case 'v':
+ 		opt_verbose++;
+@@ -1424,18 +1174,6 @@ int main(int argc, char** argv) {
+ 		return 1;
+ 	}
+ 
+-    /* If DEBIAN_HAS_FRONTEND is set in the environment, we're running under
+-     * debconf.  Enable debconf prompting unless --dry-run was also given.
+-     */
+-    if (getenv("DEBIAN_HAS_FRONTEND")!=NULL && !opt_dryrun) {
+-	debconf=debconfclient_new();
+-	if (debconf==NULL) {
+-	    fprintf(stderr, "Cannot initialize debconf\n");
+-	    exit(1);
+-	}
+-	flag_debconf=1;
+-    }
+-
+     if (read_passwd(&master_accounts, master_passwd)!=0)
+ 	return 2;
+ 
+@@ -1480,9 +1218,6 @@ int main(int argc, char** argv) {
+ 	if (!unlock_files())
+ 	    return 5;
+ 
+-    if (debconf!=NULL)
+-	debconfclient_delete(debconf);
+-
+     if (opt_dryrun)
+ 	return flag_dirty;
+     else

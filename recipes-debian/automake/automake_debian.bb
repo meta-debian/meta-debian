@@ -21,8 +21,11 @@ LIC_FILES_CHKSUM = " \
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/automake/automake"
 SRC_URI += " \
 	file://python-libdir.patch \
+	file://buildtest.patch \
 	file://automake-replace-w-option-in-shebangs-with-modern-use-warnings.patch \
 "
+
+DEPENDS_class-native = "autoconf-native"
 
 RDEPENDS_${PN} += "\
 	autoconf \
@@ -36,9 +39,11 @@ RDEPENDS_${PN} += "\
 	perl-module-vars \
 "
 
+RDEPENDS_${PN}_class-native = "autoconf-native hostperl-runtime-native"
 RDEPENDS_${PN}_class-nativesdk = "nativesdk-autoconf"
 
 PERL = "${USRBINPATH}/perl"
+PERL_class-native = "${USRBINPATH}/env perl"
 PERL_class-nativesdk = "${USRBINPATH}/env perl"
 
 CACHED_CONFIGUREVARS += "ac_cv_path_PERL='${PERL}'"
@@ -47,4 +52,4 @@ do_install_append () {
 	install -d ${D}${datadir}
 }
 
-BBCLASSEXTEND = "nativesdk"
+BBCLASSEXTEND = "native nativesdk"
