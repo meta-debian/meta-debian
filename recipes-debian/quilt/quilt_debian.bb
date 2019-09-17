@@ -6,3 +6,10 @@
 
 require quilt.inc
 inherit gettext
+
+RDEPENDS_${PN}-ptest += "coreutils patch"
+
+do_install_ptest_append() {
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=909398
+    rm ${D}${PTEST_PATH}/test/push_timeskew.test
+}
