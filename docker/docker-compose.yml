@@ -9,20 +9,12 @@ services:
     extends:
       file: common.yml
       service: deby
-    environment:
-      TEST_TARGETS: ${TEST_TARGETS}
-      TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
-      TEST_MACHINES: ${TEST_MACHINES:-qemux86}
     command: /home/deby/poky/meta-debian/tests/build_test.sh
 
   ptest:
     extends:
       file: common.yml
       service: deby
-    environment:
-      TEST_TARGETS: ${TEST_TARGETS}
-      TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
-      TEST_MACHINES: ${TEST_MACHINES:-qemux86}
     command: /home/deby/poky/meta-debian/tests/run_ptest.sh
 
 volumes:

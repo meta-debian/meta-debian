@@ -6,14 +6,20 @@ services:
       args:
         http_proxy: $http_proxy
         UID: ${UID:-1000}
+        BUILDDIR: ${BUILDDIR:-build}
     image: deby-image
     environment:
-      - http_proxy
-      - https_proxy
-      - no_proxy
+      http_proxy: $http_proxy
+      https_proxy: $https_proxy
+      no_proxy: $no_proxy
+      BUILDDIR: ${BUILDDIR:-build}
+      TEST_TARGETS: ${TEST_TARGETS}
+      TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
+      TEST_MACHINES: ${TEST_MACHINES:-qemux86}
+      TEST_DISTRO_FEATURES: ${TEST_DISTRO_FEATURES}
     volumes:
       - ../:/home/deby/poky/meta-debian
-      - downloads:/home/deby/build/downloads
+      - downloads:/home/deby/downloads
     devices:
       - /dev/net/tun:/dev/net/tun
     cap_add:

@@ -16,9 +16,6 @@ POKYDIR=$THISDIR/../..
 
 . $THISDIR/common.sh
 
-TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
-TEST_MACHINES=${TEST_MACHINES:-qemux86}
-
 # Dependencies of machine
 declare -A LAYER_DEPS
 declare -A LAYER_DEPS_URL

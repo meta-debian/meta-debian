@@ -2,6 +2,10 @@
 #
 # Common functions for other scripts.
 
+TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
+TEST_MACHINES=${TEST_MACHINES:-qemux86}
+BUILDDIR=${BUILDDIR:-build}
+
 RED='\e[91m'
 BLD='\e[1m'
 BLD_RED='\e[1;91m'
@@ -40,9 +44,9 @@ function add_or_replace {
 function setup_builddir {
 	note "Setup build directory."
 	cd $WORKDIR
-	rm -rf build/conf
+	rm -rf $BUILDDIR/conf
 	export TEMPLATECONF=meta-debian/conf
-	source ./poky/oe-init-build-env
+	source ./poky/oe-init-build-env $BUILDDIR
 
 	if which gitproxy &> /dev/null; then
 		add_or_replace "HOSTTOOLS_append" " gitproxy" conf/local.conf

@@ -15,10 +15,6 @@ WORKDIR=$THISDIR/../../..
 
 . $THISDIR/common.sh
 
-TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
-TEST_TARGETS=${TEST_TARGETS}
-TEST_MACHINES=${TEST_MACHINES:-qemux86}
-
 # SSH to QEMU machine through port 2222
 function ssh_qemu {
 	ssh -o StrictHostKeyChecking=no -p 2222 root@127.0.0.1 "/bin/sh -l -c \"$1\""
