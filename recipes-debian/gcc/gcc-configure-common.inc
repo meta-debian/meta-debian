@@ -3,7 +3,6 @@
 # base branch: daisy
 #
 
-require gcc-multilib-config.inc
 #
 # Build the list of lanaguages to build.
 #
@@ -95,6 +94,13 @@ do_configure_prepend () {
 #endif /* ! GCC_DEFAULTS_H */
 _EOF
 	mv ${B}/gcc/defaults.h.new ${B}/gcc/defaults.h
+
+	for file in ${S}/gcc/config/*/t-linux64 ${S}/gcc/config/*/linux64.h; do
+		rel_path=$(basename $(dirname $file))
+		mkdir -p ${B}/gcc/config/$rel_path
+		cp -f $file ${B}/gcc/config/$rel_path/
+	done
+	cp ${S}/gcc/config/linux.h ${B}/gcc/config/
 }
 
 do_configure () {
