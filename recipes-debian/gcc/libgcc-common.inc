@@ -110,7 +110,7 @@ fakeroot python do_multilib_install() {
             tune_bitness = '32' # /lib => 32bit lib
 
         src = '../../../' + tune_baselib + '/' + \
-            tune_arch + d.getVar('TARGET_VENDOR', True) + 'ml' + ml + \
+            tune_arch + d.getVar('TARGET_VENDOR', True) + \
             '-' + d.getVar('TARGET_OS', True) + '/' + binv + '/'
 
         dest = d.getVar('D', True) + d.getVar('libdir', True) + '/' + \

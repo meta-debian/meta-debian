@@ -52,28 +52,6 @@ export WINDRES_FOR_TARGET = "${TARGET_PREFIX}windres"
 #
 export ARCH_FLAGS_FOR_TARGET = "--sysroot=${STAGING_DIR_TARGET}"
 
-# When building with multilib is enabled,
-# poky makes LD_FOR_TARGET be inconsistent with ${TARGET_PREFIX}ld,
-# actually, all *_FOR_TARGET are inconsistent with ${TARGET_PREFIX}*.
-# For examples, LD_FOR_TARGET is i686-debymllib32-linux-ld
-# while TARGET_PREFIX is i686-deby-linux-.
-# This makes PLUGIN_LD_SUFFIX be detected wrong
-# then collect2 cannot find 'ld'.
-#
-# Fix it by adding multilib prefix to "sed" pattern in configure
-# so we can get the correct PLUGIN_LD_SUFFIX.
-do_configure_prepend() {
-	sed_pattern=""
-	for variant in ${MULTILIB_VARIANTS}; do
-		mlvendor="${TARGET_VENDOR}ml${variant}"
-		mltarget_prefix="${TARGET_ARCH}${mlvendor}${@['-' + d.getVar('TARGET_OS', True), ''][d.getVar('TARGET_OS', True) == ('' or 'custom')]}-"
-		sed_pattern="${sed_pattern}; s,${mltarget_prefix},,"
-	done
-
-	sed -i -e "s@\(PLUGIN_LD_SUFFIX=.*sed -e \"s,\$target_alias-,,\).*@\1$sed_pattern\"\`@g" \
-	    ${S}/gcc/configure.ac ${S}/gcc/configure
-}
-
 do_configure () {
 	export CC_FOR_BUILD="${BUILD_CC}"
 	export CXX_FOR_BUILD="${BUILD_CXX}"
