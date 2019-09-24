@@ -52,6 +52,9 @@ if [ -z "$TEMPLATECONF" ] && [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
     echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
     echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
+    # nsswitch.conf is not provided by debian base-file package but systemd requires it.
+    # use poky's base-files package temporary.
+    echo "BBMASK .= \"|meta-debian/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
     echo "DL_DIR = \"\${TOPDIR}/../downloads\"" >> conf/local.conf
 
     if [ -d "$HOOKS" ]; then
