@@ -261,6 +261,8 @@ PACKAGES_DYNAMIC_class-nativesdk += "^nativesdk-perl-module-.*"
 RDEPENDS_${PN}-misc += "perl perl-modules"
 RDEPENDS_${PN}-pod += "perl"
 
+include perl-rdepends-extra.inc
+
 BBCLASSEXTEND = "native nativesdk"
 
 SSTATE_SCAN_FILES += "*.pm *.pod *.h *.pl *.sh"
