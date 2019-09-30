@@ -28,7 +28,7 @@ SRC_URI += " \
 "
 
 # qemu source code from Debian does not provide these blobs,
-# but seabios does.
+# but seabios and ipxe does.
 # Avoid error:
 #   | install: cannot stat '.../qemu-system-native/3.1-r0/qemu-3.1.0/pc-bios/bios.bin': No such file or directory
 FIRMWAREPATH = "${datadir}/qemu:${datadir}/seabios:${libdir}/ipxe/qemu"
