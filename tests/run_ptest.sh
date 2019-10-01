@@ -9,6 +9,7 @@
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
 
 trap "exit" INT
+trap 'kill $(jobs -p)' EXIT
 
 THISDIR=$(dirname $(readlink -f "$0"))
 WORKDIR=$THISDIR/../../..
@@ -79,10 +80,10 @@ for distro in $TEST_DISTROS; do
 		timeout=60
 		start=`date +%s`
 		while ! ssh_qemu "#" 2> /dev/null; do
-				note "Waiting for SSH to be ready..."
 				sleep 5
 				now=`date +%s`
 				waited=$((now-start))
+				note "Waiting for SSH to be ready... (${waited}s/${timeout}s)"
 			if [ $waited -gt $timeout ]; then
 				error "Cannot connect to qemu machine."
 				exit 1
