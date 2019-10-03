@@ -11,10 +11,10 @@ start:
 test: build_test ptest
 
 build_test:
-	docker-compose up --build build_test
+	docker-compose run --rm build_test
 
 ptest:
-	docker-compose up --build ptest
+	docker-compose run --rm ptest
 
 clean:
 	rm -rf ../tests/logs
