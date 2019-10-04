@@ -4,6 +4,7 @@ SRC_URI_append = " \
 "
 
 SRC_URI_append_qemuall += "file://qemu-emlinux.config"
+SRC_URI_append_qemuarm += "file://qemuarm.config"
 
 SRC_URI_append_raspberrypi3-64 += "file://raspberrypi3-64.config"
 LINUX_DEFCONFIG_raspberrypi3-64 = "defconfig"
