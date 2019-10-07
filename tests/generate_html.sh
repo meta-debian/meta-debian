@@ -53,7 +53,6 @@ for d in $LOGDIR/*; do
 <tr bgcolor="$GREY">
 <th></th>
 <th>Package</th>
-<th>Version</th>
 <th>Build Status</th>
 <th>Ptest Status<br/>(PASS/SKIP/FAIL)</th>
 </tr></thead>
@@ -64,9 +63,8 @@ EOF
 
 		while read -r line; do
 			recipe=`echo $line | awk '{print $1}'`
-			version=`echo $line | awk '{print $2}'`
-			build_status=`echo $line | awk '{print $3}'`
-			ptest_status=`echo $line | awk '{print $4}'`
+			build_status=`echo $line | awk '{print $2}'`
+			ptest_status=`echo $line | awk '{print $3}'`
 
 			build_log="$TESTING_LOGS/$distro/$machine/$recipe.build.log"
 			ptest_log="$TESTING_LOGS/$distro/$machine/$recipe.ptest.log"
@@ -93,7 +91,7 @@ EOF
 
 			html_build_status="<td bgcolor=\"$bcolor\"><a href=$build_log>$build_status</a></td>"
 			html_ptest_status="<td bgcolor=\"$pcolor\">$html_ptest_status</td>"
-			echo "<tr><td></td><td>$recipe</td><td>$version</td>${html_build_status}${html_ptest_status}</tr>" >> $index
+			echo "<tr><td></td><td>$recipe</td>${html_build_status}${html_ptest_status}</tr>" >> $index
 		done < $LOGDIR/$distro/$machine/result.txt
 
 		echo "</table></body></html>" >> $index

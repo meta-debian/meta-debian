@@ -5,6 +5,7 @@
 TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
 TEST_MACHINES=${TEST_MACHINES:-qemux86}
 BUILDDIR=${BUILDDIR:-build}
+VERBOSE=${VERBOSE:-0}
 
 RED='\e[91m'
 BLD='\e[1m'
@@ -61,36 +62,9 @@ function setup_builddir {
 	add_or_replace "UBOOT_MACHINE_qemuarm64" "qemu_arm64_defconfig" conf/local.conf
 }
 
-# Run bitbake -s to get version of all recipes.
-# Params:
-#   $1: target file that stores version information
-function all_recipes_version {
-	all_versions=$1
-
-	note "Getting version of all recipes ..."
-	bitbake -s > $all_versions
-	if [ "$?" != "0" ]; then
-		error "Failed to bitbake."
-		exit 1
-	fi
-}
-
-# Get version of recipe
-# Params:
-#   $1: target file that stores version information
-function get_version {
-	all_versions=$1
-
-	version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
-	# If version is empty or contains only space, set it to NA
-	if echo $version | grep -q "^\s*$"; then
-		version=NA
-	fi
-}
-
 function get_all_packages {
-	BTEST_TARGETS=""
-	PTEST_TARGETS=""
+	BTEST_PACKAGES=""
+	PTEST_PACKAGES=""
 
 	recipes=`find $THISDIR/.. -name *.bb`
 	for recipe in $recipes; do
@@ -99,21 +73,21 @@ function get_all_packages {
 
 		# Get the final PN
 		pn=`grep "^PN=" $recipe_env | cut -d\" -f2`
-		BTEST_TARGETS="$BTEST_TARGETS $pn"
+		BTEST_PACKAGES="$BTEST_PACKAGES $pn"
 
 		# Check if ptest available
 		ptest_enabled=`grep "^PTEST_ENABLED=" $recipe_env | cut -d\" -f2`
 		if [ "$ptest_enabled" = "1" ]; then
-			PTEST_TARGETS="$PTEST_TARGETS $pn"
+			PTEST_PACKAGES="$PTEST_PACKAGES $pn"
 		fi
 
 		# Get BBCLASSEXTEND
 		bbclassextend=`grep "^BBCLASSEXTEND=" $recipe_env | cut -d\" -f2`
 		for variant in $bbclassextend; do
 			if [ "$variant" = "native" ] || [ "$variant" = "cross" ]; then
-				BTEST_TARGETS="$BTEST_TARGETS ${pn}-$variant"
+				BTEST_PACKAGES="$BTEST_PACKAGES ${pn}-$variant"
 			else
-				BTEST_TARGETS="$BTEST_TARGETS ${variant}-$pn"
+				BTEST_PACKAGES="$BTEST_PACKAGES ${variant}-$pn"
 			fi
 		done
 

@@ -13,7 +13,7 @@ services:
       https_proxy: $https_proxy
       no_proxy: $no_proxy
       BUILDDIR: ${BUILDDIR:-build}
-      TEST_TARGETS: ${TEST_TARGETS}
+      TEST_PACKAGES: ${TEST_PACKAGES}
       TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
       TEST_MACHINES: ${TEST_MACHINES:-qemux86}
       TEST_DISTRO_FEATURES: ${TEST_DISTRO_FEATURES}

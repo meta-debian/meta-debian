@@ -1,8 +1,9 @@
 #!/bin/bash
 #
 # Script for building meta-debian.
+#
 # Input params from env:
-#   TEST_TARGETS: recipes/packages will be built. Eg: "zlib core-image-minimal".
+#   TEST_PACKAGES: recipes/packages will be built. Eg: "zlib core-image-minimal".
 #                 If not set, all meta-debian's recipes will be built.
 #   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
 #   TEST_MACHINES: machines will be tested. Eg: "raspberrypi3 qemuarm"
@@ -27,19 +28,20 @@ LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;
 
 setup_builddir
 
-all_versions=`pwd`/all_versions.txt
-all_recipes_version "$all_versions"
-
 add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
 
-if [ "$TEST_TARGETS" = "" ]; then
-	TEST_TARGETS_NOTSET=1
+if [ "$TEST_PACKAGES" = "" ]; then
+	TEST_PACKAGES_NOTSET=1
 fi
 
 for distro in $TEST_DISTROS; do
 	note "Testing distro $distro ..."
 	add_or_replace "DISTRO" "$distro" conf/local.conf
 	for machine in $TEST_MACHINES; do
+		LOGDIR=$THISDIR/logs/$distro/$machine
+		RESULT=$LOGDIR/result.txt
+		mkdir -p $LOGDIR
+
 		note "Testing machine $machine ..."
 		add_or_replace "MACHINE" "$machine" conf/local.conf
 
@@ -63,24 +65,22 @@ for distro in $TEST_DISTROS; do
 		done
 		add_or_replace "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS"  conf/bblayers.conf
 
-		LOGDIR=$THISDIR/logs/$distro/$machine
-		RESULT=$LOGDIR/result.txt
-
-		test -d $LOGDIR || mkdir -p $LOGDIR
-
-		if [ "$TEST_TARGETS_NOTSET" = "1" ]; then
-			note "TEST_TARGETS is not defined. Getting all recipes available..."
+		if [ "$TEST_PACKAGES_NOTSET" = "1" ]; then
+			note "TEST_PACKAGES is not defined. Getting all recipes available..."
 			get_all_packages
-			TEST_TARGETS=$BTEST_TARGETS
+			TEST_PACKAGES=$BTEST_PACKAGES
 		fi
 
-		note "These recipes will be tested: $TEST_TARGETS"
+		note "These recipes will be tested: $TEST_PACKAGES"
 
-		for target in $TEST_TARGETS; do
-			get_version "$all_versions"
-
-			note "Building $target ..."
-			bitbake $target &> $LOGDIR/${target}.build.log
+		for package in $TEST_PACKAGES; do
+			logfile=$LOGDIR/${package}.build.log
+			note "Building $package ..."
+			if [ "$VERBOSE" = "1" ]; then
+				bitbake $package | tee $logfile
+			else
+				bitbake $package &> $logfile
+			fi
 
 			if [ "$?" = "0" ]; then
 				status=PASS
@@ -88,16 +88,11 @@ for distro in $TEST_DISTROS; do
 				status=FAIL
 			fi
 
-			note "Build $target: $status"
-			if grep -q "^$target $version" $RESULT 2> /dev/null; then
-				sed -i -e "s/^\($target $version \)\S*\( \S*\)/\1$status\2/" $RESULT
+			note "Build $package: $status"
+			if grep -q "^$package " $RESULT 2> /dev/null; then
+				sed -i -e "s#^\($package \)\S*\( \S*\)#\1$status\2#" $RESULT
 			else
-				# Remove old version
-				if grep -q "^$target " $RESULT 2> /dev/null; then
-					sed -i "/^$target /d" $RESULT
-				fi
-
-				echo "$target $version $status NA" >> $RESULT
+				echo "$package $status NA" >> $RESULT
 			fi
 		done
 

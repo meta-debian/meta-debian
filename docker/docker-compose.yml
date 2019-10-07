@@ -11,11 +11,11 @@ services:
       service: deby
     command: /home/deby/poky/meta-debian/tests/build_test.sh
 
-  ptest:
+  qemu_ptest:
     extends:
       file: common.yml
       service: deby
-    command: /home/deby/poky/meta-debian/tests/run_ptest.sh
+    command: /home/deby/poky/meta-debian/tests/qemu_ptest.sh
 
 volumes:
   downloads:

@@ -4,7 +4,7 @@ To use this test, the build environment needs to be setup first following [Setup
 or you can use docker for automation setup.
 ```sh
 $ make -C ../docker build_test # to run build test
-$ make -C ../docker ptest      # to run ptest
+$ make -C ../docker qemu_ptest # to run ptest for qemu machine
 ```
 
 ## build_test.sh
@@ -14,14 +14,14 @@ Input params from env:
 
 | Variable             | Description                     | Example                   |
 | -------------------- | ------------------------------- | ------------------------- |
-| TEST_TARGETS         | Recipes/Packages will be built. | "zlib core-image-minimal" |
+| TEST_PACKAGES        | Recipes/Packages will be built. | "zlib core-image-minimal" |
 | TEST_DISTROS         | Distros will be tested.         | "deby deby-tiny"          |
 | TEST_MACHINES        | Machines will be tested.        | "raspberrypi3 qemuarm"    |
 | TEST_DISTRO_FEATURES | DISTRO_FEATURES will be used.   | "pam x11"                 |
 
 Example:
 ```sh
-$ export TEST_TARGETS="xz-native gawk gzip"
+$ export TEST_PACKAGES="xz-native gawk gzip"
 $ export TEST_DISTROS="deby deby-tiny"
 $ export TEST_MACHINES="beaglebone raspberrypi3 qemuarm"
 
@@ -31,28 +31,46 @@ $ make -C ../docker build_test # For running test in docker
 
 Test result will be stored in _logs/\<distro>/\<machine>/result.txt_
 
-## run_ptest.sh
-Script for run ptest.
+## qemu_ptest.sh
+Script for build image and run ptest inside a qemu machine.
 
 Input params from env:
 
 | Variable             | Description                         | Example                   |
 | -------------------- | ----------------------------------- | ------------------------- |
-| TEST_TARGETS         | Recipes/packages will be run ptest. | "zlib bzip2"              |
+| TEST_PACKAGES        | Recipes/packages will be run ptest. | "zlib bzip2"              |
 | TEST_DISTROS         | Distros will be tested.             | "deby deby-tiny"          |
-| TEST_MACHINES | Machines will be tested. Only qemu machine is supported. | "raspberrypi3 qemuarm" |
+| TEST_MACHINES | Machines will be tested. Only qemu machine is supported. | "qemux86 qemuarm" |
 | TEST_DISTRO_FEATURES | DISTRO_FEATURES will be used.       | "pam x11"                 |
 
 Example:
 ```sh
-$ export TEST_TARGETS="bzip2 flex gawk gzip"
+$ export TEST_PACKAGES="bzip2 flex gawk gzip"
 $ export TEST_MACHINES="qemux86 qemuarm"
 
-$ ./run_ptest.sh          # For running test directly
-$ make -C ../docker ptest # For running test in docker
+$ ./qemu_ptest.sh              # For running test directly
+$ make -C ../docker qemu_ptest # For running test in docker
 ```
 
 Test result will be stored in _logs/\<distro>/\<machine>/result.txt_
+
+## run_ptest.sh
+Script to run ptest.
+This script can run independently on target machine or be called through 'qemu_ptest.sh'.
+
+Imput params from env:
+| Variable      | Description                     | Example                   |
+| --------------| ------------------------------- | ------------------------- |
+| TEST_PACKAGES | Packages need to run ptest.     | "zlib gzip"               |
+
+Example:
+```sh
+# On the target board
+$ export TEST_PACKAGES="zlib gzip"
+$ ./run_ptest.sh
+```
+
+Test result will be stored in _/tmp/ptest/_.
 
 ## generate_html.sh
 Generate HTML output from test result.
