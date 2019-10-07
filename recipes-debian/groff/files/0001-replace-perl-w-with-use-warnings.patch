@@ -1,0 +1,90 @@
+#
+# base recipe: meta/recipes-extended/groff/groff-1.22.3/0001-replace-perl-w-with-use-warnings.patch
+# base branch: warrior
+#
+Subject: [PATCH] replace "perl -w" with "use warnings"
+
+The shebang's max length is usually 128 as defined in
+/usr/include/linux/binfmts.h:
+  #define BINPRM_BUF_SIZE 128
+
+There would be errors when @PERL@ is longer than 128, use
+'/usr/bin/env perl' can fix the problem, but '/usr/bin/env perl -w'
+doesn't work:
+
+/usr/bin/env: perl -w: No such file or directory
+
+So replace "perl -w" with "use warnings" to make it work.
+
+diff --git a/font/devpdf/util/BuildFoundries.pl b/font/devpdf/util/BuildFoundries.pl
+index f8af826..9584e28 100644
+--- a/font/devpdf/util/BuildFoundries.pl
++++ b/font/devpdf/util/BuildFoundries.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -w
++#!/usr/bin/perl
+ #
+ #   BuildFoundries   : Given a Foundry file generate groff and download files
+ #   Deri James       : Monday 07 Feb 2011
+@@ -22,6 +22,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ use strict;
++use warnings;
+ 
+ (my $progname = $0) =~s @.*/@@;
+ my $where=shift||'';
+diff --git a/src/devices/gropdf/gropdf.pl b/src/devices/gropdf/gropdf.pl
+index a8b1dbe..d10be3f 100644
+--- a/src/devices/gropdf/gropdf.pl
++++ b/src/devices/gropdf/gropdf.pl
+@@ -1,4 +1,4 @@
+-#!@PERL@ -w
++#!@PERL@
+ #
+ #	gropdf		: PDF post processor for groff
+ #
+@@ -21,6 +21,7 @@
+ # along with this program. If not, see <http://www.gnu.org/licenses/>.
+ 
+ use strict;
++use warnings;
+ use Getopt::Long qw(:config bundling);
+ 
+ use constant
+diff --git a/src/devices/gropdf/pdfmom.pl b/src/devices/gropdf/pdfmom.pl
+index c9b08b2..61124f3 100644
+--- a/src/devices/gropdf/pdfmom.pl
++++ b/src/devices/gropdf/pdfmom.pl
+@@ -1,4 +1,4 @@
+-#!@PERL@ -w
++#!@PERL@
+ #
+ #	pdfmom		: Frontend to run groff -mom to produce PDFs
+ #	Deri James	: Friday 16 Mar 2012
+@@ -23,6 +23,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ use strict;
++use warnings;
+ use File::Temp qw/tempfile/;
+ my @cmd;
+ my $dev='pdf';
+diff --git a/src/utils/afmtodit/afmtodit.pl b/src/utils/afmtodit/afmtodit.pl
+index 59d871f..1e78743 100644
+--- a/src/utils/afmtodit/afmtodit.pl
++++ b/src/utils/afmtodit/afmtodit.pl
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl -w
++#! /usr/bin/perl
+ # -*- Perl -*-
+ # Copyright (C) 1989-2018 Free Software Foundation, Inc.
+ #      Written by James Clark (jjc@jclark.com)
+@@ -19,6 +19,7 @@
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ use strict;
++use warnings;
+ 
+ @afmtodit.tables@
+ 
