@@ -1,0 +1,46 @@
+# base recipe: meta/recipes-devtools/mtools/mtools_4.0.19.bb
+# base branch: warrior
+
+SUMMARY = "Utilities to access MS-DOS disks without mounting them"
+DESCRIPTION = "Mtools is a collection of utilities to access MS-DOS disks from GNU and Unix without mounting them."
+HOMEPAGE = "http://www.gnu.org/software/mtools/"
+SECTION = "optional"
+LICENSE = "GPLv3"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
+
+inherit debian-package
+require recipes-debian/sources/mtools.inc
+
+DEPENDS += "virtual/libiconv"
+
+RDEPENDS_${PN}_libc-glibc = "glibc-gconv-ibm850"
+RRECOMMENDS_${PN}_libc-glibc = "\
+	glibc-gconv-ibm437 \
+	glibc-gconv-ibm737 \
+	glibc-gconv-ibm775 \
+	glibc-gconv-ibm851 \
+	glibc-gconv-ibm852 \
+	glibc-gconv-ibm855 \
+	glibc-gconv-ibm857 \
+	glibc-gconv-ibm860 \
+	glibc-gconv-ibm861 \
+	glibc-gconv-ibm862 \
+	glibc-gconv-ibm863 \
+	glibc-gconv-ibm865 \
+	glibc-gconv-ibm866 \
+	glibc-gconv-ibm869 \
+	"
+
+inherit autotools texinfo distro_features_check
+
+EXTRA_OECONF = "--without-x"
+
+BBCLASSEXTEND = "native nativesdk"
+
+PACKAGECONFIG ??= ""
+PACKAGECONFIG[libbsd] = "ac_cv_lib_bsd_main=yes,ac_cv_lib_bsd_main=no,libbsd"
+
+do_install_prepend () {
+	# Create bindir to fix parallel installation issues
+	install -d ${D}${bindir} ${D}${datadir}
+}
