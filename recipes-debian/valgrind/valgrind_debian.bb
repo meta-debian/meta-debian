@@ -27,7 +27,14 @@ SRC_URI += "file://enable.building.on.4.x.kernel.patch"
 
 inherit autotools-brokensep
 
+do_configure[depends] += "virtual/kernel:do_shared_workdir"
+KERNEL_VERSION = "${@base_read_file('${STAGING_KERNEL_BUILDDIR}/kernel-abiversion')}"
+
 EXTRA_OECONF = "--enable-tls"
+
+do_configure_prepend() {
+	sed -i -e 's#kernel=`uname -r`#kernel="${KERNEL_VERSION}"#' ${S}/configure.ac
+}
 
 do_install_append () {
 	install -d ${D}${sysconfdir}/bash_completion.d
