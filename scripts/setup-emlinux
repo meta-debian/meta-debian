@@ -2,7 +2,7 @@
 
 clean_up()
 {
-    unset BUILDDIR BUILDDIR_SETUP_DONE REPOS
+    unset BUILDDIR BUILDDIR_SETUP_DONE REPOS HOOKS
 }
 
 # save error during 'source setup-emlinux'
