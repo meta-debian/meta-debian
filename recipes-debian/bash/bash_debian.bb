@@ -21,4 +21,14 @@ SRC_URI += " \
 DEBUG_OPTIMIZATION_append_armv4 = " ${@bb.utils.contains('TUNE_CCARGS', '-mthumb', '-fomit-frame-pointer', '', d)}"
 DEBUG_OPTIMIZATION_append_armv5 = " ${@bb.utils.contains('TUNE_CCARGS', '-mthumb', '-fomit-frame-pointer', '', d)}"
 
+do_install_append() {
+	install -d ${D}${sysconfdir}/skel
+	install -m 0644 ${S}/debian/etc.bash.bashrc ${D}${sysconfdir}/bash.bashrc
+	install -m 0644 ${S}/debian/skel.bashrc ${D}${sysconfdir}/skel/.bashrc
+	install -m 0644 ${S}/debian/skel.profile ${D}${sysconfdir}/skel/.profile
+	install -m 0644 ${S}/debian/skel.bash_logout ${D}${sysconfdir}/skel/.bash_logout
+}
+
+FILES_${PN} += "${sysconfdir}"
+
 BBCLASSEXTEND = "nativesdk"
