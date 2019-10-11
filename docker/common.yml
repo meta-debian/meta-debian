@@ -12,6 +12,7 @@ services:
       http_proxy: $http_proxy
       https_proxy: $https_proxy
       no_proxy: $no_proxy
+      VERBOSE: ${VERBOSE:-0}
       BUILDDIR: ${BUILDDIR:-build}
       TEST_PACKAGES: ${TEST_PACKAGES}
       TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
