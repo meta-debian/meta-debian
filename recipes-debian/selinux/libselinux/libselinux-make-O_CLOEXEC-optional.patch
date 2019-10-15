@@ -1,0 +1,99 @@
+From 802d224953294463fa9bc793e46f664ecfea057a Mon Sep 17 00:00:00 2001
+From: Joe MacDonald <joe.macdonald@windriver.com>
+Date: Fri, 11 Oct 2013 09:56:25 -0400
+Subject: [PATCH] libselinux: make O_CLOEXEC optional
+
+Various commits in the selinux tree in the current release added O_CLOEXEC
+to open() calls in an attempt to address file descriptor leaks as
+described:
+
+   http://danwalsh.livejournal.com/53603.html
+
+However O_CLOEXEC isn't available on all platforms, so make it a
+compile-time option and generate a warning when it is not available.  The
+actual impact of leaking these file descriptors is minimal, though it does
+produce curious AVC Denied messages.
+
+Uptream-Status: Inappropriate [O_CLOEXEC has been in Linux since 2007 and POSIX since 2008]
+
+Signed-off-by: Joe MacDonald <joe.macdonald@windriver.com>
+Signed-off-by: Wenzong Fan <wenzong.fan@windriver.com>
+
+---
+ src/procattr.c  | 16 ++++++++++++++--
+ src/sestatus.c  |  8 +++++++-
+ src/stringrep.c |  8 +++++++-
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/src/procattr.c b/src/procattr.c
+index 48dd8af..8bf8432 100644
+--- a/src/procattr.c
++++ b/src/procattr.c
+@@ -79,7 +79,13 @@ static int openattr(pid_t pid, const char *attr, int flags)
+ 		rc = asprintf(&path, "/proc/thread-self/attr/%s", attr);
+ 		if (rc < 0)
+ 			return -1;
+-		fd = open(path, flags | O_CLOEXEC);
++		fd = open(path, flags
++#ifdef O_CLOEXEC
++			  | O_CLOEXEC
++#else
++#warning O_CLOEXEC undefined on this platform, this may leak file descriptors
++#endif
++			);
+ 		if (fd >= 0 || errno != ENOENT)
+ 			goto out;
+ 		free(path);
+@@ -92,7 +98,13 @@ static int openattr(pid_t pid, const char *attr, int flags)
+ 	if (rc < 0)
+ 		return -1;
+ 
+-	fd = open(path, flags | O_CLOEXEC);
++	fd = open(path, flags
++#ifdef O_CLOEXEC
++		  | O_CLOEXEC
++#else
++#warning O_CLOEXEC undefined on this platform, this may leak file descriptors
++#endif
++		);
+ out:
+ 	free(path);
+ 	return fd;
+diff --git a/src/sestatus.c b/src/sestatus.c
+index ed29dc5..0cb15b6 100644
+--- a/src/sestatus.c
++++ b/src/sestatus.c
+@@ -268,7 +268,13 @@ int selinux_status_open(int fallback)
+ 		return -1;
+ 
+ 	snprintf(path, sizeof(path), "%s/status", selinux_mnt);
+-	fd = open(path, O_RDONLY | O_CLOEXEC);
++	fd = open(path, O_RDONLY
++#ifdef O_CLOEXEC
++             | O_CLOEXEC
++#else
++#warning O_CLOEXEC undefined on this platform, this may leak file descriptors
++#endif
++             );
+ 	if (fd < 0)
+ 		goto error;
+ 
+diff --git a/src/stringrep.c b/src/stringrep.c
+index 2d83f96..17e9232 100644
+--- a/src/stringrep.c
++++ b/src/stringrep.c
+@@ -105,7 +105,13 @@ static struct discover_class_node * discover_class(const char *s)
+ 		struct stat m;
+ 
+ 		snprintf(path, sizeof path, "%s/class/%s/perms/%s", selinux_mnt,s,dentry->d_name);
+-		fd = open(path, O_RDONLY | O_CLOEXEC);
++		fd = open(path, O_RDONLY
++#ifdef O_CLOEXEC
++                | O_CLOEXEC
++#else
++#warning O_CLOEXEC undefined on this platform, this may leak file descriptors
++#endif
++                );
+ 		if (fd < 0)
+ 			goto err4;
+ 

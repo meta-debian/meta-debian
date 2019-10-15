@@ -1,0 +1,26 @@
+From 865b8c40b331235ce2c9df1fcbbb3876c9b79338 Mon Sep 17 00:00:00 2001
+From: Randy MacLeod <Randy.MacLeod@windriver.com>
+Date: Tue, 30 Apr 2013 17:28:34 -0400
+Subject: [PATCH] libselinux: drop flag: -Wno-unused-but-set-variable
+
+Upstream status: inappropriate (older compilers only).
+
+Signed-off-by: Randy MacLeod <Randy.MacLeod@windriver.com>
+
+---
+ src/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 2408fae..a89c0f7 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -96,7 +96,7 @@ PCRE_LDLIBS ?= -lpcre
+ 
+ override CFLAGS += -I../include -D_GNU_SOURCE $(DISABLE_FLAGS) $(PCRE_CFLAGS)
+ 
+-SWIG_CFLAGS += -Wno-error -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-parameter \
++SWIG_CFLAGS += -Wno-error -Wno-unused-variable -Wno-unused-parameter \
+ 		-Wno-shadow -Wno-uninitialized -Wno-missing-prototypes -Wno-missing-declarations
+ 
+ RANLIB ?= ranlib

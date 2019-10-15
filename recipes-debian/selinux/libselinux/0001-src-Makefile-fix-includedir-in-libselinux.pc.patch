@@ -1,0 +1,28 @@
+From 37f3299e8f5c468fe692f36356c2c35f968b6aee Mon Sep 17 00:00:00 2001
+From: Robert Yang <liezhi.yang@windriver.com>
+Date: Thu, 18 Feb 2016 02:39:16 +0000
+Subject: [PATCH] src/Makefile: fix includedir in libselinux.pc
+
+Upstream-Status: Pending
+
+Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
+Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
+---
+ src/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/Makefile b/src/Makefile
+index 977b5c8..92a4289 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -156,6 +156,7 @@ $(LIBSO): $(LOBJS)
+ 
+ $(LIBPC): $(LIBPC).in ../VERSION
+ 	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:$(LIBDIR):; s:@includedir@:$(INCLUDEDIR):; s:@PCRE_MODULE@:$(PCRE_MODULE):' < $< > $@
++	sed -e 's/@VERSION@/$(VERSION)/; s:@prefix@:$(PREFIX):; s:@libdir@:${libdir}:; s:@includedir@:${prefix}/include:; s:@PCRE_MODULE@:$(PCRE_MODULE):' < $< > $@
+ 
+ selinuxswig_python_exception.i: ../include/selinux/selinux.h
+ 	bash -e exception.sh > $@ || (rm -f $@ ; false)
+-- 
+2.7.4
+
