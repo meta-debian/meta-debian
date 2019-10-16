@@ -15,8 +15,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=500b2e742befc3da00684d8a1d5fd9da"
 inherit debian-package
 require recipes-debian/sources/tpm2-abrmd.inc
 
-DEPENDS = "autoconf-archive dbus glib-2.0 tpm2-tss glib-2.0-native \
-            libtss2 libtss2-mu libtss2-tcti-device libtss2-tcti-mssim"
+DEPENDS = "autoconf-archive dbus glib-2.0 tpm2-tss glib-2.0-native tpm2-tss"
 
 SRC_URI += "\
     file://tpm2-abrmd-init.sh \
