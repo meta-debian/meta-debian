@@ -8,14 +8,12 @@ require recipes-debian/sources/aide.inc
 
 inherit autotools pkgconfig
 
-EXTRA_OECONF += "--prefix=/usr --with-zlib --with-xattr --with-posix-acl --with-e2fsattrs"
-
-EXTRA_CONFIGURE_ARGS = "--with-selinux --with-audit"
+EXTRA_OECONF += "--with-zlib --with-xattr --with-posix-acl --with-e2fsattrs --with-selinux --with-audit"
 
 do_configure () {
-	mkdir -p aide && cd aide && ${S}/configure ${EXTRA_OECONF} ${EXTRA_CONFIGURE_ARGS} && cd ..
-	mkdir -p aide-xen && cd aide-xen && ${S}/configure ${EXTRA_OECONF} ${EXTRA_CONFIGURE_ARGS} --with-extra-libs="-L${STAGING_BINDIR_NATIVE}${libdir}/xen/" && cd ..
-	mkdir -p aide-dynamic && cd aide-dynamic && ${S}/configure ${EXTRA_OECONF} ${EXTRA_CONFIGURE_ARGS} --disable-static && cd ..
+	mkdir -p aide && cd aide && ${S}/configure ${EXTRA_OECONF} ${CONFIGUREOPTS} && cd ..
+	mkdir -p aide-xen && cd aide-xen && ${S}/configure ${EXTRA_OECONF} ${CONFIGUREOPTS} --with-extra-libs="-L${STAGING_BINDIR_NATIVE}${libdir}/xen/" && cd ..
+	mkdir -p aide-dynamic && cd aide-dynamic && ${S}/configure ${EXTRA_OECONF} ${CONFIGUREOPTS} --disable-static && cd ..
 }
 
 do_configure_append () {
