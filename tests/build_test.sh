@@ -28,22 +28,20 @@ LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;
 
 setup_builddir
 
-add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
-
 if [ "$TEST_PACKAGES" = "" ]; then
 	TEST_PACKAGES_NOTSET=1
 fi
 
 for distro in $TEST_DISTROS; do
 	note "Testing distro $distro ..."
-	add_or_replace "DISTRO" "$distro" conf/local.conf
+	set_var "DISTRO" "$distro" conf/local.conf
 	for machine in $TEST_MACHINES; do
 		LOGDIR=$THISDIR/logs/$distro/$machine
 		RESULT=$LOGDIR/result.txt
 		mkdir -p $LOGDIR
 
 		note "Testing machine $machine ..."
-		add_or_replace "MACHINE" "$machine" conf/local.conf
+		set_var "MACHINE" "$machine" conf/local.conf
 
 		# Get required layers
 		for layer_url in ${LAYER_DEPS_URL[$machine]}; do
@@ -63,7 +61,7 @@ for distro in $TEST_DISTROS; do
 		for layer in ${LAYER_DEPS[$machine]}; do
 			EXTRA_BBLAYERS="$EXTRA_BBLAYERS $POKYDIR/$layer"
 		done
-		add_or_replace "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS"  conf/bblayers.conf
+		set_var "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS" conf/bblayers.conf
 
 		if [ "$TEST_PACKAGES_NOTSET" = "1" ]; then
 			note "TEST_PACKAGES is not defined. Getting all recipes available..."
@@ -76,13 +74,24 @@ for distro in $TEST_DISTROS; do
 		for package in $TEST_PACKAGES; do
 			logfile=$LOGDIR/${package}.build.log
 			note "Building $package ..."
-			if [ "$VERBOSE" = "1" ]; then
-				bitbake $package | tee $logfile
-			else
-				bitbake $package &> $logfile
+
+			test -n "${REQUIRED_DISTRO_FEATURES[$package]}" && \
+			    set_var "REQUIRED_DISTRO_FEATURES_TMP" "${REQUIRED_DISTRO_FEATURES[$package]}" conf/local.conf
+			build $package $logfile
+			ret=$?
+
+			# Add REQUIRED_DISTRO_FEATURES if needed
+			missing_distro_feature_log="$package was skipped: missing required distro feature"
+			if grep -q "$missing_distro_feature_log" $logfile 2> /dev/null; then
+				missing_distro_feature=$(grep "$missing_distro_feature_log" $logfile \
+				                         | cut -d\' -f2 | sort -u)
+				note "Add required DISTRO_FEATURES '$missing_distro_feature'."
+				append_var "REQUIRED_DISTRO_FEATURES_TMP" "$missing_distro_feature" conf/local.conf
+				build $package $logfile
+				ret=$?
 			fi
 
-			if [ "$?" = "0" ]; then
+			if [ "$ret" = "0" ]; then
 				status=PASS
 			else
 				status=FAIL
@@ -94,6 +103,9 @@ for distro in $TEST_DISTROS; do
 			else
 				echo "$package $status NA" >> $RESULT
 			fi
+
+			# Clear REQUIRED_DISTRO_FEATURES_TMP
+			set_var "REQUIRED_DISTRO_FEATURES_TMP" " " conf/local.conf
 		done
 
 		# Sort result file by alphabet

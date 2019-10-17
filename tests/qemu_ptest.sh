@@ -34,8 +34,8 @@ ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[$TEST_IPADDR]:$TEST_PORT"
 setup_builddir
 
 # Enable ptest
-add_or_replace "DISTRO_FEATURES_append" " ptest $TEST_DISTRO_FEATURES" conf/local.conf
-add_or_replace "EXTRA_IMAGE_FEATURES_append" " ptest-pkgs" conf/local.conf
+append_var "DISTRO_FEATURES_append" " ptest" conf/local.conf
+append_var "EXTRA_IMAGE_FEATURES_append" " ptest-pkgs" conf/local.conf
 
 if [ "$TEST_PACKAGES" = "" ]; then
 	note "TEST_PACKAGES is not defined. Getting all packages with ptest enabled..."
@@ -59,17 +59,17 @@ for p in $TEST_PACKAGES; do
 done
 
 # we use ssh for calling ptest, so add dropbear
-add_or_replace "IMAGE_INSTALL_append" " dropbear $EXTRA_IMAGE_INSTALL" conf/local.conf
+set_var "IMAGE_INSTALL_append" " dropbear $EXTRA_IMAGE_INSTALL" conf/local.conf
 
 for distro in $TEST_DISTROS; do
 	note "Testing distro $distro ..."
-	add_or_replace "DISTRO" "$distro" conf/local.conf
+	set_var "DISTRO" "$distro" conf/local.conf
 	if [ "$distro" = "deby-tiny" ]; then
 		# Start dropbear on boot
-		add_or_replace "INITTAB_APPEND_pn-busybox-inittab" "::sysinit:/etc/init.d/dropbear start" conf/local.conf
+		set_var "INITTAB_APPEND_pn-busybox-inittab" "::sysinit:/etc/init.d/dropbear start" conf/local.conf
 		# Boot with ext4 to avoid limited initramfs size
-		add_or_replace "IMAGE_FSTYPES_append" " ext4" conf/local.conf
-		add_or_replace "IMAGE_FSTYPES_remove" "cpio.gz" conf/local.conf
+		set_var "IMAGE_FSTYPES_append" " ext4" conf/local.conf
+		set_var "IMAGE_FSTYPES_remove" "cpio.gz" conf/local.conf
 	fi
 
 	for machine in $TEST_MACHINES; do
@@ -78,7 +78,7 @@ for distro in $TEST_DISTROS; do
 		mkdir -p $LOGDIR
 
 		note "Testing machine $machine ..."
-		add_or_replace "MACHINE" "$machine" conf/local.conf
+		set_var "MACHINE" "$machine" conf/local.conf
 
 		bitbake core-image-minimal
 		if [ "$?" != "0" ]; then
