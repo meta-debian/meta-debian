@@ -8,6 +8,10 @@ export UID
 start:
 	docker-compose run work
 
+refresh:
+	# Rebuild docker image
+	docker-compose build --no-cache work
+
 test: build_test qemu_ptest
 
 build_test:
@@ -27,4 +31,4 @@ cleanall:
 	docker volume rm -f docker_downloads
 	docker rmi -f deby-image
 
-.PHONY: start test build_test qemu_ptest clean cleanall
+.PHONY: docker_image start test build_test qemu_ptest clean cleanall
