@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=500b2e742befc3da00684d8a1d5fd9da"
 inherit debian-package
 require recipes-debian/sources/tpm2-abrmd.inc
 
-DEPENDS = "autoconf-archive dbus glib-2.0 tpm2-tss glib-2.0-native tpm2-tss"
+DEPENDS = "autoconf-archive dbus glib-2.0 tpm2-tss glib-2.0-native"
 
 SRC_URI += "\
     file://tpm2-abrmd-init.sh \
@@ -46,7 +46,7 @@ do_install_append() {
     install -m 0644 "${WORKDIR}/tpm2-abrmd.default" "${D}${sysconfdir}/default/tpm2-abrmd"
 }
 
-FILES_${PN} += "${systemd_unitdir}/system-preset \
+FILES_${PN} += "/usr/lib/systemd/system-preset/tpm2-abrmd.preset \
 		${datadir}/dbus-1"
 
 RDEPENDS_${PN} += "tpm2-tss"
