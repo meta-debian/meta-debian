@@ -20,4 +20,4 @@ do_install_append() {
 	find ${D} -name *.pyc -delete
 }
 
-RDEPENDS_${PN} += "${PYTHON_PN}-asn1crypto ${PYTHON_PN}-enum34"
+RDEPENDS_${PN} += "${PYTHON_PN}-asn1crypto"

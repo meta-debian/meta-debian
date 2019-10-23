@@ -19,4 +19,5 @@ do_install_append() {
 	find ${D} -name *.pyc -delete
 }
 
+RPROVIDES_${PN} += "python-enum34"
 PKG_${PN} = "python-enum34"
