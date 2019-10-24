@@ -20,4 +20,8 @@ do_install_append() {
 	find ${D} -name *.pyc -delete
 }
 
-RDEPENDS_${PN} += "${PYTHON_PN}-asn1crypto"
+RDEPENDS_${PN} += " \
+    ${PYTHON_PN}-asn1crypto \
+    ${PYTHON_PN}-cffi \
+    ${PYTHON_PN}-ipaddress \
+"

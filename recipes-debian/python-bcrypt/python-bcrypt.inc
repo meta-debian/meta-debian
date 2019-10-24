@@ -19,3 +19,5 @@ DEPENDS = "${PYTHON_PN}-cffi-native"
 do_install_append() {
 	find ${D} -name *.pyc -delete
 }
+
+RDEPENDS_${PN} += "${PYTHON_PN}-cffi"
