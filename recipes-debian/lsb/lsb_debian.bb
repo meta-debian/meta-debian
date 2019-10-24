@@ -21,6 +21,10 @@ do_install(){
 	install -m 0644 ${S}/init-functions ${D}${nonarch_base_libdir}/${BPN}
 	install -m 0644 ${S}/init-functions.d/20-left-info-blocks ${D}${nonarch_base_libdir}/${BPN}/init-functions.d
 
+	# Many init scripts of Poky require /etc/init.d/functions
+	install -d ${D}${sysconfdir}/init.d
+	ln -sf ${nonarch_base_libdir}/${BPN}/init-functions ${D}${sysconfdir}/init.d/functions
+
 	# Install files for lsb-release
 	install -d ${D}${bindir}
 	install -m 0755 ${S}/lsb_release ${D}${bindir}
