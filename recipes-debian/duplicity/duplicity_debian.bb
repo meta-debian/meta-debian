@@ -16,7 +16,7 @@ DEPENDS += "librsync"
 RDEPENDS_${PN} +="python-compression python-misc python-resource \
                   python-fasteners python-logging python-monotonic \
                   python-six python-core gnupg"
-RRECOMMENDS_${PN} += "python-paramiko"
+RRECOMMENDS_${PN} += "python-paramiko lftp"
 
 inherit setuptools
 
