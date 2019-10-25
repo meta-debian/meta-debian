@@ -6,3 +6,5 @@
 
 require quilt.inc
 inherit gettext
+
+RDEPENDS_${PN}-ptest += "${PN}"

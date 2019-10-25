@@ -47,3 +47,9 @@ python __anonymous() {
     d.delVarFlag('ALTERNATIVE_LINK_NAME', 'nologin')
     d.delVarFlag('ALTERNATIVE_LINK_NAME', 'nologin.8')
 }
+
+do_install_append() {
+	# This config should be handled by pam. Error:
+	#   configuration error - unknown item 'FAIL_DELAY'
+	sed -i -e 's/FAIL_DELAY/#FAIL_DELAY/g' ${D}${sysconfdir}/login.defs
+}

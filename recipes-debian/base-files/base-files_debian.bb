@@ -9,6 +9,9 @@ LIC_FILES_CHKSUM = "file://licenses/GPL-2;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 inherit debian-package
 require recipes-debian/sources/base-files.inc
 
+FILESPATH_append = ":${COREBASE}/meta/recipes-core/base-files/base-files"
+SRC_URI += "file://shells"
+
 INHIBIT_DEFAULT_DEPS = "1"
 
 OSNAME = "GNU/Linux"
@@ -64,6 +67,8 @@ do_install() {
 		install -d ${D}${prefix}/local/$i
 	done
 	ln -sf share/man ${D}${prefix}/local/man
+
+	install -m 0644 ${WORKDIR}/shells ${D}${sysconfdir}/
 }
 
 pkg_postinst_${PN}() {

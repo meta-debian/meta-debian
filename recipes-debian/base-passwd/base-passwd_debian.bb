@@ -99,16 +99,16 @@ python populate_packages_prepend() {
     f.close()
 
     preinst = """#!/bin/sh
-    mkdir -p $D${sysconfdir}
-    if [ ! -e $D${sysconfdir}/passwd ]; then
-        \tcat << 'EOF' > $D${sysconfdir}/passwd
-         """ + passwd + """EOF
-    fi
-    if [ ! -e $D${sysconfdir}/group ]; then
-        \tcat << 'EOF' > $D${sysconfdir}/group
-         """ + group + """EOF
-    fi
-    """
+mkdir -p $D${sysconfdir}
+if [ ! -e $D${sysconfdir}/passwd ]; then
+\tcat << 'EOF' > $D${sysconfdir}/passwd
+""" + passwd + """EOF
+fi
+if [ ! -e $D${sysconfdir}/group ]; then
+\tcat << 'EOF' > $D${sysconfdir}/group
+""" + group + """EOF
+fi
+"""
     d.setVar(d.expand('pkg_preinst_${PN}'), preinst)
 }
 
