@@ -10,7 +10,13 @@ inherit debian-package
 require recipes-debian/sources/python-nacl.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/PyNaCl-${PV}"
 
+SRC_URI += "file://libsodium_configure_cross.patch"
+
 DEPENDS = "${PYTHON_PN}-cffi-native"
+
+do_configure_prepend() {
+	sed -i -e "s:##HOST_SYS##:${HOST_SYS}:" ${S}/setup.py
+}
 
 do_install_append() {
 	find ${D} -name *.pyc -delete
