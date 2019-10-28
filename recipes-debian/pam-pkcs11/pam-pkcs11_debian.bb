@@ -17,6 +17,8 @@ inherit autotools gettext pkgconfig
 
 EXTRA_OECONF += "--libdir=${base_libdir} --with-curl --with-ldap=false"
 
-FILES_${PN} += "${base_libdir}"
+PACKAGES = "lib${PN} ${PN}-dbg"
 
-RDEPENDS_${PN} += "bash"
+FILES_lib${PN} = "${base_libdir} ${bindir} ${datadir}"
+
+RDEPENDS_lib${PN} += "bash openssl-bin"
