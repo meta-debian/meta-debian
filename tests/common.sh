@@ -36,6 +36,7 @@ function build {
 
 	recipe=$1
 	logfile=${2:-/dev/null}
+	mkdir -p `dirname $logfile`
 
 	if [ "$VERBOSE" = "1" ]; then
 		bitbake $recipe 2>&1 | tee $logfile
