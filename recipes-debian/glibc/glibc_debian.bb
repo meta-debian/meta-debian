@@ -135,6 +135,8 @@ do_install_append() {
 	rm -f ${D}${includedir}/rpcsvc/yppasswd.*
 	rm -f ${D}${includedir}/rpcsvc/rquota.*
 	rm -f ${D}${libdir}/libnsl*
+
+	install -m 0644 ${S}/debian/local/etc/nsswitch.conf ${D}${sysconfdir}/
 }
 
 require recipes-core/glibc/glibc-package.inc
@@ -161,5 +163,7 @@ do_install_armmultilib () {
 
         oe_multilib_header sys/elf.h sys/procfs.h sys/ptrace.h sys/ucontext.h sys/user.h
 }
+
+FILES_${PN} += "${sysconfdir}/nsswitch.conf"
 
 BBCLASSEXTEND = "nativesdk"
