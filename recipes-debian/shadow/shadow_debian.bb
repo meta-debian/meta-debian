@@ -52,4 +52,17 @@ do_install_append() {
 	# This config should be handled by pam. Error:
 	#   configuration error - unknown item 'FAIL_DELAY'
 	sed -i -e 's/FAIL_DELAY/#FAIL_DELAY/g' ${D}${sysconfdir}/login.defs
+
+	# /var/spool/mail is already provided by base-files
+	rmdir --ignore-fail-on-non-empty ${D}${localstatedir}/spool/mail
+}
+
+pkg_postinst_${PN}() {
+	# Ensure that the image has as a /var/spool/mail dir so shadow can
+	# put mailboxes there if the user reconfigures shadow to its
+	# defaults (see sed below).
+	if ! ls $D${localstatedir}/spool/mail 2> /dev/null; then
+		install -m 0775 -d $D${localstatedir}/spool/mail
+		chown root:mail $D${localstatedir}/spool/mail
+	fi
 }

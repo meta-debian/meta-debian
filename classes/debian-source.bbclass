@@ -8,9 +8,6 @@ DEBIAN_CODENAME ?= "${DISTRO_CODENAME}"
 DEBIAN_SOURCE_ENABLED ?= "0"
 DEBIAN_SRC_FORCE_REGEN ?= "0"
 
-# Most of files in Debian apt repo are in *.xz format
-HOSTTOOLS += "xz"
-
 def fetch_Sources_xz(d):
     """
     Download 'dists/<codename>/main/source/Sources.xz' from Debian mirror.
