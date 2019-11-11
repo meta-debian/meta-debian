@@ -1,7 +1,7 @@
 #
-# base recipe: meta/recipes-connectivity/openssl/openssl_1.1.1.bb
+# base recipe: meta/recipes-connectivity/openssl/openssl_1.1.1b.bb
 # base branch: master
-# base commit: 3e5c6cbf3475b513458a0bfc57dcd3353dd9e44d
+# base commit: 77a4470733a79b1d13e2848b52523d95440164eb
 #
 
 SUMMARY = "Secure Socket Layer"
@@ -154,7 +154,7 @@ do_install_append_class-native () {
 	    OPENSSL_CONF=${libdir}/ssl-1.1/openssl.cnf \
 	    SSL_CERT_DIR=${libdir}/ssl-1.1/certs \
 	    SSL_CERT_FILE=${libdir}/ssl-1.1/cert.pem \
-	    OPENSSL_ENGINES=${libdir}/ssl-1.1/engines
+	    OPENSSL_ENGINES=${libdir}/engines-1.1
 }
 
 do_install_append_class-nativesdk () {
