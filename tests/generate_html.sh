@@ -12,6 +12,9 @@ RED="#e74c3c"
 
 TESTING_LOGS="https://raw.githubusercontent.com/tswcos/meta-debian-test-logs/master"
 
+deby_machines="''"
+deby_tiny_machines="''"
+
 for d in $LOGDIR/*; do
 	test -d $d || continue
 
@@ -22,6 +25,17 @@ for d in $LOGDIR/*; do
 		test -d $m || continue
 
 		machine=`basename $m`
+
+		if [ ! -f $LOGDIR/$distro/$machine/result.txt ]; then
+			continue
+		fi
+
+		if [ "$distro" = "deby" ]; then
+			deby_machines="$deby_machines,'$machine'"
+		else
+			deby_tiny_machines="$deby_tiny_machines,'$machine'"
+		fi
+
 		echo "Generating html for $machine..."
 
 		mkdir -p $HTMLDIR/$distro/$machine
@@ -38,15 +52,73 @@ for d in $LOGDIR/*; do
     content: counter(rowNumber);
 }
 </style>
+<script>
+function reload() {
+	var distro = document.getElementById("distro").value;
+	var machine = document.getElementById("machine").value;
+
+	current_url = window.location.href.replace("/index.html","");
+	window.location = current_url + "/../../" + distro + "/" + machine + "/index.html";
+}
+
+function select_distro() {
+	var deby_tiny_machines = [##DEBY_TINY_MACHINES##];
+	var deby_machines = [##DEBY_MACHINES##];
+	var machines = [];
+
+	if (document.getElementById('distro').value == "deby") {
+		machines = deby_machines;
+	} else {
+		machines = deby_tiny_machines;
+	}
+
+	var new_opts = [];
+	for (m of machines) {
+		new_opts.push("<option value='" + m + "'>" + m + "</option>");
+	}
+	document.getElementById("machine").innerHTML=new_opts.join()
+}
+
+window.onload = function(){
+	var distro = "";
+	var machine = "";
+	var dirs = window.location.href.split("/");
+	if (dirs[dirs.length - 1] == "index.html") {
+		machine = dirs[dirs.length - 2]
+		distro = dirs[dirs.length - 3]
+	} else {
+		machine = dirs[dirs.length - 1]
+		distro = dirs[dirs.length - 2]
+	}
+
+	document.getElementById('distro').value = distro;
+
+	select_distro();
+
+	document.getElementById('machine').value = machine;
+};
+</script>
 </head>
 
 <body>
 <h1>meta-debian Status</h1>
 <br>
+<h3>$distro - $machine</h3>
 <table>
-<tr><td><b>Built distro</b></td><td>$distro</td></tr>
-<tr><td><b>Built machine</b></td><td>$machine</td></tr>
+<tr>
+	<td><b>Built distro</b></td>
+	<td><select id="distro" name="distro" onchange="select_distro()">
+		<option value='deby-tiny'>deby-tiny</option>
+		<option value='deby'>deby</option>
+</select></td>
+</tr>
+<tr>
+	<td><b>Built machine</b></td><td>$machine</td>
+	<td><select id="machine" name="machine">
+	</select></td>
+</tr>
 </table>
+<button onclick="reload()">Go</button>
 <br>
 <br><table class="main_table">
 <thead>
@@ -57,9 +129,6 @@ for d in $LOGDIR/*; do
 <th>Ptest Status<br/>(PASS/SKIP/FAIL)</th>
 </tr></thead>
 EOF
-		if [ ! -f $LOGDIR/$distro/$machine/result.txt ]; then
-			continue
-		fi
 
 		while read -r line; do
 			recipe=`echo $line | awk '{print $1}'`
@@ -97,3 +166,7 @@ EOF
 		echo "</table></body></html>" >> $index
 	done
 done
+
+sed -i -e "s@##DEBY_MACHINES##@${deby_machines}@g" \
+       -e "s@##DEBY_TINY_MACHINES##@${deby_tiny_machines}@g" \
+       ${HTMLDIR}/*/*/index.html
