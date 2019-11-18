@@ -58,7 +58,9 @@ function reload() {
 	var machine = document.getElementById("machine").value;
 
 	current_url = window.location.href.replace("/index.html","");
-	window.location = current_url + "/../../" + distro + "/" + machine + "/index.html";
+	new_url = current_url + "/../../" + distro + "/" + machine + "/index.html";
+	new_url = new_url.replace("//..","/..");
+	window.location = new_url;
 }
 
 function select_distro() {
@@ -113,7 +115,7 @@ window.onload = function(){
 </select></td>
 </tr>
 <tr>
-	<td><b>Built machine</b></td><td>$machine</td>
+	<td><b>Built machine</b></td>
 	<td><select id="machine" name="machine">
 	</select></td>
 </tr>
