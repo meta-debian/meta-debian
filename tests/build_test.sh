@@ -81,7 +81,7 @@ for distro in $TEST_DISTROS; do
 			ret=$?
 
 			# Add REQUIRED_DISTRO_FEATURES if needed
-			missing_distro_feature_log="$package was skipped: missing required distro feature"
+			missing_distro_feature_log="was skipped: missing required distro feature"
 			if grep -q "$missing_distro_feature_log" $logfile 2> /dev/null; then
 				missing_distro_feature=$(grep "$missing_distro_feature_log" $logfile \
 				                         | cut -d\' -f2 | sort -u)
