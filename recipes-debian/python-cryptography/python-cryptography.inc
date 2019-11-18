@@ -23,5 +23,4 @@ do_install_append() {
 RDEPENDS_${PN} += " \
     ${PYTHON_PN}-asn1crypto \
     ${PYTHON_PN}-cffi \
-    ${PYTHON_PN}-ipaddress \
 "
