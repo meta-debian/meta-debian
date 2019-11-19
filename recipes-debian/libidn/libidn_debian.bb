@@ -28,7 +28,9 @@ inherit pkgconfig autotools gettext texinfo gtk-doc
 
 FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-extended/libidn/libidn:"
 
-SRC_URI += "file://dont-depend-on-help2man.patch"
+SRC_URI += "file://dont-depend-on-help2man.patch \
+            file://0001-idn-format-security-warnings.patch \
+           "
 
 # command tool is under GPLv3+, while libidn itself is under LGPLv2.1+ or LGPLv3
 # so package command into a separate package
