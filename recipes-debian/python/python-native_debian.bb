@@ -41,32 +41,32 @@ EXTRA_OEMAKE = '\
 '
 # Inherit from branch morty: 6db6759097f5b44a17f73f51e504068339d03198
 do_configure_prepend() {
-    # This fix is a workaround which relates to function get_makefile_filename
+	# This fix is a workaround which relates to function get_makefile_filename
 	# in ${S}/Lib/distutils/sysconfig.py
 	#
 	# debian/patches set LIBPL to "$(LIBP)/config-$(MULTIARCH)$(DEBUG_EXT)".
 	# However, we cannot get LIBPL value by calling get_config_var() in function get_makefile_filename(),
 	# because it causes "RuntimeError: maximum recursion depth exceeded" 
-    #if apply revert_use_of_sysconfigdata.patch.
+	#if apply revert_use_of_sysconfigdata.patch.
 	#
 	# So revert LIBPL to its original value,
 	# and get Makefile path with a hardcode path lib_dir/config/Makefile.
 	# (see the last hunk in 12-distutils-prefix-is-inside-staging-area_debian.patch
-    sed -i -e 's#^LIBPL=.*#LIBPL= $(LIBP)/config#g' ${S}/Makefile.pre.in
+	sed -i -e 's#^LIBPL=.*#LIBPL= $(LIBP)/config#g' ${S}/Makefile.pre.in
 }
 
 do_configure_append() {
-    autoreconf --verbose --install --force --exclude=autopoint ../Python-${PV}/Modules/_ctypes/libffi
+	autoreconf --verbose --install --force --exclude=autopoint ../Python-${PV}/Modules/_ctypes/libffi
 }
 
 # Regenerate all of the generated files
 # This ensures that pgen and friends get created during the compile phase
 do_compile_prepend() {
-    oe_runmake regen-all
+	oe_runmake regen-all
 }
 
 do_install() {
-    oe_runmake 'DESTDIR=${D}' install
+	oe_runmake 'DESTDIR=${D}' install
 	install -d ${D}${bindir}/${PN}
 	install -m 0755 Parser/pgen ${D}${bindir}/${PN}
 

@@ -58,17 +58,17 @@ do_configure_append() {
 }
 
 do_compile() {
-	#Override debian/patches
+	# Override debian/patches
 	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${B}/Makefile
 
 	# regenerate platform specific files, because they depend on system headers
 	cd ${S}/Lib/plat-linux2
 	include=${STAGING_INCDIR} ${STAGING_BINDIR_NATIVE}/python-native/python \
-                ${S}/Tools/scripts/h2py.py -i '(u_long)' \
-                dlfcn.h \
-                linux/cdrom.h \
-                netinet/in.h \
-                sys/types.h
+	        ${S}/Tools/scripts/h2py.py -i '(u_long)' \
+	        dlfcn.h \
+	        linux/cdrom.h \
+	        netinet/in.h \
+	        sys/types.h
 	sed -e 's,${STAGING_DIR_HOST},,g' -i *.py
 	cd -
 
@@ -78,28 +78,29 @@ do_compile() {
 	if [ ! -f Makefile.orig ]; then
 		install -m 0644 Makefile Makefile.orig
 	fi
-    sed -i -e 's#^LDFLAGS=.*#LDFLAGS=${LDFLAGS} -L. -L${STAGING_LIBDIR}#g' \
-                -e 's,libdir=${libdir},libdir=${STAGING_LIBDIR},g' \
-                -e 's,libexecdir=${libexecdir},libexecdir=${STAGING_DIR_HOST}${libexecdir},g' \
-                -e 's,^LIBDIR=.*,LIBDIR=${STAGING_LIBDIR},g' \
-                -e 's,includedir=${includedir},includedir=${STAGING_INCDIR} ${STAGING_INCDIR_NATIVE},g' \
-                -e 's,^INCLUDEDIR=.*,INCLUDE=${STAGING_INCDIR},g' \
-                -e 's,^CONFINCLUDEDIR=.*,CONFINCLUDE=${STAGING_INCDIR},g' \
-                Makefile
 
-    # save copy of it now, because if we do it in do_install and
-    # then call do_install twice we get Makefile.orig == Makefile.sysroot
-    install -m 0644 Makefile Makefile.sysroot
+	sed -i -e 's#^LDFLAGS=.*#LDFLAGS=${LDFLAGS} -L. -L${STAGING_LIBDIR}#g' \
+	       -e 's,libdir=${libdir},libdir=${STAGING_LIBDIR},g' \
+	       -e 's,libexecdir=${libexecdir},libexecdir=${STAGING_DIR_HOST}${libexecdir},g' \
+	       -e 's,^LIBDIR=.*,LIBDIR=${STAGING_LIBDIR},g' \
+	       -e 's,includedir=${includedir},includedir=${STAGING_INCDIR} ${STAGING_INCDIR_NATIVE},g' \
+	       -e 's,^INCLUDEDIR=.*,INCLUDE=${STAGING_INCDIR},g' \
+	       -e 's,^CONFINCLUDEDIR=.*,CONFINCLUDE=${STAGING_INCDIR},g' \
+	       Makefile
+
+	# save copy of it now, because if we do it in do_install and
+	# then call do_install twice we get Makefile.orig == Makefile.sysroot
+ 	install -m 0644 Makefile Makefile.sysroot
 
 	export CROSS_COMPILE="${TARGET_PREFIX}"
 	export PYTHONBUILDDIR="${B}"
 
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python-native/pgen \
-                HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
-                STAGING_LIBDIR=${STAGING_LIBDIR} \
-                STAGING_INCDIR=${STAGING_INCDIR} \
-                STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
-                OPT="${CFLAGS}"
+	        HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
+	        STAGING_LIBDIR=${STAGING_LIBDIR} \
+	        STAGING_INCDIR=${STAGING_INCDIR} \
+	        STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
+	        OPT="${CFLAGS}"
 }
 
 do_install() {
@@ -113,20 +114,20 @@ do_install() {
 	# After swizzling the makefile, we need to run the build again.
 	# install can race with the build so we have to run this first, then install
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python-native/pgen \
-                HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
-                CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ \
-                STAGING_LIBDIR=${STAGING_LIBDIR} \
-                STAGING_INCDIR=${STAGING_INCDIR} \
-                STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
-                DESTDIR=${D} LIBDIR=${libdir}
+	        HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
+	        CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ \
+	        STAGING_LIBDIR=${STAGING_LIBDIR} \
+	        STAGING_INCDIR=${STAGING_INCDIR} \
+	        STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
+	        DESTDIR=${D} LIBDIR=${libdir}
 
 	oe_runmake HOSTPGEN=${STAGING_BINDIR_NATIVE}/python-native/pgen \
-                HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
-                CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ \
-                STAGING_LIBDIR=${STAGING_LIBDIR} \
-                STAGING_INCDIR=${STAGING_INCDIR} \
-                STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
-                DESTDIR=${D} LIBDIR=${libdir} install
+	        HOSTPYTHON=${STAGING_BINDIR_NATIVE}/python-native/python \
+	        CROSSPYTHONPATH=${STAGING_LIBDIR_NATIVE}/python${PYTHON_MAJMIN}/lib-dynload/ \
+	        STAGING_LIBDIR=${STAGING_LIBDIR} \
+	        STAGING_INCDIR=${STAGING_INCDIR} \
+	        STAGING_BASELIBDIR=${STAGING_BASELIBDIR} \
+	        DESTDIR=${D} LIBDIR=${libdir} install
 
 	install -m 0644 Makefile.sysroot ${D}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
 
@@ -137,7 +138,7 @@ do_install() {
 	oe_multilib_header python${PYTHON_MAJMIN}/pyconfig.h
 
 	if [ -z "${@bb.utils.filter('PACKAGECONFIG', 'bdb', d)}" ]; then
-        rm -rf ${D}/${libdir}/python${PYTHON_MAJMIN}/bsddb
+		rm -rf ${D}/${libdir}/python${PYTHON_MAJMIN}/bsddb
 	fi
 
 	# Python 3.x version of 2to3 is now the default
@@ -145,24 +146,24 @@ do_install() {
 }
 
 do_install_append_class-nativesdk () {
-    create_wrapper ${D}${bindir}/python2.7 PYTHONHOME='${prefix}' TERMINFO_DIRS='${sysconfdir}/terminfo:/etc/terminfo:/usr/share/terminfo:/usr/share/misc/terminfo:/lib/terminfo' PYTHONNOUSERSITE='1'
+	create_wrapper ${D}${bindir}/python2.7 PYTHONHOME='${prefix}' TERMINFO_DIRS='${sysconfdir}/terminfo:/etc/terminfo:/usr/share/terminfo:/usr/share/misc/terminfo:/lib/terminfo' PYTHONNOUSERSITE='1'
 }
 
 SSTATE_SCAN_FILES += "Makefile"
 PACKAGE_PREPROCESS_FUNCS += "py_package_preprocess"
 
 py_package_preprocess () {
-    # copy back the old Makefile to fix target package
-    install -m 0644 ${B}/Makefile.orig ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
-    sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g \
-           -e 's|${DEBUG_PREFIX_MAP}||g' \
-           -e 's:${HOSTTOOLS_DIR}/::g' \
-           -e 's:${RECIPE_SYSROOT_NATIVE}::g' \
-           -e 's:${RECIPE_SYSROOT}::g' \
-           -e 's:${BASE_WORKDIR}/${MULTIMACH_TARGET_SYS}::g' \
-           ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile \
-           ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py
-    (cd ${PKGD}; python -m py_compile ./${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py)
+	# copy back the old Makefile to fix target package
+	install -m 0644 ${B}/Makefile.orig ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile
+	sed -i -e 's:--sysroot=${STAGING_DIR_TARGET}::g' -e s:'--with-libtool-sysroot=${STAGING_DIR_TARGET}'::g \
+	       -e 's|${DEBUG_PREFIX_MAP}||g' \
+	       -e 's:${HOSTTOOLS_DIR}/::g' \
+	       -e 's:${RECIPE_SYSROOT_NATIVE}::g' \
+	       -e 's:${RECIPE_SYSROOT}::g' \
+	       -e 's:${BASE_WORKDIR}/${MULTIMACH_TARGET_SYS}::g' \
+	   ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/config/Makefile \
+	   ${PKGD}/${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py
+	(cd ${PKGD}; python -m py_compile ./${libdir}/python${PYTHON_MAJMIN}/_sysconfigdata.py)
 }
 
 PACKAGES_remove = "${PN}"
@@ -252,7 +253,6 @@ python(){
 }
 
 # Files needed to create a new manifest
-
 do_create_manifest() {
 	# This task should be run with every new release of Python.
 	# We must ensure that PACKAGECONFIG enables everything when creating
@@ -262,10 +262,10 @@ do_create_manifest() {
 	# e.g. BerkeleyDB is an optional build dependency so it may or may not
 	# be present, we must ensure it is.
 
-    cd ${WORKDIR}
+	cd ${WORKDIR}
 	# This needs to be executed by python-native and NOT by HOST's python
 	nativepython create_manifest2.py
-    cp python2-manifest.json.new ${THISDIR}/python/python2-manifest.json
+	cp python2-manifest.json.new ${THISDIR}/python/python2-manifest.json
 }
 
 # bitbake python -c create_manifest

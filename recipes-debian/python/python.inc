@@ -15,10 +15,10 @@ LICENSE = "PSFv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e466242989bd33c1bd2b6a526a742498" 
 
 do_debian_unpack_extra() {
-    cd ${DEBIAN_UNPACK_DIR}
-    patch -p1 < ${WORKDIR}/${BPN}2.7_${DPV}.diff
+	cd ${DEBIAN_UNPACK_DIR}
+	patch -p1 < ${WORKDIR}/${BPN}2.7_${DPV}.diff
 }
 
 do_debian_patch_prepend() {
-    cpp -E -o - ${S}/debian/patches/series.in | egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
+	cpp -E -o - ${S}/debian/patches/series.in | egrep -v '^(#.*|$$)' > ${S}/debian/patches/series
 }
