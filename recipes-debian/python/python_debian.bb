@@ -61,6 +61,9 @@ do_compile() {
 	# Override debian/patches
 	sed -i -e "s/config-\$(MULTIARCH)\$(DEBUG_EXT)/config/g" ${B}/Makefile
 
+	# Change path pkgconfig directory same to meta
+	sed -i -e  "s/\$(MULTIARCH)\/pkgconfig/pkgconfig/g" ${B}/Makefile
+
 	# regenerate platform specific files, because they depend on system headers
 	cd ${S}/Lib/plat-linux2
 	include=${STAGING_INCDIR} ${STAGING_BINDIR_NATIVE}/python-native/python \
