@@ -23,3 +23,13 @@ SRC_URI += " \
     file://glib-meson.cross \
 "
 SRC_URI_append_class-natve = "file://relocate-modules.patch"
+
+do_write_config_append_class-nativesdk() {
+    sed -e "/^c_args/ s|c_args = \[|c_args = \['$(echo ${TOOLCHAIN_OPTIONS} | sed -e 's/^ *//')', |" \
+        -e "/^c_link_args/ s|c_link_args = |c_link_args = \['$(echo ${TOOLCHAIN_OPTIONS} | sed -e 's/^ *//')', |" \
+        -e "/^c_link_args/ s|$|\]|" \
+        -e "/^cpp_args/ s|cpp_args = \[|cpp_args = \['$(echo ${TOOLCHAIN_OPTIONS} | sed -e 's/^ *//')', |" \
+        -e "/^cpp_link_args/ s|cpp_link_args = |cpp_link_args = \['$(echo ${TOOLCHAIN_OPTIONS} | sed -e 's/^ *//')', |" \
+        -e "/^cpp_link_args/ s|$|\]|" \
+        -i ${WORKDIR}/meson.cross
+}
