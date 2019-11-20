@@ -38,11 +38,18 @@ function build {
 	logfile=${2:-/dev/null}
 	mkdir -p `dirname $logfile`
 
+	ret=0
 	if [ "$VERBOSE" = "1" ]; then
+		set -o pipefail
 		bitbake $recipe 2>&1 | tee $logfile
+		ret=$?
+		set +o pipefail
 	else
 		bitbake $recipe &> $logfile
+		ret=$?
 	fi
+
+	return $ret
 }
 
 # Update variable in file.
