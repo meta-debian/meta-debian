@@ -129,6 +129,8 @@ window.onload = function(){
 <th>Package</th>
 <th>Build Status</th>
 <th>Ptest Status<br/>(PASS/SKIP/FAIL)</th>
+<th>Build Version</th>
+<th>Ptest Version</th>
 </tr></thead>
 EOF
 
@@ -136,6 +138,8 @@ EOF
 			recipe=`echo $line | awk '{print $1}'`
 			build_status=`echo $line | awk '{print $2}'`
 			ptest_status=`echo $line | awk '{print $3}'`
+			build_version=`echo $line | awk '{print $4}'`
+			ptest_version=`echo $line | awk '{print $5}'`
 
 			build_log="$TESTING_LOGS/$distro/$machine/$recipe.build.log"
 			ptest_log="$TESTING_LOGS/$distro/$machine/$recipe.ptest.log"
@@ -162,7 +166,12 @@ EOF
 
 			html_build_status="<td bgcolor=\"$bcolor\"><a href=$build_log>$build_status</a></td>"
 			html_ptest_status="<td bgcolor=\"$pcolor\">$html_ptest_status</td>"
-			echo "<tr><td></td><td>$recipe</td>${html_build_status}${html_ptest_status}</tr>" >> $index
+			html_build_version="<td>`echo $build_version | sed "s#,#<br/>#g"`</td>"
+			html_ptest_version="<td>`echo $ptest_version | sed "s#,#<br/>#g"`</td>"
+			echo "<tr><td></td><td>$recipe</td> \
+			        ${html_build_status}${html_ptest_status} \
+			        ${html_build_version}${html_ptest_version} \
+			      </tr>" >> $index
 		done < $LOGDIR/$distro/$machine/result.txt
 
 		echo "</table></body></html>" >> $index

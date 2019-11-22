@@ -14,12 +14,16 @@ trap 'kill $(jobs -p)' EXIT
 
 THISDIR=$(dirname $(readlink -f "$0"))
 WORKDIR=$THISDIR/../../..
+POKYDIR=$THISDIR/../..
 
 . $THISDIR/common.sh
 
 TEST_IPADDR=127.0.0.1
 TEST_USER=root
 TEST_PORT=2222
+
+# Get layer version
+LAYER_BASE_VER="meta:`git_head $POKYDIR`,meta-debian:`git_head $THISDIR`"
 
 function ssh_qemu {
 	ssh -o StrictHostKeyChecking=no -p $TEST_PORT $TEST_USER@$TEST_IPADDR "/bin/sh -l -c \"$1\""
@@ -113,9 +117,9 @@ for distro in $TEST_DISTROS; do
 			package=`echo $line | awk '{print $1}'`
 			status=`echo $line | awk '{print $2}'`
 			if grep -q "^$package " $RESULT 2> /dev/null; then
-				sed -i -e "s#^\($package \S* \)\S*#\1$status#" $RESULT
+				sed -i -e "s#^\($package \S* \)\S*\( \S* \)\S*#\1$status\2$LAYER_BASE_VER#" $RESULT
 			else
-				echo "$package NA $status" >> $RESULT
+				echo "$package NA $status NA $LAYER_BASE_VER" >> $RESULT
 			fi
 		done < $LOGDIR/result.ptest.txt
 

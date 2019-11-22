@@ -86,6 +86,13 @@ function append_var {
 	_set_var "$1" "$2" "$3" append
 }
 
+# Get HEAD id in short of the first 7 character
+# Params:
+#   $1: Directory you want to get HEAD
+function git_head {
+	git -C $1 rev-parse HEAD | head -c 7
+}
+
 # Set up a build directory.
 # No params.
 function setup_builddir {

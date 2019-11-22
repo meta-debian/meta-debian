@@ -17,6 +17,9 @@ POKYDIR=$THISDIR/../..
 
 . $THISDIR/common.sh
 
+# Get layer version
+LAYER_BASE_VER="meta:`git_head $POKYDIR`,meta-debian:`git_head $THISDIR`"
+
 # Dependencies of machine
 declare -A LAYER_DEPS
 declare -A LAYER_DEPS_URL
@@ -44,6 +47,7 @@ for distro in $TEST_DISTROS; do
 		set_var "MACHINE" "$machine" conf/local.conf
 
 		# Get required layers
+		LAYER_DEPS_VER=""
 		for layer_url in ${LAYER_DEPS_URL[$machine]}; do
 			url=`echo $layer_url | cut -d\; -f1`
 			branch=`echo $layer_url | cut -d\; -f2 | sed -e "s/branch=//"`
@@ -54,6 +58,7 @@ for distro in $TEST_DISTROS; do
 				git checkout $branch
 				cd -
 			fi
+			LAYER_DEPS_VER="$LAYER_DEPS_VER,$layer_dir:`git_head $POKYDIR/$layer_dir`"
 		done
 
 		# Add required layers to conf/bblayers.conf
@@ -99,9 +104,9 @@ for distro in $TEST_DISTROS; do
 
 			note "Build $package: $status"
 			if grep -q "^$package " $RESULT 2> /dev/null; then
-				sed -i -e "s#^\($package \)\S*\( \S*\)#\1$status\2#" $RESULT
+				sed -i -e "s#^\($package \)\S*\( \S* \)\S*\( \S*\)#\1$status\2${LAYER_BASE_VER}${LAYER_DEPS_VER}\3#" $RESULT
 			else
-				echo "$package $status NA" >> $RESULT
+				echo "$package $status NA ${LAYER_BASE_VER}${LAYER_DEPS_VER} NA" >> $RESULT
 			fi
 
 			# Clear REQUIRED_DISTRO_FEATURES_TMP
