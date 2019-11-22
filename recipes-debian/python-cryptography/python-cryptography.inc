@@ -11,9 +11,6 @@ inherit debian-package
 require recipes-debian/sources/python-cryptography.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/cryptography-${PV}"
 
-# There are no patch
-DEBIAN_QUILT_PATCHES = ""
-
 DEPENDS = "${PYTHON_PN}-cffi-native"
 
 do_install_append() {
