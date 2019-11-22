@@ -169,17 +169,6 @@ perl_package_preprocess () {
 
 require recipes-devtools/perl-sanity/perl-ptest.inc
 
-RDEPENDS_${PN}-ptest += " gcc binutils glibc-dev libgcc-dev linux-libc-headers-base-dev"
-INSANE_SKIP_${PN}-ptest += "dev-deps"
-
-do_install_ptest_append() {
-    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=869231
-    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=896827
-    # Note that since perl-5.30, the test is split into multiple tests. See,
-    # https://metacpan.org/pod/perldelta#Testing
-    rm ${D}${PTEST_PATH}/t/re/fold_grind.t
-}
-
 FILES_${PN} = " \
     ${bindir}/perl ${bindir}/perl.real ${bindir}/perl${PV} ${libdir}/libperl.so* \
     ${libdir}/perl5/site_perl \
