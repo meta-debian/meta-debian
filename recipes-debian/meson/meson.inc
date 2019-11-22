@@ -16,4 +16,5 @@ SRC_URI += " \
            file://disable-rpath-handling.patch \
            file://many-cross.patch \
            file://cross-libdir.patch \
+           file://0001-Handle-strings-in-cross-file-args.-Closes-4671.patch \
            "
