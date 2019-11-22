@@ -28,7 +28,7 @@ SCRIPTNAME=/etc/init.d/"$NAME"
 # Read configuration variable file if it is present
 [ -r /etc/default/"$NAME" ] && . /etc/default/"$NAME"
 
-. /etc/default/rcS
+[ -r /etc/default/rcS ] && . /etc/default/rcS
 
 . /etc/init.d/functions
 
