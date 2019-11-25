@@ -1,3 +1,7 @@
+# base recipe: meta/recipes-devtools/pseudo/pseudo_git.bb
+# base branch: warrior
+# base commit: bf363493fec990eaf7577769f1862d439404bd10
+
 require ${COREBASE}/meta/recipes-devtools/pseudo/pseudo.inc
 
 inherit debian-package
@@ -10,4 +14,5 @@ SRC_URI += " \
            file://fallback-group \
            file://moreretries.patch \
            file://toomanyfiles.patch \
+           file://0001-Add-statx.patch \
            "
