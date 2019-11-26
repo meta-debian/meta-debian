@@ -13,7 +13,9 @@ require recipes-debian/sources/pam-pkcs11.inc
 
 DEPENDS = "openssl pcsc-lite libpam curl"
 
-inherit autotools gettext pkgconfig
+inherit autotools gettext pkgconfig distro_features_check
+
+REQUIRED_DISTRO_FEATURES = "pam"
 
 EXTRA_OECONF += "--libdir=${base_libdir} --with-curl --with-ldap=false"
 

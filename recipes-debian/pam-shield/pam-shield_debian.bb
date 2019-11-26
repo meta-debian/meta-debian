@@ -12,7 +12,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=0636e73ff0215e8d672dc4c32c317bb3"
 inherit debian-package
 require recipes-debian/sources/pam-shield.inc
 
-inherit autotools-brokensep
+inherit autotools-brokensep distro_features_check
+
+REQUIRED_DISTRO_FEATURES = "pam"
 
 DEPENDS += "gdbm libpam"
 
