@@ -29,7 +29,7 @@ for package in $TEST_PACKAGES; do
 	else
 		echo "Running ptest for $package ..."
 		if [ "$VERBOSE" = "1" ]; then
-			ptest-runner $package | tee $logfile
+			ptest-runner $package 2>&1 | tee $logfile
 		else
 			ptest-runner $package &> $logfile
 		fi
