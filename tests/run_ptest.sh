@@ -28,10 +28,11 @@ for package in $TEST_PACKAGES; do
 		status=NA
 	else
 		echo "Running ptest for $package ..."
+		test -n "$PTEST_RUNNER_TIMEOUT" && timeout="-t $PTEST_RUNNER_TIMEOUT"
 		if [ "$VERBOSE" = "1" ]; then
-			ptest-runner $package 2>&1 | tee $logfile
+			ptest-runner $timeout $package 2>&1 | tee $logfile
 		else
-			ptest-runner $package &> $logfile
+			ptest-runner $timeout $package &> $logfile
 		fi
 
 		pass=`grep "^PASS:" $logfile | wc -l`

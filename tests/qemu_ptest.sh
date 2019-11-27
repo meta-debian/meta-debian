@@ -109,7 +109,7 @@ for distro in $TEST_DISTROS; do
 
 		# Run ptest
 		scp_qemu $THISDIR/run_ptest.sh $TEST_USER@$TEST_IPADDR:/tmp/ > /dev/null
-		ssh_qemu "VERBOSE=$VERBOSE TEST_PACKAGES='$TEST_PACKAGES' $EXTRA_ENV /tmp/run_ptest.sh"
+		ssh_qemu "VERBOSE=$VERBOSE PTEST_RUNNER_TIMEOUT='$PTEST_RUNNER_TIMEOUT' TEST_PACKAGES='$TEST_PACKAGES' $EXTRA_ENV /tmp/run_ptest.sh"
 		scp_qemu $TEST_USER@$TEST_IPADDR:/tmp/ptest/* $LOGDIR/ > /dev/null
 
 		# Merge result.ptest.txt to result.txt
