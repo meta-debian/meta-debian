@@ -5,4 +5,5 @@ inherit setuptools
 RDEPENDS_${PN} += " \
     python-enum34 \
     python-ipaddress \
+    python-numbers \
 "
