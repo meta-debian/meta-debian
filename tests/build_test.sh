@@ -81,7 +81,7 @@ for distro in $TEST_DISTROS; do
 			note "Building $package ..."
 
 			test -n "${REQUIRED_DISTRO_FEATURES[$package]}" && \
-			    set_var "REQUIRED_DISTRO_FEATURES_TMP" "${REQUIRED_DISTRO_FEATURES[$package]}" conf/local.conf
+			    set_var "DISTRO_FEATURES_TMP" "${REQUIRED_DISTRO_FEATURES[$package]}" conf/local.conf
 			build $package $logfile
 			ret=$?
 
@@ -91,7 +91,13 @@ for distro in $TEST_DISTROS; do
 				missing_distro_feature=$(grep "$missing_distro_feature_log" $logfile \
 				                         | cut -d\' -f2 | sort -u)
 				note "Add required DISTRO_FEATURES '$missing_distro_feature'."
-				append_var "REQUIRED_DISTRO_FEATURES_TMP" "$missing_distro_feature" conf/local.conf
+				append_var "DISTRO_FEATURES_TMP" "$missing_distro_feature" conf/local.conf
+
+				if echo $package | grep -q -- "-native$"; then
+					set_var DISTRO_FEATURES_NATIVE_append " \${DISTRO_FEATURES_TMP}" conf/local.conf
+				elif echo $package | grep -q -- "^nativesdk-"; then
+					set_var DISTRO_FEATURES_NATIVESDK_append " \${DISTRO_FEATURES_TMP}" conf/local.conf
+				fi
 				build $package $logfile
 				ret=$?
 			fi
@@ -109,8 +115,10 @@ for distro in $TEST_DISTROS; do
 				echo "$package $status NA ${LAYER_BASE_VER}${LAYER_DEPS_VER} NA" >> $RESULT
 			fi
 
-			# Clear REQUIRED_DISTRO_FEATURES_TMP
-			set_var "REQUIRED_DISTRO_FEATURES_TMP" " " conf/local.conf
+			# Clear DISTRO_FEATURES_TMP
+			set_var "DISTRO_FEATURES_TMP" " " conf/local.conf
+			set_var "DISTRO_FEATURES_NATIVE_append" " " conf/local.conf
+			set_var "DISTRO_FEATURES_NATIVESDK_append" " " conf/local.conf
 		done
 
 		# Sort result file by alphabet

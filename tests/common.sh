@@ -115,8 +115,8 @@ function setup_builddir {
 	set_var "UBOOT_MACHINE_qemuarm64" "qemu_arm64_defconfig" conf/local.conf
 
 	# Some recipes require specific DISTRO_FEATURES to build
-	set_var "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES \${REQUIRED_DISTRO_FEATURES_TMP}" conf/local.conf
-	set_var "REQUIRED_DISTRO_FEATURES_TMP" "" conf/local.conf
+	set_var "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES \${DISTRO_FEATURES_TMP}" conf/local.conf
+	set_var "DISTRO_FEATURES_TMP" "" conf/local.conf
 }
 
 # Get name of all recipes and ptest packages.
