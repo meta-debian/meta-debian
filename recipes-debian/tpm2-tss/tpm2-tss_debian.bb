@@ -76,3 +76,5 @@ FILES_libtss2-staticdev = "${libdir}/libtss*a"
 FILES_${PN} = "${libdir}/udev"
 
 RDEPENDS_libtss2 = "libgcrypt"
+
+BBCLASSEXTEND = "native"
