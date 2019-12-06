@@ -29,6 +29,10 @@ PARALLEL_MAKE = ""
 
 CACHED_CONFIGUREVARS += "ac_cv_path_PERL='/usr/bin/env perl' ac_cv_path_BASH_PROG='/usr/bin/env bash'"
 
+# Using some command from native for cross compile
+EXTRA_OEMAKE_class-target += "GROFFBIN=${STAGING_BINDIR_NATIVE}/groff \
+                              GROFF_BIN_PATH=${STAGING_BINDIR_NATIVE}"
+
 do_install_append() {
 	# Some distros have both /bin/perl and /usr/bin/perl, but we set perl location
 	# for target as /usr/bin/perl, so fix it to /usr/bin/perl.
