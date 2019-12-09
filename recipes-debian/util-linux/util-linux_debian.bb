@@ -28,6 +28,8 @@ SRC_URI += "file://configure-sbindir.patch \
             file://check-for-_HAVE_STRUCT_TERMIOS_C_OSPEED.patch \
 "
 
+PACKAGECONFIG_class-nativesdk ?= "${@bb.utils.filter('DISTRO_FEATURES', 'pam', d)}"
+
 do_install_append() {
 	# Correct owner after moving files
 	chown -R root:root ${D}${base_sbindir} ${D}${base_bindir}
