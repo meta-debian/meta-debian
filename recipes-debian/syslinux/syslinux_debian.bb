@@ -55,6 +55,8 @@ do_compile() {
 	# syslinux uses $LD for linking, strip `-Wl,' so it can work
 	export LDFLAGS="-L${STAGING_LIBDIR}"
 
+	sed -i 's@$(CC) $(LDFLAGS)@$(BUILD_CC) $(BUILD_LDFLAGS)@g' ${S}/lzo/Makefile
+
 	DATE=`date +%Y%m%d`
 	# Make sure the recompile is OK.
 	# Though the ${B} should always exist, still check it before find and rm.
