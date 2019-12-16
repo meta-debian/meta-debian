@@ -2,6 +2,13 @@
 #
 # Common functions for other scripts.
 
+TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
+TEST_MACHINES=${TEST_MACHINES:-qemux86}
+BUILDDIR=${BUILDDIR:-build}
+VERBOSE=${VERBOSE:-0}
+
+declare -A REQUIRED_DISTRO_FEATURES
+
 RED='\e[91m'
 BLD='\e[1m'
 BLD_RED='\e[1;91m'
@@ -17,22 +24,73 @@ function note {
 	echo -e "${BLD}NOTE${RST}: ${msg}"
 }
 
-# If variable is already defined, replace it
-# else define it.
+# Run bitbake and write log to file.
+# Params:
+#   $1: recipe name
+#   $2: log file
+function build {
+	if [[ $# -lt 1 ]]; then
+		error "$FUNCNAME $*: missing argument."
+		exit 1
+	fi
+
+	recipe=$1
+	logfile=${2:-/dev/null}
+	mkdir -p `dirname $logfile`
+
+	ret=0
+	if [ "$VERBOSE" = "1" ]; then
+		set -o pipefail
+		bitbake $recipe 2>&1 | tee $logfile
+		ret=$?
+		set +o pipefail
+	else
+		bitbake $recipe &> $logfile
+		ret=$?
+	fi
+
+	return $ret
+}
+
+# Update variable in file.
 # Params:
 #   $1: variable which will be updated. Eg: IMAGE_INSTALL_append
 #   $2: value which will be set. Eg: " bzip2 zlib"
 #   $3: config file which will be modified. Eg: conf/local.conf
-function add_or_replace {
+#   $4: Optional. Type of set_var: overwrite (default) or append.
+function _set_var {
+	if [[ $# -lt 3 ]]; then
+		error "$FUNCNAME $*: missing argument."
+		exit 1
+	fi
+
 	key="$1"
 	val="$2"
 	file="$3"
+	type="$4"
 
 	if grep -q "^$key\s*?*=" $file 2> /dev/null; then
-		sed -i -e "s#\(^$key\s*?*=\).*#\1 \"$val\"#" $file
+		if [ "$type" = "append" ]; then
+			sed -i -e "s#\(^$key\s*?*=.*\)\"#\1 $val\"#" $file
+		else
+			sed -i -e "s#\(^$key\s*?*=\).*#\1 \"$val\"#" $file
+		fi
 	else
 		echo "$key = \"$val\"" >> $file
 	fi
+}
+function set_var {
+	_set_var "$1" "$2" "$3"
+}
+function append_var {
+	_set_var "$1" "$2" "$3" append
+}
+
+# Get HEAD id in short of the first 7 character
+# Params:
+#   $1: Directory you want to get HEAD
+function git_head {
+	git -C $1 rev-parse HEAD | head -c 7
 }
 
 # Set up a build directory.
@@ -40,53 +98,32 @@ function add_or_replace {
 function setup_builddir {
 	note "Setup build directory."
 	cd $WORKDIR
-	rm -rf build/conf
+	rm -rf $BUILDDIR/conf
 	export TEMPLATECONF=meta-debian/conf
-	source ./poky/oe-init-build-env
+	source ./poky/oe-init-build-env $BUILDDIR
 
 	if which gitproxy &> /dev/null; then
-		add_or_replace "HOSTTOOLS_append" " gitproxy" conf/local.conf
+		set_var "HOSTTOOLS_append" " gitproxy" conf/local.conf
 	fi
 
 	# Configurations for u-boot
-	add_or_replace "UBOOT_MACHINE_qemux86" "qemu-x86_defconfig" conf/local.conf
-	add_or_replace "UBOOT_MACHINE_qemux86-64" "qemu-x86_64_defconfig" conf/local.conf
-	add_or_replace "UBOOT_MACHINE_qemumips" "qemu_mips_defconfig" conf/local.conf
-	add_or_replace "UBOOT_MACHINE_qemuppc" "qemu-ppce500_defconfig" conf/local.conf
-	add_or_replace "UBOOT_MACHINE_qemuarm" "qemu_arm_defconfig" conf/local.conf
-	add_or_replace "UBOOT_MACHINE_qemuarm64" "qemu_arm64_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemux86" "qemu-x86_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemux86-64" "qemu-x86_64_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemumips" "qemu_mips_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemuppc" "qemu-ppce500_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemuarm" "qemu_arm_defconfig" conf/local.conf
+	set_var "UBOOT_MACHINE_qemuarm64" "qemu_arm64_defconfig" conf/local.conf
+
+	# Some recipes require specific DISTRO_FEATURES to build
+	set_var "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES \${DISTRO_FEATURES_TMP}" conf/local.conf
+	set_var "DISTRO_FEATURES_TMP" "" conf/local.conf
 }
 
-# Run bitbake -s to get version of all recipes.
-# Params:
-#   $1: target file that stores version information
-function all_recipes_version {
-	all_versions=$1
-
-	note "Getting version of all recipes ..."
-	bitbake -s > $all_versions
-	if [ "$?" != "0" ]; then
-		error "Failed to bitbake."
-		exit 1
-	fi
-}
-
-# Get version of recipe
-# Params:
-#   $1: target file that stores version information
-function get_version {
-	all_versions=$1
-
-	version=`grep "^$target\s*:" $all_versions | cut -d: -f2 | sed "s/-r.*//"`
-	# If version is empty or contains only space, set it to NA
-	if echo $version | grep -q "^\s*$"; then
-		version=NA
-	fi
-}
-
+# Get name of all recipes and ptest packages.
+# No params.
 function get_all_packages {
-	BTEST_TARGETS=""
-	PTEST_TARGETS=""
+	BTEST_PACKAGES=""
+	PTEST_PACKAGES=""
 
 	recipes=`find $THISDIR/.. -name *.bb`
 	for recipe in $recipes; do
@@ -95,21 +132,27 @@ function get_all_packages {
 
 		# Get the final PN
 		pn=`grep "^PN=" $recipe_env | cut -d\" -f2`
-		BTEST_TARGETS="$BTEST_TARGETS $pn"
+		BTEST_PACKAGES="$BTEST_PACKAGES $pn"
 
 		# Check if ptest available
 		ptest_enabled=`grep "^PTEST_ENABLED=" $recipe_env | cut -d\" -f2`
 		if [ "$ptest_enabled" = "1" ]; then
-			PTEST_TARGETS="$PTEST_TARGETS $pn"
+			PTEST_PACKAGES="$PTEST_PACKAGES $pn"
 		fi
+
+		# Get REQUIRED_DISTRO_FEATURES
+		required_distro_features=`grep "^REQUIRED_DISTRO_FEATURES=" $recipe_env | cut -d\" -f2`
+		REQUIRED_DISTRO_FEATURES[$pn]=required_distro_features
 
 		# Get BBCLASSEXTEND
 		bbclassextend=`grep "^BBCLASSEXTEND=" $recipe_env | cut -d\" -f2`
 		for variant in $bbclassextend; do
 			if [ "$variant" = "native" ] || [ "$variant" = "cross" ]; then
-				BTEST_TARGETS="$BTEST_TARGETS ${pn}-$variant"
+				BTEST_PACKAGES="$BTEST_PACKAGES ${pn}-$variant"
+				REQUIRED_DISTRO_FEATURES[${pn}-$variant]=required_distro_features
 			else
-				BTEST_TARGETS="$BTEST_TARGETS ${variant}-$pn"
+				BTEST_PACKAGES="$BTEST_PACKAGES ${variant}-$pn"
+				REQUIRED_DISTRO_FEATURES[${variant}-$pn]=required_distro_features
 			fi
 		done
 

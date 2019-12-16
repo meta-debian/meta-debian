@@ -8,13 +8,17 @@ export UID
 start:
 	docker-compose run work
 
-test: build_test ptest
+refresh:
+	# Rebuild docker image
+	docker-compose build --no-cache work
+
+test: build_test qemu_ptest
 
 build_test:
-	docker-compose up --build build_test
+	docker-compose run --rm build_test
 
-ptest:
-	docker-compose up --build ptest
+qemu_ptest:
+	docker-compose run --rm qemu_ptest
 
 clean:
 	rm -rf ../tests/logs
@@ -23,8 +27,8 @@ clean:
 cleanall:
 	docker-compose rm -svf work
 	docker-compose rm -svf build_test
-	docker-compose rm -svf ptest
+	docker-compose rm -svf qemu_ptest
 	docker volume rm -f docker_downloads
 	docker rmi -f deby-image
 
-.PHONY: start test build_test ptest clean cleanall
+.PHONY: docker_image start test build_test qemu_ptest clean cleanall

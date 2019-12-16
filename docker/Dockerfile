@@ -1,6 +1,7 @@
 FROM debian:buster
 
 ARG UID
+ARG BUILDDIR
 
 USER root
 
@@ -43,6 +44,7 @@ RUN bash -c 'if test -n "$no_proxy"; then git config --global core.noproxy "$no_
 RUN git clone $POKY_GIT_URL $HOME/poky
 RUN cd $HOME/poky && git checkout $POKY_REV
 RUN mkdir -p $HOME/poky/meta-debian
-RUN mkdir -p $HOME/build/downloads
+RUN mkdir -p $HOME/$BUILDDIR
+RUN ln -sf $HOME/downloads $HOME/$BUILDDIR/downloads
 
 WORKDIR $HOME

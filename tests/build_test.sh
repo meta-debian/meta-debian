@@ -1,8 +1,9 @@
 #!/bin/bash
 #
 # Script for building meta-debian.
+#
 # Input params from env:
-#   TEST_TARGETS: recipes/packages will be built. Eg: "zlib core-image-minimal".
+#   TEST_PACKAGES: recipes/packages will be built. Eg: "zlib core-image-minimal".
 #                 If not set, all meta-debian's recipes will be built.
 #   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
 #   TEST_MACHINES: machines will be tested. Eg: "raspberrypi3 qemuarm"
@@ -16,8 +17,8 @@ POKYDIR=$THISDIR/../..
 
 . $THISDIR/common.sh
 
-TEST_DISTROS=${TEST_DISTROS:-deby-tiny}
-TEST_MACHINES=${TEST_MACHINES:-qemux86}
+# Get layer version
+LAYER_BASE_VER="meta:`git_head $POKYDIR`,meta-debian:`git_head $THISDIR`"
 
 # Dependencies of machine
 declare -A LAYER_DEPS
@@ -30,23 +31,23 @@ LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;
 
 setup_builddir
 
-all_versions=`pwd`/all_versions.txt
-all_recipes_version "$all_versions"
-
-add_or_replace "DISTRO_FEATURES_append" " $TEST_DISTRO_FEATURES" conf/local.conf
-
-if [ "$TEST_TARGETS" = "" ]; then
-	TEST_TARGETS_NOTSET=1
+if [ "$TEST_PACKAGES" = "" ]; then
+	TEST_PACKAGES_NOTSET=1
 fi
 
 for distro in $TEST_DISTROS; do
 	note "Testing distro $distro ..."
-	add_or_replace "DISTRO" "$distro" conf/local.conf
+	set_var "DISTRO" "$distro" conf/local.conf
 	for machine in $TEST_MACHINES; do
+		LOGDIR=$THISDIR/logs/$distro/$machine
+		RESULT=$LOGDIR/result.txt
+		mkdir -p $LOGDIR
+
 		note "Testing machine $machine ..."
-		add_or_replace "MACHINE" "$machine" conf/local.conf
+		set_var "MACHINE" "$machine" conf/local.conf
 
 		# Get required layers
+		LAYER_DEPS_VER=""
 		for layer_url in ${LAYER_DEPS_URL[$machine]}; do
 			url=`echo $layer_url | cut -d\; -f1`
 			branch=`echo $layer_url | cut -d\; -f2 | sed -e "s/branch=//"`
@@ -57,6 +58,7 @@ for distro in $TEST_DISTROS; do
 				git checkout $branch
 				cd -
 			fi
+			LAYER_DEPS_VER="$LAYER_DEPS_VER,$layer_dir:`git_head $POKYDIR/$layer_dir`"
 		done
 
 		# Add required layers to conf/bblayers.conf
@@ -64,44 +66,59 @@ for distro in $TEST_DISTROS; do
 		for layer in ${LAYER_DEPS[$machine]}; do
 			EXTRA_BBLAYERS="$EXTRA_BBLAYERS $POKYDIR/$layer"
 		done
-		add_or_replace "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS"  conf/bblayers.conf
+		set_var "EXTRA_BBLAYERS" "$EXTRA_BBLAYERS" conf/bblayers.conf
 
-		LOGDIR=$THISDIR/logs/$distro/$machine
-		RESULT=$LOGDIR/result.txt
-
-		test -d $LOGDIR || mkdir -p $LOGDIR
-
-		if [ "$TEST_TARGETS_NOTSET" = "1" ]; then
-			note "TEST_TARGETS is not defined. Getting all recipes available..."
+		if [ "$TEST_PACKAGES_NOTSET" = "1" ]; then
+			note "TEST_PACKAGES is not defined. Getting all recipes available..."
 			get_all_packages
-			TEST_TARGETS=$BTEST_TARGETS
+			TEST_PACKAGES=$BTEST_PACKAGES
 		fi
 
-		note "These recipes will be tested: $TEST_TARGETS"
+		note "These recipes will be tested: $TEST_PACKAGES"
 
-		for target in $TEST_TARGETS; do
-			get_version "$all_versions"
+		for package in $TEST_PACKAGES; do
+			logfile=$LOGDIR/${package}.build.log
+			note "Building $package ..."
 
-			note "Building $target ..."
-			bitbake $target &> $LOGDIR/${target}.build.log
+			test -n "${REQUIRED_DISTRO_FEATURES[$package]}" && \
+			    set_var "DISTRO_FEATURES_TMP" "${REQUIRED_DISTRO_FEATURES[$package]}" conf/local.conf
+			build $package $logfile
+			ret=$?
 
-			if [ "$?" = "0" ]; then
+			# Add REQUIRED_DISTRO_FEATURES if needed
+			missing_distro_feature_log="was skipped: missing required distro feature"
+			if grep -q "$missing_distro_feature_log" $logfile 2> /dev/null; then
+				missing_distro_feature=$(grep "$missing_distro_feature_log" $logfile \
+				                         | cut -d\' -f2 | sort -u)
+				note "Add required DISTRO_FEATURES '$missing_distro_feature'."
+				append_var "DISTRO_FEATURES_TMP" "$missing_distro_feature" conf/local.conf
+
+				if echo $package | grep -q -- "-native$"; then
+					set_var DISTRO_FEATURES_NATIVE_append " \${DISTRO_FEATURES_TMP}" conf/local.conf
+				elif echo $package | grep -q -- "^nativesdk-"; then
+					set_var DISTRO_FEATURES_NATIVESDK_append " \${DISTRO_FEATURES_TMP}" conf/local.conf
+				fi
+				build $package $logfile
+				ret=$?
+			fi
+
+			if [ "$ret" = "0" ]; then
 				status=PASS
 			else
 				status=FAIL
 			fi
 
-			note "Build $target: $status"
-			if grep -q "^$target $version" $RESULT 2> /dev/null; then
-				sed -i -e "s/^\($target $version \)\S*\( \S*\)/\1$status\2/" $RESULT
+			note "Build $package: $status"
+			if grep -q "^$package " $RESULT 2> /dev/null; then
+				sed -i -e "s#^\($package \)\S*\( \S* \)\S*\( \S*\)#\1$status\2${LAYER_BASE_VER}${LAYER_DEPS_VER}\3#" $RESULT
 			else
-				# Remove old version
-				if grep -q "^$target " $RESULT 2> /dev/null; then
-					sed -i "/^$target /d" $RESULT
-				fi
-
-				echo "$target $version $status NA" >> $RESULT
+				echo "$package $status NA ${LAYER_BASE_VER}${LAYER_DEPS_VER} NA" >> $RESULT
 			fi
+
+			# Clear DISTRO_FEATURES_TMP
+			set_var "DISTRO_FEATURES_TMP" " " conf/local.conf
+			set_var "DISTRO_FEATURES_NATIVE_append" " " conf/local.conf
+			set_var "DISTRO_FEATURES_NATIVESDK_append" " " conf/local.conf
 		done
 
 		# Sort result file by alphabet
