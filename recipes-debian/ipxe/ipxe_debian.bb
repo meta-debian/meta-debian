@@ -9,6 +9,7 @@ require recipes-debian/sources/ipxe.inc
 
 S = "${DEBIAN_UNPACK_DIR}/src"
 
+COMPATIBLE_HOST = '(x86_64|i.86).*-(linux|freebsd.*)'
 DEPENDS = "cdrtools-native xz-native syslinux"
 
 do_configure() {
