@@ -169,6 +169,9 @@ perl_package_preprocess () {
 
 require recipes-devtools/perl-sanity/perl-ptest.inc
 
+RDEPENDS_${PN}-ptest += " gcc binutils glibc-dev libgcc-dev linux-libc-headers-base-dev"
+INSANE_SKIP_${PN}-ptest += "dev-deps"
+
 FILES_${PN} = " \
     ${bindir}/perl ${bindir}/perl.real ${bindir}/perl${PV} ${libdir}/libperl.so* \
     ${libdir}/perl5/site_perl \
