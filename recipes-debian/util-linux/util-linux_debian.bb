@@ -27,3 +27,5 @@ SRC_URI += "file://configure-sbindir.patch \
             file://avoid_parallel_tests.patch \
             file://check-for-_HAVE_STRUCT_TERMIOS_C_OSPEED.patch \
 "
+
+PACKAGECONFIG_class-nativesdk ?= "${@bb.utils.filter('DISTRO_FEATURES', 'pam', d)}"

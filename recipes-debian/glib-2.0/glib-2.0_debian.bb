@@ -8,7 +8,6 @@ require recipes-core/glib-2.0/glib.inc
 
 inherit debian-package
 require recipes-debian/sources/glib2.0.inc
-BPN = "glib2.0"
 DEBIAN_UNPACK_DIR = "${WORKDIR}/glib-${PV}"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/glib-2.0/glib-2.0"
