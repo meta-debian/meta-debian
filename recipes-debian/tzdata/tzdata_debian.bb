@@ -216,6 +216,7 @@ FILES_tzdata-core += " \
                 ${datadir}/zoneinfo/zone.tab             \
                 ${datadir}/zoneinfo/zone1970.tab         \
                 ${datadir}/zoneinfo/iso3166.tab          \
+                ${datadir}/zoneinfo/SystemV/*            \
                 ${datadir}/zoneinfo/Etc/*"
 
 CONFFILES_tzdata-core = "${sysconfdir}/localtime ${sysconfdir}/timezone"
