@@ -132,6 +132,12 @@ function get_all_packages {
 
 		# Get the final PN
 		pn=`grep "^PN=" $recipe_env | cut -d\" -f2`
+
+		# Check if recipe is buildable (task do_build exists)
+		if ! grep -q "^_task_deps=\"{'tasks': \[[^]]*do_build" $recipe_env; then
+			continue
+		fi
+
 		BTEST_PACKAGES="$BTEST_PACKAGES $pn"
 
 		# Check if ptest available
