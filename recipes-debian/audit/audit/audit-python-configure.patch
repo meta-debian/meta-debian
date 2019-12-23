@@ -1,0 +1,46 @@
+From 6a2710db094061e1956fac3ed81114d0e958ea21 Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Sun, 19 Jul 2015 00:49:13 +0900
+Subject: [PATCH] audit: python cross-compile
+
+Upstream-Status: Inappropriate [embedded specific]
+
+Signed-off-by: Xin Ouyang <Xin.Ouyang@windriver.com>
+Signed-off-by: Li Xin <lixin.fnst@cn.fujitsu.com>
+Signed-off-by: Wenzong Fan <wenzong.fan@windriver.com>
+Signed-off-by: T.O. Radzy Radzykewycz <radzy@windriver.com>
+---
+ configure.ac | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 6e345f1..54bdbf1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -99,21 +99,8 @@ if test "x$use_python" = xno ; then
+ else
+ AC_MSG_RESULT(testing)
+ AM_PATH_PYTHON
+-PYINCLUDEDIR=`python${am_cv_python_version} -c "from distutils import sysconfig; print(sysconfig.get_config_var('INCLUDEPY'))"`
+-if test -f ${PYINCLUDEDIR}/Python.h ; then
+-	python_found="yes"
+-	AC_SUBST(PYINCLUDEDIR)
+-	pybind_dir="python"
+-	AC_SUBST(pybind_dir)
+-	AC_MSG_NOTICE(Python bindings will be built)
+-else
+-	python_found="no"
+-	if test "x$use_python" = xyes ; then
+-		AC_MSG_ERROR([Python explicitly requested and python headers were not found])
+-	else
+-		AC_MSG_WARN("Python headers not found - python bindings will not be made")
+-	fi
+-fi
++python_found="yes"
++AC_MSG_NOTICE(Python bindings will be built)
+ fi
+ AM_CONDITIONAL(HAVE_PYTHON, test ${python_found} = "yes")
+ 
+-- 
+2.7.4
+

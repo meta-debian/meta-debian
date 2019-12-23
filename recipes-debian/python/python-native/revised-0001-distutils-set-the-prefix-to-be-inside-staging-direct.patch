@@ -1,0 +1,41 @@
+diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
+index 666df65..bea36cd 100644
+--- a/Lib/distutils/sysconfig.py
++++ b/Lib/distutils/sysconfig.py
+@@ -75,6 +75,8 @@ def get_python_inc(plat_specific=0, prefix=None):
+     If 'prefix' is supplied, use it instead of sys.prefix or
+     sys.exec_prefix -- i.e., ignore 'plat_specific'.
+     """
++    if prefix is None:
++         prefix = os.environ['STAGING_INCDIR'].rstrip('include')
+ 
+     if os.name == "posix":
+         if python_build:
+@@ -122,12 +124,16 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
+     sys.exec_prefix -- i.e., ignore 'plat_specific'.
+     """
+     is_default_prefix = not prefix or os.path.normpath(prefix) in ('/usr', '/usr/local')
++    lib_basename = os.environ['STAGING_LIBDIR'].split('/')[-1]
+     if prefix is None:
+-        prefix = plat_specific and EXEC_PREFIX or PREFIX
++        if plat_specific:
++            prefix = os.environ['STAGING_LIBDIR'].rstrip(lib_basename)
++        else:
++            prefix = PREFIX
+ 
+     if os.name == "posix":
+         libpython = os.path.join(prefix,
+-                                 "lib", "python" + get_python_version())
++                                 lib_basename, "python" + get_python_version())
+         if standard_lib:
+             return libpython
+         elif is_default_prefix and 'PYTHONUSERBASE' not in os.environ and 'real_prefix' not in sys.__dict__:
+@@ -282,7 +282,7 @@ def get_makefile_filename():
+     if python_build:
+         return os.path.join(project_base, "Makefile")
+     lib_dir = get_python_lib(plat_specific=1, standard_lib=1)
+-    return os.path.join(get_config_var('LIBPL'), "Makefile")
++    return os.path.join(lib_dir, "config", "Makefile")
+
+
+ def parse_config_h(fp, g=None):

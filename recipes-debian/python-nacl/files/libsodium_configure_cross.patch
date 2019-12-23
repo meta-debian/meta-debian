@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index 747dc62..92f0dfe 100644
+--- a/setup.py
++++ b/setup.py
+@@ -164,7 +164,7 @@ class build_clib(_build_clib):
+         # Run ./configure
+         subprocess.check_call(
+             [
+-                configure, "--disable-shared", "--enable-static",
++                configure, "--host=##HOST_SYS##", "--disable-shared", "--enable-static",
+                 "--disable-debug", "--disable-dependency-tracking",
+                 "--with-pic", "--prefix", os.path.abspath(self.build_clib),
+             ],
+@@ -176,7 +176,7 @@ class build_clib(_build_clib):
+         subprocess.check_call(["make"] + make_args, cwd=build_temp)
+ 
+         # Check the build library
+-        subprocess.check_call(["make", "check"] + make_args, cwd=build_temp)
++        #subprocess.check_call(["make", "check"] + make_args, cwd=build_temp)
+ 
+         # Install the built library
+         subprocess.check_call(["make", "install"] + make_args, cwd=build_temp)

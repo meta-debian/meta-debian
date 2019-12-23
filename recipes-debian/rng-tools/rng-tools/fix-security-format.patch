@@ -1,0 +1,67 @@
+rng-tools: Fixing security formatting issues
+
+Fix security formatting issues related to message parameters expeted.
+
+diff --git a/rngd.c b/rngd.c
+index 27781aa..013e717 100644
+--- a/rngd.c
++++ b/rngd.c
+@@ -600,47 +600,47 @@ static void dump_rng_stats(void)
+ 	char buf[256];
+ 
+ 	pthread_mutex_lock(&rng_stats.group1_mutex);
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"bits received from HRNG source",
+ 			rng_stats.bytes_received * 8));
+ 	pthread_mutex_unlock(&rng_stats.group1_mutex);
+ 	pthread_mutex_lock(&rng_stats.group3_mutex);
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"bits sent to kernel pool",
+ 			rng_stats.bytes_sent * 8));
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"entropy added to kernel pool",
+ 			rng_stats.entropy_sent));
+ 	pthread_mutex_unlock(&rng_stats.group3_mutex);
+ 	pthread_mutex_lock(&rng_stats.group2_mutex);
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"FIPS 140-2 successes",
+ 			rng_stats.good_fips_blocks));
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"FIPS 140-2 failures",
+ 			rng_stats.bad_fips_blocks));
+ 	for (j = 0; j < N_FIPS_TESTS; j++)
+-		message(LOG_INFO, dump_stat_counter(buf, sizeof(buf), fips_test_names[j],
++		message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf), fips_test_names[j],
+ 				rng_stats.fips_failures[j]));
+ 	pthread_mutex_unlock(&rng_stats.group2_mutex);
+ 	pthread_mutex_lock(&rng_stats.group1_mutex);
+-	message(LOG_INFO, dump_stat_bw(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_bw(buf, sizeof(buf),
+ 			"HRNG source speed", "bits",
+ 			&rng_stats.source_blockfill, FIPS_RNG_BUFFER_SIZE*8));
+ 	pthread_mutex_unlock(&rng_stats.group1_mutex);
+ 	pthread_mutex_lock(&rng_stats.group2_mutex);
+-	message(LOG_INFO, dump_stat_bw(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_bw(buf, sizeof(buf),
+ 			"FIPS tests speed", "bits",
+ 			&rng_stats.fips_blockfill, FIPS_RNG_BUFFER_SIZE*8));
+ 	pthread_mutex_unlock(&rng_stats.group2_mutex);
+ 	pthread_mutex_lock(&rng_stats.group3_mutex);
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"Lowest ready-buffers level",
+ 			rng_stats.buffer_lowmark));
+-	message(LOG_INFO, dump_stat_counter(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_counter(buf, sizeof(buf),
+ 			"Entropy starvations",
+ 			rng_stats.sink_starved));
+-	message(LOG_INFO, dump_stat_stat(buf, sizeof(buf),
++	message(LOG_INFO, "%s", dump_stat_stat(buf, sizeof(buf),
+ 			"Time spent starving for entropy",
+ 			"us",
+ 			&rng_stats.sink_wait));

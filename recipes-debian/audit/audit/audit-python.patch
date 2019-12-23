@@ -1,0 +1,64 @@
+From 9d95d7e28a2c4cbefa998d375de180c731a151b1 Mon Sep 17 00:00:00 2001
+From: Li xin <lixin.fnst@cn.fujitsu.com>
+Date: Sun, 19 Jul 2015 01:40:48 +0900
+Subject: [PATCH] Remove hard coded python include directory
+
+Upstream-Status: Inappropriate [embedded specific]
+
+Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+---
+ bindings/Makefile.am                | 8 +++++++-
+ bindings/python/python2/Makefile.am | 3 ++-
+ bindings/swig/python/Makefile.am    | 5 +++--
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/bindings/Makefile.am b/bindings/Makefile.am
+index 5b5c576..7a15205 100644
+--- a/bindings/Makefile.am
++++ b/bindings/Makefile.am
+@@ -22,4 +22,10 @@
+ 
+ CONFIG_CLEAN_FILES = *.loT *.rej *.orig
+ 
+-SUBDIRS = python golang swig
++SUBDIRS = swig
++if HAVE_PYTHON
++SUBDIRS += python
++endif
++if HAVE_GOLANG
++SUBDIRS += golang
++endif
+diff --git a/bindings/python/python2/Makefile.am b/bindings/python/python2/Makefile.am
+index 1dcb5bc..6226358 100644
+--- a/bindings/python/python2/Makefile.am
++++ b/bindings/python/python2/Makefile.am
+@@ -23,7 +23,8 @@
+ 
+ CONFIG_CLEAN_FILES = *.loT *.rej *.orig
+ AM_CFLAGS = -fPIC -DPIC -fno-strict-aliasing
+-AM_CPPFLAGS = -I$(top_builddir) -I@PYINCLUDEDIR@
++PYINC ?= /usr/include/python$(PYTHON_VERSION)
++AM_CPPFLAGS = -I$(top_builddir) -I${PYINC}
+ 
+ pyexec_LTLIBRARIES = auparse.la
+ 
+diff --git a/bindings/swig/python/Makefile.am b/bindings/swig/python/Makefile.am
+index 8c98b94..ae7c52b 100644
+--- a/bindings/swig/python/Makefile.am
++++ b/bindings/swig/python/Makefile.am
+@@ -21,9 +21,10 @@
+ #
+ CONFIG_CLEAN_FILES = *.loT *.rej *.orig
+ AM_CFLAGS = -fPIC -DPIC -fno-strict-aliasing
+-AM_CPPFLAGS = -I. -I$(top_builddir) -I${top_srcdir}/lib -I@PYINCLUDEDIR@
++PYINC ?= /usr/include/$(PYLIBVER)
++AM_CPPFLAGS = -I. -I$(top_builddir) -I${top_srcdir}/lib -I${PYINC}
+ SWIG_FLAGS = -python
+-SWIG_INCLUDES = -I. -I$(top_builddir) -I${top_srcdir}/lib -I@PYINCLUDEDIR@
++SWIG_INCLUDES = -I. -I$(top_builddir) -I${top_srcdir}/lib -I${PYINC}
+ pyexec_PYTHON = audit.py
+ pyexec_LTLIBRARIES = _audit.la
+ pyexec_SOLIBRARIES = _audit.so
+-- 
+2.7.4
+

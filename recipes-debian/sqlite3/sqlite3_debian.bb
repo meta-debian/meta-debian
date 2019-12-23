@@ -16,7 +16,9 @@ require recipes-debian/sources/sqlite3.inc
 LICENSE = "PD"
 LIC_FILES_CHKSUM = "file://src/sqlite.h.in;endline=11;md5=786d3dc581eff03f4fd9e4a77ed00c66"
 
-DEPENDS =+ "tcl-native"
+# Add dependency because debian source require tclsh command to generate shell.c
+# This file is already available in meta source
+DEPENDS = "tcl-native"
 
 # Base on meta-debian branch morty, required to avoid a compile error
 SRC_URI += "file://fix-hardcode-libtool.patch"
@@ -29,5 +31,11 @@ PACKAGECONFIG[dyn_ext] = ""
 
 EXTRA_OECONF_remove = "--disable-static-shell"
 
+PACKAGECONFIG ??= ""
+PACKAGECONFIG[tcl] = "--with-tcl=${STAGING_BINDIR_CROSS}, --disable-tcl, tcl"
+
 EXTRA_OEMAKE_class-target = "CROSS_BUILDING=yes"
 EXTRA_OEMAKE_class-nativesdk = "CROSS_BUILDING=yes"
+
+PACKAGES =+ "lib${PN}-tcl"
+FILES_lib${PN}-tcl += "${libdir}/tcltk/sqlite3/*"

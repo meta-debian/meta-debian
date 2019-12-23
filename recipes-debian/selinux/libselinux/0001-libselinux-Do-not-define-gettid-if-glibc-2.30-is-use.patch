@@ -1,0 +1,60 @@
+From 2c672b4cc39fbddb6faec2c7434832058f339d59 Mon Sep 17 00:00:00 2001
+From: Petr Lautrbach <plautrba@redhat.com>
+Date: Mon, 11 Mar 2019 16:00:41 +0100
+Subject: [PATCH] libselinux: Do not define gettid() if glibc >= 2.30 is used
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since version 2.30 glibc implements gettid() system call wrapper, see
+https://sourceware.org/bugzilla/show_bug.cgi?id=6399
+
+Fixes:
+cc -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -I../include -D_GNU_SOURCE  -DNO_ANDROID_BACKEND   -c -o procattr.o procattr.c
+procattr.c:28:14: error: static declaration of ‘gettid’ follows non-static declaration
+   28 | static pid_t gettid(void)
+      |              ^~~~~~
+In file included from /usr/include/unistd.h:1170,
+                 from procattr.c:2:
+/usr/include/bits/unistd_ext.h:34:16: note: previous declaration of ‘gettid’ was here
+   34 | extern __pid_t gettid (void) __THROW;
+      |                ^~~~~~
+
+Upstream-Status: Backport
+[https://github.com/SELinuxProject/selinux/commit/707e4b8610733b5c9eaac0f00239778f3edb23c2]
+
+Signed-off-by: Petr Lautrbach <plautrba@redhat.com>
+Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
+---
+ src/procattr.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/procattr.c b/src/procattr.c
+index 8bf8432..3c7b87f 100644
+--- a/src/procattr.c
++++ b/src/procattr.c
+@@ -22,8 +22,19 @@ static pthread_key_t destructor_key;
+ static int destructor_key_initialized = 0;
+ static __thread char destructor_initialized;
+ 
+-#ifndef __BIONIC__
+-/* Bionic declares this in unistd.h and has a definition for it */
++/* Bionic and glibc >= 2.30 declare gettid() system call wrapper in unistd.h and
++ * has a definition for it */
++#ifdef __BIONIC__
++  #define OVERRIDE_GETTID 0
++#elif !defined(__GLIBC_PREREQ)
++  #define OVERRIDE_GETTID 1
++#elif !__GLIBC_PREREQ(2,30)
++  #define OVERRIDE_GETTID 1
++#else
++  #define OVERRIDE_GETTID 0
++#endif
++
++#if OVERRIDE_GETTID
+ static pid_t gettid(void)
+ {
+ 	return syscall(__NR_gettid);
+-- 
+2.7.4
+

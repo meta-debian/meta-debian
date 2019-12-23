@@ -1,0 +1,33 @@
+From d0aaf391ab30b253aa22ef6547a039bcac840fc6 Mon Sep 17 00:00:00 2001
+From: Joe MacDonald <joe.macdonald@windriver.com>
+Date: Tue, 15 Oct 2013 10:14:41 -0400
+Subject: [PATCH] libselinux: define FD_CLOEXEC as necessary
+
+In truly old systems, even FD_CLOEXEC may not be defined.  Produce a
+warning and duplicate the #define for FD_CLOEXEC found in
+asm-generic/fcntl.h on more modern platforms.
+
+Uptream-Status: Inappropriate
+
+Signed-off-by: Joe MacDonald <joe.macdonald@windriver.com>
+
+---
+ src/setrans_client.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/setrans_client.c b/src/setrans_client.c
+index fa188a8..a94f02c 100644
+--- a/src/setrans_client.c
++++ b/src/setrans_client.c
+@@ -39,6 +39,11 @@ static pthread_key_t destructor_key;
+ static int destructor_key_initialized = 0;
+ static __thread char destructor_initialized;
+ 
++#ifndef FD_CLOEXEC
++#warning FD_CLOEXEC undefined on this platform, this may leak file descriptors
++#define FD_CLOEXEC 1
++#endif
++
+ /*
+  * setransd_open
+  *

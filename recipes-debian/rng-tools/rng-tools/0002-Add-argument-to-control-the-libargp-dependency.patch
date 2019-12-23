@@ -1,0 +1,69 @@
+# base patch: meta/recipes-support/rng-tools/rng-tools/0002-Add-argument-to-control-the-libargp-dependency.patch
+# base branch: warrior
+
+This ensures that the builds are always deterministic. If the argument isn't
+passed, the default behavior is to use libargp if the libc doesn't have argp.
+
+Upstream-Status: Pending
+Signed-off-by: Christopher Larson <chris_larson@mentor.com>
+
+Rebase to 6.6
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+
+diff --git a/configure.ac b/configure.ac
+index 31e9445..ab548ad 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,6 +24,13 @@ AC_CANONICAL_HOST
+ AM_INIT_AUTOMAKE([1.9 gnu])
+ AC_CONFIG_HEADERS([rng-tools-config.h])
+ 
++AC_ARG_WITH([libargp],
++	AS_HELP_STRING([--without-libargp],
++		[Disable libargp support. Systems whose libc lacks argp can use libargp instead. (Default: check if libc lacks argp)]),
++	[with_libargp=$withval],
++	[with_libargp=check]
++)
++
+ dnl Make sure anyone changing configure.ac/Makefile.am has a clue
+ AM_MAINTAINER_MODE
+ 
+@@ -56,6 +63,38 @@ dnl -------------------------------------
+ dnl Checks for optional library functions
+ dnl -------------------------------------
+ 
++dnl Determine if we need libargp: either user requested, or libc has no argp
++AS_IF(
++	[test "x$with_libargp" != "xyes"],
++	[
++		AC_LINK_IFELSE(
++			[AC_LANG_PROGRAM(
++				[#include <argp.h>],
++				[int argc=1; char *argv[]={"test"}; argp_parse(0,argc,argv,0,0,0); return 0;]
++				)],
++			[need_libargp=no],
++			[need_libargp=yes
++			 if test "x$with_libargp" = "xno"; then
++				AC_MSG_FAILURE([libargp disabled and libc does not have argp])
++			 fi]
++		)
++	],
++	[need_libargp=yes],
++)
++
++dnl Check for libargp
++AS_IF(
++	[test "x$need_libargp" = "xyes"],
++	[
++		AC_CHECK_LIB(
++			[argp],
++			[argp_parse],
++			[LIBS="$LIBS -largp"],
++			[AC_MSG_FAILURE([libargp not found])]
++		)
++	]
++)
++
+ dnl -----------------
+ dnl Configure options
+ dnl -----------------

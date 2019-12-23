@@ -1,0 +1,318 @@
+From a042e49c58ab5224937a7d8aedd5a04a96c100fb Mon Sep 17 00:00:00 2001
+From: Alejandro Hernandez <alejandro.hernandez@linux.intel.com>
+Date: Wed, 30 Oct 2019 06:50:06 +0000
+Subject: [PATCH] Rebased for python-2.7.9 Signed-off-by: Alejandro Hernandez
+ <alejandro.hernandez@linux.intel.com> Upstream-Status: Pending
+
+---
+ Include/pythonrun.h              |  1 +
+ Lib/distutils/command/install.py |  6 ++++--
+ Lib/distutils/sysconfig.py       |  7 +++++--
+ Lib/pydoc.py                     |  2 +-
+ Lib/site.py                      |  5 +++--
+ Lib/sysconfig.py                 | 12 ++++++------
+ Lib/test/test_dl.py              |  5 +++--
+ Lib/test/test_site.py            | 10 +++++++---
+ Lib/trace.py                     |  4 ++--
+ Makefile.pre.in                  |  6 ++++--
+ Modules/getpath.c                |  9 ++++++++-
+ Python/getplatform.c             | 10 ++++++++++
+ Python/sysmodule.c               |  2 ++
+ configure.ac                     |  4 ++++
+ 14 files changed, 60 insertions(+), 23 deletions(-)
+
+diff --git a/Include/pythonrun.h b/Include/pythonrun.h
+index f0f4e38..72a4d0e 100644
+--- a/Include/pythonrun.h
++++ b/Include/pythonrun.h
+@@ -108,6 +108,7 @@ PyAPI_FUNC(char *) Py_GetPath(void);
+ /* In their own files */
+ PyAPI_FUNC(const char *) Py_GetVersion(void);
+ PyAPI_FUNC(const char *) Py_GetPlatform(void);
++PyAPI_FUNC(const char *) Py_GetLib(void);
+ PyAPI_FUNC(const char *) Py_GetCopyright(void);
+ PyAPI_FUNC(const char *) Py_GetCompiler(void);
+ PyAPI_FUNC(const char *) Py_GetBuildInfo(void);
+diff --git a/Lib/distutils/command/install.py b/Lib/distutils/command/install.py
+index 6e00e94..3e4f853 100644
+--- a/Lib/distutils/command/install.py
++++ b/Lib/distutils/command/install.py
+@@ -22,6 +22,8 @@ from site import USER_BASE
+ from site import USER_SITE
+ 
+ 
++libname = sys.lib
++
+ if sys.version < "2.2":
+     WINDOWS_SCHEME = {
+         'purelib': '$base',
+@@ -41,8 +43,8 @@ else:
+ 
+ INSTALL_SCHEMES = {
+     'unix_prefix': {
+-        'purelib': '$base/lib/python$py_version_short/site-packages',
+-        'platlib': '$platbase/lib/python$py_version_short/site-packages',
++        'purelib': '$platbase/'+libname+'/python$py_version_short/site-packages',
++        'platlib': '$platbase/'+libname+'/python$py_version_short/site-packages',
+         'headers': '$base/include/python$py_version_short/$dist_name',
+         'scripts': '$base/bin',
+         'data'   : '$base',
+diff --git a/Lib/distutils/sysconfig.py b/Lib/distutils/sysconfig.py
+index 666df65..ab0cbb7 100644
+--- a/Lib/distutils/sysconfig.py
++++ b/Lib/distutils/sysconfig.py
+@@ -126,8 +126,11 @@ def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
+         prefix = plat_specific and EXEC_PREFIX or PREFIX
+ 
+     if os.name == "posix":
+-        libpython = os.path.join(prefix,
+-                                 "lib", "python" + get_python_version())
++        if plat_specific or standard_lib:
++            lib = sys.lib
++        else:
++            lib = "lib"
++        libpython = os.path.join(prefix, lib, "python" + get_python_version())
+         if standard_lib:
+             return libpython
+         elif is_default_prefix and 'PYTHONUSERBASE' not in os.environ and 'real_prefix' not in sys.__dict__:
+diff --git a/Lib/pydoc.py b/Lib/pydoc.py
+index d7b89c9..42cc905 100755
+--- a/Lib/pydoc.py
++++ b/Lib/pydoc.py
+@@ -375,7 +375,7 @@ class Doc:
+     docmodule = docclass = docroutine = docother = docproperty = docdata = fail
+ 
+     def getdocloc(self, object,
+-                  basedir=os.path.join(sys.exec_prefix, "lib",
++                  basedir=os.path.join(sys.exec_prefix, "sys.lib",
+                                        "python"+sys.version[0:3])):
+         """Return the location of module docs or None"""
+ 
+Index: Python-2.7.14/Lib/site.py
+===================================================================
+--- Python-2.7.14.orig/Lib/site.py
++++ Python-2.7.14/Lib/site.py
+@@ -304,12 +304,16 @@ def getsitepackages():
+             sitepackages.append(os.path.join(prefix, "local/lib",
+                                         "python" + sys.version[:3],
+                                         "dist-packages"))
+-            sitepackages.append(os.path.join(prefix, "lib",
++            sitepackages.append(os.path.join(prefix, sys.lib,
+                                         "python" + sys.version[:3],
+                                         "dist-packages"))
++            if sys.lib != "lib":
++                sitepackages.append(os.path.join(prefix, "lib",
++                                        "python" + sys.version[:3],
++                                        "dist-packages"))
+         else:
+             sitepackages.append(prefix)
+-            sitepackages.append(os.path.join(prefix, "lib", "site-packages"))
++            sitepackages.append(os.path.join(prefix, sys.lib, "site-packages"))
+     return sitepackages
+ 
+ def addsitepackages(known_paths):
+Index: Python-2.7.14/Lib/sysconfig.py
+===================================================================
+--- Python-2.7.14.orig/Lib/sysconfig.py
++++ Python-2.7.14/Lib/sysconfig.py
+@@ -7,10 +7,10 @@ from os.path import pardir, realpath
+ 
+ _INSTALL_SCHEMES = {
+     'posix_prefix': {
+-        'stdlib': '{base}/lib/python{py_version_short}',
+-        'platstdlib': '{platbase}/lib/python{py_version_short}',
++        'stdlib': '{base}/'+sys.lib+'/python{py_version_short}',
++        'platstdlib': '{platbase}/'+sys.lib+'/python{py_version_short}',
+         'purelib': '{base}/lib/python{py_version_short}/site-packages',
+-        'platlib': '{platbase}/lib/python{py_version_short}/site-packages',
++        'platlib': '{platbase}/'+sys.lib+'/python{py_version_short}/site-packages',
+         'include': '{base}/include/python{py_version_short}',
+         'platinclude': '{platbase}/include/python{py_version_short}',
+         'scripts': '{base}/bin',
+@@ -85,10 +85,10 @@ _INSTALL_SCHEMES = {
+         'data'   : '{userbase}',
+         },
+     'posix_user': {
+-        'stdlib': '{userbase}/lib/python{py_version_short}',
+-        'platstdlib': '{userbase}/lib/python{py_version_short}',
++        'stdlib': '{userbase}/'+sys.lib+'/python{py_version_short}',
++        'platstdlib': '{userbase}/'+sys.lib+'/python{py_version_short}',
+         'purelib': '{userbase}/lib/python{py_version_short}/site-packages',
+-        'platlib': '{userbase}/lib/python{py_version_short}/site-packages',
++        'platlib': '{userbase}/'+sys.lib+'/python{py_version_short}/site-packages',
+         'include': '{userbase}/include/python{py_version_short}',
+         'scripts': '{userbase}/bin',
+         'data'   : '{userbase}',
+Index: Python-2.7.14/Lib/test/test_dl.py
+===================================================================
+--- Python-2.7.14.orig/Lib/test/test_dl.py
++++ Python-2.7.14/Lib/test/test_dl.py
+@@ -4,10 +4,11 @@
+ import unittest
+ from test.test_support import verbose, import_module
+ dl = import_module('dl', deprecated=True)
++import sys
+ 
+ sharedlibs = [
+-    ('/usr/lib/libc.so', 'getpid'),
+-    ('/lib/libc.so.6', 'getpid'),
++    ('/usr/'+sys.lib+'/libc.so', 'getpid'),
++    ('/'+sys.lib+'/libc.so.6', 'getpid'),
+     ('/usr/bin/cygwin1.dll', 'getpid'),
+     ('/usr/lib/libc.dylib', 'getpid'),
+     ]
+Index: Python-2.7.14/Lib/test/test_site.py
+===================================================================
+--- Python-2.7.14.orig/Lib/test/test_site.py
++++ Python-2.7.14/Lib/test/test_site.py
+@@ -254,15 +254,19 @@ class HelperFunctionsTests(unittest.TestCase):
+             self.assertEqual(dirs[0], wanted)
+         elif os.sep == '/':
+             # OS X, Linux, FreeBSD, etc
+-            self.assertEqual(len(dirs), 2)
+             wanted = os.path.join('xoxo', 'local', 'lib',
+                                   'python' + sys.version[:3],
+                                   'dist-packages')
+-            self.assertEqual(dirs[0], wanted)
++            self.assertTrue(wanted in dirs)
+             wanted = os.path.join('xoxo', 'lib',
+                                   'python' + sys.version[:3],
+                                   'dist-packages')
+-            self.assertEqual(dirs[1], wanted)
++            self.assertTrue(wanted in dirs)
++            wanted = os.path.join('xoxo', sys.lib, 'python' + sys.version[:3],
++                                  'site-packages')
++            self.assertTrue(wanted in dirs)
++            wanted = os.path.join('xoxo', sys.lib, 'site-python')
++            self.assertTrue(wanted in dirs)
+         else:
+             # other platforms
+             self.assertEqual(len(dirs), 2)
+Index: Python-2.7.14/Lib/trace.py
+===================================================================
+--- Python-2.7.14.orig/Lib/trace.py
++++ Python-2.7.14/Lib/trace.py
+@@ -754,10 +754,10 @@ def main(argv=None):
+                 # should I also call expanduser? (after all, could use $HOME)
+ 
+                 s = s.replace("$prefix",
+-                              os.path.join(sys.prefix, "lib",
++                              os.path.join(sys.prefix, sys.lib,
+                                            "python" + sys.version[:3]))
+                 s = s.replace("$exec_prefix",
+-                              os.path.join(sys.exec_prefix, "lib",
++                              os.path.join(sys.exec_prefix, sys.lib,
+                                            "python" + sys.version[:3]))
+                 s = os.path.normpath(s)
+                 ignore_dirs.append(s)
+Index: Python-2.7.14/Makefile.pre.in
+===================================================================
+--- Python-2.7.14.orig/Makefile.pre.in
++++ Python-2.7.14/Makefile.pre.in
+@@ -97,6 +97,7 @@ PY_CORE_CFLAGS=	$(PY_CFLAGS) $(PY_CPPFLAGS) $(CFLAGSFORSHARED) -DPy_BUILD_CORE
+ 
+ # Machine-dependent subdirectories
+ MACHDEP=	@MACHDEP@
++LIB=           @LIB@
+ 
+ # Multiarch directory (may be empty)
+ MULTIARCH=	@MULTIARCH@
+@@ -119,7 +120,7 @@ LIBDIR=		@libdir@
+ MANDIR=		@mandir@
+ INCLUDEDIR=	@includedir@
+ CONFINCLUDEDIR=	$(exec_prefix)/include
+-SCRIPTDIR=	$(prefix)/lib
++SCRIPTDIR=	$(prefix)/@LIB@
+ 
+ # Detailed destination directories
+ BINLIBDEST=	$(LIBDIR)/python$(VERSION)
+@@ -671,6 +672,7 @@ Modules/getpath.o: $(srcdir)/Modules/getpath.c Makefile
+ 		-DEXEC_PREFIX='"$(exec_prefix)"' \
+ 		-DVERSION='"$(VERSION)"' \
+ 		-DVPATH='"$(VPATH)"' \
++		-DLIB='"$(LIB)"' \
+ 		-o $@ $(srcdir)/Modules/getpath.c
+ 
+ Modules/python.o: $(srcdir)/Modules/python.c
+@@ -719,7 +721,7 @@ regen-ast:
+ Python/compile.o Python/symtable.o Python/ast.o: $(srcdir)/Include/graminit.h $(srcdir)/Include/Python-ast.h
+ 
+ Python/getplatform.o: $(srcdir)/Python/getplatform.c
+-		$(CC) -c $(PY_CORE_CFLAGS) -DPLATFORM='"$(MACHDEP)"' -o $@ $(srcdir)/Python/getplatform.c
++		$(CC) -c $(PY_CORE_CFLAGS) -DPLATFORM='"$(MACHDEP)"' -DLIB='"$(LIB)"' -o $@ $(srcdir)/Python/getplatform.c
+ 
+ Python/importdl.o: $(srcdir)/Python/importdl.c
+ 		$(CC) -c $(PY_CORE_CFLAGS) -I$(DLINCLDIR) -o $@ $(srcdir)/Python/importdl.c
+Index: Python-2.7.14/Modules/getpath.c
+===================================================================
+--- Python-2.7.14.orig/Modules/getpath.c
++++ Python-2.7.14/Modules/getpath.c
+@@ -100,6 +100,13 @@
+ #error "PREFIX, EXEC_PREFIX, VERSION, and VPATH must be constant defined"
+ #endif
+ 
++#define LIB_PYTHON LIB "/python" VERSION
++
++#ifndef PYTHONPATH
++#define PYTHONPATH PREFIX "/" LIB_PYTHON ":" \
++              EXEC_PREFIX "/" LIB_PYTHON "/lib-dynload"
++#endif
++
+ #ifndef LANDMARK
+ #define LANDMARK "os.py"
+ #endif
+@@ -108,7 +115,7 @@ static char prefix[MAXPATHLEN+1];
+ static char exec_prefix[MAXPATHLEN+1];
+ static char progpath[MAXPATHLEN+1];
+ static char *module_search_path = NULL;
+-static char lib_python[] = "lib/python" VERSION;
++static char lib_python[] = LIB_PYTHON;
+ 
+ static void
+ reduce(char *dir)
+diff --git a/Python/getplatform.c b/Python/getplatform.c
+index 6899140..a648548 100644
+--- a/Python/getplatform.c
++++ b/Python/getplatform.c
+@@ -10,3 +10,13 @@ Py_GetPlatform(void)
+ {
+ 	return PLATFORM;
+ }
++
++#ifndef LIB
++#define LIB "lib"
++#endif
++
++const char *
++Py_GetLib(void)
++{
++	return LIB;
++}
+diff --git a/Python/sysmodule.c b/Python/sysmodule.c
+index 8182623..794ab62 100644
+--- a/Python/sysmodule.c
++++ b/Python/sysmodule.c
+@@ -1437,6 +1437,8 @@ _PySys_Init(void)
+                         PyString_FromString(Py_GetCopyright()));
+     SET_SYS_FROM_STRING("platform",
+                         PyString_FromString(Py_GetPlatform()));
++    SET_SYS_FROM_STRING("lib",
++                        PyString_FromString(Py_GetLib()));
+     SET_SYS_FROM_STRING("executable",
+                         PyString_FromString(Py_GetProgramFullPath()));
+     SET_SYS_FROM_STRING("prefix",
+diff --git a/configure.ac b/configure.ac
+index fe99689..e4ad2d2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -780,6 +780,10 @@ SunOS*)
+     ;;
+ esac
+ 
++AC_SUBST(LIB)
++AC_MSG_CHECKING(LIB)
++LIB="SEDMELIBLEAF"
++AC_MSG_RESULT($LIB)
+ 
+ AC_SUBST(LIBRARY)
+ AC_MSG_CHECKING(LIBRARY)

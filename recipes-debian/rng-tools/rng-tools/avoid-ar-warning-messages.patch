@@ -1,0 +1,17 @@
+rng-tools: Avoid build warning messages
+
+Change AR_FLAGS defaults to avoid warning messages.
+
+diff --git a/Makefile.am b/Makefile.am
+index 921f2a2..0bdb983 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,6 +2,8 @@
+ ## Toplevel Makefile.am for rng-tools
+ ##
+ 
++ARFLAGS = crUu
++
+ SUBDIRS		= contrib
+ 
+ sbin_PROGRAMS	 = rngd

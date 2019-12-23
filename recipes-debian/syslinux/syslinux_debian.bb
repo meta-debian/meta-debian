@@ -18,6 +18,9 @@ inherit perlnative
 # ldlinux.* stuff for now, so skip mtools-native
 DEPENDS = "nasm-native util-linux e2fsprogs"
 
+DEPENDS_append_class-target = " syslinux-native"
+DEPENDS_append_class-nativesdk = " syslinux-native"
+
 FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-devtools/syslinux/syslinux:"
 
 SRC_URI += "file://syslinux-remove-clean-script.patch \
@@ -42,6 +45,10 @@ EXTRA_OEMAKE = " \
 	BINDIR=${bindir} SBINDIR=${sbindir} LIBDIR=${libdir} \
 	DATADIR=${datadir} MANDIR=${mandir} INCDIR=${includedir} \
 "
+
+EXTRA_OEMAKE_append_class-target = " PREPCORE=${STAGING_BINDIR_NATIVE}/prepcore"
+EXTRA_OEMAKE_append_class-nativesdk = " PREPCORE=${STAGING_BINDIR_NATIVE}/prepcore"
+
 do_configure() {
 	# clean installer executables included in source tarball
 	oe_runmake clean firmware="efi32" EFIINC="${includedir}"
@@ -70,6 +77,10 @@ do_install() {
 	install -m 644 ${S}/bios/core/ldlinux.sys ${D}${datadir}/syslinux/
 	install -m 644 ${S}/bios/core/ldlinux.bss ${D}${datadir}/syslinux/
 	install -m 755 ${S}/bios/linux/syslinux-nomtools ${D}${bindir}/
+}
+
+do_install_append_class-native() {
+	install -m 0755 ${S}/bios/lzo/prepcore ${D}${bindir}/
 }
 
 PACKAGES += "${PN}-nomtools ${PN}-extlinux ${PN}-mbr ${PN}-chain ${PN}-pxelinux ${PN}-isolinux ${PN}-misc"
