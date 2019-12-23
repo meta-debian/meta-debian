@@ -5,3 +5,5 @@ require recipes-kernel/linux-libc-headers/linux-libc-headers.inc
 inherit linux-src
 
 PROVIDES += "linux-libc-headers"
+RPROVIDES_${PN}-dev += "linux-libc-headers-dev"
+RPROVIDES_${PN}-dbg += "linux-libc-headers-dbg"
