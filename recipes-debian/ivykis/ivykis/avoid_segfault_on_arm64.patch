@@ -1,0 +1,116 @@
+From a5e9caddbdb4d9d85133a440edec6aa7c1f018ac Mon Sep 17 00:00:00 2001
+From: Lennert Buytenhek <buytenh@wantstofly.org>
+Date: Sun, 5 May 2019 02:44:55 +0300
+Subject: [PATCH] Avoid marking pthread_atfork() as weak if provided by
+ libc_nonshared.a.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On Linux, pthread_atfork() is provided not by libpthread.so, but by
+libc_nonshared.a (for glibc >= 2.28) or by libpthread_nonshared.a
+(for glibc <= 2.27), and using "#pragma weak pthread_atfork" will
+cause pthread_atfork to be undefined (and have an address of NULL)
+even if the relevant lib*_nonshared.a was explicitly specified to
+the linker.  This is explained by this paragraph from Chapter 4,
+section "Symbol Table", of the System V ABI specification, as pointed
+out by Hugo Grostabussiat:
+
+	When the link editor searches archive libraries [see ``Archive
+	File'' in Chapter 7], it extracts archive members that contain
+	definitions of undefined global symbols. The member's definition
+	may be either a global or a weak symbol. The link editor does
+	not extract archive members to resolve undefined weak symbols.
+	Unresolved weak symbols have a zero value.
+
+Therefore, if either of these lib*_nonshared.a libraries exists, we
+should avoid marking pthread_atfork as weak.
+
+We were doing this correctly for glibc <= 2.27, as we were checking
+for libpthread_nonshared.a, but not for libc_nonshared.a, so we would
+still mark pthread_atfork as a weak symbol on machines that provide
+libc_nonshared.a but not libpthread_nonshared.a, that is, on glibc
+>= 2.28 machines without a dummy backward compatibility version of
+libpthread_nonshared.a installed.
+
+This patch makes us do the right thing for glibc >= 2.28 as well, and
+was derived from patches provided by Rolf Eike Beer <eike@sf-mail.de>
+and Antal Nemes <antal.nemes@balabit.com>.
+
+Thanks to Hugo Grostabussiat <bonstra@bonstra.fr.eu.org>, Henrik Grindal
+Bakken <hgb@ifi.uio.no> and Tomáš Mózes <hydrapolic@gmail.com> for the
+discussion and testing.
+
+Reported-by: Changqing Li <changqing.li@windriver.com>
+Signed-off-by: Lennert Buytenhek <buytenh@wantstofly.org>
+---
+ configure.ac | 32 ++++++++++++++++++++++++--------
+ src/pthr.h   | 10 +++++-----
+ 2 files changed, 29 insertions(+), 13 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index e9b10c0..20203f3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -78,15 +78,31 @@ solaris*)
+ esac
+ 
+ #
+-# On Linux, linking against libpthread.so.0 doesn't give you
+-# pthread_atfork(), as the latter is defined in libpthread_nonshared.a,
+-# which doesn't get pulled in if libpthread.so.0 is pulled in
+-# indirectly, e.g. via -lrt, but does get pulled in if you link against
+-# -lpthread, as libpthread.so is a linker script that references both
+-# libpthread.so.0 and libpthread_nonshared.a.  As we can link in
+-# libpthread_nonshared.a without pulling in libpthread.so.0, explicitly
+-# link in libpthread_nonshared.a if it is available.
++# On Linux, pthread_atfork() is provided not by libpthread.so, but by
++# libc_nonshared.a (for glibc >= 2.28) or by libpthread_nonshared.a
++# (for glibc <= 2.27), and using "#pragma weak pthread_atfork" will
++# cause pthread_atfork to be undefined (and have an address of NULL)
++# even if the relevant lib*_nonshared.a was explicitly specified to
++# the linker.  This is explained by this paragraph from Chapter 4,
++# section "Symbol Table", of the System V ABI specification, as pointed
++# out by Hugo Grostabussiat:
+ #
++#	When the link editor searches archive libraries [see ``Archive
++#	File'' in Chapter 7], it extracts archive members that contain
++#	definitions of undefined global symbols. The member's definition
++#	may be either a global or a weak symbol. The link editor does
++#	not extract archive members to resolve undefined weak symbols.
++#	Unresolved weak symbols have a zero value.
++#
++# Therefore, if either of these lib*_nonshared.a libraries exists, we
++# need to make note of this, to avoid marking pthread_atfork as weak.
++# Also, if pthread_atfork is provided by libpthread_nonshared.a, we'll
++# need to pull that library in explicitly, as we are not necessarily
++# linked against libpthread.so.0.
++#
++AC_CHECK_LIB([c_nonshared], [pthread_atfork],
++	     [AC_DEFINE(HAVE_LIBC_NONSHARED, 1,
++	      Define to 1 if you have the `c_nonshared' library.)])
+ AC_CHECK_LIB([pthread_nonshared], [pthread_atfork])
+ 
+ # Checks for header files.
+diff --git a/src/pthr.h b/src/pthr.h
+index a41eaf3..29e4be7 100644
+--- a/src/pthr.h
++++ b/src/pthr.h
+@@ -37,12 +37,12 @@ static inline int pthreads_available(void)
+ #ifdef HAVE_PRAGMA_WEAK
+ 
+ /*
+- * On Linux, pthread_atfork() is defined in libpthread_nonshared.a,
+- * a static library, and we want to avoid "#pragma weak" for that
+- * symbol because that causes it to be undefined even if you link
+- * libpthread_nonshared.a in explicitly.
++ * On Linux, pthread_atfork() is defined in libc_nonshared.a (for
++ * glibc >= 2.28) or libpthread_nonshared.a (for glibc <= 2.27), and
++ * we want to avoid "#pragma weak" for that symbol because that causes
++ * it to be undefined even if you link lib*_nonshared.a in explicitly.
+  */
+-#ifndef HAVE_LIBPTHREAD_NONSHARED
++#if !defined(HAVE_LIBC_NONSHARED) && !defined(HAVE_LIBPTHREAD_NONSHARED)
+ #pragma weak pthread_atfork
+ #endif
+ 
