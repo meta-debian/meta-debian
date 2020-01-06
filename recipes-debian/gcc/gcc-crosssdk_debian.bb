@@ -3,7 +3,6 @@
 # base branch: daisy
 #
 
-PR = "r0"
 require gcc-cross_${PV}.bb
 
 inherit crosssdk

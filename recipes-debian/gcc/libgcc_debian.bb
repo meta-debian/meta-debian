@@ -3,8 +3,6 @@
 # base branch: master
 #
 
-PR = "r0"
-
 require libgcc-common.inc
 
 DEPENDS = "virtual/${TARGET_PREFIX}gcc virtual/${TARGET_PREFIX}g++"
