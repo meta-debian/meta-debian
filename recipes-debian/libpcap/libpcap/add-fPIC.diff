@@ -1,0 +1,23 @@
+From 96eb1420feb1aca4bc5b0622ea4af8420b6b74b0 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 5 Aug 2019 16:17:41 +0900
+
+---
+ Makefile.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index ba4a524..046444e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -62,8 +62,8 @@ ADDLOBJS = @ADDLOBJS@
+ ADDLARCHIVEOBJS = @ADDLARCHIVEOBJS@
+ LIBS = @LIBS@
+ CROSSFLAGS=
+-CFLAGS = @CFLAGS@   ${CROSSFLAGS}
+-LDFLAGS = @LDFLAGS@ ${CROSSFLAGS}
++CFLAGS = @CFLAGS@   ${CROSSFLAGS} -fPIC
++LDFLAGS = @LDFLAGS@ ${CROSSFLAGS} -fPIC
+ DYEXT = @DYEXT@
+ V_RPATH_OPT = @V_RPATH_OPT@
+ DEPENDENCY_CFLAG = @DEPENDENCY_CFLAG@
