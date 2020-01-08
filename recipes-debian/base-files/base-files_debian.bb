@@ -71,7 +71,7 @@ do_install() {
 	install -m 0644 ${WORKDIR}/shells ${D}${sysconfdir}/
 }
 
-pkg_postinst_${PN}() {
+pkg_postinst_ontarget_${PN} () {
 	for i in log/wtmp log/btmp log/lastlog run/utmp; do
 		test -f $D${localstatedir}/$i || echo -n > $D${localstatedir}/$i
 		chown root:utmp $D${localstatedir}/$i
