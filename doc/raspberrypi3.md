@@ -166,31 +166,6 @@ Go to build directory then.
 $ sudo tar xvf tmp-glibc/deploy/images/raspberrypi3-64/core-image-minimal-raspberrypi3-64.tar.gz -C /mnt/rootfs/
 ```
 
-2. Clone linux firmwares from git repository
-
-```
-$ git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-```
-
-3. Create /lib/firmware on rootfs partition
-
-```
-$ sudo mkdir  /mnt/rootfs/lib/firmware
-```
-
-4. Copy firmwares
-
-```
-$ sudo cp -r linux-firmware/brcm/ /mnt/rootfs/lib/firmware/
-```
-
-5. Create symbolic link
-
-```
-$ cd /mnt/rootfs/lib/firmware/brcm
-$ sudo ln -s brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt brcmfmac43455-sdio.txt
-```
-
 ## Boot EMLinux
 
 unmount sdcard and insert sdcart to your Raspberry Pi then start it. You can login to console via UART.
