@@ -141,6 +141,9 @@ do_install_append() {
 
 require recipes-core/glibc/glibc-package.inc
 
+# This is a backport of poky's 38fce3d2fd998a67604f9492ab3a571f963c5df3
+RDEPENDS_${PN}-dev = "linux-libc-headers-dev"
+
 stash_locale_sysroot_cleanup() {
         stash_locale_cleanup ${SYSROOT_DESTDIR}
         # We don't want to ship an empty /usr/share
