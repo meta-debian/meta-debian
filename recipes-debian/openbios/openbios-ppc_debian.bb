@@ -4,6 +4,8 @@ SUMMARY = "PowerPC Open Firmware"
 
 DEPENDS = "fcode-utils-native libxslt-native"
 
+COMPATIBLE_HOST = "(powerpc).*-linux"
+
 do_configure() {
 	# uninative does not provide ISO-8859-15
 	sed -i -e "s/ISO-8859-15/ISO-8859-1/g" ${S}/config/xml/*
