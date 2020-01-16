@@ -18,6 +18,7 @@ file://LICENSES;md5=cfc0ed77a9f62fa62eded042ebe31d72 \
 "
 
 DEPENDS += "gperf-native bison-native"
+PROVIDES += "virtual/crypt"
 
 FILESPATH_append = ":${COREBASE}/meta/recipes-core/glibc/glibc"
 
@@ -85,7 +86,6 @@ EXTRA_OECONF = "--enable-kernel=${OLDEST_KERNEL} \
                 --enable-bind-now \
                 --enable-stack-protector=strong \
                 --enable-stackguard-randomization \
-                --disable-crypt \
                 --enable-nscd \
                 ${GLIBCPIE} \
                 ${GLIBC_EXTRA_OECONF}"
@@ -168,5 +168,6 @@ do_install_armmultilib () {
 }
 
 FILES_${PN} += "${sysconfdir}/nsswitch.conf"
+FILES_${PN} += "${base_libdir}/libcrypt*.so.* ${base_libdir}/libcrypt-*.so"
 
 BBCLASSEXTEND = "nativesdk"
