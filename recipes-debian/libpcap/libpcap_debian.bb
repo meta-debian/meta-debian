@@ -16,7 +16,6 @@ DEPENDS = "flex-native bison-native"
 inherit debian-package
 require recipes-debian/sources/libpcap.inc
 
-FILESPATH_append = ":${COREBASE}/meta/recipes-connectivity/libpcap/libpcap:"
 SRC_URI += "file://0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-syste.patch \
             file://fix-lds-path.diff \
             file://add-fPIC.diff \            
