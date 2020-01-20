@@ -6,6 +6,8 @@ DEPENDS = "bison-native libmhash libpcre audit acl libselinux e2fsprogs"
 inherit debian-package
 require recipes-debian/sources/aide.inc
 
+SRC_URI += "file://update-aide.conf.patch"
+
 inherit autotools pkgconfig
 
 EXTRA_OECONF += "--with-zlib --with-xattr --with-posix-acl --with-e2fsattrs --with-selinux --with-audit"
