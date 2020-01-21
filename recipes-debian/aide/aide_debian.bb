@@ -57,4 +57,7 @@ FILES_aide-common += " \
 		${datadir}/lintian/overrides/aide-common \
 		"
 
-RDEPENDS_aide-common += "bash"
+# 10_aide_prevyear requires date command provided by coreutils, and
+# 10_aide_hostname requires hostname command provided by net-tools.
+# aide.wrapper requires dotlockfile command provided by liblockfile.
+RDEPENDS_aide-common += "aide bash coreutils liblockfile net-tools"
