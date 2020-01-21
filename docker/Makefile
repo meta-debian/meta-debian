@@ -31,4 +31,4 @@ cleanall:
 	docker volume rm -f docker_downloads
 	docker rmi -f deby-image
 
-.PHONY: docker_image start test build_test qemu_ptest clean cleanall
+.PHONY: refresh start test build_test qemu_ptest clean cleanall
