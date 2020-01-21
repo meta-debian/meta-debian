@@ -45,6 +45,11 @@ do_install_append () {
 	install -d 755 ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/aide-common ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/${PN} ${D}${datadir}/lintian/overrides
+
+	install -d 755 ${D}${sysconfdir}/aide
+	install -d 755 ${D}${sysconfdir}/aide/aide.conf.d
+	install -d 755 ${D}${sysconfdir}/aide/aide.settings.d
+	install -d 755 ${D}${localstatedir}/lib/aide
 }
 
 PACKAGES =+ "aide-common"
@@ -55,6 +60,8 @@ FILES_aide-common += " \
 		${datadir}/aide/* \
 		${sbindir}/* \
 		${datadir}/lintian/overrides/aide-common \
+		${sysconfdir}/* \
+		${localstatedir}/* \
 		"
 
 # 10_aide_prevyear requires date command provided by coreutils, and
