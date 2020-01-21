@@ -51,7 +51,6 @@ if [ -z "$TEMPLATECONF" ] && [ "${BUILDDIR_SETUP_DONE}" = "false" ]; then
     echo "DISTRO = \"emlinux\"" >> conf/local.conf
     echo "PACKAGE_CLASSES = \"package_deb\"" >> conf/local.conf
     echo "BBMASK = \"meta-debian/recipes-core\"" >> conf/local.conf
-    echo "BBMASK .= \"|meta-debian-extended/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
     # nsswitch.conf is not provided by debian base-file package but systemd requires it.
     # use poky's base-files package temporary.
     echo "BBMASK .= \"|meta-debian/recipes-debian/base-files/base-files_debian.bb\"" >> conf/local.conf
