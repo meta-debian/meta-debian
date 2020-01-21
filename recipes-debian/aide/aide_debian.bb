@@ -34,8 +34,6 @@ do_install_append () {
 	install -d 755 ${D}${datadir}/aide/config/default
 	install -c -m 644 ${S}/debian/default/aide ${D}${datadir}/aide/config/default
 
-	install -c -m 644 ${S}/debian/ucf-helper/ucf-helper-functions.sh ${D}${datadir}/aide
-
 	install -d 755 ${D}${datadir}/aide/config/cron.daily
 	install -c -m 644 ${S}/debian/cron.daily/aide ${D}${datadir}/aide/config/cron.daily
 
@@ -43,7 +41,7 @@ do_install_append () {
 	install -c -m 755 ${S}/debian/aideinit ${D}${sbindir}
 	install -c -m 755 ${S}/debian/update-aide.conf ${D}${sbindir}
 	install -c -m 755 ${S}/debian/wrapper/aide.wrapper ${D}${bindir}
-	
+
 	install -d 755 ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/aide-common ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/${PN} ${D}${datadir}/lintian/overrides
