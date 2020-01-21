@@ -25,10 +25,12 @@ do_install_append () {
 	install -c -m 755 ${S}/contrib/aide-attributes.sh ${D}${bindir}/aide-attributes
 
 	install -d 755 ${D}${datadir}/aide/config/aide
+	install -d 755 ${D}${datadir}/aide/config/aide/aide.conf.d
+	install -d 755 ${D}${datadir}/aide/config/aide/aide.settings.d
 	install -c -m 644 ${S}/debian/aide.conf ${D}${datadir}/aide/config/aide
-	install -c -m 644 ${S}/debian/aide.conf.d/* ${D}${datadir}/aide/config/aide
-	install -c -m 644 ${S}/debian/aide.settings.d/* ${D}${datadir}/aide/config/aide
-	
+	install -c -m 644 ${S}/debian/aide.conf.d/* ${D}${datadir}/aide/config/aide/aide.conf.d
+	install -c -m 644 ${S}/debian/aide.settings.d/* ${D}${datadir}/aide/config/aide/aide.settings.d
+
 	install -d 755 ${D}${datadir}/aide/config/default
 	install -c -m 644 ${S}/debian/default/aide ${D}${datadir}/aide/config/default
 
