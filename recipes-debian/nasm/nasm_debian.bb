@@ -1,6 +1,6 @@
 # base recipe: meta/recipes-devtools/nasm/nasm_2.14.02.bb
 # base branch: warrior
-# base commit: dbd22b6cd75dd607e1e47bf12da4d54b574c9a8f
+# base commit: d8da51bd3b84791d181a2844efe00d4bf2cdb02c
 
 SUMMARY = "General-purpose x86 assembler"
 SECTION = "devel"
@@ -13,6 +13,7 @@ require recipes-debian/sources/nasm.inc
 FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/nasm/nasm"
 SRC_URI += " \
            file://CVE-2018-19755.patch \
+           file://CVE-2019-14248-rebased.patch \
            "
 
 # brokensep since this uses autoconf but not automake
