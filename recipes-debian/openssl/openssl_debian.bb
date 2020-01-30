@@ -1,8 +1,6 @@
-#
-# base recipe: meta/recipes-connectivity/openssl/openssl_1.1.1b.bb
+# base recipe: meta/recipes-connectivity/openssl/openssl_1.1.1d.bb
 # base branch: master
-# base commit: 77a4470733a79b1d13e2848b52523d95440164eb
-#
+# base commit: 5b7b426cffc85ba92fe0aec6ef73bbfaba0871b8
 
 SUMMARY = "Secure Socket Layer"
 DESCRIPTION = "Secure Socket Layer (SSL) binary and related cryptographic tools."
@@ -26,6 +24,7 @@ SRC_URI += " \
            file://0001-skip-test_symbol_presence.patch \
            file://0001-buildinfo-strip-sysroot-and-debug-prefix-map-from-co.patch \
            file://afalg.patch \
+           file://CVE-2019-1551.patch \
            "
 
 SRC_URI_append_class-nativesdk = " \
