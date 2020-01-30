@@ -1,8 +1,6 @@
-#
-# base recipe: meta/recipes-core/glibc/glibc_2.28.bb
-# base branch: master
-# base commit: 6f2ef620d90ab39870bb6c02183249e0e1045aeb
-#
+# base recipe: meta/recipes-core/glibc/glibc_2.29.bb
+# base branch: warrior
+# base commit: ef2bec784ba91d7f7a2bfe5565cdc78727d2c77a
 
 require recipes-core/glibc/glibc.inc
 
@@ -52,6 +50,7 @@ SRC_URI += " \
            file://0029-inject-file-assembly-directives.patch \
            file://0031-sysdeps-ieee754-prevent-maybe-uninitialized-errors-w.patch \
            file://0033-locale-prevent-maybe-uninitialized-errors-with-Os-BZ.patch \
+           file://CVE-2019-19126.patch \
            "
 
 NATIVESDKFIXES ?= ""
