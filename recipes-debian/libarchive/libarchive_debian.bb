@@ -38,6 +38,7 @@ EXTRA_OECONF += "--enable-largefile"
 SRC_URI += " \
            file://non-recursive-extract-and-list.patch \
            file://bug1066.patch \
+           file://CVE-2019-19221.patch \
 "
 
 inherit autotools update-alternatives pkgconfig
