@@ -19,6 +19,7 @@ require recipes-debian/sources/libpcap.inc
 SRC_URI += "file://0001-pcap-usb-linux.c-add-missing-limits.h-for-musl-syste.patch \
             file://fix-lds-path.diff \
             file://add-fPIC.diff \            
+            file://0001-Fix-the-dependencies-for-the-object-files-of-scanner.patch \
             "
 
 inherit autotools binconfig-disabled pkgconfig bluetooth
