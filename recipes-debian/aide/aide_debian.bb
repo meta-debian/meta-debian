@@ -6,6 +6,8 @@ DEPENDS = "bison-native libmhash libpcre audit acl libselinux e2fsprogs"
 inherit debian-package
 require recipes-debian/sources/aide.inc
 
+SRC_URI += "file://update-aide.conf.patch"
+
 inherit autotools pkgconfig
 
 EXTRA_OECONF += "--with-zlib --with-xattr --with-posix-acl --with-e2fsattrs --with-selinux --with-audit"
@@ -23,14 +25,14 @@ do_install_append () {
 	install -c -m 755 ${S}/contrib/aide-attributes.sh ${D}${bindir}/aide-attributes
 
 	install -d 755 ${D}${datadir}/aide/config/aide
+	install -d 755 ${D}${datadir}/aide/config/aide/aide.conf.d
+	install -d 755 ${D}${datadir}/aide/config/aide/aide.settings.d
 	install -c -m 644 ${S}/debian/aide.conf ${D}${datadir}/aide/config/aide
-	install -c -m 644 ${S}/debian/aide.conf.d/* ${D}${datadir}/aide/config/aide
-	install -c -m 644 ${S}/debian/aide.settings.d/* ${D}${datadir}/aide/config/aide
-	
+	cp -d --no-preserve=ownership ${S}/debian/aide.conf.d/* ${D}${datadir}/aide/config/aide/aide.conf.d
+	cp -d --no-preserve=ownership ${S}/debian/aide.settings.d/* ${D}${datadir}/aide/config/aide/aide.settings.d
+
 	install -d 755 ${D}${datadir}/aide/config/default
 	install -c -m 644 ${S}/debian/default/aide ${D}${datadir}/aide/config/default
-
-	install -c -m 644 ${S}/debian/ucf-helper/ucf-helper-functions.sh ${D}${datadir}/aide
 
 	install -d 755 ${D}${datadir}/aide/config/cron.daily
 	install -c -m 644 ${S}/debian/cron.daily/aide ${D}${datadir}/aide/config/cron.daily
@@ -39,10 +41,15 @@ do_install_append () {
 	install -c -m 755 ${S}/debian/aideinit ${D}${sbindir}
 	install -c -m 755 ${S}/debian/update-aide.conf ${D}${sbindir}
 	install -c -m 755 ${S}/debian/wrapper/aide.wrapper ${D}${bindir}
-	
+
 	install -d 755 ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/aide-common ${D}${datadir}/lintian/overrides
 	install -c -m 644 ${S}/debian/lintian/overrides/${PN} ${D}${datadir}/lintian/overrides
+
+	install -d 755 ${D}${sysconfdir}/aide
+	install -d 755 ${D}${sysconfdir}/aide/aide.conf.d
+	install -d 755 ${D}${sysconfdir}/aide/aide.settings.d
+	install -d 755 ${D}${localstatedir}/lib/aide
 }
 
 PACKAGES =+ "aide-common"
@@ -53,6 +60,11 @@ FILES_aide-common += " \
 		${datadir}/aide/* \
 		${sbindir}/* \
 		${datadir}/lintian/overrides/aide-common \
+		${sysconfdir}/* \
+		${localstatedir}/* \
 		"
 
-RDEPENDS_aide-common += "bash"
+# 10_aide_prevyear requires date command provided by coreutils, and
+# 10_aide_hostname requires hostname command provided by net-tools.
+# aide.wrapper requires dotlockfile command provided by liblockfile.
+RDEPENDS_aide-common += "aide bash coreutils liblockfile net-tools"

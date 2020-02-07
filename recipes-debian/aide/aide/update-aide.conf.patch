@@ -1,0 +1,11 @@
+--- a/debian/update-aide.conf	2020-01-20 16:00:40.996546862 +0900
++++ b/debian/update-aide.conf	2020-01-20 16:00:57.928413675 +0900
+@@ -37,7 +37,7 @@
+        --keepcomments - Do not remove comment lines
+        --removecomments - Remove comment lines
+        -o|--output file - write output to file instead of ${UPAC_outputfile}
+-       -d|--confdir directory - read input from given directory instead of ${UPA4C_confdir}
++       -d|--confdir directory - read input from given directory instead of ${UPAC_confdir}
+        -D|--confd directory - read config snippets from given directory instead of ${UPAC_confd}
+        -S|--settingsd directory - read settings snippets from given directory instead of ${UPAC_settingsd}
+        -a|--autoconfigfile - write result to file instead of ${UPAC_autoconfigfile}
