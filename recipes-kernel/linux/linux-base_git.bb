@@ -48,11 +48,14 @@ DEPENDS += "bc-native"
 #   the base configuration files in do_configure
 LINUX_DEFCONFIG ?= ""
 
+# space separated file list that users can freely specify from any local files
+LINUX_CONFIG ?= ""
+
 # define the default kernel configuration for QEMU targets
 require linux-base-qemu-config.inc
 
 # Generate ${WORKDIR}/defconfig from specified config files;
-# LINUX_DEFCONFIG and .config files in SRC_URI.
+# LINUX_DEFCONFIG, .config files in SRC_URI, or LINUX_CONFIG.
 # ${WORKDIR}/defconfig is copied to ${B}/.config by kernel_do_configure.
 do_configure_prepend() {
 	rm -f ${WORKDIR}/defconfig ${B}/.config
@@ -66,6 +69,7 @@ do_configure_prepend() {
 		KERNEL_SRCARCH=${ARCH}
 	fi
 
+	LOCAL_CONFIGS="${@' '.join(find_cfgs(d))}"
 	if [ -n "${LINUX_DEFCONFIG}" ]; then
 		DEFCONFIG=""
 		bbnote "use the following defconfig in kernel source tree:"
@@ -79,19 +83,24 @@ do_configure_prepend() {
 		done
 	else
 		DEFCONFIG=
-		bbnote "LINUX_DEFCONFIG not set, use only .configs in SRC_URI"
+		bbnote "LINUX_DEFCONFIG not set, use only local config files"
+		if [ -z "${LOCAL_CONFIGS}${LINUX_CONFIG}" ]; then
+			bbfatal "No config file given
+Please provide at least one of the following settings:
+    LINUX_DEFCONFIG
+    .config files in SRC_URI
+    LINUX_CONFIG"
+		fi
 	fi
 
-	bbnote "creating the final config with the following .config files:"
-	LOCAL_CONFIGS="${@' '.join(find_cfgs(d))}"
-	for cfg in ${DEFCONFIG} ${LOCAL_CONFIGS}; do
+	bbnote "creating the final config with the following config files:"
+	for cfg in ${DEFCONFIG} ${LOCAL_CONFIGS} ${LINUX_CONFIG}; do
 		bbnote "    ${cfg}"
 	done
-	merge_config ${DEFCONFIG} ${LOCAL_CONFIGS}
+	merge_config ${DEFCONFIG} ${LOCAL_CONFIGS} ${LINUX_CONFIG}
 
 	if [ ! -f ${B}/.config ]; then
-		bbfatal "no config file given
-Please set LINUX_DEFCONFIG or add .config files into SRC_URI"
+		bbfatal "merge_config: failed to create the final config file"
 	fi
 	mv ${B}/.config ${WORKDIR}/defconfig
 }
