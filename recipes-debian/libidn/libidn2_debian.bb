@@ -21,9 +21,6 @@ FILESEXTRAPATHS =. "${COREBASE}/meta/recipes-extended/libidn/libidn2:"
 
 SRC_URI += "file://Unset-need_charset_alias-when-building-for-musl.patch"
 
-# source format is 3.0 (quilt) but there is no debian/patches
-DEBIAN_QUILT_PATCHES = ""
-
 DEPENDS = "virtual/libiconv libunistring"
 
 inherit pkgconfig autotools gettext texinfo gtk-doc lib_package

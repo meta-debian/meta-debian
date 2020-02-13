@@ -9,9 +9,6 @@ require recipes-devtools/git/git.inc
 inherit debian-package
 require recipes-debian/sources/git.inc
 
-# source format is 3.0 (quilt) but there is no debian/patches
-DEBIAN_QUILT_PATCHES = ""
-
 DEPENDS += "asciidoc-native xmlto-native"
 
 EXTRA_OECONF += "ac_cv_snprintf_returns_bogus=no \
