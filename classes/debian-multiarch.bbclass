@@ -115,14 +115,21 @@ def deb_ctrl_multi_arch(d):
                     multi_arch = re.split("^Multi-Arch:\s*", line)[1]
                     multi_arch_map[package] = multi_arch
 
-    # MULTI_ARCH_pkg is set in recipe will have higher priority than in debian/control
     for package in (d.getVar('PACKAGES', True) or "").split():
+        pkg_pn = d.getVar('PKG_' + package, True)
+
+        # MULTI_ARCH_pkg is set in recipe will have higher priority
+        # than in debian/control
         multi_arch = d.getVar('MULTI_ARCH_' + package, True)
         if multi_arch:
             multi_arch_map[package] = multi_arch
+            multi_arch_map[pkg_pn] = multi_arch
 
         if multi_arch_map.get(package):
             add_multi_arch_metadata(package, multi_arch_map[package])
+
+        if package != pkg_pn and multi_arch_map.get(pkg_pn):
+            add_multi_arch_metadata(package, multi_arch_map[pkg_pn])
 
 python do_package_deb_prepend() {
     deb_ctrl_multi_arch(d)
