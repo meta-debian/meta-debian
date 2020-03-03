@@ -174,3 +174,15 @@ python debian_package_name_hook_append() {
 
             d.setVar("RPROVIDES_%s" % pkg, rprovs)
 }
+
+python () {
+    ### Remove default dependency of ${PN}-dev on ${PN}
+    # meta/conf/bitbake.conf makes ${PN}-dev always depend on ${PN},
+    # this can break populate_sdk when enable multilib because of conflict
+    # of ${PN} in different architectures.
+    pn = d.getVar("PN", True)
+    extendpkgv = d.getVar("EXTENDPKGV", True)
+    rdeps_pn_dev = d.getVar("RDEPENDS_%s-dev" % pn, True) or ""
+    rdeps_pn_dev = rdeps_pn_dev.replace("%s (= %s)" % (pn, extendpkgv), "")
+    d.setVar("RDEPENDS_%s-dev" % pn, rdeps_pn_dev)
+}
