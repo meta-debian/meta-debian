@@ -134,8 +134,6 @@ FILES_${PN}-dbg += "\
 	${datadir}/Linux-PAM/xtests/.debug"
 FILES_${PN}-doc += "${datadir}/pam/*.md5sums"
 
-MULTI_ARCH_${PN} = "foreign"
-
 PKG_${PN} = "${PN}0g"
 PKG_${PN}-dev = "${PN}0g-dev"
 RPROVIDES_${PN} += "${PN}0g"
