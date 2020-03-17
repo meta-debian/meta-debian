@@ -5,6 +5,8 @@ inherit populate_sdk_debian
 IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 ROOTFS_PKGMANAGE_BOOTSTRAP = ""
 
+inherit populate_sdk_qa
+
 # update-rc.d is no longer supported in our system, so
 # remove dependency on update-rc.d-native task from do_rootfs.
 # do_rootfs[depends] is defined in image.bbclass, therefore
