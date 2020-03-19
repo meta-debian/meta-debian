@@ -18,6 +18,7 @@ LIC_FILES_CHKSUM = "file://../license.terms;md5=058f6229798281bbcac4239c788cfa38
 inherit debian-package
 require recipes-debian/sources/tcl8.6.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/tcl8.6.9"
+DEBIAN_PATCH_TYPE = "quilt"
 
 DEPENDS = "tcl-native zlib"
 
@@ -35,6 +36,11 @@ SRC_URI = "${BASE_SRC_URI} \
 SRC_URI_class-native = "${BASE_SRC_URI}"
 
 S = "${DEBIAN_UNPACK_DIR}/unix"
+
+do_debian_patch_append() {
+	cd ${S}/..
+	patch  -R -u -p1 < debian/patches/tclprivate.diff
+}
 
 inherit autotools ptest binconfig
 
