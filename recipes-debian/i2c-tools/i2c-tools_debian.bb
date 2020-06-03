@@ -36,7 +36,7 @@ do_compile_append() {
 #include/linux/i2c-dev.h file conflict with linux-libc-headers-base
 #solve this follow base recipe
 do_install() {
-	oe_runmake install DESTDIR=${D} prefix=${prefix}
+	oe_runmake install DESTDIR=${D} prefix=${prefix} sbindir=${sbindir}
 	install -d ${D}${includedir}/linux
 
 	install -m 0644 include/linux/i2c-dev.h ${D}${includedir}/linux/i2c-dev-user.h
@@ -46,9 +46,8 @@ do_install() {
 	cd py-smbus && \
 		CFLAGS="${CFLAGS} -I../include" \
 		${STAGING_BINDIR_NATIVE}/${PYTHON_PN}-native/${PYTHON_PN} setup.py install \
-		--install-layout=deb --root=build
+		--install-layout=deb --install-lib=${D}/${PYTHON_SITEPACKAGES_DIR}
 
-	cp -a ${S}/py-smbus/build/${STAGING_DIR_NATIVE}/* ${D}/
 	install -D -m 0644 ${S}/debian/i2c-tools.udev \
 		${D}${nonarch_base_libdir}/udev/rules.d/60-i2c-tools.rules
 }
@@ -58,3 +57,5 @@ PACKAGES += "python-smbus"
 FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug/*"
 FILES_python-smbus = "${PYTHON_SITEPACKAGES_DIR}/*"
 PKG_${PN}-dev = "libi2c-dev"
+
+BBCLASSEXTEND = "nativesdk"
