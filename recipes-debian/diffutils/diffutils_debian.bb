@@ -15,7 +15,7 @@ acpaths = "-I ./m4"
 
 inherit ptest
 
-RDEPENDS_${PN}-ptest += "make"
+RDEPENDS_${PN}-ptest += "make perl"
 
 do_install_ptest() {
 	t=${D}${PTEST_PATH}
