@@ -3,8 +3,6 @@
 # base branch: daisy
 #
 
-PR = "r0"
-
 require gcc-cross_${PV}.bb
 
 DEPENDS = "virtual/${TARGET_PREFIX}binutils ${NATIVEDEPS}"

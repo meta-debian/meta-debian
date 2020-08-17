@@ -6,8 +6,6 @@
 require gcc-4.9.inc
 require gcc-shared-source.inc
 
-PR = "r0"
-
 inherit cross
 
 INHIBIT_DEFAULT_DEPS = "1"
