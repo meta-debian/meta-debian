@@ -50,5 +50,9 @@ do_install_append_class-native() {
 	create_wrapper ${D}/${bindir}/bison \
 		BISON_PKGDATADIR=${STAGING_DATADIR_NATIVE}/bison
 }
+do_install_append_class-nativesdk() {
+	create_wrapper ${D}/${bindir}/bison \
+		BISON_PKGDATADIR=${datadir}/bison
+}
 
 BBCLASSEXTEND = "native nativesdk"
