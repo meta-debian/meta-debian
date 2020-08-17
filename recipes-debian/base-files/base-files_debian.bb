@@ -19,6 +19,8 @@ OSNAME = "GNU/Linux"
 do_install() {
 	( test -f ${S}/debian/base-files.dirs && \
 	    cd ${D} && install -d $(cat ${S}/debian/base-files.dirs))
+	#in case of ${libdir} != "lib" (ex. multilib)
+	install -d ${D}${libdir}
 
 	rm -rf ${D}${localstatedir}/run ${D}${localstatedir}/lock
 	ln -sf /run ${D}${localstatedir}/run
