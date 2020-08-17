@@ -76,7 +76,8 @@ do_install() {
 pkg_postinst_${PN}() {
 	for i in log/wtmp log/btmp log/lastlog run/utmp; do
 		test -f $D${localstatedir}/$i || echo -n > $D${localstatedir}/$i
-		chown root:utmp $D${localstatedir}/$i
+		# use 43 instead of 'utmp' to avoid failure on package_ipk
+		chown root:43 $D${localstatedir}/$i
 		chmod 664 $D${localstatedir}/$i
 	done
 	chmod 660 $D${localstatedir}/log/btmp
