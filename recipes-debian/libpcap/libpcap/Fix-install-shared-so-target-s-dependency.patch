@@ -1,0 +1,63 @@
+From fb25034bc33c1c9b1a23bd7920bc8fac014bae56 Mon Sep 17 00:00:00 2001
+From: Yuki Hoshino <yuki.hoshino@miraclelinux.com>
+Date: Fri, 17 Jul 2020 04:41:50 +0000
+Subject: libpcap: Fix install shared-so-target's dependency.
+
+libpcap in upstream has build target "libpcap.so" in Makefile.in
+to generate libpcap binary. This target sets SONAME to "libpcap.so.1".
+
+But by historical reason[1], debian specifies its libpcap's SONAME to
+"libpcap.so.0.8". And to do that, debian adds and uses
+"$(SHAREDLIB)" target to generates binary, instead of original target
+"libpcap.so". The "$(SHAREDLIB)" also sets SONAME to "libpcap.so.0.8".
+
+We found that in rare case, when building the package with yocto,
+the original target "libpcap.so" is executed and SONAME is set to
+"libpcap.so.1"(We got this result once in 20 times build) like below.
+
+$ readelf -d libpcap.so.1.8.1 |grep "Library soname"
+ 0x000000000000000e (SONAME)             Library soname: [libpcap.so.1]
+
+This is because the target "install-shared-so" depends on the target
+"libpcap.so" and especially in parallel building, the target "libpcap.so"
+is executed according to the timing of generating object files.
+
+To ensure the target "libpcap.so" is never executed when building with
+yocto, we deleted it and modified to make the "$(SHAREDLIB)" target
+always executed.
+
+[1] https://people.debian.org/~rfrancoise/libpcap-faq.html
+
+---
+ Makefile.in | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index d8562f1..c1a9756 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -381,13 +381,6 @@ libpcap.a: $(OBJ)
+ 
+ shared: $(SHAREDLIB)
+ 
+-libpcap.so: $(OBJ)
+-	@rm -f $@
+-	VER=`cat $(srcdir)/VERSION`; \
+-	MAJOR_VER=`sed 's/\([0-9][0-9]*\)\..*/\1/' $(srcdir)/VERSION`; \
+-	@V_SHLIB_CMD@ @V_SHLIB_OPT@ @V_SONAME_OPT@$@.$$MAJOR_VER $(LDFLAGS) \
+-	    -o $@.$$VER $(OBJ) $(ADDLOBJS) $(LIBS)
+-
+ #
+ # The following rule succeeds, but the result is untested.
+ #
+@@ -657,7 +650,7 @@ install: install-shared install-archive pcap-config
+ 		    $(DESTDIR)$(mandir)/man@MAN_MISC_INFO@/`echo $$i | sed 's/.manmisc.in/.@MAN_MISC_INFO@/'`; done
+ 
+ install-shared: install-shared-$(DYEXT)
+-install-shared-so: libpcap.so
++install-shared-so: $(SHAREDLIB)
+ 	[ -d $(DESTDIR)$(libdir) ] || \
+ 	    (mkdir -p $(DESTDIR)$(libdir); chmod 755 $(DESTDIR)$(libdir))
+ 	$(INSTALL_DATA) $(SHAREDLIB) $(DESTDIR)$(libdir)/
+-- 
+2.7.4
