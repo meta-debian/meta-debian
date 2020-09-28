@@ -30,3 +30,7 @@ PREFERRED_PROVIDER_python-six = "six"
 # instead of libsndfile1 from poky
 PREFERRED_PROVIDER_libsndfile1-dev = "libsndfile"
 PREFERRED_PROVIDER_libsndfile1 = "libsndfile"
+
+# Use xf86-video-modesetting from meta-debian,
+# instead of xf86-video-modesetting from poky (xserver-xorg)
+PREFERRED_PROVIDER_xf86-video-modesetting = "xf86-video-modesetting"
