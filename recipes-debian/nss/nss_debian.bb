@@ -44,6 +44,7 @@ TD = "${S}/tentative-dist"
 TDS = "${S}/tentative-dist-staging"
 
 TARGET_CC_ARCH += "${LDFLAGS}"
+MULTI_ARCH = "same"
 
 do_compile_prepend_class-native() {
 	export NSPR_INCLUDE_DIR=${STAGING_INCDIR_NATIVE}
