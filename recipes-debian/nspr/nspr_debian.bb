@@ -181,6 +181,8 @@ do_install_append() {
         ln -sf nspr.pc ${D}${libdir}/pkgconfig/xulrunner-nspr.pc
 }
 
+MULTI_ARCH = "same"
+
 # Correct list of packages according to list of packages build from
 # nspr source in Debian Jessie
 PACKAGES = "lib${DPN} lib${DPN}-0d lib${DPN}-dev lib${DPN}-staticdev lib${DPN}-dbg"
