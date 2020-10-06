@@ -29,3 +29,5 @@ SRC_URI += "file://configure-sbindir.patch \
 "
 
 PACKAGECONFIG_class-nativesdk ?= "${@bb.utils.filter('DISTRO_FEATURES', 'pam', d)}"
+
+RDEPENDS_${PN}-ptest += "tar"
