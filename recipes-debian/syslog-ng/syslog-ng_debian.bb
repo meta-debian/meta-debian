@@ -25,10 +25,6 @@ DEPENDS = " \
     bison-native autoconf-archive-native \
 "
 
-PACKAGES =+ "${PN}-mod-journal"
-FILES_${PN}-mod-journal = "${libdir}/syslog-ng/libsdjournal.so"
-CONFIG_${PN}-mod-journal = "--with-systemd-journal"
-
 inherit autotools gettext systemd pkgconfig update-rc.d
 
 EXTRA_OECONF = " \
@@ -44,7 +40,7 @@ EXTRA_OECONF = " \
     --disable-python \
     --disable-java --disable-java-modules \
     --with-ivykis=system \
-    ${CONFIG_${PN}-mod-journal} \
+    --with-systemd-journal \
     ${CONFIG_TLS} \
 "
 
