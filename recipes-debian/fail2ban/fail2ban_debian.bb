@@ -13,8 +13,8 @@ inherit debian-package
 require recipes-debian/sources/fail2ban.inc
 inherit update-rc.d setuptools
 SRC_URI += " \
-		file://initd \
-    	file://fail2ban_setup.py \
+		file://fail2ban \
+    	file://setup.py \
 "
 
 
@@ -22,13 +22,13 @@ INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME = "fail2ban"
 INITSCRIPT_PARAMS = "defaults 25"
 do_compile_prepend () {
-    cp ${WORKDIR}/fail2ban_setup.py ${S}/setup.py
+    cp ${WORKDIR}/setup.py ${S}/setup.py
 }
 
 do_install_append () {
 	install -d ${D}/${sysconfdir}/fail2ban
 	install -d ${D}/${sysconfdir}/init.d
-    	install -m 0755 ${WORKDIR}/initd ${D}${sysconfdir}/init.d/fail2ban
+    	install -m 0755 ${WORKDIR}/fail2ban ${D}${sysconfdir}/init.d/fail2ban
 }
 
 FILES_${PN} += "/run"
@@ -36,4 +36,3 @@ FILES_${PN} += "/run"
 INSANE_SKIP_${PN}_append = "already-stripped"
 
 RDEPENDS_${PN} = "syslog-ng nftables iptables sqlite3 python python-logging python-shell python-tests lsb"
-
