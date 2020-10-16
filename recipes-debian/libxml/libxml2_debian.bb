@@ -62,7 +62,8 @@ python populate_packages_prepend () {
         d.setVar('PKG_libxml2', '${MLPREFIX}libxml2')
 }
 
-PACKAGES += "${PN}-utils ${PN}-python"
+PACKAGE_BEFORE_PN += "${PN}-utils"
+PACKAGES += "${PN}-python"
 
 FILES_${PN}-staticdev += "${PYTHON_SITEPACKAGES_DIR}/*.a"
 FILES_${PN}-dev += "${libdir}/xml2Conf.sh ${libdir}/cmake/*"
