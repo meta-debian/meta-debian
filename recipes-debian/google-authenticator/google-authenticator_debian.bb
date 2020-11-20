@@ -20,8 +20,10 @@ EXTRA_OECONF += "--libdir=${base_libdir}"
 
 REQUIRED_DISTRO_FEATURES = "pam"
 
-PACKAGES =+ "libpam-${PN}"
-FILES_libpam-${PN} = "${base_libdir}/security/pam_google_authenticator.so \
-		      ${bindir}/*"
+FILES_${PN} = "${base_libdir}/security/pam_google_authenticator.so \
+               ${bindir}/*"
 
-RDEPENDS_libpam-${PN}  = "libpam"
+RDEPENDS_${PN}  = "libpam"
+
+RPROVIDES_${PN} += "libpam-${PN}"
+PKG_${PN} = "libpam-${PN}"
