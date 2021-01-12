@@ -6,7 +6,7 @@
 PR = "r0"
 
 inherit debian-package
-PV = "5.23"
+PV = "5.43"
 
 SUMMARY = "Linux Bluetooth Stack Userland V5"
 DESCRIPTION = "Linux Bluetooth stack V5 userland components.  These include a system configurations, daemons, tools and system libraries."
@@ -80,7 +80,6 @@ do_install_append() {
 	install -d ${D}${sbindir}
 	install -m 0644 ${S}/debian/bluez.bluetooth.default ${D}${sysconfdir}/default/bluetooth
 	install -m 0755 ${S}/debian/bluez.bluetooth.init ${D}${sysconfdir}/init.d/bluetooth
-	install -m 0644 ${S}/debian/50-bluetooth-hci-auto-poweron.rules ${D}${nonarch_base_libdir}/udev/rules.d/
 
 	ln -s ../lib/bluetooth/bluetoothd ${D}${sbindir}/bluetoothd
 
