@@ -31,6 +31,7 @@ SRC_URI += " \
     file://0002-Don-t-do-runtime-test-to-get-float-byte-order.patch \
     file://0001-Lib-sysconfig.py-fix-another-place-where-lib-is-hard.patch \
     file://restore_site-packages_in_sitepackages_paths.diff \
+    file://0020-configure.ac-setup.py-do-not-add-a-curses-include-pa.patch \
 "
 
 SRC_URI_append_class-native = " \
