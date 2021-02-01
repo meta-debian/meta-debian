@@ -45,3 +45,9 @@ EXTRA_OECMAKE += "-DOPENSSL_CORRECT_VERSION_NUMBER=TRUE "
 # To avaoid the following QA issue:
 # ERROR: QA Issue: contains probably-redundant RPATH /usr/lib [useless-rpaths]
 EXTRA_OECMAKE += "-DBINARY_PACKAGING_MODE=TRUE "
+
+do_install_append() {
+	# Move "site" to the same path as Debian package
+	install -d ${D}/${sysconfdir}/bro
+	mv ${D}/${datadir}/bro/site ${D}/${sysconfdir}/bro
+}
