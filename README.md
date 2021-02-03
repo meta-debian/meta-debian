@@ -17,18 +17,6 @@ Currently, the following software versions are supported in meta-debian.
 Quick Start
 ===========
 
-Install essential packages poky requires into your host system according to http://www.yoctoproject.org/docs/2.2/ref-manual/ref-manual.html#intro-requirements
-
-```sh
-$ sudo apt-get install git tar python3
-$ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat
-```
-
-NOTE: The following three packages have version limitation
-* git: 1.7.8 or greater
-* tar: 1.24 or greater
-* python: 2.7.3 or greater not including Python 3.x
-
 Setup repositories.
 
 ```sh
@@ -37,6 +25,10 @@ $ cd poky
 $ git clone -b morty https://github.com/meta-debian/meta-debian.git
 $ cd ..
 ```
+
+Install essential packages that poky and meta-debian depend on into the host system.
+
+    $ sudo ./poky/meta-debian/scripts/install-deps.sh
 
 Setup build directory.
 
