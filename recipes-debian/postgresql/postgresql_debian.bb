@@ -24,12 +24,10 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.postgresql.com"
 
 inherit debian-package
-PV = "9.4.15"
+PV = "9.4.18"
 
 DPN = "postgresql-9.4"
 NONARCH_PN = "postgresql"
-
-SRCREV = "v9.4.15-0+deb8u1"
 
 LICENSE = "PostgreSQL"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=81b69ddb31a8be66baafd14a90146ee2"
