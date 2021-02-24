@@ -49,3 +49,10 @@ do_install_prepend() {
 	#   bind9-config -> isc-config.sh
 	sed -i -e "s,${STAGING_LIBDIR},${libdir}," ${B}/isc-config.sh
 }
+
+# .pc/CVE-2020-8625.patch (added in 1:9.9.5.dfsg-9+deb8u21) is left
+# in the unpacked source package tree even though the source format is 1.0.
+# This causes do_patch error so should be removed.
+do_debian_patch_prepend() {
+	rm -rf ${DEBIAN_UNPACK_DIR}/.pc
+}
