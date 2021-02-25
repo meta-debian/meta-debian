@@ -18,6 +18,7 @@ HOMEPAGE = "http://www.memtest.org/"
 
 inherit debian-package
 PV = "5.01"
+DPN = "memtest86-"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://config.c;endline=9;md5=54ecc8028fdd7aabfcabdc42992d2cc2"
