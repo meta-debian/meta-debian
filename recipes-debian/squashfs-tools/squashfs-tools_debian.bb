@@ -5,10 +5,9 @@ SECTION = "base"
 
 inherit debian-package
 
-LICENSE = "GPL-2 & PD"
-LIC_FILES_CHKSUM = "file://../COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
-                    file://../../7zC.txt;beginline=12;endline=16;md5=2056cd6d919ebc3807602143c7449a7c \
-"
+LICENSE = "GPL-2"
+LIC_FILES_CHKSUM = "file://squashfs_fs.h;beginline=6;endline=22;md5=ba5187034cd4f38eeaa654bb8f28af9f"
+
 DEPENDS = "attr zlib xz lzo lz4"
 
 PV = "4.2+20130409"
