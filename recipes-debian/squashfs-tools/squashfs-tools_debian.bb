@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "file://../COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263 \
 "
 DEPENDS = "attr zlib xz lzo lz4"
 
-PV = "4.2"
+PV = "4.2+20130409"
 
 # EXTRA_OEMAKE is typically: -e MAKEFLAGS=
 # the -e causes problems as CFLAGS is modified in the Makefile, so

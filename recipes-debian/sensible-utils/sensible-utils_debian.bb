@@ -9,7 +9,7 @@ sensible-pager"
 PR = "r0"
 
 inherit debian-package
-PV = "0.0.9"
+PV = "0.0.9+deb8u1"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=19d43732fbe50ffbf510e2315e81d895"
