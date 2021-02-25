@@ -30,9 +30,10 @@ DPN = "postgresql-9.4"
 NONARCH_PN = "postgresql"
 
 LICENSE = "PostgreSQL"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=81b69ddb31a8be66baafd14a90146ee2"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=6dc95e63aa4d72502ff8193dfe2ddd38"
 
-#fix error looked at host include and/or library paths: remove -L/usr/local/lib
+# Required to avoid the following warning in do_qa_configure()
+#   warning: library search path "/usr/local/lib" is unsafe for cross-compilation
 SRC_URI += "file://fix-using-host-library_debian.patch"
 
 # keep libdir as /usr/lib to avoid libdir QA test warning
