@@ -14,6 +14,8 @@ PR = "r0"
 inherit debian-package autotools
 PV = "3.0.2"
 
+CMAKE_MAJOR_VERSION = "${@'.'.join(d.getVar('PV', True).split('.')[0:2])}"
+
 SRC_URI += " \
 file://support-oe-qt4-tools-names.patch \
 file://qt4-fail-silent.patch \
