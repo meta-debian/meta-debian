@@ -12,6 +12,8 @@ require recipes-debian/sources/ca-certificates.inc
 FILESPATH_append = ":${COREBASE}/meta/recipes-support/ca-certificates/ca-certificates"
 DEBIAN_PATCH_TYPE = "nopatch"
 
+DEBIAN_UNPACK_DIR="${WORKDIR}/work"
+
 # This is needed to ensure we can run the postinst at image creation time
 DEPENDS = ""
 DEPENDS_class-native = "openssl-native"
