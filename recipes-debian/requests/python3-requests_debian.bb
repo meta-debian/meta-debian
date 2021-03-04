@@ -4,6 +4,7 @@ require requests.inc
 
 inherit setuptools python3native
 
+DEPENDS += "python3-urllib3-native python3-chardet-native"
 do_install_append() {
 	# Remove unwanted files
 	find ${D}${PYTHON_SITEPACKAGES_DIR} -type f -name "*.pyc" -exec rm -f {} \;
