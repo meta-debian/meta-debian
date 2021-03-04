@@ -24,7 +24,7 @@ DEBIAN_PATCH_TYPE = "nopatch"
 EXTRA_OEMAKE += "STRIP=true"
 
 do_compile() {
-	oe_runmake
+	oe_runmake CC="${CC}"
 }
 
 do_install() {
