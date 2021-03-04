@@ -31,6 +31,9 @@ CACHED_CONFIGUREVARS = 'ac_cv_file__etc_debian_version=no \
                         ac_cv_file__etc_redhat_release=no \
                         ac_cv_lib_lex=""'
 
+# Avoid using the library in the native sysroot (libglib-2.0.so)
+LDFLAGS_prepend = "-L${STAGING_LIBDIR} "
+
 # required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
