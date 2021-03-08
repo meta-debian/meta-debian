@@ -15,7 +15,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=275efac2559a224527bd4fd593d38466 \
 
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEPENDS = "cairo libjpeg-turbo libxkbcommon pixman"
+DEPENDS = "wayland cairo libjpeg-turbo libxkbcommon pixman"
 
 inherit autotools pkgconfig
 
