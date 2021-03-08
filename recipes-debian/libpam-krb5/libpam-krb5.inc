@@ -10,11 +10,10 @@ PR = "r0"
 inherit debian-package
 PV = "4.6"
 
-LICENSE = "BSD & FSF-Unlimited & GPLv2+"
+LICENSE = "BSD & MIT"
 LIC_FILES_CHKSUM = "\
 	file://LICENSE;md5=189b47c200abb728c50aa74cc6e5b0b8 \
-	file://Makefile.in;beginline=1;endline=11;md5=c9cfb1cde6b401324181bf6c69886021 \
-	file://build-aux/compile;beginline=6;endline=29;md5=631bad8734d56ad4dcf55723d73fc323 \
+	file://portable/krb5-profile.c;beginline=197;endline=235;md5=767c25485a93a9876fcd3c2142866519 \
 	"
 inherit autotools-brokensep
 

@@ -47,6 +47,8 @@ do_configure_prepend() {
 	sed -i -e "s:##compile_et##:${STAGING_BINDIR_NATIVE}/:g" ${B}/configure.ac
 	sed -i -e "s:##compile_et##:${STAGING_BINDIR_NATIVE}/:g" ${B}/cf/check-compile-et.m4
 	sed -i -e "s:##STAGING_INCDIR##:${STAGING_INCDIR}:g" ${B}/cf/check-compile-et.m4
+	# Use compile_et from e2fsprogs rather than building the native from heimdal
+	sed -i -e "s:krb_cv_compile_et_cross=yes::" ${B}/cf/check-compile-et.m4
 }
 
 do_install_append() {
