@@ -7,7 +7,7 @@ index 9584bf7..7c0104c 100644
  
  $(PCRESO): dict_pcre.o
 -	gcc -shared -Wl,-soname,dict_pcre.so -o $@ $? -lpcre -L. -lutil
-+	$(CC) -shared -Wl,-soname,dict_pcre.so -o $@ $? -lpcre -L. -lutil
++	$(CC) -shared -Wl,-soname,dict_pcre.so -o $@ $? $(SYSLIBS) -lpcre -L. -lutil
  
  $(TCPSO): dict_tcp.o
 -	gcc -shared -Wl,-soname,dict_tcp.so -o $@ $? -L. -lutil
