@@ -1,0 +1,21 @@
+# A tentative patch to allow any Linux kernel versions (>= 3).
+# postfix upstream strictly checks Linux kernel major version,
+# but it may make no sence because Linux major version doesn't define
+# any functional differences[0], though users can understand unlisted
+# versions have not been tested.
+#
+# [0] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=922477
+
+diff --git a/makedefs b/makedefs
+index a654309..0af1e01 100644
+--- a/makedefs
++++ b/makedefs
+@@ -369,7 +369,7 @@ EOF
+ 		       fi;;
+ 		esac
+ 		;;
+-    Linux.[34].*) SYSTYPE=LINUX3
++    Linux.[3456789].*) SYSTYPE=LINUX3
+ 		case "$CCARGS" in
+ 		 *-DNO_DB*) ;;
+ 		 *-DHAS_DB*) ;;

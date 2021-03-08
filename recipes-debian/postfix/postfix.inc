@@ -29,10 +29,14 @@ KEEP_NONARCH_BASELIB = "1"
 #       error install when run postfix-install script, \
 #       the dict_*.so files are not in ${B}/libexec, \
 #       these files will install by command in do_install function.
+# allow-Linux5-or-later.patch:
+#       A tentative patch to disable checking Linux kernel version.
+#       See the header comment in the patch for more details.
 SRC_URI += "\
 	file://Correct-cross-compiler_debian.patch \
 	file://Add-library-to-LIBS_debian.patch \
-	file://fix-postfix-files-install_debian.patch"
+	file://fix-postfix-files-install_debian.patch \
+	file://allow-Linux5-or-later.patch"
 
 export LIB_VER = "1.0.1"
 
