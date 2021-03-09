@@ -17,19 +17,27 @@ This package contains the Python 2 version of cryptography."
 HOMEPAGE = "https://cryptography.io/"
 LICENSE = "Apache-2.0"
 SECTION = "python"
-DEPENDS = "python python-cffi-native python-ply-native six-native"
+DEPENDS = "python python-cffi-native python-ply-native six-native python-cryptography-native"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 PR = "r0"
 inherit debian-package
 PV = "0.6.1"
 
+# Use hazmat module from native sysroot to avoid importing error:
+# | ImportError: wrong ELF class: ELFCLASS32
+SRC_URI_append_class-target = " \
+    file://use-hazmat-module-from-native.patch \
+"
 inherit setuptools
 # required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH
 
+export STAGING_DIR_NATIVE
+export PYTHON_SITEPACKAGES_DIR
+
 FILES_${PN} += "${PYTHON_SITEPACKAGES_DIR}/*"
 
-RDEPENDS_${PN} += "libssl1.0.0 python-cffi python-six"
+RDEPENDS_${PN}_class-target += "libssl1.0.0 python-cffi python-six"
 
 BBCLASSEXTEND = "native"
