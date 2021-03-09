@@ -1,0 +1,21 @@
+diff --git a/setup.py b/setup.py
+index ca72927..334d01a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -74,6 +74,8 @@ if cc_is_available():
+ 
+ 
+ def get_ext_modules():
++    PYTHONPATH = os.environ['STAGING_DIR_NATIVE'] + os.environ['PYTHON_SITEPACKAGES_DIR']
++    sys.path.insert(0,PYTHONPATH)
+     from cryptography.hazmat.bindings.commoncrypto.binding import (
+         Binding as CommonCryptoBinding
+     )
+@@ -324,7 +326,6 @@ setup(
+     ],
+ 
+     packages=find_packages(exclude=["tests", "tests.*"]),
+-    include_package_data=True,
+ 
+     install_requires=requirements,
+     tests_require=test_requirements,
