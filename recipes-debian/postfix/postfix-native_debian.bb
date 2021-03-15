@@ -12,7 +12,7 @@ export CCARGS = "-DDEBIAN -DMAX_DYNAMIC_MAPS -DHAS_PCRE \
                  -DHAS_SSL -I${STAGING_INCDIR}/openssl \
                  -DUSE_TLS"
 
-export AUXLIBS = "-L${STAGING_LIBDIR_NATIVE} -lssl -lcrypto -lpthread"
+export AUXLIBS = "${LDFLAGS} -lssl -lcrypto -lpthread"
 export BUILD_SYSROOT = "${STAGING_DIR_NATIVE}"
 do_configure_prepend() {
 	sed -i -e "s:f \/usr\/include:f ${STAGING_INCDIR}:g" ${S}/makedefs
