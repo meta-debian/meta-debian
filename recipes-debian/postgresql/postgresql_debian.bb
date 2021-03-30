@@ -60,7 +60,6 @@ COMMON_CONFIGURE_FLAGS = " \
 	--datarootdir=${datadir} \
 	--datadir=${datadir}/${NONARCH_PN}/${MAJOR_VER} \
 	--bindir=${libdir}/${NONARCH_PN}/${MAJOR_VER}/${base_bindir} \
-	--libdir=${libdir}/${DEB_HOST_MULTIARCH} \
 	--libexecdir=${libdir}/${NONARCH_PN}/ \
 	--includedir=${includedir}/${NONARCH_PN} \
 	--enable-nls \
@@ -78,6 +77,7 @@ COMMON_CONFIGURE_FLAGS = " \
 EXTRA_OECONF_class-target = " \
     --with-tclconfig=${STAGING_BINDIR_CROSS} \
     --with-includes=${STAGING_INCDIR}/tcl${TCL_VER} \
+    --libdir=${libdir}/${DEB_HOST_MULTIARCH} \
 "
 EXTRA_OECONF_class-native = " \
     --with-tclconfig=${STAGING_LIBDIR_NATIVE}/tcl${TCL_VER} \
@@ -130,7 +130,8 @@ do_install_append() {
 		${D}${datadir}/${NONARCH_PN}/${MAJOR_VER}/extension/
 	install -m 0755 ${S}/build_py3/src/pl/plpython/plpython3.so \
 		${D}${libdir}/${NONARCH_PN}/${MAJOR_VER}/lib
-
+}
+do_install_append_class-target() {
 	# Remove the the absolute path to sysroot
 	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
 		${D}${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/*.pc
