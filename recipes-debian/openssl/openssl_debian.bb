@@ -137,10 +137,13 @@ do_install () {
 	# Create SSL structure for packages such as ca-certificates which
 	# contain hard-coded paths to /etc/ssl. Debian does the same.
 	install -d ${D}${sysconfdir}/ssl
-	mv ${D}${libdir}/ssl-1.1/certs \
-	   ${D}${libdir}/ssl-1.1/private \
-	   ${D}${libdir}/ssl-1.1/openssl.cnf \
-	   ${D}${sysconfdir}/ssl/
+	cp -r --no-preserve=ownership ${D}/${libdir}/ssl-1.1/certs ${D}${sysconfdir}/ssl/
+	cp -r --no-preserve=ownership ${D}/${libdir}/ssl-1.1/private ${D}${sysconfdir}/ssl/
+	install ${D}${libdir}/ssl-1.1/openssl.cnf ${D}${sysconfdir}/ssl/
+
+	rm -rf ${D}${libdir}/ssl-1.1/certs
+	rm -rf ${D}${libdir}/ssl-1.1/private
+	rm -f ${D}${libdir}/ssl-1.1/openssl.cnf
 
 	# Although absolute symlinks would be OK for the target, they become
 	# invalid if native or nativesdk are relocated from sstate.
