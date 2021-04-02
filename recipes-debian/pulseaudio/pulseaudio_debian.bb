@@ -15,6 +15,22 @@ LIC_FILES_CHKSUM = "\
 	file://src/modules/reserve.c;beginline=3;endline=25;md5=0e23094760367d51b6609750e9b31fbb"
 inherit autotools pkgconfig gettext useradd
 
+# A debian patch modifies "src/.gitignore", but that file is renamed to
+# ".gitignore-rename" when pulseaudio source tree is imported as git.
+# Need to apply the following patch to solve this conflict
+# before do_debian_patch().
+SRC_URI += "file://0001-Remove-patch-for-.gitignore.patch;apply=false"
+
+do_unpack_append() {
+    bb.build.exec_func('remove_patch_for_gitignore', d)
+}
+remove_patch_for_gitignore() {
+	cd ${S}
+	bbnote "Applying an extra patch before do_debian_patch()"
+	patch -p1 < ${WORKDIR}/0001-Remove-patch-for-.gitignore.patch;apply=false
+	cd ${WORKDIR}
+}
+
 # *.desktop rules wont be generated during configure and build will fail
 # if using --disable-nls
 USE_NLS = "yes"

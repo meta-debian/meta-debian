@@ -1,0 +1,39 @@
+From: OKAMOTO Kouta <kouta.okamoto@toshiba.co.jp>
+Date: Thu, 16 Jul 2015 17:16:18 +0900
+Subject: [PATCH 1/2] Remove patch for .gitignore
+
+Signed-off-by: OKAMOTO Kouta <kouta.okamoto@toshiba.co.jp>
+---
+ debian/patches/misc-cleanups-and-bug-fixes.patch | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/debian/patches/misc-cleanups-and-bug-fixes.patch b/debian/patches/misc-cleanups-and-bug-fixes.patch
+index 7a08a53..2fc50bb 100644
+--- a/debian/patches/misc-cleanups-and-bug-fixes.patch
++++ b/debian/patches/misc-cleanups-and-bug-fixes.patch
+@@ -2,22 +2,10 @@ Author: Peter Meerwald <pmeerw@pmeerw.net>
+ Description: misc cleanups and bug fixes
+  This is a collapse of a few small patches by Peter Meerwald.
+  Changes are:
+- put *.log and *.trs (which are created by running 'make check') into src/.gitignore
+  fix format specifiers, avoid compilation warnings
+  fix compilation warning when certain syscalls are not available (e.g. on kFreeBSD)
+  add checks for the expected results in sigbus-test
+  add SIGSEGV to the memtrap signal handler to make the sigbus-test work on kFreeBSD
+---- a/src/.gitignore
+-+++ b/src/.gitignore
+-@@ -3,6 +3,8 @@ TAGS
+- *.o
+- *.la
+- *.gcno
+-+*.trs
+-+*.log
+- .deps
+- .libs
+- /Makefile
+ --- a/src/pulsecore/core-util.c
+ +++ b/src/pulsecore/core-util.c
+ @@ -3315,8 +3315,11 @@ int pa_open_cloexec(const char *fn, int
+-- 
+2.1.4
+
