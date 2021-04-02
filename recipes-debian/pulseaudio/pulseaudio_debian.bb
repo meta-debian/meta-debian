@@ -19,15 +19,18 @@ inherit autotools pkgconfig gettext useradd
 # ".gitignore-rename" when pulseaudio source tree is imported as git.
 # Need to apply the following patch to solve this conflict
 # before do_debian_patch().
+GITIGNORE_PATCH ?= "1"
 SRC_URI += "file://0001-Remove-patch-for-.gitignore.patch;apply=false"
 
 do_unpack_append() {
-    bb.build.exec_func('remove_patch_for_gitignore', d)
+    if d.getVar('GITIGNORE_PATCH', True) == '1':
+      bb.build.exec_func('remove_patch_for_gitignore', d)
 }
 remove_patch_for_gitignore() {
+	patch=${WORKDIR}/0001-Remove-patch-for-.gitignore.patch
 	cd ${S}
-	bbnote "Applying an extra patch before do_debian_patch()"
-	patch -p1 < ${WORKDIR}/0001-Remove-patch-for-.gitignore.patch;apply=false
+	bbnote "Applying ${patch} before do_debian_patch()"
+	patch -p1 < ${patch}
 	cd ${WORKDIR}
 }
 
