@@ -6,12 +6,11 @@ DESCRIPTION = "libConfuse is a configuration file parser library written in C. I
  functions and nested include statements)."
 HOMEPAGE = "http://www.nongnu.org/confuse/"
 
-LICENSE = "GPLv2+ & GPLv3+"
+LICENSE = "ISC"
 inherit debian-package
 PV = "2.7"
 PR = "r0"
-LIC_FILES_CHKSUM = "file://support/missing;beginline=6;endline=25;md5=40b23661ee5b2d5c1ec9e09e5e928e56 \
-                    file://support/config.guess;beginline=7;endline=25;md5=e443b5b496d01ee52219d5269560d697"
+LIC_FILES_CHKSUM = "file://src/confuse.c;beginline=2;endline=14;md5=c1af423e2b67c0bb651f7c4ec5842e9e"
 
 inherit autotools binconfig pkgconfig lib_package gettext
 
