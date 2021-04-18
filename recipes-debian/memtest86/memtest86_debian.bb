@@ -30,6 +30,8 @@ inherit autotools-brokensep
 
 KEEP_NONARCH_BASELIB = "1"
 
+COMPATIBLE_HOST = '(i.86|x86_64).*-linux'
+
 do_compile() {
 	oe_runmake CC="${CC}" LD="${LD}" AS="${AS} -32"
 }

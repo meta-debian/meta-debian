@@ -4,17 +4,17 @@
 
 # Use TUNE_ARCH instead of TARGET_ARCH because if recipe inherits "allarch"
 # TARGET_ARCH will be set to "allarch", so we can't get what DEB_HOST_MULTIARCH we want.
-GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TUNE_ARCH', True), d.getVar('TUNE_FEATURES', True))}"
+GNU_HOST_SUFFIX = "${@get_gnu_suffix(d.getVar('TUNE_ARCH', True), d.getVar('TUNE_FEATURES', True), d)}"
 DEB_HOST_MULTIARCH = "${@arch_to_multiarch(d.getVar('TUNE_ARCH', True))}-${TARGET_OS}${GNU_HOST_SUFFIX}"
 
 # Help target recipe be able to get location of multiarch libdir in sdk's sysroot.
-GNU_SDK_SUFFIX = "${@get_gnu_suffix(d.getVar('SDK_ARCH', True), '')}"
+GNU_SDK_SUFFIX = "${@get_gnu_suffix(d.getVar('SDK_ARCH', True), '', d)}"
 DEB_SDK_MULTIARCH = "${@arch_to_multiarch(d.getVar('SDK_ARCH', True))}-${SDK_OS}${GNU_SDK_SUFFIX}"
 DEB_HOST_MULTIARCH_class-nativesdk = "${DEB_SDK_MULTIARCH}"
 
 # Provide an alternative DEB_HOST_MULTIARCH for native environment,
 # so target recipe can get native multiarch 'libdir'.
-GNU_BUILD_SUFFIX = "${@get_gnu_suffix(d.getVar('BUILD_ARCH', True), '')}"
+GNU_BUILD_SUFFIX = "${@get_gnu_suffix(d.getVar('BUILD_ARCH', True), '', d)}"
 DEB_BUILD_MULTIARCH = "${@arch_to_multiarch(d.getVar('BUILD_ARCH', True))}-${BUILD_OS}${GNU_BUILD_SUFFIX}"
 DEB_HOST_MULTIARCH_class-native = "${DEB_BUILD_MULTIARCH}"
 
@@ -63,13 +63,16 @@ def arch_to_multiarch(arch):
         return arch
 
 
-def get_gnu_suffix(arch, tune):
+def get_gnu_suffix(arch, tune, d):
     tune_features = tune.split()
-    # If arch is arm, TARGET_OS already contains "-gnueabi" itself
+    # If arch is arm, TARGET_OS already contains "-gnueabi" itself,
+    # but it will be overwritten if recipe inherits "allarch",
+    # need to check whether TARGET_OS contains "-gnueabi" or not.
     if arch.startswith("arm"):
         # If arch is armel, suffix will be "-gnueabi"
         # if armhf, suffix will be "-gnueabihf"
-        return ['', 'hf']['callconvention-hard' in tune_features]
+        suffix = '' if d.getVar('TARGET_OS', True).endswith('-gnueabi') else '-gnueabi'
+        return [suffix + '', suffix + 'hf']['callconvention-hard' in tune_features]
     else:
         return '-gnu'
 

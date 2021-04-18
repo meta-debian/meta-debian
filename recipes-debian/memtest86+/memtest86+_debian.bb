@@ -40,6 +40,8 @@ DEPENDS += "cdrkit-native"
 
 KEEP_NONARCH_BASELIB = "1"
 
+COMPATIBLE_HOST = '(i.86|x86_64).*-linux'
+
 do_compile() {
 	oe_runmake memtest.bin memtest CC="${CC} " LD="${LD} -z max-page-size=0x1000 --hash-style=gnu" AS="${AS} -32"
 	./makeiso.sh
