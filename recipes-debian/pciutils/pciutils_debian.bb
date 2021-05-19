@@ -19,7 +19,6 @@ PV = "3.2.1"
 
 SRC_URI += "\
         file://configure_debian.patch \
-        file://guess-fix_debian.patch \
         file://makefile_debian.patch \
 "
 
