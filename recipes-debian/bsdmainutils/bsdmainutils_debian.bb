@@ -16,7 +16,7 @@ PV = "9.0.6"
 LICENSE="BSD-4-Clause"
 LIC_FILES_CHKSUM="file://usr.bin/hexdump/hexdump.h;endline=35;md5=148f6a2793c64631604a03a5d41a2cdc"
 
-DEPENDS = "libhdate-native ncurses"
+DEPENDS = "libhdate-native ncurses base-passwd"
 
 DEBIAN_PATCH_TYPE = "quilt"
 
