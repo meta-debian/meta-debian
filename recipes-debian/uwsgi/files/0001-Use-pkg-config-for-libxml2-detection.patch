@@ -1,0 +1,78 @@
+diff --git a/uwsgiconfig.py b/uwsgiconfig.py
+index b594462..8652bd6 100644
+--- a/uwsgiconfig.py
++++ b/uwsgiconfig.py
+@@ -1233,10 +1233,10 @@ class uConf(object):
+ 
+         if self.get('xml'):
+             if self.get('xml') == 'auto':
+-                xmlconf = spcall('xml2-config --libs')
++                xmlconf = spcall('pkg-config --libs libxml-2.0')
+                 if xmlconf:
+                     self.libs.append(xmlconf)
+-                    xmlconf = spcall("xml2-config --cflags")
++                    xmlconf = spcall("pkg-config --cflags libxml-2.0")
+                     self.cflags.append(xmlconf)
+                     self.cflags.append("-DUWSGI_XML -DUWSGI_XML_LIBXML2")
+                     self.gcc_list.append('core/xmlconf')
+@@ -1247,13 +1247,13 @@ class uConf(object):
+                     self.gcc_list.append('core/xmlconf')
+                     report['xml'] = 'expat'
+             elif self.get('xml') == 'libxml2':
+-                xmlconf = spcall('xml2-config --libs')
++                xmlconf = spcall('pkg-config --libs libxml-2.0')
+                 if xmlconf is None:
+                     print("*** libxml2 headers unavailable. uWSGI build is interrupted. You have to install libxml2 development package or use libexpat or disable XML")
+                     sys.exit(1)
+                 else:
+                     self.libs.append(xmlconf)
+-                    xmlconf = spcall("xml2-config --cflags")
++                    xmlconf = spcall("pkg-config --cflags libxml-2.0")
+                     if xmlconf is None:
+                         print("*** libxml2 headers unavailable. uWSGI build is interrupted. You have to install libxml2 development package or use libexpat or disable XML")
+                         sys.exit(1)
+diff --git a/plugins/airbrake/uwsgiplugin.py b/plugins/airbrake/uwsgiplugin.py
+index 10db6fc..0086cf7 100644
+--- a/plugins/airbrake/uwsgiplugin.py
++++ b/plugins/airbrake/uwsgiplugin.py
+@@ -2,8 +2,8 @@ from uwsgiconfig import spcall
+ 
+ NAME='airbrake'
+ 
+-CFLAGS = [spcall('xml2-config --cflags')]
++CFLAGS = [spcall('pkg-config --cflags libxml-2.0')]
+ LDFLAGS = []
+-LIBS = ['-lcurl', spcall('xml2-config --libs')]
++LIBS = ['-lcurl', spcall('pkg-config --libs libxml-2.0')]
+ GCC_LIST = ['airbrake_plugin']
+ 
+diff --git a/plugins/webdav/uwsgiplugin.py b/plugins/webdav/uwsgiplugin.py
+index ab4f445..e53f248 100644
+--- a/plugins/webdav/uwsgiplugin.py
++++ b/plugins/webdav/uwsgiplugin.py
+@@ -1,8 +1,8 @@
+ import os
+ 
+ NAME='webdav'
+-CFLAGS = os.popen('xml2-config --cflags').read().rstrip().split()
++CFLAGS = os.popen('pkg-config --cflags libxml-2.0').read().rstrip().split()
+ LDFLAGS = []
+-LIBS = os.popen('xml2-config --libs').read().rstrip().split()
++LIBS = os.popen('pkg-config --libs libxml-2.0').read().rstrip().split()
+ 
+ GCC_LIST = ['webdav']
+diff --git a/plugins/xslt/uwsgiplugin.py b/plugins/xslt/uwsgiplugin.py
+index 8a8c20c..f55880c 100644
+--- a/plugins/xslt/uwsgiplugin.py
++++ b/plugins/xslt/uwsgiplugin.py
+@@ -1,8 +1,8 @@
+ import os
+ 
+ NAME='xslt'
+-CFLAGS = os.popen('xslt-config --cflags').read().rstrip().split()
++CFLAGS = os.popen('pkg-config --cflags libxslt').read().rstrip().split()
+ LDFLAGS = []
+-LIBS = os.popen('xslt-config --libs').read().rstrip().split()
++LIBS = os.popen('pkg-config --libs libxslt').read().rstrip().split()
+ 
+ GCC_LIST = ['xslt']

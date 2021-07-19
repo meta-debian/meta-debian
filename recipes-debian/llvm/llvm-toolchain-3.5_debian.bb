@@ -15,11 +15,13 @@ PR = "r2"
 LICENSE = "NCSA"
 LIC_FILES_CHKSUM = "file://LICENSE.TXT;md5=47e311aa9caedd1b3abf098bd7814d1d"
 
+SRC_URI += "file://fix-package-check-for-libxml2.patch"
+
 DEPENDS = "isl libffi libxml2-native zlib binutils python libedit swig-native dpkg-native"
 
 KEEP_NONARCH_BASELIB = "1"
 
-inherit perlnative pythonnative autotools
+inherit perlnative pythonnative autotools pkgconfig
 
 LLVM_VERSION_FULL = "${PV}.0"
 SONAME_EXT = "1"

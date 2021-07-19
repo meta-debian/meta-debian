@@ -20,11 +20,11 @@ DEPENDS = "cairo-native freetype-native giflib-native libjpeg-turbo-native \
 
 # python_c-missing-semicolon.patch:
 # 	Add missing semicolon in fontforge/python.c.
-# check-libxml2-headers-by-xml2-config.patch:
-# 	Use xml2-config to check libxml2 headers instead of looking from host system.
+# fix-package-check-for-libxml2.patch
+# 	xml2-config does not work. Use pkg-config to set CFLAGS
 SRC_URI += " \
     file://python_c-missing-semicolon.patch \
-    file://check-libxml2-headers-by-xml2-config.patch \
+    file://fix-package-check-for-libxml2.patch \
 "
 
 inherit autotools-brokensep pkgconfig pythonnative native

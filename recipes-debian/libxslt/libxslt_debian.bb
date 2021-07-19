@@ -17,6 +17,8 @@ DEPENDS = "libxml2"
 inherit debian-package
 PV = "1.1.28"
 
+SRC_URI += "file://0001-Use-pkg-config-to-find-gcrypt-and-libxml2.patch"
+
 EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto"
 
 inherit autotools pkgconfig binconfig lib_package

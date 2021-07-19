@@ -1,0 +1,15 @@
+xml2-config does not work. Use pkg-config to set XML2HEAD.
+
+diff --git a/configure.ac b/configure.ac
+index 56c4d56..e68f986 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -701,7 +701,7 @@ AC_MSG_CHECKING(for special libxml2 includes)
+ if test "x$XML2CONFIG" = "x"; then
+    AC_MSG_ERROR(libxml2 config not found)
+ else
+-   XML2HEAD="`$XML2CONFIG --cflags`"
++   XML2HEAD="`pkg-config --cflags libxml-2.0`"
+    AC_MSG_RESULT($XML2HEAD)
+    AC_CHECK_LIB(xml2, xmlReadMemory)
+ fi
