@@ -43,10 +43,13 @@ python do_package_deb_prepend() {
                 status = ex.returncode
             if status != 0:
                 bb.fatal("%s: failed to read %s" % (dpn, changelog))
-            search = re.compile("\(.*\)").search(head)
+            # Format of search: "(version) distributions;"
+            # Expressly search ";" to ignore "()" which might be included after it
+            search = re.compile("\(.*\) [^()]*;").search(head)
             if search is None:
                 bb.fatal("%s: failed to parse %s" % (dpn, changelog))
-            deb_src_ver = re.compile("[\(\)]").sub("", search.group())
+            # Pick up source package version from search
+            deb_src_ver = re.compile("\((.*)\).*").sub("\\1", search.group())
         else:
             bb.fatal("%s: %s not found" % (dpn, changelog))
 
