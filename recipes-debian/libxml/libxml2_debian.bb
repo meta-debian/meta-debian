@@ -14,7 +14,7 @@ BUGTRACKER = "http://bugzilla.gnome.org/buglist.cgi?product=libxml2"
 PR = "r1"
 DEPENDS =+ "zlib"
 
-inherit autotools pkgconfig binconfig pythonnative debian-package
+inherit autotools pkgconfig binconfig-disabled pythonnative debian-package
 PV = "2.9.1+dfsg1"
 
 LICENSE = "MIT"

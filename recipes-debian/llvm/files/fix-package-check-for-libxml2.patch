@@ -1,0 +1,27 @@
+Use pkg-config to search libxml2 headers, xml2-config was disabled.
+Fix compile error:
+ | checking for libxml2 includes... ERROR: build/tmp/sysroots/x86_64-linux/usr/bin/xml2-config should not be used, use an alternative such as pkg-config
+ | --should-not-have-used-/build/tmp/sysroots/x86_64-linux/usr/bin/xml2-config
+
+diff --git a/configure b/configure
+index 1f63732..d904e94 100755
+--- a/configure
++++ b/configure
+@@ -10171,7 +10171,7 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
+-for ac_prog in xml2-config
++for ac_prog in pkg-config
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.
+ set dummy $ac_prog; ac_word=$2
+@@ -10220,7 +10220,7 @@ if test "x$XML2CONFIG" = "x"; then
+  { echo "$as_me:$LINENO: result: xml2-config not found" >&5
+ echo "${ECHO_T}xml2-config not found" >&6; }
+ else
+- LIBXML2_INC=`$XML2CONFIG --cflags`
++ LIBXML2_INC=`$XML2CONFIG libxml-2.0 --cflags`
+  { echo "$as_me:$LINENO: result: $LIBXML2_INC" >&5
+ echo "${ECHO_T}$LIBXML2_INC" >&6; }
+  { echo "$as_me:$LINENO: checking for xmlReadFile in -lxml2" >&5

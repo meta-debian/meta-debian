@@ -29,7 +29,8 @@ DEPENDS += "flex-native libibverbs librdmacm lvm2 fuse db libaio bison-native \
 CACHED_CONFIGUREVARS = 'ac_cv_file__etc_debian_version=no \
                         ac_cv_file__etc_SuSE_release=no \
                         ac_cv_file__etc_redhat_release=no \
-                        ac_cv_lib_lex=""'
+                        ac_cv_lib_lex="" \
+                        ac_cv_path_XML2_CONFIG="pkg-config libxml-2.0"'
 
 # required by distutils/sysconfig.py to get config dir
 export DEB_HOST_MULTIARCH

@@ -24,17 +24,19 @@ DESCRIPTION = "\
 HOMEPAGE = "http://www.postgresql.com"
 
 inherit debian-package
-PV = "9.4.18"
+PV = "9.4.26"
 
 DPN = "postgresql-9.4"
 NONARCH_PN = "postgresql"
 
 LICENSE = "PostgreSQL"
-LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=6dc95e63aa4d72502ff8193dfe2ddd38"
+LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=fc4ce21960f0c561460d750bc270d11f"
 
-# Required to avoid the following warning in do_qa_configure()
-#   warning: library search path "/usr/local/lib" is unsafe for cross-compilation
-SRC_URI += "file://fix-using-host-library_debian.patch"
+# fix-using-host-library_debian.patch:
+#  Required to avoid the following warning in do_qa_configure()
+#    warning: library search path "/usr/local/lib" is unsafe for cross-compilation
+SRC_URI += "file://fix-using-host-library_debian.patch \
+            file://0001-Use-pkg-config-for-libxml2-detection.patch"
 
 # keep libdir as /usr/lib to avoid libdir QA test warning
 KEEP_NONARCH_BASELIB = "1"
@@ -133,7 +135,7 @@ do_install_append() {
 }
 do_install_append_class-target() {
 	# Remove the the absolute path to sysroot
-	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|" \
+	sed -i -e "s|${STAGING_LIBDIR}|${libdir}|g" \
 		${D}${libdir}/${DEB_HOST_MULTIARCH}/pkgconfig/*.pc
 }
 

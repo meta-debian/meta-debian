@@ -13,6 +13,7 @@ inherit autotools-brokensep
 DEPENDS += "libdbi mysql sqlite3 postgresql sqlite"
 EXTRA_OECONF += "\
 	--with-pgsql \
+	--with-pgsql-incdir=${STAGING_INCDIR}/postgresql \
 	--with-dbi-libdir=${STAGING_LIBDIR} \
 	--with-mysql \
 	--with-mysql-incdir=${STAGING_INCDIR} \

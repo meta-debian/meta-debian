@@ -10,12 +10,13 @@ HOMEPAGE = "http://www.libarchive.org/"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b4e3ffd607d6686c6cb2f63394370841"
 
-inherit debian-package autotools
+inherit debian-package autotools pkgconfig
 PV = "3.1.2"
 # lib_package??
 
-# needed to build with a separated build tree
-SRC_URI += "file://mkdir.patch"
+# mkdir.patch: needed to build with a separated build tree
+SRC_URI += "file://mkdir.patch \
+            file://fix-package-check-for-libxml2.patch"
 
 # follow Debian's configuration; actual linked libraries
 PACKAGECONFIG ?= "acl \

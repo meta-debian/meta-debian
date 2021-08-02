@@ -16,6 +16,7 @@ inherit autotools-brokensep pkgconfig
 
 SRC_URI_append = " \
     file://0001-don-t-compile-doc-and-Error-Fix.patch \
+    file://fix-package-check-for-libxml2.patch \
 "
 
 KEEP_NONARCH_BASELIB = "1"
