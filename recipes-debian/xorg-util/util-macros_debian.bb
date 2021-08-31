@@ -10,9 +10,6 @@ require xorg-util-common.inc
 
 PR = "${INC_PR}.0"
 
-S = "${DEBIAN_UNPACK_DIR}/util-macros"
-
-LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=1970511fddd439b07a6ba789d28ff662"
 
 # ${PN} is empty so we need to tweak -dev and -dbg package dependencies

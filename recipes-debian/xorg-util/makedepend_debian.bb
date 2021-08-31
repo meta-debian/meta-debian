@@ -16,10 +16,7 @@ require xorg-util-common.inc
 
 PR = "${INC_PR}.0"
 
-LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=43a6eda34b48ee821b3b66f4f753ce4f"
-
-S = "${DEBIAN_UNPACK_DIR}/makedepend"
 
 DEPENDS = "xproto util-macros"
 
