@@ -13,4 +13,4 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b9c6cfb044c6d0ff899eaafe4c729367"
 
 DEPENDS = "util-macros xproto xorg-cf-files"
 
-RDEPENDS_${PN} = "perl xproto"
+RDEPENDS_${PN} = "perl"
