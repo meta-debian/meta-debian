@@ -28,6 +28,7 @@ SHLIBVER = "0.4.11"
 EXTRA_OECMAKE = " \
     -DWITH_VALA=ON -DWITH_GNOME3=ON \
     -DCMAKE_SKIP_RPATH=ON \
+    -DWITH_PERL=no \
     -DBIPR=0 \
     -DLIB_INSTALL_DIR=${libdir} \
     -DLIBEXEC_INSTALL_DIR=${libdir}/${DPN}/${SHLIBVER} \

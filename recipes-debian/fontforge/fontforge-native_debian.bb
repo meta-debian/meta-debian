@@ -25,6 +25,7 @@ DEPENDS = "cairo-native freetype-native giflib-native libjpeg-turbo-native \
 SRC_URI += " \
     file://python_c-missing-semicolon.patch \
     file://fix-package-check-for-libxml2.patch \
+    file://configure-use-pkg-config-for-freetype-detection.patch \
 "
 
 inherit autotools-brokensep pkgconfig pythonnative native

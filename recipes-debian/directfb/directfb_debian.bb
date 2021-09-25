@@ -12,9 +12,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=dcf3c825659e82539645da41a7908589"
 
 DEPENDS_class-target = "${PN}-native"
 
-SRC_URI += "file://configure-remove-host-path.patch"
+SRC_URI += "file://configure-remove-host-path.patch \
+            file://Use-pkg-config-to-find-libpng.patch"
 
-inherit autotools pkgconfig lib_package
+BINCONFIG = "${bindir}/directfb-config"
+
+inherit autotools pkgconfig lib_package binconfig-disabled
 
 EXTRA_OECONF = " \
     --with-gfxdrivers=all \

@@ -1,0 +1,20 @@
+configure: use pkg-config for freetype detection
+
+diff --git a/configure.in b/configure.in
+index e433eb0..77172ab 100644
+--- a/configure.in
++++ b/configure.in
+@@ -353,10 +353,10 @@ AC_CHECK_FUNC(tzset,:,AC_DEFINE(_NO_TZSET))
+ dnl Is there a better way to add a directory to the include path?
+ 
+ FreeType2_IncRoot=
+-if sh -c "freetype-config --prefix" >/dev/null 2>&1 ; then
+- FreeType2_IncRoot=`freetype-config --prefix`
++if sh -c "pkg-config --variable=prefix freetype2 >/dev/null 2>&1" ; then
++ FreeType2_IncRoot=`pkg-config --variable=prefix freetype2 | cut -d '"' -f2`
+  AC_CHECK_FILE($FreeType2_IncRoot/include/freetype2,CFLAGS="$CFLAGS -I$FreeType2_IncRoot/include/freetype2/",FreeType2_IncRoot=)
+- ft_flags=`freetype-config --cflags`
++ ft_flags=`pkg-config --cflags freetype2`
+  CFLAGS="$CFLAGS $ft_flags"
+ fi
+ 

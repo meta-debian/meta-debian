@@ -8,7 +8,9 @@ SUMMARY = "The New Curses library"
 DESCRIPTION = "SVr4 and XSI-Curses compatible curses library and terminfo tools including tic, infocmp, captoinfo. Supports color, multiple highlights, forms-drawing characters, and automatic recognition of keypad and function-key sequences. Extensions include resizable windows and mouse support on both xterm and Linux console using the gpm library."
 HOMEPAGE = "http://www.gnu.org/software/ncurses/ncurses.html"
 
-inherit debian-package autotools binconfig multilib_header update-alternatives
+BINCONFIG = "${bindir}/ncurses5-config ${bindir}/ncursesw5-config"
+
+inherit debian-package autotools binconfig-disabled multilib_header update-alternatives
 PV = "5.9+20140913"
 
 PR = "r1"

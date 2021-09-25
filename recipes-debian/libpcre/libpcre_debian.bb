@@ -11,7 +11,9 @@ to the POSIX regular expression API."
 SUMMARY = "Perl Compatible Regular Expressions"
 HOMEPAGE = "http://www.pcre.org"
 
-inherit autotools binconfig ptest debian-package
+BINCONFIG = "${bindir}/pcre-config"
+
+inherit autotools binconfig-disabled ptest debian-package
 PV = "8.35"
 PR = "r0"
 DPN = "pcre3"

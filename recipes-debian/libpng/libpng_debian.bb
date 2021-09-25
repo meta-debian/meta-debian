@@ -9,7 +9,10 @@ HOMEPAGE = "http://www.libpng.org/"
 
 inherit debian-package
 PV = "1.2.50"
-inherit autotools binconfig pkgconfig
+
+BINCONFIG = "${bindir}/libpng-config ${bindir}/libpng12-config"
+
+inherit autotools binconfig-disabled pkgconfig
 
 PR = "r1"
 DEPENDS = "zlib"

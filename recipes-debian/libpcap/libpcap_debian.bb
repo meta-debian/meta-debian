@@ -22,7 +22,9 @@ PR = "r0"
 inherit debian-package
 PV = "1.6.2"
 
-inherit autotools-brokensep bluetooth
+BINCONFIG = "${bindir}/pcap-config"
+
+inherit autotools-brokensep bluetooth binconfig-disabled
 
 EXTRA_OECONF = "--with-pcap=linux"
 
