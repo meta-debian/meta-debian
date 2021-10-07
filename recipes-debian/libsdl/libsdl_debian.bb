@@ -18,6 +18,9 @@ PV = "1.2.15"
 #Correct the debian package name
 DPN ="libsdl1.2"
 
+# base on meta/recipes-graphics/libsdl/libsdl-1.2.15/pkgconfig.patch
+SRC_URI += "file://pkgconfig.patch"
+
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=27818cd7fd83877a8e3ef82b82798ef4"
 
@@ -32,6 +35,8 @@ DEPENDS_class-nativesdk = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', \
 			   nativesdk-libxrender nativesdk-libxext', '', d)}"
 
 PROVIDES = "virtual/libsdl"
+
+BINCONFIG = "${bindir}/sdl-config"
 
 inherit autotools lib_package binconfig-disabled
 

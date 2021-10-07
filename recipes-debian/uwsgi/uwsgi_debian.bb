@@ -21,7 +21,7 @@ PV = "2.0.7"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=33ab1ce13e2312dddfad07f97f66321f"
 
-SRC_URI += "file://0001-Use-pkg-config-for-libxml2-detection.patch"
+SRC_URI += "file://0001-Use-pkg-config-for-libxml2-libpcre-detection.patch"
 
 inherit setuptools pkgconfig update-alternatives
 

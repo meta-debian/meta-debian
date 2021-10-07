@@ -1,7 +1,37 @@
+Use pkg-config for libxml2 and libpcre detection
+
 diff --git a/uwsgiconfig.py b/uwsgiconfig.py
-index b594462..8652bd6 100644
+index b594462..9fa66ae 100644
 --- a/uwsgiconfig.py
 +++ b/uwsgiconfig.py
+@@ -1004,23 +1004,23 @@ class uConf(object):
+         # re-enable after pcre fix
+         if self.get('pcre'):
+             if self.get('pcre') == 'auto':
+-                pcreconf = spcall('pcre-config --libs')
++                pcreconf = spcall('pkg-config --libs libpcre')
+                 if pcreconf:
+                     self.libs.append(pcreconf)
+-                    pcreconf = spcall("pcre-config --cflags")
++                    pcreconf = spcall("pkg-config --cflags libpcre")
+                     self.cflags.append(pcreconf)
+                     self.gcc_list.append('core/regexp')
+                     self.cflags.append("-DUWSGI_PCRE")
+                     has_pcre = True
+ 
+             else:
+-                pcreconf = spcall('pcre-config --libs')
++                pcreconf = spcall('pkg-config --libs libpcre')
+                 if pcreconf is None:
+                     print("*** libpcre headers unavailable. uWSGI build is interrupted. You have to install pcre development package or disable pcre")
+                     sys.exit(1)
+                 else:
+                     self.libs.append(pcreconf)
+-                    pcreconf = spcall("pcre-config --cflags")
++                    pcreconf = spcall("pkg-config --cflags libpcre")
+                     self.cflags.append(pcreconf)
+                     self.gcc_list.append('core/regexp')
+                     self.cflags.append("-DUWSGI_PCRE")
 @@ -1233,10 +1233,10 @@ class uConf(object):
  
          if self.get('xml'):

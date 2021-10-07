@@ -8,7 +8,9 @@ SUMMARY = "Small library that defines common error values for all GnuPG componen
 HOMEPAGE = "http://www.gnupg.org/related_software/libgpg-error/"
 BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
-inherit debian-package autotools binconfig pkgconfig gettext
+BINCONFIG = "${bindir}/gpg-error-config"
+
+inherit debian-package autotools binconfig-disabled pkgconfig gettext
 PV = "1.17"
 
 PR = "r0"
@@ -19,6 +21,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=59530bdf33659b29e73d4adb9f9f6552 \
                     file://src/gpg-error.h.in;endline=23;md5=5dfe776dc8b62af093ddc859de6f494c \
                     file://src/init.c;endline=20;md5=8f5a9b59634f4aebcd0ec9d3ebd53bfe \
 "
+
+# base on meta/recipes-support/libgpg-error/libgpg-error/pkgconfig.patch
+SRC_URI += "file://pkgconfig.patch"
 
 EXTRA_OECONF = "--enable-static --disable-rpath"
 

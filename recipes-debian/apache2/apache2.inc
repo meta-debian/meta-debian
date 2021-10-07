@@ -13,6 +13,8 @@ PV = "2.4.10"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=dbff5a2b542fa58854455bf1a0b94b83"
 
+SRC_URI += "file://configure-use-pkg-config-for-PCRE-detection.patch"
+
 inherit autotools pkgconfig perlnative
 
 # Correct installation and library path.

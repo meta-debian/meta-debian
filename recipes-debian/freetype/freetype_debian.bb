@@ -22,7 +22,9 @@ file://docs/FTL.TXT;md5=d479e83797f699fe873b38dadd0fcd4c \
 file://docs/GPLv2.TXT;md5=8ef380476f642c20ebf40fecb0add2ec \
 "
 
-inherit autotools-brokensep pkgconfig binconfig multilib_header
+BINCONFIG = "${bindir}/freetype-config"
+
+inherit autotools-brokensep pkgconfig binconfig-disabled multilib_header
 
 LIBTOOL = "${S}/builds/unix/${HOST_SYS}-libtool"
 EXTRA_OEMAKE = "'LIBTOOL=${LIBTOOL}'"

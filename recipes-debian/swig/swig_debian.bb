@@ -10,6 +10,9 @@ LIC_FILES_CHKSUM = " \
 file://LICENSE;md5=e7807a6282784a7dde4c846626b08fc6 \
 "
 
+# base on meta/recipes-devtools/swig/swig/0001-configure-use-pkg-config-for-pcre-detection.patch
+SRC_URI += "file://0001-configure-use-pkg-config-for-pcre-detection.patch"
+
 DEPENDS = "python libpcre tcl"
 
 # Path to find tclConfig.sh

@@ -8,7 +8,9 @@ SUMMARY = "General purpose cryptographic library based on the code from GnuPG"
 HOMEPAGE = "http://directory.fsf.org/project/libgcrypt/"
 BUGTRACKER = "https://bugs.g10code.com/gnupg/index"
 
-inherit debian-package autotools-brokensep binconfig pkgconfig
+BINCONFIG = "${bindir}/libgcrypt-config"
+
+inherit debian-package autotools-brokensep binconfig-disabled pkgconfig
 PV = "1.6.3"
 
 PR = "r3"
@@ -42,6 +44,11 @@ EXTRA_OECONF = " \
 # 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_sub_n'
 # 	| ./.libs/libgcrypt.so: undefined reference to `_gcry_mpih_rshift'
 EXTRA_OECONF += "--disable-asm"
+
+do_configure_prepend () {
+	# Else this could be used in preference to the one in aclocal-copy
+	rm -f ${S}/m4/gpg-error.m4
+}
 
 # libgcrypt.pc is added locally and thus installed here
 do_install_append() {

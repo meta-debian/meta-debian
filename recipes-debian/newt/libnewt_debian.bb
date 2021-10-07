@@ -37,6 +37,7 @@ SRC_URI += " \
 	file://fix_SHAREDDIR.patch \
 	file://cross_ar.patch \
 	file://disable_python_dbg.patch \
+	file://Makefile.in-Add-tinfo-library-to-the-linking-librari.patch \
 "
 
 DPN = "newt"

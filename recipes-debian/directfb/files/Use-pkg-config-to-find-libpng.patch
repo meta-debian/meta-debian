@@ -1,0 +1,15 @@
+Use pkg-config to find libpng.
+
+diff --git a/configure.in b/configure.in
+index 91b769d..739c0de 100644
+--- a/configure.in
++++ b/configure.in
+@@ -733,7 +733,7 @@ if test "$enable_png" = "yes"; then
+ *** libpng-config not found ])
+   else
+       PNG=yes
+-      LIBPNG=`$LIBPNG_CONFIG --libs`
++      LIBPNG=`pkg-config --libs libpng`
+   fi
+ 
+   dnl Test for libpng
