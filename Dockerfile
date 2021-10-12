@@ -15,6 +15,13 @@ ARG USER_PASSWORD=deby
 ARG UID=1000
 ARG GID=1000
 
+# Add ELTS repository and upgrade packages
+RUN apt-get update && apt-get install -y wget && \
+    wget http://deb.freexian.com/extended-lts/pool/main/f/freexian-archive-keyring/freexian-archive-keyring_2020.09.19_all.deb && \
+    dpkg -i freexian-archive-keyring_2020.09.19_all.deb && \
+    echo "deb http://deb.freexian.com/extended-lts jessie-lts main" > /etc/apt/sources.list.d/extended-lts.list && \
+    apt-get update && apt-get upgrade -y
+
 # Set locale required by bitbake
 RUN apt-get update && apt-get install -y locales && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
