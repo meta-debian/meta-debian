@@ -1,0 +1,74 @@
+From c1375a6df4379c620d4e2a622eb58e5d7a1b556a Mon Sep 17 00:00:00 2001
+From: Seebs <seebs@seebs.net>
+Date: Tue, 9 Apr 2019 18:05:43 -0500
+Subject: [PATCH] don't renameat2 please
+
+commit 6ebc7d6bc8ab973d0ba949eeb363821811ce8dc5 upstream
+
+So renameat2 now has a glibc wrapper in some recent glibc, which
+means that mv can use it, and thus bypass all our clever testing,
+and since we can't intercept the actual syscall (gnulib's implementation
+apparently doesn't hit the glibc syscall() wrapper?), this results
+in files being moved without pseudo knowing about them.
+
+Implementing the semantics properly is Very Hard, but possibly we
+can just fail politely for now.
+
+We'll be back to this later.
+---
+ ChangeLog.txt                |  4 ++++
+ ports/linux/guts/renameat2.c | 20 ++++++++++++++++++++
+ ports/linux/wrapfuncs.in     |  1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 ports/linux/guts/renameat2.c
+
+diff --git a/ChangeLog.txt b/ChangeLog.txt
+index e0c66fc..8b98dca 100644
+--- a/ChangeLog.txt
++++ b/ChangeLog.txt
+@@ -1,3 +1,7 @@
++2019-04-09:
++	* (seebs) Make a glibc renameat2 wrapper that just fails because
++	implementing renameat2 semantics is Surprisingly Hard.
++
+ 2018-09-20:
+ 	* (seebs) coerce inodes to signed int64_t range when shoving
+ 	  them into sqlite.
+diff --git a/ports/linux/guts/renameat2.c b/ports/linux/guts/renameat2.c
+new file mode 100644
+index 0000000..0df8369
+--- /dev/null
++++ b/ports/linux/guts/renameat2.c
+@@ -0,0 +1,20 @@
++/*
++ * Copyright (c) 2019 Peter Seebach/Seebs <seebs@seebs.net>; see
++ * guts/COPYRIGHT for information.
++ *
++ * [Note: copyright added by code generator, may be
++ * incorrect. Remove this if you fix it.]
++ *
++ * int renameat2(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, unsigned int flags)
++ *	int rc = -1;
++ */
++
++	/* for now, let's try just failing out hard, and hope things retry with a
++	 * different syscall.
++	 */
++	errno = ENOSYS;
++	rc = -1;
++
++/*	return rc;
++ * }
++ */
+diff --git a/ports/linux/wrapfuncs.in b/ports/linux/wrapfuncs.in
+index e47acc3..a129eba 100644
+--- a/ports/linux/wrapfuncs.in
++++ b/ports/linux/wrapfuncs.in
+@@ -55,3 +55,4 @@ int getpwent_r(struct passwd *pwbuf, char *buf, size_t buflen, struct passwd **p
+ int getgrent_r(struct group *gbuf, char *buf, size_t buflen, struct group **gbufp);
+ int capset(cap_user_header_t hdrp, const cap_user_data_t datap); /* real_func=pseudo_capset */
+ long syscall(long nr, ...); /* hand_wrapped=1 */
++int renameat2(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, unsigned int flags); /* flags=AT_SYMLINK_NOFOLLOW */
+-- 
+2.20.1
+
