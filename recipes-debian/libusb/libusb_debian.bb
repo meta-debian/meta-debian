@@ -26,12 +26,12 @@ do_install_append() {
 	rm ${D}${libdir}/*.la
 }
 
-PACKAGES =+ "${PN}++ ${PN}++-dev"
+PACKAGES =+ "${DPN}++ ${DPN}++-dev"
 
 FILES_${PN} += "${bindir}/libusb-config"
-FILES_${PN}++ = "${libdir}/libusbpp-*"
-FILES_${PN}++-dev = "${includedir}/usbpp.h ${libdir}/libusbpp.so"
+FILES_${DPN}++ = "${libdir}/libusbpp-*"
+FILES_${DPN}++-dev = "${includedir}/usbpp.h ${libdir}/libusbpp.so"
 
-DEBIANNAME_${PN} = "${PN}-0.1-4"
-DEBIANNAME_${PN}++ = "${PN}++-0.1-4c2"
-DEBIANNAME_${PN}++-dev = "${PN}++-dev"
+DEBIANNAME_${PN} = "${DPN}-0.1-4"
+DEBIANNAME_${DPN}++ = "${DPN}++-0.1-4c2"
+DEBIANNAME_${DPN}++-dev = "${DPN}++-dev"

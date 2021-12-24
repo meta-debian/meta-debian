@@ -25,5 +25,5 @@ DEPENDS += "libxext inputproto libxfixes"
 # There is no debian patch
 DEBIAN_PATCH_TYPE = "nopatch"
 
-DEBIANNAME_${PN} = "${PN}6"
-DEBIANNAME_${PN}-dbg = "${PN}6-dbg"
+DEBIANNAME_${PN} = "${DPN}6"
+DEBIANNAME_${PN}-dbg = "${DPN}6-dbg"

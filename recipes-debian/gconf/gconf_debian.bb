@@ -98,7 +98,7 @@ pkg_postinst_${PN}() {
 	fi
 }
 
-PACKAGES =+ "${PN}-gsettings-backend ${PN}-service ${PN}-common lib${DPN}"
+PACKAGES =+ "${PN}-gsettings-backend ${PN}-service ${DPN}-common lib${DPN}"
 
 FILES_${PN}-gsettings-backend = "${libdir}/gio/modules/libgsettingsgconfbackend.so"
 FILES_${PN}-service = "${libdir}/gconf/*/* \
@@ -113,10 +113,10 @@ FILES_${PN}-dbg += "${libdir}/gconf/*/.debug"
 
 DEBIANNAME_${PN}-dev = "libgconf2-dev"
 RPROVIDES_${PN}-dev = "libgconf2-dev"
-DEBIANNAME_${PN} = "${PN}2"
-RPROVIDES_${PN} = "${PN}2"
-DEBIANNAME_${PN}-common = "${PN}2-common"
-RPROVIDES_${PN}-common = "${PN}2-common"
+DEBIANNAME_${PN} = "${DPN}2"
+RPROVIDES_${PN} = "${DPN}2"
+DEBIANNAME_${PN}-common = "${DPN}2-common"
+RPROVIDES_${PN}-common = "${DPN}2-common"
 RPROVIDES_lib${DPN} = "lib${DPN}-2-4 lib${DPN}2-4"
 
 # Base on debian/control

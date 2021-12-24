@@ -80,6 +80,6 @@ FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 
 RDEPENDS_${PN}_class-target += "${PN}-common"
 
-DEBIANNAME_${PN}-dev = "${PN}1-dev"
+DEBIANNAME_${PN}-dev = "${DPN}1-dev"
 
 BBCLASSEXTEND = "native"

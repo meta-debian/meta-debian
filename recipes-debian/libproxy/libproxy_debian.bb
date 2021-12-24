@@ -48,10 +48,10 @@ python() {
         d.setVar("EXTRA_OECMAKE", d.getVar("EXTRA_OECMAKE", False).replace("-DWITH_GNOME3=ON", "-DWITH_GNOME3=OFF -DWITH_GNOME=OFF"))
 }
 
-PACKAGES =+ "${PN}-tools ${PN}-plugin-gsettings python-${PN}"
+PACKAGES =+ "${PN}-tools ${DPN}-plugin-gsettings python-${PN}"
 
 FILES_${PN}-tools = "${bindir}/*"
-FILES_${PN}-plugin-gsettings = " \
+FILES_${DPN}-plugin-gsettings = " \
     ${libdir}/${DPN}/${SHLIBVER}/modules/config_gnome3.so \
     ${libdir}/${DPN}/${SHLIBVER}/pxgsettings \
 "
@@ -63,7 +63,7 @@ FILES_${PN}-dbg += " \
     ${libdir}/${DPN}/${SHLIBVER}/.debug \
 "
 
-RDEPENDS_${PN}-plugin-gsettings += "${PN}"
+RDEPENDS_${DPN}-plugin-gsettings += "${PN}"
 RDEPENDS_python-${PN} += "${PN}"
 
-DEBIANNAME_${PN}-plugin-gsettings = "${PN}1-plugin-gsettings"
+DEBIANNAME_${DPN}-plugin-gsettings = "${DPN}1-plugin-gsettings"

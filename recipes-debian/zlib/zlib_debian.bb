@@ -43,11 +43,11 @@ do_install_append_class-target() {
 }
 
 # In Debian, binary package name of zlib is "${PN}1g"
-DEBIANNAME_${PN}-dbg       = "${PN}1g-dbg"
-DEBIANNAME_${PN}-staticdev = "${PN}1g-staticdev"
-DEBIANNAME_${PN}-dev       = "${PN}1g-dev"
-DEBIANNAME_${PN}-doc       = "${PN}1g-doc"
-DEBIANNAME_${PN}           = "${PN}1g"
+DEBIANNAME_${PN}-dbg       = "${DPN}1g-dbg"
+DEBIANNAME_${PN}-staticdev = "${DPN}1g-staticdev"
+DEBIANNAME_${PN}-dev       = "${DPN}1g-dev"
+DEBIANNAME_${PN}-doc       = "${DPN}1g-doc"
+DEBIANNAME_${PN}           = "${DPN}1g"
 
 BBCLASSEXTEND = "native nativesdk"
 

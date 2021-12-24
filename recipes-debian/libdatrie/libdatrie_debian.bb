@@ -23,6 +23,6 @@ PACKAGES =+ "${PN}1-bin"
 FILES_${PN}1-bin += "${bindir}/*"
 
 # Rename package follow Debian
-DEBIANNAME_${PN} = "${PN}1"
+DEBIANNAME_${PN} = "${DPN}1"
 
 BBCLASSEXTEND += "native"

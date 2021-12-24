@@ -54,8 +54,8 @@ do_install_prepend() {
 
 FILES_${PN}-dev += "${bindir}/pcap-config"
 
-DEBIANNAME_${PN} = "${PN}0.8"
-DEBIANNAME_${PN}-dev = "${PN}0.8-dev"
-DEBIANNAME_${PN}-dbg = "${PN}0.8-dbg"
+DEBIANNAME_${PN} = "${DPN}0.8"
+DEBIANNAME_${PN}-dev = "${DPN}0.8-dev"
+DEBIANNAME_${PN}-dbg = "${DPN}0.8-dbg"
 
 BBCLASSEXTEND="native"

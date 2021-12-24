@@ -28,8 +28,8 @@ FILES_libgif = "${libdir}/libgif${SOLIBS}"
 RPROVIDES_libgif = "libgif4"
 
 RDEPENDS_${PN} = "perl"
-DEBIANNAME_${PN} = "${PN}-tools"
-RPROVIDES_${PN} = "${PN}-tools libungif-bin"
+DEBIANNAME_${PN} = "${DPN}-tools"
+RPROVIDES_${PN} = "${DPN}-tools libungif-bin"
 
 DEBIANNAME_${PN}-dev = "libgif-dev"
 RPROVIDES_${PN}-dev = "libgif-dev"

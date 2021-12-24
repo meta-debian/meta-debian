@@ -13,6 +13,6 @@ LIC_FILES_CHKSUM = "file://gpl.txt;md5=751419260aa954499f7abaabaa882bbe"
 
 inherit autotools-brokensep
 
-DEBIANNAME_${PN}-dbg = "${PN}0-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}0-dbg"
 
 BBCLASSEXTEND = "native"

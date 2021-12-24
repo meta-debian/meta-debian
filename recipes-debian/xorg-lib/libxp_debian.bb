@@ -15,7 +15,7 @@ CFLAGS_append += " -I ${S}/include/X11/XprintUtil -I ${S}/include/X11/extensions
 DEBIAN_PATCH_TYPE = "quilt"
 
 # Change package follow Debian
-DEBIANNAME_${PN}-dbg = "${PN}6-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}6-dbg"
 
 EXTRA_OECONF += "--enable-static"
 

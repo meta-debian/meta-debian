@@ -16,4 +16,4 @@ DEBIAN_PATCH_TYPE = "nopatch"
 #configure follow debian/rules
 EXTRA_OECONF = "--with-versioned-symbol"
 
-DEBIANNAME_${PN}-dev = "${PN}1-dev"
+DEBIANNAME_${PN}-dev = "${DPN}1-dev"

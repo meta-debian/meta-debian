@@ -26,4 +26,4 @@ BBCLASSEXTEND = "native nativesdk"
 DEBIAN_PATCH_TYPE = "nopatch"
 
 # Correct the package name follow Debian
-DEBIANNAME_${PN}-dbg = "${PN}3-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}3-dbg"

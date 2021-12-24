@@ -61,4 +61,4 @@ FILES_${PN}-utils = " \
     ${datadir}/crypto++/TestData \
 "
 
-DEBIANNAME_${PN}-dbg = "${PN}9-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}9-dbg"

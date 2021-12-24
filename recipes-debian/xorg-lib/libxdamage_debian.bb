@@ -32,4 +32,4 @@ BBCLASSEXTEND = "native"
 DEBIAN_PATCH_TYPE = "nopatch"
 
 # Correct the package name follow Debian
-DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}1-dbg"
