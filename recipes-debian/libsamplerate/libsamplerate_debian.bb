@@ -22,8 +22,8 @@ inherit autotools-brokensep pkgconfig
 
 PACKAGES =+ "samplerate-programs"
 
-DEBIANNAME_${PN} = "${PN}0"
-DEBIANNAME_${PN}-dev = "${PN}0-dev"
+DEBIANNAME_${PN} = "${DPN}0"
+DEBIANNAME_${PN}-dev = "${DPN}0-dev"
 
 FILES_samplerate-programs = "${bindir}/sndfile-resample"
 RDEPENDS_${PN}-dev += "${PN}"

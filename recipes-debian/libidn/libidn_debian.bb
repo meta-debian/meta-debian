@@ -40,7 +40,7 @@ PACKAGES =+ "idn"
 FILES_${PN} += "${libdir}"
 FILES_idn = "${bindir}/idn ${datadir}/emacs"
 
-DEBIANNAME_${PN}-dev = "${PN}11-dev"
+DEBIANNAME_${PN}-dev = "${DPN}11-dev"
 
 do_compile_prepend() {
         export LD_LIBRARY_PATH=${STAGING_LIBDIR}:$LD_LIBRARY_PATH

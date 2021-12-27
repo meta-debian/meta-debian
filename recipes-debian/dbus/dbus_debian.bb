@@ -46,8 +46,8 @@ USERADD_PARAM_${PN} = "--system --home ${localstatedir}/lib/dbus \
 
 CONFFILES_${PN} = "${sysconfdir}/dbus-1/system.conf ${sysconfdir}/dbus-1/session.conf"
 
-DEBIANNAME_${PN}-dbg = "${PN}-1-dbg"
-DEBIANNAME_${PN}-doc = "${PN}-1-doc"
+DEBIANNAME_${PN}-dbg = "${DPN}-1-dbg"
+DEBIANNAME_${PN}-doc = "${DPN}-1-doc"
 
 PACKAGES =+ "${PN}-lib"
 

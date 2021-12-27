@@ -27,5 +27,5 @@ do_install_append() {
 	chmod 0644 ${D}${libdir}/${LINKLIB}
 }
 inherit autotools texinfo binconfig lib_package
-DEBIANNAME_${PN}-dev = "${PN}-dev"
-DEBIANNAME_${PN}-dbg = "${PN}-dbg"
+DEBIANNAME_${PN}-dev = "${DPN}-dev"
+DEBIANNAME_${PN}-dbg = "${DPN}-dbg"

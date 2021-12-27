@@ -18,4 +18,4 @@ inherit autotools distro_features_check pkgconfig
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
-DEBIANNAME_${PN}-dbg = "${PN}6-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}6-dbg"

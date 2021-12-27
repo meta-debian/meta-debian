@@ -240,6 +240,6 @@ FILES_${PN}-dbg += "${libdir}/${NONARCH_PN}/${MAJOR_VER}/bin/.debug/* \
 
 DEBIANNAME_${PN} = "${DPN}"
 DEBIANNAME_${PN}-dbg = "${DPN}-dbg"
-DEBIANNAME_${PN}-doc = "${PN}-doc-${MAJOR_VER}"
+DEBIANNAME_${PN}-doc = "${DPN}-doc-${MAJOR_VER}"
 
 BBCLASSEXTEND = "native"

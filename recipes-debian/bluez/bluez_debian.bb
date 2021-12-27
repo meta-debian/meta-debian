@@ -90,14 +90,14 @@ do_install_append() {
 ALLOW_EMPTY_libasound-module-bluez = "1"
 PACKAGES =+ " \
 	libasound-module-bluez \
-	${PN}-obex \
-	${PN}-cups \
-	${PN}-hcidump \
+	${DPN}-obex \
+	${DPN}-cups \
+	${DPN}-hcidump \
 	libbluetooth \
 "
 
-FILES_${PN}-cups = "${nonarch_libdir}/cups/backend/bluetooth"
-FILES_${PN}-hcidump = "${bindir}/hcidump"
+FILES_${DPN}-cups = "${nonarch_libdir}/cups/backend/bluetooth"
+FILES_${DPN}-hcidump = "${bindir}/hcidump"
 FILES_libbluetooth = "${libdir}/libbluetooth.so.* ${libdir}/bluetooth/plugins/*.so"
 
 FILES_libasound-module-bluez = "${libdir}/alsa-lib/lib*.so ${datadir}/alsa"
@@ -117,12 +117,12 @@ FILES_${PN}-dev += "\
 
 FILES_${PN}-staticdev += "${libdir}/bluetooth/plugins/*.a"
 
-FILES_${PN}-obex = " \
+FILES_${DPN}-obex = " \
 	${nonarch_libdir}/bluetooth/obexd \
 	${nonarch_libdir}/systemd/user/obex.service \
 	${datadir}/dbus-1/services/org.bluez.obex.service \
 "
-SYSTEMD_SERVICE_${PN}-obex = "obex.service"
+SYSTEMD_SERVICE_${DPN}-obex = "obex.service"
 
 FILES_${PN}-dbg += "\
 	${libdir}/bluetooth/.debug \
@@ -137,5 +137,5 @@ SYSTEMD_SERVICE_${PN} = "bluetooth.service"
 EXCLUDE_FROM_WORLD = "1"
 
 DEBIANNAME_libbluetooth = "libbluetooth3"
-DEBIANNAME_${PN}-obex = "${PN}-obexd"
-DEBIANNAME_${PN}-dev = "libbluetooth-dev"
+DEBIANNAME_${DPN}-obex = "${DPN}-obexd"
+DEBIANNAME_${DPN}-dev = "libbluetooth-dev"

@@ -26,4 +26,4 @@ PROVIDES = "xtst"
 DEBIAN_PATCH_TYPE = "quilt"
 
 # Correct the package name follow Debian.
-DEBIANNAME_${PN}-dbg = "${PN}6-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}6-dbg"

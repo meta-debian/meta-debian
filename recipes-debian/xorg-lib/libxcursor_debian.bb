@@ -24,4 +24,4 @@ BBCLASSEXTEND = "native"
 
 DEBIAN_PATCH_TYPE = "quilt"
 
-DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}1-dbg"

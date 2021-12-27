@@ -31,7 +31,7 @@ inherit autotools distro_features_check pkgconfig
 # Requires libGL.so which is provided by mesa when x11 in DISTRO_FEATURES
 REQUIRED_DISTRO_FEATURES = "x11"
 
-DEBIANNAME_${PN} = "${PN}1-mesa"
-DEBIANNAME_${PN}-dev = "${PN}1-mesa-dev"
-RPROVIDES_${PN} += "${PN}-mesa"
-RPROVIDES_${PN}-dev += "${PN}-mesa-dev"
+DEBIANNAME_${PN} = "${DPN}1-mesa"
+DEBIANNAME_${PN}-dev = "${DPN}1-mesa-dev"
+RPROVIDES_${PN} += "${DPN}-mesa"
+RPROVIDES_${PN}-dev += "${DPN}-mesa-dev"

@@ -21,6 +21,6 @@ SRC_URI += "file://do-not-use-system-headers.patch"
 
 inherit autotools binconfig
 
-DEBIANNAME_${PN}-dbg = "${PN}2-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}2-dbg"
 
 BBCLASSEXTEND = "native"

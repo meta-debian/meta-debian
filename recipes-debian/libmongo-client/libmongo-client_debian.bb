@@ -25,4 +25,4 @@ do_install_append() {
 	chmod 0644 ${D}${libdir}/${LINKLIB}
 }
 #correct the sub-package name
-DEBIANNAME_${PN}-dbg = "${PN}0-dbg"
+DEBIANNAME_${PN}-dbg = "${DPN}0-dbg"

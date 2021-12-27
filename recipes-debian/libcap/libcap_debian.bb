@@ -79,7 +79,7 @@ FILES_libpam-cap = " \
 "
 FILES_${PN}-dbg += "${base_libdir}/security/.debug/*.so"
 
-DEBIANNAME_${PN} = "${PN}2"
-DEBIANNAME_${PN}-bin = "${PN}2-bin"
+DEBIANNAME_${PN} = "${DPN}2"
+DEBIANNAME_${PN}-bin = "${DPN}2-bin"
 
 BBCLASSEXTEND = "native nativesdk"

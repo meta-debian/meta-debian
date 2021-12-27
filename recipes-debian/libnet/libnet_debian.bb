@@ -26,6 +26,6 @@ DEPENDS = "libpcap"
 inherit autotools binconfig
 
 #Correct the packages name
-DEBIANNAME_${PN}-dev = "${PN}1-dev"
-DEBIANNAME_${PN}-doc = "${PN}1-doc"
-DEBIANNAME_${PN}-dbg = "${PN}1-dbg"
+DEBIANNAME_${PN}-dev = "${DPN}1-dev"
+DEBIANNAME_${PN}-doc = "${DPN}1-doc"
+DEBIANNAME_${PN}-dbg = "${DPN}1-dbg"

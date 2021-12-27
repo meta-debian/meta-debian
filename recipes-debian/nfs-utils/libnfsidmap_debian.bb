@@ -27,4 +27,4 @@ do_install_append(){
 FILES_${PN} += "${base_libdir}/${DPN}/*.so"
 FILES_${PN}-dbg += "${base_libdir}/${DPN}/.debug"
 
-DEBIANNAME_${PN} = "${PN}2"
+DEBIANNAME_${PN} = "${DPN}2"

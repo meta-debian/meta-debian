@@ -45,4 +45,4 @@ FILES_${PN}-dbg += "${base_libdir}/security/.debug"
 FILES_${PN}-dev += "${base_libdir}/security/*.la"
 
 # Rename package follow Debian
-DEBIANNAME_${PN} = "${PN}1"
+DEBIANNAME_${PN} = "${DPN}1"

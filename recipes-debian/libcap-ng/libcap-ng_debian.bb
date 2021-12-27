@@ -52,7 +52,7 @@ FILES_${PN}-dbg += "${PYTHON_SITEPACKAGES_DIR}/.debug"
 RPROVIDES_python-cap-ng = "${PN}-python"
 
 # lib_package class provides libcap-ng-bin which is equal to libcap-ng-utils from Debian
-RPROVIDES_${PN}-bin = "${PN}-utils"
-DEBIANNAME_${PN}-bin = "${PN}-utils"
+RPROVIDES_${PN}-bin = "${DPN}-utils"
+DEBIANNAME_${PN}-bin = "${DPN}-utils"
 
 BBCLASSEXTEND = "native"
