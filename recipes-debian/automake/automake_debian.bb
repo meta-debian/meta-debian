@@ -23,6 +23,7 @@ SRC_URI += " \
 	file://python-libdir.patch \
 	file://buildtest.patch \
 	file://automake-replace-w-option-in-shebangs-with-modern-use-warnings.patch \
+	file://0001-build-fix-race-in-parallel-builds.patch \
 "
 
 DEPENDS_class-native = "autoconf-native"
