@@ -7,8 +7,10 @@ inherit debian-package
 require recipes-debian/sources/fcode-utils.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/${BPN}"
 
+SRC_URI += "file://dont-strip-executable-file.patch"
+
 do_compile() {
-	oe_runmake
+	oe_runmake CC="${CC}"
 }
 
 do_install() {
