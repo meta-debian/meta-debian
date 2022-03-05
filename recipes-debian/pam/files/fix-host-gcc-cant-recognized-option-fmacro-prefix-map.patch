@@ -1,0 +1,19 @@
+Fix host gcc can't recognized option -fmacro-prefix-map
+
+The /doc/specs use CC_FOR_BUILD to compile a native binary, and
+the CFLAGS coming from the cross toolchain, containing
+the "-fmacro-prefix-map" default, so we should use the BUILD_CFLAGS, it
+contains the flags that used for host building.
+
+diff --git a/doc/specs/Makefile.am b/doc/specs/Makefile.am
+index b94e5ef..8efe975 100644
+--- a/doc/specs/Makefile.am
++++ b/doc/specs/Makefile.am
+@@ -12,6 +12,7 @@ draft-morgan-pam-current.txt: padout draft-morgan-pam.raw
+ AM_YFLAGS = -d
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = @BUILD_CFLAGS@
+ AM_CPPFLAGS = @BUILD_CPPFLAGS@
+ AM_CFLAGS = @BUILD_CFLAGS@
+ AM_LDFLAGS = @BUILD_LDFLAGS@
