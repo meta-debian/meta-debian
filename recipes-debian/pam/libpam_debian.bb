@@ -33,6 +33,7 @@ SRC_URI += " \
            file://libpam-xtests.patch \
            file://fixsepbuild.patch \
            file://crypt_configure.patch \
+           file://fix-host-gcc-cant-recognized-option-fmacro-prefix-map.patch \
           "
 
 SRC_URI_append_libc-musl = " file://0001-Add-support-for-defining-missing-funcitonality.patch \

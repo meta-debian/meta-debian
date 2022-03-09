@@ -1,0 +1,21 @@
+[PATCH] fcode-utils: don't strip executables
+
+By default, fcode-utils strips its binaries. This produces QA ERROR
+as follows:
+
+   ERROR: QA Issue: File '/usr/bin/romheaders' from fcode-utils was already stripped, this will prevent future debugging! [already-stripped]
+
+Remove "strip" command in romheaders/Makefile to prevent the QA ERROR.
+
+diff --git a/romheaders/Makefile b/romheaders/Makefile
+index fa516f3..05985b1 100644
+--- a/romheaders/Makefile
++++ b/romheaders/Makefile
+@@ -32,7 +32,6 @@ all: romheaders
+ 
+ romheaders: $(SOURCES)
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(SOURCES) -o $@
+-	strip romheaders
+ 	
+ clean:
+ 	rm -f *~
