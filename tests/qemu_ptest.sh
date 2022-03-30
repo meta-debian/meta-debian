@@ -8,6 +8,7 @@
 #   TEST_PACKAGES: recipes/packages need to run ptest. Eg: "zlib quilt"
 #   TEST_MACHINES: machines will be tested. Eg: "qemux86 qemuarm"
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
+#   TEST_ENABLE_SECURITY_UPDATE: If 1 is set, enable security update repository.
 
 trap "exit" INT
 trap 'kill $(jobs -p)' EXIT
@@ -36,6 +37,10 @@ function scp_qemu {
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[$TEST_IPADDR]:$TEST_PORT"
 
 setup_builddir
+
+if [ "$TEST_ENABLE_SECURITY_UPDATE" = "1" ]; then
+	setup_security_update_repository
+fi
 
 # Enable ptest
 append_var "DISTRO_FEATURES_append" " ptest" conf/local.conf

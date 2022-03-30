@@ -165,3 +165,8 @@ function get_all_packages {
 		rm -f $recipe_env
 	done
 }
+
+function setup_security_update_repository() {
+	set_var "DEBIAN_SECURITY_UPDATE_MIRROR" "http://security.debian.org/debian-security/pool/updates" conf/local.conf
+	echo 'MIRRORS+="${DEBIAN_MIRROR}    ${DEBIAN_SECURITY_UPDATE_MIRROR}"' >> conf/local.conf
+}

@@ -8,6 +8,7 @@
 #   TEST_DISTROS: distros will be tested. Eg: "deby deby-tiny"
 #   TEST_MACHINES: machines will be tested. Eg: "raspberrypi3 qemuarm"
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
+#   TEST_ENABLE_SECURITY_UPDATE: If 1 is set, enable security update repository.
 
 trap "exit" INT
 
@@ -30,6 +31,10 @@ LAYER_DEPS_URL[beaglebone]="https://git.yoctoproject.org/git/meta-ti;branch=mast
 LAYER_DEPS_URL[raspberrypi3]="https://git.yoctoproject.org/git/meta-raspberrypi;branch=warrior"
 
 setup_builddir
+
+if [ "$TEST_ENABLE_SECURITY_UPDATE" = "1" ]; then
+	setup_security_update_repository
+fi
 
 if [ "$TEST_PACKAGES" = "" ]; then
 	TEST_PACKAGES_NOTSET=1
