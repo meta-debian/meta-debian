@@ -186,6 +186,7 @@ do_install_ptest () {
 
 	install -d ${D}${PTEST_PATH}/engines
 	install -m755 ${B}/engines/ossltest.so ${D}${PTEST_PATH}/engines
+	install -m755 ${B}/engines/dasync.so ${D}${PTEST_PATH}/engines
 }
 
 # Add the openssl.cnf file to the openssl-conf package. Make the libcrypto
