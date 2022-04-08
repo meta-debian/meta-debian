@@ -214,3 +214,5 @@ RREPLACES_openssl-conf = "openssl10-conf"
 RCONFLICTS_openssl-conf = "openssl10-conf"
 
 BBCLASSEXTEND = "native nativesdk"
+
+CVE_CHECK_WHITELIST = "CVE-2016-7798 CVE-2018-16395"
