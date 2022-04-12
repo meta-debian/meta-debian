@@ -18,6 +18,7 @@ services:
       TEST_DISTROS: ${TEST_DISTROS:-deby-tiny}
       TEST_MACHINES: ${TEST_MACHINES:-qemux86}
       TEST_DISTRO_FEATURES: ${TEST_DISTRO_FEATURES}
+      TEST_ENABLE_SECURITY_UPDATE: ${TEST_ENABLE_SECURITY_UPDATE}
     volumes:
       - ../:/home/deby/poky/meta-debian
       - downloads:/home/deby/downloads

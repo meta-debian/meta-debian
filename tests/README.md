@@ -18,6 +18,7 @@ Input params from env:
 | TEST_DISTROS         | Distros will be tested.         | "deby deby-tiny"          |
 | TEST_MACHINES        | Machines will be tested.        | "raspberrypi3 qemuarm"    |
 | TEST_DISTRO_FEATURES | DISTRO_FEATURES will be used.   | "pam x11"                 |
+| TEST_ENABLE_SECURITY_UPDATE | Enable security update repository. | "1"             |
 
 Example:
 ```sh
