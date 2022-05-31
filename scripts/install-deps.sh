@@ -18,6 +18,8 @@ PKG_ESSENTIALS_DEBIAN=" \
 # In addition to the above, the following packages are required:
 #   cpio: listed in SANITY_REQUIRED_UTILITIES is missing in the manual above
 #   python: pseudo-native requires `/usr/bin/env python` as python2.7
-PKG_EXTRA="cpio python"
+#   locales: meta-debian's SDK uses locales data from host machine
+#     ref: https://www.yoctoproject.org/docs/2.2/ref-manual/ref-manual.html#migration-2.2-utf-8-locale-required-on-build-host
+PKG_EXTRA="cpio python locales"
 
 apt-get install ${@} ${PKG_ESSENTIALS} ${PKG_ESSENTIALS_DEBIAN} ${PKG_EXTRA}
