@@ -22,6 +22,8 @@ PR = "r0"
 inherit debian-package
 PV = "1.6.2"
 
+SRC_URI += "file://fix-parallel-make.patch"
+
 BINCONFIG = "${bindir}/pcap-config"
 
 inherit autotools-brokensep bluetooth binconfig-disabled
