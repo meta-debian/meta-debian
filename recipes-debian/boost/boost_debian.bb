@@ -120,6 +120,13 @@ BJAM_TOOLS   = "-sTOOLS=gcc \
 
 # use PARALLEL_MAKE to speed up the build, but limit it by -j 64, greater paralelism causes bjam to segfault or to ignore -j
 # https://svn.boost.org/trac/boost/ticket/7634
+# However, sometimes the boost compile failed on some machines with a lot of CPU cores (eg: 32 threads):
+# > libs/math/build/../src/tr1/comp_ellint_2.cpp:7:0: error: unterminated #ifndef
+# > ....
+# > libs/math/build/../src/tr1/pch.hpp:1: confused by earlier errors, bailing out
+#
+# So temporarily limit the PARALLEL_MAKE by -j 16, this is not a solution but a workaround
+# to avoid both of errors above.
 def get_boost_parallel_make(bb, d):
     pm = d.getVar('PARALLEL_MAKE', True)
     if pm:
@@ -129,7 +136,7 @@ def get_boost_parallel_make(bb, d):
         pm_val = re.search("\d+", pm)
         if pm_prefix is None or pm_val is None:
             bb.error("Unable to analyse format of PARALLEL_MAKE variable: %s" % pm)
-        pm_nval = min(64, int(pm_val.group(0)))
+        pm_nval = min(16, int(pm_val.group(0)))
         return pm_prefix.group(0) + str(pm_nval) + pm[pm_val.end():]
     else:
         return ""
