@@ -1,0 +1,16 @@
+Sometimes libpcap cannot be built parallel,
+it will fail if the pcap_pic.o compiles before the version.h is generated
+
+diff --git a/Makefile.in b/Makefile.in
+index 0b39e48..48d29fb 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -92,7 +92,7 @@ YACC = @V_YACC@
+ 	@rm -f $@
+ 	$(CC) $(FULL_CFLAGS) -c -o $@ $(srcdir)/$*.c
+ 
+-%_pic.o: %.c
++%_pic.o: %.c version.h
+ 	@rm -f $@
+ 	$(CC) -fPIC $(FULL_CFLAGS) -c -o $@ $(srcdir)/$*.c
+ 
