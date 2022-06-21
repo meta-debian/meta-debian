@@ -8,11 +8,12 @@ PR = "r0"
 inherit debian-package
 PV = "2.69"
 
-LICENSE = "GPLv2+ & GPLv3+ & GFDL-1.3+"
+LICENSE = "GPLv2+ & GPL-3.0-with-autoconf-exception & GFDL-1.3+"
 LIC_FILES_CHKSUM = " \
 	file://COPYING;md5=751419260aa954499f7abaabaa882bbe \
 	file://COPYINGv3;md5=d32239bcb673463ab874e80d47fae504 \
-	file://doc/autoconf.info;beginline=8;endline=15;md5=7d7c48253fc5f07f296c80f56e817aa2 \
+	file://COPYING.EXCEPTION;md5=fdef168ebff3bc2f13664c365a5fb515 \
+	file://doc/fdl.texi;md5=da6ec703e0ca8336f9bef7af7b985f02 \
 "
 
 SRC_URI += " \
