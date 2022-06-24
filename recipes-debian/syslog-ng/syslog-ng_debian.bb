@@ -12,7 +12,12 @@ require recipes-debian/sources/syslog-ng.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/syslog-ng-syslog-ng-${PV}"
 
 LICENSE = "GPL-2.0-with-OpenSSL-exception & LGPL-2.1-with-OpenSSL-exception"
-LIC_FILES_CHKSUM = "file://COPYING;md5=24c0c5cb2c83d9f2ab725481e4df5240"
+LIC_FILES_CHKSUM = " \
+  file://debian/copyright;md5=896b5aaa7720190a36f9383f1874258e \
+  file://LGPL.txt;md5=4fbd65380cdd255951079008b364516c \
+  file://GPL.txt;md5=133409beb2c017d3b0f406f22c5439e7 \
+"
+NO_GENERIC_LICENSE[LGPL-2.1-with-OpenSSL-exception] = "debian/copyright LGPL.txt"
 
 SRC_URI += " \
     file://configure.ac-add-option-enable-thread-tls-to-manage-.patch \
