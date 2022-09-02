@@ -1,0 +1,41 @@
+From b7e6e848230a69c62f34378921a2d2289c6291c3 Mon Sep 17 00:00:00 2001
+From: Masami Ichikawa <masami.ichikawa@miraclelinux.com>
+Date: Fri, 25 Jun 2021 10:58:18 +0900
+Subject: [PATCH 3/3] Apply patch:
+ 0011-linux-user-remove-host-stime-syscall.patch
+
+Backport patch 0011-linux-user-remove-host-stime-syscall.patch[1] from poky
+thud branch.
+
+This commit fixed hunk and patching error.
+
+1:
+https://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/meta/recipes-devtools/qemu/qemu/0011-linux-user-remove-host-stime-syscall.patch?h=thud&id=e52122a3e6912575ff401a4af6ac1bf3070092bc
+
+Signed-off-by: Masami Ichikawa <masami.ichikawa@miraclelinux.com>
+---
+ linux-user/syscall.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 384da6a..aaf4d50 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -7314,10 +7314,11 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
+ #ifdef TARGET_NR_stime /* not on alpha */
+     case TARGET_NR_stime:
+         {
+-            time_t host_time;
+-            if (get_user_sal(host_time, arg1))
++            struct timespec ts;
++            ts.tv_nsec = 0;
++            if (get_user_sal(ts.tv_sec, arg1))
+                 return -TARGET_EFAULT;
+-            return get_errno(stime(&host_time));
++            return get_errno(clock_settime(CLOCK_REALTIME, &ts));
+         }
+ #endif
+ #ifdef TARGET_NR_alarm /* not on alpha */
+-- 
+2.25.1
+
