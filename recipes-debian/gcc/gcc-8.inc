@@ -56,3 +56,6 @@ SRC_URI += " \
        file://0037-Fix-for-testsuite-failure.patch \
        file://0038-Re-introduce-spe-commandline-options.patch \
 "
+
+# CVE-2021-37322 is already fixed but NVD db is not updated.
+CVE_CHECK_WHITELIST = "CVE-2021-37322"
