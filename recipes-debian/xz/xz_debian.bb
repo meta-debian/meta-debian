@@ -48,8 +48,6 @@ LIC_FILES_CHKSUM = " \
 inherit debian-package
 require recipes-debian/sources/xz-utils.inc
 
-DEBIAN_QUILT_PATCHES = ""
-
 inherit autotools gettext
 
 PACKAGES =+ "liblzma"
