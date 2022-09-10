@@ -7,6 +7,10 @@ SDK_VERSION := "${DISTRO_VERSION}"
 MAINTAINER = "meta-debian Development Team"
 TARGET_VENDOR = "-deby"
 
+# Using the package versions provided in the security update mirror
+# is now necessary to pull updates by Debian LTS
+DEBIAN_SECURITY_UPDATE_MIRROR ?= "http://security.debian.org/debian-security/pool/updates"
+
 # Add an eventhandler that generates DEBIAN_SRC_URI information
 # from Debian apt repository.
 INHERIT += "debian-source"
