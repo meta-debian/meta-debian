@@ -36,4 +36,6 @@ do_install_ptest() {
 	    -e 's:${HOSTTOOLS_DIR}/::g'                 \
 	    -e 's:${BASE_WORKDIR}/${MULTIMACH_TARGET_SYS}::g' \
 	    ${B}/tests/Makefile > ${D}${PTEST_PATH}/src/tests/Makefile
+	chmod 755 ${D}${PTEST_PATH}/src/tests/zgrep-abuse
+	chmod 755 ${D}${PTEST_PATH}/src/tests/zgrep-binary
 }
