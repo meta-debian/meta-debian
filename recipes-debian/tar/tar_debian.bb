@@ -72,3 +72,5 @@ PROVIDES_append_class-native = " tar-replacement-native"
 NATIVE_PACKAGE_PATH_SUFFIX = "/${PN}"
 
 BBCLASSEXTEND = "native nativesdk"
+
+CVE_PRODUCT = "gnu:tar"
