@@ -7,9 +7,6 @@ inherit debian-package
 require recipes-debian/sources/python-ipaddress.inc
 DEBIAN_UNPACK_DIR = "${WORKDIR}/ipaddress-${PV}"
 
-# There is no patch
-DEBIAN_QUILT_PATCHES = ""
-
 inherit setuptools
 
 do_install_append() {
