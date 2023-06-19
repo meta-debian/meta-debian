@@ -5,13 +5,13 @@
 
 require curl.inc
 
-PR = "${INC_PR}.0"
+PR = "${INC_PR}.1"
 
 inherit binconfig
 
-PACKAGECONFIG ??= "${@bb.utils.contains("DISTRO_FEATURES", "ipv6", "ipv6", "", d)} gnutls zlib"
-PACKAGECONFIG_class-native = "ipv6 ssl zlib"
-PACKAGECONFIG_class-nativesdk = "ipv6 ssl zlib"
+PACKAGECONFIG ??= "${@bb.utils.contains("DISTRO_FEATURES", "ipv6", "ipv6", "", d)} gnutls zlib libssh2"
+PACKAGECONFIG_class-native = "ipv6 ssl zlib libssh2"
+PACKAGECONFIG_class-nativesdk = "ipv6 ssl zlib libssh2"
 
 PACKAGECONFIG[ipv6] = "--enable-ipv6,--disable-ipv6,"
 PACKAGECONFIG[ssl] = "--with-ssl --with-random=/dev/urandom,--without-ssl,openssl"
