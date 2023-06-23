@@ -80,4 +80,4 @@ DEBIANNAME_${PN}-dev = "libgcrypt20-dev"
 DEBIANNAME_${PN}-dbg = "libgcrypt20-dbg"
 DEBIANNAME_${PN}-doc = "libgcrypt20-doc"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
