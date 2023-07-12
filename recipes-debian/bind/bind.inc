@@ -6,7 +6,7 @@
 SUMMARY = "ISC Internet Domain Name Server"
 HOMEPAGE = "http://www.isc.org/sw/bind/"
 
-INC_PR = "r0"
+INC_PR = "r1"
 DPN = "bind9"
 inherit debian-package
 PV = "9.9.5.dfsg"
@@ -15,7 +15,7 @@ LICENSE = "ISC & BSD"
 LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=a3df5f651469919a0e6cb42f84fb6ff1"
 
 DEPENDS = "openssl libcap krb5"
-DEBIAN_PATCH_TYPE = "nopatch"
+DEBIAN_PATCH_TYPE = "quilt"
 
 # fix-configure-for-gssapi.patch 
 #	fix path to gssapi.h file
