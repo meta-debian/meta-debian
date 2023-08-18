@@ -26,6 +26,10 @@ RUN echo "$USER:$PASS" | chpasswd
 RUN echo "%$USER  ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/debygrp
 RUN chmod 0440 /etc/sudoers.d/debygrp
 
+# Setup directory's owner before switching to user.
+RUN mkdir $HOME/downloads
+RUN chown $USER:$USER $HOME/downloads
+
 ADD gitproxy /usr/bin
 RUN chmod +x /usr/bin/gitproxy
 RUN bash -c 'if test -n "$http_proxy"; then sed -i -e "s#\(http_proxy=\"\).*#\1$http_proxy\"#" /usr/bin/gitproxy; fi'
