@@ -41,3 +41,7 @@ BBCLASSEXTEND = "native"
 
 # exclude version 2.3.2 which triggers a false positive
 UPSTREAM_CHECK_REGEX = "^zip(?P<pver>(?!232).+)\.tgz"
+
+# CVE-2018-13684: It's false positive because the flaw is not caused by this
+#                 package.
+CVE_CHECK_WHITELIST = "CVE-2018-13684"
