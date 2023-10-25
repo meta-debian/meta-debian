@@ -45,6 +45,7 @@ Input params from env:
 | TEST_DISTRO_FEATURES | DISTRO_FEATURES will be used.       | "pam x11"                 |
 | PTEST_RUNNER_TIMEOUT | Timeout seconds for ptest-runner.   | "7200"                    |
 | QEMU_PARAMS          | Specify custom parameters to QEMU.  | "-smp 2 -m 2048"          |
+| IMAGE_ROOTFS_EXTRA_SPACE | Extra space(KB) of rootfs for qemu machine. | "1048576"     |
 
 Example:
 ```sh

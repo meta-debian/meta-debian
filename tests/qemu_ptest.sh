@@ -13,6 +13,7 @@
 #   QEMU_PARAMS: Specify custom parameters to QEMU. Eg: "-smp 2 -m 2048"
 #     - `-smp`: Amount of CPU cores.
 #     - `-m`:   Memory size(MB). Default: 512 MB
+#   IMAGE_ROOTFS_EXTRA_SPACE: Extra space(KB) of rootfs for qemu machine.
 
 trap "exit" INT
 trap 'kill $(jobs -p)' EXIT
@@ -92,6 +93,11 @@ for distro in $TEST_DISTROS; do
 
 		note "Testing machine $machine ..."
 		set_var "MACHINE" "$machine" conf/local.conf
+
+		if [ -n "$IMAGE_ROOTFS_EXTRA_SPACE" ] && [[ "$IMAGE_ROOTFS_EXTRA_SPACE" =~ ^[0-9]+$ ]]; then
+			note "Set IMAGE_ROOTFS_EXTRA_SPACE to $IMAGE_ROOTFS_EXTRA_SPACE KB."
+			set_var "IMAGE_ROOTFS_EXTRA_SPACE" "$IMAGE_ROOTFS_EXTRA_SPACE" conf/local.conf
+		fi
 
 		bitbake core-image-minimal
 		if [ "$?" != "0" ]; then
