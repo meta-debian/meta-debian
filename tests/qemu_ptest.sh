@@ -10,6 +10,9 @@
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
 #   TEST_ENABLE_SECURITY_UPDATE: If 1 is set, enable security update repository.
 #   PTEST_RUNNER_TIMEOUT: Timeout seconds for ptest-runner. Default: 300 seconds, Eg: 7200
+#   QEMU_PARAMS: Specify custom parameters to QEMU. Eg: "-smp 2 -m 2048"
+#     - `-smp`: Amount of CPU cores.
+#     - `-m`:   Memory size(MB). Default: 512 MB
 
 trap "exit" INT
 trap 'kill $(jobs -p)' EXIT
@@ -97,7 +100,7 @@ for distro in $TEST_DISTROS; do
 		fi
 
 		# Boot image with QEMU
-		nohup runqemu $machine nographic slirp &
+		nohup runqemu $machine nographic slirp qemuparams="$QEMU_PARAMS" &
 
 		# Wait for SSH
 		timeout=60

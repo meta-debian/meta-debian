@@ -44,6 +44,7 @@ Input params from env:
 | TEST_MACHINES | Machines will be tested. Only qemu machine is supported. | "qemux86 qemuarm" |
 | TEST_DISTRO_FEATURES | DISTRO_FEATURES will be used.       | "pam x11"                 |
 | PTEST_RUNNER_TIMEOUT | Timeout seconds for ptest-runner.   | "7200"                    |
+| QEMU_PARAMS          | Specify custom parameters to QEMU.  | "-smp 2 -m 2048"          |
 
 Example:
 ```sh

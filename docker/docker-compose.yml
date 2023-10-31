@@ -17,6 +17,7 @@ services:
       service: deby
     environment:
       PTEST_RUNNER_TIMEOUT: $PTEST_RUNNER_TIMEOUT
+      QEMU_PARAMS: $QEMU_PARAMS
     command: /home/deby/poky/meta-debian/tests/qemu_ptest.sh
 
 volumes:
