@@ -108,3 +108,7 @@ RRECOMMENDS_lib${BPN} += "ca-certificates"
 FILES_${PN} += "${datadir}/zsh"
 
 BBCLASSEXTEND = "native nativesdk"
+
+# CVE-2013-2617: It's false positive because it was mistakenly detected as
+#                RubyGem's module.
+CVE_CHECK_WHITELIST = "CVE-2013-2617"
