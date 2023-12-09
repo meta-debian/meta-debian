@@ -1,3 +1,7 @@
+# base recipe: meta/recipes-devtools/elfutils/elfutils_0.176.bb
+# base branch: master
+# base commit: 17bfcbacb0fa6e4641919fd92bcb86c5bb86c761
+
 SUMMARY = "Utilities and libraries for handling compiled object files"
 HOMEPAGE = "https://sourceware.org/elfutils"
 SECTION = "base"
@@ -7,13 +11,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504 \
                     file://COPYING-LGPLV3;md5=e6a600fd5e1d9cbde2d983680233ad02 \
                     "
 DEPENDS = "libtool bzip2 zlib virtual/libintl"
-DEPENDS_append_libc-musl = " argp-standalone fts "
+DEPENDS_append_libc-musl = " argp-standalone fts musl-obstack "
 # The Debian patches below are from:
-# http://ftp.de.debian.org/debian/pool/main/e/elfutils/elfutils_0.170-0.5.debian.tar.xz
-
+# http://ftp.de.debian.org/debian/pool/main/e/elfutils/elfutils_0.176-1.1.debian.tar.xz
 inherit debian-package
 require recipes-debian/sources/elfutils.inc
-FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/elfutils/files"
+FILESPATH_append = ":${COREBASE}/meta/recipes-devtools/elfutils/files:${THISDIR}/files"
 
 SRC_URI += " \
            file://0001-dso-link-change.patch \
@@ -23,42 +26,58 @@ SRC_URI += " \
            file://0006-Fix-build-on-aarch64-musl.patch \
            file://0001-libasm-may-link-with-libbz2-if-found.patch \
            file://0001-libelf-elf_end.c-check-data_list.data.d.d_buf-before.patch \
+           file://0001-skip-the-test-when-gcc-not-deployed.patch \
+           file://run-ptest \
+           file://ptest.patch \
            "
 
-# file://0007-Fix-control-path-where-we-have-str-as-uninitialized-.patch
-# file://debian/0001-hppa_backend.patch
-# file://debian/0001-arm_backend.patch 
-# file://debian/0001-mips_backend.patch 
-# file://debian/0001-testsuite-ignore-elflint.patch 
-# file://debian/0001-mips_readelf_w.patch 
-# file://debian/0001-Ignore-differences-between-mips-machine-identifiers.patch 
-# file://debian/0002-Add-support-for-mips64-abis-in-mips_retval.c.patch 
-# file://debian/0003-Add-mips-n64-relocation-format-hack.patch 
-# file://debian/ignore_strmerge.diff 
-# file://debian/0001-fix-gcc7-ftbfs.patch 
-# file://debian/0001-disable_werror.patch 
-# file://CVE-2018-16062.patch 
-# file://0001-libdw-Check-end-of-attributes-list-consistently.patch 
-# file://0002-libelf-Return-error-if-elf_compress_gnu-is-used-on-S.patch 
-# file://0005-fix-a-stack-usage-warning.patch
+SRC_URI_append_libc-musl = " \
+           file://musl-obstack-fts.patch \
+           file://musl-libs.patch \
+           file://musl-utils.patch \
+           file://musl-tests.patch \
+           "
 
-SRC_URI_append_libc-musl = " file://0008-build-Provide-alternatives-for-glibc-assumptions-hel.patch"
-
-inherit autotools gettext
+inherit autotools gettext ptest
 
 EXTRA_OECONF = "--program-prefix=eu- --without-lzma"
 EXTRA_OECONF_append_class-native = " --without-bzlib"
+RDEPENDS_${PN}-ptest += "libasm libelf bash make coreutils ${PN}-binutils"
 
-do_install_append() {
-	if [ "${TARGET_ARCH}" != "x86_64" ] && [ -z `echo "${TARGET_ARCH}"|grep 'i.86'` ];then
-		rm -f ${D}${bindir}/eu-objdump
-	fi
+EXTRA_OECONF_append_class-target += "--disable-tests-rpath"
+
+RDEPENDS_${PN}-ptest_append_libc-glibc = " glibc-utils"
+
+do_compile_ptest() {
+       cd ${B}/tests
+       oe_runmake buildtest-TESTS oecheck
+}
+
+do_install_ptest() {
+       if [ ${PTEST_ENABLED} = "1" ]; then
+               # copy the files which needed by the cases
+               TEST_FILES="strip strip.o addr2line elfcmp objdump readelf size.o nm.o nm elflint"
+               install -d -m 755                       ${D}${PTEST_PATH}/src
+               install -d -m 755                       ${D}${PTEST_PATH}/libelf
+               install -d -m 755                       ${D}${PTEST_PATH}/libdw
+               for test_file in ${TEST_FILES}; do
+                       if [ -f ${B}/src/${test_file} ]; then
+                               cp -r ${B}/src/${test_file} ${D}${PTEST_PATH}/src
+                       fi
+               done
+               cp ${D}${libdir}/libelf-${PV}.so ${D}${PTEST_PATH}/libelf/libelf.so
+               cp ${D}${libdir}/libdw-${PV}.so ${D}${PTEST_PATH}/libdw/libdw.so
+               cp -r ${S}/tests/                       ${D}${PTEST_PATH}
+               cp -r ${B}/tests/*                      ${D}${PTEST_PATH}/tests
+               cp -r ${B}/config.h                     ${D}${PTEST_PATH}
+               cp -r ${B}/backends                     ${D}${PTEST_PATH}
+               sed -i '/^Makefile:/c Makefile:'        ${D}${PTEST_PATH}/tests/Makefile
+               find ${D}${PTEST_PATH} -type f -name *.[hoc] | xargs -i rm {}
+       fi
 }
 
 EXTRA_OEMAKE_class-native = ""
 EXTRA_OEMAKE_class-nativesdk = ""
-
-ALLOW_EMPTY_${PN}_libc-musl = "1"
 
 BBCLASSEXTEND = "native nativesdk"
 
@@ -94,3 +113,27 @@ FILES_libdw  = "${libdir}/libdw-${PV}.so ${libdir}/libdw.so.* ${libdir}/elfutils
 
 # The package contains symlinks that trip up insane
 INSANE_SKIP_${MLPREFIX}libdw = "dev-so"
+
+# avoid stripping some generated binaries otherwise some of the tests such as test-nlist,
+# run-strip-reloc.sh, run-strip-strmerge.sh and so on will fail
+INHIBIT_PACKAGE_STRIP_FILES = "\
+    ${PKGD}${PTEST_PATH}/tests/test-nlist \
+    ${PKGD}${PTEST_PATH}/tests/elfstrmerge \
+    ${PKGD}${PTEST_PATH}/tests/backtrace-child \
+    ${PKGD}${PTEST_PATH}/tests/backtrace-data \
+    ${PKGD}${PTEST_PATH}/tests/backtrace-dwarf \
+    ${PKGD}${PTEST_PATH}/tests/deleted \
+    ${PKGD}${PTEST_PATH}/src/strip \
+    ${PKGD}${PTEST_PATH}/src/addr2line \
+    ${PKGD}${PTEST_PATH}/src/elfcmp \
+    ${PKGD}${PTEST_PATH}/src/objdump \
+    ${PKGD}${PTEST_PATH}/src/readelf \
+    ${PKGD}${PTEST_PATH}/src/nm \
+    ${PKGD}${PTEST_PATH}/src/elflint \
+    ${PKGD}${PTEST_PATH}/libelf/libelf.so \
+    ${PKGD}${PTEST_PATH}/libdw/libdw.so \
+    ${PKGD}${PTEST_PATH}/backends/libebl_i386.so \
+    ${PKGD}${PTEST_PATH}/backends/libebl_x86_64.so \
+"
+
+PRIVATE_LIBS_${PN}-ptest = "libdw.so.1 libelf.so.1"
