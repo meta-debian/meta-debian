@@ -89,6 +89,7 @@ for distro in $TEST_DISTROS; do
 	for machine in $TEST_MACHINES; do
 		LOGDIR=$THISDIR/logs/$distro/$machine
 		RESULT=$LOGDIR/result.txt
+		QEMULOG=$LOGDIR/runqemu.log
 		mkdir -p $LOGDIR
 
 		note "Testing machine $machine ..."
@@ -106,7 +107,8 @@ for distro in $TEST_DISTROS; do
 		fi
 
 		# Boot image with QEMU
-		nohup runqemu $machine nographic slirp qemuparams="$QEMU_PARAMS" &
+		note "Run command: \`runqemu $machine nographic slirp qemuparams=\"$QEMU_PARAMS\"\`"
+		nohup runqemu $machine nographic slirp qemuparams="$QEMU_PARAMS" > $QEMULOG &
 
 		# Wait for SSH
 		timeout=60
@@ -117,6 +119,10 @@ for distro in $TEST_DISTROS; do
 			waited=$((now-start))
 			note "Waiting for SSH to be ready... (${waited}s / ${timeout}s)"
 			if [ $waited -gt $timeout ]; then
+				QEMULOG=$(grep 'ERROR' $QEMULOG)
+				if [ -n "$QEMULOG" ]; then
+					error "$QEMULOG"
+				fi
 				error "Cannot connect to qemu machine."
 				exit 1
 			fi
