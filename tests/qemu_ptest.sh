@@ -9,6 +9,11 @@
 #   TEST_MACHINES: machines will be tested. Eg: "qemux86 qemuarm"
 #   TEST_DISTRO_FEATURES: DISTRO_FEATURES will be used. Eg: "pam x11"
 #   TEST_ENABLE_SECURITY_UPDATE: If 1 is set, enable security update repository.
+#   PTEST_RUNNER_TIMEOUT: Timeout seconds for ptest-runner. Default: 300 seconds, Eg: 7200
+#   QEMU_PARAMS: Specify custom parameters to QEMU. Eg: "-smp 2 -m 2048"
+#     - `-smp`: Amount of CPU cores.
+#     - `-m`:   Memory size(MB). Default: 512 MB
+#   IMAGE_ROOTFS_EXTRA_SPACE: Extra space(KB) of rootfs for qemu machine.
 
 trap "exit" INT
 trap 'kill $(jobs -p)' EXIT
@@ -84,10 +89,16 @@ for distro in $TEST_DISTROS; do
 	for machine in $TEST_MACHINES; do
 		LOGDIR=$THISDIR/logs/$distro/$machine
 		RESULT=$LOGDIR/result.txt
+		QEMULOG=$LOGDIR/runqemu.log
 		mkdir -p $LOGDIR
 
 		note "Testing machine $machine ..."
 		set_var "MACHINE" "$machine" conf/local.conf
+
+		if [ -n "$IMAGE_ROOTFS_EXTRA_SPACE" ] && [[ "$IMAGE_ROOTFS_EXTRA_SPACE" =~ ^[0-9]+$ ]]; then
+			note "Set IMAGE_ROOTFS_EXTRA_SPACE to $IMAGE_ROOTFS_EXTRA_SPACE KB."
+			set_var "IMAGE_ROOTFS_EXTRA_SPACE" "$IMAGE_ROOTFS_EXTRA_SPACE" conf/local.conf
+		fi
 
 		bitbake core-image-minimal
 		if [ "$?" != "0" ]; then
@@ -96,7 +107,8 @@ for distro in $TEST_DISTROS; do
 		fi
 
 		# Boot image with QEMU
-		nohup runqemu $machine nographic slirp &
+		note "Run command: \`runqemu $machine nographic slirp qemuparams=\"$QEMU_PARAMS\"\`"
+		nohup runqemu $machine nographic slirp qemuparams="$QEMU_PARAMS" > $QEMULOG &
 
 		# Wait for SSH
 		timeout=60
@@ -107,6 +119,10 @@ for distro in $TEST_DISTROS; do
 			waited=$((now-start))
 			note "Waiting for SSH to be ready... (${waited}s / ${timeout}s)"
 			if [ $waited -gt $timeout ]; then
+				QEMULOG=$(grep 'ERROR' $QEMULOG)
+				if [ -n "$QEMULOG" ]; then
+					error "$QEMULOG"
+				fi
 				error "Cannot connect to qemu machine."
 				exit 1
 			fi
@@ -131,3 +147,4 @@ for distro in $TEST_DISTROS; do
 		ssh_qemu "/sbin/poweroff"
 	done
 done
+
