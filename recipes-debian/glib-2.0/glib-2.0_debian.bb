@@ -22,3 +22,5 @@ SRC_URI += " \
     file://glib-meson.cross \
 "
 SRC_URI_append_class-natve = "file://relocate-modules.patch"
+
+RDEPENDS_${PN}-ptest += "netbase"
