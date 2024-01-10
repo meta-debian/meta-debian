@@ -25,3 +25,32 @@ do_install () {
 }
 
 CONFFILES_${PN} = "${sysconfdir}/hosts"
+
+# Base on debian/netbase.postinst
+pkg_postinst_${PN}() {
+    create_hosts_file() {
+        if [ -e $D${sysconfdir}/hosts ]; then return 0; fi
+
+        cat > $D${sysconfdir}/hosts <<-EOF
+	127.0.0.1	localhost
+	::1		localhost ip6-localhost ip6-loopback
+	ff02::1		ip6-allnodes
+	ff02::2		ip6-allrouters
+
+EOF
+    }
+
+    create_networks_file() {
+        if [ -e $D${sysconfdir}/networks ]; then return 0; fi
+
+        cat > $D${sysconfdir}/networks <<-EOF
+	default		0.0.0.0
+	loopback	127.0.0.0
+	link-local	169.254.0.0
+
+EOF
+    }
+
+    create_hosts_file
+    create_networks_file
+}
