@@ -26,7 +26,6 @@ SRC_URI += " \
     file://arm_eabi.patch \
     file://run-ptest \
     file://Add-ptest-support.patch \
-    file://0001-Extend-test-cert-to-2049-05-27.patch \
 "
 
 inherit autotools texinfo pkgconfig gettext lib_package gtk-doc ptest
