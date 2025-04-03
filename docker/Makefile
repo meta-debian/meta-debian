@@ -4,30 +4,35 @@ ifeq ($(UID),0)
 endif
 
 export UID
+ifneq ("$(shell which docker-compose)", "")
+	DOCKER_COMPOSE=docker-compose
+else
+	DOCKER_COMPOSE=docker compose
+endif
 
 start:
-	docker compose run work
+	$(DOCKER_COMPOSE) run work
 
 refresh:
 	# Rebuild docker image
-	docker compose build --no-cache work
+	$(DOCKER_COMPOSE) build --no-cache work
 
 test: build_test qemu_ptest
 
 build_test:
-	docker compose run --rm build_test
+	$(DOCKER_COMPOSE) run --rm build_test
 
 qemu_ptest:
-	docker compose run --rm qemu_ptest
+	$(DOCKER_COMPOSE) run --rm qemu_ptest
 
 clean:
 	rm -rf ../tests/logs
 	rm -rf ../tests/html
 
 cleanall:
-	docker compose rm -svf work
-	docker compose rm -svf build_test
-	docker compose rm -svf qemu_ptest
+	$(DOCKER_COMPOSE) rm -svf work
+	$(DOCKER_COMPOSE) rm -svf build_test
+	$(DOCKER_COMPOSE) rm -svf qemu_ptest
 	docker volume rm -f docker_downloads
 	docker rmi -f deby-image
 
