@@ -48,3 +48,6 @@ FILES_${PN} += "${libdir}/libxslt-plugins"
 FILES_${PN}-dev += "${libdir}/xsltConf.sh"
 
 BBCLASSEXTEND = "native nativesdk"
+
+# CVE-2022-29824 is an issue in the dependent libxml2
+CVE_CHECK_WHITELIST += "CVE-2022-29824"
