@@ -1,3 +1,7 @@
+# base recipe: meta/recipes-support/libxslt/libxslt_1.1.33.bb
+# base branch: warrior
+# base commit: 58e85c53951077424e4215cea7f1443315477078
+
 SUMMARY = "GNOME XSLT library"
 HOMEPAGE = "http://xmlsoft.org/XSLT/"
 BUGTRACKER = "https://bugzilla.gnome.org/"
@@ -29,7 +33,7 @@ do_configure_prepend () {
 	touch ${S}/doc/xsltproc.1
 }
 
-EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto"
+EXTRA_OECONF = "--without-python --without-debug --without-mem-debug --without-crypto --with-html-subdir=${BPN}"
 # older versions of this recipe had ${PN}-utils
 RPROVIDES_${PN}-bin += "${PN}-utils"
 RCONFLICTS_${PN}-bin += "${PN}-utils"
