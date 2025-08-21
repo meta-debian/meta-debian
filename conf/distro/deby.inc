@@ -7,9 +7,11 @@ SDK_VERSION := "${DISTRO_VERSION}"
 MAINTAINER = "meta-debian Development Team"
 TARGET_VENDOR = "-deby"
 
+DEBIAN_MIRROR = "http://archive.debian.org/debian/pool"
+
 # Using the package versions provided in the security update mirror
 # is now necessary to pull updates by Debian LTS
-DEBIAN_SECURITY_UPDATE_MIRROR ?= "http://security.debian.org/debian-security/pool/updates"
+DEBIAN_SECURITY_UPDATE_MIRROR ?= "http://archive.debian.org/debian-security/pool/updates"
 
 # Extended LTS Updates for Debian 10 Buster
 DEBIAN_ELTS_SECURITY_UPDATE_MIRROR ?= "http://deb.freexian.com/extended-lts/pool"
