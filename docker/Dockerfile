@@ -12,6 +12,7 @@ ENV POKY_GIT_URL https://git.yoctoproject.org/git/poky
 ENV POKY_REV warrior
 
 RUN bash -c 'if test -n "$http_proxy"; then echo "Acquire::http::proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/99proxy; fi'
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list
 RUN apt-get update && \
     apt-get install -y --no-install-recommends sudo iptables \
 	gawk wget git-core diffstat unzip texinfo gcc-multilib \
