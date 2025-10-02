@@ -20,6 +20,10 @@ RUN apt-get update && \
 	python3-pexpect xz-utils debianutils iputils-ping file locales \
 	openssh-client python3-debian
 
+# for kernel-cve-check.bbclass
+RUN apt-get install -y --no-install-recommends \
+	python3-yaml python3-html5lib python3-requests
+
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
 RUN useradd -d $HOME -U -m -s /bin/bash -u $UID $USER
 RUN usermod -a -G sudo $USER

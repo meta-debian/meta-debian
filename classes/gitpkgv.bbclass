@@ -44,6 +44,11 @@ GITPKGVTAG = "${@get_git_pkgv(d, True)}"
 # groups will be concatenated to yield the final version.
 GITPKGV_TAG_REGEXP ??= "v(\d.*)"
 
+# This variable specifies options to git-describe command used to getting the tag name.
+# The default is `--exact-match`.
+# To get the closest tag name from a specified hash, specify `--abbrev=0`.
+GITPKGV_TAG_OPTION ??= "--exact-match"
+
 def gitpkgv_drop_tag_prefix(d, version):
     import re
 
@@ -108,8 +113,9 @@ def get_git_pkgv(d, use_tags):
 
                 if use_tags:
                     try:
+                        vars['opt'] = d.getVar('GITPKGV_TAG_OPTION')
                         output = bb.fetch2.runfetchcmd(
-                            "git --git-dir=%(repodir)s describe %(rev)s --tags --exact-match 2>/dev/null"
+                            "git --git-dir=%(repodir)s describe %(rev)s --tags %(opt)s 2>/dev/null"
                             % vars, d, quiet=True).strip()
                         ver = gitpkgv_drop_tag_prefix(d, output)
                     except Exception:
