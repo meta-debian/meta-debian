@@ -312,3 +312,6 @@ RDEPENDS_${PN}-tkinter += "${@bb.utils.contains('PACKAGECONFIG', 'tk', 'tk tk-li
 RDEPENDS_${PN}-dev = ""
 
 BBCLASSEXTEND = "native nativesdk"
+
+# CVE-2017-17522: The exploitation is impossible.
+CVE_CHECK_WHITELIST = "CVE-2017-17522"
