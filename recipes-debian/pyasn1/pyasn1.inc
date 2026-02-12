@@ -14,3 +14,18 @@ DEBIAN_UNPACK_DIR = "${WORKDIR}/pyasn1-${PV}"
 do_install_append() {
 	find ${D} -name *.pyc -delete
 }
+
+inherit ptest
+
+SRC_URI += " \
+        file://run-ptest \
+"
+
+RDEPENDS_${PN}-ptest += " \
+        ${PYTHON_PN}-tests \
+"
+
+do_install_ptest() {
+	install -d ${D}${PTEST_PATH}/tests
+	cp -rf ${S}/tests/* ${D}${PTEST_PATH}/tests/
+}
