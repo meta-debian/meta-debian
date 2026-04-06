@@ -1,3 +1,7 @@
+# base recipe: meta/recipes-devtools/perl/libxml-parser-perl_2.44.bb
+# base branch: warrior
+# base commit: 720f7554a8cc3ca15321e010b9f1348cd7bfe23c
+
 SUMMARY = "XML::Parser - A perl module for parsing XML documents"
 HOMEPAGE = "https://libexpat.github.io/"
 SECTION = "libs"
@@ -47,5 +51,7 @@ do_install_ptest() {
 	cp -r ${B}/samples ${D}${PTEST_PATH}
 	chown -R root:root ${D}${PTEST_PATH}/samples
 }
+
+RDEPENDS_${PN}-ptest += "perl-module-filehandle perl-module-if perl-module-test perl-module-test-more"
 
 BBCLASSEXTEND="native nativesdk"
