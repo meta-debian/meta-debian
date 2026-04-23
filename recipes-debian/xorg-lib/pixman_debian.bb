@@ -77,6 +77,10 @@ do_install_ptest() {
             -e 's|^top_srcdir =.*$|top_srcdir = ..|g' \
             ${D}${PTEST_PATH}/$d/Makefile
     done
+
+    # Remove library files from ptest package
+    find ${D}${PTEST_PATH} \( -name '*.so' -o -name '*.so.*' \) \
+        -exec rm -f {} \;
 }
 
 RDEPENDS_${PN}-ptest += "make gawk"

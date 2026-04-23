@@ -50,6 +50,10 @@ do_install_ptest() {
     install -m 644 ${B}/*.la ${D}${PTEST_PATH}
     install -m 644 ${B}/*.o ${D}${PTEST_PATH}
     install -m 755 ${B}/.libs/* ${D}${PTEST_PATH}
+
+    # Remove library files from ptest package
+    find ${D}${PTEST_PATH} \( -name '*.so' -o -name '*.so.*' \) \
+        -exec rm -f {} \;
 }
 
 RDEPENDS_${PN}-ptest += "make gawk"

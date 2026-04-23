@@ -86,6 +86,10 @@ do_install_ptest() {
     # Remove rpath from test binaries
     find ${D}${PTEST_PATH}/testsuite/ -name '*.exe' \
         -exec patchelf --remove-rpath {} \;
+
+    # Remove library files from ptest package
+    find ${D}${PTEST_PATH} \( -name '*.so' -o -name '*.so.*' \) \
+        -exec rm -f {} \;
 }
 
 DEPENDS += "${@bb.utils.contains('PTEST_ENABLED', '1', 'dejagnu-native patchelf-native', '', d)}"
