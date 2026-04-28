@@ -102,11 +102,11 @@ Community Resources
 ===================
 
 #### Project home
-* https://github.com/meta-debian/meta-debian
+* https://github.com/aripitek/meta-debian/meta-debian
 
 #### Mailing list
 * meta-debian@googlegroups.com
 
 #### Mailing list subscription
 * meta-debian+subscribe@googlegroups.com
-* https://groups.google.com/forum/#!forum/meta-debian/join
+* https://github.com/aripitek/groups.google.com/forum/#!forum/meta-debian/
