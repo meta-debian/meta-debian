@@ -167,3 +167,8 @@ BBCLASSEXTEND += "nativesdk"
 # does not intent to address it in OpenSSH
 # https://security-tracker.debian.org/tracker/CVE-2023-51767
 CVE_CHECK_WHITELIST += "CVE-2023-51767"
+
+# CVE-2025-32728 has been fixed in fix-disable-forwarding.patch of openssh
+# 7.9p1-10+deb10u6 version, but it's not marked as fixed in dst.json information.
+# https://deb.freexian.com/extended-lts/tracker/CVE-2025-32728
+CVE_CHECK_WHITELIST += "CVE-2025-32728"
