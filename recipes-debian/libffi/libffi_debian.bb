@@ -30,70 +30,31 @@ inherit autotools texinfo ptest
 FILES_${PN}-dev += "${libdir}/libffi-${PV}"
 
 do_compile_ptest() {
-    # Prevent execution of test binaries on host environment
-    sed -i \
-        -e 's/dg-do run/dg-do link/g' \
-        ${S}/testsuite/libffi.call/*
-
-    # Compile test binaries
-    oe_runmake -k -C testsuite check RUNTESTFLAGS="-a"
-
-    # Restore the previous change to make sure tests will be executed
-    # on target environment
-    sed -i \
-        -e 's/dg-do link/dg-do run/g' \
-        ${S}/testsuite/libffi.call/*
+    # Compile site.exp file
+    oe_runmake -C testsuite site.exp
 }
 
 do_install_ptest() {
+    cp -r --dereference ${B}/include/ ${D}${PTEST_PATH}/
+    rm ${D}${PTEST_PATH}/include/Makefile*
     cp -r ${S}/testsuite/ ${D}${PTEST_PATH}/
-    cp -r ${B}/* ${D}${PTEST_PATH}/
-    cp -r ${B}/.libs/* ${D}${PTEST_PATH}/
-
-    # Replace CC and CXX with true command to prevent compilation on target
-    # environment (instead, do nothing)
-    sed -i \
-        -e 's|^set CC_FOR_TARGET .*|set CC_FOR_TARGET "true"|g' \
-        -e 's|^set CXX_FOR_TARGET .*|set CXX_FOR_TARGET "true"|g' \
-        ${D}${PTEST_PATH}/testsuite/site.exp
+    cp -r ${B}/testsuite/ ${D}${PTEST_PATH}/
+    rm ${D}${PTEST_PATH}/testsuite/Makefile*
+    cp -r ${B}/config.status ${D}${PTEST_PATH}/
+    cp -r ${B}/fficonfig.h ${D}${PTEST_PATH}/
+    cp -r ${B}/local.exp ${D}${PTEST_PATH}/
 
     sed -i \
         -e 's|^set srcdir .*|set srcdir "."|g' \
         -e 's|^set objdir .*|set objdir "."|g' \
+        -e '/^set build_alias/s/^/#/' \
+        -e '/^set build_triplet/s/^/#/' \
+        -e '/^set CC_FOR_TARGET/s/^/#/' \
+        -e '/^set CXX_FOR_TARGET/s/^/#/' \
         ${D}${PTEST_PATH}/testsuite/site.exp
-
-    sed -i \
-        -e 's|^VPATH =.*$|VPATH = .|g' \
-        -e 's|^Makefile:.*$|Makefile:|g' \
-        -e 's|^srcdir =.*|srcdir = .|g' \
-        -e 's|^top_srcdir =.*|top_srcdir = .|g' \
-        -e 's|^abs_srcdir =.*|abs_srcdir = .|g' \
-        -e 's|^abs_top_srcdir =.*|abs_top_srcdir = .|g' \
-        -e "s|${BPN}-${PV}/config.guess|./config.guess|g" \
-        ${D}${PTEST_PATH}/Makefile
-
-    for d in include testsuite; do
-        sed -i \
-            -e 's|^VPATH =.*$|VPATH = .|g' \
-            -e 's|^Makefile:.*$|Makefile:|g' \
-            -e 's|^srcdir =.*|srcdir = .|g' \
-            -e 's|^top_srcdir =.*|top_srcdir = ..|g' \
-            -e 's|^abs_srcdir =.*|abs_srcdir = .|g' \
-            -e 's|^abs_top_srcdir =.*|abs_top_srcdir = ..|g' \
-            ${D}${PTEST_PATH}/$d/Makefile
-    done
-
-    # Remove rpath from test binaries
-    find ${D}${PTEST_PATH}/testsuite/ -name '*.exe' \
-        -exec patchelf --remove-rpath {} \;
-
-    # Remove library files from ptest package
-    find ${D}${PTEST_PATH} \( -name '*.so' -o -name '*.so.*' \) \
-        -exec rm -f {} \;
 }
 
-DEPENDS += "${@bb.utils.contains('PTEST_ENABLED', '1', 'dejagnu-native patchelf-native', '', d)}"
-RDEPENDS_${PN}-ptest += "bash dejagnu make"
+RDEPENDS_${PN}-ptest += "bash dejagnu gcc-symlinks g++-symlinks binutils"
 
 # Doesn't compile in MIPS16e mode due to use of hand-written
 # assembly

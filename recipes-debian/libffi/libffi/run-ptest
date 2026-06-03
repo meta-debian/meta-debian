@@ -1,2 +1,11 @@
 #!/bin/sh
-make -k -C testsuite check RUNTESTFLAGS="-a"
+cd testsuite
+
+LIB_DIR="../.libs"
+mkdir -p "${LIB_DIR}"
+LINK_FILE="${LIB_DIR}/libffi.so"
+if ! [ -L "${LINK_FILE}" ]; then
+    ln -s /usr/lib/libffi.so.*.*.* "${LINK_FILE}"
+fi
+runtest --tool libffi --srcdir ./ -a
+rm -f "${LINK_FILE}"
